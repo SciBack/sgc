@@ -64,6 +64,7 @@ def get_context(context):
         em = frappe.db.get_value("Elemento Marco", x.elemento_marco, ["codigo", "denominacion"], as_dict=1) or {}
         nivel = x.get("nivel_propuesto") or ""
         estandares.append({
+            "name": x.elemento_marco,
             "codigo": em.get("codigo") or x.elemento_marco,
             "nombre": em.get("denominacion") or "",
             "nivel": nivel,
