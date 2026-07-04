@@ -11,13 +11,13 @@
     --navy-50:#eef4f9;--navy-100:#dde8f2;
     --ink:#0f2338;--muted:#546578;--line:#e2e9f1;--bg:#fff;--bg-soft:#f4f8fb;
     --radius:16px;--ease-out:cubic-bezier(0.23,1,0.32,1);
-    --shadow-sm:0 1px 2px rgba(0,40,69,.06),0 2px 10px rgba(0,40,69,.05);
-    --shadow-md:0 10px 34px rgba(0,40,69,.12);--maxw:1140px;
+    --shadow-sm:0 1px 2px rgba(0,40,69,.05),0 2px 10px rgba(0,40,69,.045);
+    --shadow-md:0 12px 40px rgba(0,40,69,.10);--maxw:1440px;
   }
   body.sgc-portal{background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;margin:0}
   .sgc-portal *{box-sizing:border-box}
   .sgc-portal a{color:inherit;text-decoration:none}
-  .sgc-portal .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .sgc-portal .wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(22px,4vw,56px)}
 
   /* nav */
   .sgc-portal header.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.85);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid transparent;transition:border-color .3s var(--ease-out)}
@@ -42,9 +42,10 @@
   .sgc-portal .ms i:nth-child(1){background:#f25022}.sgc-portal .ms i:nth-child(2){background:#7fba00}.sgc-portal .ms i:nth-child(3){background:#00a4ef}.sgc-portal .ms i:nth-child(4){background:#ffb900}
 
   /* hero */
-  .sgc-portal .hero{position:relative;overflow:hidden;padding:84px 0 0;background:radial-gradient(1100px 460px at 82% -8%,var(--navy-50),transparent 62%),linear-gradient(180deg,#fff,#fafcfe)}
-  .sgc-portal .hero:before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 1px 1px,rgba(0,56,101,.045) 1px,transparent 0);background-size:26px 26px;-webkit-mask-image:linear-gradient(180deg,#000,transparent 78%);mask-image:linear-gradient(180deg,#000,transparent 78%);pointer-events:none}
-  .sgc-portal .hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:56px;align-items:center;position:relative;z-index:2}
+  .sgc-portal .hero{position:relative;overflow:hidden;padding:clamp(36px,5vh,72px) 0 0;background:radial-gradient(1200px 520px at 86% -12%,var(--navy-50),transparent 60%),linear-gradient(180deg,#fff,#fafcfe)}
+  .sgc-portal .hero:before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 1px 1px,rgba(0,56,101,.04) 1px,transparent 0);background-size:28px 28px;-webkit-mask-image:linear-gradient(180deg,#000,transparent 72%);mask-image:linear-gradient(180deg,#000,transparent 72%);pointer-events:none}
+  .sgc-portal .hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,468px);gap:clamp(40px,5vw,96px);align-items:center;position:relative;z-index:2;min-height:min(560px,64vh)}
+  .sgc-portal .hero-copy{max-width:600px}
   .sgc-portal .eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:12.5px;font-weight:700;color:var(--navy);background:var(--gold-soft);padding:6px 13px;border-radius:100px;letter-spacing:.02em;text-transform:uppercase}
   .sgc-portal .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px rgba(247,168,0,.2)}
   .sgc-portal h1{font-size:clamp(33px,4.6vw,52px);line-height:1.05;letter-spacing:-.025em;font-weight:800;margin:22px 0 0;text-wrap:balance;color:var(--navy)}
@@ -67,11 +68,12 @@
   .sgc-portal .node{display:flex;align-items:center;gap:12px;padding:12px 13px;border:1px solid var(--line);border-radius:12px;background:#fff;position:relative;z-index:2;transition:transform .25s var(--ease-out)}
   .sgc-portal .node:hover{transform:translateX(3px)}
   .sgc-portal .node .ni{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;flex:none;color:#fff}
-  .sgc-portal .node .nt{font-size:13.5px;font-weight:600;color:var(--ink)}
-  .sgc-portal .node .ns{font-size:11.5px;color:var(--muted)}
-  .sgc-portal .node .chk{margin-left:auto;color:var(--gold-600)}
+  .sgc-portal .node>span:nth-child(2){display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+  .sgc-portal .node .nt{font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.25}
+  .sgc-portal .node .ns{font-size:11.5px;color:var(--muted);line-height:1.3}
+  .sgc-portal .node .chk{color:var(--gold-600);flex:none}
   .sgc-portal .link{height:16px;width:2px;background:var(--navy-100);margin:0 0 0 29px;position:relative;z-index:1}
-  .sgc-portal .seal{position:absolute;top:-16px;right:-14px;background:var(--gold);color:var(--navy-900);font-weight:800;font-size:12px;padding:9px 14px;border-radius:100px;box-shadow:0 8px 20px rgba(247,168,0,.4);display:flex;align-items:center;gap:7px;transform:rotate(3deg)}
+  .sgc-portal .badge-float{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.16);color:#fff;font-weight:700;font-size:11px;padding:6px 11px;border-radius:100px;display:flex;align-items:center;gap:6px;backdrop-filter:blur(4px)}
 
   /* metrics */
   .sgc-portal .metrics{position:relative;z-index:2;margin-top:70px}
@@ -139,8 +141,8 @@
   .sgc-portal .d1{animation-delay:.05s}.sgc-portal .d2{animation-delay:.12s}.sgc-portal .d3{animation-delay:.19s}.sgc-portal .d4{animation-delay:.26s}.sgc-portal .d5{animation-delay:.33s}
 
   @media (max-width:940px){
-    .sgc-portal .hero-grid{grid-template-columns:1fr;gap:44px}
-    .sgc-portal .hero-visual{max-width:460px}
+    .sgc-portal .hero-grid{grid-template-columns:1fr;gap:40px;min-height:auto}
+    .sgc-portal .hero-visual{max-width:480px}
     .sgc-portal .nav-links{display:none}
     .sgc-portal .brand .sub{display:none}
     .sgc-portal .metric-grid{grid-template-columns:repeat(2,1fr)}
@@ -204,10 +206,6 @@
       </div>
 
       <div class="hero-visual reveal d3">
-        <div class="seal">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
-          Trazable
-        </div>
         <div class="panel">
           <div class="panel-bar"><span class="dots"><i></i><i></i><i></i></span><span class="ttl">SGC UPeU · Cadena de evidencia</span></div>
           <div class="panel-body">
