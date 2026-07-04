@@ -1,0 +1,261 @@
+{% extends "templates/base.html" %}
+
+{% block title %}Sistema de Gestión de la Calidad · UPeU{% endblock %}
+
+{% block head_include %}
+<meta name="description" content="Sistema de Gestión de la Calidad de la Universidad Peruana Unión — procesos, documentación y evidencias para la mejora continua y la acreditación de nuestros programas.">
+<style>
+  :root{
+    --navy-900:#101836;--navy-800:#16224a;--navy-700:#1e2c63;
+    --blue-600:#2647b0;--blue-500:#3358d4;--blue-100:#e7edfb;
+    --ink:#141a2e;--muted:#5b6478;--line:#e6e9f0;--bg:#fff;--bg-soft:#f6f8fc;
+    --radius:16px;--ease-out:cubic-bezier(0.23,1,0.32,1);
+    --shadow-sm:0 1px 2px rgba(16,24,54,.06),0 2px 8px rgba(16,24,54,.05);
+    --shadow-md:0 8px 30px rgba(16,24,54,.10);--maxw:1140px;
+  }
+  body.sgc-portal{background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;margin:0}
+  .sgc-portal *{box-sizing:border-box}
+  .sgc-portal a{color:inherit;text-decoration:none}
+  .sgc-portal .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+
+  .sgc-portal header.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.82);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid transparent;transition:border-color .3s var(--ease-out)}
+  .sgc-portal header.nav[data-scrolled="true"]{border-bottom-color:var(--line)}
+  .sgc-portal .nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .sgc-portal .brand{display:flex;align-items:center;gap:11px;font-weight:700;letter-spacing:-.01em;color:var(--ink)}
+  .sgc-portal .brand .mark{width:30px;height:30px;display:grid;place-items:center;border-radius:8px;background:linear-gradient(135deg,var(--navy-700),var(--blue-600));color:#fff;font-weight:800;font-size:15px}
+  .sgc-portal .brand small{display:block;font-weight:500;color:var(--muted);font-size:11.5px;letter-spacing:.02em;margin-top:-2px}
+  .sgc-portal .nav-links{display:flex;align-items:center;gap:30px}
+  .sgc-portal .nav-links a{font-size:14.5px;color:var(--muted);font-weight:500;transition:color .2s var(--ease-out)}
+  .sgc-portal .nav-links a:hover{color:var(--ink)}
+  .sgc-portal .btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14.5px;padding:10px 18px;border-radius:10px;cursor:pointer;border:1px solid transparent;transition:transform .16s var(--ease-out),background .2s var(--ease-out),box-shadow .2s var(--ease-out);color:var(--ink)}
+  .sgc-portal .btn:active{transform:scale(.97)}
+  .sgc-portal .btn:focus-visible{outline:2px solid var(--blue-500);outline-offset:2px}
+  .sgc-portal .btn-primary{background:var(--navy-800);color:#fff;box-shadow:var(--shadow-sm)}
+  .sgc-portal .btn-primary:hover{background:var(--navy-700);box-shadow:var(--shadow-md)}
+  .sgc-portal .btn-ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+  .sgc-portal .btn-ghost:hover{border-color:#c9d0de;background:var(--bg-soft)}
+  .sgc-portal .ms{width:16px;height:16px;display:inline-grid;grid-template-columns:1fr 1fr;gap:2px}
+  .sgc-portal .ms i{display:block;border-radius:1px}
+  .sgc-portal .ms i:nth-child(1){background:#f25022}.sgc-portal .ms i:nth-child(2){background:#7fba00}.sgc-portal .ms i:nth-child(3){background:#00a4ef}.sgc-portal .ms i:nth-child(4){background:#ffb900}
+
+  .sgc-portal .hero{position:relative;overflow:hidden;padding:96px 0 0;background:radial-gradient(1200px 500px at 78% -10%,var(--blue-100),transparent 60%),linear-gradient(180deg,#fff,#fbfcfe)}
+  .sgc-portal .hero:before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 1px 1px,rgba(30,44,99,.05) 1px,transparent 0);background-size:26px 26px;-webkit-mask-image:linear-gradient(180deg,#000,transparent 75%);mask-image:linear-gradient(180deg,#000,transparent 75%);pointer-events:none}
+  .sgc-portal .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--blue-600);background:var(--blue-100);padding:6px 13px;border-radius:100px}
+  .sgc-portal .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--blue-500);box-shadow:0 0 0 4px rgba(51,88,212,.15)}
+  .sgc-portal h1{font-size:clamp(34px,5vw,56px);line-height:1.04;letter-spacing:-.025em;font-weight:800;margin:22px 0 0;max-width:15ch;text-wrap:balance;color:var(--ink)}
+  .sgc-portal h1 .grad{background:linear-gradient(120deg,var(--blue-600),var(--navy-700));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sgc-portal .lede{font-size:clamp(16px,2.1vw,19px);color:var(--muted);max-width:52ch;margin-top:22px}
+  .sgc-portal .hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+  .sgc-portal .btn-lg{padding:14px 24px;font-size:15.5px;border-radius:12px}
+  .sgc-portal .assurance{margin-top:20px;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px}
+
+  .sgc-portal .metrics{position:relative;z-index:2;margin-top:64px}
+  .sgc-portal .metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .sgc-portal .metric{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px;box-shadow:var(--shadow-sm);transition:transform .25s var(--ease-out),box-shadow .25s var(--ease-out)}
+  .sgc-portal .metric:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+  .sgc-portal .metric .num{font-size:40px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums;background:linear-gradient(120deg,var(--navy-700),var(--blue-600));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sgc-portal .metric .lbl{margin-top:6px;font-size:13.5px;color:var(--muted);font-weight:500}
+
+  .sgc-portal section{padding:88px 0}
+  .sgc-portal .sec-head{max-width:640px}
+  .sgc-portal .sec-tag{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue-600)}
+  .sgc-portal h2{font-size:clamp(26px,3.4vw,36px);letter-spacing:-.02em;font-weight:800;margin-top:12px;line-height:1.12;text-wrap:balance;color:var(--ink)}
+  .sgc-portal .sec-head p{color:var(--muted);margin-top:14px;font-size:16.5px}
+  .sgc-portal .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px}
+  .sgc-portal .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:28px;transition:transform .25s var(--ease-out),box-shadow .25s var(--ease-out),border-color .25s var(--ease-out)}
+  .sgc-portal .card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:#dbe1ee}
+  .sgc-portal .card .ic{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:var(--blue-100);color:var(--blue-600);margin-bottom:18px}
+  .sgc-portal .card h3{font-size:18px;letter-spacing:-.01em}
+  .sgc-portal .card p{color:var(--muted);margin-top:9px;font-size:14.5px}
+
+  .sgc-portal .models{background:var(--bg-soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .sgc-portal .badge-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:38px}
+  .sgc-portal .badge{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 20px;box-shadow:var(--shadow-sm)}
+  .sgc-portal .badge .k{width:38px;height:38px;border-radius:9px;background:var(--navy-800);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px}
+  .sgc-portal .badge b{font-size:14.5px}.sgc-portal .badge span{display:block;font-size:12.5px;color:var(--muted);font-weight:500}
+
+  .sgc-portal .band{margin:0 auto;max-width:var(--maxw);padding:0 24px}
+  .sgc-portal .band-inner{position:relative;overflow:hidden;background:linear-gradient(120deg,var(--navy-800),var(--navy-700) 55%,var(--blue-600));border-radius:22px;padding:52px 48px;color:#fff;box-shadow:var(--shadow-md)}
+  .sgc-portal .band-inner:before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,.10) 1px,transparent 0);background-size:22px 22px;-webkit-mask-image:radial-gradient(600px 300px at 85% 20%,#000,transparent);mask-image:radial-gradient(600px 300px at 85% 20%,#000,transparent)}
+  .sgc-portal .band-inner h2{color:#fff}
+  .sgc-portal .band-inner p{color:rgba(255,255,255,.82);max-width:56ch;margin-top:12px}
+  .sgc-portal .band .btn-white{background:#fff;color:var(--navy-800);margin-top:26px}
+  .sgc-portal .band .btn-white:hover{background:#eef1f8}
+
+  .sgc-portal footer.foot{padding:56px 0 40px;border-top:1px solid var(--line);color:var(--muted)}
+  .sgc-portal .foot-grid{display:flex;justify-content:space-between;flex-wrap:wrap;gap:28px}
+  .sgc-portal .foot-brand{max-width:320px}
+  .sgc-portal .foot-brand p{font-size:13.5px;margin-top:12px}
+  .sgc-portal .foot-col h4{font-size:12.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink);margin-bottom:12px}
+  .sgc-portal .foot-col a{display:block;font-size:14px;margin-bottom:9px;transition:color .2s var(--ease-out)}
+  .sgc-portal .foot-col a:hover{color:var(--ink)}
+  .sgc-portal .foot-base{margin-top:40px;padding-top:22px;border-top:1px solid var(--line);font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+  .sgc-portal .reveal{opacity:0;transform:translateY(14px);animation:sgcRise .7s var(--ease-out) forwards}
+  @keyframes sgcRise{to{opacity:1;transform:none}}
+  .sgc-portal .d1{animation-delay:.05s}.sgc-portal .d2{animation-delay:.12s}.sgc-portal .d3{animation-delay:.19s}.sgc-portal .d4{animation-delay:.26s}.sgc-portal .d5{animation-delay:.33s}
+
+  @media (max-width:900px){
+    .sgc-portal .nav-links{display:none}
+    .sgc-portal .metric-grid{grid-template-columns:repeat(2,1fr)}
+    .sgc-portal .cards{grid-template-columns:1fr}
+    .sgc-portal .band-inner{padding:40px 28px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .sgc-portal .reveal{animation:none;opacity:1;transform:none}
+    .sgc-portal .metric:hover,.sgc-portal .card:hover{transform:none}
+  }
+</style>
+{% endblock %}
+
+{% block banner %}{% endblock %}
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div id="top"></div>
+
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">
+      <span class="mark">A</span>
+      <span>UPeU<small>Sistema de Gestión de la Calidad</small></span>
+    </a>
+    <nav class="nav-links">
+      <a href="#sistema">El sistema</a>
+      <a href="#modelos">Modelos y normas</a>
+      <a href="#transparencia">Transparencia</a>
+    </nav>
+    <a class="btn btn-primary" href="/api/method/sgc.api.acceso_m365">
+      <span class="ms"><i></i><i></i><i></i><i></i></span>
+      Acceso comité
+    </a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow reveal d1"><span class="dot"></span> Dirección de Planeamiento y Gestión de la Calidad</span>
+      <h1 class="reveal d2">Calidad que se gestiona,<br><span class="grad">evidencia que se demuestra.</span></h1>
+      <p class="lede reveal d3">El Sistema de Gestión de la Calidad de la Universidad Peruana Unión articula procesos, documentación y evidencias para la mejora continua y la acreditación de nuestros programas.</p>
+      <div class="hero-cta reveal d4">
+        <a class="btn btn-primary btn-lg" href="/api/method/sgc.api.acceso_m365">
+          <span class="ms"><i></i><i></i><i></i><i></i></span>
+          Ingresar con UPeU (M365)
+        </a>
+        <a class="btn btn-ghost btn-lg" href="#sistema">Conoce el sistema →</a>
+      </div>
+      <div class="assurance reveal d5">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2647b0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Acceso institucional seguro · sin contraseñas nuevas
+      </div>
+
+      <div class="metrics">
+        <div class="metric-grid">
+          <div class="metric reveal d2"><div class="num">{{ n_modelos or 3 }}</div><div class="lbl">Modelos de calidad adoptados (CONEAU · SUNEDU · Institucional)</div></div>
+          <div class="metric reveal d3"><div class="num">{{ n_estandares or "—" }}</div><div class="lbl">Estándares de calidad monitoreados</div></div>
+          <div class="metric reveal d4"><div class="num">{{ n_criterios or n_indicadores or "—" }}</div><div class="lbl">Criterios de evaluación gestionados</div></div>
+          <div class="metric reveal d5"><div class="num">100%</div><div class="lbl">Licenciamiento SUNEDU vigente</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sistema">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="sec-tag">El sistema</div>
+        <h2>Un solo lugar para gobernar la calidad</h2>
+        <p>Del documento controlado a la evidencia de acreditación, todo el ciclo vive conectado y trazable.</p>
+      </div>
+      <div class="cards">
+        <div class="card reveal d1">
+          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg></div>
+          <h3>Gestión documental</h3>
+          <p>Políticas, procedimientos y registros bajo control de versiones, con vigencia y responsables definidos.</p>
+        </div>
+        <div class="card reveal d2">
+          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+          <h3>Autoevaluación y acreditación</h3>
+          <p>Criterios, estándares y evidencias del modelo CONEAU-SINEACE, con avance por programa en tiempo real.</p>
+        </div>
+        <div class="card reveal d3">
+          <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20"/></svg></div>
+          <h3>Transparencia y datos abiertos</h3>
+          <p>Indicadores de interés público publicados como datos abiertos, cosechables y verificables.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="modelos" class="models">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="sec-tag">Modelos y normas</div>
+        <h2>Alineados a los marcos oficiales</h2>
+        <p>El sistema se estructura sobre los referentes nacionales e internacionales de calidad universitaria.</p>
+      </div>
+      <div class="badge-row">
+        <div class="badge reveal d1"><div class="k">SI</div><div><b>CONEAU · SINEACE</b><span>Acreditación de programas</span></div></div>
+        <div class="badge reveal d2"><div class="k">SU</div><div><b>SUNEDU</b><span>Condiciones básicas de calidad</span></div></div>
+        <div class="badge reveal d3"><div class="k">ISO</div><div><b>ISO 21001</b><span>Organizaciones educativas</span></div></div>
+        <div class="badge reveal d4"><div class="k">9K</div><div><b>ISO 9001</b><span>Gestión de la calidad</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="transparencia" style="padding-bottom:96px">
+    <div class="band">
+      <div class="band-inner reveal d1">
+        <div class="sec-tag" style="color:#bcd0ff">Transparencia</div>
+        <h2>Datos abiertos de calidad</h2>
+        <p>Publicamos indicadores no sensibles de nuestros procesos de calidad como datos abiertos, en formato estándar y cosechable, para rendición de cuentas ante la comunidad.</p>
+        <a class="btn btn-white btn-lg" href="{{ datos_url }}" target="_blank" rel="noopener">Ver portal de datos abiertos →</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="#top"><span class="mark">A</span><span>UPeU<small>Sistema de Gestión de la Calidad</small></span></a>
+        <p>Dirección de Planeamiento y Gestión de la Calidad · Universidad Peruana Unión.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Sistema</h4>
+        <a href="#sistema">El sistema</a>
+        <a href="#modelos">Modelos y normas</a>
+        <a href="#transparencia">Transparencia</a>
+      </div>
+      <div class="foot-col">
+        <h4>Acceso</h4>
+        <a href="/api/method/sgc.api.acceso_m365">Acceso comité (M365)</a>
+        <a href="{{ datos_url }}" target="_blank" rel="noopener">Datos abiertos</a>
+      </div>
+      <div class="foot-col">
+        <h4>Contacto</h4>
+        <a href="mailto:calidad@upeu.edu.pe">calidad@upeu.edu.pe</a>
+        <span style="font-size:14px">Campus Lima · Ñaña</span>
+      </div>
+    </div>
+    <div class="foot-base">
+      <span>© 2026 Universidad Peruana Unión · SGC</span>
+      <span>calidad.upeu.edu.pe</span>
+    </div>
+  </div>
+</footer>
+{% endblock %}
+
+{% block script %}
+<script>
+  (function(){
+    var nav=document.getElementById('nav');
+    if(!nav) return;
+    var onScroll=function(){nav.setAttribute('data-scrolled', window.scrollY>8?'true':'false');};
+    onScroll(); window.addEventListener('scroll',onScroll,{passive:true});
+  })();
+</script>
+{% endblock %}
