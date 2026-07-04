@@ -1,42 +1,45 @@
-"""Borra TODOS los datos operativos/demo del SGC, dejando intactos los
-frameworks normativos (Marco/Elemento Marco/Indicador) y la estructura
-(Programa, Unidad Orgánica, Periodo).
+"""Borra TODOS los datos operativos/demo del SGC en los 6 módulos, dejando
+intactos los frameworks normativos y la estructura.
 
-En producción real estos DocTypes están en 0 hasta que llegan datos reales,
-así que borrar todos sus registros = eliminar exactamente el demo.
+Auto-descubre los DocTypes operativos: todos los de la app `sgc` MENOS la
+lista blanca (marcos, elementos, indicadores-definición, programas, unidades,
+periodos). En producción real esos operativos están en 0 hasta que llegan
+datos reales, así que borrarlos = eliminar exactamente el demo.
 
 Ejecutar: bench --site calidad.upeu.edu.pe execute sgc.setup.demo_cleanup.run
 """
 
 import frappe
 
-# Orden: dependientes primero (Links).
-_OPERATIVOS = [
-    "Accion Mejora",
-    "Plan Mejora",
-    "No Conformidad",
-    "Hallazgo",
-    "Evidencia Enlace",
-    "Evidencia",
-    "Valor Indicador",
-    "Trazabilidad",
-    "Valoracion Criterio",
-    "Valoracion Estandar",
-    "Autoevaluacion",
-]
+# Se CONSERVAN (frameworks normativos + estructura institucional).
+_KEEP = {
+    "Marco Normativo", "Elemento Marco", "Escala Valoracion", "Nivel Escala", "Nivel Marco",
+    "Indicador", "Ficha Indicador", "Indicador Criterio",
+    "Programa", "Programa Sede", "Unidad Organica", "Periodo Academico",
+}
 
 
 def run():
+    mods = frappe.get_all("Module Def", {"app_name": "sgc"}, pluck="name")
+    dts = frappe.get_all("DocType", {"module": ["in", mods], "istable": 0}, pluck="name")
+    operativos = [d for d in dts if d not in _KEEP]
+
     total = 0
-    for dt in _OPERATIVOS:
-        if not frappe.db.exists("DocType", dt) or not frappe.db.table_exists(dt):
-            continue
-        for name in frappe.get_all(dt, pluck="name"):
-            try:
-                frappe.delete_doc(dt, name, force=1, ignore_permissions=True, delete_permanently=True)
-                total += 1
-            except Exception as e:
-                print("  no se pudo borrar %s %s: %s" % (dt, name, str(e)[:80]))
+    # Varias pasadas para respetar dependencias por Link.
+    for _ in range(5):
+        remaining = 0
+        for dt in operativos:
+            if not frappe.db.table_exists(dt):
+                continue
+            for name in frappe.get_all(dt, pluck="name"):
+                try:
+                    frappe.delete_doc(dt, name, force=1, ignore_permissions=True, delete_permanently=True)
+                    total += 1
+                except Exception:
+                    remaining += 1
         frappe.db.commit()
-    print("DEMO_CLEANUP: %d registros operativos eliminados. "
-          "Frameworks normativos y estructura intactos." % total)
+        if remaining == 0:
+            break
+
+    print("DEMO_CLEANUP: %d registros operativos eliminados en %d DocTypes. "
+          "Frameworks normativos y estructura intactos." % (total, len(operativos)))
