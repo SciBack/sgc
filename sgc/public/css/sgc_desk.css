@@ -1,0 +1,125 @@
+/* ============================================================
+   SGC UPeU — Tema de escritorio (identidad institucional)
+   Paleta oficial: navy #003865 · oro #f7a800 · tema claro.
+   Craft: Emil Kowalski (microinteracciones, ease-out) +
+   Impeccable (60-30-10, neutrales tintados, sin AI-slop).
+   ============================================================ */
+:root {
+  --sgc-navy: #003865;
+  --sgc-navy-700: #01477e;
+  --sgc-navy-600: #0a568f;
+  --sgc-navy-050: #eaf1f7;
+  --sgc-gold: #f7a800;
+  --sgc-ink: #10233a;
+  --sgc-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --sgc-shadow: 0 8px 24px rgba(0, 40, 69, 0.10);
+
+  /* Reasignar el acento azul de Frappe -> navy UPeU (cohesión de marca) */
+  --primary: var(--sgc-navy);
+  --primary-color: var(--sgc-navy);
+  --blue-400: var(--sgc-navy-600);
+  --blue-500: var(--sgc-navy);
+  --blue-600: var(--sgc-navy-700);
+  --text-on-blue: #ffffff;
+}
+
+/* --- Encabezados de sección del workspace --- */
+.widget-group-title,
+.layout-main-section h4.ce-header,
+.layout-main-section .ce-block h1,
+.layout-main-section .ce-block h2,
+.layout-main-section .ce-block h3,
+.layout-main-section .ce-block h4 {
+  color: var(--sgc-navy);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* --- Tarjetas base (todos los widgets) --- */
+.number-widget-box,
+.shortcut-widget-box,
+.links-widget-box {
+  border-radius: 13px;
+  transition: transform 0.18s var(--sgc-ease), box-shadow 0.18s var(--sgc-ease),
+    border-color 0.18s var(--sgc-ease);
+}
+.number-widget-box:hover,
+.shortcut-widget-box:hover,
+.links-widget-box:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sgc-shadow);
+  border-color: #d7e2ec;
+}
+
+/* --- Number cards: valor en navy, acento oro discreto --- */
+.number-widget-box .widget-content .number,
+.number-widget-box .number,
+.number-widget-box .widget-body .number {
+  color: var(--sgc-navy) !important;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+.number-widget-box .widget-head .widget-title::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--sgc-gold);
+  vertical-align: middle;
+}
+
+/* --- Module link cards: hover del enlace en navy --- */
+.links-widget-box .link-item:hover,
+.links-widget-box .link-content:hover {
+  color: var(--sgc-navy);
+}
+
+/* --- Sidebar izquierda: elemento activo en navy --- */
+.standard-sidebar-item.selected {
+  background: var(--sgc-navy-050);
+}
+.standard-sidebar-item.selected .sidebar-item-label,
+.standard-sidebar-item.selected a {
+  color: var(--sgc-navy);
+  font-weight: 600;
+}
+.standard-sidebar-item:hover .sidebar-item-label {
+  color: var(--sgc-navy);
+}
+
+/* --- Botones primarios y enlaces -> navy --- */
+.btn-primary {
+  background-color: var(--sgc-navy);
+  border-color: var(--sgc-navy);
+}
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--sgc-navy-700);
+  border-color: var(--sgc-navy-700);
+}
+a:not(.btn),
+.text-primary {
+  color: var(--sgc-navy);
+}
+
+/* --- Botón de presión: feedback táctil (Emil) --- */
+.btn:active {
+  transform: scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .number-widget-box,
+  .shortcut-widget-box,
+  .links-widget-box,
+  .btn {
+    transition: none;
+  }
+  .number-widget-box:hover,
+  .shortcut-widget-box:hover,
+  .links-widget-box:hover,
+  .btn:active {
+    transform: none;
+  }
+}

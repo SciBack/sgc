@@ -23,7 +23,7 @@ add_to_apps_screen = [
 # ------------------
 
 # include js, css files in header of desk.html
-# app_include_css = "/assets/sgc/css/sgc.css"
+app_include_css = "/assets/sgc/css/sgc_desk.css"
 # app_include_js = "/assets/sgc/js/sgc.js"
 
 # include js, css files in header of web template
