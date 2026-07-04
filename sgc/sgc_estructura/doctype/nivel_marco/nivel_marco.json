@@ -1,0 +1,62 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "creation": "2026-07-04 17:26:39.860326",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "nombre",
+  "profundidad",
+  "es_valorable",
+  "es_hoja_evidenciable"
+ ],
+ "fields": [
+  {
+   "description": "Dimensi\u00f3n\u00b7Factor\u00b7Est\u00e1ndar\u00b7Criterio\u00b7Condici\u00f3n\u00b7Componente\u00b7Indicador",
+   "fieldname": "nombre",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Nombre",
+   "reqd": 1
+  },
+  {
+   "description": "1 = ra\u00edz del marco; ordena la jerarqu\u00eda",
+   "fieldname": "profundidad",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Profundidad"
+  },
+  {
+   "default": "0",
+   "description": "Nivel que recibe el juicio oficial (Est\u00e1ndar en CONEAU, Indicador en CBC)",
+   "fieldname": "es_valorable",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Es valorable"
+  },
+  {
+   "default": "0",
+   "description": "Nivel contra el que se cuelgan evidencias (Criterio en CONEAU)",
+   "fieldname": "es_hoja_evidenciable",
+   "fieldtype": "Check",
+   "label": "Es hoja evidenciable"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-07-04 17:26:39.860326",
+ "modified_by": "Administrator",
+ "module": "SGC Estructura",
+ "name": "Nivel Marco",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,116 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "hash",
+ "creation": "2026-07-04 17:29:31.979583",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "autoevaluacion",
+  "elemento_marco",
+  "nivel",
+  "calculado_auto",
+  "justificacion",
+  "estado",
+  "aprobado_por",
+  "nivel_propuesto",
+  "confirmado"
+ ],
+ "fields": [
+  {
+   "fieldname": "autoevaluacion",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Autoevaluaci\u00f3n",
+   "options": "Autoevaluacion",
+   "reqd": 1
+  },
+  {
+   "fieldname": "elemento_marco",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Est\u00e1ndar (elemento del marco)",
+   "options": "Elemento Marco",
+   "reqd": 1
+  },
+  {
+   "fieldname": "nivel",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Nivel (NL/L/LP)",
+   "options": "Nivel Escala",
+   "permlevel": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "calculado_auto",
+   "fieldtype": "Check",
+   "label": "Calculado autom\u00e1ticamente"
+  },
+  {
+   "fieldname": "justificacion",
+   "fieldtype": "Text",
+   "label": "Justificaci\u00f3n"
+  },
+  {
+   "default": "Borrador",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Borrador\nPropuesto\nAprobado"
+  },
+  {
+   "fieldname": "aprobado_por",
+   "fieldtype": "Link",
+   "label": "Aprobado por",
+   "options": "User"
+  },
+  {
+   "description": "Lo propone el motor de scoring. El nivel oficial (`nivel`) lo confirma el humano tras revisar la evoluci\u00f3n de los indicadores (\u00b13%).",
+   "fieldname": "nivel_propuesto",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Nivel propuesto (motor)",
+   "options": "\nNL\nL\nLP",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "description": "El humano confirm\u00f3 el `nivel` oficial (permlevel 1).",
+   "fieldname": "confirmado",
+   "fieldtype": "Check",
+   "label": "Confirmado por humano"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-04 17:45:57.341903",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "Valoracion Estandar",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "elemento_marco",
+ "track_changes": 1
+}

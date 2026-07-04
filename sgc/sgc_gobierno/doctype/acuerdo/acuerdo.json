@@ -1,0 +1,99 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "format:ACU-{YYYY}-{#####}",
+ "creation": "2026-07-04 17:29:33.521799",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "reunion",
+  "descripcion",
+  "responsable",
+  "fecha_compromiso",
+  "estado",
+  "genero_doctype",
+  "genero_id"
+ ],
+ "fields": [
+  {
+   "fieldname": "reunion",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Reuni\u00f3n",
+   "options": "Reunion",
+   "reqd": 1
+  },
+  {
+   "fieldname": "descripcion",
+   "fieldtype": "Text",
+   "in_list_view": 1,
+   "label": "Descripci\u00f3n"
+  },
+  {
+   "fieldname": "responsable",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Responsable",
+   "options": "User"
+  },
+  {
+   "fieldname": "fecha_compromiso",
+   "fieldtype": "Date",
+   "label": "Fecha de compromiso"
+  },
+  {
+   "default": "Pendiente",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Pendiente\nEn proceso\nCumplido\nVencido\nCancelado"
+  },
+  {
+   "description": "Un acuerdo puede escalar a Accion Mejora / No Conformidad\u2026",
+   "fieldname": "genero_doctype",
+   "fieldtype": "Link",
+   "label": "Tipo de documento generado",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "genero_id",
+   "fieldtype": "Dynamic Link",
+   "label": "Documento generado",
+   "options": "genero_doctype"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-04 17:29:33.521799",
+ "modified_by": "Administrator",
+ "module": "SGC Gobierno",
+ "name": "Acuerdo",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "descripcion",
+ "track_changes": 1
+}

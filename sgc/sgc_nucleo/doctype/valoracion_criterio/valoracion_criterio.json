@@ -1,0 +1,111 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "hash",
+ "creation": "2026-07-04 17:29:31.936129",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "autoevaluacion",
+  "criterio",
+  "cumple",
+  "observacion",
+  "estado",
+  "valorado_por",
+  "fecha",
+  "debilidad",
+  "comentario"
+ ],
+ "fields": [
+  {
+   "fieldname": "autoevaluacion",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Autoevaluaci\u00f3n",
+   "options": "Autoevaluacion",
+   "reqd": 1
+  },
+  {
+   "fieldname": "criterio",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Criterio",
+   "options": "Elemento Marco",
+   "reqd": 1
+  },
+  {
+   "fieldname": "cumple",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Cumple",
+   "options": "Cumple\nCumple parcial\nNo cumple\nNo aplica"
+  },
+  {
+   "fieldname": "observacion",
+   "fieldtype": "Text",
+   "label": "Observaci\u00f3n"
+  },
+  {
+   "default": "Pendiente",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Pendiente\nEn analisis\nValorado\nRevisado"
+  },
+  {
+   "fieldname": "valorado_por",
+   "fieldtype": "Link",
+   "label": "Valorado por",
+   "options": "User"
+  },
+  {
+   "fieldname": "fecha",
+   "fieldtype": "Datetime",
+   "label": "Fecha"
+  },
+  {
+   "description": "Descripci\u00f3n de la debilidad u oportunidad de mejora, si aplica.",
+   "fieldname": "debilidad",
+   "fieldtype": "Text",
+   "label": "Debilidad / OM"
+  },
+  {
+   "description": "Sustento del juicio del criterio.",
+   "fieldname": "comentario",
+   "fieldtype": "Text",
+   "label": "Comentario (sustento)"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-04 17:45:57.133746",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "Valoracion Criterio",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "criterio",
+ "track_changes": 1
+}

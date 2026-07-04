@@ -1,0 +1,51 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "creation": "2026-07-04 17:31:18.851234",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "riesgo_identificado",
+  "accion_mitigacion",
+  "riesgo"
+ ],
+ "fields": [
+  {
+   "fieldname": "riesgo_identificado",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Riesgo identificado",
+   "reqd": 1
+  },
+  {
+   "fieldname": "accion_mitigacion",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Acci\u00f3n de mitigaci\u00f3n"
+  },
+  {
+   "description": "Escala el riesgo de la ficha al inventario GRC formal (B2) sin recapturarse",
+   "fieldname": "riesgo",
+   "fieldtype": "Link",
+   "label": "Riesgo (inventario GRC)",
+   "options": "Riesgo"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-07-04 17:31:18.851234",
+ "modified_by": "Administrator",
+ "module": "SGC Procesos",
+ "name": "Riesgo Proceso",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

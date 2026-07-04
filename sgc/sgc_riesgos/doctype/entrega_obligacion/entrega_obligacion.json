@@ -1,0 +1,126 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "format:ENT-{YYYY}-{#####}",
+ "creation": "2026-07-04 17:29:33.173439",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "obligacion_ente",
+  "periodo",
+  "fecha_limite",
+  "fecha_entrega",
+  "estado",
+  "responsable",
+  "observaciones",
+  "sb_costura",
+  "evidencia",
+  "informe_cumplimiento",
+  "no_conformidad"
+ ],
+ "fields": [
+  {
+   "fieldname": "obligacion_ente",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Obligaci\u00f3n al ente",
+   "options": "Obligacion Ente",
+   "reqd": 1
+  },
+  {
+   "description": "\"2026\", \"2026-I\"",
+   "fieldname": "periodo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Periodo"
+  },
+  {
+   "fieldname": "fecha_limite",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Fecha l\u00edmite"
+  },
+  {
+   "fieldname": "fecha_entrega",
+   "fieldtype": "Date",
+   "label": "Fecha de entrega"
+  },
+  {
+   "default": "Pendiente",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Pendiente\nEn preparacion\nEntregada\nAceptada\nObservada\nSubsanada"
+  },
+  {
+   "fieldname": "responsable",
+   "fieldtype": "Link",
+   "label": "Responsable",
+   "options": "User"
+  },
+  {
+   "fieldname": "observaciones",
+   "fieldtype": "Text",
+   "label": "Observaciones"
+  },
+  {
+   "fieldname": "sb_costura",
+   "fieldtype": "Section Break",
+   "label": "Costura con evidencia / IAC / NC"
+  },
+  {
+   "description": "cargo/constancia de la entrega",
+   "fieldname": "evidencia",
+   "fieldtype": "Link",
+   "label": "Evidencia",
+   "options": "Evidencia"
+  },
+  {
+   "description": "si la entrega ES el IAC",
+   "fieldname": "informe_cumplimiento",
+   "fieldtype": "Link",
+   "label": "Informe de cumplimiento (IAC)",
+   "options": "Informe Cumplimiento"
+  },
+  {
+   "description": "si una entrega se incumple/observa \u2192 NC (origen=ObligacionEnte)",
+   "fieldname": "no_conformidad",
+   "fieldtype": "Link",
+   "label": "No conformidad",
+   "options": "No Conformidad"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-04 17:29:33.173439",
+ "modified_by": "Administrator",
+ "module": "SGC Riesgos",
+ "name": "Entrega Obligacion",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

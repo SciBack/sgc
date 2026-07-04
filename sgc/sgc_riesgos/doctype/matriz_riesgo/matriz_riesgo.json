@@ -1,0 +1,94 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "field:codigo",
+ "creation": "2026-07-04 17:26:42.389271",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "codigo",
+  "nombre",
+  "dimension",
+  "cfg_sb",
+  "niveles_probabilidad",
+  "niveles_impacto",
+  "umbrales"
+ ],
+ "fields": [
+  {
+   "fieldname": "codigo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "C\u00f3digo",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "nombre",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Nombre",
+   "reqd": 1
+  },
+  {
+   "description": "p. ej. 5 (matriz 5\u00d75)",
+   "fieldname": "dimension",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Dimensi\u00f3n"
+  },
+  {
+   "fieldname": "cfg_sb",
+   "fieldtype": "Section Break",
+   "label": "Configuraci\u00f3n de escala"
+  },
+  {
+   "description": "[{valor,etiqueta}]",
+   "fieldname": "niveles_probabilidad",
+   "fieldtype": "JSON",
+   "label": "Niveles de probabilidad"
+  },
+  {
+   "description": "[{valor,etiqueta}]",
+   "fieldname": "niveles_impacto",
+   "fieldtype": "JSON",
+   "label": "Niveles de impacto"
+  },
+  {
+   "description": "mapea rango de score \u2192 Bajo/Moderado/Alto/Extremo + color",
+   "fieldname": "umbrales",
+   "fieldtype": "JSON",
+   "label": "Umbrales"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-04 17:26:42.389271",
+ "modified_by": "Administrator",
+ "module": "SGC Riesgos",
+ "name": "Matriz Riesgo",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "nombre",
+ "track_changes": 1
+}

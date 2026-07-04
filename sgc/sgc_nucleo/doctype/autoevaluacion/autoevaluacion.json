@@ -1,0 +1,149 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "field:codigo",
+ "creation": "2026-07-04 17:29:31.889046",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "codigo",
+  "titulo",
+  "marco_normativo",
+  "programa_sede",
+  "periodo_academico",
+  "alcance",
+  "estado",
+  "resultado_vigencia",
+  "puntaje_excelencia",
+  "responsable",
+  "fecha_inicio",
+  "fecha_cierre",
+  "vigencia_propuesta",
+  "avance_pct"
+ ],
+ "fields": [
+  {
+   "fieldname": "codigo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "C\u00f3digo",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "titulo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "T\u00edtulo"
+  },
+  {
+   "fieldname": "marco_normativo",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Marco normativo",
+   "options": "Marco Normativo",
+   "reqd": 1
+  },
+  {
+   "fieldname": "programa_sede",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Programa-Sede",
+   "options": "Programa Sede"
+  },
+  {
+   "fieldname": "periodo_academico",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Periodo acad\u00e9mico",
+   "options": "Periodo Academico"
+  },
+  {
+   "fieldname": "alcance",
+   "fieldtype": "Text",
+   "label": "Alcance"
+  },
+  {
+   "default": "Planificada",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Planificada\nEn curso\nEn revision\nConsolidada\nCerrada"
+  },
+  {
+   "fieldname": "resultado_vigencia",
+   "fieldtype": "Select",
+   "label": "Resultado de vigencia",
+   "options": "\nEn proceso\nAcreditado 3 a\u00f1os\nAcreditado 6 a\u00f1os\nAcreditado 8 a\u00f1os"
+  },
+  {
+   "fieldname": "puntaje_excelencia",
+   "fieldtype": "Int",
+   "label": "Puntaje de excelencia"
+  },
+  {
+   "fieldname": "responsable",
+   "fieldtype": "Link",
+   "label": "Responsable",
+   "options": "User"
+  },
+  {
+   "fieldname": "fecha_inicio",
+   "fieldtype": "Date",
+   "label": "Fecha de inicio"
+  },
+  {
+   "fieldname": "fecha_cierre",
+   "fieldtype": "Date",
+   "label": "Fecha de cierre"
+  },
+  {
+   "description": "Propuesta por el motor sobre los niveles CONFIRMADOS de los 10 est\u00e1ndares (Tabla 9). El `resultado_vigencia` oficial lo fija el humano.",
+   "fieldname": "vigencia_propuesta",
+   "fieldtype": "Select",
+   "label": "Vigencia propuesta (motor)",
+   "options": "\nEn proceso\nAcreditado 3 anios\nAcreditado 6 anios\nAcreditado 8 anios",
+   "read_only": 1
+  },
+  {
+   "description": "% de criterios valorados sobre el total de criterios del marco.",
+   "fieldname": "avance_pct",
+   "fieldtype": "Percent",
+   "label": "Avance (%)",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-04 17:45:57.409314",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "Autoevaluacion",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "search_fields": "titulo,marco_normativo,programa_sede",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "titulo",
+ "track_changes": 1
+}

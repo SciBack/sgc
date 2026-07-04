@@ -1,0 +1,158 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "field:codigo",
+ "creation": "2026-07-04 17:31:19.185815",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "codigo",
+  "proceso",
+  "nivel",
+  "subsistema",
+  "propietario_unidad",
+  "responsable",
+  "estado",
+  "orden",
+  "is_group",
+  "parent_proceso",
+  "lft",
+  "rgt",
+  "old_parent"
+ ],
+ "fields": [
+  {
+   "description": "PK natural: E01\u2026E04 \u00b7 C01\u2026C13 \u00b7 S01\u2026S05",
+   "fieldname": "codigo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "C\u00f3digo",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "description": "Denominaci\u00f3n oficial (PENDIENTE Mapa v8.0 para los 22)",
+   "fieldname": "proceso",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Denominaci\u00f3n del proceso"
+  },
+  {
+   "fieldname": "nivel",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Nivel",
+   "options": "Estrat\u00e9gico\nClave\nSoporte"
+  },
+  {
+   "fieldname": "subsistema",
+   "fieldtype": "Data",
+   "label": "Subsistema"
+  },
+  {
+   "fieldname": "propietario_unidad",
+   "fieldtype": "Link",
+   "label": "Propietario (\u00e1rea)",
+   "options": "Unidad Organica"
+  },
+  {
+   "fieldname": "responsable",
+   "fieldtype": "Link",
+   "label": "Responsable (due\u00f1o de proceso)",
+   "options": "User"
+  },
+  {
+   "default": "Borrador",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Borrador\nVigente\nObsoleto"
+  },
+  {
+   "fieldname": "orden",
+   "fieldtype": "Int",
+   "label": "Orden"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "label": "Es grupo (macroproceso)"
+  },
+  {
+   "fieldname": "parent_proceso",
+   "fieldtype": "Link",
+   "label": "Proceso padre",
+   "options": "Proceso"
+  },
+  {
+   "fieldname": "lft",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Left",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "rgt",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Right",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "label": "Es grupo (macroproceso)"
+  },
+  {
+   "fieldname": "old_parent",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Old Parent",
+   "options": "Proceso"
+  },
+  {
+   "fieldname": "parent_proceso",
+   "fieldtype": "Link",
+   "label": "Proceso padre",
+   "options": "Proceso"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_tree": 1,
+ "links": [],
+ "modified": "2026-07-04 17:48:52.854741",
+ "modified_by": "Administrator",
+ "module": "SGC Procesos",
+ "name": "Proceso",
+ "nsm_parent_field": "parent_proceso",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "proceso",
+ "track_changes": 1
+}

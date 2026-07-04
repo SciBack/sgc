@@ -1,0 +1,160 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "format:AUD-{YYYY}-{###}",
+ "creation": "2026-07-04 17:29:32.606433",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "programa_auditoria",
+  "titulo",
+  "tipo",
+  "unidad_organica",
+  "proceso",
+  "programa_sede",
+  "periodo_academico",
+  "objetivo",
+  "alcance",
+  "criterios",
+  "equipo",
+  "fecha_plan",
+  "fecha_inicio",
+  "fecha_fin",
+  "estado",
+  "informe"
+ ],
+ "fields": [
+  {
+   "fieldname": "programa_auditoria",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Programa de auditor\u00eda",
+   "options": "Programa Auditoria"
+  },
+  {
+   "fieldname": "titulo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "T\u00edtulo",
+   "reqd": 1
+  },
+  {
+   "fieldname": "tipo",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Tipo",
+   "options": "Interna\nExterna (certificacion)\nDe seguimiento"
+  },
+  {
+   "fieldname": "unidad_organica",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Unidad org\u00e1nica",
+   "options": "Unidad Organica"
+  },
+  {
+   "fieldname": "proceso",
+   "fieldtype": "Link",
+   "label": "Proceso",
+   "options": "Proceso"
+  },
+  {
+   "fieldname": "programa_sede",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Programa-Sede",
+   "options": "Programa Sede"
+  },
+  {
+   "fieldname": "periodo_academico",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Periodo acad\u00e9mico",
+   "options": "Periodo Academico"
+  },
+  {
+   "fieldname": "objetivo",
+   "fieldtype": "Small Text",
+   "label": "Objetivo"
+  },
+  {
+   "fieldname": "alcance",
+   "fieldtype": "Text",
+   "label": "Alcance"
+  },
+  {
+   "fieldname": "criterios",
+   "fieldtype": "Table",
+   "label": "Criterios",
+   "options": "Criterio Auditoria"
+  },
+  {
+   "fieldname": "equipo",
+   "fieldtype": "Table",
+   "label": "Equipo auditor",
+   "options": "Equipo Auditoria"
+  },
+  {
+   "fieldname": "fecha_plan",
+   "fieldtype": "Date",
+   "label": "Fecha planificada"
+  },
+  {
+   "fieldname": "fecha_inicio",
+   "fieldtype": "Date",
+   "label": "Fecha de inicio"
+  },
+  {
+   "fieldname": "fecha_fin",
+   "fieldtype": "Date",
+   "label": "Fecha de fin"
+  },
+  {
+   "default": "Planificada",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Planificada\nEn ejecucion\nEjecutada\nInforme emitido\nCerrada"
+  },
+  {
+   "fieldname": "informe",
+   "fieldtype": "Link",
+   "label": "Informe de auditor\u00eda",
+   "options": "Informe Auditoria"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-04 17:29:32.606433",
+ "modified_by": "Administrator",
+ "module": "SGC Auditoria",
+ "name": "Auditoria",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "titulo",
+ "track_changes": 1
+}

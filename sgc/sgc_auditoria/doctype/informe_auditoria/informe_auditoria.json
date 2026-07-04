@@ -1,0 +1,123 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "field:codigo",
+ "creation": "2026-07-04 17:29:32.710403",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "codigo",
+  "auditoria",
+  "resumen_ejecutivo",
+  "conclusiones",
+  "n_nc_mayores",
+  "n_nc_menores",
+  "n_observaciones",
+  "n_om",
+  "fecha_emision",
+  "emitido_por",
+  "pdf",
+  "presentado_en"
+ ],
+ "fields": [
+  {
+   "fieldname": "codigo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "C\u00f3digo",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "auditoria",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Auditor\u00eda",
+   "options": "Auditoria",
+   "reqd": 1
+  },
+  {
+   "fieldname": "resumen_ejecutivo",
+   "fieldtype": "Text Editor",
+   "label": "Resumen ejecutivo"
+  },
+  {
+   "fieldname": "conclusiones",
+   "fieldtype": "Text",
+   "label": "Conclusiones"
+  },
+  {
+   "fieldname": "n_nc_mayores",
+   "fieldtype": "Int",
+   "label": "N.\u00ba NC mayores"
+  },
+  {
+   "fieldname": "n_nc_menores",
+   "fieldtype": "Int",
+   "label": "N.\u00ba NC menores"
+  },
+  {
+   "fieldname": "n_observaciones",
+   "fieldtype": "Int",
+   "label": "N.\u00ba observaciones"
+  },
+  {
+   "fieldname": "n_om",
+   "fieldtype": "Int",
+   "label": "N.\u00ba oportunidades de mejora"
+  },
+  {
+   "fieldname": "fecha_emision",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Fecha de emisi\u00f3n"
+  },
+  {
+   "fieldname": "emitido_por",
+   "fieldtype": "Link",
+   "label": "Emitido por",
+   "options": "User"
+  },
+  {
+   "fieldname": "pdf",
+   "fieldtype": "Attach",
+   "label": "PDF"
+  },
+  {
+   "description": "Insumo de \u00a79.3 \u2014 cierra el ciclo con la rama 4",
+   "fieldname": "presentado_en",
+   "fieldtype": "Link",
+   "label": "Presentado en (Revisi\u00f3n Direcci\u00f3n)",
+   "options": "Revision Direccion"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-04 17:29:32.710403",
+ "modified_by": "Administrator",
+ "module": "SGC Auditoria",
+ "name": "Informe Auditoria",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

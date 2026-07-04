@@ -1,0 +1,171 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "field:codigo",
+ "creation": "2026-07-04 17:29:33.101070",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "codigo",
+  "nombre",
+  "ente_externo",
+  "descripcion",
+  "sb_periodicidad",
+  "periodicidad",
+  "fecha_referencia",
+  "proximo_vencimiento",
+  "cb_periodicidad",
+  "interoperable",
+  "protocolo",
+  "sistema_fuente",
+  "sb_resp",
+  "responsable",
+  "unidad_organica",
+  "documento_controlado",
+  "activa"
+ ],
+ "fields": [
+  {
+   "fieldname": "codigo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "C\u00f3digo",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "description": "\"IAC \u2014 cumplimiento CBC\", \"Tesis RENATI\", \"SIBE\"",
+   "fieldname": "nombre",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Nombre",
+   "reqd": 1
+  },
+  {
+   "fieldname": "ente_externo",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Ente externo",
+   "options": "Ente Externo",
+   "reqd": 1
+  },
+  {
+   "description": "qu\u00e9 se entrega",
+   "fieldname": "descripcion",
+   "fieldtype": "Text",
+   "label": "Descripci\u00f3n"
+  },
+  {
+   "fieldname": "sb_periodicidad",
+   "fieldtype": "Section Break",
+   "label": "Periodicidad y vencimiento"
+  },
+  {
+   "fieldname": "periodicidad",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Periodicidad",
+   "options": "Continua\nMensual\nSemestral\nAnual\nDecenal\nPor proceso\nOn-demand"
+  },
+  {
+   "description": "ancla del c\u00e1lculo (p. ej. 31-mar para IAC)",
+   "fieldname": "fecha_referencia",
+   "fieldtype": "Date",
+   "label": "Fecha de referencia"
+  },
+  {
+   "description": "calculado por Scheduler desde periodicidad+fecha_referencia (F4)",
+   "fieldname": "proximo_vencimiento",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Pr\u00f3ximo vencimiento",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cb_periodicidad",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "sem\u00e1foro de automatizaci\u00f3n del mapa",
+   "fieldname": "interoperable",
+   "fieldtype": "Select",
+   "label": "Interoperable",
+   "options": "Alto\nMedio\nBajo"
+  },
+  {
+   "description": "OAI-PMH / CERIF / SOAP-PIDE / formulario",
+   "fieldname": "protocolo",
+   "fieldtype": "Data",
+   "label": "Protocolo"
+  },
+  {
+   "description": "DSpace / DSpace-CRIS / SGC / RRHH",
+   "fieldname": "sistema_fuente",
+   "fieldtype": "Data",
+   "label": "Sistema fuente"
+  },
+  {
+   "fieldname": "sb_resp",
+   "fieldtype": "Section Break",
+   "label": "Responsabilidad"
+  },
+  {
+   "fieldname": "responsable",
+   "fieldtype": "Link",
+   "label": "Responsable",
+   "options": "User"
+  },
+  {
+   "description": "\u00e1rea responsable",
+   "fieldname": "unidad_organica",
+   "fieldtype": "Link",
+   "label": "Unidad org\u00e1nica",
+   "options": "Unidad Organica"
+  },
+  {
+   "description": "plantilla/instructivo",
+   "fieldname": "documento_controlado",
+   "fieldtype": "Link",
+   "label": "Documento controlado",
+   "options": "Documento Controlado"
+  },
+  {
+   "default": "1",
+   "fieldname": "activa",
+   "fieldtype": "Check",
+   "label": "Activa"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-04 17:29:33.101070",
+ "modified_by": "Administrator",
+ "module": "SGC Riesgos",
+ "name": "Obligacion Ente",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "nombre",
+ "track_changes": 1
+}

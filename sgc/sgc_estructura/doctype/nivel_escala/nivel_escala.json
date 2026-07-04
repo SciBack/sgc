@@ -1,0 +1,80 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "creation": "2026-07-04 17:26:40.043728",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "codigo",
+  "sigla",
+  "etiqueta",
+  "score",
+  "orden",
+  "es_aprobatorio",
+  "definicion"
+ ],
+ "fields": [
+  {
+   "fieldname": "codigo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "C\u00f3digo",
+   "reqd": 1
+  },
+  {
+   "description": "NL\u00b7L\u00b7LP",
+   "fieldname": "sigla",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Sigla"
+  },
+  {
+   "fieldname": "etiqueta",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Etiqueta"
+  },
+  {
+   "description": "0/1/2 (del YAML CONEAU)",
+   "fieldname": "score",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Score"
+  },
+  {
+   "fieldname": "orden",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Orden"
+  },
+  {
+   "default": "0",
+   "fieldname": "es_aprobatorio",
+   "fieldtype": "Check",
+   "label": "Es aprobatorio"
+  },
+  {
+   "description": "Definici\u00f3n textual oficial del nivel",
+   "fieldname": "definicion",
+   "fieldtype": "Text",
+   "label": "Definici\u00f3n"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-07-04 17:26:40.043728",
+ "modified_by": "Administrator",
+ "module": "SGC Estructura",
+ "name": "Nivel Escala",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

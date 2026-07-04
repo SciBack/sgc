@@ -1,0 +1,156 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "field:codigo",
+ "creation": "2026-07-04 17:29:32.292151",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "codigo",
+  "tipo",
+  "origen",
+  "criterio",
+  "autoevaluacion",
+  "proceso",
+  "descripcion",
+  "unidad_organica",
+  "programa_sede",
+  "severidad",
+  "no_conformidad",
+  "escalado_a_nc",
+  "estado",
+  "detectado_por",
+  "fecha"
+ ],
+ "fields": [
+  {
+   "fieldname": "codigo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "C\u00f3digo",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "tipo",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Tipo",
+   "options": "Fortaleza\nDebilidad\nOportunidad de mejora"
+  },
+  {
+   "fieldname": "origen",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Origen",
+   "options": "Autoevaluacion\nAuditoria\nSupervision"
+  },
+  {
+   "fieldname": "criterio",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Criterio (elemento del marco)",
+   "options": "Elemento Marco"
+  },
+  {
+   "fieldname": "autoevaluacion",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Autoevaluaci\u00f3n",
+   "options": "Autoevaluacion"
+  },
+  {
+   "fieldname": "proceso",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Proceso",
+   "options": "Proceso"
+  },
+  {
+   "fieldname": "descripcion",
+   "fieldtype": "Text",
+   "label": "Descripci\u00f3n"
+  },
+  {
+   "fieldname": "unidad_organica",
+   "fieldtype": "Link",
+   "label": "Unidad org\u00e1nica",
+   "options": "Unidad Organica"
+  },
+  {
+   "fieldname": "programa_sede",
+   "fieldtype": "Link",
+   "label": "Programa-Sede",
+   "options": "Programa Sede"
+  },
+  {
+   "fieldname": "severidad",
+   "fieldtype": "Select",
+   "label": "Severidad",
+   "options": "\nCritica\nAlta\nMedia\nBaja"
+  },
+  {
+   "fieldname": "no_conformidad",
+   "fieldtype": "Link",
+   "label": "No conformidad",
+   "options": "No Conformidad"
+  },
+  {
+   "default": "0",
+   "fieldname": "escalado_a_nc",
+   "fieldtype": "Check",
+   "label": "Escalado a NC"
+  },
+  {
+   "default": "Abierto",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Abierto\nEn tratamiento\nVerificacion\nCerrado eficaz\nCerrado no eficaz"
+  },
+  {
+   "fieldname": "detectado_por",
+   "fieldtype": "Link",
+   "label": "Detectado por",
+   "options": "User"
+  },
+  {
+   "fieldname": "fecha",
+   "fieldtype": "Date",
+   "label": "Fecha"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-04 17:29:32.292151",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "Hallazgo",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "codigo",
+ "track_changes": 1
+}

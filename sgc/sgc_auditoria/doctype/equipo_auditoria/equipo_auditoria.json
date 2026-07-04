@@ -1,0 +1,54 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "creation": "2026-07-04 17:29:32.521521",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "usuario",
+  "rol",
+  "independiente_del_area"
+ ],
+ "fields": [
+  {
+   "fieldname": "usuario",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Usuario",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "rol",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Rol",
+   "options": "Auditor lider\nAuditor\nObservador\nExperto tecnico"
+  },
+  {
+   "default": "0",
+   "description": "Evidencia de independencia (\u00a79.2.2 e)",
+   "fieldname": "independiente_del_area",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Independiente del \u00e1rea"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-07-04 17:29:32.521521",
+ "modified_by": "Administrator",
+ "module": "SGC Auditoria",
+ "name": "Equipo Auditoria",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

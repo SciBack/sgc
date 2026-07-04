@@ -1,0 +1,201 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "format:NC-{YYYY}-{#####}",
+ "creation": "2026-07-04 17:29:32.242298",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "titulo",
+  "origen_doctype",
+  "origen_id",
+  "origen_tipo",
+  "tipo",
+  "descripcion",
+  "requisito_incumplido",
+  "unidad_organica",
+  "proceso",
+  "programa_sede",
+  "criterio",
+  "severidad",
+  "requiere_analisis_causa",
+  "analisis_causa",
+  "correccion_inmediata",
+  "plan_mejora",
+  "estado",
+  "responsable",
+  "fecha_deteccion",
+  "fecha_compromiso",
+  "evidencia_cierre",
+  "verificada_por"
+ ],
+ "fields": [
+  {
+   "fieldname": "titulo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "T\u00edtulo",
+   "reqd": 1
+  },
+  {
+   "fieldname": "origen_doctype",
+   "fieldtype": "Link",
+   "label": "Tipo de documento origen",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "origen_id",
+   "fieldtype": "Dynamic Link",
+   "label": "Documento origen",
+   "options": "origen_doctype"
+  },
+  {
+   "fieldname": "origen_tipo",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Origen",
+   "options": "Autoevaluacion\nAuditoria\nQueja/Reclamo\nIndicador fuera de meta\nRevision por direccion\nRiesgo materializado\nIncumplimiento a ente\nProceso\nOtra"
+  },
+  {
+   "fieldname": "tipo",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Tipo",
+   "options": "No conformidad mayor\nNo conformidad menor\nObservacion\nOportunidad de mejora"
+  },
+  {
+   "fieldname": "descripcion",
+   "fieldtype": "Text",
+   "label": "Descripci\u00f3n"
+  },
+  {
+   "fieldname": "requisito_incumplido",
+   "fieldtype": "Small Text",
+   "label": "Requisito incumplido"
+  },
+  {
+   "fieldname": "unidad_organica",
+   "fieldtype": "Link",
+   "label": "Unidad org\u00e1nica",
+   "options": "Unidad Organica"
+  },
+  {
+   "fieldname": "proceso",
+   "fieldtype": "Link",
+   "label": "Proceso",
+   "options": "Proceso"
+  },
+  {
+   "fieldname": "programa_sede",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Programa-Sede",
+   "options": "Programa Sede"
+  },
+  {
+   "fieldname": "criterio",
+   "fieldtype": "Link",
+   "label": "Criterio (elemento del marco)",
+   "options": "Elemento Marco"
+  },
+  {
+   "fieldname": "severidad",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Severidad",
+   "options": "Critica\nAlta\nMedia\nBaja"
+  },
+  {
+   "default": "0",
+   "fieldname": "requiere_analisis_causa",
+   "fieldtype": "Check",
+   "label": "Requiere an\u00e1lisis de causa"
+  },
+  {
+   "fieldname": "analisis_causa",
+   "fieldtype": "Text",
+   "label": "An\u00e1lisis de causa ra\u00edz"
+  },
+  {
+   "fieldname": "correccion_inmediata",
+   "fieldtype": "Text",
+   "label": "Correcci\u00f3n inmediata (contenci\u00f3n)"
+  },
+  {
+   "fieldname": "plan_mejora",
+   "fieldtype": "Link",
+   "label": "Plan de mejora",
+   "options": "Plan Mejora"
+  },
+  {
+   "default": "Abierta",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Abierta\nEn analisis\nEn tratamiento\nEn verificacion\nCerrada eficaz\nCerrada no eficaz"
+  },
+  {
+   "fieldname": "responsable",
+   "fieldtype": "Link",
+   "label": "Responsable",
+   "options": "User"
+  },
+  {
+   "fieldname": "fecha_deteccion",
+   "fieldtype": "Date",
+   "label": "Fecha de detecci\u00f3n"
+  },
+  {
+   "fieldname": "fecha_compromiso",
+   "fieldtype": "Date",
+   "label": "Fecha de compromiso (ETA)"
+  },
+  {
+   "fieldname": "evidencia_cierre",
+   "fieldtype": "Link",
+   "label": "Evidencia de cierre",
+   "options": "Evidencia"
+  },
+  {
+   "fieldname": "verificada_por",
+   "fieldtype": "Link",
+   "label": "Verificada por",
+   "options": "User"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-04 17:29:32.242298",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "No Conformidad",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "search_fields": "titulo,origen_tipo",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "titulo",
+ "track_changes": 1
+}

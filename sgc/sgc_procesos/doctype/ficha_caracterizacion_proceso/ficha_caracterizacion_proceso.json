@@ -1,0 +1,206 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "format:FICHA-{proceso}",
+ "creation": "2026-07-04 17:31:19.283293",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "proceso",
+  "version",
+  "fecha_emision",
+  "estado",
+  "sec_plan",
+  "objetivo",
+  "alcance",
+  "requisitos_aplicables",
+  "recursos",
+  "sec_entradas",
+  "entradas",
+  "actividades",
+  "salidas",
+  "sec_verificar",
+  "indicadores",
+  "registros",
+  "riesgos",
+  "documentos_asociados",
+  "sec_control",
+  "elaborado_por",
+  "revisado_por",
+  "aprobado_por",
+  "resolucion_aprobacion",
+  "control_cambios"
+ ],
+ "fields": [
+  {
+   "fieldname": "proceso",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Proceso",
+   "options": "Proceso",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "version",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Versi\u00f3n"
+  },
+  {
+   "fieldname": "fecha_emision",
+   "fieldtype": "Date",
+   "label": "Fecha de emisi\u00f3n"
+  },
+  {
+   "default": "Borrador",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Borrador\nEn revisi\u00f3n\nAprobado\nPublicado\nObsoleto"
+  },
+  {
+   "fieldname": "sec_plan",
+   "fieldtype": "Section Break",
+   "label": "Planificar (P)"
+  },
+  {
+   "fieldname": "objetivo",
+   "fieldtype": "Small Text",
+   "label": "Objetivo del proceso"
+  },
+  {
+   "fieldname": "alcance",
+   "fieldtype": "Small Text",
+   "label": "Alcance"
+  },
+  {
+   "fieldname": "requisitos_aplicables",
+   "fieldtype": "Small Text",
+   "label": "Requisitos aplicables"
+  },
+  {
+   "fieldname": "recursos",
+   "fieldtype": "Small Text",
+   "label": "Recursos"
+  },
+  {
+   "fieldname": "sec_entradas",
+   "fieldtype": "Section Break",
+   "label": "SIPOC"
+  },
+  {
+   "fieldname": "entradas",
+   "fieldtype": "Table",
+   "label": "Entradas",
+   "options": "Entrada Proceso"
+  },
+  {
+   "fieldname": "actividades",
+   "fieldtype": "Table",
+   "label": "Actividades / Procedimientos",
+   "options": "Actividad Proceso"
+  },
+  {
+   "fieldname": "salidas",
+   "fieldtype": "Table",
+   "label": "Salidas",
+   "options": "Salida Proceso"
+  },
+  {
+   "fieldname": "sec_verificar",
+   "fieldtype": "Section Break",
+   "label": "Verificar / Actuar (V/A)"
+  },
+  {
+   "fieldname": "indicadores",
+   "fieldtype": "Table",
+   "label": "Indicadores",
+   "options": "Indicador Proceso Link"
+  },
+  {
+   "fieldname": "registros",
+   "fieldtype": "Table",
+   "label": "Registros",
+   "options": "Registro Proceso"
+  },
+  {
+   "fieldname": "riesgos",
+   "fieldtype": "Table",
+   "label": "Riesgos",
+   "options": "Riesgo Proceso"
+  },
+  {
+   "fieldname": "documentos_asociados",
+   "fieldtype": "Table",
+   "label": "Documentos asociados",
+   "options": "Doc Proceso Link"
+  },
+  {
+   "fieldname": "sec_control",
+   "fieldtype": "Section Break",
+   "label": "Control de emisi\u00f3n y cambios"
+  },
+  {
+   "fieldname": "elaborado_por",
+   "fieldtype": "Link",
+   "label": "Elaborado por",
+   "options": "User"
+  },
+  {
+   "fieldname": "revisado_por",
+   "fieldtype": "Link",
+   "label": "Revisado por",
+   "options": "User"
+  },
+  {
+   "fieldname": "aprobado_por",
+   "fieldtype": "Link",
+   "label": "Aprobado por",
+   "options": "User"
+  },
+  {
+   "fieldname": "resolucion_aprobacion",
+   "fieldtype": "Data",
+   "label": "Resoluci\u00f3n N\u00b0"
+  },
+  {
+   "fieldname": "control_cambios",
+   "fieldtype": "Table",
+   "label": "Control de cambios",
+   "options": "Cambio Ficha"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-04 17:31:19.283293",
+ "modified_by": "Administrator",
+ "module": "SGC Procesos",
+ "name": "Ficha Caracterizacion Proceso",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "proceso",
+ "track_changes": 1
+}

@@ -1,0 +1,112 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "format:TRR-{YYYY}-{#####}",
+ "creation": "2026-07-04 17:29:33.003716",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "riesgo",
+  "estrategia",
+  "descripcion",
+  "responsable",
+  "fecha_compromiso",
+  "estado",
+  "sb_costura",
+  "accion_mejora",
+  "evidencia"
+ ],
+ "fields": [
+  {
+   "fieldname": "riesgo",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Riesgo",
+   "options": "Riesgo",
+   "reqd": 1
+  },
+  {
+   "fieldname": "estrategia",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Estrategia",
+   "options": "Evitar\nReducir\nTransferir\nAceptar"
+  },
+  {
+   "description": "control/plan de tratamiento",
+   "fieldname": "descripcion",
+   "fieldtype": "Text",
+   "label": "Descripci\u00f3n"
+  },
+  {
+   "fieldname": "responsable",
+   "fieldtype": "Link",
+   "label": "Responsable",
+   "options": "User"
+  },
+  {
+   "fieldname": "fecha_compromiso",
+   "fieldtype": "Date",
+   "label": "Fecha compromiso"
+  },
+  {
+   "default": "Planificado",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Estado",
+   "options": "Planificado\nEn ejecucion\nImplementado\nVerificado"
+  },
+  {
+   "fieldname": "sb_costura",
+   "fieldtype": "Section Break",
+   "label": "Costura con mejora / evidencia"
+  },
+  {
+   "description": "reutiliza el CAPA si el tratamiento es una acci\u00f3n concreta ejecutable",
+   "fieldname": "accion_mejora",
+   "fieldtype": "Link",
+   "label": "Acci\u00f3n de mejora",
+   "options": "Accion Mejora"
+  },
+  {
+   "description": "prueba de implementaci\u00f3n del control",
+   "fieldname": "evidencia",
+   "fieldtype": "Link",
+   "label": "Evidencia",
+   "options": "Evidencia"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-04 17:29:33.003716",
+ "modified_by": "Administrator",
+ "module": "SGC Riesgos",
+ "name": "Tratamiento Riesgo",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

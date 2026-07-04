@@ -1,0 +1,1770 @@
+urn: urn:intuitem:risk:library:coneau-programas-2025
+locale: es
+ref_id: CONEAU-Programas-2025
+name: Modelo de Acreditación CONEAU Programas 2025
+description: Modelo de Acreditación para Programas de Estudios de Educación Superior Universitaria (CONEAU 2025), del Sistema Nacional de Evaluación, Acreditación y Certificación de la Calidad Educativa (SINEACE), Perú. 10 estándares, 53 criterios, 52 evidencias y 29 indicadores. Valoración por estándar en escala de 3 niveles (NL/L/LP).
+copyright: SINEACE - CONEAU. Documento oficial de acceso público del Estado peruano. Transcripción textual del PDF oficial del Modelo (pp. 41-98).
+version: 1
+publication_date: '2025-09-26'
+provider: SINEACE-CONEAU
+packager: UPeU-DPGC
+objects:
+  framework:
+    urn: urn:intuitem:risk:framework:coneau-programas-2025
+    ref_id: CONEAU-Programas-2025
+    name: Modelo de Acreditación CONEAU Programas 2025
+    description: Estándares y criterios del Modelo de Acreditación para Programas de Estudios de Educación Superior Universitaria (CONEAU 2025, SINEACE).
+    min_score: 0
+    max_score: 2
+    scores_definition:
+    - score: 0
+      name: NL — Estándar no logrado
+      description: Cuando se ha demostrado que el programa de estudios no cumple con todos los criterios del estándar y las debilidades detectadas afectan seriamente la calidad de los procesos y resultados del programa.
+    - score: 1
+      name: L — Estándar logrado
+      description: Cuando se ha demostrado que el programa de estudios cumple con todos los criterios del estándar, pero la evaluación muestra que hay debilidades y oportunidades de mejora por implementar.
+    - score: 2
+      name: LP — Estándar logrado plenamente
+      description: Cuando se ha demostrado que el programa de estudios cumple con todos los criterios del estándar.
+    requirement_nodes:
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:root
+      assessable: false
+      depth: 1
+      ref_id: CONEAU-2025
+      name: Modelo de Acreditación CONEAU Programas 2025
+      description: Modelo de Acreditación para Programas de Estudios de Educación Superior Universitaria (CONEAU 2025, SINEACE).
+      annotation: |-
+        Modelo de Acreditación para Programas de Estudios de Educación Superior Universitaria — CONEAU 2025 (SINEACE). El documento se titula "2025" (metadatos del PDF: creado 2025-09-12, modificado 2025-09-26). Estructura plana: 10 estándares → 53 criterios → 52 evidencias (por estándar) → 29 indicadores (transversales). No existen dimensiones ni factores.
+
+        VALORACIÓN (Sección IX, pp. 94-98): la valoración es POR ESTÁNDAR en escala de 3 niveles — NL (no logrado) = 0, L (logrado) = 1, LP (logrado plenamente) = 2. Se analiza el criterio y el comportamiento de sus indicadores asociados sobre los últimos cuatro semestres (o dos periodos anuales). Los valores absolutos de los indicadores NO fijan el nivel de logro; importa su evolución y las mejoras implementadas. Cada indicador tiene nivel referencial con margen de error de ±3% (ej.: si el referencial es 70%, un 67% es aceptable; una evolución positiva n-1→n también).
+
+        VIGENCIA (Tabla 9, p. 95): En proceso = presencia de uno o más estándares NL. Acreditado 3 años = todos los estándares L, o combinación de L y LP. Acreditado 6 años = todos LP. Acreditado 8 años = todos LP + ≥ 16 puntos de la tabla de criterios de excelencia (Tabla 10).
+
+        EXCELENCIA (Tabla 10, pp. 96-98): otorga puntos adicionales (requiere todos los estándares LP + ciclo de mejora continua consolidado + acumulado ≥ 16 puntos). Criterios: % docentes con doctorado (1-3 pts), % docentes Renacyt (1-3), % docentes a tiempo completo (1-3), % egresados por promoción (1-3), % egresados trabajando en su profesión el primer año (1-3), % egresados titulados al primer año (1-3), SGC (implementado 4 · certificado 8), acreditación de agencia del extranjero (3), idoneidad de infraestructura — promedio ID3 e ID17 (1-3), y contribución cultural/artística/histórica/filosófica excepcional (hasta 6).
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e1
+      assessable: true
+      depth: 2
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:root
+      ref_id: E1
+      name: GESTIÓN DEL PROGRAMA DE ESTUDIOS
+      description: El programa de estudios gestiona su accionar mediante una organización interna formalmente establecida, a cargo de personal competente, con base en planes estratégicos y operativos que incluyen, entre otros, objetivos académicos definidos, cuyo grado de cumplimiento es evaluado, por lo menos, con periodicidad anual.
+      annotation: |-
+        📖 Fuente: Estándar 1, p. 50 del Modelo CONEAU 2025.
+
+        📎 Evidencias del estándar (fuentes de verificación, p. 50):
+        EV1: Documento(s) que define(n) la organización interna para la gestión del programa de estudios.
+        EV2: Hoja de vida del cuerpo directivo a cargo de la gestión del programa de estudios.
+        EV3: Documento que contiene los objetivos académicos del programa de estudios.
+        EV4: Publicación de los objetivos académicos que evidencien su accesibilidad por las partes interesadas
+        EV5: Planes estratégicos y operativos vigentes de los los [sic] dos años anteriores a la autoevaluación con fines de acreditación.
+        EV6: Informes de evaluación de los planes estratégicos y operativos
+        EV7: Informes sobre quejas, reclamos y denuncias presentadas y las atenciones o soluciones, e las mismas han tenido [sic]
+
+        💬 Valoración por estándar en 3 niveles (NL=0 / L=1 / LP=2), analizando sus criterios e indicadores asociados.
+      reference_controls:
+      - urn:intuitem:risk:function:coneau-programas-2025:id8
+      - urn:intuitem:risk:function:coneau-programas-2025:id18
+      - urn:intuitem:risk:function:coneau-programas-2025:id21
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e2
+      assessable: true
+      depth: 2
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:root
+      ref_id: E2
+      name: CURRÍCULO
+      description: El currículo se diseña con la debida fundamentación y garantiza el perfil del egresado
+      annotation: |-
+        📖 Fuente: Estándar 2, p. 51 del Modelo CONEAU 2025.
+
+        📎 Evidencias del estándar (fuentes de verificación, p. 52):
+        EV8: Todos los documentos que se enuncian en el criterio 2.1 como componentes del currículo y su fundamentación.
+        EV9: Sílabos de las asignaturas
+        EV10: Informe de cumplimiento semestral de los sílabos, el cual contiene: procedimiento de verificación, porcentajes de cumplimiento y acciones emprendidas para disminuir o eliminar esa situación.
+        EV11: Documento(s) que establece(n) el procedimiento de convalidación y/o reconocimiento de créditos, que hayan obtenidos [sic] en otras instituciones o por otras actividades no lectivas.
+
+        💬 Valoración por estándar en 3 niveles (NL=0 / L=1 / LP=2), analizando sus criterios e indicadores asociados.
+      reference_controls:
+      - urn:intuitem:risk:function:coneau-programas-2025:id1
+      - urn:intuitem:risk:function:coneau-programas-2025:id11
+      - urn:intuitem:risk:function:coneau-programas-2025:id12
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e3
+      assessable: true
+      depth: 2
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:root
+      ref_id: E3
+      name: EVALUACIÓN DE LA ENSEÑANZA, EL APRENDIZAJE Y DEL LOGRO DEL PERFIL DE EGRESO
+      description: Se evalúa la calidad de la enseñanza, así como la progresión del desempeño académico de los estudiantes, para determinar en qué medida se cumple con las competencias/objetivos u otro enfoque establecido en el perfil del egresado, y se implementan actividades de orientación y apoyo para alcanzarlos. Se consideran las diferentes necesidades de aprendizaje.
+      annotation: |-
+        📖 Fuente: Estándar 3, p. 53 del Modelo CONEAU 2025.
+
+        📎 Evidencias del estándar (fuentes de verificación, p. 53):
+        EV12: Documentos que norman los mecanismos e instrumentos de evaluación de la calidad de la enseñanza, informes sobre su aplicación, de los resultados obtenidos y sugerencias para la mejora, de acuerdo con el criterio 3.1.
+        EV13: Documento(s) que orienta(n) y regula(n) la evaluación del estudiante, de acuerdo con los criterios 3.2 y 3.3.
+        EV14: Documento(s) que norma(n) las actividades de asesoría y/o tutoría de los estudiantes e informe sobre prácticas realizadas, durante los últimos dos semestres anteriores a la presentación del informe de autoevaluación con fines de acreditación.
+        EV15: En los casos que corresponda, documento(s) que norma(n) las prácticas pre profesionales y su supervisión, e información de su aplicación durante los dos (2) semestres anteriores a la presentación del informe de autoevaluación con fines de acreditación. Incluye información sobre la proporción de estudiantes que participaron en estas prácticas.
+        EV16: Normas que establecen los requerimientos definidos en el criterio 3.7, informe de incidencias y acciones desarrolladas en esos casos, de los últimos dos semestres anteriores a la presentación del informe de autoevaluación con fines de acreditación.
+        EV17: Informe de la evolución del desempeño de los estudiantes, con base a la evolución de los siguientes indicadores, en los últimos cuatro semestres o dos años: ID10: Porcentaje de estudiantes aprobados por asignatura; ID28: Porcentaje de estudiantes que han alcanzado el título profesional, dentro de los dos años posteriores a su egreso
+        EV18: Resultados de programas o actividades de asesoría y/o tutoría realizados durante los dos (2) semestres anteriores a la presentación del informe de autoevaluación. Especificar objetivos, actividades realizadas y cantidad de participantes.
+        EV19: Relación de tesis y trabajos de suficiencia profesional sustentadas por los titulados, durante los dos (2) años anteriores a la presentación del informe de autoevaluación, que obran en el repositorio.
+
+        💬 Valoración por estándar en 3 niveles (NL=0 / L=1 / LP=2), analizando sus criterios e indicadores asociados.
+      reference_controls:
+      - urn:intuitem:risk:function:coneau-programas-2025:id1
+      - urn:intuitem:risk:function:coneau-programas-2025:id3
+      - urn:intuitem:risk:function:coneau-programas-2025:id4
+      - urn:intuitem:risk:function:coneau-programas-2025:id5
+      - urn:intuitem:risk:function:coneau-programas-2025:id9
+      - urn:intuitem:risk:function:coneau-programas-2025:id10
+      - urn:intuitem:risk:function:coneau-programas-2025:id19
+      - urn:intuitem:risk:function:coneau-programas-2025:id20
+      - urn:intuitem:risk:function:coneau-programas-2025:id22
+      - urn:intuitem:risk:function:coneau-programas-2025:id24
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e4
+      assessable: true
+      depth: 2
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:root
+      ref_id: E4
+      name: PLANA DOCENTE
+      description: La plana docente cuenta con las características académicas y experiencia requeridas en el currículo, para llevar a cabo las actividades de formación profesional.
+      annotation: |-
+        📖 Fuente: Estándar 4, p. 55 del Modelo CONEAU 2025.
+
+        📎 Evidencias del estándar (fuentes de verificación, p. 55):
+        EV20: Reglamento de personal docente o similar o documentos que orientan y norman la gestión docente (convocatoria, selección, vinculación, permanencia, evaluación, promoción y desvinculación).
+        EV21: Documentos que orientan y regulan la evaluación de desempeño docente (incluidos los instrumentos de medición).
+        EV22: Currículum vitae documentado de los docentes.
+        EV23: Formato C9 de la Sunedu, o similar, que incluya una columna con la relación de asignaturas en las que se ha desempeñado cada docente durante los últimos períodos académicos (2 años o 4 semestres, relacionado con la duración del periodo).
+        EV24: Informe en el que se explique la pertinencia de la formación y experiencia de cada docente, con la naturaleza de las asignaturas en que se desempeña, de acuerdo con lo establecido en los criterio [sic] 4.1, 4.2 y 4.3.
+        EV25: Informe y documentación sustentadora sobre los resultados de evaluación de desempeño docente de los dos (2) últimos años.
+        EV26: Plan de capacitación o documento similar del programa, facultad o institución, que evidencie lo requerido en el criterio 4.5.
+        EV27: Informe y documentación sustentadora de los resultados de las capacitaciones de los docentes del programa de los dos (2) últimos años, en correspondencia con lo requerido en el criterio 4.5.
+        EV28: Informe y documentación sustentadora de los resultados de producción científica, innovación o creación cultural y artística de los docentes vinculados al programa de estudios. Debe incluir acceso a las fuentes primarias de lo producido.
+        EV29: Información sobre las experiencias académicas y trabajos colaborativos en la que los docentes han participado, de acuerdo con lo establecido en el criterio 4.6
+
+        💬 Valoración por estándar en 3 niveles (NL=0 / L=1 / LP=2), analizando sus criterios e indicadores asociados.
+      reference_controls:
+      - urn:intuitem:risk:function:coneau-programas-2025:id2
+      - urn:intuitem:risk:function:coneau-programas-2025:id4
+      - urn:intuitem:risk:function:coneau-programas-2025:id13
+      - urn:intuitem:risk:function:coneau-programas-2025:id14
+      - urn:intuitem:risk:function:coneau-programas-2025:id15
+      - urn:intuitem:risk:function:coneau-programas-2025:id16
+      - urn:intuitem:risk:function:coneau-programas-2025:id19
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e5
+      assessable: true
+      depth: 2
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:root
+      ref_id: E5
+      name: RECURSOS PARA LA ENSEÑANZA - APRENDIZAJE
+      description: Los recursos requeridos para el desarrollo de las actividades de enseñanza - aprendizaje considerados en el currículo, se encuentran a disposición de docentes y estudiantes, de manera oportuna.
+      annotation: |-
+        📖 Fuente: Estándar 5, p. 57 del Modelo CONEAU 2025.
+
+        📎 Evidencias del estándar (fuentes de verificación, p. 57):
+        EV30: Informe y documentación sustentadora de la infraestructura, equipamiento, mobiliario y tecnologías de información y comunicación utilizados en las actividades de formación profesional del programa de estudios, y fundamentación sobre su coherencia con las disciplinas que componen el currículo. Se especifica aquella que se utiliza para las modalidades semipresencial y/o a distancia. (criterios 5.1, 5.2 y 5.3) (ID3, ID17)
+        EV31: Protocolos, guías, manuales u otros medios referidos en el criterio 5.4
+        EV32: Suscripciones a bases de datos bibliográficas, catálogos de la biblioteca y hemeroteca a las que tienen acceso los docentes y estudiantes del programa de estudios. (criterio 5.5)
+        EV33: Plan de mantenimiento de la infraestructura y equipamiento, o documento similar, e información sobre su cumplimiento. (criterio 5.6)
+
+        💬 Valoración por estándar en 3 niveles (NL=0 / L=1 / LP=2), analizando sus criterios e indicadores asociados.
+      reference_controls:
+      - urn:intuitem:risk:function:coneau-programas-2025:id3
+      - urn:intuitem:risk:function:coneau-programas-2025:id17
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e6
+      assessable: true
+      depth: 2
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:root
+      ref_id: E6
+      name: RESPONSABILIDAD SOCIAL UNIVERSITARIA
+      description: Se evalúa el impacto de la formación en los egresados, en la adquisición de competencias y en el ejercicio profesional y se implantan acciones de mejora, en los casos que corresponda, para alcanzar el impacto deseado.
+      annotation: |-
+        📖 Fuente: Estándar 6, p. 58 del Modelo CONEAU 2025.
+
+        📎 Evidencias del estándar (fuentes de verificación, p. 58):
+        EV34: informe [sic] de medición del impacto de la formación en los egresados del programa de estudios. Debe incluir el análisis de los siguientes indicadores: ID20: porcentaje de egresados satisfechos con la calidad y utilidad de la formación recibida, para su empleabilidad; ID26: tiempo promedio entre egreso y primer empleo en el campo profesional; ID27: Porcentaje de egresados que laboran en su campo profesional
+        EV35: informe [sic] que incluye opinión de empleadores y/u otras partes interesadas respecto del impacto de la formación en los egresados del programa de estudios. Se incluye el análisis del indicador: ID29: porcentaje de empleadores satisfechos con el desempeño de los egresados
+        EV36: Informe y evidencias de acciones de mejora implementadas en el proceso de formación en los últimos dos años.
+
+        💬 Valoración por estándar en 3 niveles (NL=0 / L=1 / LP=2), analizando sus criterios e indicadores asociados.
+      reference_controls:
+      - urn:intuitem:risk:function:coneau-programas-2025:id20
+      - urn:intuitem:risk:function:coneau-programas-2025:id22
+      - urn:intuitem:risk:function:coneau-programas-2025:id26
+      - urn:intuitem:risk:function:coneau-programas-2025:id27
+      - urn:intuitem:risk:function:coneau-programas-2025:id28
+      - urn:intuitem:risk:function:coneau-programas-2025:id29
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e7
+      assessable: true
+      depth: 2
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:root
+      ref_id: E7
+      name: BIENESTAR Y SERVICIOS DE APOYO AL ESTUDIANTE
+      description: La institución a la que pertenece el programa de estudios pone a disposición de los estudiantes, personal docente y no docente, programas de bienestar y actividades recreativas, culturales, artísticas y deportivas. Asimismo, dispone de servicios de apoyo para la mejora del desempeño y formación del estudiante. Estos programas son evaluados periódicamente y se mejoran de manera continua.
+      annotation: |-
+        📖 Fuente: Estándar 7, p. 59 del Modelo CONEAU 2025.
+
+        📎 Evidencias del estándar (fuentes de verificación, p. 59):
+        EV37: Informe y documentación sobre los resultados de los servicios bienestar [sic] y la satisfacción del estudiante.
+        EV38: Informe y documentación sobre los resultados de los servicios de apoyo (criterio 7.2) y su impacto en la mejora del desempeño y formación del estudiante.
+        EV39: Informe y documentación sobre acciones o planes de mejora implementados a partir de los resultados obtenidos, según corresponda.
+
+        💬 Valoración por estándar en 3 niveles (NL=0 / L=1 / LP=2), analizando sus criterios e indicadores asociados.
+      reference_controls:
+      - urn:intuitem:risk:function:coneau-programas-2025:id7
+      - urn:intuitem:risk:function:coneau-programas-2025:id9
+      - urn:intuitem:risk:function:coneau-programas-2025:id23
+      - urn:intuitem:risk:function:coneau-programas-2025:id24
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e8
+      assessable: true
+      depth: 2
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:root
+      ref_id: E8
+      name: GESTIÓN DE LA INFORMACIÓN
+      description: Se recoge y analiza información de la gestión y resultados del programa
+      annotation: |-
+        📖 Fuente: Estándar 8, p. 60 del Modelo CONEAU 2025.
+
+        📎 Evidencias del estándar (fuentes de verificación, p. 60):
+        EV40: Documento(s) que orienta(n) y regula(n) el recojo y análisis de la información, de acuerdo con lo establecido en el criterio 8.1
+        EV41: Resultados acerca de la satisfacción de los estudiantes con la gestión y el desarrollo de las actividades académicas y administrativas del programa (docentes, recursos, currículo, evaluación del aprendizaje, actividades de asesoría y tutoría, bienestar, administración, etc.) (ID1, ID2, ID3, ID4, ID5, ID7, ID8)
+        EV42: Resultados acerca de la satisfacción de los docentes con la gestión y el desarrollo de las actividades académicas y administrativas del programa (recursos, currículo, administración, etc.), así como con las actividades de fortalecimiento de capacidades y de desarrollo académico. (ID12, ID16, ID17, ID18)
+        EV43: Resultados acerca de la satisfacción de los egresados con la gestión y el desarrollo de las actividades académicas y administrativas del programa (docentes, currículo, calidad de la enseñanza, programas de bienestar, servicios de apoyo administración [sic], etc.), impacto de la formación recibida en su desarrollo profesional y personal u otras cuestiones que se consideren pertinentes. (ID20, ID21, ID22, ID23, ID24).
+        EV44: Resultados acerca de la satisfacción de los empleadores con el desempeño de los egresados, sus competencias, calidad de la formación recibida, entre otras cuestiones que se consideren pertinentes. (ID29).
+
+        💬 Valoración por estándar en 3 niveles (NL=0 / L=1 / LP=2), analizando sus criterios e indicadores asociados.
+      reference_controls:
+      - urn:intuitem:risk:function:coneau-programas-2025:id1
+      - urn:intuitem:risk:function:coneau-programas-2025:id2
+      - urn:intuitem:risk:function:coneau-programas-2025:id3
+      - urn:intuitem:risk:function:coneau-programas-2025:id4
+      - urn:intuitem:risk:function:coneau-programas-2025:id5
+      - urn:intuitem:risk:function:coneau-programas-2025:id6
+      - urn:intuitem:risk:function:coneau-programas-2025:id7
+      - urn:intuitem:risk:function:coneau-programas-2025:id8
+      - urn:intuitem:risk:function:coneau-programas-2025:id9
+      - urn:intuitem:risk:function:coneau-programas-2025:id10
+      - urn:intuitem:risk:function:coneau-programas-2025:id12
+      - urn:intuitem:risk:function:coneau-programas-2025:id13
+      - urn:intuitem:risk:function:coneau-programas-2025:id14
+      - urn:intuitem:risk:function:coneau-programas-2025:id15
+      - urn:intuitem:risk:function:coneau-programas-2025:id16
+      - urn:intuitem:risk:function:coneau-programas-2025:id17
+      - urn:intuitem:risk:function:coneau-programas-2025:id18
+      - urn:intuitem:risk:function:coneau-programas-2025:id19
+      - urn:intuitem:risk:function:coneau-programas-2025:id20
+      - urn:intuitem:risk:function:coneau-programas-2025:id21
+      - urn:intuitem:risk:function:coneau-programas-2025:id22
+      - urn:intuitem:risk:function:coneau-programas-2025:id23
+      - urn:intuitem:risk:function:coneau-programas-2025:id24
+      - urn:intuitem:risk:function:coneau-programas-2025:id25
+      - urn:intuitem:risk:function:coneau-programas-2025:id26
+      - urn:intuitem:risk:function:coneau-programas-2025:id27
+      - urn:intuitem:risk:function:coneau-programas-2025:id28
+      - urn:intuitem:risk:function:coneau-programas-2025:id29
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e9
+      assessable: true
+      depth: 2
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:root
+      ref_id: E9
+      name: SUPERVISIÓN Y REVISIÓN DEL PROGRAMA DE ESTUDIOS
+      description: Se utiliza la información de la gestión y resultados del programa para realizar mejoras.
+      annotation: |-
+        📖 Fuente: Estándar 9, p. 61 del Modelo CONEAU 2025.
+
+        📎 Evidencias del estándar (fuentes de verificación, p. 61):
+        EV45: Documentos que norman la revisión del currículo.
+        EV46: Informe sobre la ejecución de los procesos de actualización curricular y documentación sustentadora.
+        EV47: Registro histórico de cambios curriculares.
+        EV48: Informe y documentación sustentadora de las acciones de supervisión de ejecución de las actividades lectivas, propuestas de mejora realizadas y ejecutadas.
+
+        💬 Valoración por estándar en 3 niveles (NL=0 / L=1 / LP=2), analizando sus criterios e indicadores asociados.
+      reference_controls:
+      - urn:intuitem:risk:function:coneau-programas-2025:id11
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e10
+      assessable: true
+      depth: 2
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:root
+      ref_id: E10
+      name: GESTIÓN DE LA CALIDAD
+      description: Se cuenta con un sistema de gestión de la calidad en diseño y/o implementado a nivel de programa o a nivel institucional, con alcance al programa.
+      annotation: |-
+        📖 Fuente: Estándar 10, p. 62 del Modelo CONEAU 2025.
+
+        📎 Evidencias del estándar (fuentes de verificación, p. 62):
+        EV49: Documentos que den cuenta del diseño y/o implementación del sistema de gestión de la calidad: manual de calidad, plan(es) de implementación, resultados de implementación, según corresponda.
+        EV50: Información sobre los procesos incluidos en el sistema de gestión de la calidad.
+        EV51: Registro histórico de cambios al sistema de gestión de la calidad.
+        EV52: Resultados de evaluación del funcionamiento del sistema de gestión de la calidad, y acciones de mejora propuestas e implementadas.
+
+        💬 Valoración por estándar en 3 niveles (NL=0 / L=1 / LP=2), analizando sus criterios e indicadores asociados.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e1.1
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e1
+      ref_id: '1.1'
+      name: Estructura interna en Reglamento/MOF
+      description: El programa cuenta con una estructura interna pertinente, que se detalla en su Reglamento y/o Manual de Organización y Funciones o en el de la universidad.
+      annotation: |-
+        📖 Fuente: Criterio 1.1, p. 50.
+
+        💬 La organización del programa debe estar formalizada en el Reglamento o MOF.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e1.2
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e1
+      ref_id: '1.2'
+      name: Cuerpo directivo competente
+      description: La gestión del programa de estudios está a cargo de un cuerpo directivo, que cuenta con los requisitos de la Ley Universitaria, en los casos que corresponde, así como con la formación y experiencia y otras características requeridas en el Reglamento y/o Manual de Organización y Funciones.
+      annotation: |-
+        📖 Fuente: Criterio 1.2, p. 50.
+
+        ⚖️ Referencia legal: Ley 30220, Ley Universitaria (requisitos del cuerpo directivo).
+
+        💬 Quienes dirigen el programa cumplen los requisitos de la Ley Universitaria y del MOF.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e1.3
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e1
+      ref_id: '1.3'
+      name: Planes estratégicos y operativos con evaluación anual
+      description: El programa de estudios gestiona su accionar con base en planes estratégicos, y operativos, propios o de la facultad a la cual pertenecen. Estos planes incluyen, entre otros, objetivos académicos definidos y cuyo grado de cumplimiento es evaluado, por lo menos, con periodicidad anual, utilizando los indicadores que correspondan.
+      annotation: |-
+        📖 Fuente: Criterio 1.3, p. 50.
+
+        💬 El programa planifica y evalúa el cumplimiento de sus objetivos al menos una vez al año.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e1.4
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e1
+      ref_id: '1.4'
+      name: Gestión de quejas y reclamos
+      description: El programa gestiona las quejas, reclamos y denuncias emitidos por los miembros de la comunidad universitaria, por medio del Libro de Reclamaciones o ante la Defensoría Universitaria, y los atiende en la medida que sean pertinentes.
+      annotation: |-
+        📖 Fuente: Criterio 1.4, p. 50.
+
+        ⚖️ Referencia legal: Ley 29571, Código de Protección y Defensa del Consumidor (Libro de Reclamaciones); Ley 30220, Ley Universitaria (Defensoría Universitaria).
+
+        💬 Existe un canal formal (Libro de Reclamaciones/Defensoría) para atender quejas.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e1.5
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e1
+      ref_id: '1.5'
+      name: Satisfacción con servicios administrativos
+      description: Se evalúa la satisfacción de los estudiantes, docentes y egresados con los procedimientos de los servicios administrativos. (ID8, ID18, ID21)
+      annotation: |-
+        📖 Fuente: Criterio 1.5, p. 50.
+
+        📊 Indicadores asociados:
+           ID8 — Porcentaje de estudiantes satisfechos con los procedimientos de los servicios administrativos (referencial ID8 ≥ 60%).
+           ID18 — Porcentaje de docentes satisfechos con los procedimientos de los servicios administrativos (referencial ID18 ≥ 75%).
+           ID21 — Porcentaje de egresados satisfechos con los procedimientos de los servicios administrativos (referencial ID21 ≥ 70%).
+
+        💬 Se mide qué tan satisfechos están estudiantes, docentes y egresados con los trámites administrativos.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e2.1
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e2
+      ref_id: '2.1'
+      name: Contenido mínimo del currículo
+      description: 'El currículo contiene, como mínimo: a. Datos generales del programa de estudios (denominación, grado y título que otorga, modalidad, resolución de aprobación, entre otros). b. Fundamentación, en la que se plantean: alineamiento con el modelo educativo, políticas curriculares u otros documentos que, explícitamente, establezcan los lineamientos institucionales para su elaboración y gestión; tendencias nacionales e internacionales del ejercicio profesional, del desarrollo científico y tecnológico en su campo, así como de los propios procesos formativos. Del mismo modo, deben enunciarse los aspectos deontológicos y las normativas aplicables al ejercicio profesional, en caso los hubiera. En este proceso, se toman en cuenta las opiniones de empleadores, egresados, estudiantes y docentes, además de otras partes interesadas que se consideren pertinentes. c. Justificación del enfoque pedagógico del programa (competencias/objetivos u otro enfoque que resulte pertinente). d. Perfil del ingresante e. Perfil de egreso (o perfil de egresado) f. Plan de estudios g. Procedimientos generales y estrategias de formación, evaluación del aprendizaje y de las competencias/objetivos u otro enfoque incluidos en el perfil del egresado. — Si el programa es ofrecido en modalidad semipresencial y/o a distancia, el currículo debe incluir la justificación metodológica sobre la pertinencia de dicha(s) modalidad(es) respecto de: a. La pertinencia didáctica de la modalidad a distancia, para cada una de las asignaturas o para las disciplinas en conjunto, en las cuales se aplica. b. La pertinencia para el logro de las competencias, capacidades u objetivos, según corresponda, para cada una las asignaturas [sic] o para las disciplinas en conjunto, en las cuales se aplica. (ID1, ID12)'
+      annotation: |-
+        📖 Fuente: Criterio 2.1, p. 51.
+
+        📎 Evidencias relacionadas: EV8.
+
+        📊 Indicadores asociados:
+           ID1 — Porcentaje de estudiantes satisfechos con el currículo (referencial ID1 ≥ 60%).
+           ID12 — Porcentaje de docentes satisfechos con el currículo (referencial ID12 ≥ 70%).
+
+        💬 Define los componentes obligatorios del documento curricular (datos, fundamentación, perfiles, plan de estudios).
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e2.2
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e2
+      ref_id: '2.2'
+      name: Perfil de egreso por competencias
+      description: El perfil de egreso comprende las competencias genéricas y específicas propias de un profesional que ha culminado exitosamente el programa; así como las actitudes y valores que deben formarse. En lugar de competencias, el perfil puede elaborarse en base a objetivos, capacidades u otro enfoque que resulten pertinentes. Las competencias/objetivos u otro enfoque debe referirse [sic] a las actividades profesionales básicas que deben caracterizar a un egresado y que le permitan incorporarse de manera eficaz al ejercicio profesional; así como a habilidades genéricas relacionadas con su formación y desarrollo personal y social.
+      annotation: |-
+        📖 Fuente: Criterio 2.2, p. 51.
+
+        💬 El perfil de egreso describe las competencias/objetivos del profesional que forma el programa.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e2.3
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e2
+      ref_id: '2.3'
+      name: Contenido mínimo del plan de estudios
+      description: 'El plan de estudios comprende, como mínimo: cuadro de asignaturas o cursos o módulos, indicando su naturaleza (general, específica o de especialidad), horas y créditos (de teoría, práctica, lectivos y no lectivos) contabilizados por asignatura, ciclo y total del plan de estudios; malla curricular, las sumillas de las asignaturas, los métodos de enseñanza – aprendizaje, las estrategias de investigación formativa y los procedimientos específicos de evaluación del aprendizaje. En el caso de que el programa sea ofrecido en modalidades distintas a la presencial (semipresencial o a distancia), el currículo debe incluir la justificación metodológica sobre la pertinencia de dicha(s) modalidad(es) para el logro del perfil del egresado.'
+      annotation: |-
+        📖 Fuente: Criterio 2.3, p. 51.
+
+        💬 El plan de estudios detalla asignaturas, créditos, malla, sumillas y métodos.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e2.4
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e2
+      ref_id: '2.4'
+      name: Carga lectiva y no lectiva ≤ 40 horas
+      description: El total de horas semanales para los estudiantes en un determinado curso según el plan de estudios debe estar precisado en el sílabo en términos de carga lectiva y carga no lectiva, con el objetivo de evitarles sobrecargas y permitirles disponer de tiempo libre para descansar o para realizar actividades extracurriculares que contribuyan a su formación integral, tales como actividad física, artística, cultural y otras. La suma de la carga lectiva y no lectiva no debe exceder de las cuarenta horas semanales.
+      annotation: |-
+        📖 Fuente: Criterio 2.4, p. 51.
+
+        💬 La carga total semanal del estudiante no debe superar 40 horas.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e2.5
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e2
+      ref_id: '2.5'
+      name: Contenido mínimo de los sílabos
+      description: 'Los sílabos de las asignaturas, cursos, módulos, proyectos formativos u otros similares establecen: • Las competencias, objetivos, capacidades u otros componentes del perfil del egreso, que serán tratados en cada una de ellas. • Las actividades de enseñanza aprendizaje. • Los contenidos por desarrollar. • Los productos qu [sic] se deben elaborar (en los casos que se requiera). • Tipos y frecuencia de las evaluaciones, así como mecanismos de ponderación. • Las fuentes de información requerida (bibliografía y otras). — En el caso de que el programa sea ofrecido en más de una modalidad, los sílabos indican aquellas en las que se desarrolla la asignatura, la cantidad de horas que corresponden a esa modalidad, así como las estrategias pedagógicas específicas de estas.'
+      annotation: |-
+        📖 Fuente: Criterio 2.5, p. 52.
+
+        💬 Cada sílabo debe declarar competencias, actividades, contenidos, evaluación y bibliografía.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e2.6
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e2
+      ref_id: '2.6'
+      name: Normas de convalidación de estudios
+      description: Existen normas que establecen como [sic] se realiza la convalidación de los estudios cursados por el estudiante en el mismo programa, producto de una actualización del plan de estudios, en otros programas de la misma universidad o de otras instituciones de educación superior, nacionales o extranjeras o entre modalidades.
+      annotation: |-
+        📖 Fuente: Criterio 2.6, p. 52.
+
+        💬 Hay reglas claras para convalidar estudios entre planes, programas, instituciones o modalidades.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e2.7
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e2
+      ref_id: '2.7'
+      name: Cumplimiento de sílabos y acciones correctivas
+      description: Existen procedimientos que permiten obtener evidencias acerca del grado de cumplimiento de los sílabos de las asignaturas y se diseñan e implementan acciones que permitan disminuir o eliminar los casos de incumplimiento. (ID11)
+      annotation: |-
+        📖 Fuente: Criterio 2.7, p. 52.
+
+        📊 Indicadores asociados:
+           ID11 — Porcentaje de cumplimiento de los sílabos (referencial ID11 ≥ 90%).
+
+        💬 Se verifica el cumplimiento de los sílabos y se corrigen los incumplimientos.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e3.1
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e3
+      ref_id: '3.1'
+      name: Evaluación de la calidad de la enseñanza
+      description: Existen mecanismos e instrumentos que evalúan la calidad de la enseñanza, desde las perspectivas de los estudiantes y de la dirección del programa, cuyos resultados sirven de sustento para la mejora continua del aprendizaje. (ID1, ID3, ID4, ID10, ID19, ID22)de estudio. (ID4) [sic — cola "de estudio. (ID4)" impresa así en el original]
+      annotation: |-
+        📖 Fuente: Criterio 3.1, p. 53.
+
+        📎 Evidencias relacionadas: EV12.
+
+        📊 Indicadores asociados:
+           ID1 — Porcentaje de estudiantes satisfechos con el currículo (referencial ID1 ≥ 60%).
+           ID3 — Porcentaje de estudiantes satisfechos con los recursos requeridos para el desarrollo de las actividades de enseñanza - aprendizaje (referencial ID3 ≥ 70%).
+           ID4 — Porcentaje de estudiantes satisfechos con la evaluación del aprendizaje (referencial ID4 ≥ 60%).
+           ID10 — Porcentaje de estudiantes aprobados por asignatura (referencial ID10 ≥ 80%).
+           ID19 — Porcentaje de docentes con desempeño satisfactorio, en opinión de los estudiantes (referencial ID19 ≥ 75%).
+           ID22 — Porcentaje de egresados satisfechos con la calidad de enseñanza (referencial ID22 ≥ 70%).
+
+        💬 Se evalúa la calidad de la enseñanza desde estudiantes y dirección para mejorar el aprendizaje.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e3.2
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e3
+      ref_id: '3.2'
+      name: Coherencia de la evaluación del estudiante
+      description: La evaluación del estudiante (procedimientos, instrumentos, tipos, frecuencia), es coherente con el enfoque pedagógico del programa de estudios, la naturaleza de las asignaturas, los componentes del perfil de egreso, las diversas necesidades de aprendizaje y las modalidades de estudio. (ID4)
+      annotation: |-
+        📖 Fuente: Criterio 3.2, p. 53.
+
+        📎 Evidencias relacionadas: EV13.
+
+        📊 Indicadores asociados:
+           ID4 — Porcentaje de estudiantes satisfechos con la evaluación del aprendizaje (referencial ID4 ≥ 60%).
+
+        💬 La forma de evaluar es coherente con el enfoque pedagógico y el perfil de egreso.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e3.3
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e3
+      ref_id: '3.3'
+      name: Evidencias de logro del perfil de egreso
+      description: Los procedimientos e instrumentos de evaluación del aprendizaje y otros que resulten pertinentes, permiten obtener evidencias acerca de la medida en que los estudiantes van alcanzando las competencias/objetivos u otro enfoque establecido en el perfil de egreso; los resultados son utilizados para el perfeccionamiento del currículo y la mejora continua del programa de estudios. (ID4, ID20)
+      annotation: |-
+        📖 Fuente: Criterio 3.3, p. 53.
+
+        📎 Evidencias relacionadas: EV13.
+
+        📊 Indicadores asociados:
+           ID4 — Porcentaje de estudiantes satisfechos con la evaluación del aprendizaje (referencial ID4 ≥ 60%).
+           ID20 — Porcentaje de egresados satisfechos con la calidad y utilidad de la formación recibida, para su empleabilidad (referencial ID20 ≥ 70%).
+
+        💬 La evaluación evidencia el logro del perfil de egreso y alimenta la mejora del currículo.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e3.4
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e3
+      ref_id: '3.4'
+      name: Información oportuna al estudiante
+      description: El estudiante es informado oportunamente acerca de los criterios de evaluación y de los resultados de su desempeño académico. (ID4)
+      annotation: |-
+        📖 Fuente: Criterio 3.4, p. 53.
+
+        📊 Indicadores asociados:
+           ID4 — Porcentaje de estudiantes satisfechos con la evaluación del aprendizaje (referencial ID4 ≥ 60%).
+
+        💬 El estudiante conoce a tiempo los criterios de evaluación y sus resultados.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e3.5
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e3
+      ref_id: '3.5'
+      name: Tutoría y asesoría
+      description: Existen programas o actividades de tutoría y/o asesoría, que se desarrollan de manera oportuna y contribuyen a la mejora del desempeño académico de los estudiantes y para la elaboración de los trabajos de investigación, las tesis y los trabajos de suficiencia profesional. (ID5, ID9, ID24)
+      annotation: |-
+        📖 Fuente: Criterio 3.5, p. 53.
+
+        📊 Indicadores asociados:
+           ID5 — Porcentaje de estudiantes satisfechos con las actividades de asesoría y/o tutoría para la obtención del título profesional (referencial ID5 ≥ 70%).
+           ID9 — Porcentaje de estudiantes satisfechos con los servicios de apoyo pedagógico para la mejora del desempeño académico de los estudiantes (referencial ID9 ≥ 70%).
+           ID24 — Porcentaje de egresados satisfechos con los servicios de apoyo al estudiante (referencial ID24 ≥ 70%).
+
+        💬 Existen tutoría y asesoría que apoyan el desempeño académico y la elaboración de tesis.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e3.6
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e3
+      ref_id: '3.6'
+      name: Originalidad e integridad de tesis
+      description: Las tesis, trabajos de investigación y trabajos de suficiencia profesional muestran originalidad y rigurosidad académica. Existen normas institucionales y/o del programa, que establecen los requisitos y formas que pueden tener esos documentos, así como los principios éticos y de integridad que deben cumplirse en su elaboración y sustentación, en los casos que corresponda. Se supervisa el cumplimiento de estas normas, de manera sistemática, con los procedimientos e instrumentos adecuados, entre ellos los que permitan evaluar la originalidad de los trabajos académicos y de investigación de los estudiantes, así como la ausencia de plagios.
+      annotation: |-
+        📖 Fuente: Criterio 3.6, p. 53.
+
+        💬 Las tesis son originales y rigurosas; se supervisa la integridad y ausencia de plagio.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e3.7
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e3
+      ref_id: '3.7'
+      name: Autoría propia del trabajo académico
+      description: Existen regulaciones – procedimientos y/o instrumentos – que garantizan que las evaluaciones, tareas y cualquier trabajo de carácter académico es desarrollado por el propio estudiante y no por otras personas.
+      annotation: |-
+        📖 Fuente: Criterio 3.7, p. 53.
+
+        📎 Evidencias relacionadas: EV16.
+
+        💬 Se garantiza que el trabajo académico lo hace el propio estudiante.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e4.1
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e4
+      ref_id: '4.1'
+      name: Selección transparente de docentes
+      description: La selección y vinculación de docentes se lleva a cabo de manera transparente e incluye el análisis de información sobre su formación académica y experiencia profesional, para evaluar su adecuación al perfil del egresado definido en el currículo. (ID4, ID14, ID19)
+      annotation: |-
+        📖 Fuente: Criterio 4.1, p. 55.
+
+        📎 Evidencias relacionadas: EV24.
+
+        📊 Indicadores asociados:
+           ID4 — Porcentaje de estudiantes satisfechos con la evaluación del aprendizaje (referencial ID4 ≥ 60%).
+           ID14 — Porcentaje de docentes con el grado académico de doctor (referencial ID14 ≥ 20%).
+           ID19 — Porcentaje de docentes con desempeño satisfactorio, en opinión de los estudiantes (referencial ID19 ≥ 75%).
+
+        💬 La contratación docente es transparente y evalúa su idoneidad frente al perfil de egreso.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e4.2
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e4
+      ref_id: '4.2'
+      name: Competencias pedagógicas, disciplinares y digitales
+      description: Los docentes demuestran dominio de competencias pedagógicas, disciplinares y digitales esenciales, lo cual asegura la calidad y efectividad del proceso de enseñanza aprendizaje en cualquier modalidad impartida. (ID2, ID19)
+      annotation: |-
+        📖 Fuente: Criterio 4.2, p. 55.
+
+        📎 Evidencias relacionadas: EV24.
+
+        📊 Indicadores asociados:
+           ID2 — Porcentaje de estudiantes satisfechos con el desempeño docente (referencial ID2 ≥ 70%).
+           ID19 — Porcentaje de docentes con desempeño satisfactorio, en opinión de los estudiantes (referencial ID19 ≥ 75%).
+
+        💬 Los docentes dominan competencias pedagógicas, disciplinares y digitales.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e4.3
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e4
+      ref_id: '4.3'
+      name: Asignación de carga lectiva por idoneidad
+      description: 'La carga lectiva para las asignaturas generales, específicas y de especialidad se asigna a los docentes, de acuerdo con su experiencia académica en el ejercicio profesional y en la investigación, según corresponda. En ese sentido, los docentes deben cumplir con uno o varios de los siguientes requisitos relacionados con el programa en que se desempeña, la modalidad de estudio o con las asignaturas a su cargo: a. Formación de pregrado o posgrado b. Experiencia profesional (laboral, ya sea como empleado o como profesional independiente). c. Experiencia en investigación, innovación y/o creación cultural y artística. (ID2, ID13, ID14)'
+      annotation: |-
+        📖 Fuente: Criterio 4.3, p. 55.
+
+        📎 Evidencias relacionadas: EV24.
+
+        📊 Indicadores asociados:
+           ID2 — Porcentaje de estudiantes satisfechos con el desempeño docente (referencial ID2 ≥ 70%).
+           ID13 — Porcentaje de docentes a tiempo completo (referencial ID13 ≥ 25%).
+           ID14 — Porcentaje de docentes con el grado académico de doctor (referencial ID14 ≥ 20%).
+
+        💬 La carga lectiva se asigna según la formación y experiencia del docente.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e4.4
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e4
+      ref_id: '4.4'
+      name: Evaluación periódica del desempeño docente
+      description: 'Se evalúa el desempeño de los docentes de manera periódica (semestral/anual) y se les informa de sus resultados oportunamente. Entre los criterios de evaluación deben considerarse, por lo menos: • Desempeño pedagógico • Cumplimiento de las normas institucionales • Cumplimiento de los sílabos — Los instrumentos de evaluación deben considerar, como mínimo, la autoevaluación, opinión de los estudiantes y de la dirección del programa o del departamento académico, según corresponda. (ID2, ID15, ID16, ID19)'
+      annotation: |-
+        📖 Fuente: Criterio 4.4, p. 55.
+
+        📊 Indicadores asociados:
+           ID2 — Porcentaje de estudiantes satisfechos con el desempeño docente (referencial ID2 ≥ 70%).
+           ID15 — Porcentaje de docentes que han recibido formación, capacitación o especialización en docencia e investigación, en los últimos dos años (referencial ID15 ≥ 50%).
+           ID16 — Porcentaje de docentes satisfechos con las actividades de fortalecimiento de capacidades y las posibilidades de desarrollo académico (referencial ID16 ≥ 70%).
+           ID19 — Porcentaje de docentes con desempeño satisfactorio, en opinión de los estudiantes (referencial ID19 ≥ 75%).
+
+        💬 El desempeño docente se evalúa periódicamente con autoevaluación y opinión de estudiantes.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e4.5
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e4
+      ref_id: '4.5'
+      name: Fortalecimiento de capacidades docentes
+      description: Se llevan a cabo y se evalúan actividades de fortalecimiento de capacidades y de desarrollo académico que garantizan el perfeccionamiento continuo y la innovación pedagógica de los docentes. Estas actividades son diseñadas sobre la base de los resultados de evaluación de desempeño y las necesidades del programa. Se incluyen en los planes de capacitación del programa, de la facultad o de la universidad. En los casos en que los programas se desarrollen en las modalidades semipresencial o a distancia, se realizan las capacitaciones necesarias para garantizar el dominio, por parte de los docentes, de las competencias informáticas y pedagógicas necesarias para su desempeño óptimo en esas modalidades. (ID15, ID16)
+      annotation: |-
+        📖 Fuente: Criterio 4.5, p. 55.
+
+        📎 Evidencias relacionadas: EV26, EV27.
+
+        📊 Indicadores asociados:
+           ID15 — Porcentaje de docentes que han recibido formación, capacitación o especialización en docencia e investigación, en los últimos dos años (referencial ID15 ≥ 50%).
+           ID16 — Porcentaje de docentes satisfechos con las actividades de fortalecimiento de capacidades y las posibilidades de desarrollo académico (referencial ID16 ≥ 70%).
+
+        💬 Hay capacitación docente basada en resultados de evaluación y necesidades del programa.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e4.6
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e4
+      ref_id: '4.6'
+      name: Experiencias académicas y colaboración externa
+      description: Se promueve que los docentes, independientemente de su régimen y modalidad de trabajo, accedan a experiencias académicas y a trabajos colaborativos en otras instituciones, que contribuyan a fortalecer sus capacidades. Estas experiencias pueden ser de docencia, investigación, extensión cultural, proyección social, RSU y/o educación continua, en instituciones nacionales o extranjeras, de manera presencial, semipresencial o a distancia/virtual. (ID 14)
+      annotation: |-
+        📖 Fuente: Criterio 4.6, p. 55.
+
+        📎 Evidencias relacionadas: EV29.
+
+        📊 Indicadores asociados:
+           ID14 — Porcentaje de docentes con el grado académico de doctor (referencial ID14 ≥ 20%).
+
+        💬 Se promueve que los docentes colaboren con otras instituciones para fortalecer capacidades.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e5.1
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e5
+      ref_id: '5.1'
+      name: Infraestructura suficiente y adecuada
+      description: La infraestructura de aulas, laboratorios, talleres y otros ambientes requeridos para el proceso de enseñanza - aprendizaje son suficientes (acorde a la cantidad de estudiantes) y adecuados (acorde a las actividades a realizar) a las características del programa y a las actividades académicas que se desarrollan en el mismo. Se consideran las necesidades de las personas con discapacidad en el diseño de la infraestructura. (ID3, ID17)
+      annotation: |-
+        📖 Fuente: Criterio 5.1, p. 57.
+
+        📎 Evidencias relacionadas: EV30.
+
+        📊 Indicadores asociados:
+           ID3 — Porcentaje de estudiantes satisfechos con los recursos requeridos para el desarrollo de las actividades de enseñanza - aprendizaje (referencial ID3 ≥ 70%).
+           ID17 — Porcentaje de docentes satisfechos con los recursos requeridos para el desarrollo de las actividades de enseñanza - aprendizaje (referencial ID17 ≥ 70%).
+
+        💬 Las aulas y ambientes son suficientes y adecuados, incluyendo accesibilidad para discapacidad.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e5.2
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e5
+      ref_id: '5.2'
+      name: Equipamiento y mobiliario suficientes
+      description: El equipamiento y mobiliario de aulas, laboratorios y talleres son suficientes (acorde con la cantidad de estudiantes) y adecuados (acorde con las actividades a realizar) para realizar las actividades teóricas y prácticas requeridas para el programa de estudios. (ID3, ID17)
+      annotation: |-
+        📖 Fuente: Criterio 5.2, p. 57.
+
+        📎 Evidencias relacionadas: EV30.
+
+        📊 Indicadores asociados:
+           ID3 — Porcentaje de estudiantes satisfechos con los recursos requeridos para el desarrollo de las actividades de enseñanza - aprendizaje (referencial ID3 ≥ 70%).
+           ID17 — Porcentaje de docentes satisfechos con los recursos requeridos para el desarrollo de las actividades de enseñanza - aprendizaje (referencial ID17 ≥ 70%).
+
+        💬 El equipamiento y mobiliario alcanzan y son apropiados para las actividades.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e5.3
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e5
+      ref_id: '5.3'
+      name: TIC suficientes y adecuadas
+      description: Las tecnologías de información y comunicación requeridas para el desarrollo de las actividades lectivas y no lectivas son suficientes (acorde con la cantidad de estudiantes) y adecuadas (acorde con las actividades a realizar) para el desarrollo de los procesos de enseñanza - aprendizaje. Si el programa es ofrecido en modalidad semipresencial y/o a distancia, se dispone de infraestructura tecnológica (sistema o plataforma) funcional, estable y accesible, que permita al docente gestionar los recursos de aprendizaje y de evaluación, y que permite al estudiante acceder a estos. (ID3, ID17)
+      annotation: |-
+        📖 Fuente: Criterio 5.3, p. 57.
+
+        📎 Evidencias relacionadas: EV30.
+
+        📊 Indicadores asociados:
+           ID3 — Porcentaje de estudiantes satisfechos con los recursos requeridos para el desarrollo de las actividades de enseñanza - aprendizaje (referencial ID3 ≥ 70%).
+           ID17 — Porcentaje de docentes satisfechos con los recursos requeridos para el desarrollo de las actividades de enseñanza - aprendizaje (referencial ID17 ≥ 70%).
+
+        💬 Las TIC y plataformas son suficientes, funcionales y accesibles.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e5.4
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e5
+      ref_id: '5.4'
+      name: Protocolos de uso de recursos y seguridad
+      description: Se disponen de protocolos, guías, manuales u otros medios, dirigidos a estudiantes y docentes, para orientarlos en el uso y funcionamiento de los recursos para el desarrollo de las actividades de formación profesional consideradas en el currículo. Estas orientaciones incluyen las medidas de seguridad, el manejo adecuado (conforme a lo indicado en el protocolo con el fin de evitar accidentes) de materiales peligrosos y la disposición de residuos.
+      annotation: |-
+        📖 Fuente: Criterio 5.4, p. 57.
+
+        📎 Evidencias relacionadas: EV31.
+
+        💬 Existen guías de uso seguro de los recursos, materiales peligrosos y residuos.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e5.5
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e5
+      ref_id: '5.5'
+      name: Recursos académicos de referencia accesibles
+      description: Los recursos académicos de referencia físicos y virtuales (libros, revistas, bases de datos) son accesibles y suficientes (acorde a la cantidad de solicitudes) para docentes y estudiantes, de acuerdo con los contenidos curriculares del programa de estudios. La universidad a la que pertenece el programa está suscrita a bases de datos que proporcionan información especializada relacionada con la naturaleza de las asignaturas que componen el plan de estudios. (ID3, ID17)
+      annotation: |-
+        📖 Fuente: Criterio 5.5, p. 57.
+
+        📎 Evidencias relacionadas: EV32.
+
+        📊 Indicadores asociados:
+           ID3 — Porcentaje de estudiantes satisfechos con los recursos requeridos para el desarrollo de las actividades de enseñanza - aprendizaje (referencial ID3 ≥ 70%).
+           ID17 — Porcentaje de docentes satisfechos con los recursos requeridos para el desarrollo de las actividades de enseñanza - aprendizaje (referencial ID17 ≥ 70%).
+
+        💬 Hay libros, revistas y bases de datos suficientes y accesibles, incluidas suscripciones especializadas.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e5.6
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e5
+      ref_id: '5.6'
+      name: Plan de mantenimiento
+      description: Se cuenta con un plan de mantenimiento de la infraestructura y del equipamiento a los que hacen alusión a los criterios 5.1, 5.2, 5.3 y 5.5 [sic], y se supervisa y controla su cumplimiento.
+      annotation: |-
+        📖 Fuente: Criterio 5.6, p. 57.
+
+        📎 Evidencias relacionadas: EV33.
+
+        💬 Existe y se supervisa un plan de mantenimiento de infraestructura y equipamiento.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e6.1
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e6
+      ref_id: '6.1'
+      name: Diseño curricular con impacto positivo
+      description: El currículo se diseña e implementa de tal manera, que asegure un impacto positivo en el desarrollo personal, económico y social de los estudiantes y egresados; así como en la satisfacción de las demandas de los empleadores y otros grupos de interés que se considere pertinente incluir. (ID20, ID26, ID27, ID28, ID29)
+      annotation: |-
+        📖 Fuente: Criterio 6.1, p. 58.
+
+        📊 Indicadores asociados:
+           ID20 — Porcentaje de egresados satisfechos con la calidad y utilidad de la formación recibida, para su empleabilidad (referencial ID20 ≥ 70%).
+           ID26 — Tiempo promedio entre egreso y primer empleo en el campo profesional (referencial ID26 ≤ 1 año).
+           ID27 — Porcentaje de egresados que laboran en su campo profesional (referencial ID27 ≥ 50%).
+           ID28 — Porcentaje de estudiantes que han alcanzado el título profesional, dentro de los dos años posteriores a su egreso (referencial ID28 ≥ 60%).
+           ID29 — Porcentaje de empleadores satisfechos con el desempeño de los egresados (referencial ID29 ≥ 70%).
+
+        💬 El currículo busca un impacto positivo en egresados, empleadores y grupos de interés.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e6.2
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e6
+      ref_id: '6.2'
+      name: Impacto de la formación en egresados
+      description: Se evalúa el impacto de la formación en los egresados (de los últimos cinco años, como mínimo) en términos de su satisfacción/valoración con lo aprendido, su utilidad en el ámbito laboral y de su contribución a su desarrollo personal. (ID20, ID22, ID26, ID27, ID28, ID29)
+      annotation: |-
+        📖 Fuente: Criterio 6.2, p. 58.
+
+        📊 Indicadores asociados:
+           ID20 — Porcentaje de egresados satisfechos con la calidad y utilidad de la formación recibida, para su empleabilidad (referencial ID20 ≥ 70%).
+           ID22 — Porcentaje de egresados satisfechos con la calidad de enseñanza (referencial ID22 ≥ 70%).
+           ID26 — Tiempo promedio entre egreso y primer empleo en el campo profesional (referencial ID26 ≤ 1 año).
+           ID27 — Porcentaje de egresados que laboran en su campo profesional (referencial ID27 ≥ 50%).
+           ID28 — Porcentaje de estudiantes que han alcanzado el título profesional, dentro de los dos años posteriores a su egreso (referencial ID28 ≥ 60%).
+           ID29 — Porcentaje de empleadores satisfechos con el desempeño de los egresados (referencial ID29 ≥ 70%).
+
+        💬 Se mide el impacto de la formación en los egresados de los últimos cinco años.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e6.3
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e6
+      ref_id: '6.3'
+      name: Impacto según empleadores
+      description: Se evalúa el impacto de la formación de los egresados (de los últimos cinco años, como mínimo), a través de consultas a sus empleadores y otras partes interesadas que se considere pertinente, en términos de satisfacción/valoración de la calidad de su desempeño, su contribución a la solución de problemas y al logro de objetivos/metas. (ID26, ID27, ID28, ID29)
+      annotation: |-
+        📖 Fuente: Criterio 6.3, p. 58.
+
+        📊 Indicadores asociados:
+           ID26 — Tiempo promedio entre egreso y primer empleo en el campo profesional (referencial ID26 ≤ 1 año).
+           ID27 — Porcentaje de egresados que laboran en su campo profesional (referencial ID27 ≥ 50%).
+           ID28 — Porcentaje de estudiantes que han alcanzado el título profesional, dentro de los dos años posteriores a su egreso (referencial ID28 ≥ 60%).
+           ID29 — Porcentaje de empleadores satisfechos con el desempeño de los egresados (referencial ID29 ≥ 70%).
+
+        💬 Se consulta a empleadores sobre el desempeño de los egresados.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e6.4
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e6
+      ref_id: '6.4'
+      name: Planes de mejora a partir del impacto
+      description: A partir de los resultados de 6.2 y 6.3, se elaboran planes de mejora que contribuyen al perfeccionamiento del proceso de formación.
+      annotation: |-
+        📖 Fuente: Criterio 6.4, p. 58.
+
+        💬 Los resultados de impacto (6.2 y 6.3) generan planes de mejora de la formación.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e6.5
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e6
+      ref_id: '6.5'
+      name: Evaluaciones dentro del alcance del SGC
+      description: Los procedimientos de evaluación referidos en los criterios 6.1, 6.2 y 6.3 se incluyen en el alcance del SGC de la universidad y/o del programa de estudios.
+      annotation: |-
+        📖 Fuente: Criterio 6.5, p. 58.
+
+        💬 La evaluación de impacto forma parte del alcance del sistema de gestión de la calidad.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e7.1
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e7
+      ref_id: '7.1'
+      name: Programas de bienestar
+      description: 'La institución a la que pertenece el programa de estudios brinda programas de bienestar a los estudiantes, docentes y no docentes, según corresponda. Se consideran, entre otros, que sean pertinentes los siguientes [sic]: servicios de salud, psicología, servicio social, actividades culturales y deportivas, becas y medias becas.'
+      annotation: |-
+        📖 Fuente: Criterio 7.1, p. 59.
+
+        💬 La institución ofrece programas de bienestar (salud, psicología, becas, cultura, deporte).
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e7.2
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e7
+      ref_id: '7.2'
+      name: Servicios de apoyo al estudiante
+      description: 'La institución a la que pertenece el programa de estudios brinda servicios de apoyo al estudiante. Se considera, entre otros: servicios de tutoría, psicopedagogía, asesoría, consejería, movilidad estudiantil, nivelación de ingresantes. (ID24)'
+      annotation: |-
+        📖 Fuente: Criterio 7.2, p. 59.
+
+        📎 Evidencias relacionadas: EV38.
+
+        📊 Indicadores asociados:
+           ID24 — Porcentaje de egresados satisfechos con los servicios de apoyo al estudiante (referencial ID24 ≥ 70%).
+
+        💬 La institución ofrece servicios de apoyo (tutoría, psicopedagogía, movilidad, nivelación).
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e7.3
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e7
+      ref_id: '7.3'
+      name: Personal idóneo y disponible
+      description: Los programas de bienestar y los servicios de apoyo cuentan con el personal idóneo para la prestación de los servicios, y se asegura la disponibilidad para los estudiantes, docentes y personal no docente, según corresponda.
+      annotation: |-
+        📖 Fuente: Criterio 7.3, p. 59.
+
+        💬 El personal de bienestar y apoyo es idóneo y está disponible.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e7.4
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e7
+      ref_id: '7.4'
+      name: Evaluación periódica de bienestar y apoyo
+      description: La calidad de los programas de bienestar y los servicios de apoyo al estudiante es evaluada periódicamente. Los resultados son tomados en cuenta para la mejora continua. (ID7, ID9, ID23, ID24)
+      annotation: |-
+        📖 Fuente: Criterio 7.4, p. 59.
+
+        📊 Indicadores asociados:
+           ID7 — Porcentaje de estudiantes satisfechos con los programas de bienestar y actividades recreativas, culturales, artísticas y deportivas al estudiante (referencial ID7 ≥ 70%).
+           ID9 — Porcentaje de estudiantes satisfechos con los servicios de apoyo pedagógico para la mejora del desempeño académico de los estudiantes (referencial ID9 ≥ 70%).
+           ID23 — Porcentaje de egresados satisfechos con los programas de bienestar y actividades recreativas, culturales, artísticas y deportivas (referencial ID23 ≥ 70%).
+           ID24 — Porcentaje de egresados satisfechos con los servicios de apoyo al estudiante (referencial ID24 ≥ 70%).
+
+        💬 Se evalúa periódicamente la calidad del bienestar y apoyo para mejorarlos.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e8.1
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e8
+      ref_id: '8.1'
+      name: Mecanismos de gestión de la información
+      description: El programa dispone de mecanismos de gestión de la información, que facilita [sic] la disponibilidad, integridad y confidencialidad de los datos. Se cuenta con procedimientos de aplicación periódica para el recojo y análisis de los resultados del proceso de formación (establecimiento de indicadores, características y frecuencia de la medición, instrumentos y criterios para el cálculo e interpretación de los resultados).
+      annotation: |-
+        📖 Fuente: Criterio 8.1, p. 60.
+
+        📎 Evidencias relacionadas: EV40.
+
+        💬 El programa gestiona sus datos con disponibilidad, integridad y confidencialidad, y mide resultados.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e8.2
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e8
+      ref_id: '8.2'
+      name: Información de partes interesadas
+      description: Se recoge y analiza información de empleadores, egresados, docentes y estudiantes, entre otras partes interesadas, que se consideren pertinentes, de manera periódica, acerca de su satisfacción sobre diversos aspectos del proceso de enseñanza aprendizaje, el impacto de la formación en el desempeño de los egresados, sugerencias para la mejora del proceso de formación, especialmente el currículo, etc. (ID1, ID2, ID3, ID4, ID5, ID6, ID7, ID8, ID9, ID12, ID13, ID14, ID15, ID16, ID17, ID18, ID20, ID21, ID22, ID23, ID24, ID26, ID27, ID28)
+      annotation: |-
+        📖 Fuente: Criterio 8.2, p. 60.
+
+        📊 Indicadores asociados:
+           ID1 — Porcentaje de estudiantes satisfechos con el currículo (referencial ID1 ≥ 60%).
+           ID2 — Porcentaje de estudiantes satisfechos con el desempeño docente (referencial ID2 ≥ 70%).
+           ID3 — Porcentaje de estudiantes satisfechos con los recursos requeridos para el desarrollo de las actividades de enseñanza - aprendizaje (referencial ID3 ≥ 70%).
+           ID4 — Porcentaje de estudiantes satisfechos con la evaluación del aprendizaje (referencial ID4 ≥ 60%).
+           ID5 — Porcentaje de estudiantes satisfechos con las actividades de asesoría y/o tutoría para la obtención del título profesional (referencial ID5 ≥ 70%).
+           ID6 — Evolución del porcentaje de postulantes al programa de estudios (referencial ID6 ≥ 0%).
+           ID7 — Porcentaje de estudiantes satisfechos con los programas de bienestar y actividades recreativas, culturales, artísticas y deportivas al estudiante (referencial ID7 ≥ 70%).
+           ID8 — Porcentaje de estudiantes satisfechos con los procedimientos de los servicios administrativos (referencial ID8 ≥ 60%).
+           ID9 — Porcentaje de estudiantes satisfechos con los servicios de apoyo pedagógico para la mejora del desempeño académico de los estudiantes (referencial ID9 ≥ 70%).
+           ID12 — Porcentaje de docentes satisfechos con el currículo (referencial ID12 ≥ 70%).
+           ID13 — Porcentaje de docentes a tiempo completo (referencial ID13 ≥ 25%).
+           ID14 — Porcentaje de docentes con el grado académico de doctor (referencial ID14 ≥ 20%).
+           ID15 — Porcentaje de docentes que han recibido formación, capacitación o especialización en docencia e investigación, en los últimos dos años (referencial ID15 ≥ 50%).
+           ID16 — Porcentaje de docentes satisfechos con las actividades de fortalecimiento de capacidades y las posibilidades de desarrollo académico (referencial ID16 ≥ 70%).
+           ID17 — Porcentaje de docentes satisfechos con los recursos requeridos para el desarrollo de las actividades de enseñanza - aprendizaje (referencial ID17 ≥ 70%).
+           ID18 — Porcentaje de docentes satisfechos con los procedimientos de los servicios administrativos (referencial ID18 ≥ 75%).
+           ID20 — Porcentaje de egresados satisfechos con la calidad y utilidad de la formación recibida, para su empleabilidad (referencial ID20 ≥ 70%).
+           ID21 — Porcentaje de egresados satisfechos con los procedimientos de los servicios administrativos (referencial ID21 ≥ 70%).
+           ID22 — Porcentaje de egresados satisfechos con la calidad de enseñanza (referencial ID22 ≥ 70%).
+           ID23 — Porcentaje de egresados satisfechos con los programas de bienestar y actividades recreativas, culturales, artísticas y deportivas (referencial ID23 ≥ 70%).
+           ID24 — Porcentaje de egresados satisfechos con los servicios de apoyo al estudiante (referencial ID24 ≥ 70%).
+           ID26 — Tiempo promedio entre egreso y primer empleo en el campo profesional (referencial ID26 ≤ 1 año).
+           ID27 — Porcentaje de egresados que laboran en su campo profesional (referencial ID27 ≥ 50%).
+           ID28 — Porcentaje de estudiantes que han alcanzado el título profesional, dentro de los dos años posteriores a su egreso (referencial ID28 ≥ 60%).
+
+        💬 Se recoge y analiza información de estudiantes, docentes, egresados y empleadores.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e8.3
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e8
+      ref_id: '8.3'
+      name: Indicadores de desempeño docente
+      description: Se recoge y analiza información sobre indicadores de desempeño docente (ID2, ID19).
+      annotation: |-
+        📖 Fuente: Criterio 8.3, p. 60.
+
+        📊 Indicadores asociados:
+           ID2 — Porcentaje de estudiantes satisfechos con el desempeño docente (referencial ID2 ≥ 70%).
+           ID19 — Porcentaje de docentes con desempeño satisfactorio, en opinión de los estudiantes (referencial ID19 ≥ 75%).
+
+        💬 Se analizan los indicadores de desempeño docente.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e8.4
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e8
+      ref_id: '8.4'
+      name: Indicadores de evaluación del aprendizaje
+      description: Se recoge y analiza información sobre indicadores de evaluación del aprendizaje (ID4, ID10).
+      annotation: |-
+        📖 Fuente: Criterio 8.4, p. 60.
+
+        📊 Indicadores asociados:
+           ID4 — Porcentaje de estudiantes satisfechos con la evaluación del aprendizaje (referencial ID4 ≥ 60%).
+           ID10 — Porcentaje de estudiantes aprobados por asignatura (referencial ID10 ≥ 80%).
+
+        💬 Se analizan los indicadores de evaluación del aprendizaje.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e8.5
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e8
+      ref_id: '8.5'
+      name: Indicadores de graduación y titulación
+      description: Se recoge y analiza información sobre indicadores de graduación y titulación. (ID25, ID28, ID29).
+      annotation: |-
+        📖 Fuente: Criterio 8.5, p. 60.
+
+        📊 Indicadores asociados:
+           ID25 — Tiempo promedio entre egreso y titulación (referencial ID25 ≤ 2 años).
+           ID28 — Porcentaje de estudiantes que han alcanzado el título profesional, dentro de los dos años posteriores a su egreso (referencial ID28 ≥ 60%).
+           ID29 — Porcentaje de empleadores satisfechos con el desempeño de los egresados (referencial ID29 ≥ 70%).
+
+        💬 Se analizan los indicadores de graduación y titulación.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e8.6
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e8
+      ref_id: '8.6'
+      name: Información accesible para decisiones
+      description: La información registrada, a la que hace referencia los criterios [sic] 8.2, 8.3, 8.4, y 8.5 se encuentra accesible para el personal directivo y docente encargado de tomar decisiones sobre la gestión de mejoras al programa de estudios.
+      annotation: |-
+        📖 Fuente: Criterio 8.6, p. 60.
+
+        💬 La información analizada está accesible para quienes deciden las mejoras.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e9.1
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e9
+      ref_id: '9.1'
+      name: Evaluación periódica del currículo
+      description: El currículo se evalúa periódicamente, en relación con los contenidos establecidos en los criterios 2.1 y 2.2. Los resultados de la evaluación curricular son utilizados para su actualización.
+      annotation: |-
+        📖 Fuente: Criterio 9.1, p. 61.
+
+        ⚖️ Referencia legal: Ley 30220, Ley Universitaria, art. 40 (Diseño curricular).
+
+        💬 El currículo se revisa periódicamente (frente a 2.1 y 2.2) y se actualiza.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e9.2
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e9
+      ref_id: '9.2'
+      name: Registro histórico de cambios curriculares
+      description: Los cambios curriculares son documentados y se lleva un registro histórico de los mismos.
+      annotation: |-
+        📖 Fuente: Criterio 9.2, p. 61.
+
+        💬 Los cambios del currículo se documentan y quedan registrados.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e9.3
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e9
+      ref_id: '9.3'
+      name: Supervisión de actividades lectivas
+      description: Se supervisa la ejecución de las actividades lectivas planificadas y se toman acciones para asegurar su cumplimiento. (ID11).
+      annotation: |-
+        📖 Fuente: Criterio 9.3, p. 61.
+
+        📊 Indicadores asociados:
+           ID11 — Porcentaje de cumplimiento de los sílabos (referencial ID11 ≥ 90%).
+
+        💬 Se supervisa que las clases planificadas se ejecuten y se corrige lo que falta.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e10.1
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e10
+      ref_id: '10.1'
+      name: Diseño del SGC
+      description: El diseño del sistema de gestión de la calidad considera una política de calidad, las instancias para la toma de decisiones sobre el programa y los procesos involucrados.
+      annotation: |-
+        📖 Fuente: Criterio 10.1, p. 62.
+
+        💬 El SGC define política de calidad, instancias de decisión y procesos.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e10.2
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e10
+      ref_id: '10.2'
+      name: Procesos mínimos del SGC
+      description: 'El sistema de gestión de la calidad considera, como mínimo, procesos orientados a: diseño, evaluación y modificación curricular; gestión docente; enseñanza aprendizaje, mantenimiento de infraestructura y equipamiento; evaluación del aprendizaje; seguimiento y vinculación con egresados (o graduados); relación con las partes interesadas, gestión de riesgos, gestión de la información y transparencia.'
+      annotation: |-
+        📖 Fuente: Criterio 10.2, p. 62.
+
+        💬 El SGC cubre como mínimo los procesos clave del programa (currículo, docentes, egresados, riesgos, información).
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e10.3
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e10
+      ref_id: '10.3'
+      name: Registro histórico de cambios del SGC
+      description: Los cambios en el sistema de gestión de la calidad son documentados y se lleva un registro histórico de los mismos.
+      annotation: |-
+        📖 Fuente: Criterio 10.3, p. 62.
+
+        💬 Los cambios del SGC se documentan y quedan registrados.
+    - urn: urn:intuitem:risk:req_node:coneau-programas-2025:e10.4
+      assessable: true
+      depth: 3
+      parent_urn: urn:intuitem:risk:req_node:coneau-programas-2025:e10
+      ref_id: '10.4'
+      name: Evaluación y mejora del SGC
+      description: Se evalúa periódicamente el funcionamiento del sistema de gestión de la calidad y se proponen acciones de mejora.
+      annotation: |-
+        📖 Fuente: Criterio 10.4, p. 62.
+
+        💬 El funcionamiento del SGC se evalúa periódicamente para mejorarlo.
+  reference_controls:
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id1
+    ref_id: ID1
+    name: Porcentaje de estudiantes satisfechos con el currículo
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 2 CURRÍCULO · Estándar 3 EVALUACIÓN DE LA ENSEÑANZA, EL APRENDIZAJE Y DEL LOGRO DEL PERFIL DE EGRESO · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 2.1, Criterio 3.1, Criterio 8.2.
+
+      OBJETIVO DE MEDICIÓN: Medir el porcentaje de estudiantes del programa de estudios satisfechos con el currículo
+
+      VALOR REFERENCIAL / UMBRAL: ID1 ≥ 60% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID1 igual o mayor a 60% evidencia que el currículo resulta satisfactorio para los estudiantes del programa
+
+      FUENTE DE INFORMACIÓN: Registro de resultados de consulta dirigida a estudiantes
+
+      VARIABLES: EPSC: Total de estudiantes del programa de estudios satisfechos con el currículo · EPR: Total de estudiantes del programa de estudios que respondieron la consulta
+
+      FORMA DE CÁLCULO: (EPSC / EPR) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Anual
+
+      NOTAS: La consulta considera a estudiantes del programa de estudios que cursan los dos últimos ciclos de su formación al momento de la consulta. Los estudiantes encuestados deben representar, por lo menos, el 70% de los matriculados.
+
+      📖 Fuente: Ficha ID1, p. 65 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id2
+    ref_id: ID2
+    name: Porcentaje de estudiantes satisfechos con el desempeño docente
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 4 PLANA DOCENTE · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 4.2, Criterio 4.3, Criterio 4.4, Criterio 8.2 Criterio 8.3 [sic, sin coma].
+
+      OBJETIVO DE MEDICIÓN: Medir el porcentaje de estudiantes del programa de estudios satisfechos con el desempeño pedagógico de los docentes
+
+      VALOR REFERENCIAL / UMBRAL: ID2 ≥ 70% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID2 igual o mayor 70% evidencia que el desempeño docente resulta satisfactorio para los estudiantes del programa de estudios
+
+      FUENTE DE INFORMACIÓN: Registro de resultados de consulta dirigida a estudiantes
+
+      VARIABLES: EPSDD: Total de estudiantes del programa de estudios satisfechos con el desempeño pedagógico de los docentes · EPR: Total de estudiantes del programa de estudios que respondieron la consulta
+
+      FORMA DE CÁLCULO: (EPSDD / EPR) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Semestral
+
+      NOTAS: Los estudiantes encuestados deben representar, por lo menos, el 70% de los matriculados.
+
+      📖 Fuente: Ficha ID2, p. 66 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id3
+    ref_id: ID3
+    name: Porcentaje de estudiantes satisfechos con los recursos requeridos para el desarrollo de las actividades de enseñanza - aprendizaje
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 3 EVALUACIÓN DE LA ENSEÑANZA, EL APRENDIZAJE Y DEL LOGRO DEL PERFIL DE EGRESO · Estándar 5 RECURSOS PARA LA ENSEÑANZA - APRENDIZAJE · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 3.1, Criterio 5.1, Criterio 5.2, Criterio 5.3, Criterio 5.5, Criterio 8.2.
+
+      OBJETIVO DE MEDICIÓN: Medir el porcentaje de estudiantes del programa de estudios satisfechos con los recursos requeridos para el desarrollo de las actividades de enseñanza - aprendizaje
+
+      VALOR REFERENCIAL / UMBRAL: ID3 ≥ 70% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID3 igual o mayor a 70% evidencia que los recursos requeridos para el desarrollo de las actividades de enseñanza - aprendizaje resultan satisfactorios para los estudiantes del programa.
+
+      FUENTE DE INFORMACIÓN: Registro de resultados de consulta dirigida a estudiantes
+
+      VARIABLES: EPSREA: Total de estudiantes del programa de estudios satisfechos con los recursos requeridos para el desarrollo de las actividades de enseñanza - aprendizaje · EPR: Total de estudiantes del programa de estudios que respondieron la consulta
+
+      FORMA DE CÁLCULO: (EPSREA / EPR) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Semestral
+
+      NOTAS: Debe preguntarse por cada uno de los recursos requeridos para el desarrollo de las actividades de enseñanza - aprendizaje incluyen [sic]: i) la infraestructura de aulas, laboratorios, talleres y otros ambientes; ii) el equipamiento y mobiliario respectivo; iii) tecnologías de información y comunicación; y iv) recursos académicos de referencia físicos y virtuales (libros, revistas, bases de datos). Los estudiantes encuestados deben representar, por lo menos, el 70% de los matriculados.
+
+      📖 Fuente: Ficha ID3, p. 67 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id4
+    ref_id: ID4
+    name: Porcentaje de estudiantes satisfechos con la evaluación del aprendizaje
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 3 EVALUACIÓN DE LA ENSEÑANZA, DEL APRENDIZAJE Y DEL LOGRO DEL PERFIL DE EGRESO [sic, "DEL" en vez de "EL"] · Estándar 4 PLANA DOCENTE · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 3.1, Criterio 3.2, Criterio 3.3, Criterio 3.4, Criterio 4.1, Criterio 8.2, Criterio 8.4.
+
+      OBJETIVO DE MEDICIÓN: Medir el porcentaje de estudiantes del programa de estudios satisfechos con la evaluación del aprendizaje
+
+      VALOR REFERENCIAL / UMBRAL: ID4 ≥ 60% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID4 igual o mayor a 70% evidencia que la evaluación del aprendizaje resulta satisfactoria para los estudiantes del programa [sic — el valor referencial dice 60% y la interpretación 70%: inconsistencia interna del original]
+
+      FUENTE DE INFORMACIÓN: Registro de resultados de consulta dirigida a estudiantes
+
+      VARIABLES: EPSEA: Total de estudiantes del programa de estudios satisfechos con la evaluación del aprendizaje · EPR: Total de estudiantes del programa de estudios que respondieron la consulta
+
+      FORMA DE CÁLCULO: (EPSEA / EPR) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Semestral
+
+      NOTAS: Los estudiantes encuestados deben representar, por lo menos, el 70% de los matriculados.
+
+      📖 Fuente: Ficha ID4, p. 68 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id5
+    ref_id: ID5
+    name: Porcentaje de estudiantes satisfechos con las actividades de asesoría y/o tutoría para la obtención del título profesional
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 3 EVALUACIÓN DE LA ENSEÑANZA, DEL APRENDIZAJE Y DEL LOGRO DEL PERFIL DE EGRESO · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 3.5, Criterio 8.2.
+
+      OBJETIVO DE MEDICIÓN: Medir la satisfacción de los estudiantes del programa de estudios respecto de las actividades de asesoría y/o tutoría para la elaboración de tesis o trabajo de suficiencia profesional.
+
+      VALOR REFERENCIAL / UMBRAL: ID5 ≥ 70% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID5 igual o mayor a 70% evidencia que las actividades de asesoría y/o tutoría resultan satisfactorias para los estudiantes del programa
+
+      FUENTE DE INFORMACIÓN: Registro de resultados de consulta dirigida a estudiantes
+
+      VARIABLES: EPSAT: Total de estudiantes del programa de estudios satisfechos con las actividades de asesoría y/o tutoría en las que han participado · EPR: Total de estudiantes del programa de estudios que respondieron la consulta
+
+      FORMA DE CÁLCULO: (EPSAT / EPR) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Semestral
+
+      NOTAS: La consulta considera a estudiantes del programa de estudios que cursan los dos últimos ciclos de su formación al momento de la consulta. Los estudiantes encuestados deben representar, por lo menos, el 70% de los matriculados.
+
+      📖 Fuente: Ficha ID5, p. 69 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id6
+    ref_id: ID6
+    name: Evolución del porcentaje de postulantes al programa de estudios
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 8.2.
+
+      OBJETIVO DE MEDICIÓN: Medir la evolución de la cantidad de postulantes al programa de estudios
+
+      VALOR REFERENCIAL / UMBRAL: ID6 ≥ 0% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID6 igual o mayor a 0% evidencia un aumento en la cantidad de postulantes al programa. Un valor menor, no significa una evaluación deficiente necesariamente, sin embargo, deben analizarse las causas del comportamiento, tales como, aumento de la oferta de otras instituciones, grado de satisfacción de los estudiantes, etc.
+
+      FUENTE DE INFORMACIÓN: Registros de postulantes (proceso de admisión)
+
+      VARIABLES: CPPU: Cantidad de postulantes al programa de estudios del último año · CPPP: Cantidad de postulantes al programa de estudios del penúltimo año
+
+      FORMA DE CÁLCULO: ((CPPU − CPPP) / CPPP) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Anual
+
+      NOTAS: De contar con más de una convocatoria de admisión durante un año, la cantidad de postulantes al programa de estudios debe consolidarse para realizar el cálculo.
+
+      📖 Fuente: Ficha ID6, p. 70 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id7
+    ref_id: ID7
+    name: Porcentaje de estudiantes satisfechos con los programas de bienestar y actividades recreativas, culturales, artísticas y deportivas al estudiante
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 7 BIENESTAR Y SERVICIOS DE APOYO AL ESTUDIANTE · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 7.4, Criterio 8.2.
+
+      OBJETIVO DE MEDICIÓN: Medir el porcentaje de estudiantes del programa de estudios satisfechos con cada uno de los programas de bienestar y actividades recreativas, culturales, artísticas y deportivas para el estudiante del programa de estudios.
+
+      VALOR REFERENCIAL / UMBRAL: ID7 ≥ 70% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID7 igual o mayor a 70% evidencia que los programas de bienestar y actividades recreativas, culturales, artísticas y deportivas resultan satisfactorios para los estudiantes del programa de estudios.
+
+      FUENTE DE INFORMACIÓN: Registro de resultados de consulta dirigida a estudiantes
+
+      VARIABLES: EPSB: Total de estudiantes del programa de estudios satisfechos con los servicios de bienestar y actividades recreativas, culturales, artísticas y deportivas · EPR: Total de estudiantes del programa de estudios que respondieron la consulta
+
+      FORMA DE CÁLCULO: (EPSB / EPR) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Semestral
+
+      NOTAS: Los estudiantes encuestados deben representar, por lo menos, el 70% de los matriculados y los resultados son individuales por cada uno de los programas y actividades recreativas, culturales, artísticas y deportivas brindadas al estudiante.
+
+      📖 Fuente: Ficha ID7, p. 71 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id8
+    ref_id: ID8
+    name: Porcentaje de estudiantes satisfechos con los procedimientos de los servicios administrativos
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 1 GESTIÓN DEL PROGRAMA DE ESTUDIOS · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 1.5, Criterio 8.2.
+
+      OBJETIVO DE MEDICIÓN: Medir el porcentaje de estudiantes del programa de estudios satisfechos con los procedimientos de los servicios administrativos: matrícula, convalidaciones, constancias académicas, etc.
+
+      VALOR REFERENCIAL / UMBRAL: ID8 ≥ 60% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID8 igual o mayor a 60% evidencia que los procedimientos de los servicios administrativos resultan satisfactorios para los estudiantes del programa
+
+      FUENTE DE INFORMACIÓN: Registro de resultados de consulta dirigida a estudiantes
+
+      VARIABLES: EPSPA: Total de estudiantes del programa de estudios satisfechos con los procedimientos de los servicios administrativos · EPR: Total de estudiantes del programa de estudios que respondieron la consulta
+
+      FORMA DE CÁLCULO: (EPSPA / EPR) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Semestral
+
+      NOTAS: Los procedimientos de los servicios administrativos están referidos a: matrícula, convalidaciones, constancias académicas, etc. Los estudiantes encuestados deben representar, por lo menos, el 70% de los matriculados.
+
+      📖 Fuente: Ficha ID8, p. 72 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id9
+    ref_id: ID9
+    name: Porcentaje de estudiantes satisfechos con los servicios de apoyo pedagógico para la mejora del desempeño académico de los estudiantes
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 3 EVALUACIÓN DE LA ENSEÑANZA, DEL APRENDIZAJE Y DEL LOGRO DEL PERFIL DE EGRESO · Estándar 7 BIENESTAR Y SERVICIOS DE APOYO AL ESTUDIANTE · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 3.5, Criterio 7.4, Criterio 8.2.
+
+      OBJETIVO DE MEDICIÓN: Medir la satisfacción de los estudiantes del programa de estudios respecto de los servicios de orientación y apoyo pedagógico (psicopedagogía, tutoría y/o asesoría⁷, consejería y otros que el programa ofrezca) en los que participaron. — Nota al pie 7: "Además de la tutoría y/o asesoría para la elaboración de las tesis o trabajos de investigación, los programas pueden desarrollar este tipo de actividades para la nivelación y mejora del desempeño de los estudiantes."
+
+      VALOR REFERENCIAL / UMBRAL: ID9 ≥ 70% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID9 igual o mayor a 70% evidencia que los servicios de orientación y tutoría resultan satisfactorias [sic] para los estudiantes del programa
+
+      FUENTE DE INFORMACIÓN: Registro de resultados de consulta dirigida a estudiantes
+
+      VARIABLES: EPSAP: Total de estudiantes del programa de estudios satisfechos con el servicio de apoyo pedagógico (psicopedagogía, tutoría y/o asesoría, consejería y otros que el programa ofrezca) en el que han participado. · EPSAR: Total de estudiantes del programa de estudios que participaron el servicio de pedagógico (psicopedagogía pedagogía, tutoría y/o asesoría, consejería y otros que el programa ofrezca) [sic] y que respondieron la consulta.
+
+      FORMA DE CÁLCULO: (EPSAP / EPSAR) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Semestral
+
+      NOTAS: La consulta considera a estudiantes del programa de estudios al momento de su aplicación. Los estudiantes encuestados deben representar, por lo menos, el 70% de los matriculados y los resultados son individuales por cada uno de los servicios de apoyo brindados a estos.
+
+      📖 Fuente: Ficha ID9, p. 73 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id10
+    ref_id: ID10
+    name: Porcentaje de estudiantes aprobados por asignatura
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 3 EVALUACIÓN DE LA ENSEÑANZA, DEL APRENDIZAJE Y DEL LOGRO DEL PERFIL DE EGRESO · Estándar 6 RESPONSABILIDAD SOCIAL UNIVERSITARIA · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterios 3.1 [sic], Criterio 6.1, Criterio 8.4.
+
+      OBJETIVO DE MEDICIÓN: - Evaluar la efectividad de los procesos de enseñanza aprendizaje y el nivel de logro académico de los estudiantes en cada asignatura. - Identificar asignaturas con bajo rendimiento, áreas de mejora en el currículo, y la necesidad de implementar estrategias de apoyo para los estudiantes.
+
+      VALOR REFERENCIAL / UMBRAL: ID10 ≥ 80% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID10 igual o mayor a 80% evidencia un mejor resultado en los procesos formativos, sin embargo, deben considerarse los niveles de complejidad de las diferentes asignaturas, la evolución semestral del indicador etc. En los casos que no se alcanza ese valor, pero la evolución es positiva, entonces debe considerarse como un resultado satisfactorio.
+
+      FUENTE DE INFORMACIÓN: Registro de calificaciones (por asignatura) de estudiantes del programa de estudios
+
+      VARIABLES: EPCAA: Total de estudiantes del programa de estudios con calificación aprobatoria en la asignatura al término del semestre · TEMA: Total de estudiantes del programa de estudios matriculados en la asignatura
+
+      FORMA DE CÁLCULO: (EPCAA / TEMA) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Semestral
+
+      NOTAS: La ecuación se aplica a cada una de las asignaturas del programa de estudios. El registro de la información considera a todos los estudiantes del programa de estudios matriculados en el semestre de cálculo.
+
+      📖 Fuente: Ficha ID10, p. 74 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id11
+    ref_id: ID11
+    name: Porcentaje de cumplimiento de los sílabos
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 2 – CURRÍCULO · Estándar 9 SUPERVISIÓN Y REVISIÓN DEL PROGRAMA DE ESTUDIOS. Criterio(s): Criterio 2.7, Criterio 9.3.
+
+      OBJETIVO DE MEDICIÓN: Medir el porcentaje de cumplimiento de los sílabos
+
+      VALOR REFERENCIAL / UMBRAL: ID11 ≥ 90% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID11 igual o mayor a 90% evidencia una adecuada planificación y se ha desarrollado el sílabo durante el periodo académico
+
+      FUENTE DE INFORMACIÓN: Registros de ejecución de actividades programadas en los sílabos
+
+      VARIABLES: TSC: Total de sílabos con actividades ejecutadas al 100% · TSD: Total de sílabos de cursos desarrollados en el periodo académico
+
+      FORMA DE CÁLCULO: (TSC / TSD) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Semestral
+
+      NOTAS: Las actividades programadas en los sílabos corresponden a las de enseñanza - aprendizaje y las de evaluación del aprendizaje
+
+      📖 Fuente: Ficha ID11, p. 75 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id12
+    ref_id: ID12
+    name: Porcentaje de docentes satisfechos con el currículo
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 2 CURRÍCULO · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 2.1, Criterio 8.2.
+
+      OBJETIVO DE MEDICIÓN: Medir el porcentaje de docentes del programa de estudios satisfechos con el currículo
+
+      VALOR REFERENCIAL / UMBRAL: ID12 ≥ 70% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID12 igual o mayor a 70% evidencia que el currículo resulta satisfactorio para los docentes del programa
+
+      FUENTE DE INFORMACIÓN: Registro de resultados de consulta dirigida a docentes
+
+      VARIABLES: DPSC: Total de docentes del programa de estudios satisfechos con el currículo · DPR: Total de docentes del programa de estudios que respondieron la consulta
+
+      FORMA DE CÁLCULO: (DPSC / DPR) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Cada tres (03) años
+
+      NOTAS: La consulta considera a docentes con carga lectiva en el programa de estudios durante el semestre de cálculo del indicador. Los docentes encuestados deben representar, por lo menos, el 70% del total.
+
+      📖 Fuente: Ficha ID12, p. 76 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id13
+    ref_id: ID13
+    name: Porcentaje de docentes a tiempo completo
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 4 PLANA DOCENTE · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 4.3, Criterio 8.2.
+
+      OBJETIVO DE MEDICIÓN: Medir el porcentaje de docentes a tiempo completo con carga lectiva
+
+      VALOR REFERENCIAL / UMBRAL: ID13 ≥ 25% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID13 igual o mayor a 25% evidencia que el programa cuenta con un número adecuado de docentes a tiempo completo
+
+      FUENTE DE INFORMACIÓN: Registro de docentes con carga lectiva
+
+      VARIABLES: DTCP: Docentes a tiempo completo del programa de estudios · TDP: Total de docentes con carga lectiva
+
+      FORMA DE CÁLCULO: (DTCP / TDP) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Semestral
+
+      NOTAS: La información a evaluar considera los registros de docentes con carga lectiva en el programa de estudios durante el semestre de cálculo del indicador
+
+      📖 Fuente: Ficha ID13, p. 77 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id14
+    ref_id: ID14
+    name: Porcentaje de docentes con el grado académico de doctor
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 4 PLANA DOCENTE · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 4.1, Criterio 4.3, Criterio 4.6, Criterio 8.2.
+
+      OBJETIVO DE MEDICIÓN: Medir el porcentaje de docentes del programa de estudios que cuentan con el grado académico de doctor
+
+      VALOR REFERENCIAL / UMBRAL: ID14 ≥ 20% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID14 igual o mayor a 20% evidencia que el programa cuenta con un número adecuado de docentes con grado académico de doctor
+
+      FUENTE DE INFORMACIÓN: Registro de docentes que desarrollan labores de formación en el programa
+
+      VARIABLES: DGDP: Docentes con grado académico de doctor que desarrollan labores de formación en el programa de estudios · TDP: Total de docentes que desarrollan labores de formación en el programa de estudios
+
+      FORMA DE CÁLCULO: (DGDP / TDP) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Semestral
+
+      NOTAS: La información a evaluar considera los registros de todos los docentes con carga lectiva en el programa de estudios durante el semestre de cálculo del indicador. (En el listado de p. 64 el nombre figura como "Porcentaje de docentes con el grado de doctor"; la ficha usa "grado académico de doctor".)
+
+      📖 Fuente: Ficha ID14, p. 78 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id15
+    ref_id: ID15
+    name: Porcentaje de docentes que han recibido formación, capacitación o especialización en docencia e investigación, en los últimos dos años
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 4 PLANA DOCENTE · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 4.4, Criterio 4.5, Criterio 8.2.
+
+      OBJETIVO DE MEDICIÓN: Medir el porcentaje de docentes del programa de estudios que han recibido formación, capacitación o especialización en docencia e investigación (incluye didáctica, evaluación del aprendizaje, competencias digitales* e investigación) en los dos (02) últimos años.
+
+      VALOR REFERENCIAL / UMBRAL: ID15 ≥ 50% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID15 igual o mayor a 50% evidencia que el programa cuenta con un número adecuado de docentes que han recibido formación, capacitación o especialización en docencia e investigación, en los últimos dos años.
+
+      FUENTE DE INFORMACIÓN: Registro de docentes que han recibido formación, capacitación o especialización en docencia e investigación
+
+      VARIABLES: DFCEDU: Docentes del programa de estudios que han recibido formación, capacitación o especialización en docencia e investigación · TDP: Total de docentes del programa de estudios
+
+      FORMA DE CÁLCULO: (DFCEDU / TDP) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Anual
+
+      NOTAS: La información a evaluar considera los registros de todos los docentes con carga lectiva en el programa de estudios durante el semestre de cálculo del indicador. El programa dispone de información sobre las evidencias de la formación, capacitación o especialización en docencia e investigación. * Las competencias digitales incluyen el uso creativo, crítico y seguro de las tecnologías digitales para alcanzar objetivos específicos en el ámbito educativo y saber para qué usarlas y cómo integrarlas pedagógicamente para mejorar el proceso de enseñanza aprendizaje.
+
+      📖 Fuente: Ficha ID15, p. 79 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id16
+    ref_id: ID16
+    name: Porcentaje de docentes satisfechos con las actividades de fortalecimiento de capacidades y las posibilidades de desarrollo académico
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 4 PLANA DOCENTE · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 4.4, Criterio 4.5, Criterio 8.2.
+
+      OBJETIVO DE MEDICIÓN: Medir el porcentaje de docentes del programa de estudios satisfechos con las actividades de fortalecimiento de capacidades y las posibilidades de desarrollo académico.
+
+      VALOR REFERENCIAL / UMBRAL: ID16 ≥ 70% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID16 igual o mayor a 70% evidencia que las actividades de fortalecimiento de capacidades y posibilidades de desarrollo académico resultan satisfactorias para los docentes del programa.
+
+      FUENTE DE INFORMACIÓN: Registro de resultados de consulta dirigida a docentes
+
+      VARIABLES: DPSFCDA: Docentes del programa de estudios satisfechos con las actividades de fortalecimiento de capacidades y posibilidades de desarrollo académico · TDPR: Total de docentes del programa de estudios que respondieron la consulta
+
+      FORMA DE CÁLCULO: (DPSFCDA / TDPR) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Semestral
+
+      NOTAS: La consulta considera a docentes con carga lectiva del programa de estudios durante el semestre de cálculo del indicador. Los docentes encuestados deben representar, por lo menos, el 70% del total.
+
+      📖 Fuente: Ficha ID16, p. 80 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id17
+    ref_id: ID17
+    name: Porcentaje de docentes satisfechos con los recursos requeridos para el desarrollo de las actividades de enseñanza - aprendizaje
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 5 RECURSOS PARA LA ENSEÑANZA - APRENDIZAJE · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 5.1, Criterio 5.2, Criterio 5.3, Criterio 5.5, Criterio 8.2.
+
+      OBJETIVO DE MEDICIÓN: Medir el porcentaje de docentes del programa de estudios satisfechos con los recursos requeridos para el desarrollo de las actividades de enseñanza - aprendizaje.
+
+      VALOR REFERENCIAL / UMBRAL: ID17 ≥ 70% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID17 igual o mayor a 70% evidencia que los recursos requeridos para el desarrollo de las actividades de enseñanza - aprendizaje resultan satisfactorios para los docentes del programa.
+
+      FUENTE DE INFORMACIÓN: Registro de resultados de consulta dirigida a docentes
+
+      VARIABLES: DPSR: Docentes del programa de estudios satisfechos con los recursos requeridos para el desarrollo de las actividades de enseñanza- aprendizaje · TDPR: Total de docentes del programa de estudios que respondieron la consulta
+
+      FORMA DE CÁLCULO: (DPSR / TDPR) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Semestral
+
+      NOTAS: Los recursos requeridos para el desarrollo de las actividades de enseñanza - aprendizaje incluyen: i) la infraestructura de aulas, laboratorios, talleres y otros ambientes; ii) el equipamiento y mobiliario respectivo; iii) tecnologías de información y comunicación; y iv) recursos académicos de referencia físicos y virtuales (libros, revistas, bases de datos). La consulta considera a docentes con carga lectiva del programa de estudios durante el semestre de cálculo del indicador. Los docentes encuestados deben representar, por lo menos, el 70% del total.
+
+      📖 Fuente: Ficha ID17, p. 81 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id18
+    ref_id: ID18
+    name: Porcentaje de docentes satisfechos con los procedimientos de los servicios administrativos
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 1 GESTIÓN DEL PROGRAMA DE ESTUDIOS · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 1.5, Criterio 8.2.
+
+      OBJETIVO DE MEDICIÓN: Medir el porcentaje de docentes del programa de estudios satisfechos con los procedimientos de los servicios administrativos están referidos a [sic]: emisión de licencias, certificados, o constancias; registro de actas/notas y otros que sean pertinentes.
+
+      VALOR REFERENCIAL / UMBRAL: ID18 ≥ 75% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID18 igual o mayor a 75% evidencia que los procedimientos de los servicios administrativos resultan satisfactorios para los docentes del programa
+
+      FUENTE DE INFORMACIÓN: Registro de resultados de consulta dirigida a docentes
+
+      VARIABLES: DPSPA: Docentes del programa de estudios satisfechos con los procedimientos de los servicios administrativos · TDPR: Total de docentes del programa de estudios que respondieron la consulta
+
+      FORMA DE CÁLCULO: (DPSPA / TDPR) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Semestral
+
+      NOTAS: Los procedimientos de los servicios administrativos están referidos a: emisión de licencias, certificados, o constancias; registro de actas/notas y otros que sean pertinentes. La consulta considera a docentes con carga lectiva del programa de estudios durante el semestre de cálculo del indicador. Los docentes encuestados deben representar, por lo menos, el 70% del total.
+
+      📖 Fuente: Ficha ID18, p. 82 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id19
+    ref_id: ID19
+    name: Porcentaje de docentes con desempeño satisfactorio, en opinión de los estudiantes
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 3 EVALUACIÓN DE LA ENSEÑANZA, DEL APRENDIZAJE Y DEL LOGRO DEL PERFIL DE EGRESO · Estándar 4 PLANA DOCENTE · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 3.1, Criterio 4.1, Criterio 4.2, Criterio 4.4, Criterio 8.3.
+
+      OBJETIVO DE MEDICIÓN: Medir el porcentaje de docentes con desempeño satisfactorio, en opinión de los estudiantes
+
+      VALOR REFERENCIAL / UMBRAL: ID19 ≥ 75% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID19 igual o mayor a 75% evidencia que los estudiantes están satisfechos con la enseñanza del docente
+
+      FUENTE DE INFORMACIÓN: Registro de docentes del programa de estudios · Registros de resultados de evaluación de desempeño docente
+
+      VARIABLES: DPEDS: Docentes del programa de estudios con desempeño satisfactorio en opinión de los estudiantes · TDPE: Total de docentes del programa de estudios evaluados por los estudiantes
+
+      FORMA DE CÁLCULO: (DPEDS / TDPE) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Semestral
+
+      NOTAS: La consulta considera a docentes que tienen carga lectiva del programa de estudios durante el semestre de cálculo del indicador.
+
+      📖 Fuente: Ficha ID19, p. 83 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id20
+    ref_id: ID20
+    name: Porcentaje de egresados satisfechos con la calidad y utilidad de la formación recibida, para su empleabilidad
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 3 EVALUACIÓN DE LA ENSEÑANZA, EL APRENDIZAJE Y DEL LOGRO DEL PERFIL DE EGRESO · Estándar 6 RESPONSABILIDAD SOCIAL UNIVERSITARIA · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 3.3, Criterio 6.1, Criterio 6.2, Criterio 8.2.
+
+      OBJETIVO DE MEDICIÓN: Medir el porcentaje de egresados del programa de estudios satisfechos con la calidad y utilidad de la formación recibida, para su empleabilidad
+
+      VALOR REFERENCIAL / UMBRAL: ID20 ≥ 70% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID20 igual o mayor a 70% evidencia que la calidad y utilidad de la formación recibida, para la empleabilidad, resultan satisfactorias para los egresados del programa.
+
+      FUENTE DE INFORMACIÓN: Registro de resultados de consulta dirigida a egresados
+
+      VARIABLES: EPSF: Egresados del programa de estudios satisfechos con la calidad y utilidad de la formación recibida, para la empleabilidad · TEEP: Total de egresados encuestados del programa de estudios
+
+      FORMA DE CÁLCULO: (EPSF / TEEP) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Anual
+
+      NOTAS: La consulta considera a egresados del programa de estudios de los últimos cinco (05) años. Para este indicador, la institución determina la muestra y el tratamiento estadístico pertinente.
+
+      📖 Fuente: Ficha ID20, p. 84 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id21
+    ref_id: ID21
+    name: Porcentaje de egresados satisfechos con los procedimientos de los servicios administrativos
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 1 GESTIÓN DEL PROGRAMA DE ESTUDIOS · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 1.5, Criterio 8.2.
+
+      OBJETIVO DE MEDICIÓN: Medir el porcentaje de egresados del programa de estudios satisfechos con los procedimientos de los servicios administrativos están referidos a [sic]: emisión de licencias, certificados, o constancias; promoción; registro de actas/notas y otros que sean pertinentes.
+
+      VALOR REFERENCIAL / UMBRAL: ID21 ≥ 70% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID21 igual o mayor a 70% evidencia que los procedimientos de los servicios administrativos resultan satisfactorios para los egresados del programa
+
+      FUENTE DE INFORMACIÓN: Registro de resultados de consulta dirigida a egresados
+
+      VARIABLES: ESPA: Egresados del programa de estudios satisfechos con los procedimientos de los servicios administrativos · TEEP: Total de egresados encuestados del programa de estudios
+
+      FORMA DE CÁLCULO: (ESPA / TEEP) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Anual
+
+      NOTAS: Los procedimientos de los servicios administrativos están referidos a: emisión de licencias, certificados, o constancias; promoción; registro de actas/notas y otros que sean pertinentes. La consulta considera a egresados del programa de estudios de los últimos cinco (05) años. Para este indicador, la institución determina la muestra y el tratamiento estadístico pertinente.
+
+      📖 Fuente: Ficha ID21, p. 85 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id22
+    ref_id: ID22
+    name: Porcentaje de egresados satisfechos con la calidad de enseñanza
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 3 EVALUACIÓN DE LA ENSEÑANZA, EL APRENDIZAJE Y DEL LOGRO DEL PERFIL DE EGRESO · Estándar 6 RESPONSABILIDAD SOCIAL UNIVERSITARIA · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 3.1, Criterio 6.2, Criterio 8.2.
+
+      OBJETIVO DE MEDICIÓN: Medir el porcentaje de egresados del programa de estudios satisfechos con la calidad de la enseñanza.
+
+      VALOR REFERENCIAL / UMBRAL: ID22 ≥ 70% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID22 igual o mayor a 70% evidencia que la calidad de la enseñanza resulta satisfactoria para los egresados del programa
+
+      FUENTE DE INFORMACIÓN: Registro de resultados de consulta dirigida a egresados
+
+      VARIABLES: EPSCE: Egresados del programa de estudios satisfechos con la calidad de la enseñanza · TEEP: Total de egresados encuestados del programa de estudios
+
+      FORMA DE CÁLCULO: (EPSCE / TEEP) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Anual
+
+      NOTAS: La consulta considera a egresados del programa de estudios de los últimos cinco (05) años. Para este indicador, la institución determina la muestra y el tratamiento estadístico pertinente.
+
+      📖 Fuente: Ficha ID22, p. 86 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id23
+    ref_id: ID23
+    name: Porcentaje de egresados satisfechos con los programas de bienestar y actividades recreativas, culturales, artísticas y deportivas
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 7 BIENESTAR Y SERVICIOS DE APOYO AL ESTUDIANTE · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 7.4 · Criterio 8.2.
+
+      OBJETIVO DE MEDICIÓN: Medir el porcentaje de egresados del programa de estudios satisfechos con los programas de bienestar y actividades recreativas, culturales, artísticas y deportivas.
+
+      VALOR REFERENCIAL / UMBRAL: ID23 ≥ 70% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID23 igual o mayor a 70% evidencia que los programas de bienestar y actividades recreativas, culturales, artísticas y deportivas resultan satisfactorios para los egresados del programa.
+
+      FUENTE DE INFORMACIÓN: Registro de resultados de consulta dirigida a egresados
+
+      VARIABLES: EPSB: Egresados del programa de estudios satisfechos con programas de bienestar y actividades recreativas, culturales, artísticas y deportivas. en el que ha participado [sic]. · TEEP: Total de egresados encuestados del programa de estudios
+
+      FORMA DE CÁLCULO: (EPSB / TEEP) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Anual
+
+      NOTAS: Realizar el cálculo del indicador por cada uno de los programas y actividades ofrecidos. La consulta considera a egresados del programa de estudios de los últimos cinco (05) años. Para este indicador, la institución determina la muestra y el tratamiento estadístico pertinente.
+
+      📖 Fuente: Ficha ID23, p. 87 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id24
+    ref_id: ID24
+    name: Porcentaje de egresados satisfechos con los servicios de apoyo al estudiante
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 3 EVALUACIÓN DE LA ENSEÑANZA, DEL APRENDIZAJE Y DEL LOGRO DEL PERFIL DE EGRESO · Estándar 7 BIENESTAR Y SERVICIOS DE APOYO AL ESTUDIANTE · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 3.5, Criterio 7.2, Criterio 7.4, Criterio 8.2.
+
+      OBJETIVO DE MEDICIÓN: Medir la satisfacción de los egresados del programa de estudios respecto de los servicios de orientación y apoyo (tutoría, psicopedagogía, asesoría, consejería) en los que participaron.
+
+      VALOR REFERENCIAL / UMBRAL: ID24 ≥ 70% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID24 igual o mayor a 70% evidencia que los servicios de apoyo resultan satisfactorios para los egresados del programa
+
+      FUENTE DE INFORMACIÓN: Registro de resultados de consulta dirigida a egresados
+
+      VARIABLES: EPSSA: Egresados del programa de estudios satisfechos con el servicio de apoyo (tutoría, psicopedagogía, asesoría, consejería) en el que participaron · TEEP: Total de egresados encuestados del programa de estudios
+
+      FORMA DE CÁLCULO: (EPSSA / TEEP) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Anual
+
+      NOTAS: Realizar el cálculo del indicador por cada uno de los servicios de apoyo ofrecidos. La consulta considera a egresados del programa de estudios de los últimos cinco (05) años. Para este indicador, la institución determina la muestra y el tratamiento estadístico pertinente.
+
+      📖 Fuente: Ficha ID24, p. 88 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id25
+    ref_id: ID25
+    name: Tiempo promedio entre egreso y titulación
+    category: process
+    description: |-
+      Tipo de dato: Promedio. Estándar(es): Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 8.5.
+
+      OBJETIVO DE MEDICIÓN: Medir el promedio del tiempo transcurrido entre la obtención de la condición de egresado y la obtención del título profesional o licenciatura
+
+      VALOR REFERENCIAL / UMBRAL: ID25 ≤ 2 años (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID25 menor a dos años evidencia que, el tiempo transcurrido entre la obtención de la condición de egresado y la obtención del título profesional o licenciatura, es adecuado.
+
+      FUENTE DE INFORMACIÓN: Registro de egresados del programa de estudios (fecha de egreso, fecha de obtención del título)
+
+      VARIABLES: TETP: Tiempo transcurrido entre la obtención de la condición de egresado y la obtención del título profesional. Se suma el tiempo, en años, de todos los titulados, desde que egresan hasta que se titulan. · TEPTP: Total de titulados del programa de estudios, que han alcanzado el título profesional en los últimos cuatro años
+
+      FORMA DE CÁLCULO: (Σ TETP / TEPTP) — sin factor ×100 (es un promedio)
+
+      PERIODICIDAD (frecuencia de cálculo): Anual
+
+      NOTAS: El registro de la información incluye a todos los titulados del programa de estudios de los últimos cuatro (04) años. La diferencia entre la fecha de egreso y titulación se expresa en "años y meses". El programa dispone de información periódica sobre los indicadores que componen la fórmula.
+
+      📖 Fuente: Ficha ID25, p. 89 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id26
+    ref_id: ID26
+    name: Tiempo promedio entre egreso y primer empleo en el campo profesional
+    category: process
+    description: |-
+      Tipo de dato: Promedio. Estándar(es): Estándar 6 RESPONSABILIDAD SOCIAL UNIVERSITARIA · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 6.1, Criterio 6.2, Criterio 6.3, Criterio 8.2.
+
+      OBJETIVO DE MEDICIÓN: Medir el promedio del tiempo transcurrido entre la obtención de la condición de egresado y el primer empleo en el campo profesional
+
+      VALOR REFERENCIAL / UMBRAL: ID26 ≤ 1 año (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID26 menor a un año evidencia que el tiempo transcurrido entre la obtención de la condición de egresado y el primer empleo en el campo profesional, es adecuado.
+
+      FUENTE DE INFORMACIÓN: Registro de egresados del programa de estudios de los últimos diez años que contenga información de la fecha de egreso y fecha de ingreso al primer empleo (incluye el autoempleo) en el campo profesional.
+
+      VARIABLES: TOCEPE: Tiempo transcurrido entre la obtención de la condición de egresado y el primer empleo en el campo profesional. Se suman los tiempos, en años, transcurridos por egresado. Si no trabaja en su campo, no se considera en la suma. · TEEP: Total de egresados encuestados del programa de estudios
+
+      FORMA DE CÁLCULO: (Σ TOCEPE / TEEP) — sin factor ×100 (es un promedio)
+
+      PERIODICIDAD (frecuencia de cálculo): Anual
+
+      NOTAS: El registro de la información considera a todos los egresados del programa de los últimos diez (10) años. El registro del primer empleo en el campo profesional corresponde a partir de la fecha de egreso (o graduación oficial) hasta la fecha de inicio de su primer empleo o autoempleo. La diferencia entre la fecha de egreso y primer empleo se expresa en "años y meses".
+
+      📖 Fuente: Ficha ID26, p. 90 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id27
+    ref_id: ID27
+    name: Porcentaje de egresados que laboran en su campo profesional
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 6 RESPONSABILIDAD SOCIAL UNIVERSITARIA · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 6.1, Criterio 6.2, Criterio 6.3, Criterio 8.2.
+
+      OBJETIVO DE MEDICIÓN: Medir el porcentaje de egresados del programa de estudios que laboran en su campo profesional
+
+      VALOR REFERENCIAL / UMBRAL: ID27 ≥ 50% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID27 igual o mayor a 50% evidencia que el porcentaje de egresados del programa que laboran en su campo profesional es adecuado
+
+      FUENTE DE INFORMACIÓN: Registro de egresados del programa de estudios de los últimos diez años que contenga información de la fecha de egreso y fecha de ingreso al primer empleo (incluye el autoempleo) en el campo profesional.
+
+      VARIABLES: EPLCP: Egresados del programa de estudios encuestados que laboran en su campo profesional · TEEP: Total de egresados encuestados del programa de estudios
+
+      FORMA DE CÁLCULO: (EPLCP / TEEP) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Anual
+
+      NOTAS: El registro de la información considera a los egresados del programa de estudios, por lo menos de los últimos cinco (5), seis (6) o siete (7) años del programa de estudios, según corresponda.
+
+      📖 Fuente: Ficha ID27, p. 91 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id28
+    ref_id: ID28
+    name: Porcentaje de estudiantes que han alcanzado el título profesional, dentro de los dos años posteriores a su egreso
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 6 RESPONSABILIDAD SOCIAL UNIVERSITARIA · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 6.1, Criterio 6.2, Criterio 6.3, Criterio 8.2, Criterio 8.5.
+
+      OBJETIVO DE MEDICIÓN: Medir el porcentaje de estudiantes del programa de estudios que han alcanzado el título profesional, dentro de los dos años posteriores a su egreso
+
+      VALOR REFERENCIAL / UMBRAL: ID28 ≥ 60% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID28 igual o mayor a 60% evidencia que la tasa de titulación dentro de los dos años de egreso es adecuada
+
+      FUENTE DE INFORMACIÓN: Registro de egresados del programa de estudios (fecha de inicio de estudios, fecha de declaración de la condición de egresado, fecha de emisión del grado de bachiller, fecha de emisión del título profesional o licenciatura).
+
+      VARIABLES: EGPTL: Egresados del programa de estudios que alcanzaron el título profesional o licenciatura hasta dos años después de su egreso · TEP: Total de egresados del programa de estudios — [la fórmula usa la sigla "EPTL", distinta de la declarada "EGPTL"; discrepancia del original]
+
+      FORMA DE CÁLCULO: (EPTL / TEP) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Anual
+
+      NOTAS: El registro de la información considera a todos los egresados del programa de estudios, por lo menos de los últimos cinco (05) años. Se requiere evidencia de las fechas de egreso y titulación para los egresados declarados con título profesional o licenciatura.
+
+      📖 Fuente: Ficha ID28, p. 92 del Modelo CONEAU 2025.
+  - urn: urn:intuitem:risk:function:coneau-programas-2025:id29
+    ref_id: ID29
+    name: Porcentaje de empleadores satisfechos con el desempeño de los egresados
+    category: process
+    description: |-
+      Tipo de dato: Porcentaje. Estándar(es): Estándar 6 RESPONSABILIDAD SOCIAL UNIVERSITARIA · Estándar 8 GESTIÓN DE LA INFORMACIÓN. Criterio(s): Criterio 6.1, Criterio 6.2, Criterio 6.3, Criterio 8.5.
+
+      OBJETIVO DE MEDICIÓN: Medir el porcentaje de empleadores (de egresados del programa de estudios) satisfechos con el desempeño de los egresados del programa
+
+      VALOR REFERENCIAL / UMBRAL: ID29 ≥ 70% (margen de error de ±3% según la escala de valoración oficial, Sección IX 9.1).
+
+      INTERPRETACIÓN: Un ID29 igual o mayor a 70% evidencia que el desempeño de los egresados del programa resulta satisfactorio para los empleadores
+
+      FUENTE DE INFORMACIÓN: Registro de resultados de consulta dirigida a empleadores
+
+      VARIABLES: EMSDE: Empleadores satisfechos con el desempeño de los egresados del programa de estudios · TEMR: Total de empleadores que respondieron la consulta
+
+      FORMA DE CÁLCULO: (EMSDE / TEMR) × 100
+
+      PERIODICIDAD (frecuencia de cálculo): Anual
+
+      NOTAS: La consulta considera a los empleadores de los egresados del programa de estudios
+
+      📖 Fuente: Ficha ID29, p. 93 del Modelo CONEAU 2025.

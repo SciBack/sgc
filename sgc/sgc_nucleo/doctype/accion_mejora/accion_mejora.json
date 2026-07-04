@@ -1,0 +1,138 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "field:codigo",
+ "creation": "2026-07-04 17:29:32.391165",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "codigo",
+  "plan_mejora",
+  "hallazgo",
+  "no_conformidad",
+  "criterio",
+  "descripcion",
+  "tipo",
+  "responsable",
+  "fecha_inicio",
+  "fecha_compromiso",
+  "avance_pct",
+  "estado",
+  "evidencia_cierre"
+ ],
+ "fields": [
+  {
+   "fieldname": "codigo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "C\u00f3digo",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "plan_mejora",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Plan de mejora",
+   "options": "Plan Mejora"
+  },
+  {
+   "fieldname": "hallazgo",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Hallazgo",
+   "options": "Hallazgo"
+  },
+  {
+   "fieldname": "no_conformidad",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "No conformidad",
+   "options": "No Conformidad"
+  },
+  {
+   "fieldname": "criterio",
+   "fieldtype": "Link",
+   "label": "Criterio (elemento del marco)",
+   "options": "Elemento Marco"
+  },
+  {
+   "fieldname": "descripcion",
+   "fieldtype": "Text",
+   "label": "Descripci\u00f3n"
+  },
+  {
+   "fieldname": "tipo",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Tipo",
+   "options": "Correctiva\nPreventiva\nMejora"
+  },
+  {
+   "fieldname": "responsable",
+   "fieldtype": "Link",
+   "label": "Responsable",
+   "options": "User"
+  },
+  {
+   "fieldname": "fecha_inicio",
+   "fieldtype": "Date",
+   "label": "Fecha de inicio"
+  },
+  {
+   "fieldname": "fecha_compromiso",
+   "fieldtype": "Date",
+   "label": "Fecha de compromiso (ETA)"
+  },
+  {
+   "fieldname": "avance_pct",
+   "fieldtype": "Int",
+   "label": "Avance (%)"
+  },
+  {
+   "default": "Planificada",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Planificada\nEn ejecucion\nEjecutada\nVerificada eficaz\nVerificada no eficaz"
+  },
+  {
+   "fieldname": "evidencia_cierre",
+   "fieldtype": "Link",
+   "label": "Evidencia de cierre",
+   "options": "Evidencia"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-04 17:29:32.391165",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "Accion Mejora",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "codigo",
+ "track_changes": 1
+}

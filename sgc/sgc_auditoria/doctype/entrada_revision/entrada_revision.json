@@ -1,0 +1,59 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "creation": "2026-07-04 17:29:32.760317",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "tipo_entrada",
+  "resumen",
+  "fuente_doctype",
+  "fuente_id"
+ ],
+ "fields": [
+  {
+   "fieldname": "tipo_entrada",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Tipo de entrada",
+   "options": "Estado de acciones de revisiones previas\nCambios en cuestiones externas/internas\nDesempeno y eficacia del SGC\nSuficiencia de recursos\nEficacia de acciones frente a riesgos\nOportunidades de mejora"
+  },
+  {
+   "fieldname": "resumen",
+   "fieldtype": "Text",
+   "label": "Resumen"
+  },
+  {
+   "fieldname": "fuente_doctype",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Tipo de fuente",
+   "options": "DocType"
+  },
+  {
+   "description": "Evidencia real: InformeAuditoria, ResultadoInstrumento, ValorIndicador, EvaluacionRiesgo\u2026",
+   "fieldname": "fuente_id",
+   "fieldtype": "Dynamic Link",
+   "in_list_view": 1,
+   "label": "Fuente",
+   "options": "fuente_doctype"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-07-04 17:29:32.760317",
+ "modified_by": "Administrator",
+ "module": "SGC Auditoria",
+ "name": "Entrada Revision",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

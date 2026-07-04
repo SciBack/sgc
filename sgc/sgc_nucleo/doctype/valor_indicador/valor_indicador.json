@@ -1,0 +1,121 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "hash",
+ "creation": "2026-07-04 17:29:32.143763",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "indicador",
+  "autoevaluacion",
+  "periodo_academico",
+  "programa_sede",
+  "unidad_organica",
+  "valor_num",
+  "valor_texto",
+  "calculado",
+  "fuente",
+  "fecha",
+  "registrado_por"
+ ],
+ "fields": [
+  {
+   "fieldname": "indicador",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Indicador",
+   "options": "Indicador",
+   "reqd": 1
+  },
+  {
+   "fieldname": "autoevaluacion",
+   "fieldtype": "Link",
+   "label": "Autoevaluaci\u00f3n",
+   "options": "Autoevaluacion"
+  },
+  {
+   "fieldname": "periodo_academico",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Periodo acad\u00e9mico",
+   "options": "Periodo Academico"
+  },
+  {
+   "fieldname": "programa_sede",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Programa-Sede",
+   "options": "Programa Sede"
+  },
+  {
+   "fieldname": "unidad_organica",
+   "fieldtype": "Link",
+   "label": "Unidad org\u00e1nica",
+   "options": "Unidad Organica"
+  },
+  {
+   "fieldname": "valor_num",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Valor num\u00e9rico"
+  },
+  {
+   "fieldname": "valor_texto",
+   "fieldtype": "Data",
+   "label": "Valor (texto)"
+  },
+  {
+   "default": "0",
+   "fieldname": "calculado",
+   "fieldtype": "Check",
+   "label": "Calculado"
+  },
+  {
+   "fieldname": "fuente",
+   "fieldtype": "Data",
+   "label": "Fuente del dato"
+  },
+  {
+   "fieldname": "fecha",
+   "fieldtype": "Datetime",
+   "label": "Fecha"
+  },
+  {
+   "fieldname": "registrado_por",
+   "fieldtype": "Link",
+   "label": "Registrado por",
+   "options": "User"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-04 17:29:32.143763",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "Valor Indicador",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "indicador",
+ "track_changes": 1
+}

@@ -1,0 +1,179 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "field:codigo",
+ "creation": "2026-07-04 17:29:31.556796",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "codigo",
+  "denominacion",
+  "marco_normativo",
+  "nivel",
+  "tipo",
+  "texto_oficial",
+  "orden",
+  "peso",
+  "es_valorable",
+  "nota_normativa",
+  "atributos",
+  "is_group",
+  "parent_elemento_marco",
+  "lft",
+  "rgt",
+  "old_parent"
+ ],
+ "fields": [
+  {
+   "description": "E1, 1.1, CBC-I, CBC-I.2 \u2014 c\u00f3digo oficial",
+   "fieldname": "codigo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "C\u00f3digo",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "denominacion",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Denominaci\u00f3n"
+  },
+  {
+   "fieldname": "marco_normativo",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Marco normativo",
+   "options": "Marco Normativo",
+   "reqd": 1
+  },
+  {
+   "description": "Nombre del nivel (Est\u00e1ndar, Criterio\u2026); denormalizado de Nivel Marco",
+   "fieldname": "nivel",
+   "fieldtype": "Data",
+   "label": "Nivel"
+  },
+  {
+   "fieldname": "tipo",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Tipo",
+   "options": "Dimension\nFactor\nEstandar\nCriterio\nCondicion\nComponente\nIndicador"
+  },
+  {
+   "description": "Descripci\u00f3n literal (del description del YAML)",
+   "fieldname": "texto_oficial",
+   "fieldtype": "Text",
+   "label": "Texto oficial"
+  },
+  {
+   "fieldname": "orden",
+   "fieldtype": "Int",
+   "label": "Orden"
+  },
+  {
+   "description": "Ponderaci\u00f3n si el modelo la usa (CONEAU no pondera)",
+   "fieldname": "peso",
+   "fieldtype": "Float",
+   "label": "Peso"
+  },
+  {
+   "default": "0",
+   "description": "Denormalizado del nivel, para queries",
+   "fieldname": "es_valorable",
+   "fieldtype": "Check",
+   "label": "Es valorable"
+  },
+  {
+   "description": "Fuente + p\u00e1gina (del annotation del YAML)",
+   "fieldname": "nota_normativa",
+   "fieldtype": "Text",
+   "label": "Nota normativa"
+  },
+  {
+   "description": "Lo variable por marco (obligatoriedad, glosa, referencia legal)",
+   "fieldname": "atributos",
+   "fieldtype": "JSON",
+   "label": "Atributos"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "label": "Es grupo"
+  },
+  {
+   "fieldname": "parent_elemento_marco",
+   "fieldtype": "Link",
+   "label": "Elemento padre",
+   "options": "Elemento Marco"
+  },
+  {
+   "fieldname": "lft",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Left",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "rgt",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Right",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "label": "Es grupo"
+  },
+  {
+   "fieldname": "old_parent",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Old Parent",
+   "options": "Elemento Marco"
+  },
+  {
+   "fieldname": "parent_elemento_marco",
+   "fieldtype": "Link",
+   "label": "Elemento padre",
+   "options": "Elemento Marco"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_tree": 1,
+ "links": [],
+ "modified": "2026-07-04 17:48:52.607393",
+ "modified_by": "Administrator",
+ "module": "SGC Estructura",
+ "name": "Elemento Marco",
+ "nsm_parent_field": "parent_elemento_marco",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "denominacion",
+ "track_changes": 1
+}

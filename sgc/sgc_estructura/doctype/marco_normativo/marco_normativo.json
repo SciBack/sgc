@@ -1,0 +1,126 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "field:codigo",
+ "creation": "2026-07-04 17:29:31.510979",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "codigo",
+  "nombre",
+  "ente",
+  "version",
+  "vigente_desde",
+  "vigente_hasta",
+  "estado",
+  "escala_valoracion",
+  "niveles",
+  "reglas_vigencia",
+  "nota_normativa"
+ ],
+ "fields": [
+  {
+   "description": "CONEAU-PROG-2025, CBC-SUNEDU-2026, ISO-21001\u2026",
+   "fieldname": "codigo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "C\u00f3digo",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "nombre",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Nombre",
+   "reqd": 1
+  },
+  {
+   "fieldname": "ente",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Ente",
+   "options": "SINEACE\nSUNEDU\nISO\nINTERNACIONAL"
+  },
+  {
+   "description": "2025, 2026 \u2014 permite convivencia de versiones",
+   "fieldname": "version",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Versi\u00f3n"
+  },
+  {
+   "fieldname": "vigente_desde",
+   "fieldtype": "Date",
+   "label": "Vigente desde"
+  },
+  {
+   "fieldname": "vigente_hasta",
+   "fieldtype": "Date",
+   "label": "Vigente hasta"
+  },
+  {
+   "default": "borrador",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "borrador\nvigente\nderogado"
+  },
+  {
+   "fieldname": "escala_valoracion",
+   "fieldtype": "Link",
+   "label": "Escala de valoraci\u00f3n",
+   "options": "Escala Valoracion"
+  },
+  {
+   "fieldname": "niveles",
+   "fieldtype": "Table",
+   "label": "Niveles del marco",
+   "options": "Nivel Marco"
+  },
+  {
+   "description": "Tabla de vigencia del ente (CONEAU: en_proceso/3a/6a/8a)",
+   "fieldname": "reglas_vigencia",
+   "fieldtype": "JSON",
+   "label": "Reglas de vigencia"
+  },
+  {
+   "description": "Fuente oficial (PDF, RCD, pp.)",
+   "fieldname": "nota_normativa",
+   "fieldtype": "Text",
+   "label": "Nota normativa"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-04 17:29:31.510979",
+ "modified_by": "Administrator",
+ "module": "SGC Estructura",
+ "name": "Marco Normativo",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "nombre",
+ "track_changes": 1
+}

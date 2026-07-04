@@ -1,0 +1,167 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "creation": "2026-07-04 17:29:31.669740",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "indicador",
+  "elemento_marco",
+  "objetivo",
+  "tipo_valor",
+  "formula",
+  "variables",
+  "unidad",
+  "valor_referencial",
+  "margen_error",
+  "regla_evolucion",
+  "interpretacion",
+  "frecuencia",
+  "fuente_dato",
+  "responsable",
+  "notas",
+  "dominio_dato",
+  "fuente_autoritativa"
+ ],
+ "fields": [
+  {
+   "description": "Ficha 1:1 con Indicador (o con ElementoMarco-indicador en CBC)",
+   "fieldname": "indicador",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Indicador",
+   "options": "Indicador"
+  },
+  {
+   "description": "Alternativa: la ficha cuelga del nodo evaluable en CBC",
+   "fieldname": "elemento_marco",
+   "fieldtype": "Link",
+   "label": "Elemento marco (indicador CBC)",
+   "options": "Elemento Marco"
+  },
+  {
+   "description": "OBJETIVO DE MEDICI\u00d3N: \u2026",
+   "fieldname": "objetivo",
+   "fieldtype": "Text",
+   "label": "Objetivo"
+  },
+  {
+   "fieldname": "tipo_valor",
+   "fieldtype": "Select",
+   "label": "Tipo de valor",
+   "options": "porcentaje\nnumerico\nratio\nbooleano\nescala_satisfaccion\ntexto"
+  },
+  {
+   "description": "FORMA DE C\u00c1LCULO: (EPSC/EPR)\u00d7100",
+   "fieldname": "formula",
+   "fieldtype": "Text",
+   "label": "F\u00f3rmula"
+  },
+  {
+   "description": "VARIABLES: EPSC=\u2026, EPR=\u2026",
+   "fieldname": "variables",
+   "fieldtype": "JSON",
+   "label": "Variables"
+  },
+  {
+   "description": "%, ratio, n.\u00ba",
+   "fieldname": "unidad",
+   "fieldtype": "Small Text",
+   "label": "Unidad"
+  },
+  {
+   "description": "Umbral (ID1 \u2265 60%)",
+   "fieldname": "valor_referencial",
+   "fieldtype": "Float",
+   "label": "Valor referencial"
+  },
+  {
+   "default": "3",
+   "description": "\u00b13% por defecto (escala oficial \u00a79.1)",
+   "fieldname": "margen_error",
+   "fieldtype": "Float",
+   "label": "Margen de error"
+  },
+  {
+   "default": "0",
+   "description": "Si aplica evoluci\u00f3n positiva n-1\u2192n como aceptable",
+   "fieldname": "regla_evolucion",
+   "fieldtype": "Check",
+   "label": "Regla de evoluci\u00f3n"
+  },
+  {
+   "fieldname": "interpretacion",
+   "fieldtype": "Text",
+   "label": "Interpretaci\u00f3n"
+  },
+  {
+   "fieldname": "frecuencia",
+   "fieldtype": "Select",
+   "label": "Frecuencia",
+   "options": "anual\nsemestral\npor_promocion"
+  },
+  {
+   "description": "LAMB \u00b7 Koha \u00b7 DSpace \u00b7 encuesta \u00b7 manual",
+   "fieldname": "fuente_dato",
+   "fieldtype": "Small Text",
+   "label": "Fuente de dato"
+  },
+  {
+   "description": "Responsable del indicador (data steward)",
+   "fieldname": "responsable",
+   "fieldtype": "Link",
+   "label": "Responsable",
+   "options": "User"
+  },
+  {
+   "description": "Condiciones muestrales (\u226570% de matriculados)",
+   "fieldname": "notas",
+   "fieldtype": "Text",
+   "label": "Notas"
+  },
+  {
+   "description": "Dominio del dato (contrato de datos: matr\u00edcula, egresados\u2026)",
+   "fieldname": "dominio_dato",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Dominio de dato",
+   "options": "D1\nD2\nD3\nD4\nD5\nD6\nD7\nD8"
+  },
+  {
+   "description": "Sistema fuente de verdad (Oracle LAMB, Koha\u2026)",
+   "fieldname": "fuente_autoritativa",
+   "fieldtype": "Small Text",
+   "label": "Fuente autoritativa"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-04 17:48:52.769878",
+ "modified_by": "Administrator",
+ "module": "SGC Estructura",
+ "name": "Ficha Indicador",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "indicador",
+ "track_changes": 1
+}

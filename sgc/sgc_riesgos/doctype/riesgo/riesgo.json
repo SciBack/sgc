@@ -1,0 +1,147 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "format:RSK-{YYYY}-{#####}",
+ "creation": "2026-07-04 17:29:32.909293",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "titulo",
+  "descripcion",
+  "categoria",
+  "sb_scoping",
+  "unidad_organica",
+  "proceso",
+  "elemento_marco",
+  "cb_scoping",
+  "causa",
+  "consecuencia",
+  "propietario",
+  "sb_estado",
+  "matriz_riesgo",
+  "estado"
+ ],
+ "fields": [
+  {
+   "fieldname": "titulo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "T\u00edtulo",
+   "reqd": 1
+  },
+  {
+   "description": "evento incierto",
+   "fieldname": "descripcion",
+   "fieldtype": "Text",
+   "label": "Descripci\u00f3n"
+  },
+  {
+   "fieldname": "categoria",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Categor\u00eda",
+   "options": "Estrategico\nOperacional\nCumplimiento\nFinanciero\nReputacional\nSeguridad de informacion\nAcademico"
+  },
+  {
+   "fieldname": "sb_scoping",
+   "fieldtype": "Section Break",
+   "label": "\u00c1mbito"
+  },
+  {
+   "description": "due\u00f1o del riesgo",
+   "fieldname": "unidad_organica",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Unidad org\u00e1nica",
+   "options": "Unidad Organica"
+  },
+  {
+   "description": "riesgo de proceso (vincula GRC\u2194gesti\u00f3n por procesos)",
+   "fieldname": "proceso",
+   "fieldtype": "Link",
+   "label": "Proceso",
+   "options": "Proceso"
+  },
+  {
+   "description": "si el riesgo amenaza un est\u00e1ndar/condici\u00f3n (p. ej. una CBC)",
+   "fieldname": "elemento_marco",
+   "fieldtype": "Link",
+   "label": "Elemento de marco",
+   "options": "Elemento Marco"
+  },
+  {
+   "fieldname": "cb_scoping",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "fuente del riesgo (\u00a76.4.2)",
+   "fieldname": "causa",
+   "fieldtype": "Text",
+   "label": "Causa"
+  },
+  {
+   "description": "impacto potencial",
+   "fieldname": "consecuencia",
+   "fieldtype": "Text",
+   "label": "Consecuencia"
+  },
+  {
+   "fieldname": "propietario",
+   "fieldtype": "Link",
+   "label": "Propietario (risk owner)",
+   "options": "User"
+  },
+  {
+   "fieldname": "sb_estado",
+   "fieldtype": "Section Break"
+  },
+  {
+   "description": "qu\u00e9 escala usa",
+   "fieldname": "matriz_riesgo",
+   "fieldtype": "Link",
+   "label": "Matriz de riesgo",
+   "options": "Matriz Riesgo"
+  },
+  {
+   "default": "Identificado",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Identificado\nEvaluado\nEn tratamiento\nMonitoreado\nCerrado\nMaterializado"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-04 17:29:32.909293",
+ "modified_by": "Administrator",
+ "module": "SGC Riesgos",
+ "name": "Riesgo",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "titulo",
+ "track_changes": 1
+}
