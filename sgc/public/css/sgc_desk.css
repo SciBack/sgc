@@ -11,10 +11,12 @@
   --sgc-navy-050: #eaf1f7;
   --sgc-gold: #f7a800;
   --sgc-ink: #10233a;
+  --sgc-muted: #5b6b7c;
+  --sgc-line: #e4ebf2;
   --sgc-ease: cubic-bezier(0.23, 1, 0.32, 1);
-  --sgc-shadow: 0 8px 24px rgba(0, 40, 69, 0.10);
+  --sgc-shadow: 0 10px 28px rgba(0, 40, 69, 0.10);
 
-  /* Reasignar el acento azul de Frappe -> navy UPeU (cohesión de marca) */
+  /* Reasignar el acento azul de Frappe -> navy UPeU */
   --primary: var(--sgc-navy);
   --primary-color: var(--sgc-navy);
   --blue-400: var(--sgc-navy-600);
@@ -23,41 +25,72 @@
   --text-on-blue: #ffffff;
 }
 
-/* --- Encabezados de sección del workspace --- */
-.widget-group-title,
-.layout-main-section h4.ce-header,
-.layout-main-section .ce-block h1,
-.layout-main-section .ce-block h2,
-.layout-main-section .ce-block h3,
-.layout-main-section .ce-block h4 {
-  color: var(--sgc-navy);
-  font-weight: 700;
-  letter-spacing: -0.01em;
+/* --- Fondo tenue: hace resaltar las tarjetas blancas --- */
+.layout-main-section-wrapper,
+.layout-main-section,
+.page-body,
+.workspace-body {
+  background-color: #f5f8fb;
 }
-
-/* --- Tarjetas base (todos los widgets) --- */
 .number-widget-box,
 .shortcut-widget-box,
 .links-widget-box {
-  border-radius: 13px;
+  background-color: #ffffff;
+}
+
+/* --- Título principal del workspace + encabezados de sección --- */
+.layout-main-section .ce-block h1,
+.layout-main-section .ce-block h2,
+.layout-main-section h4.ce-header,
+.widget-group-title {
+  color: var(--sgc-navy);
+  font-weight: 750;
+  letter-spacing: -0.015em;
+}
+/* Subtítulos de sección (Accesos rápidos, Módulos) -> etiqueta editorial */
+.layout-main-section .ce-block h3,
+.layout-main-section .ce-block h4 {
+  color: var(--sgc-muted);
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+/* --- Tarjetas base --- */
+.number-widget-box,
+.shortcut-widget-box,
+.links-widget-box {
+  border-radius: 14px;
+  border: 1px solid var(--sgc-line);
   transition: transform 0.18s var(--sgc-ease), box-shadow 0.18s var(--sgc-ease),
     border-color 0.18s var(--sgc-ease);
 }
 .number-widget-box:hover,
 .shortcut-widget-box:hover,
 .links-widget-box:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow: var(--sgc-shadow);
-  border-color: #d7e2ec;
+  border-color: #d3e0ec;
 }
 
-/* --- Number cards: valor en navy, acento oro discreto --- */
+/* --- Number cards: número grande en navy + acento oro --- */
+.number-widget-box {
+  padding: 4px 2px;
+}
 .number-widget-box .widget-content .number,
 .number-widget-box .number,
 .number-widget-box .widget-body .number {
   color: var(--sgc-navy) !important;
   font-weight: 800;
-  letter-spacing: -0.025em;
+  font-size: 2.4rem;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+.number-widget-box .widget-head .widget-title,
+.number-widget-box .widget-title {
+  color: var(--sgc-muted);
+  font-weight: 600;
 }
 .number-widget-box .widget-head .widget-title::before {
   content: "";
@@ -70,13 +103,24 @@
   vertical-align: middle;
 }
 
-/* --- Module link cards: hover del enlace en navy --- */
+/* --- Títulos de las tarjetas de módulo en navy --- */
+.links-widget-box .widget-head .widget-title,
+.links-widget-box .widget-title {
+  color: var(--sgc-navy);
+  font-weight: 700;
+}
 .links-widget-box .link-item:hover,
 .links-widget-box .link-content:hover {
   color: var(--sgc-navy);
 }
 
-/* --- Sidebar izquierda: elemento activo en navy --- */
+/* --- Breadcrumb / título de página --- */
+.page-title .title-text,
+.breadcrumb .breadcrumb-item a {
+  color: var(--sgc-navy);
+}
+
+/* --- Sidebar: elemento activo en navy --- */
 .standard-sidebar-item.selected {
   background: var(--sgc-navy-050);
 }
@@ -89,7 +133,7 @@
   color: var(--sgc-navy);
 }
 
-/* --- Botones primarios y enlaces -> navy --- */
+/* --- Botones primarios y enlaces --- */
 .btn-primary {
   background-color: var(--sgc-navy);
   border-color: var(--sgc-navy);
@@ -103,10 +147,34 @@ a:not(.btn),
 .text-primary {
   color: var(--sgc-navy);
 }
-
-/* --- Botón de presión: feedback táctil (Emil) --- */
 .btn:active {
   transform: scale(0.98);
+}
+
+/* --- Ancho completo del contenido del workspace --- */
+.layout-main-section-wrapper {
+  width: 100% !important;
+  flex: 1 0 100% !important;
+  max-width: 100% !important;
+}
+.codex-editor__redactor .ce-block__content,
+.ce-block__content {
+  max-width: 100% !important;
+}
+.layout-main-section {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* --- Labels completos (sin recorte "…"): que envuelvan a 2 líneas --- */
+.widget .widget-title,
+.number-widget-box .widget-title,
+.shortcut-widget-box .widget-title,
+.widget .widget-label {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  line-height: 1.25;
 }
 
 @media (prefers-reduced-motion: reduce) {
