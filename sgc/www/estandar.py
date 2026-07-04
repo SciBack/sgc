@@ -47,6 +47,7 @@ def get_context(context):
         "texto": em.get("texto_oficial") or "",
     }
     context.ae_codigo = frappe.db.get_value("Autoevaluacion", ae, "codigo") or ae
+    context.ae_name = ae
 
     nivel = frappe.db.get_value("Valoracion Estandar", {"autoevaluacion": ae, "elemento_marco": est}, "nivel_propuesto")
     context.nivel = nivel
@@ -62,6 +63,7 @@ def get_context(context):
     for c in criterios_raw:
         cumple = frappe.db.get_value("Valoracion Criterio", {"autoevaluacion": ae, "criterio": c.name}, "cumple")
         criterios.append({
+            "name": c.name,
             "codigo": c.get("codigo") or c.name,
             "nombre": c.get("denominacion") or "",
             "cumple": cumple,
