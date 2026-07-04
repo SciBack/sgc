@@ -11,15 +11,13 @@ app_license = "mit"
 # required_apps = []
 
 # Each item in the list will be shown as an app in the apps page
-# add_to_apps_screen = [
-# 	{
-# 		"name": "sgc",
-# 		"logo": "/assets/sgc/logo.png",
-# 		"title": "SGC UPeU",
-# 		"route": "/sgc",
-# 		"has_permission": "sgc.api.permission.has_app_permission"
-# 	}
-# ]
+add_to_apps_screen = [
+	{
+		"name": "sgc",
+		"title": "SGC UPeU",
+		"route": "/app/sgc",
+	}
+]
 
 # Includes in <head>
 # ------------------
