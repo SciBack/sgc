@@ -127,8 +127,20 @@
 
 <section style="padding-bottom:44px">
   <div class="tw">
-    <h2>Evidencias</h2>
+    <h2>Evidencias{% if evidencias %} · {{ evidencias|length }}{% endif %}</h2>
+    {% if evidencias %}
+    <div class="h-list">
+      {% for ev in evidencias %}
+      <div class="h-item">
+        <span class="hc">{{ ev.tipo or "Doc" }}</span>
+        <span class="ht">{{ ev.titulo or ev.codigo }}{% if ev.descripcion %} <small>· {{ ev.descripcion }}</small>{% endif %}</span>
+        <span class="tag" style="background:var(--navy-050);color:var(--navy)">{{ ev.codigo }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
     <div class="empty">Aún no se han cargado evidencias para este criterio. Se adjuntan desde el sistema (escritorio).</div>
+    {% endif %}
   </div>
 </section>
 

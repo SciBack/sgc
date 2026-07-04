@@ -71,5 +71,11 @@ def get_context(context):
         h["estado_meta"] = _estado_color(h.get("estado"))
     context.hallazgos = hs
 
-    context.n_evidencias = frappe.db.count("Evidencia", {"origen_doctype": "Valoracion Criterio"}) if frappe.db.has_column("Evidencia", "origen_doctype") else 0
+    vc_name = frappe.db.get_value("Valoracion Criterio", {"autoevaluacion": ae, "criterio": crit}, "name")
+    evid = frappe.get_all("Evidencia", filters={"origen_doctype": "Elemento Marco", "origen_id": crit},
+                          fields=["codigo", "titulo", "tipo", "descripcion"], limit_page_length=20)
+    if vc_name:
+        evid += frappe.get_all("Evidencia", filters={"origen_doctype": "Valoracion Criterio", "origen_id": vc_name},
+                               fields=["codigo", "titulo", "tipo", "descripcion"], limit_page_length=20)
+    context.evidencias = evid
     return context
