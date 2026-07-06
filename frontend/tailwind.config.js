@@ -22,6 +22,11 @@ export default {
           gold: '#f7a800',
         },
       },
+      fontFamily: {
+        // Serif institucional — solo para títulos de página/sección (no
+        // reemplaza el sans-serif base de frappe-ui en el cuerpo de texto).
+        display: ['Iowan Old Style', 'Palatino Linotype', 'Palatino', 'Georgia', 'Times New Roman', 'serif'],
+      },
     },
   },
 }

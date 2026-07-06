@@ -38,6 +38,16 @@ const userMenu = [
   },
 ]
 
+const initials = computed(() =>
+  session.displayName
+    .split(/[\s.@]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join('')
+    .toUpperCase(),
+)
+
 // Menú del encabezado (bajo el logo) — nivel "aplicación", no "cuenta de
 // usuario" (eso es el menú de abajo). Mientras F2 no cubra todo el Desk,
 // dejamos un acceso directo a él para administración.
@@ -54,7 +64,11 @@ const appMenu = [
   <div class="h-screen w-full bg-surface-base text-ink-gray-9">
     <DesktopShell>
       <template #sidebar>
-        <Sidebar width="15rem" class="border-r">
+        <Sidebar
+          width="15rem"
+          data-theme="dark"
+          class="border-r border-black/20 bg-gradient-to-b from-[#023052] via-upeu-navy to-[#00477e]"
+        >
           <SidebarHeader title="SGC · UPeU" subtitle="Gestión de la Calidad" logo="/files/upeu-favicon.ico" :menu-items="appMenu" />
 
           <ScrollArea class="min-h-0 flex-1" viewport-class="px-2 pt-0.5 pb-10">
@@ -86,15 +100,15 @@ const appMenu = [
             </div>
           </ScrollArea>
 
-          <div class="mt-auto flex items-center gap-2 border-t p-2">
+          <div class="mt-auto flex items-center gap-2 border-t border-white/10 p-2">
             <Dropdown :options="userMenu">
               <template #default="{ open }">
                 <button
-                  class="flex w-full items-center gap-2 rounded p-1.5 text-left hover:bg-surface-gray-1"
-                  :class="{ 'bg-surface-gray-1': open }"
+                  class="flex w-full items-center gap-2 rounded p-1.5 text-left hover:bg-white/10"
+                  :class="{ 'bg-white/10': open }"
                 >
-                  <Avatar :label="session.user" size="sm" />
-                  <span class="flex-1 truncate text-sm text-ink-gray-8">{{ session.user }}</span>
+                  <Avatar :label="session.displayName" size="sm">{{ initials }}</Avatar>
+                  <span class="flex-1 truncate text-sm text-ink-gray-8">{{ session.displayName }}</span>
                 </button>
               </template>
             </Dropdown>
@@ -104,6 +118,22 @@ const appMenu = [
 
       <PageHeader>
         <Breadcrumbs :items="breadcrumbs" />
+        <div class="flex items-center gap-3">
+          <div
+            class="hidden items-center gap-2 rounded-md border border-outline-gray-2 bg-surface-gray-1 px-3 py-1.5 text-sm text-ink-gray-5 sm:flex"
+            title="Búsqueda global — próximamente"
+          >
+            <span class="lucide-search size-3.5" aria-hidden="true" />
+            <span>Buscar en el sistema…</span>
+          </div>
+          <Dropdown :options="userMenu">
+            <template #default>
+              <button class="rounded-full hover:opacity-80">
+                <Avatar :label="session.displayName" size="lg">{{ initials }}</Avatar>
+              </button>
+            </template>
+          </Dropdown>
+        </div>
       </PageHeader>
 
       <router-view />

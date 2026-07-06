@@ -16,6 +16,10 @@ export const useSessionStore = defineStore('sgc-session', () => {
   const user = ref(sessionUser())
   const isLoggedIn = computed(() => !!user.value)
 
+  // window.user_fullname solo existe en producción (inyectado por www/sgc.py
+  // vía jinjaBootData); en dev no hay boot, así que cae al email de sesión.
+  const displayName = computed(() => window.user_fullname || user.value)
+
   function logout() {
     window.location.href = '/api/method/logout'
   }
@@ -24,5 +28,5 @@ export const useSessionStore = defineStore('sgc-session', () => {
     window.location.href = '/login?redirect-to=/sgc'
   }
 
-  return { user, isLoggedIn, logout, redirectToLogin }
+  return { user, isLoggedIn, displayName, logout, redirectToLogin }
 })

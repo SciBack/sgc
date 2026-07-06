@@ -18,6 +18,6 @@ def get_context(context):
 	context.boot = {
 		"csrf_token": get_csrf_token(),
 		"user": frappe.session.user,
-		"user_info": frappe.session.data.user_info if hasattr(frappe.session.data, "user_info") else {},
+		"user_fullname": frappe.utils.get_fullname(frappe.session.user),
 	}
 	return context

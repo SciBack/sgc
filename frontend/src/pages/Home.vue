@@ -50,7 +50,7 @@ function openModule(mod) {
           <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-upeu-navy opacity-75">
             Universidad Peruana Unión · Dirección de Gestión de la Calidad
           </div>
-          <h1 class="mb-3 text-3xl font-bold tracking-tight text-upeu-navy">Índice del sistema</h1>
+          <h1 class="mb-3 font-display text-3xl font-bold tracking-tight text-upeu-navy">Índice del sistema</h1>
           <p class="mb-4 max-w-[64ch] text-p-base text-ink-gray-7">
             Mapa completo del Sistema de Gestión de la Calidad — los 18 módulos organizados en 4
             bloques, con su estado real. Todo lo que ya funciona y lo que falta, en un solo lugar.
@@ -92,7 +92,7 @@ function openModule(mod) {
       <!-- Bloques de módulos -->
       <section v-for="block in BLOCKS" :key="block.letter" class="mb-8">
         <div class="mb-3 flex items-center gap-3 border-b border-outline-gray-1 pb-2.5">
-          <div class="flex size-7 items-center justify-center rounded-md bg-upeu-navy text-sm font-bold text-white">
+          <div class="flex size-7 items-center justify-center rounded-md bg-upeu-navy font-display text-sm font-bold text-white">
             {{ block.letter }}
           </div>
           <div class="text-lg font-semibold text-ink-gray-9">{{ block.name }}</div>
