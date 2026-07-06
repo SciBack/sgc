@@ -55,12 +55,20 @@ app_include_css = "/assets/sgc/css/sgc_desk.css"
 # ----------
 
 # application home page (will override Website Settings)
-# home_page = "login"
+home_page = "sgc"
 
 # website user home page (by Role)
 # role_home_page = {
 # 	"Role": "home_page"
 # }
+
+# Website Route Rules
+# --------------------
+# Catch-all: cualquier ruta bajo /sgc/* sirve la misma SPA (www/sgc.html);
+# el enrutado real lo hace vue-router en el cliente.
+website_route_rules = [
+	{"from_route": "/sgc/<path:app_path>", "to_route": "sgc"},
+]
 
 # Generators
 # ----------
