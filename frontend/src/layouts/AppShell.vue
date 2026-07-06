@@ -44,7 +44,7 @@ const userMenu = [
     <DesktopShell>
       <template #sidebar>
         <Sidebar width="15rem" class="border-r">
-          <SidebarHeader title="SGC · UPeU" subtitle="Gestión de la Calidad" logo="/assets/sgc/upeu-favicon.png" />
+          <SidebarHeader title="SGC · UPeU" subtitle="Gestión de la Calidad" logo="/files/upeu-favicon.ico" />
 
           <ScrollArea class="min-h-0 flex-1" viewport-class="px-2 pt-0.5 pb-10">
             <nav class="space-y-0.5">
