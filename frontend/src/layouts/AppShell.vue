@@ -37,6 +37,17 @@ const userMenu = [
     onClick: () => session.logout(),
   },
 ]
+
+// Menú del encabezado (bajo el logo) — nivel "aplicación", no "cuenta de
+// usuario" (eso es el menú de abajo). Mientras F2 no cubra todo el Desk,
+// dejamos un acceso directo a él para administración.
+const appMenu = [
+  {
+    label: 'Ir al Escritorio (Desk)',
+    icon: 'lucide-layout-grid',
+    onClick: () => { window.location.href = '/app/sgc' },
+  },
+]
 </script>
 
 <template>
@@ -44,7 +55,7 @@ const userMenu = [
     <DesktopShell>
       <template #sidebar>
         <Sidebar width="15rem" class="border-r">
-          <SidebarHeader title="SGC · UPeU" subtitle="Gestión de la Calidad" logo="/files/upeu-favicon.ico" />
+          <SidebarHeader title="SGC · UPeU" subtitle="Gestión de la Calidad" logo="/files/upeu-favicon.ico" :menu-items="appMenu" />
 
           <ScrollArea class="min-h-0 flex-1" viewport-class="px-2 pt-0.5 pb-10">
             <nav class="space-y-0.5">
