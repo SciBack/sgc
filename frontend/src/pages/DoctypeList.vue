@@ -1,13 +1,14 @@
 <script setup>
 import { useCall } from 'frappe-ui'
+import { useRouter } from 'vue-router'
 import { List, ListRow, ListRows, ListCell, ListHeader, ListHeaderCell } from 'frappe-ui/list'
-import { PageHeaderTitle, ScrollArea, LoadingText, ErrorMessage } from 'frappe-ui'
+import { Button, PageHeaderTitle, ScrollArea, LoadingText, ErrorMessage } from 'frappe-ui'
+
+const router = useRouter()
 
 // Vista de lista GENÉRICA — funciona para cualquier DocType con solo su
-// nombre. Es deliberadamente mínima (name + modified): la vista completa
-// dirigida por metadata (columnas reales, filtros, formulario) es F2 del
-// plan (doc/specs/sgc-frappe/05-plan-frontend-spa.md §6). Por ahora,
-// "ver en el Desk" cubre el detalle completo mientras se construye F2.
+// nombre. Columnas mínimas (name + modified); el detalle/edición real ya
+// vive en DocForm.vue (F2, dirigido por metadata) — cada fila navega ahí.
 const props = defineProps({ doctype: { type: String, required: true } })
 
 const list = useCall({
@@ -26,12 +27,27 @@ const list = useCall({
 function deskUrl(name) {
   return `/app/${encodeURIComponent(props.doctype.toLowerCase().replace(/ /g, '-'))}/${encodeURIComponent(name)}`
 }
+
+// La Autoevaluación tiene pantalla propia (flujo de valoración NL/L/LP); el
+// resto de los DocTypes usa el formulario genérico dirigido por metadata.
+function openRow(name) {
+  if (props.doctype === 'Autoevaluacion') {
+    router.push({ name: 'AutoevaluacionDetalle', params: { name } })
+  } else {
+    router.push({ name: 'DocForm', params: { doctype: props.doctype, name } })
+  }
+}
 </script>
 
 <template>
   <ScrollArea class="min-h-0 flex-1">
     <div class="mx-auto max-w-4xl px-5 py-6 sm:px-8">
-      <PageHeaderTitle :title="doctype" class="mb-4" />
+      <div class="mb-4 flex items-center justify-between">
+        <PageHeaderTitle :title="doctype" />
+        <Button variant="solid" :route="{ name: 'DocNew', params: { doctype } }">
+          Nuevo
+        </Button>
+      </div>
 
       <LoadingText v-if="list.loading && !list.data" />
       <ErrorMessage v-else-if="list.error" :message="list.error.message" />
@@ -42,23 +58,32 @@ function deskUrl(name) {
         <ListHeader>
           <ListHeaderCell>Registro</ListHeaderCell>
           <ListHeaderCell align="end">Modificado</ListHeaderCell>
+          <ListHeaderCell />
         </ListHeader>
         <ListRows :items="list.data" v-slot="{ item, value }">
-          <ListRow :value="value">
-            <a :href="deskUrl(item.name)" target="_blank" class="contents">
-              <ListCell>
-                <span class="truncate text-base text-ink-gray-8">{{ item.name }}</span>
-              </ListCell>
-              <ListCell class="justify-end">
-                <span class="text-sm text-ink-gray-5">{{ item.modified }}</span>
-              </ListCell>
-            </a>
+          <ListRow :value="value" class="cursor-pointer" @click="openRow(item.name)">
+            <ListCell>
+              <span class="truncate text-base text-ink-gray-8">{{ item.name }}</span>
+            </ListCell>
+            <ListCell class="justify-end">
+              <span class="text-sm text-ink-gray-5">{{ item.modified }}</span>
+            </ListCell>
+            <ListCell class="justify-end">
+              <a
+                :href="deskUrl(item.name)"
+                target="_blank"
+                class="text-p-xs text-ink-gray-4 hover:text-ink-gray-7 hover:underline"
+                @click.stop
+              >
+                Desk
+              </a>
+            </ListCell>
           </ListRow>
         </ListRows>
       </List>
       <p class="mt-4 text-p-xs text-ink-gray-5">
-        Vista mínima (F1). El formulario completo dentro de la SPA llega en F2 — por ahora, cada
-        fila abre el registro en el Desk de Frappe.
+        Vista genérica dirigida por metadata (F2). El enlace "Desk" es un acceso directo de respaldo
+        para administración.
       </p>
     </div>
   </ScrollArea>

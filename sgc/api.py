@@ -24,3 +24,23 @@ def acceso_m365(redirect_to: str = "/app/sgc"):
     frappe.local.response["location"] = get_oauth2_authorize_url(
         _PROVIDER, redirect_to or "/app/sgc"
     )
+
+
+@frappe.whitelist()
+def get_niveles_escala():
+    """Catálogo completo de "Nivel Escala" (NL/L/LP) con etiqueta legible.
+
+    "Nivel Escala" quedó marcado `istable=1` en su DocType (diseño heredado);
+    eso hace que los endpoints genéricos de listado/búsqueda de Frappe
+    (frappe.client.get_list, frappe.desk.search.search_link) le recorten los
+    campos extra y solo devuelvan `name` — es una limitación conocida del
+    query builder de Frappe para doctypes de tabla consultados como si fueran
+    documentos independientes. frappe.get_all con ignore_permissions no pasa
+    por esa ruta restringida, así que sí trae sigla/etiqueta.
+    """
+    return frappe.get_all(
+        "Nivel Escala",
+        fields=["name", "sigla", "etiqueta", "orden"],
+        order_by="orden asc",
+        ignore_permissions=True,
+    )

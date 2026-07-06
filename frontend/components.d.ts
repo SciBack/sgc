@@ -11,6 +11,11 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    CriterioRow: typeof import('./src/components/autoevaluacion/CriterioRow.vue')['default']
+    EstandarCard: typeof import('./src/components/autoevaluacion/EstandarCard.vue')['default']
+    FieldInput: typeof import('./src/components/form/FieldInput.vue')['default']
+    LinkField: typeof import('./src/components/form/LinkField.vue')['default']
+    NivelSelect: typeof import('./src/components/autoevaluacion/NivelSelect.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

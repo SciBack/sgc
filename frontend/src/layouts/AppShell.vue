@@ -19,13 +19,30 @@ import { useSessionStore } from '@/stores/session'
 const route = useRoute()
 const session = useSessionStore()
 
+function areaFor(doctype) {
+  const area = AREAS.find((a) => a.items.some((i) => i.doctype === doctype))
+  const item = area?.items.find((i) => i.doctype === doctype)
+  return { area, item }
+}
+
 const breadcrumbs = computed(() => {
   const items = [{ label: 'Inicio', route: { name: 'Home' } }]
-  if (route.name === 'DoctypeList') {
-    const area = AREAS.find((a) => a.items.some((i) => i.doctype === route.params.doctype))
-    const item = area?.items.find((i) => i.doctype === route.params.doctype)
+  if (route.name === 'DoctypeList' || route.name === 'DocNew') {
+    const { area, item } = areaFor(route.params.doctype)
     if (area) items.push({ label: area.label })
-    if (item) items.push({ label: item.label })
+    if (item) items.push({ label: item.label, route: { name: 'DoctypeList', params: { doctype: route.params.doctype } } })
+    if (route.name === 'DocNew') items.push({ label: 'Nuevo' })
+  } else if (route.name === 'DocForm') {
+    const { area, item } = areaFor(route.params.doctype)
+    if (area) items.push({ label: area.label })
+    if (item) items.push({ label: item.label, route: { name: 'DoctypeList', params: { doctype: route.params.doctype } } })
+    items.push({ label: route.params.name })
+  } else if (route.name === 'Tablero') {
+    items.push({ label: 'Tablero de indicadores' })
+  } else if (route.name === 'AutoevaluacionDetalle') {
+    items.push({ label: 'Acreditación' })
+    items.push({ label: 'Autoevaluación', route: { name: 'DoctypeList', params: { doctype: 'Autoevaluacion' } } })
+    items.push({ label: route.params.name })
   }
   return items
 })
@@ -78,6 +95,12 @@ const appMenu = [
                   <span class="lucide-layout-dashboard size-4" aria-hidden="true" />
                 </template>
                 <span class="flex-1 truncate text-sm">Inicio</span>
+              </SidebarItem>
+              <SidebarItem :to="{ name: 'Tablero' }">
+                <template #prefix>
+                  <span class="lucide-bar-chart-3 size-4" aria-hidden="true" />
+                </template>
+                <span class="flex-1 truncate text-sm">Tablero de indicadores</span>
               </SidebarItem>
             </nav>
 
