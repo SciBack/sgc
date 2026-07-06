@@ -9,10 +9,14 @@
   "indicador",
   "elemento_marco",
   "objetivo",
+  "alcance",
   "tipo_valor",
   "formula",
+  "numerador",
+  "denominador",
   "variables",
   "unidad",
+  "linea_base",
   "valor_referencial",
   "margen_error",
   "regla_evolucion",
@@ -47,6 +51,13 @@
    "label": "Objetivo"
   },
   {
+   "description": "Nivel al que aplica: Institucional, Campus, Facultad, Escuela, \u00c1rea o Proceso (plantilla oficial de Calidad)",
+   "fieldname": "alcance",
+   "fieldtype": "Select",
+   "label": "Alcance",
+   "options": "Institucional\nCampus\nFacultad\nEscuela\n\u00c1rea\nProceso"
+  },
+  {
    "fieldname": "tipo_valor",
    "fieldtype": "Select",
    "label": "Tipo de valor",
@@ -59,7 +70,19 @@
    "label": "F\u00f3rmula"
   },
   {
-   "description": "VARIABLES: EPSC=\u2026, EPR=\u2026",
+   "description": "Dato alcanzado o casos favorables (solo indicadores tipo Porcentaje \u2014 plantilla oficial de Calidad). Para f\u00f3rmulas con m\u00e1s de 2 variables, usar el campo Variables.",
+   "fieldname": "numerador",
+   "fieldtype": "Small Text",
+   "label": "Numerador"
+  },
+  {
+   "description": "Total de referencia (solo indicadores tipo Porcentaje \u2014 plantilla oficial de Calidad). Para f\u00f3rmulas con m\u00e1s de 2 variables, usar el campo Variables.",
+   "fieldname": "denominador",
+   "fieldtype": "Small Text",
+   "label": "Denominador"
+  },
+  {
+   "description": "VARIABLES: EPSC=\u2026, EPR=\u2026 (f\u00f3rmulas de m\u00e1s de 2 variables; para Porcentaje simple usar Numerador/Denominador)",
    "fieldname": "variables",
    "fieldtype": "JSON",
    "label": "Variables"
@@ -69,6 +92,12 @@
    "fieldname": "unidad",
    "fieldtype": "Small Text",
    "label": "Unidad"
+  },
+  {
+   "description": "Resultado hist\u00f3rico o inicial del indicador, antes del periodo de medici\u00f3n actual (plantilla oficial de Calidad)",
+   "fieldname": "linea_base",
+   "fieldtype": "Float",
+   "label": "L\u00ednea base"
   },
   {
    "description": "Umbral (ID1 \u2265 60%)",
@@ -96,10 +125,11 @@
    "label": "Interpretaci\u00f3n"
   },
   {
+   "description": "Mensual/trimestral: indicadores institucionales (plantilla oficial de Calidad). Anual/semestral/por_promocion: indicadores CONEAU ya cargados.",
    "fieldname": "frecuencia",
    "fieldtype": "Select",
    "label": "Frecuencia",
-   "options": "anual\nsemestral\npor_promocion"
+   "options": "mensual\ntrimestral\nsemestral\nanual\npor_promocion"
   },
   {
    "description": "LAMB \u00b7 Koha \u00b7 DSpace \u00b7 encuesta \u00b7 manual",
