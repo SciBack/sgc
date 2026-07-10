@@ -38,8 +38,8 @@ Leídos de `apps/frappe/frappe/integrations/oauth2_logins.py` y
 
 ## Responsabilidad del **admin de Keycloak** (realm `upeu`)
 
-Hoy existen los clientes `ciso-assistant` y `mayan-sgc`. Falta crear
-`sgc-frappe`. Estos pasos NO los hace el script de Frappe:
+El cliente `sgc-frappe` en el realm `upeu` (junto al `mayan-sgc` de Mayan).
+Estos pasos NO los hace el script de Frappe:
 
 1. **Crear cliente** `sgc-frappe` en el realm `upeu`:
    - **Client type:** OpenID Connect

@@ -10,7 +10,7 @@ Fuente única de la especificación: `doc/specs/sgc-frappe/insumos/G-escalamient
   - Parte D  -> matriz rol × DocType × permiso (C/R/W/S/X + permlevel). Es la ley de este script.
 
 Principio (G Parte C): "Frappe intersecta dos ejes independientes." No se reimplementa
-el motor de autorización de CISO. Aquí se cablea SOLO el eje "qué puede hacer cada Role".
+un motor de autorización externo. Aquí se cablea SOLO el eje "qué puede hacer cada Role".
 
 Idempotente:
   - Roles: se crean si faltan (DPGC y Responsable de Programa YA existen — los creó
