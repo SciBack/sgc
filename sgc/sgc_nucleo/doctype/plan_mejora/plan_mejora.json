@@ -15,7 +15,10 @@
   "unidad_organica",
   "periodo_academico",
   "estado",
-  "responsable"
+  "responsable",
+  "avance_pct",
+  "semaforo",
+  "fecha_compromiso"
  ],
  "fields": [
   {
@@ -77,6 +80,30 @@
    "fieldtype": "Link",
    "label": "Responsable",
    "options": "User"
+  },
+  {
+   "description": "Promedio del avance de las acciones de mejora (calculado).",
+   "fieldname": "avance_pct",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Avance %",
+   "read_only": 1
+  },
+  {
+   "default": "Verde",
+   "fieldname": "semaforo",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Semáforo",
+   "options": "Verde\nAmbar\nRojo",
+   "read_only": 1
+  },
+  {
+   "description": "Fecha de compromiso más tardía entre las acciones (calculado).",
+   "fieldname": "fecha_compromiso",
+   "fieldtype": "Date",
+   "label": "Fecha compromiso",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
