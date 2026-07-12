@@ -1,0 +1,82 @@
+/* SGC-UPeU — estilos de páginas web públicas.
+ * Se aplican SOLO cuando el body tiene la clase .sgc-login (la añade sgc_web.js en
+ * la página de login), para no afectar otras páginas del portal. */
+
+body.sgc-login {
+  background: linear-gradient(135deg, #f4f7fc 0%, #e7edf6 100%) !important;
+}
+
+body.sgc-login main.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  max-width: none;
+}
+
+body.sgc-login .page-card.login-content {
+  max-width: 410px;
+  width: 100%;
+  margin: 0;
+  background: #fff;
+  border-radius: 18px;
+  padding: 44px 38px 40px;
+  box-shadow: 0 12px 48px rgba(15, 43, 76, 0.14);
+  border: 1px solid rgba(15, 43, 76, 0.06);
+}
+
+body.sgc-login .page-card-head {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+body.sgc-login .app-logo {
+  max-height: 52px;
+  width: auto;
+  margin-bottom: 22px;
+}
+
+body.sgc-login .page-card-head-text h4 {
+  font-size: 21px;
+  font-weight: 700;
+  color: #0f2b4c;
+  margin: 0 0 8px;
+  letter-spacing: -0.2px;
+}
+
+body.sgc-login .page-card-subtitle {
+  color: #6b7a90;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+body.sgc-login .btn-login-option.btn-keycloak {
+  background: #0f2b4c !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 11px;
+  padding: 14px 18px;
+  font-weight: 600;
+  font-size: 15px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 3px 12px rgba(15, 43, 76, 0.28);
+  transition: transform 0.16s cubic-bezier(0.23, 1, 0.32, 1), background 0.2s ease;
+}
+
+body.sgc-login .btn-login-option.btn-keycloak:hover {
+  background: #16406e !important;
+}
+
+body.sgc-login .btn-login-option.btn-keycloak:active {
+  transform: scale(0.97);
+}
+
+/* oculta el icono roto del Social Login Key (src="fa fa-key") */
+body.sgc-login .btn-login-option.btn-keycloak img {
+  display: none !important;
+}
