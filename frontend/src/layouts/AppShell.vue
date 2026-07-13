@@ -65,6 +65,19 @@ const initials = computed(() =>
     .toUpperCase(),
 )
 
+// El acceso al Escritorio (Desk) solo se muestra al admin (System Manager);
+// para los demás el Desk está oculto y bloqueado (desk_access=0 en sus roles).
+const appMenu = window.is_system_manager
+  ? [
+      {
+        label: 'Ir al Escritorio (Desk)',
+        icon: 'lucide-layout-grid',
+        onClick: () => {
+          window.location.href = '/app/sgc'
+        },
+      },
+    ]
+  : []
 </script>
 
 <template>
@@ -76,7 +89,7 @@ const initials = computed(() =>
           data-theme="dark"
           class="border-r border-black/20 bg-gradient-to-b from-[#023052] via-upeu-navy to-[#00477e]"
         >
-          <SidebarHeader title="SGC · UPeU" subtitle="Gestión de la Calidad" logo="/files/upeu-favicon.ico" />
+          <SidebarHeader title="SGC · UPeU" subtitle="Gestión de la Calidad" logo="/files/upeu-favicon.ico" :menu-items="appMenu.length ? appMenu : undefined" />
 
           <ScrollArea class="min-h-0 flex-1" viewport-class="px-2 pt-0.5 pb-10">
             <nav class="space-y-0.5">
