@@ -65,16 +65,6 @@ const initials = computed(() =>
     .toUpperCase(),
 )
 
-// Menú del encabezado (bajo el logo) — nivel "aplicación", no "cuenta de
-// usuario" (eso es el menú de abajo). Mientras F2 no cubra todo el Desk,
-// dejamos un acceso directo a él para administración.
-const appMenu = [
-  {
-    label: 'Ir al Escritorio (Desk)',
-    icon: 'lucide-layout-grid',
-    onClick: () => { window.location.href = '/app/sgc' },
-  },
-]
 </script>
 
 <template>
@@ -86,7 +76,7 @@ const appMenu = [
           data-theme="dark"
           class="border-r border-black/20 bg-gradient-to-b from-[#023052] via-upeu-navy to-[#00477e]"
         >
-          <SidebarHeader title="SGC · UPeU" subtitle="Gestión de la Calidad" logo="/files/upeu-favicon.ico" :menu-items="appMenu" />
+          <SidebarHeader title="SGC · UPeU" subtitle="Gestión de la Calidad" logo="/files/upeu-favicon.ico" />
 
           <ScrollArea class="min-h-0 flex-1" viewport-class="px-2 pt-0.5 pb-10">
             <nav class="space-y-0.5">
