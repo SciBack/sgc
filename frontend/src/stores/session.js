@@ -20,8 +20,19 @@ export const useSessionStore = defineStore('sgc-session', () => {
   // vía jinjaBootData); en dev no hay boot, así que cae al email de sesión.
   const displayName = computed(() => window.user_fullname || user.value)
 
-  function logout() {
-    window.location.href = '/api/method/logout'
+  // El endpoint /api/method/logout solo acepta POST (Frappe api/v2). Una
+  // navegación GET (window.location) devolvía 403. Se hace POST con el CSRF
+  // token (inyectado en window por www/sgc.py) y luego se redirige al login.
+  async function logout() {
+    try {
+      await fetch('/api/method/logout', {
+        method: 'POST',
+        headers: { 'X-Frappe-CSRF-Token': window.csrf_token || '' },
+      })
+    } catch (e) {
+      // aunque falle la llamada, redirigimos igual al login
+    }
+    window.location.href = '/login?redirect-to=/sgc'
   }
 
   function redirectToLogin() {
