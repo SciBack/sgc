@@ -11,21 +11,31 @@
   "titulo",
   "descripcion",
   "tipo",
-  "almacenamiento_uri",
-  "mime",
-  "tamano",
-  "hash_sha256",
+  "archivo",
+  "enlace_url",
+  "sec_vinculos",
+  "elementos_marco",
+  "col_vinculos",
+  "procesos",
+  "sec_clasificacion",
   "documento_controlado",
   "programa_sede",
   "periodo_academico",
   "unidad_organica",
+  "col_clasificacion",
   "estado",
   "vigencia_desde",
   "vigencia_hasta",
-  "origen_doctype",
-  "origen_id",
+  "sec_meta",
+  "mime",
+  "tamano",
+  "hash_sha256",
   "cargado_por",
-  "fecha_carga"
+  "fecha_carga",
+  "sec_legado",
+  "almacenamiento_uri",
+  "origen_doctype",
+  "origen_id"
  ],
  "fields": [
   {
@@ -49,6 +59,7 @@
    "label": "Descripci\u00f3n"
   },
   {
+   "default": "Documento",
    "fieldname": "tipo",
    "fieldtype": "Select",
    "in_standard_filter": 1,
@@ -56,24 +67,47 @@
    "options": "Documento\nEnlace\nRegistro\nDataset\nActa"
   },
   {
-   "fieldname": "almacenamiento_uri",
-   "fieldtype": "Data",
-   "label": "URI de almacenamiento (MinIO)"
+   "depends_on": "eval:doc.tipo != 'Enlace'",
+   "description": "Archivo de la evidencia. Hasta 50 MB (RF-C04).",
+   "fieldname": "archivo",
+   "fieldtype": "Attach",
+   "label": "Archivo"
   },
   {
-   "fieldname": "mime",
+   "depends_on": "eval:doc.tipo == 'Enlace'",
+   "description": "URL cuando la evidencia es un enlace externo en vez de un archivo.",
+   "fieldname": "enlace_url",
    "fieldtype": "Data",
-   "label": "MIME"
+   "label": "Enlace (URL)",
+   "options": "URL"
   },
   {
-   "fieldname": "tamano",
-   "fieldtype": "Int",
-   "label": "Tama\u00f1o (bytes)"
+   "fieldname": "sec_vinculos",
+   "fieldtype": "Section Break",
+   "label": "Trazabilidad (RNF09)"
   },
   {
-   "fieldname": "hash_sha256",
-   "fieldtype": "Data",
-   "label": "Hash SHA-256"
+   "description": "Est\u00e1ndares, criterios, indicadores o condiciones (CBC) que esta evidencia respalda.",
+   "fieldname": "elementos_marco",
+   "fieldtype": "Table MultiSelect",
+   "label": "Elementos del marco (criterio / est\u00e1ndar / CBC)",
+   "options": "Evidencia Elemento"
+  },
+  {
+   "fieldname": "col_vinculos",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Procesos del Mapa que esta evidencia sustenta.",
+   "fieldname": "procesos",
+   "fieldtype": "Table MultiSelect",
+   "label": "Procesos",
+   "options": "Evidencia Proceso"
+  },
+  {
+   "fieldname": "sec_clasificacion",
+   "fieldtype": "Section Break",
+   "label": "Clasificaci\u00f3n"
   },
   {
    "fieldname": "documento_controlado",
@@ -102,6 +136,10 @@
    "options": "Unidad Organica"
   },
   {
+   "fieldname": "col_clasificacion",
+   "fieldtype": "Column Break"
+  },
+  {
    "default": "Pendiente",
    "fieldname": "estado",
    "fieldtype": "Select",
@@ -121,27 +159,68 @@
    "label": "Vigencia hasta"
   },
   {
-   "fieldname": "origen_doctype",
-   "fieldtype": "Link",
-   "label": "Tipo de origen",
-   "options": "DocType"
+   "collapsible": 1,
+   "fieldname": "sec_meta",
+   "fieldtype": "Section Break",
+   "label": "Metadatos del archivo"
   },
   {
-   "fieldname": "origen_id",
-   "fieldtype": "Dynamic Link",
-   "label": "Origen",
-   "options": "origen_doctype"
+   "fieldname": "mime",
+   "fieldtype": "Data",
+   "label": "MIME",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tamano",
+   "fieldtype": "Int",
+   "label": "Tama\u00f1o (bytes)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "hash_sha256",
+   "fieldtype": "Data",
+   "label": "Hash SHA-256",
+   "read_only": 1
   },
   {
    "fieldname": "cargado_por",
    "fieldtype": "Link",
    "label": "Cargado por",
-   "options": "User"
+   "options": "User",
+   "read_only": 1
   },
   {
    "fieldname": "fecha_carga",
    "fieldtype": "Datetime",
-   "label": "Fecha de carga"
+   "label": "Fecha de carga",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "sec_legado",
+   "fieldtype": "Section Break",
+   "label": "Legado \u2014 solo lectura"
+  },
+  {
+   "description": "Campo legado (puntero a MinIO). El archivo ahora vive en el campo Archivo.",
+   "fieldname": "almacenamiento_uri",
+   "fieldtype": "Data",
+   "label": "URI de almacenamiento (MinIO)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "origen_doctype",
+   "fieldtype": "Link",
+   "label": "Tipo de origen",
+   "options": "DocType",
+   "read_only": 1
+  },
+  {
+   "fieldname": "origen_id",
+   "fieldtype": "Dynamic Link",
+   "label": "Origen",
+   "options": "origen_doctype",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
