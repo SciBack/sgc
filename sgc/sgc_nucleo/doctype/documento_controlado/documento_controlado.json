@@ -9,16 +9,22 @@
  "field_order": [
   "codigo",
   "titulo",
+  "tipo_documento",
   "version",
-  "almacenamiento_uri",
-  "mayan_document_id",
+  "archivo",
   "proceso",
   "estado",
   "elaborado_por",
   "revisado_por",
   "aprobado_por",
   "fecha_publicacion",
-  "reemplaza_a"
+  "fecha_proxima_revision",
+  "reemplaza_a",
+  "descripcion_cambio",
+  "historial_cambios",
+  "seccion_legado",
+  "almacenamiento_uri",
+  "mayan_document_id"
  ],
  "fields": [
   {
@@ -43,14 +49,61 @@
    "label": "Versi\u00f3n"
   },
   {
-   "fieldname": "almacenamiento_uri",
-   "fieldtype": "Data",
-   "label": "URI de almacenamiento"
+   "description": "Tipo documental. Determina el prefijo del código SGC.",
+   "fieldname": "tipo_documento",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Tipo de documento",
+   "options": "\nManual\nPolítica\nProcedimiento\nInstructivo\nGuía\nFormato\nPlan\nInforme",
+   "reqd": 1
   },
   {
+   "description": "Archivo del documento (PDF). Obligatorio para publicar.",
+   "fieldname": "archivo",
+   "fieldtype": "Attach",
+   "label": "Archivo"
+  },
+  {
+   "description": "Se recalcula al publicar: la norma exige revisión al menos anual.",
+   "fieldname": "fecha_proxima_revision",
+   "fieldtype": "Date",
+   "label": "Próxima revisión",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.__islocal != 1",
+   "description": "Obligatorio al cambiar de versión. Se archiva en el historial al publicar.",
+   "fieldname": "descripcion_cambio",
+   "fieldtype": "Small Text",
+   "label": "Descripción del cambio (versión actual)"
+  },
+  {
+   "fieldname": "historial_cambios",
+   "fieldtype": "Table",
+   "label": "Historial de cambios",
+   "options": "Cambio Documento",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "seccion_legado",
+   "fieldtype": "Section Break",
+   "label": "Legado (Mayan) — solo lectura"
+  },
+  {
+   "description": "Campo legado. El archivo ahora vive en el campo Archivo.",
+   "fieldname": "almacenamiento_uri",
+   "fieldtype": "Data",
+   "label": "URI de almacenamiento",
+   "read_only": 1
+  },
+  {
+   "description": "Campo legado del tiempo en que los documentos vivían en Mayan EDMS.",
    "fieldname": "mayan_document_id",
    "fieldtype": "Data",
-   "label": "ID documento en Mayan"
+   "label": "ID documento en Mayan",
+   "read_only": 1
   },
   {
    "fieldname": "proceso",
