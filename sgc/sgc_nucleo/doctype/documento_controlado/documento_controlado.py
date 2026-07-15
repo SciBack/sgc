@@ -12,10 +12,22 @@ Sustituye al puntero a Mayan EDMS: el archivo ahora es un adjunto de Frappe
 (campo `archivo`) y el historico vive en la tabla `historial_cambios`.
 """
 
+import re
+
 import frappe
 from frappe import _
 from frappe.model.document import Document
 from frappe.utils import add_years, nowdate
+
+
+def _siguiente_correlativo(nombres) -> int:
+	"""Máximo sufijo numérico de una lista de códigos + 1 (robusto a borrados)."""
+	maximo = 0
+	for n in nombres:
+		m = re.search(r"(\d+)$", n or "")
+		if m:
+			maximo = max(maximo, int(m.group(1)))
+	return maximo + 1
 
 # Transiciones permitidas. Un estado con conjunto vacio es terminal.
 TRANSICIONES = {
@@ -70,7 +82,12 @@ class DocumentoControlado(Document):
 		return previo.estado if previo else None
 
 	def _generar_codigo(self) -> str:
-		"""Codigo SGC: [PROCESO]-[SIGLA]-[NNN], con correlativo por proceso+tipo."""
+		"""Codigo SGC: [PROCESO]-[SIGLA]-[NNN], con correlativo por proceso+tipo.
+
+		El correlativo se toma del MÁXIMO sufijo existente + 1, no de count(): con
+		count(), borrar un documento intermedio hace que el siguiente reuse un
+		número ya usado y choque contra el `unique` del código (DuplicateEntryError).
+		"""
 		sigla = SIGLAS.get(self.tipo_documento, "DO")
 		prefijo = (self.proceso or "SGC").upper().replace(" ", "")[:12]
 
@@ -79,7 +96,7 @@ class DocumentoControlado(Document):
 			filters={"proceso": self.proceso, "tipo_documento": self.tipo_documento},
 			pluck="name",
 		)
-		return f"{prefijo}-{sigla}-{len(existentes) + 1:03d}"
+		return f"{prefijo}-{sigla}-{_siguiente_correlativo(existentes):03d}"
 
 	# ------------------------------------------------------------ validaciones
 

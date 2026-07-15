@@ -147,14 +147,25 @@ def _upsert_valoracion_estandar(autoevaluacion, estandar_name, nivel_propuesto):
     """Crea o actualiza la Valoracion Estandar (autoevaluacion + elemento_marco).
 
     Solo setea `nivel_propuesto` (+ marca `calculado_auto`). No toca `nivel`.
+
+    El DocType no tiene índice único sobre (autoevaluacion, elemento_marco), así
+    que dos recomputos concurrentes podrían haber creado filas duplicadas del
+    mismo par. Se auto-sana: se conserva la más antigua (donde vive el `nivel`
+    confirmado por el humano) y se borran las extras, para que el informe no
+    tome una arbitraria ni la vigencia cuente de más.
     """
-    name = frappe.db.get_value(
+    nombres = frappe.get_all(
         "Valoracion Estandar",
-        {"autoevaluacion": autoevaluacion, "elemento_marco": estandar_name},
-        "name",
+        filters={"autoevaluacion": autoevaluacion, "elemento_marco": estandar_name},
+        pluck="name",
+        order_by="creation asc",
     )
-    if name:
-        ve = frappe.get_doc("Valoracion Estandar", name)
+    if nombres:
+        ve = frappe.get_doc("Valoracion Estandar", nombres[0])
+        for extra in nombres[1:]:
+            frappe.delete_doc(
+                "Valoracion Estandar", extra, force=1, ignore_permissions=True
+            )
     else:
         ve = frappe.new_doc("Valoracion Estandar")
         ve.autoevaluacion = autoevaluacion
@@ -220,7 +231,13 @@ def proponer_vigencia(autoevaluacion):
 
 
 def _calcular_avance_pct(autoevaluacion, estandares=None):
-    """% de criterios valorados (cumple no vacío ni 'No aplica') sobre el total del marco."""
+    """% de criterios con juicio emitido sobre el total del marco.
+
+    "No aplica" ES un juicio válido del comité (el criterio fue revisado y
+    descartado): cuenta como valorado. Solo restan avance los criterios sin
+    tocar (None / vacío). De lo contrario, cualquier autoevaluación con al
+    menos un "No aplica" nunca llegaría a 100 %.
+    """
     if estandares is None:
         estandares = _estandares_de_autoevaluacion(autoevaluacion)
 
@@ -231,7 +248,7 @@ def _calcular_avance_pct(autoevaluacion, estandares=None):
         total += len(criterios)
         for c in criterios:
             v = _valoracion_criterio(autoevaluacion, c)
-            if v not in (None, "", "No aplica"):
+            if v not in (None, ""):
                 valorados += 1
 
     if total == 0:

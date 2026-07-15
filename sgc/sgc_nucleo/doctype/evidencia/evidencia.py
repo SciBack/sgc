@@ -19,6 +19,8 @@ exige al menos una traza para dar una evidencia por válida, y marca como Vencid
 la evidencia cuya vigencia expiró.
 """
 
+import re
+
 import frappe
 from frappe import _
 from frappe.model.document import Document
@@ -43,10 +45,21 @@ class Evidencia(Document):
 	# ---------------------------------------------------------------- helpers
 
 	def _generar_codigo(self) -> str:
-		"""Código EVD-AAAA-NNNN, correlativo por año de carga."""
+		"""Código EVD-AAAA-NNNN, correlativo por año de carga.
+
+		Correlativo = máximo sufijo existente + 1 (no count): con count, borrar
+		una evidencia intermedia haría reusar un número y chocar con el `unique`.
+		"""
 		anio = getdate(nowdate()).year
-		n = frappe.db.count("Evidencia", {"codigo": ["like", f"EVD-{anio}-%"]})
-		return f"EVD-{anio}-{n + 1:04d}"
+		existentes = frappe.get_all(
+			"Evidencia", filters={"codigo": ["like", f"EVD-{anio}-%"]}, pluck="codigo"
+		)
+		maximo = 0
+		for c in existentes:
+			m = re.search(r"(\d+)$", c or "")
+			if m:
+				maximo = max(maximo, int(m.group(1)))
+		return f"EVD-{anio}-{maximo + 1:04d}"
 
 	def _sincronizar_metadatos_archivo(self):
 		"""Copia MIME, tamaño y hash desde el File adjunto (fuente única de verdad).
