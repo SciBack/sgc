@@ -1,4 +1,7 @@
-# Módulo Gobierno (`sgc_gobierno`)
+---
+title: Módulo Gobierno (sgc_gobierno)
+description: Los órganos de gobierno de la calidad y sus instrumentos de gestión.
+---
 
 Los órganos de gobierno de la calidad y sus instrumentos de gestión: comités,
 políticas, objetivos y la escucha de grupos de interés.

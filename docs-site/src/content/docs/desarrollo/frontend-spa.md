@@ -1,4 +1,7 @@
-# Frontend: la SPA
+---
+title: "Frontend: la SPA"
+description: Arquitectura de la SPA Vue 3 + frappe-ui, genérica sobre el meta de cada DocType.
+---
 
 `frontend/` es una SPA Vue 3 + [frappe-ui](https://github.com/frappe/frappe-ui) +
 Vite + Tailwind, servida bajo `/sgc/*`. Es **genérica sobre el meta de cada DocType**:
@@ -47,7 +50,7 @@ frontend/src/
 6. Conexiones: `DocConnections.vue` lee el bloque `links` del meta para listar y
    crear inline registros de otros DocTypes que apuntan a este documento — es el
    mecanismo genérico detrás de, por ejemplo, vincular una Evidencia a un criterio
-   vía Trazabilidad (ver [Evidencias y trazabilidad](../manual-uso/evidencias-trazabilidad.md)).
+   vía Trazabilidad (ver [Evidencias y trazabilidad](/manual-uso/evidencias-trazabilidad/)).
 
 ## Componente específico: `CriterioRow.vue`
 

@@ -4,15 +4,16 @@ Sistema de Gestion de la Calidad - UPeU (SciBack)
 
 ### Documentación
 
-Manuales de uso, referencia de módulos y guía de arquitectura en `docs/`
-(MkDocs Material):
+Manuales de uso, referencia de módulos y guía de arquitectura en `docs-site/`
+(Astro + Starlight), publicada en <https://sciback.github.io/sgc/>.
 
 ```bash
-pip install -r docs/requirements.txt
-mkdocs serve
+cd docs-site
+npm install
+npm run dev
 ```
 
-Abre `http://127.0.0.1:8000`.
+Abre `http://localhost:4321/sgc`.
 
 ### Installation
 

@@ -1,4 +1,7 @@
-# RBAC — Roles y permisos
+---
+title: "RBAC: Roles y permisos"
+description: Los 13 roles institucionales, la matriz de permisos y el permlevel del nivel oficial de acreditación.
+---
 
 El control de acceso institucional se define en `sgc/setup/f3b_rbac.py`, que aplica
 **13 roles** + una matriz rol × DocType × permiso, más una regla especial de
@@ -46,7 +49,7 @@ sin poder ver o escribir ese campo específico:
 
 Esto es lo que separa "el motor propone, el sistema puede mostrarlo a cualquiera" de
 "solo el comité y DPGC pueden fijar el nivel oficial" — ver
-[Autoevaluación](../manual-uso/autoevaluacion.md).
+[Autoevaluación](/manual-uso/autoevaluacion/).
 
 ## Role Profiles
 

@@ -1,4 +1,7 @@
-# Manual de uso · No conformidades y mejora continua (CAPA)
+---
+title: No conformidades y mejora continua (CAPA)
+description: Cadena Hallazgo → No Conformidad → Plan de Mejora → Acción de Mejora.
+---
 
 Cadena única de mejora continua (ISO 9001 §10): **Hallazgo → No Conformidad → Plan de
 Mejora → Acción de Mejora**. Es la misma cadena sin importar si el origen es una
@@ -17,9 +20,11 @@ una Valoracion Criterio es `No cumple` o `Cumple parcial`:
 Es **idempotente**: si ya existe un Hallazgo para esa misma autoevaluación + criterio,
 lo devuelve en vez de duplicar.
 
-> Un Hallazgo también puede originarse en una auditoría interna
-> (`Hallazgo Auditoria`, ver [módulo Auditoría](../modulos/auditoria.md)) — mismo
-> concepto, distinto punto de entrada.
+:::tip
+Un Hallazgo también puede originarse en una auditoría interna
+(`Hallazgo Auditoria`, ver [módulo Auditoría](/modulos/auditoria/)) — mismo
+concepto, distinto punto de entrada.
+:::
 
 ## Paso 2 — Escalar a No Conformidad
 

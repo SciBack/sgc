@@ -1,4 +1,7 @@
-# Instalación
+---
+title: Instalación
+description: Cómo instalar la app SGC en un bench Frappe.
+---
 
 ## Requisitos
 
@@ -53,7 +56,7 @@ cd apps/sgc
 pre-commit install
 ```
 
-Ver [Tests](desarrollo/tests.md) para correr la suite antes de enviar un cambio.
+Ver [Tests](/desarrollo/tests/) para correr la suite antes de enviar un cambio.
 
 ## Licencia
 

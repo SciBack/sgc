@@ -1,4 +1,7 @@
-# Manual de uso · Evidencias y trazabilidad
+---
+title: Evidencias y trazabilidad
+description: Cómo cargar evidencias y vincularlas a criterios o procesos vía Trazabilidad.
+---
 
 ## Cargar una evidencia
 
@@ -30,7 +33,7 @@ Links" de Frappe), no como un campo de tabla hija.
 
 ## Consultar evidencias desde un criterio
 
-Al valorar un criterio en la [autoevaluación](autoevaluacion.md), la interfaz muestra
+Al valorar un criterio en la [autoevaluación](/manual-uso/autoevaluacion/), la interfaz muestra
 las evidencias ya vinculadas a ese criterio mediante una consulta inversa sobre
 Trazabilidad (código, título, badge de estado, enlace al archivo) — así el comité no
 tiene que ir a buscar la evidencia en otra pantalla.

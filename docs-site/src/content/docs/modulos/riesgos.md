@@ -1,4 +1,7 @@
-# Módulo Riesgos (`sgc_riesgos`)
+---
+title: Módulo Riesgos (sgc_riesgos)
+description: Gestión de riesgos institucionales y de las obligaciones con entes externos.
+---
 
 Gestión de riesgos institucionales y de las obligaciones con entes externos
 (reguladores, acreditadores).

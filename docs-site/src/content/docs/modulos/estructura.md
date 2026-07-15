@@ -1,4 +1,7 @@
-# Módulo Estructura (`sgc_estructura`)
+---
+title: Módulo Estructura (sgc_estructura)
+description: El marco normativo contra el que se acredita, y la estructura organizacional sobre la que se aplica.
+---
 
 El marco normativo contra el que se acredita, y la estructura organizacional sobre la
 que se aplica.

@@ -1,4 +1,7 @@
-# Manual de uso · Control documental
+---
+title: Control documental
+description: Ciclo de vida de un Documento Controlado (ISO 21001 §7.5).
+---
 
 Implementa ISO 21001 §7.5 (información documentada) sobre el DocType **Documento
 Controlado**.

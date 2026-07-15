@@ -1,0 +1,64 @@
+---
+title: SGC — Sistema de Gestión de la Calidad
+description: Documentación del producto canónico SciBack — eQMS para acreditación universitaria (CONEAU/SINEACE, CBC, ISO 21001).
+template: splash
+hero:
+  tagline: eQMS para acreditación universitaria — CONEAU/SINEACE, Condiciones Básicas de Calidad y gestión de procesos ISO 21001.
+  actions:
+    - text: Empezar por la arquitectura
+      link: /arquitectura/
+      icon: right-arrow
+    - text: Manual de uso
+      link: /manual-uso/autoevaluacion/
+      icon: open-book
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+**SGC** es un producto SciBack: un eQMS construido como app
+[Frappe](https://frappeframework.com/) v16, pensado para que universidades peruanas
+gestionen su proceso de **acreditación** (CONEAU, SINEACE) y sus **Condiciones Básicas
+de Calidad (CBC)** ante SUNEDU, con una capa de gestión de procesos alineada a
+ISO 21001.
+
+Esta documentación cubre la **capa canónica** del producto: el código agnóstico a
+cualquier institución. La parametrización específica de un cliente (dominio,
+branding, integraciones SSO, credenciales) vive en la capa de esa institución, no
+aquí.
+
+## Qué resuelve
+
+<CardGrid stagger>
+	<Card title="Autoevaluación de acreditación" icon="seti:markdown">
+		El sistema **propone** un nivel de cumplimiento por estándar (NL/L/LP) y el
+		comité **confirma** oficialmente.
+	</Card>
+	<Card title="Diagnóstico de CBC" icon="approve-check">
+		Las 8 Condiciones Básicas de Calidad de SUNEDU, con semáforo de cumplimiento
+		e informe PDF listo para presentar.
+	</Card>
+	<Card title="Control documental" icon="document">
+		Ciclo de vida de documentos controlados (ISO 21001 §7.5) con workflow de
+		aprobación y trazabilidad de versiones.
+	</Card>
+	<Card title="No conformidades y mejora (CAPA)" icon="rocket">
+		Cadena Hallazgo → No Conformidad → Plan de Mejora → Acción de Mejora, con
+		seguimiento de avance y vencimientos.
+	</Card>
+	<Card title="Evidencias" icon="open-book">
+		Repositorio de evidencias vinculadas (N:M) a criterios normativos y
+		procesos, con expiración de vigencia.
+	</Card>
+	<Card title="Procesos, riesgos, gobierno y auditoría" icon="setting">
+		Módulos de soporte del sistema de gestión completo.
+	</Card>
+</CardGrid>
+
+## Principio de diseño
+
+El sistema separa siempre **lo que el motor propone** de **lo que el humano
+confirma**. Ningún cálculo automático (nivel de estándar, vigencia de acreditación,
+semáforo CBC) se escribe como oficial sin una acción humana explícita — ver
+[Autoevaluación](/manual-uso/autoevaluacion/) para el caso más representativo de este
+principio.

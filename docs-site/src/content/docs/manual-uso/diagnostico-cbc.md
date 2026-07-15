@@ -1,4 +1,7 @@
-# Manual de uso · Diagnóstico de Condiciones Básicas de Calidad (CBC)
+---
+title: Diagnóstico de Condiciones Básicas de Calidad (CBC)
+description: Cómo se evalúan y consolidan las 8 CBC exigidas por SUNEDU.
+---
 
 Las **8 Condiciones Básicas de Calidad** exigidas por SUNEDU son, en el modelo de
 datos, un `Elemento Marco` de tipo `Estandar` dentro del marco normativo
@@ -46,5 +49,5 @@ de la autoridad correspondiente.
 ## Relación con el resto del sistema
 
 Una condición marcada No cumple o Parcial es candidata a generar un
-[Hallazgo](no-conformidades-mejora.md) igual que un criterio de autoevaluación —
+[Hallazgo](/manual-uso/no-conformidades-mejora/) igual que un criterio de autoevaluación —
 ambos comparten el mismo árbol `Elemento Marco` y el mismo flujo CAPA.

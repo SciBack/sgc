@@ -1,4 +1,7 @@
-# Manual de uso · Autoevaluación de acreditación
+---
+title: Autoevaluación de acreditación
+description: Flujo end-to-end desde la carga del marco normativo hasta la vigencia de acreditación oficial.
+---
 
 Este es el flujo central del sistema: llevar un programa académico desde la carga del
 marco normativo hasta la vigencia de acreditación oficial.
@@ -33,9 +36,11 @@ Regla (por estándar, sobre sus criterios hijos):
 | Algún criterio `Cumple parcial` (y ninguno `No cumple`) | **L** — Logrado |
 | Todos los criterios `Cumple` | **LP** — Logrado Plenamente (propuesto) |
 
-> **LP no es mecánico.** Aunque todos los criterios cumplan, confirmar LP exige que el
-> comité revise la evolución de los indicadores asociados (±3%, 4 semestres) antes de
-> aceptar la propuesta — no basta con el cálculo automático.
+:::note[LP no es mecánico]
+Aunque todos los criterios cumplan, confirmar LP exige que el comité revise la
+evolución de los indicadores asociados (±3%, 4 semestres) antes de aceptar la
+propuesta — no basta con el cálculo automático.
+:::
 
 ## Paso 3 — El comité confirma el nivel oficial
 
@@ -76,10 +81,10 @@ acreditación con el Print Format oficial, usando el motor Chrome de Frappe.
 
 Al abrir el detalle de un criterio en la SPA, el comité ve las evidencias ya
 vinculadas a ese criterio (consulta inversa sobre `Trazabilidad`) sin salir de la
-pantalla de valoración — ver [Evidencias y trazabilidad](evidencias-trazabilidad.md).
+pantalla de valoración — ver [Evidencias y trazabilidad](/manual-uso/evidencias-trazabilidad/).
 
 ## Si un criterio no cumple: generar un hallazgo
 
 Cuando `Valoracion Criterio.cumple` es `No cumple` o `Cumple parcial`, ese juicio
 puede escalar a la cadena de mejora continua — ver
-[No conformidades y mejora](no-conformidades-mejora.md).
+[No conformidades y mejora](/manual-uso/no-conformidades-mejora/).

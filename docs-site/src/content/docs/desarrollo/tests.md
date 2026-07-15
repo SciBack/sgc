@@ -1,4 +1,7 @@
-# Tests
+---
+title: Tests
+description: Cómo correr la suite de integración, factories, y gotchas conocidos.
+---
 
 Suite de integración Frappe (`bench run-tests`), con factories reutilizables y
 cobertura enfocada en la lógica de negocio real (no en DocTypes triviales).
