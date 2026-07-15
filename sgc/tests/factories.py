@@ -316,7 +316,11 @@ def confirmar_estandar(autoevaluacion, estandar, sigla, prefijo=PREFIJO):
 def crear_proceso(codigo=None, prefijo=PREFIJO, **overrides):
     """Proceso mínimo (codigo autoname). Devuelve el doc."""
     if not codigo:
-        codigo = f"{prefijo}-PROC-{next(_seq)}"
+        # Código corto (<=12 chars) a propósito: Documento Controlado trunca el
+        # proceso a 12 chars para el prefijo de su código; con "TEST-PROC-<seq>"
+        # (>12 al pasar seq de 99) dos procesos truncaban al mismo prefijo y sus
+        # documentos colisionaban en el PK. "TEST-P<seq>" cabe entero en 12.
+        codigo = f"{prefijo}-P{next(_seq):04d}"
     vals = {"codigo": codigo}
     vals.update(overrides)
     return _ensure_named("Proceso", codigo, vals)

@@ -82,18 +82,25 @@ class DocumentoControlado(Document):
 		return previo.estado if previo else None
 
 	def _generar_codigo(self) -> str:
-		"""Codigo SGC: [PROCESO]-[SIGLA]-[NNN], con correlativo por proceso+tipo.
+		"""Codigo SGC: [PROCESO]-[SIGLA]-[NNN], con correlativo por prefijo+sigla.
 
 		El correlativo se toma del MÁXIMO sufijo existente + 1, no de count(): con
 		count(), borrar un documento intermedio hace que el siguiente reuse un
 		número ya usado y choque contra el `unique` del código (DuplicateEntryError).
+
+		El correlativo se escopa al MISMO prefijo visible que forma el `name`
+		(`{prefijo}-{sigla}-%`), NO al proceso completo: el prefijo trunca el
+		proceso a 12 caracteres, así que dos procesos cuyos primeros 12 caracteres
+		coinciden (p.ej. "PROC-GESTION-01" y "PROC-GESTION-02") comparten prefijo de
+		código. Escopar al proceso les daría a ambos el correlativo 001 y colisionar-
+		ían en el PK; escopar al prefijo garantiza que el `name` generado es único.
 		"""
 		sigla = SIGLAS.get(self.tipo_documento, "DO")
 		prefijo = (self.proceso or "SGC").upper().replace(" ", "")[:12]
 
 		existentes = frappe.get_all(
 			"Documento Controlado",
-			filters={"proceso": self.proceso, "tipo_documento": self.tipo_documento},
+			filters={"name": ["like", f"{prefijo}-{sigla}-%"]},
 			pluck="name",
 		)
 		return f"{prefijo}-{sigla}-{_siguiente_correlativo(existentes):03d}"
