@@ -30,14 +30,43 @@ const saved = ref(false)
 const saveError = ref(null)
 const saving = ref(false)
 
-// Campos visibles del formulario: sin ocultos ni de solo-lectura del sistema
-// (name/owner/creation/... no vienen en meta.fields — ver useDoctypeMeta).
-const visibleFields = computed(() =>
+// Todos los campos del doctype (sin los ocultos): base para poblar y guardar.
+const formFields = computed(() =>
   (meta.value?.fields || []).filter((f) => !f.hidden),
 )
 
+function hasContent(v) {
+  return v !== null && v !== undefined && v !== '' && v !== 0
+}
+
+// Evalúa el `depends_on` de un campo (mismo mecanismo que el Desk) para no
+// mostrar campos que no aplican — p.ej. `archivo` cuando el tipo es Enlace. La
+// expresión viene del meta del propio sistema (confiable); ante cualquier error
+// se muestra el campo (fail-open, nunca ocultar por un fallo de evaluación).
+function passesDependsOn(expr, doc) {
+  if (!expr) return true
+  const code = expr.startsWith('eval:') ? expr.slice(5) : `doc.${expr}`
+  try {
+    return !!new Function('doc', `return (${code})`)(doc)
+  } catch {
+    return true
+  }
+}
+
+// Campos que se RENDERIZAN: se ocultan (a) los de solo-lectura vacíos —
+// metadatos del sistema (MIME, hash, cargado_por, URI, origen…) que solo hacen
+// ruido cuando no tienen valor; los de solo-lectura CON valor (código, fechas,
+// semáforo) sí se ven — y (b) los que su `depends_on` excluye.
+const visibleFields = computed(() =>
+  formFields.value.filter((f) => {
+    if (f.read_only && !hasContent(values[f.fieldname])) return false
+    if (!passesDependsOn(f.depends_on, values)) return false
+    return true
+  }),
+)
+
 function seedValuesFromDoc(source) {
-  for (const f of visibleFields.value) {
+  for (const f of formFields.value) {
     values[f.fieldname] = source?.[f.fieldname] ?? (f.fieldtype === 'Check' ? 0 : null)
   }
 }
@@ -62,27 +91,47 @@ function deskUrl() {
   return isNew.value ? `/app/${slug}/new` : `/app/${slug}/${encodeURIComponent(props.name)}`
 }
 
+// Extrae un mensaje legible del error de frappe-ui/Frappe (que a veces trae
+// HTML o viene envuelto). Evita el "Cannot read properties of null" cuando el
+// guardado falla y `submit` no rejecta sino que deja el error en el recurso.
+function errorMessage(err, fallback) {
+  const raw =
+    err?.messages?.[0] ||
+    err?.message ||
+    (typeof err === 'string' ? err : '') ||
+    fallback
+  return String(raw).replace(/<[^>]+>/g, '').trim() || fallback
+}
+
 async function save() {
   saveError.value = null
   saved.value = false
   saving.value = true
   try {
     const editable = {}
-    for (const f of visibleFields.value) {
+    for (const f of formFields.value) {
       if (f.fieldtype === 'Table' || f.read_only) continue
       editable[f.fieldname] = values[f.fieldname]
     }
     if (isNew.value) {
       const created = await docType.insert.submit(editable)
+      // insert.submit puede resolver a null y dejar el error en docType.insert.error
+      // (p.ej. 403 de permisos): mostrar el motivo real, no reventar en created.name.
+      if (!created?.name) {
+        throw new Error(errorMessage(docType.insert.error, 'No se pudo crear el registro.'))
+      }
       saving.value = false
       router.replace({ name: 'DocForm', params: { doctype: props.doctype, name: created.name } })
       return
     }
     await doc.setValue.submit(editable)
+    if (doc.setValue.error) {
+      throw new Error(errorMessage(doc.setValue.error, 'No se pudieron guardar los cambios.'))
+    }
     saved.value = true
     setTimeout(() => (saved.value = false), 2500)
   } catch (e) {
-    saveError.value = e
+    saveError.value = { message: errorMessage(e, 'No se pudo guardar.') }
   } finally {
     saving.value = false
   }
