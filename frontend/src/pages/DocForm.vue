@@ -1,7 +1,7 @@
 <script setup>
 import { computed, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { Button, ErrorMessage, LoadingText, ScrollArea, useDoc, useDoctype } from 'frappe-ui'
+import { Button, ErrorMessage, LoadingText, ScrollArea, call, useDoc, useDoctype } from 'frappe-ui'
 import { useDoctypeMeta } from '@/composables/useDoctypeMeta'
 import FieldInput from '@/components/form/FieldInput.vue'
 import DocConnections from '@/components/form/DocConnections.vue'
@@ -29,6 +29,12 @@ const values = reactive({})
 const saved = ref(false)
 const saveError = ref(null)
 const saving = ref(false)
+
+// Última versión conocida del doc en el servidor. Sirve de base para el guardado
+// completo (frappe.client.save) — se refresca tras cada guardado para no reenviar
+// un `modified` viejo (evita el conflicto "Document has been modified") ni filas
+// hijas sin `name` (que Frappe interpretaría como filas nuevas duplicadas).
+const currentDoc = ref(null)
 
 // Todos los campos del doctype (sin los ocultos): base para poblar y guardar.
 const formFields = computed(() =>
@@ -76,9 +82,15 @@ watch([() => doc.doc, meta], ([d, m]) => {
   if (isNew.value) {
     seedValuesFromDoc({})
   } else if (d) {
+    currentDoc.value = d
     seedValuesFromDoc(d)
   }
 }, { immediate: true })
+
+// ¿El doctype tiene tablas hijas? Determina el camino de guardado en UPDATE.
+const hasTableFields = computed(() =>
+  formFields.value.some((f) => f.fieldtype === 'Table'),
+)
 
 const title = computed(() => {
   if (isNew.value) return `Nuevo · ${props.doctype}`
@@ -103,17 +115,25 @@ function errorMessage(err, fallback) {
   return String(raw).replace(/<[^>]+>/g, '').trim() || fallback
 }
 
+// Valor de una fila hija normalizado a array (el modelo puede venir null).
+function tableRows(fieldname) {
+  const v = values[fieldname]
+  return Array.isArray(v) ? v : []
+}
+
 async function save() {
   saveError.value = null
   saved.value = false
   saving.value = true
   try {
-    const editable = {}
-    for (const f of formFields.value) {
-      if (f.fieldtype === 'Table' || f.read_only) continue
-      editable[f.fieldname] = values[f.fieldname]
-    }
     if (isNew.value) {
+      // INSERT: incluimos las tablas hijas en el payload — Frappe acepta el array
+      // de filas al crear el documento.
+      const editable = {}
+      for (const f of formFields.value) {
+        if (f.read_only) continue
+        editable[f.fieldname] = f.fieldtype === 'Table' ? tableRows(f.fieldname) : values[f.fieldname]
+      }
       const created = await docType.insert.submit(editable)
       // insert.submit puede resolver a null y dejar el error en docType.insert.error
       // (p.ej. 403 de permisos): mostrar el motivo real, no reventar en created.name.
@@ -124,9 +144,44 @@ async function save() {
       router.replace({ name: 'DocForm', params: { doctype: props.doctype, name: created.name } })
       return
     }
-    await doc.setValue.submit(editable)
-    if (doc.setValue.error) {
-      throw new Error(errorMessage(doc.setValue.error, 'No se pudieron guardar los cambios.'))
+
+    if (hasTableFields.value) {
+      // UPDATE con tablas hijas: frappe.client.set_value NO persiste child tables,
+      // así que guardamos el DOCUMENTO COMPLETO. Partimos de la última versión
+      // conocida del servidor y superponemos los campos editables (escalares y
+      // arrays de filas), preservando los read_only tal cual venían.
+      const fullDoc = {
+        ...(currentDoc.value || {}),
+        doctype: props.doctype,
+        name: props.name,
+      }
+      for (const f of formFields.value) {
+        if (f.read_only) continue
+        fullDoc[f.fieldname] = f.fieldtype === 'Table' ? tableRows(f.fieldname) : values[f.fieldname]
+      }
+      // call() rechaza ante error → lo captura el catch; si resolviera a algo sin
+      // name, lo tratamos como fallo (mismo criterio que el resto del guardado).
+      const savedDoc = await call('frappe.client.save', { doc: fullDoc })
+      if (!savedDoc?.name) {
+        throw new Error(errorMessage(savedDoc, 'No se pudieron guardar los cambios.'))
+      }
+      // Refrescamos base y borrador con el doc normalizado por el servidor (filas
+      // hijas ya con `name`, `modified` al día) para que un segundo guardado no
+      // choque ni duplique filas.
+      currentDoc.value = savedDoc
+      seedValuesFromDoc(savedDoc)
+    } else {
+      // Camino histórico para docs SIN tablas (Evidencia, Documento Controlado):
+      // set_value puntual, sin tocar nada más, para no arriesgar regresiones.
+      const editable = {}
+      for (const f of formFields.value) {
+        if (f.read_only) continue
+        editable[f.fieldname] = values[f.fieldname]
+      }
+      await doc.setValue.submit(editable)
+      if (doc.setValue.error) {
+        throw new Error(errorMessage(doc.setValue.error, 'No se pudieron guardar los cambios.'))
+      }
     }
     saved.value = true
     setTimeout(() => (saved.value = false), 2500)
