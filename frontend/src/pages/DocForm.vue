@@ -107,7 +107,13 @@ async function save() {
 
       <form v-else class="space-y-4" @submit.prevent="save">
         <div v-for="f in visibleFields" :key="f.fieldname">
-          <FieldInput v-model="values[f.fieldname]" :field="f" :read-only="Boolean(f.read_only)" />
+          <FieldInput
+            v-model="values[f.fieldname]"
+            :field="f"
+            :read-only="Boolean(f.read_only)"
+            :doctype="doctype"
+            :docname="name"
+          />
         </div>
 
         <div class="flex items-center gap-3 border-t border-outline-gray-1 pt-4">

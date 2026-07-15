@@ -2,10 +2,13 @@
 import { computed } from 'vue'
 import { FormControl } from 'frappe-ui'
 import LinkField from './LinkField.vue'
+import AttachField from './AttachField.vue'
 
 const props = defineProps({
   field: { type: Object, required: true }, // {fieldname, fieldtype, label, options, reqd}
   readOnly: { type: Boolean, default: false },
+  doctype: { type: String, default: '' }, // contexto para adjuntar archivos
+  docname: { type: String, default: '' },
 })
 
 const value = defineModel({ default: null })
@@ -38,6 +41,15 @@ function rowsFor(fieldtype) {
       :disabled="readOnly"
     />
   </div>
+
+  <AttachField
+    v-else-if="field.fieldtype === 'Attach' || field.fieldtype === 'Attach Image'"
+    v-model="value"
+    :field="field"
+    :doctype="doctype"
+    :docname="docname"
+    :read-only="readOnly"
+  />
 
   <div v-else-if="field.fieldtype === 'Dynamic Link'" class="space-y-1.5">
     <FormControl v-model="value" type="text" :label="label" :disabled="readOnly" />
