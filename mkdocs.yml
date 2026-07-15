@@ -1,5 +1,6 @@
 site_name: SGC — Sistema de Gestión de la Calidad
 site_description: Documentación del producto canónico SciBack — eQMS para acreditación universitaria (CONEAU/SINEACE, CBC, ISO 21001)
+site_url: https://sciback.github.io/sgc/
 repo_url: https://github.com/SciBack/sgc
 repo_name: SciBack/sgc
 edit_uri: edit/main/docs/
