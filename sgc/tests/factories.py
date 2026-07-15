@@ -204,7 +204,10 @@ def crear_autoevaluacion(marco, codigo=None, prefijo=PREFIJO, **extra):
         "codigo": codigo,
         "titulo": f"Autoevaluacion de prueba {codigo}",
         "marco_normativo": marco,
-        "estado": "En curso",
+        # NO forzar el estado: Autoevaluacion tiene Workflow activo y setear un
+        # estado != inicial ("Planificada") al insertar dispara WorkflowPermissionError.
+        # El scoring no depende del estado de la autoeval. Si un test lo necesita,
+        # que use frappe.model.workflow.apply_workflow.
     }
     vals.update(extra)
     return _ensure_named("Autoevaluacion", codigo, vals)
@@ -379,3 +382,21 @@ def crear_trazabilidad(evidencia, elemento_marco=None, proceso=None,
         vals["proceso"] = proceso
     vals.update(overrides)
     return _insert("Trazabilidad", vals)
+
+
+def desactivar_workflow(document_type):
+    """Desactiva (is_active=0) el Workflow de un DocType durante los tests.
+
+    Autoevaluacion y No Conformidad tienen Workflow activo: setear un estado
+    != inicial dispara WorkflowPermissionError. Los tests que ejercitan las
+    validaciones del CONTROLADOR por estado (validate) necesitan mover el estado
+    libremente; el workflow se reactiva solo entre casos por el rollback, pero
+    llamar esto en setUp lo desactiva para el caso. No toca la logica de validate.
+    """
+    nombres = frappe.get_all(
+        "Workflow", filters={"document_type": document_type, "is_active": 1}, pluck="name"
+    )
+    for n in nombres:
+        frappe.db.set_value("Workflow", n, "is_active", 0)
+    # Limpiar el cache de workflow para que el cambio surta efecto en el mismo request.
+    frappe.clear_cache(doctype=document_type)

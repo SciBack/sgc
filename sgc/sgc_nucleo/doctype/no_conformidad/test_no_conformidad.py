@@ -45,6 +45,11 @@ class IntegrationTestNoConformidad(IntegrationTestCase):
     """Validaciones incrementales por etapa del M05 (No Conformidad)."""
 
     def setUp(self):
+        # No Conformidad tiene Workflow activo: para poder crear la NC directamente
+        # en el estado que cada test necesita (sin transicionar), se desactiva el
+        # workflow. Las validaciones del CONTROLADOR (no_conformidad.validate, dict
+        # ORDEN) siguen corriendo — que es lo que estos tests ejercitan.
+        factories.desactivar_workflow("No Conformidad")
         # Evidencia reutilizable como soporte del cierre (M09 le da un enlace_url).
         self.evidencia = factories.crear_evidencia().name
 

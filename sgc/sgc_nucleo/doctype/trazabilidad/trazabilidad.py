@@ -26,15 +26,12 @@ class Trazabilidad(Document):
 			)
 
 		# Evitar duplicar el mismo vínculo (misma evidencia al mismo destino).
-		if frappe.db.exists(
-			"Trazabilidad",
-			{
-				"evidencia": self.evidencia,
-				"elemento_marco": self.elemento_marco or "",
-				"proceso": self.proceso or "",
-				"name": ["!=", self.name or ""],
-			},
-		):
+		# Un Link vacío se guarda como NULL en Postgres, y NULL no matchea "" en un
+		# filtro de igualdad → hay que buscarlo con "is not set", no con or "".
+		filtros = {"evidencia": self.evidencia, "name": ["!=", self.name or ""]}
+		filtros["elemento_marco"] = self.elemento_marco if self.elemento_marco else ["is", "not set"]
+		filtros["proceso"] = self.proceso if self.proceso else ["is", "not set"]
+		if frappe.db.exists("Trazabilidad", filtros):
 			frappe.throw(
 				_("Ya existe una Trazabilidad de esta evidencia hacia el mismo destino."),
 				title=_("Vínculo duplicado"),

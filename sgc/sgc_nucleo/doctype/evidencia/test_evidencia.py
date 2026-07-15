@@ -198,4 +198,9 @@ class IntegrationTestEvidencia(IntegrationTestCase):
 
     def test_evidencias_de_elemento_sin_trazas_devuelve_vacio(self):
         """Un criterio sin ninguna Trazabilidad devuelve lista vacía."""
-        self.assertEqual(evidencias_de_elemento(self.criterios[0]), [])
+        # Criterio de un marco PROPIO (prefijo único): el criterio compartido
+        # self.criterios[0] lo traza otro test de la clase, y el aislamiento de
+        # datos idempotentes entre tests no siempre lo revierte.
+        arbol = factories.crear_marco_prueba(n_estandares=1, n_criterios=1, prefijo="TEST-SINTRAZA")
+        crit = arbol["criterios"][arbol["estandares"][0]][0]
+        self.assertEqual(evidencias_de_elemento(crit), [])

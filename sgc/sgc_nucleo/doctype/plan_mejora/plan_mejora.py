@@ -11,16 +11,21 @@ class PlanMejora(Document):
         # Recalcula en memoria; el save del propio plan persiste los campos.
         self.recalcular_avance(save=False)
 
-    def recalcular_avance(self, save=True):
+    def recalcular_avance(self, save=True, excluir_accion=None):
         """avance_pct = promedio del avance de sus acciones; fecha_compromiso = la
         más tardía; semaforo por vencimiento (RF-C06). Idempotente.
 
         Se llama desde el propio plan (validate) y desde Accion Mejora cuando una
         acción cambia. Con save=True persiste sin re-disparar validaciones (evita
-        recursión plan<->acción)."""
+        recursión plan<->acción). `excluir_accion` omite una acción del cálculo:
+        necesario al borrar una acción, porque `on_trash` corre ANTES del delete
+        físico y la acción todavía figuraría en el promedio."""
+        filtros = {"plan_mejora": self.name}
+        if excluir_accion:
+            filtros["name"] = ["!=", excluir_accion]
         acciones = frappe.get_all(
             "Accion Mejora",
-            filters={"plan_mejora": self.name},
+            filters=filtros,
             fields=["avance_pct", "fecha_compromiso", "estado"],
         )
         if acciones:

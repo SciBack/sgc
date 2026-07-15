@@ -23,10 +23,14 @@ class AccionMejora(Document):
         self._recalcular_plan()
 
     def on_trash(self):
-        self._recalcular_plan()
+        # on_trash corre ANTES del delete físico: hay que excluir esta acción del
+        # recálculo, si no seguiría contando en el promedio del plan.
+        self._recalcular_plan(excluir=self.name)
 
-    def _recalcular_plan(self):
+    def _recalcular_plan(self, excluir=None):
         """Propaga el avance/semáforo al plan padre. set_value directo dentro de
         recalcular_avance evita recursión (no re-guarda el plan entero)."""
         if self.plan_mejora and frappe.db.exists("Plan Mejora", self.plan_mejora):
-            frappe.get_doc("Plan Mejora", self.plan_mejora).recalcular_avance(save=True)
+            frappe.get_doc("Plan Mejora", self.plan_mejora).recalcular_avance(
+                save=True, excluir_accion=excluir
+            )

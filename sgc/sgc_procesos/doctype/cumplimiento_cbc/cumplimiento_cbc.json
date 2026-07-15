@@ -23,11 +23,12 @@
    "reqd": 1
   },
   {
+   "description": "Vacío = CBC aún sin evaluar (no cuenta como Cumple).",
    "fieldname": "cumple",
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Cumplimiento",
-   "options": "Cumple\nCumple parcial\nNo cumple"
+   "options": "\nCumple\nCumple parcial\nNo cumple"
   },
   {
    "fieldname": "justificacion",

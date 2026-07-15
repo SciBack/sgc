@@ -268,7 +268,9 @@ def recalcular_autoevaluacion(autoevaluacion):
         propuestos[est] = proponer_nivel_estandar(autoevaluacion, est)
 
     resultado = proponer_vigencia(autoevaluacion)
-    frappe.db.commit()
+    # Sin commit explícito: rompía el aislamiento transaccional de los tests
+    # (filtraba registros entre casos) y en producción Frappe ya hace commit al
+    # cerrar la request. Un contexto batch que lo necesite debe commitear él mismo.
 
     return {
         "estandares": propuestos,

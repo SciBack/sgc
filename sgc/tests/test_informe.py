@@ -72,7 +72,10 @@ class IntegrationTestInforme(IntegrationTestCase):
         cab = ctx["cabecera"]
         self.assertEqual(cab["codigo"], self.ae)
         self.assertEqual(cab["marco"], self.marco)
-        self.assertEqual(cab["estado"], "En curso")
+        # La factory crea la autoeval en su estado inicial ("Planificada"); el
+        # informe refleja ese estado tal cual (Autoevaluacion tiene Workflow, no
+        # se fuerza otro estado en los tests).
+        self.assertEqual(cab["estado"], "Planificada")
         # Nombre y ente vienen del Marco Normativo creado por la factory.
         self.assertEqual(cab["marco_nombre"], "Marco de prueba TEST")
         self.assertEqual(cab["ente"], "SINEACE")
