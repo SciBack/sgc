@@ -29,4 +29,4 @@ de Calidad (CBC) exigidas por SUNEDU.
 | **Cumplimiento CBC** | Tabla hija: el juicio de cumplimiento de UNA Condición Básica de Calidad (child de `Informe Cumplimiento`). |
 | **Informe Cumplimiento** | El diagnóstico anual de las 8 CBC (`IAC-{año}`, autoname único por año). Al guardarse, auto-puebla las 8 condiciones si la tabla está vacía; consolida conteos y **semáforo** (Rojo si alguna no cumple / Ámbar si parcial / Verde si todas cumplen); exige justificación en toda CBC parcial o no cumplida; bloquea el estado "Presentado a SUNEDU" si queda alguna CBC sin evaluar. Genera el informe PDF (`Diagnostico CBC SUNEDU`). |
 
-Ver [Manual de uso · Diagnóstico CBC](/manual-uso/diagnostico-cbc/).
+Ver [Manual de uso · Diagnóstico CBC](/sgc/manual-uso/diagnostico-cbc/).

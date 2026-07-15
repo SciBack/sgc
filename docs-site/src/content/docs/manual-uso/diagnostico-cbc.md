@@ -49,5 +49,5 @@ de la autoridad correspondiente.
 ## Relación con el resto del sistema
 
 Una condición marcada No cumple o Parcial es candidata a generar un
-[Hallazgo](/manual-uso/no-conformidades-mejora/) igual que un criterio de autoevaluación —
+[Hallazgo](/sgc/manual-uso/no-conformidades-mejora/) igual que un criterio de autoevaluación —
 ambos comparten el mismo árbol `Elemento Marco` y el mismo flujo CAPA.

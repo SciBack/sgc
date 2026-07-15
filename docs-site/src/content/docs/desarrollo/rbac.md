@@ -49,7 +49,7 @@ sin poder ver o escribir ese campo específico:
 
 Esto es lo que separa "el motor propone, el sistema puede mostrarlo a cualquiera" de
 "solo el comité y DPGC pueden fijar el nivel oficial" — ver
-[Autoevaluación](/manual-uso/autoevaluacion/).
+[Autoevaluación](/sgc/manual-uso/autoevaluacion/).
 
 ## Role Profiles
 

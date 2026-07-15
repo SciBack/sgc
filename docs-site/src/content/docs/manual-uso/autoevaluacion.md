@@ -81,10 +81,10 @@ acreditación con el Print Format oficial, usando el motor Chrome de Frappe.
 
 Al abrir el detalle de un criterio en la SPA, el comité ve las evidencias ya
 vinculadas a ese criterio (consulta inversa sobre `Trazabilidad`) sin salir de la
-pantalla de valoración — ver [Evidencias y trazabilidad](/manual-uso/evidencias-trazabilidad/).
+pantalla de valoración — ver [Evidencias y trazabilidad](/sgc/manual-uso/evidencias-trazabilidad/).
 
 ## Si un criterio no cumple: generar un hallazgo
 
 Cuando `Valoracion Criterio.cumple` es `No cumple` o `Cumple parcial`, ese juicio
 puede escalar a la cadena de mejora continua — ver
-[No conformidades y mejora](/manual-uso/no-conformidades-mejora/).
+[No conformidades y mejora](/sgc/manual-uso/no-conformidades-mejora/).
