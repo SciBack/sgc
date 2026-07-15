@@ -2,6 +2,18 @@
 
 Sistema de Gestion de la Calidad - UPeU (SciBack)
 
+### Documentación
+
+Manuales de uso, referencia de módulos y guía de arquitectura en `docs/`
+(MkDocs Material):
+
+```bash
+pip install -r docs/requirements.txt
+mkdocs serve
+```
+
+Abre `http://127.0.0.1:8000`.
+
 ### Installation
 
 You can install this app using the [bench](https://github.com/frappe/bench) CLI:

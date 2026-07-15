@@ -1,0 +1,66 @@
+site_name: SGC — Sistema de Gestión de la Calidad
+site_description: Documentación del producto canónico SciBack — eQMS para acreditación universitaria (CONEAU/SINEACE, CBC, ISO 21001)
+repo_url: https://github.com/SciBack/sgc
+repo_name: SciBack/sgc
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  language: es
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Cambiar a modo oscuro
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Cambiar a modo claro
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - content.code.copy
+    - content.action.edit
+    - search.suggest
+    - search.highlight
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - pymdownx.tabbed:
+      alternate_style: true
+
+nav:
+  - Inicio: index.md
+  - Arquitectura: arquitectura.md
+  - Instalación: instalacion.md
+  - Módulos:
+      - modulos/nucleo.md
+      - modulos/estructura.md
+      - modulos/gobierno.md
+      - modulos/procesos.md
+      - modulos/riesgos.md
+      - modulos/auditoria.md
+  - Manual de uso:
+      - manual-uso/autoevaluacion.md
+      - manual-uso/diagnostico-cbc.md
+      - manual-uso/control-documental.md
+      - manual-uso/evidencias-trazabilidad.md
+      - manual-uso/no-conformidades-mejora.md
+  - Desarrollo:
+      - desarrollo/rbac.md
+      - desarrollo/tests.md
+      - desarrollo/frontend-spa.md
