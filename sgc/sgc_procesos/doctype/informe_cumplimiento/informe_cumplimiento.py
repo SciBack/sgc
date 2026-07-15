@@ -108,6 +108,82 @@ class InformeCumplimiento(Document):
 		if not self.condiciones:
 			frappe.throw(_("No se puede presentar un informe sin condiciones evaluadas."))
 
+	# ------------------------------------------------------------ informe PDF
+
+	@frappe.whitelist()
+	def datos_diagnostico(self):
+		"""Contrato tipado del informe de diagnóstico CBC (RF-A03).
+
+		Consolida la cabecera + las 8 CBC con su denominación real (del Elemento
+		Marco) para que el Print Format solo itere. Único punto de datos del PDF.
+		"""
+		institucion = (
+			frappe.db.get_default("company")
+			or frappe.db.get_single_value("System Settings", "app_name")
+			or "Universidad Peruana Unión"
+		)
+
+		condiciones = []
+		for c in self.condiciones:
+			em = frappe.db.get_value(
+				"Elemento Marco", c.condicion, ["codigo", "denominacion"], as_dict=True
+			) or {}
+			condiciones.append({
+				"codigo": em.get("codigo") or c.condicion,
+				"denominacion": em.get("denominacion") or "",
+				"cumple": c.cumple or "Sin evaluar",
+				"justificacion": c.justificacion or "",
+				"no_conformidad": c.no_conformidad or "",
+			})
+
+		return {
+			"institucion": institucion,
+			"anio": self.anio,
+			"marco": self.marco_normativo or "",
+			"unidad": self.unidad_organica or "",
+			"estado": self.estado or "",
+			"fecha_presentacion": self.fecha_presentacion,
+			"semaforo": self.semaforo or "",
+			"n_cumple": self.n_cumple or 0,
+			"n_parcial": self.n_parcial or 0,
+			"n_no_cumple": self.n_no_cumple or 0,
+			"total": len(self.condiciones),
+			"condiciones": condiciones,
+			"resumen": self.resumen or "",
+		}
+
+	@frappe.whitelist()
+	def generar_pdf(self, adjuntar=False):
+		"""Genera el PDF del diagnóstico CBC (motor Chrome v16). Ver el patrón de
+		`sgc.informe.generar_pdf`. Con `adjuntar` truthy lo guarda como File."""
+		frappe.local.lang = "es"
+		adjuntar = frappe.utils.cint(adjuntar)
+
+		pdf_bytes = frappe.get_print(
+			"Informe Cumplimiento",
+			self.name,
+			print_format="Diagnostico CBC SUNEDU",
+			as_pdf=True,
+			pdf_generator="chrome",
+		)
+
+		if not adjuntar:
+			return pdf_bytes
+
+		filedoc = frappe.get_doc({
+			"doctype": "File",
+			"file_name": "Diagnostico-CBC-{0}.pdf".format(self.name),
+			"attached_to_doctype": "Informe Cumplimiento",
+			"attached_to_name": self.name,
+			"is_private": 1,
+			"content": pdf_bytes,
+		})
+		filedoc.save(ignore_permissions=True)
+		frappe.db.set_value("Informe Cumplimiento", self.name, "pdf", filedoc.file_url,
+			update_modified=False)
+		frappe.db.commit()
+		return {"file_name": filedoc.file_name, "file_url": filedoc.file_url}
+
 
 @frappe.whitelist()
 def cbc_no_cumplidas(informe: str):
