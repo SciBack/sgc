@@ -17,8 +17,8 @@ correcto. No es una convención de papel: el sistema lo hace cumplir.
 ## Los perfiles y su trabajo
 
 ### Responsable de Calidad de Programa — *el comité del programa*
-Es el motor operativo (por ejemplo, el comité de Enfermería). **Ejecuta** el trabajo de calidad
-de su programa:
+Es el motor operativo — el comité de calidad de un programa académico. **Ejecuta** el trabajo de
+calidad de su programa:
 
 - **Autoevaluación:** crea la autoevaluación del programa → *Iniciar evaluación* → valora los
   criterios, sube evidencias y las vincula (trazabilidad), confirma los niveles → *Enviar a
@@ -123,4 +123,4 @@ Los permisos de creación no dependen del workflow sino del RBAC. En resumen:
 - El **nivel oficial de acreditación** (permlevel 1) solo lo escriben **DPGC** y **Responsable
   de Calidad de Programa**; los demás roles pueden verlo pero no cambiarlo.
 
-Para el detalle técnico del modelo de permisos, ver la sección de desarrollo (*RBAC*).
+Para el detalle técnico del modelo de permisos, ver [RBAC](/sgc/desarrollo/rbac/).
