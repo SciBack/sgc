@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { Button, ErrorMessage, LoadingText, ScrollArea, useDoc, useDoctype } from 'frappe-ui'
 import { useDoctypeMeta } from '@/composables/useDoctypeMeta'
 import FieldInput from '@/components/form/FieldInput.vue'
+import DocConnections from '@/components/form/DocConnections.vue'
 
 const props = defineProps({
   doctype: { type: String, required: true },
@@ -124,6 +125,17 @@ async function save() {
           <ErrorMessage v-if="saveError" :message="saveError.message" />
         </div>
       </form>
+
+      <!-- Conexiones (Document Links del meta): p.ej. Evidencia -> Trazabilidad -->
+      <div v-if="!metaLoading && (meta?.links || []).length" class="mt-8 space-y-6 border-t border-outline-gray-1 pt-6">
+        <DocConnections
+          v-for="lnk in meta.links"
+          :key="lnk.link_doctype + lnk.link_fieldname"
+          :parent-doctype="doctype"
+          :parent-name="name"
+          :link="lnk"
+        />
+      </div>
     </div>
   </ScrollArea>
 </template>

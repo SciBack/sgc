@@ -39,6 +39,12 @@ export function useDoctypeMeta(doctype) {
         fields,
         titleField: doc.title_field || null,
         searchFields: (doc.search_fields || '').split(',').map((s) => s.trim()).filter(Boolean),
+        // Document Links: otros DocTypes que apuntan a este (sección Connections).
+        links: (doc.links || []).map((l) => ({
+          link_doctype: l.link_doctype,
+          link_fieldname: l.link_fieldname,
+          group: l.group || l.link_doctype,
+        })),
       }
       cache.set(dt, value)
       meta.value = value

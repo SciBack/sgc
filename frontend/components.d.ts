@@ -13,6 +13,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AttachField: typeof import('./src/components/form/AttachField.vue')['default']
     CriterioRow: typeof import('./src/components/autoevaluacion/CriterioRow.vue')['default']
+    DocConnections: typeof import('./src/components/form/DocConnections.vue')['default']
     EstandarCard: typeof import('./src/components/autoevaluacion/EstandarCard.vue')['default']
     FieldInput: typeof import('./src/components/form/FieldInput.vue')['default']
     LinkField: typeof import('./src/components/form/LinkField.vue')['default']
