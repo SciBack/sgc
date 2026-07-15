@@ -12,6 +12,7 @@ export default defineConfig({
 			description:
 				'Documentación del producto canónico SciBack — eQMS para acreditación universitaria (CONEAU/SINEACE, CBC, ISO 21001).',
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/SciBack/sgc' }],
+			tableOfContents: false,
 			editLink: {
 				baseUrl: 'https://github.com/SciBack/sgc/edit/main/docs-site/',
 			},
