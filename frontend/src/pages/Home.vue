@@ -102,7 +102,7 @@ function openModule(mod) {
           <div
             v-for="mod in block.modules"
             :key="mod.code"
-            class="flex cursor-pointer flex-col rounded-lg border border-outline-gray-1 bg-surface-base p-4 transition hover:border-outline-gray-3 hover:shadow-sm"
+            class="flex cursor-pointer flex-col rounded-lg border border-outline-gray-1 bg-surface-base p-4 transition-[transform,box-shadow,border-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-0.5 hover:border-upeu-navy/25 hover:shadow-md active:scale-[0.99]"
             @click="openModule(mod)"
           >
             <div class="mb-1 flex items-center gap-2">

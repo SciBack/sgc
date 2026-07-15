@@ -14,6 +14,7 @@ import {
 } from 'frappe-ui'
 import { AREAS } from '@/data/areas'
 import { useSessionStore } from '@/stores/session'
+import upeuLogo from '@/assets/upeu-logo.png'
 
 const route = useRoute()
 const session = useSessionStore()
@@ -75,18 +76,27 @@ const initials = computed(() =>
           data-theme="dark"
           class="border-r border-black/20 bg-gradient-to-b from-[#023052] via-upeu-navy to-[#00477e]"
         >
-          <!-- Encabezado estático (sin dropdown): el SidebarHeader de frappe-ui
-               siempre envuelve el título en un menú, y sin opciones mostraba
-               "No options". Como no hay acciones que ofrecer, se rinde plano. -->
-          <div class="flex h-12 shrink-0 items-center px-2">
-            <div class="size-7 shrink-0 overflow-hidden rounded-[6px]">
-              <img :src="'/files/upeu-favicon.ico'" alt="Logo UPeU" class="h-full w-full object-cover" />
+          <!-- Marca institucional = acceso a Inicio. El logo UPeU es azul marino,
+               así que va sobre una tarjeta blanca (contraste). Toda la cabecera
+               es un enlace a Inicio con feedback de press. -->
+          <router-link
+            :to="{ name: 'Home' }"
+            class="brand-header group block shrink-0 px-2.5 pb-1 pt-2.5"
+          >
+            <div
+              class="brand-card flex items-center justify-center rounded-lg bg-white px-3 py-2.5 shadow-sm ring-1 ring-black/5 transition-[transform,box-shadow] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:shadow-md group-active:scale-[0.98]"
+            >
+              <img :src="upeuLogo" alt="Universidad Peruana Unión" class="h-9 w-full object-contain" />
             </div>
-            <div class="ml-2 flex flex-1 flex-col truncate text-left">
-              <span class="text-base-medium leading-none text-ink-gray-8">SGC · UPeU</span>
-              <span class="mt-0.5 text-sm leading-none text-ink-gray-6">Gestión de la Calidad</span>
+            <div class="mt-2.5 px-0.5">
+              <div class="flex items-center gap-1.5">
+                <span class="h-3 w-1 rounded-full bg-upeu-gold" aria-hidden="true" />
+                <span class="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/70">
+                  Sistema de Gestión de la Calidad
+                </span>
+              </div>
             </div>
-          </div>
+          </router-link>
 
           <ScrollArea class="min-h-0 flex-1" viewport-class="px-2 pt-0.5 pb-10">
             <nav class="space-y-0.5">
@@ -163,3 +173,16 @@ const initials = computed(() =>
     </DesktopShell>
   </div>
 </template>
+
+<style scoped>
+/* La marca es un enlace ocasional (navegación), así que un feedback sutil de
+   press es apropiado; se anula bajo prefers-reduced-motion. */
+@media (prefers-reduced-motion: reduce) {
+  .brand-card {
+    transition: box-shadow 200ms ease;
+  }
+  .brand-header:active .brand-card {
+    transform: none;
+  }
+}
+</style>
