@@ -27,9 +27,13 @@ _CLAVES = {
 
 class IntegrationTestHomeDashboard(IntegrationTestCase):
     def test_estructura_y_pendientes(self):
-        """El payload trae las 3 claves y las 6 tarjetas de pendientes."""
+        """El payload trae las claves esperadas y las 6 tarjetas de pendientes."""
         r = resumen_inicio()
-        self.assertEqual(set(r.keys()), {"autoevaluacion", "pendientes", "horizonte_dias"})
+        self.assertEqual(
+            set(r.keys()), {"autoevaluaciones", "programas_total", "pendientes", "horizonte_dias"}
+        )
+        self.assertIsInstance(r["autoevaluaciones"], list)
+        self.assertIsInstance(r["programas_total"], int)
         claves = {p["clave"] for p in r["pendientes"]}
         self.assertEqual(claves, _CLAVES)
         for p in r["pendientes"]:
@@ -44,16 +48,15 @@ class IntegrationTestHomeDashboard(IntegrationTestCase):
         despues = next(p["valor"] for p in resumen_inicio()["pendientes"] if p["clave"] == "evidencias_vencidas")
         self.assertEqual(despues, base + 1)
 
-    def test_autoevaluacion_activa_con_criterios(self):
-        """Con una Autoevaluacion del marco, reporta total/valorados/pendientes."""
+    def test_autoevaluacion_en_la_lista_con_criterios(self):
+        """Una Autoevaluacion viva aparece en la lista con total/valorados/pendientes."""
         arbol = factories.crear_marco_prueba(n_estandares=2, n_criterios=3, prefijo="TEST-HOME")
         ae = factories.crear_autoevaluacion(arbol, prefijo="TEST-HOME")
         # Valorar un criterio del primer estándar.
         est = arbol["estandares"][0]
         factories.valorar_criterio(ae, arbol["criterios"][est][0])
 
-        r = resumen_inicio()
-        info = r["autoevaluacion"]
+        info = next((a for a in resumen_inicio()["autoevaluaciones"] if a["name"] == ae.name), None)
         self.assertIsNotNone(info)
         # 2 estándares x 3 criterios = 6 criterios valorables en el marco.
         self.assertEqual(info["criterios_total"], 6)

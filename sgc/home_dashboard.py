@@ -98,35 +98,48 @@ def resumen_inicio(horizonte_dias=30):
         },
     ]
 
+    autoevals = _autoevaluaciones()
     return {
-        "autoevaluacion": _autoevaluacion_activa(),
+        # Lista (no una sola): el sistema sirve a los 22 programas de la UPeU, no
+        # a un solo caso. `programas_total` deja explícito el universo.
+        "autoevaluaciones": autoevals,
+        "programas_total": frappe.db.count("Programa Sede"),
         "pendientes": pendientes,
         "horizonte_dias": horizonte_dias,
     }
 
 
-def _autoevaluacion_activa():
-    """La autoevaluación "En curso" más reciente (o la más reciente si ninguna lo
-    está), enriquecida con el conteo de criterios valorados vs. pendientes."""
-    campos = ["name", "titulo", "marco_normativo", "estado", "avance_pct", "resultado_vigencia"]
-    ae = frappe.get_all(
-        "Autoevaluacion", filters={"estado": "En curso"}, fields=campos, order_by="modified desc", limit=1
-    )
-    if not ae:
-        ae = frappe.get_all("Autoevaluacion", fields=campos, order_by="modified desc", limit=1)
-    if not ae:
-        return None
+# Estados de Autoevaluacion que cuentan como "trabajo vivo" (no cerrada).
+_AE_ACTIVAS = ("Planificada", "En curso", "En revision", "Consolidada")
 
-    autoeval = ae[0]
-    criterios = frappe.get_all(
-        "Elemento Marco",
-        filters={"marco_normativo": autoeval["marco_normativo"], "es_valorable": 1},
-        pluck="name",
+
+def _autoevaluaciones(limite=12):
+    """Autoevaluaciones vivas (no cerradas), cada una con su avance y el conteo de
+    criterios valorados vs. pendientes. El sistema es multi-programa: aquí puede
+    haber desde 1 (piloto Enfermería) hasta las 22 de la UPeU."""
+    campos = [
+        "name", "titulo", "programa_sede", "periodo_academico",
+        "marco_normativo", "estado", "avance_pct", "resultado_vigencia",
+    ]
+    aes = frappe.get_all(
+        "Autoevaluacion",
+        filters={"estado": ["in", _AE_ACTIVAS]},
+        fields=campos,
+        order_by="modified desc",
+        limit=limite,
     )
-    valorados = (
-        frappe.db.count("Valoracion Criterio", {"autoevaluacion": autoeval["name"]}) if criterios else 0
-    )
-    autoeval["criterios_total"] = len(criterios)
-    autoeval["criterios_valorados"] = min(valorados, len(criterios))
-    autoeval["criterios_pendientes"] = max(0, len(criterios) - valorados)
-    return autoeval
+
+    # Cache de criterios valorables por marco (varias AE comparten marco).
+    crit_por_marco = {}
+    for ae in aes:
+        marco = ae["marco_normativo"]
+        if marco not in crit_por_marco:
+            crit_por_marco[marco] = frappe.db.count(
+                "Elemento Marco", {"marco_normativo": marco, "es_valorable": 1}
+            )
+        total = crit_por_marco[marco]
+        valorados = frappe.db.count("Valoracion Criterio", {"autoevaluacion": ae["name"]}) if total else 0
+        ae["criterios_total"] = total
+        ae["criterios_valorados"] = min(valorados, total)
+        ae["criterios_pendientes"] = max(0, total - valorados)
+    return aes
