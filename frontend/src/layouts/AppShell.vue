@@ -9,7 +9,6 @@ import {
   PageHeader,
   ScrollArea,
   Sidebar,
-  SidebarHeader,
   SidebarItem,
   SidebarLabel,
 } from 'frappe-ui'
@@ -76,7 +75,18 @@ const initials = computed(() =>
           data-theme="dark"
           class="border-r border-black/20 bg-gradient-to-b from-[#023052] via-upeu-navy to-[#00477e]"
         >
-          <SidebarHeader title="SGC · UPeU" subtitle="Gestión de la Calidad" logo="/files/upeu-favicon.ico" />
+          <!-- Encabezado estático (sin dropdown): el SidebarHeader de frappe-ui
+               siempre envuelve el título en un menú, y sin opciones mostraba
+               "No options". Como no hay acciones que ofrecer, se rinde plano. -->
+          <div class="flex h-12 shrink-0 items-center px-2">
+            <div class="size-7 shrink-0 overflow-hidden rounded-[6px]">
+              <img :src="'/files/upeu-favicon.ico'" alt="Logo UPeU" class="h-full w-full object-cover" />
+            </div>
+            <div class="ml-2 flex flex-1 flex-col truncate text-left">
+              <span class="text-base-medium leading-none text-ink-gray-8">SGC · UPeU</span>
+              <span class="mt-0.5 text-sm leading-none text-ink-gray-6">Gestión de la Calidad</span>
+            </div>
+          </div>
 
           <ScrollArea class="min-h-0 flex-1" viewport-class="px-2 pt-0.5 pb-10">
             <nav class="space-y-0.5">
