@@ -1,139 +1,165 @@
 <script setup>
+import { computed } from 'vue'
 import { ScrollArea, useCall } from 'frappe-ui'
-import { BLOCKS, STATUS_LABEL } from '@/data/modules'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-const statusTheme = {
-  ok: { badge: 'text-ink-green-6 bg-surface-green-2', dot: 'bg-surface-green-7' },
-  wip: { badge: 'text-ink-amber-6 bg-surface-amber-2', dot: 'bg-surface-amber-7' },
-  pend: { badge: 'text-ink-gray-6 bg-surface-gray-2', dot: 'bg-surface-gray-5' },
+// Payload operativo del backend (sgc.home_dashboard.resumen_inicio): pendientes
+// reales + estado de la autoevaluación activa.
+const panel = useCall({
+  url: '/api/v2/method/sgc.home_dashboard.resumen_inicio',
+  cacheKey: 'home-resumen',
+})
+
+const autoeval = computed(() => panel.data?.autoevaluacion || null)
+const pendientes = computed(() => panel.data?.pendientes || [])
+const totalAtencion = computed(() => pendientes.value.reduce((n, p) => n + (p.valor || 0), 0))
+
+const avance = computed(() => Math.round(Number(autoeval.value?.avance_pct || 0)))
+
+// Tono de cada tarjeta de pendiente: si no hay nada, se muestra en calma
+// (verde "al día"); si hay, rojo/ámbar según severidad.
+function tono(p) {
+  if (!p.valor) return { card: 'border-outline-gray-1', num: 'text-ink-gray-4', chip: 'bg-surface-gray-2 text-ink-gray-5', al_dia: true }
+  if (p.tono === 'rojo') return { card: 'border-outline-red-1 bg-surface-red-1', num: 'text-ink-red-5', chip: 'bg-surface-red-2 text-ink-red-6' }
+  return { card: 'border-outline-amber-1 bg-surface-amber-1', num: 'text-ink-amber-6', chip: 'bg-surface-amber-2 text-ink-amber-7' }
 }
 
-// Conteos en vivo — misma idea que el bloque HTML del inicio interino
-// (sgc_home_apply.py), pero pedidos vía la API en vez de embebidos.
-const metrics = [
-  { label: 'Marcos normativos cargados', doctype: 'Marco Normativo' },
-  { label: 'Indicadores catalogados', doctype: 'Indicador' },
-  { label: 'Programas con código INEI', doctype: 'Programa' },
-  { label: 'Autoevaluaciones', doctype: 'Autoevaluacion' },
+function irA(doctype) {
+  router.push({ name: 'DoctypeList', params: { doctype } })
+}
+
+const accesos = [
+  { label: 'Autoevaluación', icon: 'lucide-clipboard-check', doctype: 'Autoevaluacion' },
+  { label: 'Cargar evidencia', icon: 'lucide-paperclip', doctype: 'Evidencia', nuevo: true },
+  { label: 'Diagnóstico CBC', icon: 'lucide-shield-check', doctype: 'Informe Cumplimiento' },
+  { label: 'Registrar hallazgo', icon: 'lucide-flag', doctype: 'Hallazgo', nuevo: true },
 ]
 
-function countCall(doctype) {
-  return useCall({
-    // v2, no v1: v1 envuelve la respuesta en {"message": N}; useCall espera
-    // el envelope v2 {"data": N}.
-    url: '/api/v2/method/frappe.client.get_count',
-    params: { doctype },
-    cacheKey: ['count', doctype],
-  })
-}
-
-const counts = metrics.map((m) => ({ ...m, resource: countCall(m.doctype) }))
-
-function openModule(mod) {
-  if (mod.doctype) {
-    router.push({ name: 'DoctypeList', params: { doctype: mod.doctype } })
-  }
+function abrirAcceso(a) {
+  router.push({ name: 'DoctypeList', params: { doctype: a.doctype } })
 }
 </script>
 
 <template>
   <ScrollArea class="min-h-0 flex-1">
     <div class="mx-auto max-w-5xl px-5 py-6 sm:px-8">
-      <!-- Hero -->
+      <!-- Encabezado -->
+      <div class="mb-5">
+        <div class="text-xs font-semibold uppercase tracking-wide text-upeu-navy opacity-75">
+          Universidad Peruana Unión · Dirección de Gestión de la Calidad
+        </div>
+        <h1 class="mt-1 font-display text-3xl font-bold tracking-tight text-upeu-navy">Inicio</h1>
+      </div>
+
+      <!-- Autoevaluación activa -->
       <section
-        class="mb-6 flex flex-wrap items-stretch gap-6 rounded-xl border border-outline-gray-1 bg-gradient-to-b from-upeu-navy-050 to-surface-gray-1 p-7"
+        v-if="autoeval"
+        class="mb-6 overflow-hidden rounded-xl border border-outline-gray-1 bg-gradient-to-b from-upeu-navy-050 to-surface-base"
       >
-        <div class="min-w-[280px] flex-1">
-          <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-upeu-navy opacity-75">
-            Universidad Peruana Unión · Dirección de Gestión de la Calidad
-          </div>
-          <h1 class="mb-3 font-display text-3xl font-bold tracking-tight text-upeu-navy">Índice del sistema</h1>
-          <p class="mb-4 max-w-[64ch] text-p-base text-ink-gray-7">
-            Mapa completo del Sistema de Gestión de la Calidad — los 18 módulos organizados en 4
-            bloques, con su estado real. Todo lo que ya funciona y lo que falta, en un solo lugar.
-          </p>
-          <div class="flex flex-wrap gap-2">
-            <span
-              v-for="chip in ['3 sedes', '22 programas', 'CONEAU · SUNEDU · ISO 21001']"
-              :key="chip"
-              class="rounded-full border border-outline-gray-2 bg-surface-base px-3 py-1 text-xs font-medium text-upeu-navy"
-            >
-              {{ chip }}
-            </span>
-          </div>
-        </div>
-        <div class="min-w-[220px] flex-none rounded-lg border border-outline-gray-1 bg-surface-base p-4">
-          <div class="mb-3 text-xs font-semibold uppercase tracking-wide text-upeu-navy">Estado</div>
-          <div v-for="(label, key) in STATUS_LABEL" :key="key" class="mb-2 flex items-center gap-2 text-sm text-ink-gray-6">
-            <span class="size-2.5 shrink-0 rounded-full" :class="statusTheme[key].dot" />
-            {{ label }}
-          </div>
-        </div>
-      </section>
+        <div class="flex flex-wrap items-start gap-4 p-5 sm:p-6">
+          <div class="min-w-[240px] flex-1">
+            <div class="mb-1 text-xs font-semibold uppercase tracking-wide text-upeu-navy opacity-75">
+              Autoevaluación en curso
+            </div>
+            <h2 class="font-display text-xl font-bold text-upeu-navy">{{ autoeval.titulo || autoeval.name }}</h2>
+            <div class="mt-1 text-p-sm text-ink-gray-6">
+              Marco: {{ autoeval.marco_normativo }} · Estado: {{ autoeval.estado }}
+              <span v-if="autoeval.resultado_vigencia"> · {{ autoeval.resultado_vigencia }}</span>
+            </div>
 
-      <!-- Métricas -->
-      <section class="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <div
-          v-for="m in counts"
-          :key="m.doctype"
-          class="rounded-lg border border-outline-gray-1 bg-surface-base p-4"
-        >
-          <div class="text-2xl font-bold text-upeu-navy">
-            <span v-if="m.resource.loading">···</span>
-            <span v-else>{{ m.resource.data ?? 0 }}</span>
+            <!-- Barra de avance -->
+            <div class="mt-4">
+              <div class="mb-1 flex items-baseline justify-between">
+                <span class="text-p-sm font-medium text-ink-gray-7">Avance de valoración</span>
+                <span class="font-display text-lg font-bold text-upeu-navy">{{ avance }}%</span>
+              </div>
+              <div class="h-2 w-full overflow-hidden rounded-full bg-surface-gray-3">
+                <div
+                  class="h-full rounded-full bg-upeu-navy transition-[width] duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
+                  :style="{ width: avance + '%' }"
+                />
+              </div>
+              <div class="mt-1.5 text-p-xs text-ink-gray-5">
+                {{ autoeval.criterios_valorados }} de {{ autoeval.criterios_total }} criterios valorados
+                <template v-if="autoeval.criterios_pendientes">
+                  · <b class="text-ink-amber-6">{{ autoeval.criterios_pendientes }} sin valorar</b>
+                </template>
+              </div>
+            </div>
           </div>
-          <div class="mt-1 text-p-xs text-ink-gray-6">{{ m.label }}</div>
-        </div>
-      </section>
 
-      <!-- Bloques de módulos -->
-      <section v-for="block in BLOCKS" :key="block.letter" class="mb-8">
-        <div class="mb-3 flex items-center gap-3 border-b border-outline-gray-1 pb-2.5">
-          <div class="flex size-7 items-center justify-center rounded-md bg-upeu-navy font-display text-sm font-bold text-white">
-            {{ block.letter }}
-          </div>
-          <div class="text-lg font-semibold text-ink-gray-9">{{ block.name }}</div>
-          <div class="ml-auto text-xs text-ink-gray-5">{{ block.modules.length }} módulos</div>
-        </div>
-        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <div
-            v-for="mod in block.modules"
-            :key="mod.code"
-            class="flex cursor-pointer flex-col rounded-lg border border-outline-gray-1 bg-surface-base p-4 transition-[transform,box-shadow,border-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-0.5 hover:border-upeu-navy/25 hover:shadow-md active:scale-[0.99]"
-            @click="openModule(mod)"
+          <button
+            class="flex items-center gap-2 rounded-lg bg-upeu-navy px-4 py-2 text-sm font-semibold text-white shadow-sm transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-upeu-navy-700 active:scale-[0.97]"
+            @click="irA('Autoevaluacion')"
           >
-            <div class="mb-1 flex items-center gap-2">
-              <span class="rounded bg-surface-gray-2 px-1.5 py-0.5 font-mono text-xs font-semibold text-ink-gray-6">
-                {{ mod.code }}
-              </span>
-              <span
-                class="ml-auto rounded-full px-2.5 py-0.5 text-xs font-semibold"
-                :class="statusTheme[mod.status].badge"
-              >
-                {{ STATUS_LABEL[mod.status] }}
-              </span>
-            </div>
-            <h3 class="mb-1.5 text-base font-semibold text-ink-gray-9">{{ mod.title }}</h3>
-            <p class="mb-3 text-p-sm text-ink-gray-6">{{ mod.desc }}</p>
-            <div class="mt-auto flex flex-wrap gap-1.5">
-              <span
-                v-for="tag in mod.tags"
-                :key="tag"
-                class="rounded border border-outline-gray-1 bg-surface-gray-1 px-2 py-0.5 text-xs text-ink-gray-7"
-              >
-                {{ tag }}
-              </span>
-            </div>
-          </div>
+            Continuar
+            <span class="lucide-arrow-right size-4" aria-hidden="true" />
+          </button>
         </div>
       </section>
 
-      <p class="rounded-lg border border-outline-gray-1 bg-surface-gray-1 p-4 text-p-xs text-ink-gray-6">
-        <b class="text-ink-gray-8">Este es el inicio del sistema.</b>
-        El menú de la izquierda te lleva a cada área; las migas de pan (arriba) indican dónde estás.
+      <!-- Requiere atención -->
+      <section class="mb-8">
+        <div class="mb-3 flex items-center gap-2">
+          <h2 class="text-lg font-semibold text-ink-gray-9">Requiere atención</h2>
+          <span
+            v-if="!panel.loading"
+            class="rounded-full px-2 py-0.5 text-xs font-semibold"
+            :class="totalAtencion ? 'bg-surface-amber-2 text-ink-amber-7' : 'bg-surface-green-2 text-ink-green-6'"
+          >
+            {{ totalAtencion ? `${totalAtencion} pendientes` : 'Todo al día' }}
+          </span>
+        </div>
+
+        <div v-if="panel.loading" class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <div v-for="i in 6" :key="i" class="h-24 animate-pulse rounded-lg border border-outline-gray-1 bg-surface-gray-1" />
+        </div>
+
+        <div v-else class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <button
+            v-for="p in pendientes"
+            :key="p.clave"
+            class="group flex flex-col items-start rounded-lg border p-4 text-left transition-[transform,box-shadow,border-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-0.5 hover:shadow-md active:scale-[0.99]"
+            :class="tono(p).card"
+            @click="irA(p.doctype)"
+          >
+            <div class="flex w-full items-center justify-between">
+              <span class="font-display text-3xl font-bold" :class="tono(p).num">{{ p.valor }}</span>
+              <span
+                v-if="tono(p).al_dia"
+                class="lucide-check size-4 text-ink-green-6"
+                aria-hidden="true"
+              />
+            </div>
+            <span class="mt-1.5 text-p-sm font-medium text-ink-gray-7">{{ p.label }}</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Accesos rápidos -->
+      <section class="mb-8">
+        <h2 class="mb-3 text-lg font-semibold text-ink-gray-9">Accesos rápidos</h2>
+        <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <button
+            v-for="a in accesos"
+            :key="a.label"
+            class="group flex flex-col items-center gap-2 rounded-lg border border-outline-gray-1 bg-surface-base p-4 text-center transition-[transform,box-shadow,border-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-0.5 hover:border-upeu-navy/25 hover:shadow-md active:scale-[0.98]"
+            @click="abrirAcceso(a)"
+          >
+            <span
+              class="flex size-10 items-center justify-center rounded-full bg-upeu-navy-050 text-upeu-navy transition-colors group-hover:bg-upeu-navy group-hover:text-white"
+            >
+              <span :class="a.icon" class="size-5" aria-hidden="true" />
+            </span>
+            <span class="text-p-sm font-medium text-ink-gray-8">{{ a.label }}</span>
+          </button>
+        </div>
+      </section>
+
+      <p class="text-p-xs text-ink-gray-5">
+        El menú de la izquierda te lleva a cada área del sistema; las migas de pan (arriba) indican dónde estás.
       </p>
     </div>
   </ScrollArea>
