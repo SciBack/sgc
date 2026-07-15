@@ -131,7 +131,7 @@ def _evidencias_de_elementos(elementos):
             continue
         meta = frappe.db.get_value(
             "Evidencia", ev,
-            ["codigo", "titulo", "estado", "documento_controlado", "almacenamiento_uri"],
+            ["codigo", "titulo", "estado", "documento_controlado", "archivo", "almacenamiento_uri"],
             as_dict=True,
         ) or {}
         doc_sgc = ""
@@ -147,7 +147,8 @@ def _evidencias_de_elementos(elementos):
             "estado": meta.get("estado") or "",
             "doc_sgc": doc_sgc,
             "version": version,
-            "uri": meta.get("almacenamiento_uri") or "",
+            # El archivo real (M09) tiene prioridad; el URI de MinIO es legado.
+            "uri": meta.get("archivo") or meta.get("almacenamiento_uri") or "",
             "vinculo": tz.get("tipo_vinculo") or "",
         }
     # Orden estable por código de evidencia

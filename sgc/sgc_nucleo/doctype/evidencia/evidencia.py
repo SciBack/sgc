@@ -5,13 +5,18 @@
 
 Una evidencia es un archivo (o enlace) verificable que respalda el cumplimiento
 de uno o más elementos del marco normativo (criterios, estándares, condiciones
-CBC) y/o procesos del Mapa. La relación evidencia<->elemento es N:M, como exigen
-los modelos SINEACE; la vinculación simultánea a proceso + CBC + estándar es
-RNF09 del requerimiento.
+CBC) y/o procesos del Mapa.
+
+El vínculo evidencia<->elemento/proceso es N:M y se modela con el DocType
+`Trazabilidad` (evidencia + elemento_marco/proceso + tipo_vinculo + origen), que
+es el mecanismo canónico que ya consume el Informe de Autoevaluación (informe.py).
+Desde la ficha de Evidencia se ven/crean sus Trazabilidad vía la sección
+Connections (bloque `links` del DocType). RNF09 (vincular a la vez a proceso +
+CBC + estándar) se cubre con varias Trazabilidad sobre la misma evidencia.
 
 El controlador: autocompleta los metadatos técnicos desde el archivo adjunto,
-exige trazabilidad para dar una evidencia por válida, y marca como Vencida la
-evidencia cuya vigencia expiró.
+exige al menos una traza para dar una evidencia por válida, y marca como Vencida
+la evidencia cuya vigencia expiró.
 """
 
 import frappe
@@ -86,14 +91,18 @@ class Evidencia(Document):
 
 		La norma exige que la evidencia sea verificable y trazable al elemento que
 		respalda; una evidencia válida "colgando de nada" no sirve para auditoría.
+		El vínculo vive en Trazabilidad, que apunta a esta evidencia — por eso se
+		crea DESPUÉS de guardar la evidencia (primero Pendiente, se vincula, y
+		recién entonces se puede marcar Válida).
 		"""
-		if self.estado != "Valida":
+		if self.estado != "Valida" or self.is_new():
 			return
 
-		if not self.elementos_marco and not self.procesos:
+		if not frappe.db.exists("Trazabilidad", {"evidencia": self.name}):
 			frappe.throw(
-				_("Para marcar la evidencia como Válida, vincúlela al menos a un "
-				  "elemento del marco (criterio / estándar / CBC) o a un proceso."),
+				_("Para marcar la evidencia como Válida, cree al menos una "
+				  "Trazabilidad que la vincule a un elemento del marco "
+				  "(criterio / estándar / CBC) o a un proceso."),
 				title=_("Falta trazabilidad"),
 			)
 
@@ -102,14 +111,15 @@ class Evidencia(Document):
 def evidencias_de_elemento(elemento_marco: str):
 	"""Evidencias que respaldan un elemento del marco (criterio/estándar/CBC).
 
-	Consulta inversa del vínculo N:M — la que usa la ficha de un criterio para
-	mostrar "¿qué evidencias lo sustentan?".
+	Consulta inversa del vínculo N:M (vía Trazabilidad) — la que usa la ficha de un
+	criterio para mostrar "¿qué evidencias lo sustentan?".
 	"""
 	nombres = frappe.get_all(
-		"Evidencia Elemento",
-		filters={"elemento_marco": elemento_marco, "parenttype": "Evidencia"},
-		pluck="parent",
+		"Trazabilidad",
+		filters={"elemento_marco": elemento_marco},
+		pluck="evidencia",
 	)
+	nombres = list({n for n in nombres if n})
 	if not nombres:
 		return []
 

@@ -13,10 +13,6 @@
   "tipo",
   "archivo",
   "enlace_url",
-  "sec_vinculos",
-  "elementos_marco",
-  "col_vinculos",
-  "procesos",
   "sec_clasificacion",
   "documento_controlado",
   "programa_sede",
@@ -80,29 +76,6 @@
    "fieldtype": "Data",
    "label": "Enlace (URL)",
    "options": "URL"
-  },
-  {
-   "fieldname": "sec_vinculos",
-   "fieldtype": "Section Break",
-   "label": "Trazabilidad (RNF09)"
-  },
-  {
-   "description": "Est\u00e1ndares, criterios, indicadores o condiciones (CBC) que esta evidencia respalda.",
-   "fieldname": "elementos_marco",
-   "fieldtype": "Table MultiSelect",
-   "label": "Elementos del marco (criterio / est\u00e1ndar / CBC)",
-   "options": "Evidencia Elemento"
-  },
-  {
-   "fieldname": "col_vinculos",
-   "fieldtype": "Column Break"
-  },
-  {
-   "description": "Procesos del Mapa que esta evidencia sustenta.",
-   "fieldname": "procesos",
-   "fieldtype": "Table MultiSelect",
-   "label": "Procesos",
-   "options": "Evidencia Proceso"
   },
   {
    "fieldname": "sec_clasificacion",
@@ -225,8 +198,14 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-07-04 17:29:32.027113",
+ "links": [
+  {
+   "group": "Trazabilidad",
+   "link_doctype": "Trazabilidad",
+   "link_fieldname": "evidencia"
+  }
+ ],
+ "modified": "2026-07-14 23:59:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "Evidencia",
