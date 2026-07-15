@@ -13,6 +13,12 @@
   "autoevaluacion",
   "obligacion_ente",
   "estado",
+  "sec_diagnostico",
+  "semaforo",
+  "n_cumple",
+  "col_diag",
+  "n_parcial",
+  "n_no_cumple",
   "condiciones",
   "riesgos_detectados",
   "resumen",
@@ -65,6 +71,43 @@
    "options": "Borrador\nEn revisi\u00f3n\nAprobado\nPresentado a SUNEDU"
   },
   {
+   "fieldname": "sec_diagnostico",
+   "fieldtype": "Section Break",
+   "label": "Diagnóstico"
+  },
+  {
+   "description": "Rojo: alguna CBC No cumple. Ámbar: alguna Cumple parcial. Verde: todas cumplen.",
+   "fieldname": "semaforo",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Semáforo",
+   "options": "\nVerde\nÁmbar\nRojo",
+   "read_only": 1
+  },
+  {
+   "fieldname": "n_cumple",
+   "fieldtype": "Int",
+   "label": "Cumple",
+   "read_only": 1
+  },
+  {
+   "fieldname": "col_diag",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "n_parcial",
+   "fieldtype": "Int",
+   "label": "Cumple parcial",
+   "read_only": 1
+  },
+  {
+   "fieldname": "n_no_cumple",
+   "fieldtype": "Int",
+   "label": "No cumple",
+   "read_only": 1
+  },
+  {
+   "description": "Se autocompletan las 8 CBC del marco al guardar si está vacío.",
    "fieldname": "condiciones",
    "fieldtype": "Table",
    "label": "Condiciones (CBC)",
