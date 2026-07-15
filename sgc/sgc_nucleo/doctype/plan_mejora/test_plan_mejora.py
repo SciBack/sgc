@@ -19,12 +19,21 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, getdate, nowdate
 
+from sgc.tests import factories
+
 # Contador para códigos únicos dentro de la transacción de cada test.
 _seq = itertools.count(1)
 
 
 class IntegrationTestPlanMejora(IntegrationTestCase):
     """Integration tests para PlanMejora + AccionMejora (rollup M11)."""
+
+    def setUp(self):
+        # Plan Mejora y Accion Mejora tienen Workflow activo en producción (f4);
+        # estos tests setean el `estado` directamente para ejercitar el rollup,
+        # así que se desactiva el workflow para el caso (se reactiva por rollback).
+        factories.desactivar_workflow("Plan Mejora")
+        factories.desactivar_workflow("Accion Mejora")
 
     # ------------------------------------------------------------------
     # Helpers de construcción

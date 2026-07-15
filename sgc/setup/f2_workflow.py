@@ -25,7 +25,7 @@ Ejecutar (lo hace el orquestador, NO este agente):
 import frappe
 
 # Roles usados en las transiciones. System Manager ya existe en Frappe core.
-ROLES = ["Responsable de Programa", "DPGC"]
+ROLES = ["Responsable de Calidad de Programa", "DPGC"]
 
 # --- Workflow 1: Autoevaluacion (estados = Select real de Autoevaluacion.estado) ---
 WF_AUTOEVAL = {
@@ -36,16 +36,16 @@ WF_AUTOEVAL = {
     "send_email_alert": 0,
     # state, doc_status, allow_edit (rol que puede editar el doc en ese estado)
     "states": [
-        ("Planificada", "0", "Responsable de Programa"),
-        ("En curso", "0", "Responsable de Programa"),
+        ("Planificada", "0", "Responsable de Calidad de Programa"),
+        ("En curso", "0", "Responsable de Calidad de Programa"),
         ("En revision", "0", "DPGC"),
         ("Consolidada", "0", "DPGC"),
         ("Cerrada", "0", "DPGC"),
     ],
     # state (desde), action (boton), next_state (hacia), allowed (rol)
     "transitions": [
-        ("Planificada", "Iniciar evaluacion", "En curso", "Responsable de Programa"),
-        ("En curso", "Enviar a revision", "En revision", "Responsable de Programa"),
+        ("Planificada", "Iniciar evaluacion", "En curso", "Responsable de Calidad de Programa"),
+        ("En curso", "Enviar a revision", "En revision", "Responsable de Calidad de Programa"),
         ("En revision", "Devolver a evaluacion", "En curso", "DPGC"),
         ("En revision", "Consolidar", "Consolidada", "DPGC"),
         ("Consolidada", "Cerrar", "Cerrada", "DPGC"),
@@ -60,17 +60,17 @@ WF_NC = {
     "is_active": 1,
     "send_email_alert": 0,
     "states": [
-        ("Abierta", "0", "Responsable de Programa"),
-        ("En analisis", "0", "Responsable de Programa"),
-        ("En tratamiento", "0", "Responsable de Programa"),
+        ("Abierta", "0", "Responsable de Calidad de Programa"),
+        ("En analisis", "0", "Responsable de Calidad de Programa"),
+        ("En tratamiento", "0", "Responsable de Calidad de Programa"),
         ("En verificacion", "0", "DPGC"),
         ("Cerrada eficaz", "0", "DPGC"),
         ("Cerrada no eficaz", "0", "DPGC"),
     ],
     "transitions": [
-        ("Abierta", "Analizar causa", "En analisis", "Responsable de Programa"),
-        ("En analisis", "Tratar", "En tratamiento", "Responsable de Programa"),
-        ("En tratamiento", "Enviar a verificacion", "En verificacion", "Responsable de Programa"),
+        ("Abierta", "Analizar causa", "En analisis", "Responsable de Calidad de Programa"),
+        ("En analisis", "Tratar", "En tratamiento", "Responsable de Calidad de Programa"),
+        ("En tratamiento", "Enviar a verificacion", "En verificacion", "Responsable de Calidad de Programa"),
         ("En verificacion", "Cerrar eficaz", "Cerrada eficaz", "DPGC"),
         ("En verificacion", "Cerrar no eficaz", "Cerrada no eficaz", "DPGC"),
         ("En verificacion", "Reabrir tratamiento", "En tratamiento", "DPGC"),

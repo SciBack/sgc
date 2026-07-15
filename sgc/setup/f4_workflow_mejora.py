@@ -16,7 +16,7 @@ import frappe
 
 from sgc.setup.f2_workflow import _ensure_role, _upsert_workflow
 
-ROLES = ["Responsable de Programa", "DPGC"]
+ROLES = ["Responsable de Calidad de Programa", "DPGC"]
 
 WF_PLAN = {
     "name": "Plan de Mejora SGC",
@@ -25,8 +25,8 @@ WF_PLAN = {
     "is_active": 1,
     "send_email_alert": 0,
     "states": [
-        ("Borrador", "0", "Responsable de Programa"),
-        ("En ejecucion", "0", "Responsable de Programa"),
+        ("Borrador", "0", "Responsable de Calidad de Programa"),
+        ("En ejecucion", "0", "Responsable de Calidad de Programa"),
         ("Cerrado", "0", "DPGC"),
     ],
     "transitions": [
@@ -43,15 +43,15 @@ WF_ACCION = {
     "is_active": 1,
     "send_email_alert": 0,
     "states": [
-        ("Planificada", "0", "Responsable de Programa"),
-        ("En ejecucion", "0", "Responsable de Programa"),
-        ("Ejecutada", "0", "Responsable de Programa"),
+        ("Planificada", "0", "Responsable de Calidad de Programa"),
+        ("En ejecucion", "0", "Responsable de Calidad de Programa"),
+        ("Ejecutada", "0", "Responsable de Calidad de Programa"),
         ("Verificada eficaz", "0", "DPGC"),
         ("Verificada no eficaz", "0", "DPGC"),
     ],
     "transitions": [
-        ("Planificada", "Iniciar", "En ejecucion", "Responsable de Programa"),
-        ("En ejecucion", "Marcar ejecutada", "Ejecutada", "Responsable de Programa"),
+        ("Planificada", "Iniciar", "En ejecucion", "Responsable de Calidad de Programa"),
+        ("En ejecucion", "Marcar ejecutada", "Ejecutada", "Responsable de Calidad de Programa"),
         ("Ejecutada", "Verificar eficaz", "Verificada eficaz", "DPGC"),
         ("Ejecutada", "Verificar no eficaz", "Verificada no eficaz", "DPGC"),
         ("Verificada no eficaz", "Reabrir", "En ejecucion", "DPGC"),

@@ -38,6 +38,11 @@ class IntegrationTestWww(IntegrationTestCase):
         # corren como Administrator (que además tiene System Manager).
         frappe.set_user("Administrator")
 
+        # mejora.get_context siembra Plan/Accion Mejora con estados no iniciales;
+        # ambos tienen Workflow activo en prod, así que se desactiva para el caso.
+        factories.desactivar_workflow("Plan Mejora")
+        factories.desactivar_workflow("Accion Mejora")
+
         # Árbol base: 3 estándares × 3 criterios + escala NL/L/LP.
         self.arbol = factories.crear_marco_prueba(n_estandares=3, n_criterios=3)
         self.marco = self.arbol["marco"]
