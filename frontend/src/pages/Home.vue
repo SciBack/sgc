@@ -1,9 +1,18 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { ScrollArea, useCall } from 'frappe-ui'
 import { useRouter } from 'vue-router'
+import { GUIAS_ROL } from '@/data/guias-rol'
 
 const router = useRouter()
+
+// Guía rápida por rol (mini-manual en contexto). Empieza contraída para no
+// estorbar a quien ya conoce el sistema; una persona nueva la despliega y elige
+// su puesto.
+const guiaAbierta = ref(false)
+const guiaSel = ref(0)
+const guia = computed(() => GUIAS_ROL[guiaSel.value])
+const MANUAL_URL = 'https://sciback.github.io/sgc/manual-uso/primeros-pasos/'
 
 // Payload operativo del backend (sgc.home_dashboard.resumen_inicio): pendientes
 // reales + estado de la autoevaluación activa.
@@ -59,6 +68,65 @@ function abrirAcceso(a) {
         </div>
         <h1 class="mt-1 font-display text-3xl font-bold tracking-tight text-upeu-navy">Inicio</h1>
       </div>
+
+      <!-- Guía rápida por rol (mini-manual en contexto) -->
+      <section class="mb-6 overflow-hidden rounded-xl border border-outline-gray-1 bg-surface-base">
+        <button
+          class="flex w-full items-center gap-3 px-5 py-3.5 text-left transition-colors duration-150 hover:bg-surface-gray-1"
+          @click="guiaAbierta = !guiaAbierta"
+        >
+          <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-upeu-navy-050 text-upeu-navy">
+            <span class="lucide-compass size-4" aria-hidden="true" />
+          </span>
+          <span class="flex-1">
+            <span class="block text-p-base font-semibold text-ink-gray-9">¿No sabes por dónde empezar?</span>
+            <span class="block text-p-xs text-ink-gray-5">Guía rápida según tu rol — qué hacer, paso a paso.</span>
+          </span>
+          <span
+            class="lucide-chevron-down size-5 text-ink-gray-5 transition-transform duration-200 ease-[cubic-bezier(0.23,1,0.32,1)]"
+            :class="guiaAbierta && 'rotate-180'"
+            aria-hidden="true"
+          />
+        </button>
+
+        <div v-if="guiaAbierta" class="border-t border-outline-gray-1 px-5 py-4">
+          <div class="mb-4 flex flex-wrap gap-2">
+            <button
+              v-for="(g, i) in GUIAS_ROL"
+              :key="g.rol"
+              class="rounded-full border px-3 py-1 text-p-sm font-medium transition-colors duration-150"
+              :class="i === guiaSel ? 'border-upeu-navy bg-upeu-navy text-white' : 'border-outline-gray-2 text-ink-gray-6 hover:border-upeu-navy/40'"
+              @click="guiaSel = i"
+            >
+              {{ g.corto }}
+            </button>
+          </div>
+
+          <p class="mb-3 text-p-sm text-ink-gray-7">
+            <b class="text-ink-gray-9">{{ guia.rol }}.</b> {{ guia.resumen }}
+          </p>
+          <ol class="space-y-2">
+            <li v-for="(paso, i) in guia.pasos" :key="i" class="flex gap-2.5 text-p-sm text-ink-gray-7">
+              <span class="flex size-5 shrink-0 items-center justify-center rounded-full bg-upeu-navy-050 text-xs font-bold text-upeu-navy">
+                {{ i + 1 }}
+              </span>
+              <span>{{ paso }}</span>
+            </li>
+          </ol>
+          <p class="mt-3 rounded-lg bg-surface-gray-1 px-3 py-2 text-p-xs text-ink-gray-6">
+            <span class="lucide-flag size-3.5 mr-1 inline align-text-bottom" aria-hidden="true" />{{ guia.fin }}
+          </p>
+          <a
+            :href="MANUAL_URL"
+            target="_blank"
+            rel="noopener"
+            class="mt-3 inline-flex items-center gap-1 text-p-sm font-medium text-upeu-navy hover:opacity-70"
+          >
+            Ver la guía completa
+            <span class="lucide-external-link size-3.5" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
 
       <!-- Autoevaluaciones (multi-programa: 1..22 de la UPeU) -->
       <section class="mb-8">
