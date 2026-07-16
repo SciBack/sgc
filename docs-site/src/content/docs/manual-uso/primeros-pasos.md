@@ -1,6 +1,8 @@
 ---
 title: Primeros pasos — ¿por dónde empiezo?
 description: Guía de inicio según tu rol — tu punto de partida, qué haces paso a paso y dónde termina tu parte en el sistema.
+sidebar:
+  order: 1
 ---
 
 Lo primero que ves al entrar es la pantalla de **Inicio**. Lo que hagas a partir de ahí

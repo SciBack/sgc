@@ -1,6 +1,8 @@
 ---
 title: Flujos de tarea por perfil
 description: Qué hace cada rol del SGC, paso a paso — quién ejecuta, quién revisa y quién aprueba en cada flujo.
+sidebar:
+  order: 2
 ---
 
 El SGC separa dos responsabilidades a propósito: **el programa ejecuta** (valora, trata,
