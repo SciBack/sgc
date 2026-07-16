@@ -6,10 +6,9 @@ import { GUIAS_ROL } from '@/data/guias-rol'
 
 const router = useRouter()
 
-// Guía rápida por rol (mini-manual en contexto). Empieza contraída para no
-// estorbar a quien ya conoce el sistema; una persona nueva la despliega y elige
-// su puesto.
-const guiaAbierta = ref(false)
+// Guía rápida por rol (mini-manual en contexto). Empieza ABIERTA para que una
+// persona nueva la vea al entrar; se puede contraer con un clic.
+const guiaAbierta = ref(true)
 const guiaSel = ref(0)
 const guia = computed(() => GUIAS_ROL[guiaSel.value])
 const MANUAL_URL = 'https://sciback.github.io/sgc/manual-uso/primeros-pasos/'
