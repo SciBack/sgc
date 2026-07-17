@@ -26,6 +26,11 @@ const routes = [
         props: true,
       },
       {
+        path: 'ejecutivo',
+        name: 'TableroEjecutivo',
+        component: () => import('./pages/TableroEjecutivo.vue'),
+      },
+      {
         path: 'tablero',
         name: 'Tablero',
         component: () => import('./pages/Tablero.vue'),

@@ -39,6 +39,8 @@ const breadcrumbs = computed(() => {
     items.push({ label: route.params.name })
   } else if (route.name === 'Tablero') {
     items.push({ label: 'Tablero de indicadores' })
+  } else if (route.name === 'TableroEjecutivo') {
+    items.push({ label: 'Tablero ejecutivo' })
   } else if (route.name === 'AutoevaluacionDetalle') {
     items.push({ label: 'Acreditación' })
     items.push({ label: 'Autoevaluación', route: { name: 'DoctypeList', params: { doctype: 'Autoevaluacion' } } })
@@ -105,6 +107,12 @@ const initials = computed(() =>
                   <span class="lucide-layout-dashboard size-4" aria-hidden="true" />
                 </template>
                 <span class="flex-1 truncate text-sm">Inicio</span>
+              </SidebarItem>
+              <SidebarItem :to="{ name: 'TableroEjecutivo' }">
+                <template #prefix>
+                  <span class="lucide-gauge size-4" aria-hidden="true" />
+                </template>
+                <span class="flex-1 truncate text-sm">Tablero ejecutivo</span>
               </SidebarItem>
               <SidebarItem :to="{ name: 'Tablero' }">
                 <template #prefix>
