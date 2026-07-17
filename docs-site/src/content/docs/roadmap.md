@@ -34,7 +34,7 @@ registro; lo que falta es la lógica que lo automatiza.
 | **M03** Control documental | ✅ Operativo | Código SGC automático, versiones, flujo de tres firmas, historial de cambios y export de la Lista Maestra a Excel. |
 | **M04** Procesos e indicadores de proceso | 🟡 Parcial | Los indicadores operan; las fichas de proceso esperan la carga del mapa de procesos institucional (es un dato, no código). |
 | **M05** No conformidades | ✅ Operativo | Registro con validaciones incrementales por etapa y flujo hasta el cierre. |
-| **M06** Auditorías internas | 🔴 Pendiente | Modelo de datos completo (programa, ejecución, hallazgos, informe); falta la lógica y el flujo. |
+| **M06** Auditorías internas | ✅ Operativo | Programa anual, ejecución de auditorías (equipo, criterios), hallazgos con escalamiento a No Conformidad e informe consolidado, con workflow. |
 
 ## Bloque C — Acreditación
 
@@ -45,7 +45,7 @@ registro; lo que falta es la lógica que lo automatiza.
 | **M09** Evidencias de acreditación | ✅ Operativo | Carga de archivo o enlace, vigencia y trazabilidad N:M contra criterios y procesos. |
 | **M10** Indicadores de acreditación | ✅ Operativo | Catálogo de indicadores con fichas y tablero. |
 | **M11** Planes de mejora | ✅ Operativo | Planes y acciones con flujo, avance acumulado y semáforo por vencimiento. |
-| **M12** Encuestas a grupos de interés | 🔴 Pendiente | Modelo de datos (instrumento, aplicación, resultados); falta la lógica. |
+| **M12** Encuestas a grupos de interés | ✅ Operativo | Instrumentos aplicados a grupos de interés por periodo, con tabulación y agregación de resultados y workflow de campo. |
 | **M13** Tablero ejecutivo | ✅ Operativo | Vista institucional: cobertura de autoevaluación, distribución de estándares por nivel, semáforo de CBC, riesgos abiertos y avance por programa. |
 | **M14** Acreditación internacional | 🔴 Pendiente | Fase posterior. |
 | **M15** Reportería BI | 🔴 Pendiente | Fase posterior. |
@@ -60,7 +60,7 @@ registro; lo que falta es la lógica que lo automatiza.
 
 ## Resumen
 
-**8 operativos** · **5 parciales** · **5 pendientes**.
+**10 operativos** · **5 parciales** · **3 pendientes**.
 
 El núcleo de un ciclo de acreditación completo — **M01 + M03 + M08 + M09**, con **M11** para la
 mejora — está operativo: permite llevar un programa desde el marco normativo hasta el informe de
