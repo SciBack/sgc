@@ -46,7 +46,7 @@ registro; lo que falta es la lógica que lo automatiza.
 | **M10** Indicadores de acreditación | ✅ Operativo | Catálogo de indicadores con fichas y tablero. |
 | **M11** Planes de mejora | ✅ Operativo | Planes y acciones con flujo, avance acumulado y semáforo por vencimiento. |
 | **M12** Encuestas a grupos de interés | 🔴 Pendiente | Modelo de datos (instrumento, aplicación, resultados); falta la lógica. |
-| **M13** Tablero ejecutivo | 🔴 Pendiente | Existe el tablero de indicadores; falta la vista ejecutiva de acreditación. |
+| **M13** Tablero ejecutivo | ✅ Operativo | Vista institucional: cobertura de autoevaluación, distribución de estándares por nivel, semáforo de CBC, riesgos abiertos y avance por programa. |
 | **M14** Acreditación internacional | 🔴 Pendiente | Fase posterior. |
 | **M15** Reportería BI | 🔴 Pendiente | Fase posterior. |
 
@@ -60,7 +60,7 @@ registro; lo que falta es la lógica que lo automatiza.
 
 ## Resumen
 
-**7 operativos** · **5 parciales** · **6 pendientes**.
+**8 operativos** · **5 parciales** · **5 pendientes**.
 
 El núcleo de un ciclo de acreditación completo — **M01 + M03 + M08 + M09**, con **M11** para la
 mejora — está operativo: permite llevar un programa desde el marco normativo hasta el informe de
