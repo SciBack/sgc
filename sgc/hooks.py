@@ -131,14 +131,28 @@ website_route_rules = [
 # Permissions
 # -----------
 # Permissions evaluated in scripted ways
-
-# permission_query_conditions = {
-# 	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
-# }
 #
-# has_permission = {
-# 	"Event": "frappe.desk.doctype.event.event.has_permission",
-# }
+# M07 — Visibilidad por programa (opt-in, seguro). Ver sgc/permissions.py.
+# Acota SOLO a usuarios con User Permission sobre "Programa Sede" y sin rol
+# exento. Sin User Permission sembrada, el mecanismo queda INACTIVO (todos ven
+# todo). Solo se acotan DocTypes con derivación de programa NO ambigua.
+permission_query_conditions = {
+	"Autoevaluacion": "sgc.permissions.pqc_autoevaluacion",
+	"Hallazgo": "sgc.permissions.pqc_hallazgo",
+	"No Conformidad": "sgc.permissions.pqc_no_conformidad",
+	"Valoracion Criterio": "sgc.permissions.pqc_valoracion_criterio",
+	"Valoracion Estandar": "sgc.permissions.pqc_valoracion_estandar",
+	"Plan Mejora": "sgc.permissions.pqc_plan_mejora",
+}
+
+has_permission = {
+	"Autoevaluacion": "sgc.permissions.has_permission",
+	"Hallazgo": "sgc.permissions.has_permission",
+	"No Conformidad": "sgc.permissions.has_permission",
+	"Valoracion Criterio": "sgc.permissions.has_permission",
+	"Valoracion Estandar": "sgc.permissions.has_permission",
+	"Plan Mejora": "sgc.permissions.has_permission",
+}
 
 # Document Events
 # ---------------
