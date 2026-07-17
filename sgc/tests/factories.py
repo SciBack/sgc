@@ -388,6 +388,83 @@ def crear_trazabilidad(evidencia, elemento_marco=None, proceso=None,
     return _insert("Trazabilidad", vals)
 
 
+# ---------------------------------------------------------------------------
+# M12 — Encuestas a grupos de interés
+# ---------------------------------------------------------------------------
+def crear_grupo_interes(codigo=None, nombre=None, tipo="Beneficiario",
+                        prefijo=PREFIJO, **overrides):
+    """Grupo Interes (autoname field:codigo). Idempotente por código. Devuelve el doc."""
+    if not codigo:
+        codigo = f"{prefijo}-GI-{next(_seq)}"
+    vals = {
+        "nombre": nombre or f"Grupo de interés {codigo}",
+        "tipo": tipo,
+    }
+    vals.update(overrides)
+    return _ensure_named("Grupo Interes", codigo, vals)
+
+
+def crear_instrumento(codigo=None, nombre=None, tipo="Encuesta satisfacción",
+                      plataforma="Otra", grupo_interes=None, prefijo=PREFIJO,
+                      **overrides):
+    """Instrumento (autoname field:codigo). Idempotente por código. Devuelve el doc.
+
+    `plataforma` por defecto "Otra" para no exigir survey_id (LimeSurvey solo
+    emite un msgprint si falta, no bloquea, pero "Otra" mantiene los tests limpios).
+    `grupo_interes` puede ser un name o un doc Grupo Interes.
+    """
+    if not codigo:
+        codigo = f"{prefijo}-INS-{next(_seq)}"
+    if hasattr(grupo_interes, "name"):
+        grupo_interes = grupo_interes.name
+    vals = {
+        "nombre": nombre or f"Instrumento {codigo}",
+        "tipo": tipo,
+        "plataforma": plataforma,
+    }
+    if grupo_interes:
+        vals["grupo_interes"] = grupo_interes
+    vals.update(overrides)
+    return _ensure_named("Instrumento", codigo, vals)
+
+
+def crear_aplicacion_instrumento(instrumento=None, prefijo=PREFIJO, **overrides):
+    """Aplicacion Instrumento (autoname format:APL-{YYYY}-{#####}). Devuelve el doc.
+
+    Crea un Instrumento mínimo si no se pasa. `instrumento` puede ser name o doc.
+    NO fija estado != inicial ("Planificada") por defecto: el DocType tiene
+    Workflow y hacerlo dispararía WorkflowPermissionError salvo que el test lo
+    haya desactivado con `desactivar_workflow("Aplicacion Instrumento")`.
+    """
+    if instrumento is None:
+        instrumento = crear_instrumento(prefijo=prefijo).name
+    elif hasattr(instrumento, "name"):
+        instrumento = instrumento.name
+    vals = {"instrumento": instrumento}
+    vals.update(overrides)
+    return _insert("Aplicacion Instrumento", vals)
+
+
+def crear_resultado_instrumento(aplicacion, dimension=None, valor=None,
+                                unidad=None, n=None, prefijo=PREFIJO, **overrides):
+    """Resultado Instrumento (autoname format:RES-{YYYY}-{#####}). Devuelve el doc.
+
+    `aplicacion` puede ser un name o un doc Aplicacion Instrumento.
+    """
+    ap = aplicacion.name if hasattr(aplicacion, "name") else aplicacion
+    vals = {"aplicacion_instrumento": ap}
+    if dimension is not None:
+        vals["dimension"] = dimension
+    if valor is not None:
+        vals["valor"] = valor
+    if unidad is not None:
+        vals["unidad"] = unidad
+    if n is not None:
+        vals["n"] = n
+    vals.update(overrides)
+    return _insert("Resultado Instrumento", vals)
+
+
 def desactivar_workflow(document_type):
     """Desactiva (is_active=0) el Workflow de un DocType durante los tests.
 
