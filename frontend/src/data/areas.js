@@ -60,7 +60,15 @@ export const AREAS = [
       { label: 'Política Calidad', doctype: 'Politica Calidad' },
       { label: 'Objetivo Calidad', doctype: 'Objetivo Calidad' },
       { label: 'Reunión', doctype: 'Reunion' },
+    ],
+  },
+  {
+    label: 'Encuestas y grupos de interés',
+    icon: 'lucide-clipboard-list',
+    items: [
+      { label: 'Grupo de Interés', doctype: 'Grupo Interes' },
       { label: 'Instrumento', doctype: 'Instrumento' },
+      { label: 'Aplicación Instrumento', doctype: 'Aplicacion Instrumento' },
     ],
   },
   {
@@ -79,6 +87,7 @@ export const AREAS = [
     icon: 'lucide-clipboard-check',
     items: [
       { label: 'Programa Auditoría', doctype: 'Programa Auditoria' },
+      { label: 'Auditoría', doctype: 'Auditoria' },
       { label: 'Informe Auditoría', doctype: 'Informe Auditoria' },
       { label: 'Hallazgo Auditoría', doctype: 'Hallazgo Auditoria' },
       { label: 'Revisión Dirección', doctype: 'Revision Direccion' },

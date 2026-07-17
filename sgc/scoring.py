@@ -37,6 +37,24 @@ CON_DEBILIDAD = {"Cumple con debilidad", "Cumple parcial"}
 NIVELES_VALIDOS = {"NL", "L", "LP"}
 
 
+def _sin_valorar(cumple):
+    """True si el criterio NO tiene un juicio de cumplimiento real.
+
+    Un criterio está valorado solo cuando su `cumple` es un juicio de
+    cumplimiento: "Cumple", "Cumple parcial" o "No cumple". "No aplica" y el
+    vacío/None NO valoran: el criterio aún no aporta ni a la propuesta de nivel
+    del estándar ni al avance.
+
+    Es la ÚNICA definición de "sin valorar" del motor: la comparten
+    `proponer_nivel_estandar` (para dejar el estándar incompleto) y
+    `_calcular_avance_pct` (para no contarlo en el numerador). Antes cada una
+    tenía su propia regla y se contradecían: el avance contaba "No aplica" como
+    valorado y llegaba a 100 % mientras el nivel dejaba ese mismo estándar como
+    "incompleto" — justo el bug de "el porcentaje miente".
+    """
+    return cumple in (None, "", "No aplica")
+
+
 # ===========================================================================
 # Helpers de árbol
 # ===========================================================================
@@ -84,6 +102,35 @@ def _criterios_de_estandar(estandar_name):
     return [h.name for h in hijos if (h.tipo or "") == "Criterio"]
 
 
+def _criterios_valorables_del_marco(marco):
+    """Criterios VALORABLES del marco: Elemento Marco tipo="Criterio" con es_valorable=1.
+
+    Fuente ÚNICA de verdad del denominador del avance. EXCLUYE los estándares:
+    el marco CONEAU marca `es_valorable=1` tanto en los 10 estándares (depth 2)
+    como en los 53 criterios (depth 3), pero un estándar NO se valora con una
+    Valoracion Criterio sino con un NIVEL. Contar los estándares como si fueran
+    criterios (lo que hace `count(es_valorable=1)` = 63 en vez de 53) es lo que
+    descuadraba el avance con el conteo real de criterios.
+
+    Si el marco no denormalizó `es_valorable` en ningún criterio, cae a todos los
+    `tipo="Criterio"` del marco.
+    """
+    if not marco:
+        return []
+    crits = frappe.get_all(
+        "Elemento Marco",
+        filters={"marco_normativo": marco, "tipo": "Criterio", "es_valorable": 1},
+        pluck="name",
+    )
+    if crits:
+        return crits
+    return frappe.get_all(
+        "Elemento Marco",
+        filters={"marco_normativo": marco, "tipo": "Criterio"},
+        pluck="name",
+    )
+
+
 def _estandares_de_autoevaluacion(autoevaluacion):
     """Los 10 estándares (depth 2) del marco de la autoevaluación."""
     marco = _marco_de_autoevaluacion(autoevaluacion)
@@ -124,9 +171,6 @@ def proponer_nivel_estandar(autoevaluacion, estandar_name):
         propuesto = None
     else:
         juicios = [_valoracion_criterio(autoevaluacion, c) for c in criterios]
-
-        def _sin_valorar(v):
-            return v is None or v == "" or v == "No aplica"
 
         if any(_sin_valorar(v) for v in juicios):
             propuesto = None                                  # incompleto
@@ -219,8 +263,8 @@ def proponer_vigencia(autoevaluacion):
     else:
         vigencia = "Acreditado 3 anios"                       # todos L, o combo L/LP
 
-    # --- Avance (criterios valorados / total criterios del marco) ---
-    avance = _calcular_avance_pct(autoevaluacion, estandares)
+    # --- Avance (criterios valorados / total criterios valorables del marco) ---
+    avance = _calcular_avance_pct(autoevaluacion)
 
     frappe.db.set_value(
         "Autoevaluacion", autoevaluacion,
@@ -231,28 +275,38 @@ def proponer_vigencia(autoevaluacion):
 
 
 def _calcular_avance_pct(autoevaluacion, estandares=None):
-    """% de criterios con juicio emitido sobre el total del marco.
+    """% de criterios del marco con un juicio de cumplimiento real.
 
-    "No aplica" ES un juicio válido del comité (el criterio fue revisado y
-    descartado): cuenta como valorado. Solo restan avance los criterios sin
-    tocar (None / vacío). De lo contrario, cualquier autoevaluación con al
-    menos un "No aplica" nunca llegaría a 100 %.
+    Definición explícita del avance (para que NO mienta):
+
+      avance = criterios con juicio real / criterios VALORABLES del marco × 100
+
+    - Denominador: `_criterios_valorables_del_marco` = solo los criterios
+      (tipo="Criterio", es_valorable=1). Se EXCLUYEN los estándares, que también
+      llevan es_valorable=1 en el marco CONEAU pero se valoran con un NIVEL, no
+      con Valoracion Criterio. (Antes el denominador se armaba recorriendo los
+      estándares y sumando sus criterios hijos; ahora se lee directo del marco,
+      robusto ante criterios que no cuelguen de un estándar.)
+    - Numerador: criterios NO `_sin_valorar`, i.e. con juicio de cumplimiento
+      real (Cumple / Cumple parcial / No cumple). "No aplica" y vacío NO cuentan
+      —igual que para el nivel—, así una autoevaluación con criterios en
+      "No aplica" o sin tocar nunca llega a 100 %.
+
+    `estandares` se mantiene por compatibilidad de firma pero ya no se usa: el
+    denominador es del marco completo, no de los estándares recorridos.
     """
-    if estandares is None:
-        estandares = _estandares_de_autoevaluacion(autoevaluacion)
-
-    total = 0
-    valorados = 0
-    for est in estandares:
-        criterios = _criterios_de_estandar(est)
-        total += len(criterios)
-        for c in criterios:
-            v = _valoracion_criterio(autoevaluacion, c)
-            if v not in (None, ""):
-                valorados += 1
-
+    marco = _marco_de_autoevaluacion(autoevaluacion)
+    criterios = _criterios_valorables_del_marco(marco)
+    total = len(criterios)
     if total == 0:
         return 0.0
+
+    valorados = 0
+    for c in criterios:
+        cumple = _valoracion_criterio(autoevaluacion, c)
+        if not _sin_valorar(cumple):
+            valorados += 1
+
     return round(valorados * 100.0 / total, 2)
 
 

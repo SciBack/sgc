@@ -129,16 +129,29 @@ def _autoevaluaciones(limite=12):
         limit=limite,
     )
 
-    # Cache de criterios valorables por marco (varias AE comparten marco).
+    # Denominador y numerador CONSISTENTES con el motor de scoring: el total son
+    # los criterios valorables DEL MARCO (excluye los estándares, que también
+    # llevan es_valorable=1 pero se valoran con un nivel, no con Valoracion
+    # Criterio); "valorado" es solo un juicio REAL (no "No aplica" ni vacío).
+    # Sin esto el pill decía "53/63" contando los 10 estándares como criterios.
+    from sgc import scoring
+
     crit_por_marco = {}
     for ae in aes:
         marco = ae["marco_normativo"]
         if marco not in crit_por_marco:
-            crit_por_marco[marco] = frappe.db.count(
-                "Elemento Marco", {"marco_normativo": marco, "es_valorable": 1}
-            )
-        total = crit_por_marco[marco]
-        valorados = frappe.db.count("Valoracion Criterio", {"autoevaluacion": ae["name"]}) if total else 0
+            crit_por_marco[marco] = set(scoring._criterios_valorables_del_marco(marco))
+        valorables = crit_por_marco[marco]
+        total = len(valorables)
+        valorados = 0
+        if total:
+            for vc in frappe.get_all(
+                "Valoracion Criterio",
+                filters={"autoevaluacion": ae["name"]},
+                fields=["criterio", "cumple"],
+            ):
+                if vc["criterio"] in valorables and not scoring._sin_valorar(vc["cumple"]):
+                    valorados += 1
         ae["criterios_total"] = total
         ae["criterios_valorados"] = min(valorados, total)
         ae["criterios_pendientes"] = max(0, total - valorados)

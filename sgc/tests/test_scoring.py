@@ -14,9 +14,12 @@ Reglas verificadas (scoring.py):
     algún "No cumple"        -> "NL"      (precede a L y LP)
     algún "Cumple parcial"   -> "L"
     algún criterio sin valor -> None      (incompleto)
-    algún "No aplica"        -> None      (incompleto; OJO: para AVANCE sí cuenta)
+    algún "No aplica"        -> None      (incompleto; y para AVANCE tampoco cuenta)
   _calcular_avance_pct:
-    "No aplica" cuenta como valorado -> puede llegar a 100 %.
+    denominador = criterios VALORABLES del marco (tipo=Criterio, es_valorable=1);
+      EXCLUYE los estándares (que también llevan es_valorable=1 en CONEAU).
+    numerador   = criterios con juicio real (Cumple / Cumple parcial / No cumple);
+      "No aplica" y vacío NO cuentan -> con criterios sin valorar nunca llega a 100 %.
   proponer_vigencia (sobre los 'nivel' CONFIRMADOS):
     faltan confirmados       -> None
     algún NL                 -> "En proceso"
@@ -118,7 +121,7 @@ class IntegrationTestScoring(IntegrationTestCase):
         self.assertIsNone(scoring.proponer_nivel_estandar(ae2, est_vacio))
 
     # ======================================================================
-    # _calcular_avance_pct — "No aplica" cuenta como valorado
+    # _calcular_avance_pct — juicio real / criterios valorables (sin estándares)
     # ======================================================================
     def test_avance_cero_sin_valoraciones(self):
         self.assertEqual(scoring._calcular_avance_pct(self.ae), 0.0)
@@ -131,8 +134,19 @@ class IntegrationTestScoring(IntegrationTestCase):
         factories.valorar_estandar(ae, arbol["criterios"][e1], default=factories.CUMPLE)
         self.assertEqual(scoring._calcular_avance_pct(ae), 50.0)
 
-    def test_avance_no_aplica_cuenta_y_llega_a_100(self):
-        # 4 criterios; todos con juicio (incl. un "No aplica") -> avance 100 %.
+    def test_avance_criterio_sin_valorar_no_llega_a_100(self):
+        # marco 2×2 = 4 criterios; valorar solo 3 -> 75 %, nunca 100 %.
+        arbol = factories.crear_marco_prueba(n_estandares=2, n_criterios=2, prefijo="TESTSV")
+        ae = factories.crear_autoevaluacion(arbol, prefijo="TESTSV").name
+        e1, e2 = arbol["estandares"]
+        factories.valorar_estandar(ae, arbol["criterios"][e1], default=factories.CUMPLE)
+        factories.valorar_criterio(ae, arbol["criterios"][e2][0], factories.CUMPLE)
+        # el 4º criterio queda sin tocar
+        self.assertEqual(scoring._calcular_avance_pct(ae), 75.0)
+
+    def test_avance_no_aplica_no_cuenta_y_no_llega_a_100(self):
+        # 4 criterios; uno en "No aplica" -> solo 3 con juicio real -> 75 %, no 100 %.
+        # (Antes "No aplica" contaba como valorado y daba 100 % — el porcentaje mentía.)
         arbol = factories.crear_marco_prueba(n_estandares=2, n_criterios=2, prefijo="TESTNA")
         ae = factories.crear_autoevaluacion(arbol, prefijo="TESTNA").name
         e1, e2 = arbol["estandares"]
@@ -140,11 +154,28 @@ class IntegrationTestScoring(IntegrationTestCase):
         factories.valorar_estandar(
             ae, arbol["criterios"][e2], juicios={0: factories.NO_APLICA}, default=factories.CUMPLE,
         )
-        # avance llega a 100 aunque haya un "No aplica"...
         res = scoring.proponer_vigencia(ae)
-        self.assertEqual(res["avance_pct"], 100.0)
-        # ...pero ese estándar con "No aplica" queda incompleto para el nivel.
+        # "No aplica" NO cuenta como valorado -> 3/4 = 75 %, coherente con el nivel.
+        self.assertEqual(res["avance_pct"], 75.0)
+        # y ese estándar con "No aplica" también queda incompleto para el nivel.
         self.assertIsNone(scoring.proponer_nivel_estandar(ae, e2))
+
+    def test_avance_excluye_estandares_valorables_del_denominador(self):
+        # Reproduce el bug real de prod: el marco CONEAU marca es_valorable=1
+        # también en los estándares. El denominador del avance debe seguir siendo
+        # SOLO los criterios (tipo=Criterio); si contara los estándares, 4 criterios
+        # valorados sobre 6 "valorables" daría 66 % en vez del 100 % correcto.
+        arbol = factories.crear_marco_prueba(n_estandares=2, n_criterios=2, prefijo="TESTEV")
+        ae = factories.crear_autoevaluacion(arbol, prefijo="TESTEV").name
+        # Marcar los estándares como es_valorable=1 (como en el marco CONEAU real).
+        for est in arbol["estandares"]:
+            frappe.db.set_value("Elemento Marco", est, "es_valorable", 1)
+        # El denominador de criterios valorables NO incluye los 2 estándares.
+        self.assertEqual(len(scoring._criterios_valorables_del_marco(arbol["marco"])), 4)
+        # Valorar los 4 criterios -> 100 % (no 4/6 = 66.67 %).
+        for est in arbol["estandares"]:
+            factories.valorar_estandar(ae, arbol["criterios"][est], default=factories.CUMPLE)
+        self.assertEqual(scoring._calcular_avance_pct(ae), 100.0)
 
     # ======================================================================
     # proponer_vigencia — sobre los niveles CONFIRMADOS (Tabla 9)
