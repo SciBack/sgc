@@ -17,6 +17,7 @@ export default defineConfig({
 				baseUrl: 'https://github.com/SciBack/sgc/edit/main/docs-site/',
 			},
 			sidebar: [
+				{ label: 'Estado del producto', link: '/roadmap/' },
 				{ label: 'Arquitectura', link: '/arquitectura/' },
 				{ label: 'Instalación', link: '/instalacion/' },
 				{
