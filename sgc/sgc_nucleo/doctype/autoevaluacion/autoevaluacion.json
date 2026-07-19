@@ -20,7 +20,9 @@
   "fecha_inicio",
   "fecha_cierre",
   "vigencia_propuesta",
-  "avance_pct"
+  "avance_pct",
+  "seccion_snapshot",
+  "marco_snapshot"
  ],
  "fields": [
   {
@@ -114,10 +116,25 @@
    "fieldtype": "Percent",
    "label": "Avance (%)",
    "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "seccion_snapshot",
+   "fieldtype": "Section Break",
+   "label": "Snapshot del marco (al cerrar)"
+  },
+  {
+   "description": "Copia inmutable del árbol del marco normativo (elementos + niveles de escala) tomada justo antes del submit (paso a docstatus=1, estado \"Cerrada\"). El motor de scoring (sgc.scoring) la usa en vez de consultar Elemento Marco en vivo, para que el resultado calculado no cambie si el marco se edita después del cierre. La escribe `Autoevaluacion.before_submit`.",
+   "fieldname": "marco_snapshot",
+   "fieldtype": "JSON",
+   "label": "Snapshot del marco (al cerrar)",
+   "no_copy": 1,
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
+ "is_submittable": 1,
  "links": [],
  "modified": "2026-07-04 17:45:57.409314",
  "modified_by": "Administrator",

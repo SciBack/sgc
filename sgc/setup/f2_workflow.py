@@ -40,7 +40,11 @@ WF_AUTOEVAL = {
         ("En curso", "0", "Responsable de Calidad de Programa"),
         ("En revision", "0", "DPGC"),
         ("Consolidada", "0", "DPGC"),
-        ("Cerrada", "0", "DPGC"),
+        # doc_status "1": la transición "Cerrar" hacia este estado dispara el
+        # submit NATIVO de Frappe (docstatus 0->1) porque Autoevaluacion es
+        # is_submittable=1 -- ver Autoevaluacion.before_submit (captura el
+        # marco_snapshot justo antes) y sgc.scoring (lo lee cuando existe).
+        ("Cerrada", "1", "DPGC"),
     ],
     # state (desde), action (boton), next_state (hacia), allowed (rol)
     "transitions": [

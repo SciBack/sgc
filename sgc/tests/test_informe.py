@@ -26,13 +26,40 @@ Contrato verificado (informe.consolidar):
     oficial (humano) gana sobre la propuesta del motor; sin ninguna -> "Pendiente".
   caso de error:
     autoevaluación inexistente -> frappe.DoesNotExistError.
+
+Snapshot congelado (Fase 3+4 — inmutabilidad vía submittable nativo):
+  Draft (docstatus=0)      -> el informe sigue leyendo Elemento Marco EN VIVO,
+                              sin cambios (mismo camino de siempre).
+  Cerrada (docstatus=1)    -> el informe lee del `marco_snapshot` congelado en
+                              el submit automático (workflow "Cerrar"); una
+                              edición posterior al Elemento Marco en vivo NO
+                              se refleja en el informe ya generado.
+  cabecera                 -> `fecha_congelamiento` presente solo si hay snapshot.
 """
 import frappe
+from frappe.model.workflow import apply_workflow
 from frappe.tests import IntegrationTestCase
 
 from sgc import informe
 from sgc import scoring
 from sgc.tests import factories
+
+
+def _cerrar_autoevaluacion(ae_name):
+    """Recorre la cadena REAL de transiciones de WF_AUTOEVAL hasta "Cerrada".
+
+    Planificada -[Iniciar evaluacion]-> En curso -[Enviar a revision]->
+    En revision -[Consolidar]-> Consolidada -[Cerrar]-> Cerrada.
+
+    "Cerrar" es la transición cuyo estado destino tiene doc_status="1" en
+    `sgc.setup.f2_workflow.WF_AUTOEVAL` -> dispara el submit automático
+    (docstatus 0->1) de Autoevaluacion (is_submittable=1). Requiere el
+    workflow ACTIVO (no llamar `factories.desactivar_workflow` antes de esto).
+    """
+    for accion in ("Iniciar evaluacion", "Enviar a revision", "Consolidar", "Cerrar"):
+        doc = frappe.get_doc("Autoevaluacion", ae_name)
+        apply_workflow(doc, accion)
+    return frappe.get_doc("Autoevaluacion", ae_name)
 
 
 class IntegrationTestInforme(IntegrationTestCase):
@@ -257,3 +284,67 @@ class IntegrationTestInforme(IntegrationTestCase):
     def test_autoevaluacion_inexistente_lanza(self):
         with self.assertRaises(frappe.DoesNotExistError):
             informe.consolidar("TEST-AE-NO-EXISTE-999")
+
+    # ======================================================================
+    # Snapshot congelado (Fase 3+4 — inmutabilidad vía submittable nativo)
+    # ======================================================================
+    # Árbol propio con prefijo dedicado: no comparte datos con el resto de la
+    # clase (gotcha ya conocido: crear_marco_prueba sin prefijo único colisiona
+    # entre tests) y solo estos tests mueven la Autoevaluacion por el workflow.
+
+    def test_draft_sin_snapshot_lee_marco_en_vivo(self):
+        """En Draft (docstatus=0) el informe sigue leyendo Elemento Marco EN VIVO
+        y la cabecera NO trae fecha/versión de congelamiento — cero cambios de
+        comportamiento respecto de antes del snapshot."""
+        self.assertEqual(frappe.db.get_value("Autoevaluacion", self.ae, "docstatus"), 0)
+
+        ctx = informe.consolidar(self.ae)
+        self.assertEqual(ctx["cabecera"]["fecha_congelamiento"], "")
+        self.assertEqual(ctx["cabecera"]["version_marco_congelado"], "")
+
+        bloque = self._estandar_out(ctx, self.estandares[0])
+        self.assertEqual(bloque["denominacion"], "Estandar de prueba 1")
+
+    def test_snapshot_congela_denominacion_tras_cierre(self):
+        """Tras Cerrar (submit automático), editar el Elemento Marco EN VIVO
+        NO cambia retroactivamente un informe ya generado -- se sigue leyendo
+        la denominación ORIGINAL desde `marco_snapshot`, no la editada."""
+        arbol = factories.crear_marco_prueba(n_estandares=1, n_criterios=1, prefijo="TESTSNAP")
+        est = arbol["estandares"][0]
+        crit = arbol["criterios"][est][0]
+        ae = factories.crear_autoevaluacion(arbol, prefijo="TESTSNAP").name
+
+        # Valora el único criterio para que el estándar quede con un nivel.
+        factories.valorar_criterio(ae, crit, factories.CUMPLE)
+
+        ae_doc = _cerrar_autoevaluacion(ae)
+        self.assertEqual(ae_doc.docstatus, 1)
+        self.assertEqual(ae_doc.estado, "Cerrada")
+
+        # Denominación ORIGINAL, tal como la ve el informe antes de editar.
+        bloque_antes = self._estandar_out(informe.consolidar(ae), est)
+        self.assertEqual(bloque_antes["denominacion"], "Estandar de prueba 1")
+
+        # Edición en vivo del Elemento Marco DESPUÉS del cierre.
+        frappe.db.set_value("Elemento Marco", est, "denominacion", "Denominación EDITADA post-cierre")
+
+        # El informe generado DESPUÉS de la edición sigue mostrando el original.
+        bloque_despues = self._estandar_out(informe.consolidar(ae), est)
+        self.assertEqual(bloque_despues["denominacion"], "Estandar de prueba 1")
+        self.assertNotEqual(bloque_despues["denominacion"], "Denominación EDITADA post-cierre")
+
+    def test_cabecera_cerrada_incluye_fecha_congelamiento(self):
+        """La cabecera del informe de una Autoevaluacion cerrada trae fecha y
+        versión de congelamiento (ausentes/vacías en una en curso)."""
+        arbol = factories.crear_marco_prueba(n_estandares=1, n_criterios=1, prefijo="TESTSNAP2")
+        est = arbol["estandares"][0]
+        crit = arbol["criterios"][est][0]
+        ae = factories.crear_autoevaluacion(arbol, prefijo="TESTSNAP2").name
+        factories.valorar_criterio(ae, crit, factories.CUMPLE)
+
+        _cerrar_autoevaluacion(ae)
+
+        cab = informe.consolidar(ae)["cabecera"]
+        self.assertTrue(cab["fecha_congelamiento"])
+        self.assertTrue(cab["version_marco_congelado"])
+        self.assertIn(arbol["marco"], cab["version_marco_congelado"])

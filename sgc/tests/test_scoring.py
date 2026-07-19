@@ -31,10 +31,16 @@ Reglas verificadas (scoring.py):
     más antiguo (donde vive el 'nivel' confirmado) y borra los extras.
 """
 import frappe
+from frappe.model.workflow import apply_workflow
 from frappe.tests import IntegrationTestCase
 
 from sgc import scoring
 from sgc.tests import factories
+
+# Acciones del Workflow "Autoevaluacion SGC" en orden, hasta "Cerrada"
+# (ver sgc/setup/f2_workflow.py WF_AUTOEVAL["transitions"]). "Cerrada" mapea a
+# doc_status="1" -> la transición "Cerrar" dispara el submit nativo de Frappe.
+_CADENA_CIERRE = ("Iniciar evaluacion", "Enviar a revision", "Consolidar", "Cerrar")
 
 
 class IntegrationTestScoring(IntegrationTestCase):
@@ -245,6 +251,95 @@ class IntegrationTestScoring(IntegrationTestCase):
         # el `nivel` oficial confirmado se preservó (el motor nunca lo toca)
         self.assertEqual(superviviente.nivel, factories.nivel_escala_por_sigla("LP"))
         self.assertEqual(superviviente.confirmado, 1)
+
+    # ======================================================================
+    # Snapshot inmutable (Fase 3+4 fusionadas) — el motor lee el árbol
+    # CONGELADO cuando la autoevaluación está Cerrada (submit nativo), en vez
+    # del árbol en vivo. Ver `sgc.scoring.construir_snapshot` /
+    # `_snapshot_de_autoevaluacion` y `Autoevaluacion.before_submit`.
+    # ======================================================================
+    def _cerrar(self, ae_name):
+        """Recorre la cadena REAL de transiciones del Workflow hasta 'Cerrada'
+        (dispara `doc.submit()` dentro de `apply_workflow` -> `before_submit`
+        congela `marco_snapshot`). NO usa `factories.desactivar_workflow`:
+        eso también apaga el submit-por-workflow (ver gotcha conocido).
+        """
+        doc = frappe.get_doc("Autoevaluacion", ae_name)
+        for accion in _CADENA_CIERRE:
+            doc = apply_workflow(doc, accion)
+        return doc
+
+    def test_autoevaluacion_draft_sigue_leyendo_el_marco_en_vivo(self):
+        # (c) Draft (docstatus=0, nunca cerrada): comportamiento IDÉNTICO al de
+        # siempre -- consulta Elemento Marco en vivo, sin snapshot.
+        self.assertEqual(frappe.db.get_value("Autoevaluacion", self.ae, "docstatus"), 0)
+        self.assertIsNone(scoring._snapshot_de_autoevaluacion(self.ae))
+        self.assertEqual(set(scoring._estandares_de_autoevaluacion(self.ae)), set(self.estandares))
+
+        est = self.estandares[0]
+        self.assertEqual(
+            set(scoring._criterios_de_estandar(est, autoevaluacion=self.ae)),
+            set(self.criterios[est]),
+        )
+        # y si edito el marco EN VIVO, el cambio se ve de inmediato (nada que congelar).
+        frappe.db.set_value("Elemento Marco", est, "denominacion", "Editado en vivo (Draft)")
+        self.assertEqual(
+            frappe.db.get_value("Elemento Marco", est, "denominacion"), "Editado en vivo (Draft)"
+        )
+
+    def test_snapshot_blinda_el_scoring_de_ediciones_al_marco_tras_el_cierre(self):
+        # (b) el bug real que esta feature cierra: tras Cerrar, reparentar o
+        # editar un Elemento Marco EN VIVO NO debe alterar lo que el motor lee
+        # para esa autoevaluación -- debe seguir viendo la foto de al cerrar.
+        arbol = factories.crear_marco_prueba(n_estandares=2, n_criterios=2, prefijo="TESTFRZ")
+        ae = factories.crear_autoevaluacion(arbol, prefijo="TESTFRZ").name
+        e1, e2 = arbol["estandares"]
+        c1_1 = arbol["criterios"][e1][0]
+
+        # valorar antes de cerrar, para que haya algo real que congelar.
+        factories.valorar_estandar(ae, arbol["criterios"][e1], default=factories.CUMPLE)
+        factories.valorar_estandar(ae, arbol["criterios"][e2], default=factories.CUMPLE)
+
+        doc = self._cerrar(ae)
+        self.assertEqual(doc.docstatus, 1)
+        self.assertIsNotNone(scoring._snapshot_de_autoevaluacion(ae))
+
+        # estructura ORIGINAL, resuelta ya desde el snapshot (post-cierre).
+        self.assertEqual(set(scoring._estandares_de_autoevaluacion(ae)), {e1, e2})
+        self.assertEqual(
+            set(scoring._criterios_de_estandar(e1, autoevaluacion=ae)),
+            set(arbol["criterios"][e1]),
+        )
+
+        # Edito el marco EN VIVO después de cerrar: reparento c1_1 de e1 -> e2
+        # y le cambio la denominación a e1 (constata que el marco SÍ cambió).
+        frappe.db.set_value("Elemento Marco", c1_1, "parent_elemento_marco", e2)
+        frappe.db.set_value("Elemento Marco", e1, "denominacion", "Reescrito despues de Cerrada")
+        self.assertEqual(
+            frappe.db.get_value("Elemento Marco", e1, "denominacion"), "Reescrito despues de Cerrada"
+        )
+
+        # El motor, para ESTA autoevaluación (Cerrada), sigue devolviendo la
+        # estructura ORIGINAL: c1_1 sigue "bajo" e1, la denominación no cambió.
+        self.assertEqual(
+            set(scoring._criterios_de_estandar(e1, autoevaluacion=ae)),
+            set(arbol["criterios"][e1]),
+        )
+        self.assertNotIn(c1_1, scoring._criterios_de_estandar(e2, autoevaluacion=ae))
+        self.assertEqual(
+            scoring._snapshot_de_autoevaluacion(ae)["elementos"][e1]["denominacion"],
+            "Estandar de prueba 1",
+        )
+
+        # Y una autoevaluación DISTINTA (Draft) del MISMO marco sigue viendo el
+        # árbol en vivo -- el congelamiento es por autoevaluación, no global.
+        ae_draft = factories.crear_autoevaluacion(arbol, prefijo="TESTFRZ").name
+        self.assertNotIn(
+            c1_1, scoring._criterios_de_estandar(e1, autoevaluacion=ae_draft)
+        )
+        self.assertIn(
+            c1_1, scoring._criterios_de_estandar(e2, autoevaluacion=ae_draft)
+        )
 
     # ======================================================================
     # recalcular_autoevaluacion — integración de la cadena completa

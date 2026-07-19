@@ -2,10 +2,33 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
 from frappe.model.document import Document
 
 
 class ValoracionCriterio(Document):
+	def validate(self):
+		"""Bloquea creación/edición si la Autoevaluación padre ya está Cerrada (submit).
+
+		'Valoracion Criterio' es un DocType standalone (Link `autoevaluacion`, no
+		child table) -- Frappe NO lo protege automáticamente cuando la Autoevaluacion
+		pasa a docstatus=1 vía el workflow nativo (F4). Sin este guard, el snapshot
+		del marco quedaría inmutable pero los datos de valoración seguirían mutables,
+		contradiciendo el propósito de la feature. Va primero en validate() para
+		fallar rápido, antes de cualquier otra validación de negocio.
+		"""
+		if self.autoevaluacion and frappe.db.get_value(
+			"Autoevaluacion", self.autoevaluacion, "docstatus"
+		) == 1:
+			frappe.throw(
+				_(
+					"La autoevaluación ya fue cerrada y enviada; sus valoraciones "
+					"quedan inmutables. Si necesita corregir un dato, cancele y "
+					"reabra la autoevaluación (flujo nativo de Frappe: cancel + amend)."
+				),
+				title=_("Autoevaluación cerrada"),
+			)
+
 	def on_update(self):
 		"""Al valorar un criterio, recomputar el nivel propuesto de su estándar.
 

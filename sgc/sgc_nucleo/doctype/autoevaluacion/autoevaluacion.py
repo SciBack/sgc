@@ -6,6 +6,21 @@ from frappe.model.document import Document
 
 
 class Autoevaluacion(Document):
+    def before_submit(self):
+        """Congela el árbol del marco normativo justo antes del submit (Cerrada).
+
+        Corre en el `_action == "submit"` de `run_before_save_methods` (ver
+        `frappe/model/document.py`), es decir ANTES de que el docstatus quede
+        persistido en 1 -- en ese instante el árbol vivo de Elemento Marco
+        todavía es la fuente correcta a congelar. A partir de aquí
+        `sgc.scoring` lee `marco_snapshot` en vez de consultar en vivo para
+        esta autoevaluación, blindando el resultado contra ediciones
+        posteriores del marco (reparenteos, correcciones de texto, etc.).
+        """
+        from sgc import scoring
+
+        self.marco_snapshot = scoring.construir_snapshot(self.name)
+
     @frappe.whitelist()
     def datos_informe(self):
         """Contrato tipado del Informe de Autoevaluación (formato SINEACE).

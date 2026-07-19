@@ -24,6 +24,7 @@ El motor NUNCA escribe `nivel`. LP no es mecánico.
 (`parent_elemento_marco`) es el estándar depth 2. Ver `_estandar_padre_de_criterio`.
 """
 import frappe
+from frappe.utils import cint
 
 # --- Literales del campo `Valoracion Criterio.cumple` -----------------------
 # El contrato §1 usa "Cumple con debilidad"; el DocType F1 real trae
@@ -79,8 +80,16 @@ def _sigla_nivel(nivel_name):
     return token if token in NIVELES_VALIDOS else None
 
 
-def _estandar_padre_de_criterio(criterio_name):
-    """Estándar (depth 2) padre de un criterio (depth 3): su `parent_elemento_marco`."""
+def _estandar_padre_de_criterio(criterio_name, autoevaluacion=None):
+    """Estándar (depth 2) padre de un criterio (depth 3): su `parent_elemento_marco`.
+
+    Si `autoevaluacion` tiene snapshot congelado (está Cerrada), resuelve desde
+    el árbol congelado en vez de Elemento Marco en vivo. Ver `_snapshot_de_autoevaluacion`.
+    """
+    snap = _snapshot_de_autoevaluacion(autoevaluacion) if autoevaluacion else None
+    if snap:
+        el = snap["elementos"].get(criterio_name)
+        return el.get("parent_elemento_marco") if el else None
     return frappe.db.get_value("Elemento Marco", criterio_name, "parent_elemento_marco")
 
 
@@ -88,8 +97,26 @@ def _marco_de_autoevaluacion(autoevaluacion):
     return frappe.db.get_value("Autoevaluacion", autoevaluacion, "marco_normativo")
 
 
-def _criterios_de_estandar(estandar_name):
-    """Criterios assessable (depth 3) del estándar: hijos directos valorables."""
+def _criterios_de_estandar(estandar_name, autoevaluacion=None):
+    """Criterios assessable (depth 3) del estándar: hijos directos valorables.
+
+    Si `autoevaluacion` tiene snapshot congelado (está Cerrada), resuelve desde
+    el árbol congelado (`snapshot["elementos"]`, filtrando en memoria) en vez de
+    consultar Elemento Marco en vivo -- así el árbol usado no cambia si alguien
+    edita/reparenta el marco después del cierre. Sin snapshot (Draft o
+    `autoevaluacion` no provisto), el comportamiento es IDÉNTICO al de siempre.
+    """
+    snap = _snapshot_de_autoevaluacion(autoevaluacion) if autoevaluacion else None
+    if snap:
+        hijos = [
+            (name, el) for name, el in snap["elementos"].items()
+            if el.get("parent_elemento_marco") == estandar_name
+        ]
+        valorables = [name for name, el in hijos if el.get("es_valorable")]
+        if valorables:
+            return valorables
+        return [name for name, el in hijos if (el.get("tipo") or "") == "Criterio"]
+
     hijos = frappe.get_all(
         "Elemento Marco",
         filters={"parent_elemento_marco": estandar_name},
@@ -102,7 +129,7 @@ def _criterios_de_estandar(estandar_name):
     return [h.name for h in hijos if (h.tipo or "") == "Criterio"]
 
 
-def _criterios_valorables_del_marco(marco):
+def _criterios_valorables_del_marco(marco, autoevaluacion=None):
     """Criterios VALORABLES del marco: Elemento Marco tipo="Criterio" con es_valorable=1.
 
     Fuente ÚNICA de verdad del denominador del avance. EXCLUYE los estándares:
@@ -114,7 +141,24 @@ def _criterios_valorables_del_marco(marco):
 
     Si el marco no denormalizó `es_valorable` en ningún criterio, cae a todos los
     `tipo="Criterio"` del marco.
+
+    `autoevaluacion` es OPCIONAL (callers como `home_dashboard` agregan por
+    marco sin una autoevaluación puntual y deben seguir en vivo siempre). Si se
+    provee y esa autoevaluación tiene snapshot congelado, resuelve desde ahí.
     """
+    snap = _snapshot_de_autoevaluacion(autoevaluacion) if autoevaluacion else None
+    if snap:
+        crits = [
+            name for name, el in snap["elementos"].items()
+            if (el.get("tipo") or "") == "Criterio" and el.get("es_valorable")
+        ]
+        if crits:
+            return crits
+        return [
+            name for name, el in snap["elementos"].items()
+            if (el.get("tipo") or "") == "Criterio"
+        ]
+
     if not marco:
         return []
     crits = frappe.get_all(
@@ -132,7 +176,24 @@ def _criterios_valorables_del_marco(marco):
 
 
 def _estandares_de_autoevaluacion(autoevaluacion):
-    """Los 10 estándares (depth 2) del marco de la autoevaluación."""
+    """Los 10 estándares (depth 2) del marco de la autoevaluación.
+
+    Si `autoevaluacion` tiene snapshot congelado (está Cerrada), resuelve desde
+    el árbol congelado; si no, consulta Elemento Marco en vivo (comportamiento
+    idéntico al de siempre para Draft).
+    """
+    snap = _snapshot_de_autoevaluacion(autoevaluacion)
+    if snap:
+        ests = [
+            (name, el) for name, el in snap["elementos"].items()
+            if el.get("tipo") == "Estandar"
+        ]
+        ests.sort(key=lambda t: (
+            t[1].get("orden") if t[1].get("orden") is not None else float("inf"),
+            t[1].get("codigo") or "",
+        ))
+        return [name for name, _ in ests]
+
     marco = _marco_de_autoevaluacion(autoevaluacion)
     if not marco:
         return []
@@ -143,6 +204,113 @@ def _estandares_de_autoevaluacion(autoevaluacion):
         order_by="orden asc, codigo asc",
     )
     return [e.name for e in ests]
+
+
+# ===========================================================================
+# Snapshot inmutable del marco (congelado al Cerrar / submit)
+# ===========================================================================
+
+def construir_snapshot(autoevaluacion):
+    """Congela el árbol vivo del Marco Normativo de `autoevaluacion` en un dict.
+
+    Se llama desde `Autoevaluacion.before_submit`, justo ANTES de que el
+    docstatus quede persistido en 1 -- en ese instante el árbol vivo de
+    Elemento Marco (y la Escala Valoracion vinculada) todavía es la fuente
+    correcta a copiar. Estructura EXACTA (contrato compartido con quien lee el
+    snapshot, p.ej. `sgc.informe`):
+
+        {
+          "tomado_en": "<frappe.utils.now()>",
+          "marco_normativo": "<Marco Normativo.name>",
+          "escala_valoracion": "<Escala Valoracion.name o None>",
+          "niveles": [{"sigla", "score", "orden", "es_aprobatorio"}, ...],
+          "elementos": {"<Elemento Marco.name>": {codigo, denominacion,
+                        texto_oficial, tipo, es_valorable, peso,
+                        parent_elemento_marco, orden}, ...},
+        }
+
+    No escribe nada en `autoevaluacion` -- devuelve el dict; el caller
+    (`before_submit`) lo asigna a `self.marco_snapshot`.
+    """
+    ae = autoevaluacion.name if hasattr(autoevaluacion, "name") else autoevaluacion
+    marco = _marco_de_autoevaluacion(ae)
+
+    escala = frappe.db.get_value("Marco Normativo", marco, "escala_valoracion") if marco else None
+
+    niveles = []
+    if escala:
+        filas_nivel = frappe.get_all(
+            "Nivel Escala",
+            filters={"parent": escala, "parenttype": "Escala Valoracion", "parentfield": "niveles"},
+            fields=["sigla", "score", "orden", "es_aprobatorio"],
+            order_by="idx asc",
+        )
+        niveles = [
+            {
+                "sigla": f.sigla,
+                "score": f.score,
+                "orden": f.orden,
+                "es_aprobatorio": 1 if f.es_aprobatorio else 0,
+            }
+            for f in filas_nivel
+        ]
+
+    elementos = {}
+    if marco:
+        filas_em = frappe.get_all(
+            "Elemento Marco",
+            filters={"marco_normativo": marco},
+            fields=["name", "codigo", "denominacion", "texto_oficial", "tipo",
+                    "es_valorable", "peso", "parent_elemento_marco", "orden"],
+        )
+        for f in filas_em:
+            elementos[f.name] = {
+                "codigo": f.codigo,
+                "denominacion": f.denominacion,
+                "texto_oficial": f.texto_oficial,
+                "tipo": f.tipo,
+                "es_valorable": 1 if f.es_valorable else 0,
+                "peso": f.peso,
+                "parent_elemento_marco": f.parent_elemento_marco or None,
+                "orden": f.orden,
+            }
+
+    return {
+        "tomado_en": frappe.utils.now(),
+        "marco_normativo": marco,
+        "escala_valoracion": escala or None,
+        "niveles": niveles,
+        "elementos": elementos,
+    }
+
+
+def _snapshot_de_autoevaluacion(autoevaluacion):
+    """El dict del snapshot congelado de `autoevaluacion`, o None.
+
+    Devuelve el dict SOLO si la autoevaluación está Cerrada (docstatus==1) Y
+    `marco_snapshot` tiene contenido válido. En cualquier otro caso -- Draft
+    (docstatus==0), `autoevaluacion` vacío/None, JSON vacío o malformado --
+    devuelve None para que el caller caiga al camino en vivo. NUNCA revienta.
+    """
+    if not autoevaluacion:
+        return None
+    ae = autoevaluacion.name if hasattr(autoevaluacion, "name") else autoevaluacion
+    row = frappe.db.get_value(
+        "Autoevaluacion", ae, ["docstatus", "marco_snapshot"], as_dict=True
+    )
+    if not row or cint(row.docstatus) != 1 or not row.marco_snapshot:
+        return None
+
+    snap = row.marco_snapshot
+    if isinstance(snap, str):
+        try:
+            snap = frappe.parse_json(snap)
+        except Exception:
+            return None
+
+    if not isinstance(snap, dict) or not snap.get("elementos"):
+        return None
+    return snap
 
 
 def _valoracion_criterio(autoevaluacion, criterio_name):
@@ -166,7 +334,7 @@ def proponer_nivel_estandar(autoevaluacion, estandar_name):
     if not autoevaluacion or not estandar_name:
         return None
 
-    criterios = _criterios_de_estandar(estandar_name)
+    criterios = _criterios_de_estandar(estandar_name, autoevaluacion=autoevaluacion)
     if not criterios:
         propuesto = None
     else:
@@ -296,7 +464,7 @@ def _calcular_avance_pct(autoevaluacion, estandares=None):
     denominador es del marco completo, no de los estándares recorridos.
     """
     marco = _marco_de_autoevaluacion(autoevaluacion)
-    criterios = _criterios_valorables_del_marco(marco)
+    criterios = _criterios_valorables_del_marco(marco, autoevaluacion=autoevaluacion)
     total = len(criterios)
     if total == 0:
         return 0.0
