@@ -176,11 +176,11 @@ def confirmar_todos_propuestos(autoevaluacion):
 
 @frappe.whitelist()
 def finalizar_vigencia(autoevaluacion):
-    """Exige 10/10 estándares confirmados; si están, promueve la vigencia oficial.
+    """Exige TODOS los estándares confirmados; si están, promueve la vigencia oficial.
 
     - Cuenta las `Valoracion Estandar` de la autoevaluación con `confirmado=1` y `nivel`.
     - Si faltan, devuelve {ok: False, faltan: N} (no toca nada).
-    - Si están los 10, llama `scoring.proponer_vigencia` (lee los `nivel` confirmados,
+    - Si están todos, llama `scoring.proponer_vigencia` (lee los `nivel` confirmados,
       aplica la Tabla 9) y MAPEA la propuesta (sin tilde) a la opción oficial (con tilde)
       del campo `Autoevaluacion.resultado_vigencia`.
     Idempotente. Devuelve {ok: True, vigencia: "<oficial>"}.
@@ -192,11 +192,17 @@ def finalizar_vigencia(autoevaluacion):
         "Valoracion Estandar",
         {"autoevaluacion": autoevaluacion, "confirmado": 1, "nivel": ["is", "set"]},
     )
+    # Fase 3 (2026-07-19): antes era un TOTAL_ESTANDARES=10 fijo -- bloqueaba
+    # `finalizar_vigencia` para cualquier marco con un número distinto de
+    # estándares (el propio scoring.proponer_vigencia ya cuenta dinámico,
+    # esto lo dejaba inconsistente con su propia dependencia). Cuenta real
+    # del marco de ESTA autoevaluación, vía la misma función que usa el motor.
+    total_estandares = len(scoring._estandares_de_autoevaluacion(autoevaluacion))
 
-    if confirmados < TOTAL_ESTANDARES:
+    if confirmados < total_estandares:
         return {
             "ok": False,
-            "faltan": TOTAL_ESTANDARES - confirmados,
+            "faltan": total_estandares - confirmados,
             "confirmados": confirmados,
         }
 

@@ -252,7 +252,14 @@ class IntegrationTestConfirmacion(IntegrationTestCase):
         )
 
     def test_finalizar_vigencia_faltan_confirmados(self):
-        """Si no están los 10 confirmados no toca la vigencia y reporta cuántos faltan."""
+        """Si no están TODOS los estándares confirmados no toca la vigencia y reporta cuántos faltan.
+
+        Fase 3 (2026-07-19): `faltan` se calcula contra el total REAL de
+        estándares del marco de esta autoevaluación (3, ver setUp), no contra
+        el viejo `TOTAL_ESTANDARES=10` hardcodeado -- ese hardcode ignoraba el
+        marco real y esta misma aserción validaba el bug (esperaba faltar 8
+        sobre un árbol de solo 3 estándares).
+        """
         # El árbol base solo tiene 3 estándares; confirmamos 2.
         factories.confirmar_estandar(self.ae, self.estandares[0], "LP", prefijo=self.PREFIJO)
         factories.confirmar_estandar(self.ae, self.estandares[1], "LP", prefijo=self.PREFIJO)
@@ -261,7 +268,7 @@ class IntegrationTestConfirmacion(IntegrationTestCase):
 
         self.assertFalse(res["ok"])
         self.assertEqual(res["confirmados"], 2)
-        self.assertEqual(res["faltan"], confirmacion.TOTAL_ESTANDARES - 2)
+        self.assertEqual(res["faltan"], len(self.estandares) - 2)
         # No se promovió ninguna vigencia oficial.
         self.assertIn(
             frappe.db.get_value("Autoevaluacion", self.ae, "resultado_vigencia"),
