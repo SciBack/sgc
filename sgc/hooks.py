@@ -202,6 +202,7 @@ has_permission = {
 scheduler_events = {
 	"daily": [
 		"sgc.tasks.marcar_evidencias_vencidas",
+		"sgc.tasks.marcar_acuerdos_vencidos",
 	],
 }
 

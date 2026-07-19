@@ -36,3 +36,26 @@ def marcar_evidencias_vencidas():
 		frappe.db.set_value("Evidencia", name, "estado", "Vencida", update_modified=False)
 
 	frappe.db.commit()
+
+
+def marcar_acuerdos_vencidos():
+	"""Marca Vencido todo Acuerdo Pendiente/En proceso cuya fecha_compromiso ya pasó.
+
+	Cierra el mismo gap que `marcar_evidencias_vencidas`: `Acuerdo.validate()`
+	solo actúa al guardar -- si nadie vuelve a tocar un acuerdo tras vencer,
+	se queda "Pendiente"/"En proceso" para siempre. Acuerdo no tiene Workflow
+	nativo, así que `frappe.db.set_value` es solo por consistencia con el
+	patrón del módulo, no por necesidad de bypass de motor.
+	"""
+	vencidos = frappe.get_all(
+		"Acuerdo",
+		filters={
+			"estado": ["in", ("Pendiente", "En proceso")],
+			"fecha_compromiso": ["<", getdate(nowdate())],
+		},
+		pluck="name",
+	)
+	for name in vencidos:
+		frappe.db.set_value("Acuerdo", name, "estado", "Vencido", update_modified=False)
+
+	frappe.db.commit()
