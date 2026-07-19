@@ -286,12 +286,16 @@ _ROWS = {
         DATA: "r", AUDI: "crw", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
     },
 
-    # --- Revision Direccion: workflow f10, las 4 transiciones son DPGC (ver
-    #     H1/Fase 1 self_approval — RECT queda con lectura, candidato a 2do
-    #     aprobador si se decide cerrar la autoaprobación aquí). ---
+    # --- Revision Direccion: workflow f10. DPGC prepara/realiza (crwsx).
+    #     RECT (Rectorado/VR) promovido a "rw" (2026-07-19, hallazgo ISO 9001
+    #     §9.3.1/§5.1.1 de la investigación de escalamiento) -- ejecuta la
+    #     transición "Cerrar revision", el acto formal de la alta dirección.
+    #     Nota: RECT sigue "r" (solo lectura) en TODAS las demás filas de esta
+    #     matriz -- esta es una excepción deliberada y acotada a este único
+    #     DocType, no un cambio general del rol. ---
     "Revision Direccion": {
         DPGC: "crws", ANAL: "rw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
-        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+        DATA: "r", AUDI: "r", RECT: "rw", RSED: "r", DECA: "r", SYSM: "r",
     },
 
     # --- Informe Cumplimiento (IAC, licenciamiento CBC/SUNEDU, anual) ---
