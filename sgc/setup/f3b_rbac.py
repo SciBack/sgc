@@ -295,9 +295,13 @@ _ROWS = {
     },
 
     # --- Informe Cumplimiento (IAC, licenciamiento CBC/SUNEDU, anual) ---
+    # APROB (Autoridad Aprobadora) agregado 2026-07-19 (Fase 2, workflow f11):
+    # ejecuta "Presentar a SUNEDU" — sin este DocPerm el rol estaría en el
+    # workflow pero no podría tocar el documento (mismo bug que H4 en Fase 1).
     "Informe Cumplimiento": {
         DPGC: "crws", ANAL: "crw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
         DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+        APROB: "rw",
     },
 
     # --- GRC: Riesgo y sus hijas operativas. Sin flujo documentado aún —

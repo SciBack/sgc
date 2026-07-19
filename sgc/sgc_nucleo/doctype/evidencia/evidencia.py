@@ -38,9 +38,14 @@ class Evidencia(Document):
 
 	def validate(self):
 		self._sincronizar_metadatos_archivo()
-		self._marcar_vencida_si_expiro()
 		self._validar_soporte()
 		self._validar_trazabilidad_si_valida()
+
+	def on_update(self):
+		# `on_update` corre tanto en insert como en update (Frappe llama
+		# `after_insert` + `run_post_save_methods` -> `on_update` en el alta) --
+		# un solo hook basta.
+		self._marcar_vencida_si_expiro()
 
 	# ---------------------------------------------------------------- helpers
 
@@ -87,8 +92,20 @@ class Evidencia(Document):
 			self.mime = archivo_doc.file_type.lower()
 
 	def _marcar_vencida_si_expiro(self):
+		"""Marca Vencida por escritura directa a BD, fuera de `validate()`.
+
+		Fase 2 (2026-07-19, workflow f13): con `Evidencia SGC` activo, Frappe
+		bloquea CUALQUIER intento de fijar `estado` a un valor no-inicial dentro
+		de `validate()`/`save()` -- tanto en insert (siempre exige el primer
+		estado del workflow) como en update (exige una transición definida, y
+		"Vencida" queda deliberadamente fuera del grafo: la pone el sistema, no
+		una persona). Por eso este flip usa `frappe.db.set_value` directo, que
+		no pasa por el motor de workflow ni por `validate()` -- ver docstring de
+		f13_workflow_evidencia.py.
+		"""
 		if self.vigencia_hasta and getdate(self.vigencia_hasta) < getdate(nowdate()):
 			if self.estado in ("Pendiente", "Valida"):
+				frappe.db.set_value(self.doctype, self.name, "estado", "Vencida", update_modified=False)
 				self.estado = "Vencida"
 
 	def _validar_soporte(self):

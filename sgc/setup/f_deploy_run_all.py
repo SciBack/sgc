@@ -25,6 +25,10 @@ Orden (por dependencia real, no alfabético):
   8. f8_workflow_auditoria   — workflows Programa Auditoria / Auditoria
   9. f9_workflow_encuestas   — workflow Aplicacion Instrumento
   10. f10_workflow_revision  — workflow Revision Direccion
+  11. f11_workflow_cumplimiento — workflow Informe Cumplimiento (Fase 2)
+  12. f12_workflow_hallazgo     — workflow Hallazgo (Fase 2)
+  13. f13_workflow_evidencia    — workflow Evidencia (Fase 2)
+  14. f14_workflow_riesgos      — workflows Riesgo + Tratamiento Riesgo (Fase 2)
 
 Ejecutar manualmente:
     bench --site <site> execute sgc.setup.f_deploy_run_all.run
@@ -36,6 +40,8 @@ from sgc.setup import (
     f1_run_all, f2_run_all, f3b_rbac, f4_workflow_mejora,
     f5_workflow_documental, f6_informe_cbc, f7_notificaciones,
     f8_workflow_auditoria, f9_workflow_encuestas, f10_workflow_revision,
+    f11_workflow_cumplimiento, f12_workflow_hallazgo, f13_workflow_evidencia,
+    f14_workflow_riesgos,
 )
 
 STEPS = [
@@ -49,6 +55,10 @@ STEPS = [
     ("f8_workflow_auditoria", f8_workflow_auditoria),
     ("f9_workflow_encuestas", f9_workflow_encuestas),
     ("f10_workflow_revision", f10_workflow_revision),
+    ("f11_workflow_cumplimiento", f11_workflow_cumplimiento),
+    ("f12_workflow_hallazgo", f12_workflow_hallazgo),
+    ("f13_workflow_evidencia", f13_workflow_evidencia),
+    ("f14_workflow_riesgos", f14_workflow_riesgos),
 ]
 
 

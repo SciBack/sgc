@@ -171,9 +171,18 @@ class IntegrationTestInformeCumplimiento(IntegrationTestCase):
 			self._informe(2016, estado="Presentado a SUNEDU", con_marco=False)
 
 	def test_presentar_ok_con_todas_evaluadas(self):
-		"""Todas las CBC evaluadas -> se presenta a SUNEDU sin error."""
+		"""Todas las CBC evaluadas -> se presenta a SUNEDU sin error.
+
+		Con workflow activo (f11) no se puede insertar directo en "Presentado a
+		SUNEDU" (Frappe exige insertar en el primer estado); se recorre la
+		cadena real de transiciones Borrador -> En revisión -> Aprobado ->
+		Presentado a SUNEDU, tal como lo haría un usuario.
+		"""
 		conds = [self._cond(e, factories.CUMPLE) for e in self.estandares]
-		doc = self._informe(2017, condiciones=conds, estado="Presentado a SUNEDU")
+		doc = self._informe(2017, condiciones=conds)  # arranca Borrador
+		for estado in ("En revisión", "Aprobado", "Presentado a SUNEDU"):
+			doc.estado = estado
+			doc.save(ignore_permissions=True)
 		self.assertEqual(doc.estado, "Presentado a SUNEDU")
 		self.assertEqual(doc.semaforo, "Verde")
 

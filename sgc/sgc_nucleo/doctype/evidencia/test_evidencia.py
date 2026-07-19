@@ -143,14 +143,16 @@ class IntegrationTestEvidencia(IntegrationTestCase):
         ev.save(ignore_permissions=True)
         self.assertEqual(frappe.db.get_value("Evidencia", ev.name, "estado"), "Valida")
 
-    def test_valida_al_insertar_no_exige_trazabilidad(self):
-        """La regla de trazabilidad NO se aplica en el alta (is_new): solo al editar.
-
-        El flujo canónico es insertar Pendiente, vincular, y recién editar a Valida;
-        el guard `is_new()` evita bloquear el propio insert.
+    def test_insertar_directo_en_estado_no_inicial_falla(self):
+        """Con workflow activo (f13), Frappe exige insertar siempre en el primer
+        estado ("Pendiente") -- insertar directo en "Valida" u otro estado no
+        inicial es rechazado por el motor de workflow antes de llegar a la
+        validación de trazabilidad. Reemplaza al viejo
+        `test_valida_al_insertar_no_exige_trazabilidad`, escrito cuando
+        Evidencia todavía no tenía workflow (Fase 2, hallazgo H2).
         """
-        ev = self._nueva_evidencia(estado="Valida")
-        self.assertEqual(ev.estado, "Valida")
+        with self.assertRaises(frappe.ValidationError):
+            self._nueva_evidencia(estado="Valida")
 
     # ------------------------------------------------------- vencimiento vigencia
     def test_marca_vencida_al_expirar(self):
@@ -169,10 +171,19 @@ class IntegrationTestEvidencia(IntegrationTestCase):
         """Una evidencia Observada que expira NO se fuerza a Vencida.
 
         `_marcar_vencida_si_expiro` solo actúa sobre Pendiente/Valida; otros
-        estados de gestión (Observada/Subsanada) se conservan.
+        estados de gestión (Observada/Subsanada) se conservan. Con workflow
+        activo (f13) solo se puede llegar a "Observada" transicionando desde
+        Pendiente vía `.save()` (insertar directo en un estado no inicial está
+        bloqueado por el motor de workflow) -- no directo al insertar.
         """
+        ev = self._nueva_evidencia()  # arranca Pendiente
+        ev.estado = "Observada"
+        ev.save(ignore_permissions=True)
+        self.assertEqual(ev.estado, "Observada")
+
         ayer = add_days(nowdate(), -1)
-        ev = self._nueva_evidencia(estado="Observada", vigencia_hasta=ayer)
+        ev.vigencia_hasta = ayer
+        ev.save(ignore_permissions=True)
         self.assertEqual(ev.estado, "Observada")
 
     # ----------------------------------------------- helper evidencias_de_elemento
