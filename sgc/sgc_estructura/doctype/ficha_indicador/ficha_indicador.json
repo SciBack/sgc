@@ -35,7 +35,8 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Indicador",
-   "options": "Indicador"
+   "options": "Indicador",
+   "unique": 1
   },
   {
    "description": "Alternativa: la ficha cuelga del nodo evaluable en CBC",

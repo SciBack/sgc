@@ -180,7 +180,7 @@ def run():
     # + contrato de datos: dominio_dato (D1..D8) + fuente_autoritativa.
     _dt("Ficha Indicador", [
         {"fieldname": "indicador", "fieldtype": "Link", "label": "Indicador",
-         "options": "Indicador", "in_list_view": 1,
+         "options": "Indicador", "in_list_view": 1, "unique": 1,
          "description": "Ficha 1:1 con Indicador (o con ElementoMarco-indicador en CBC)"},
         {"fieldname": "elemento_marco", "fieldtype": "Link",
          "label": "Elemento marco (indicador CBC)", "options": "Elemento Marco",

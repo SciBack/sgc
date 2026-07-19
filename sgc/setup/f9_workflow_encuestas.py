@@ -25,7 +25,7 @@ WF_APLICACION = {
     "document_type": "Aplicacion Instrumento",
     "workflow_state_field": "estado",
     "is_active": 1,
-    "send_email_alert": 0,
+    "send_email_alert": 0,  # revertido 2026-07-19: dispara attach_print (PDF) por email en CUALQUIER save con transicion pendiente, no solo en transiciones reales -- rompio 70 tests y arriesga flood de correos en prod. Necesita diseno propio (Fase 2, item aparte), no un toggle de 1 linea.
     "states": [
         ("Planificada", "0", "Responsable de Calidad de Programa"),
         ("En campo", "0", "Responsable de Calidad de Programa"),

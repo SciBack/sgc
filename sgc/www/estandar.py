@@ -7,6 +7,8 @@ Parámetros: ?ae=<autoevaluacion>&est=<elemento_marco del estándar>
 
 import frappe
 
+from sgc.informe import _nivel_de_estandar
+
 CUMPLE_META = {
     "Cumple": {"label": "Cumple", "color": "#1f7a46", "bg": "#e6f4ec"},
     "Cumple parcial": {"label": "Cumple parcial", "color": "#b7791f", "bg": "#fdf4e0"},
@@ -49,8 +51,11 @@ def get_context(context):
     context.ae_codigo = frappe.db.get_value("Autoevaluacion", ae, "codigo") or ae
     context.ae_name = ae
 
-    nivel = frappe.db.get_value("Valoracion Estandar", {"autoevaluacion": ae, "elemento_marco": est}, "nivel_propuesto")
+    # Fase 2 (2026-07-19, hallazgo): antes leía solo `nivel_propuesto` (mismo bug
+    # de tablero.py) — ahora usa el helper compartido con informe.py.
+    nivel, confirmado, _just = _nivel_de_estandar(ae, est)
     context.nivel = nivel
+    context.confirmado = bool(confirmado)
     context.nivel_meta = NIVEL_META.get(nivel, _FB)
 
     criterios_raw = frappe.get_all(

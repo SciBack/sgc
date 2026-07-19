@@ -133,8 +133,8 @@ def run():
          "options":"No conformidad mayor\nNo conformidad menor\nObservacion\n"
                    "Oportunidad de mejora\nConformidad\nFortaleza",
          "in_list_view":1,"in_standard_filter":1},
-        {"fieldname":"criterio_incumplido","fieldtype":"Small Text","label":"Criterio incumplido",
-         "description":"Qué requisito se incumple"},
+        {"fieldname":"criterio_incumplido","fieldtype":"Link","label":"Criterio incumplido",
+         "options":"Elemento Marco","description":"Qué requisito se incumple"},
         {"fieldname":"descripcion","fieldtype":"Text","label":"Descripción",
          "description":"Evidencia objetiva del hallazgo"},
         {"fieldname":"unidad_organica","fieldtype":"Link","label":"Unidad orgánica",

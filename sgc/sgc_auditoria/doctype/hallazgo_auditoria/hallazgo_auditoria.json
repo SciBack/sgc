@@ -47,8 +47,9 @@
   {
    "description": "Qu\u00e9 requisito se incumple",
    "fieldname": "criterio_incumplido",
-   "fieldtype": "Small Text",
-   "label": "Criterio incumplido"
+   "fieldtype": "Link",
+   "label": "Criterio incumplido",
+   "options": "Elemento Marco"
   },
   {
    "description": "Evidencia objetiva del hallazgo",

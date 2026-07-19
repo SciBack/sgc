@@ -29,6 +29,10 @@ class IntegrationTestHallazgoAuditoria(IntegrationTestCase):
         factories.desactivar_workflow("Auditoria")
         factories.desactivar_workflow("No Conformidad")
         self.auditoria = self._auditoria()
+        # Fase 2 (2026-07-19): `criterio_incumplido` pasó de Small Text a Link
+        # (Elemento Marco) -- se necesita un criterio real para los tests.
+        marco = factories.crear_marco_prueba()
+        self.criterio = marco["criterios"][marco["estandares"][0]][0]
 
     # -- helpers ------------------------------------------------------------
     def _auditoria(self):
@@ -48,7 +52,7 @@ class IntegrationTestHallazgoAuditoria(IntegrationTestCase):
             "auditoria": self.auditoria.name,
             "tipo": tipo,
             "descripcion": "Evidencia objetiva del hallazgo.",
-            "criterio_incumplido": "ISO 9001 7.5.3",
+            "criterio_incumplido": self.criterio,
             "estado": "Abierto",
         }
         vals.update(overrides)
@@ -78,7 +82,7 @@ class IntegrationTestHallazgoAuditoria(IntegrationTestCase):
         self.assertEqual(nc.origen_id, self.auditoria.name)
         self.assertEqual(nc.origen_tipo, "Auditoria")
         self.assertEqual(nc.tipo, "No conformidad mayor")
-        self.assertEqual(nc.requisito_incumplido, "ISO 9001 7.5.3")
+        self.assertEqual(nc.requisito_incumplido, self.criterio)
 
         # el hallazgo queda marcado como escalado
         h.reload()
