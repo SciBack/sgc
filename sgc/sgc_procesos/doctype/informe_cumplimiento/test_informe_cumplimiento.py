@@ -7,6 +7,8 @@ Cubre el controlador `informe_cumplimiento.py`:
 - consolidación de conteos + semáforo global (Rojo / Ámbar / Verde);
 - exigencia de justificación a toda CBC parcial o no cumplida (A4);
 - bloqueo de "Presentado a SUNEDU" con CBC sin evaluar / sin condiciones;
+- auto-sync del picklist `evidencia` (Evidencia Enlace) de cada CBC hacia
+  Trazabilidad al guardar (idempotente, marca `origen=Auto-sincronizado`);
 - helper whitelisted `cbc_no_cumplidas`.
 
 Cada test corre en su propia transacción con rollback automático, así que las
@@ -30,12 +32,15 @@ class IntegrationTestInformeCumplimiento(IntegrationTestCase):
 	# ------------------------------------------------------------ helpers
 
 	@staticmethod
-	def _cond(condicion, cumple=None, justificacion=None):
+	def _cond(condicion, cumple=None, justificacion=None, evidencia=None):
 		row = {"condicion": condicion}
 		if cumple:
 			row["cumple"] = cumple
 		if justificacion is not None:
 			row["justificacion"] = justificacion
+		if evidencia is not None:
+			# Table MultiSelect anidada: lista de nombres de Evidencia -> filas Evidencia Enlace.
+			row["evidencia"] = [{"evidencia": ev} for ev in evidencia]
 		return row
 
 	def _informe(self, anio, condiciones=None, estado="Borrador", con_marco=True):
@@ -191,6 +196,74 @@ class IntegrationTestInformeCumplimiento(IntegrationTestCase):
 		doc = self._informe(2018)  # autopoblado, sin evaluar, estado Borrador
 		self.assertEqual(doc.estado, "Borrador")
 		self.assertEqual(len(doc.condiciones), 8)
+
+	# ------------------------------------------------------------ auto-sync trazabilidad (M09)
+
+	def test_agregar_evidencia_crea_trazabilidad_al_guardar(self):
+		"""Una fila en `evidencia` (Evidencia Enlace) de una CBC genera su Trazabilidad."""
+		ev = factories.crear_evidencia().name
+		conds = [self._cond(self.estandares[0], evidencia=[ev])]
+		doc = self._informe(2101, condiciones=conds)
+
+		self.assertTrue(
+			frappe.db.exists(
+				"Trazabilidad", {"evidencia": ev, "elemento_marco": self.estandares[0]}
+			)
+		)
+
+	def test_trazabilidad_auto_sync_marca_origen(self):
+		"""La Trazabilidad creada por el auto-sync queda marcada `origen=Auto-sincronizado`."""
+		ev = factories.crear_evidencia().name
+		conds = [self._cond(self.estandares[0], evidencia=[ev])]
+		self._informe(2102, condiciones=conds)
+
+		origen = frappe.db.get_value(
+			"Trazabilidad", {"evidencia": ev, "elemento_marco": self.estandares[0]}, "origen"
+		)
+		self.assertEqual(origen, "Auto-sincronizado")
+
+	def test_guardar_dos_veces_no_duplica_trazabilidad(self):
+		"""Re-guardar el informe sin tocar `evidencia` no duplica la Trazabilidad."""
+		ev = factories.crear_evidencia().name
+		conds = [self._cond(self.estandares[0], evidencia=[ev])]
+		doc = self._informe(2103, condiciones=conds)
+
+		doc.resumen = "re-guardado sin tocar evidencia"
+		doc.save(ignore_permissions=True)
+
+		self.assertEqual(
+			frappe.db.count(
+				"Trazabilidad", {"evidencia": ev, "elemento_marco": self.estandares[0]}
+			),
+			1,
+		)
+
+	def test_sin_filas_de_evidencia_no_crea_trazabilidad(self):
+		"""CBC sin ninguna fila en `evidencia` no genera Trazabilidad.
+
+		Usa un estándar PROPIO (prefijo único), no `self.estandares` compartido:
+		otros tests de esta clase sí trazan `self.estandares[0]`, y el aislamiento
+		de datos idempotentes entre tests no siempre lo revierte -- un conteo
+		exacto sobre el estándar compartido daría falso positivo por residuo de
+		otro test (mismo patrón ya resuelto en test_evidencia.py /
+		test_hallazgo_auditoria.py).
+		"""
+		arbol = factories.crear_marco_prueba(n_estandares=1, n_criterios=0, prefijo="TEST-IC-SINEVD")
+		estandar_propio = arbol["estandares"][0]
+		doc = self._informe(2104, condiciones=[self._cond(estandar_propio)], con_marco=False)
+		nombres = [c.condicion for c in doc.condiciones]
+		self.assertEqual(frappe.db.count("Trazabilidad", {"elemento_marco": ["in", nombres]}), 0)
+
+	def test_misma_evidencia_en_varias_cbc_crea_varias_trazabilidad(self):
+		"""La misma evidencia en dos CBC distintas produce dos Trazabilidad (destinos distintos)."""
+		ev = factories.crear_evidencia().name
+		conds = [
+			self._cond(self.estandares[0], evidencia=[ev]),
+			self._cond(self.estandares[1], evidencia=[ev]),
+		]
+		self._informe(2105, condiciones=conds)
+
+		self.assertEqual(frappe.db.count("Trazabilidad", {"evidencia": ev}), 2)
 
 	# ------------------------------------------------------------ helper cbc_no_cumplidas
 

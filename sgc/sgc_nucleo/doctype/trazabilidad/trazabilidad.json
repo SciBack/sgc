@@ -48,11 +48,12 @@
   },
   {
    "default": "Directo",
+   "description": "\"Auto-sincronizado\": la creó el auto-sync de un picklist Evidencia Enlace (Cumplimiento CBC / Hallazgo Auditoria), no una captura manual.",
    "fieldname": "origen",
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Origen",
-   "options": "Directo\nPropagado por crosswalk"
+   "options": "Directo\nPropagado por crosswalk\nAuto-sincronizado"
   },
   {
    "fieldname": "vigencia_desde",

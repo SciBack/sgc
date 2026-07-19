@@ -7,6 +7,11 @@ Verifica:
   - `escalar_a_no_conformidad`: crea la No Conformidad (origen Auditoria), marca
     el hallazgo (no_conformidad, genera_nc=1, estado "Escalado a NC"), es
     idempotente y rechaza tipos que no constituyen no conformidad (Conformidad).
+  - Auto-sync (Fase 2, brecha Evidencia Enlace / Trazabilidad): una fila en el
+    picklist `evidencia` (Table MultiSelect de Evidencia Enlace) crea su
+    Trazabilidad correspondiente al guardar (destino `criterio_incumplido`
+    y/o `proceso`), marcada `origen=Auto-sincronizado`, idempotente, y no crea
+    nada sin destino (evita el "vínculo vacío" de `Trazabilidad.validate()`).
 
 La NC tiene Workflow ("No Conformidad SGC") -> se desactiva en setUp para poder
 insertarla desde el escalamiento sin WorkflowPermissionError.
@@ -33,6 +38,7 @@ class IntegrationTestHallazgoAuditoria(IntegrationTestCase):
         # (Elemento Marco) -- se necesita un criterio real para los tests.
         marco = factories.crear_marco_prueba()
         self.criterio = marco["criterios"][marco["estandares"][0]][0]
+        self.proceso = factories.crear_proceso().name
 
     # -- helpers ------------------------------------------------------------
     def _auditoria(self):
@@ -115,3 +121,81 @@ class IntegrationTestHallazgoAuditoria(IntegrationTestCase):
         h = self._hallazgo(no_conformidad=nc.name)
         self.assertEqual(h.genera_nc, 1)
         self.assertEqual(h.estado, "Escalado a NC")
+
+    # ======================================================================
+    # Auto-sync del picklist `evidencia` hacia Trazabilidad (M09)
+    # ======================================================================
+    def test_agregar_evidencia_crea_trazabilidad_al_guardar(self):
+        """Una fila en `evidencia` con `criterio_incumplido` genera su Trazabilidad."""
+        ev = factories.crear_evidencia().name
+        self._hallazgo(evidencia=[{"evidencia": ev}])  # criterio_incumplido = self.criterio (default)
+
+        self.assertTrue(
+            frappe.db.exists("Trazabilidad", {"evidencia": ev, "elemento_marco": self.criterio})
+        )
+
+    def test_trazabilidad_auto_sync_marca_origen(self):
+        ev = factories.crear_evidencia().name
+        self._hallazgo(evidencia=[{"evidencia": ev}])
+
+        origen = frappe.db.get_value(
+            "Trazabilidad", {"evidencia": ev, "elemento_marco": self.criterio}, "origen"
+        )
+        self.assertEqual(origen, "Auto-sincronizado")
+
+    def test_sincroniza_a_proceso_sin_criterio(self):
+        """Sin `criterio_incumplido`, con `proceso` -> la Trazabilidad apunta solo al proceso."""
+        ev = factories.crear_evidencia().name
+        self._hallazgo(criterio_incumplido=None, proceso=self.proceso, evidencia=[{"evidencia": ev}])
+
+        self.assertTrue(
+            frappe.db.exists("Trazabilidad", {"evidencia": ev, "proceso": self.proceso})
+        )
+
+    def test_sincroniza_a_criterio_y_proceso_a_la_vez(self):
+        ev = factories.crear_evidencia().name
+        self._hallazgo(proceso=self.proceso, evidencia=[{"evidencia": ev}])
+
+        self.assertTrue(
+            frappe.db.exists(
+                "Trazabilidad",
+                {"evidencia": ev, "elemento_marco": self.criterio, "proceso": self.proceso},
+            )
+        )
+
+    def test_guardar_dos_veces_no_duplica_trazabilidad(self):
+        """Re-guardar el hallazgo sin tocar `evidencia` no duplica la Trazabilidad."""
+        ev = factories.crear_evidencia().name
+        h = self._hallazgo(evidencia=[{"evidencia": ev}])
+
+        h.descripcion = "re-guardado sin tocar evidencia"
+        h.flags.ignore_permissions = True
+        h.save(ignore_permissions=True)
+
+        self.assertEqual(
+            frappe.db.count("Trazabilidad", {"evidencia": ev, "elemento_marco": self.criterio}),
+            1,
+        )
+
+    def test_sin_filas_de_evidencia_no_crea_trazabilidad(self):
+        """Hallazgo con `criterio_incumplido` pero sin ninguna fila en `evidencia`.
+
+        Usa un criterio PROPIO (prefijo único), no `self.criterio` compartido:
+        otros tests de esta clase sí trazan `self.criterio`, y el aislamiento de
+        datos idempotentes entre tests no siempre lo revierte -- un conteo
+        exacto sobre el criterio compartido daría falso positivo por residuo
+        de otro test (mismo patrón ya resuelto en test_evidencia.py).
+        """
+        arbol = factories.crear_marco_prueba(n_estandares=1, n_criterios=1, prefijo="TEST-HAU-SINEVD")
+        criterio_propio = arbol["criterios"][arbol["estandares"][0]][0]
+        self._hallazgo(criterio_incumplido=criterio_propio)
+
+        self.assertEqual(frappe.db.count("Trazabilidad", {"elemento_marco": criterio_propio}), 0)
+
+    def test_sin_criterio_ni_proceso_no_crea_trazabilidad_aunque_haya_evidencia(self):
+        """Sin destino (ni `criterio_incumplido` ni `proceso`) el sync no crea nada:
+        crearla chocaría con el "vínculo vacío" que `Trazabilidad.validate()` rechaza."""
+        ev = factories.crear_evidencia().name
+        self._hallazgo(criterio_incumplido=None, evidencia=[{"evidencia": ev}])
+
+        self.assertEqual(frappe.db.count("Trazabilidad", {"evidencia": ev}), 0)

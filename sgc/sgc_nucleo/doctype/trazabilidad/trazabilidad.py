@@ -36,3 +36,54 @@ class Trazabilidad(Document):
 				_("Ya existe una Trazabilidad de esta evidencia hacia el mismo destino."),
 				title=_("Vínculo duplicado"),
 			)
+
+
+def sincronizar_evidencia_enlace(filas_evidencia_enlace, elemento_marco=None, proceso=None):
+	"""Auto-sincroniza un picklist `Evidencia Enlace` (Table MultiSelect) con Trazabilidad.
+
+	`Cumplimiento CBC` (vía `Informe Cumplimiento`) y `Hallazgo Auditoria` exponen
+	un campo `evidencia` como Table MultiSelect de `Evidencia Enlace` -- un
+	picklist rápido, no el vínculo N:M oficial. Sin este sync, una evidencia
+	adjuntada solo por ese picklist queda invisible para el Informe de
+	Autoevaluación (informe.py) y no cuenta para el gate
+	`Evidencia._validar_trazabilidad_si_valida` (hallazgo de la investigación de
+	brecha Evidencia Enlace / Trazabilidad).
+
+	Idempotente vía `frappe.db.exists()` -- mismo patrón que
+	`sgc.capa.escalar_a_no_conformidad`: no duplica si la Trazabilidad ya existe.
+	No crea nada si faltan AMBOS destinos (`elemento_marco` y `proceso`), porque
+	`Trazabilidad.validate()` rechazaría ese vínculo vacío.
+
+	Los llamadores van en el `validate()` de cada DOCUMENTO PADRE real (no en el
+	controlador de una child table `istable:1`: Frappe nunca invoca el
+	`validate()` de una fila de child table -- las persiste con
+	`Document.update_child_table()` -> `d.db_update()` directo, sin pasar por
+	`run_method("validate")`).
+	"""
+	if not elemento_marco and not proceso:
+		return
+
+	for fila in filas_evidencia_enlace or []:
+		# `.get()`, no `getattr()`: una fila de un Table MultiSelect construida
+		# en memoria (nested dentro de OTRA child table, vía append() con un
+		# dict) llega como dict plano, no como Document -- getattr() no lee
+		# claves de dict. `.get()` funciona igual para dict y para Document
+		# (BaseDocument también expone `.get()`).
+		evidencia = fila.get("evidencia") if hasattr(fila, "get") else None
+		if not evidencia:
+			continue
+
+		filtros = {
+			"evidencia": evidencia,
+			"elemento_marco": elemento_marco if elemento_marco else ["is", "not set"],
+			"proceso": proceso if proceso else ["is", "not set"],
+		}
+		if frappe.db.exists("Trazabilidad", filtros):
+			continue
+
+		vals = {"doctype": "Trazabilidad", "evidencia": evidencia, "origen": "Auto-sincronizado"}
+		if elemento_marco:
+			vals["elemento_marco"] = elemento_marco
+		if proceso:
+			vals["proceso"] = proceso
+		frappe.get_doc(vals).insert(ignore_permissions=True)

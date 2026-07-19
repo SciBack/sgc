@@ -30,8 +30,8 @@ Ver [Manual de uso · Control documental](/sgc/manual-uso/control-documental/).
 | DocType | Rol |
 |---|---|
 | **Evidencia** | Repositorio real de una evidencia (archivo adjunto o URL externa), con código autogenerado `EVD-AAAA-NNNN`, metadatos autocompletados (mime/tamaño/hash) y vigencia. |
-| **Evidencia Enlace** | Enlace auxiliar de una evidencia externa (no reemplaza a Trazabilidad). |
-| **Trazabilidad** | El vínculo N:M real entre una Evidencia y un criterio normativo (`Elemento Marco`) o un proceso, con `tipo_vinculo` (Cumple/Soporta/Parcial) y `origen` (Directo/crosswalk). Es lo que el informe de acreditación consume para citar evidencias. |
+| **Evidencia Enlace** | Child table de un solo campo (Link a Evidencia) usada como picklist rápido (Table MultiSelect) en `Cumplimiento CBC` y `Hallazgo Auditoria`. Al guardar cualquiera de esos dos documentos, se auto-sincroniza con Trazabilidad (una fila por cada combinación evidencia/destino que aún no exista, marcada `origen=Auto-sincronizado`) — así lo capturado por el picklist queda igual de visible para el informe oficial que un vínculo creado a mano. |
+| **Trazabilidad** | El vínculo N:M real entre una Evidencia y un criterio normativo (`Elemento Marco`) o un proceso, con `tipo_vinculo` (Cumple/Soporta/Parcial) y `origen` (Directo/Propagado por crosswalk/Auto-sincronizado). Es lo que el informe de acreditación consume para citar evidencias. |
 
 Ver [Manual de uso · Evidencias y trazabilidad](/sgc/manual-uso/evidencias-trazabilidad/).
 

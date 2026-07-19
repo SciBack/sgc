@@ -197,6 +197,14 @@ has_permission = {
 # 	],
 # }
 
+# M09 (2026-07-19): cierra el gap de Evidencia.on_update -- una vigencia que
+# expira sin que nadie guarde el documento debe marcarse Vencida igual.
+scheduler_events = {
+	"daily": [
+		"sgc.tasks.marcar_evidencias_vencidas",
+	],
+}
+
 # Testing
 # -------
 

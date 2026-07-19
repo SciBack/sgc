@@ -17,6 +17,8 @@ import frappe
 from frappe import _
 from frappe.model.document import Document
 
+from sgc.sgc_nucleo.doctype.trazabilidad.trazabilidad import sincronizar_evidencia_enlace
+
 NO_CUMPLE = "No cumple"
 PARCIAL = "Cumple parcial"
 CUMPLE = "Cumple"
@@ -28,6 +30,7 @@ class InformeCumplimiento(Document):
 		self._consolidar()
 		self._validar_sustento()
 		self._validar_presentacion()
+		self._sincronizar_trazabilidad()
 
 	# ------------------------------------------------------------ autopoblado
 
@@ -70,6 +73,25 @@ class InformeCumplimiento(Document):
 			self.semaforo = "Verde"
 		else:
 			self.semaforo = ""
+
+	# ------------------------------------------------------------ trazabilidad
+
+	def _sincronizar_trazabilidad(self):
+		"""Auto-sincroniza el picklist `evidencia` de cada CBC con Trazabilidad.
+
+		Cada fila `condiciones` (Cumplimiento CBC) trae su propio picklist de
+		evidencia (Evidencia Enlace); el destino de la Trazabilidad es la
+		`condicion` (Elemento Marco) de esa fila -- sin proceso, porque
+		Cumplimiento CBC no lo tiene. Ver `sincronizar_evidencia_enlace` para el
+		porqué esto vive en el padre y no en `cumplimiento_cbc.py`.
+		"""
+		for c in self.condiciones:
+			if not c.condicion:
+				continue
+			# `.get()`, no `.evidencia`: una fila recién construida en memoria
+			# (append() con un dict que no trae la clave "evidencia") no tiene
+			# ese atributo -- AttributeError con acceso por punto.
+			sincronizar_evidencia_enlace(c.get("evidencia"), elemento_marco=c.condicion)
 
 	# ------------------------------------------------------------ validaciones
 

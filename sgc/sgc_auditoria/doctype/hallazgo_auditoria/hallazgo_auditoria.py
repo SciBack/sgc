@@ -18,6 +18,8 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import nowdate
 
+from sgc.sgc_nucleo.doctype.trazabilidad.trazabilidad import sincronizar_evidencia_enlace
+
 # Tipos de hallazgo que constituyen una no conformidad escalable a M05, con el
 # `tipo` equivalente en el DocType No Conformidad (Select real de ambos .json).
 TIPO_A_NC = {
@@ -52,7 +54,21 @@ class HallazgoAuditoria(Document):
             if self.estado == "Abierto":
                 self.estado = "Escalado a NC"
 
+        self._sincronizar_trazabilidad()
+
     # ---------------------------------------------------------------- helpers
+
+    def _sincronizar_trazabilidad(self):
+        """Auto-sincroniza el picklist `evidencia` con Trazabilidad.
+
+        Destino: `criterio_incumplido` (Elemento Marco) y/o `proceso` -- este
+        hallazgo, a diferencia de Cumplimiento CBC, sí tiene ambos campos. Ver
+        `sgc.sgc_nucleo.doctype.trazabilidad.trazabilidad.sincronizar_evidencia_enlace`.
+        """
+        sincronizar_evidencia_enlace(
+            self.evidencia, elemento_marco=self.criterio_incumplido, proceso=self.proceso
+        )
+
     def _generar_codigo(self) -> str:
         """Código HAU-{anio}-NNNN con correlativo por año (máximo sufijo + 1)."""
         anio = nowdate()[:4]

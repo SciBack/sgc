@@ -29,6 +29,8 @@ Orden (por dependencia real, no alfabético):
   12. f12_workflow_hallazgo     — workflow Hallazgo (Fase 2)
   13. f13_workflow_evidencia    — workflow Evidencia (Fase 2)
   14. f14_workflow_riesgos      — workflows Riesgo + Tratamiento Riesgo (Fase 2)
+  15. f15_notificaciones_workflow — Notification Value Change en transiciones
+                               reales del workflow de Informe Cumplimiento
 
 Ejecutar manualmente:
     bench --site <site> execute sgc.setup.f_deploy_run_all.run
@@ -41,7 +43,7 @@ from sgc.setup import (
     f5_workflow_documental, f6_informe_cbc, f7_notificaciones,
     f8_workflow_auditoria, f9_workflow_encuestas, f10_workflow_revision,
     f11_workflow_cumplimiento, f12_workflow_hallazgo, f13_workflow_evidencia,
-    f14_workflow_riesgos,
+    f14_workflow_riesgos, f15_notificaciones_workflow,
 )
 
 STEPS = [
@@ -59,6 +61,7 @@ STEPS = [
     ("f12_workflow_hallazgo", f12_workflow_hallazgo),
     ("f13_workflow_evidencia", f13_workflow_evidencia),
     ("f14_workflow_riesgos", f14_workflow_riesgos),
+    ("f15_notificaciones_workflow", f15_notificaciones_workflow),
 ]
 
 
