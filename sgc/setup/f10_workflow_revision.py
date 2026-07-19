@@ -32,11 +32,22 @@ WF_REVISION = {
         ("Cerrada", "0", "DPGC"),
     ],
     # state (desde), action (boton), next_state (hacia), allowed (rol)
+    #
+    # EXCEPCIÓN DELIBERADA al default self_approval=0 de f2_workflow._upsert_workflow
+    # (Fase 1, 2026-07-19): las 4 transiciones son DPGC y solo DPGC toca este
+    # DocType -> si "Realizar revision"/"Cerrar revision" quedaran en 0, DPGC no
+    # podría avanzar NINGÚN documento que ella misma creó y el flujo de Revisión
+    # por la Dirección (ISO 9001 §9.3) quedaría inejecutable por construcción.
+    # Riesgo residual ACEPTADO y documentado (no accidental): la revisión por la
+    # dirección hoy se autoaprueba de principio a fin por una sola cuenta DPGC.
+    # Mitigación real pendiente de decisión de Alberto: promover "Rectorado/VR
+    # (lectura)" a co-aprobador activo de este workflow (dejaría de ser solo
+    # lectura). Hasta entonces, self_approval=1 en las 4.
     "transitions": [
-        ("Planificada", "Realizar revision", "Realizada", "DPGC"),
-        ("Realizada", "Devolver a planificada", "Planificada", "DPGC"),
-        ("Realizada", "Cerrar revision", "Cerrada", "DPGC"),
-        ("Cerrada", "Reabrir revision", "Realizada", "DPGC"),
+        ("Planificada", "Realizar revision", "Realizada", "DPGC", 1),
+        ("Realizada", "Devolver a planificada", "Planificada", "DPGC", 1),
+        ("Realizada", "Cerrar revision", "Cerrada", "DPGC", 1),
+        ("Cerrada", "Reabrir revision", "Realizada", "DPGC", 1),
     ],
 }
 

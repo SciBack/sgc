@@ -214,6 +214,13 @@ class IntegrationTestDocumentoControlado(IntegrationTestCase):
 
     def test_al_publicar_obsoleta_el_reemplazado(self):
         """Publicar un documento que reemplaza a otro deja al anterior en Obsoleto."""
+        # Fase 1 (2026-07-19): el workflow "Documento Controlado SGC" ahora se
+        # aplica de forma fiable en cada migrate (antes no estaba cableado a
+        # ningun runner/hook, asi que este atajo de alta directa en "Publicado"
+        # nunca chocaba con el chequeo de adyacencia de transiciones). Este test
+        # no ejercita el workflow (eso ya lo cubren los tests de arriba) -- solo
+        # usa el atajo para preparar datos, asi que se desactiva localmente.
+        factories.desactivar_workflow("Documento Controlado")
         # Documento vigente (publicado directamente: en alta no hay chequeo de transicion).
         anterior = self._crear(archivo=ARCHIVO, aprobado_por=USER, estado="Publicado")
         self.assertEqual(

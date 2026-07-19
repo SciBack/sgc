@@ -22,7 +22,7 @@ import frappe
 
 from sgc.setup.f2_workflow import _ensure_role, _upsert_workflow
 
-ROLES = ["Dueno de Proceso", "DPGC", "Autoridad Aprobadora"]
+ROLES = ["Dueño de Proceso", "DPGC", "Autoridad Aprobadora"]
 
 WF_DOCUMENTO = {
     "name": "Documento Controlado SGC",
@@ -31,9 +31,9 @@ WF_DOCUMENTO = {
     "is_active": 1,
     "send_email_alert": 0,
     "states": [
-        ("Borrador", "0", "Dueno de Proceso"),
+        ("Borrador", "0", "Dueño de Proceso"),
         ("En revision", "0", "DPGC"),
-        ("Observado", "0", "Dueno de Proceso"),
+        ("Observado", "0", "Dueño de Proceso"),
         ("Aprobado", "0", "Autoridad Aprobadora"),
         # Publicado y Obsoleto quedan bajo la DPGC: son los estados que la
         # Lista Maestra reporta hacia afuera.
@@ -41,11 +41,13 @@ WF_DOCUMENTO = {
         ("Obsoleto", "0", "DPGC"),
     ],
     "transitions": [
-        ("Borrador", "Enviar a revision", "En revision", "Dueno de Proceso"),
-        ("En revision", "Observar", "Observado", "DPGC"),
+        ("Borrador", "Enviar a revision", "En revision", "Dueño de Proceso", 1),  # avance operativo
+        ("En revision", "Observar", "Observado", "DPGC", 1),  # devuelve, afloja
+        # aprobar y publicar son el control DTN-Pro-01 -> self_approval=0 (default):
+        # quien elaboró el documento no puede aprobarlo/publicarlo bajo su misma cuenta.
         ("En revision", "Aprobar", "Aprobado", "DPGC"),
-        ("Observado", "Corregir", "Borrador", "Dueno de Proceso"),
-        ("Aprobado", "Observar", "Observado", "DPGC"),
+        ("Observado", "Corregir", "Borrador", "Dueño de Proceso", 1),  # avance operativo
+        ("Aprobado", "Observar", "Observado", "DPGC", 1),  # devuelve, afloja
         ("Aprobado", "Publicar", "Publicado", "Autoridad Aprobadora"),
         ("Publicado", "Derogar", "Obsoleto", "DPGC"),
     ],

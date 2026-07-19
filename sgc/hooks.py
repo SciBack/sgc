@@ -94,6 +94,16 @@ website_route_rules = [
 # before_install = "sgc.install.before_install"
 # after_install = "sgc.install.after_install"
 
+# Migration
+# ------------
+# Fase 1 (2026-07-19, hallazgo H8): antes de esto, `bench migrate` NO aplicaba
+# RBAC ni workflows — un site nuevo o recuperado en DR quedaba con System
+# Manager teniendo create/read/write/delete en los 68 DocTypes y ningún rol SGC
+# funcional, hasta que alguien corriera a mano 6+ `bench execute` en el orden
+# correcto (nunca documentado más que como comentario suelto). Todos los pasos
+# de f_deploy_run_all son idempotentes — reejecutar en cada migrate es seguro.
+after_migrate = "sgc.setup.f_deploy_run_all.run"
+
 # Uninstallation
 # ------------
 

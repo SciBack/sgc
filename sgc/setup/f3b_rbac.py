@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
-"""F3b RBAC — RBAC institucional del SGC: 13 Roles + Role Profiles + matriz de permisos.
+"""F3b RBAC — RBAC institucional del SGC: 14 Roles + Role Profiles + matriz de permisos.
+
+Auditoría 2026-07-19 (Fase 1 del plan de acción): matriz extendida de 18 a 46
+DocTypes de negocio (los 28 restantes no tenían NINGÚN permiso de rol SGC — solo
+System Manager podía tocarlos, incluido `No Conformidad` pese a tener workflow
+activo). Se agregó el rol "Autoridad Aprobadora" (existía en el workflow
+documental sin ningún DocPerm) y se retiraron `Nivel Escala`/`Evidencia Enlace`
+de la matriz (son child tables — istable=1 — donde un DocPerm propio es un no-op,
+Frappe evalúa permisos por el doctype padre).
 
 Fuente única de la especificación: `doc/specs/sgc-frappe/insumos/G-escalamiento-rbac.md`
   - Parte B  -> catálogo de los 13 roles (naturaleza, ámbito, qué gobierna).
@@ -53,7 +61,8 @@ ROLES = [
     ("Decano/Director (lectura)", 1),  # 10 autoridad de línea, lectura de su ámbito
     ("Responsable de Sede", 1),  # 11 coordinación territorial (requiere fix #3)
     ("Lector Externo",    0),  # 12 evaluador CONEAU/par — SIN desk access (portal/acotado)
-    # 13 SysAdmin = System Manager (Frappe core, no se recrea)
+    ("Autoridad Aprobadora", 1),  # 13 quien publica documentos/aprueba política (Rector/Decano) — ver H4/H2 2026-07-19
+    # 14 SysAdmin = System Manager (Frappe core, no se recrea)
 ]
 
 # ===========================================================================
@@ -83,11 +92,15 @@ AUDI   = "Auditor Interno"
 RECT   = "Rectorado/VR (lectura)"
 DECA   = "Decano/Director (lectura)"
 RSED   = "Responsable de Sede"
+APROB  = "Autoridad Aprobadora"
 SYSM   = "System Manager"  # SysAdmin (core)
 
 # Grupos de DocTypes según las filas colapsadas de G Parte D.
-MARCO_DTS      = ["Marco Normativo", "Elemento Marco", "Escala Valoracion", "Nivel Escala"]
-EVIDENCIA_DTS  = ["Evidencia", "Evidencia Enlace", "Trazabilidad"]
+# Nota 2026-07-19: "Nivel Escala" y "Evidencia Enlace" quitados de aquí — son
+# child tables (istable=1); Frappe ignora DocPerm propio en un child, evalúa
+# permisos por el doctype padre. Tenerlos en la matriz no tenía efecto (no-op).
+MARCO_DTS      = ["Marco Normativo", "Elemento Marco", "Escala Valoracion"]
+EVIDENCIA_DTS  = ["Evidencia", "Trazabilidad"]
 INDICADOR_DTS  = ["Indicador", "Ficha Indicador"]
 ESTRUCTURA_DTS = ["Unidad Organica", "Programa Sede", "Programa"]
 
@@ -125,9 +138,13 @@ _ROWS = {
         DPROC: "crw", DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
     },
     # --- Documento Controlado (Mayan) ---
+    # APROB (Autoridad Aprobadora) agregado 2026-07-19: ejecuta la transición
+    # "Publicar" del workflow (f5_workflow_documental.py) — sin este DocPerm el
+    # rol estaba en el workflow pero no podía tocar el documento (H4).
     "Documento Controlado": {
         DPGC: "crws", ANAL: "crws", CFAC: "r", RPRO: "rw", MIEM: "r",
         DPROC: "crw", DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+        APROB: "rw",
     },
     # --- Valor Indicador (métricas) ---
     "Valor Indicador": {
@@ -158,6 +175,164 @@ _ROWS = {
     "ESTRUCTURA": {
         DPGC: "crw", ANAL: "rw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
         DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "crws",
+    },
+
+    # =======================================================================
+    # AMPLIACIÓN 2026-07-19 (Fase 1) — 28 DocTypes que solo tenía System Manager.
+    # Confianza alta (regla derivada directamente de un Workflow ya activo, con
+    # sus roles/transiciones verificados en producción): No Conformidad,
+    # Programa Auditoria, Auditoria, Aplicacion Instrumento, Revision Direccion.
+    # Confianza media (sin workflow ni doc de flujo explícito; CRUD por rol
+    # funcional siguiendo el mismo criterio del resto de la matriz — "los datos
+    # los crean los roles funcionales, no System Manager"): el resto. Revisar
+    # con Alberto si alguna de estas necesita ajuste fino.
+    # =======================================================================
+
+    # --- No Conformidad (workflow f2: Abierta->...->Cerrada eficaz/no eficaz,
+    #     roles Responsable de Programa + DPGC). Auditor la crea al escalar un
+    #     Hallazgo Auditoria (HallazgoAuditoria.escalar_a_no_conformidad()). ---
+    "No Conformidad": {
+        DPGC: "crwsx", ANAL: "crws", CFAC: "r", RPRO: "crws", MIEM: "r",
+        DPROC: "r", DATA: "r", AUDI: "cr", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+
+    # --- Proceso (tree, mapa E/C/S) — Dueño de Proceso mantiene su ficha;
+    #     DPGC gobierna el mapa; SysAdmin sincroniza el Mapa v8.0 cuando llegue. ---
+    "Proceso": {
+        DPGC: "crw", ANAL: "rw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "rw",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "crws",
+    },
+    "Procedimiento": {
+        DPGC: "rw", ANAL: "rw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "crw",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+    "Ficha Caracterizacion Proceso": {
+        DPGC: "rw", ANAL: "rw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "crw",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+    "Interaccion Proceso": {
+        DPGC: "crw", ANAL: "rw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "cr",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+
+    # --- Comite / Reunion / Acuerdo (gobierno del comité de calidad) ---
+    "Comite": {
+        DPGC: "crw", ANAL: "rw", CFAC: "r", RPRO: "rw", MIEM: "r", DPROC: "r",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+    "Reunion": {
+        DPGC: "rw", ANAL: "rw", CFAC: "r", RPRO: "crw", MIEM: "crw", DPROC: "r",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+    "Acuerdo": {
+        DPGC: "rw", ANAL: "rw", CFAC: "r", RPRO: "crw", MIEM: "crw", DPROC: "r",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+
+    # --- Gobierno: Política/Objetivo de Calidad. Política aprobada por la
+    #     Autoridad Aprobadora (Rectorado/DPGC per PDF Requerimiento §6.1). ---
+    "Politica Calidad": {
+        DPGC: "crw", ANAL: "rw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+        APROB: "rw",
+    },
+    "Objetivo Calidad": {
+        DPGC: "crw", ANAL: "crw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+
+    # --- M12 Encuestas: Grupo Interes/Instrumento los define DPGC/Analista;
+    #     Aplicacion Instrumento tiene workflow f9 (RPRO+DPGC); Resultado lo
+    #     materializa quien tabula (Data Steward) o el propio motor. ---
+    "Grupo Interes": {
+        DPGC: "crw", ANAL: "crw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+    "Instrumento": {
+        DPGC: "crw", ANAL: "crw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+    "Aplicacion Instrumento": {
+        DPGC: "crws", ANAL: "crw", CFAC: "r", RPRO: "crws", MIEM: "r", DPROC: "r",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+    "Resultado Instrumento": {
+        DPGC: "rw", ANAL: "rw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
+        DATA: "crw", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+
+    # --- Periodo Academico: catálogo institucional, sincronizado (LAMB/manual). ---
+    "Periodo Academico": {
+        DPGC: "crw", ANAL: "r", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "crws",
+    },
+
+    # --- M06 Auditorías: workflow f8 (Auditor Interno + DPGC). Auditor crea y
+    #     ejecuta; DPGC aprueba el programa anual y cierra. ---
+    "Programa Auditoria": {
+        DPGC: "rws", ANAL: "rw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
+        DATA: "r", AUDI: "crwsx", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+    "Auditoria": {
+        DPGC: "rws", ANAL: "rw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
+        DATA: "r", AUDI: "crwsx", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+    "Hallazgo Auditoria": {
+        DPGC: "rw", ANAL: "rw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
+        DATA: "r", AUDI: "crw", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+    "Informe Auditoria": {
+        DPGC: "rw", ANAL: "rw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
+        DATA: "r", AUDI: "crw", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+
+    # --- Revision Direccion: workflow f10, las 4 transiciones son DPGC (ver
+    #     H1/Fase 1 self_approval — RECT queda con lectura, candidato a 2do
+    #     aprobador si se decide cerrar la autoaprobación aquí). ---
+    "Revision Direccion": {
+        DPGC: "crws", ANAL: "rw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+
+    # --- Informe Cumplimiento (IAC, licenciamiento CBC/SUNEDU, anual) ---
+    "Informe Cumplimiento": {
+        DPGC: "crws", ANAL: "crw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+
+    # --- GRC: Riesgo y sus hijas operativas. Sin flujo documentado aún —
+    #     DPGC gobierna el registro institucional, Dueño de Proceso identifica
+    #     y trata los riesgos de su propio proceso. ---
+    "Riesgo": {
+        DPGC: "crw", ANAL: "rw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "crw",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+    "Matriz Riesgo": {
+        DPGC: "crw", ANAL: "rw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+    "Evaluacion Riesgo": {
+        DPGC: "crw", ANAL: "rw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "crw",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+    "Tratamiento Riesgo": {
+        DPGC: "crw", ANAL: "rw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "crw",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+
+    # --- Cumplimiento regulatorio externo (entes/obligaciones que alimentan
+    #     Informe Cumplimiento) — función de DPGC. ---
+    "Ente Externo": {
+        DPGC: "crw", ANAL: "crw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+    "Obligacion Ente": {
+        DPGC: "crw", ANAL: "crw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+    "Entrega Obligacion": {
+        DPGC: "crw", ANAL: "crw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
     },
 }
 

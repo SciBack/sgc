@@ -234,6 +234,7 @@ def otorgar_programa(user, programa_sede):
         bench --site <site> execute sgc.permissions.otorgar_programa \
             --kwargs '{"user":"x@upeu.edu.pe","programa_sede":"ENF-LIMA"}'
     """
+    frappe.only_for(("DPGC", "System Manager"))
     creadas = 0
     for dt in DOCTYPES_ACOTADOS_DIRECTOS:
         existe = frappe.db.exists(

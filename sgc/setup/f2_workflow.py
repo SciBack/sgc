@@ -44,9 +44,13 @@ WF_AUTOEVAL = {
     ],
     # state (desde), action (boton), next_state (hacia), allowed (rol)
     "transitions": [
-        ("Planificada", "Iniciar evaluacion", "En curso", "Responsable de Calidad de Programa"),
-        ("En curso", "Enviar a revision", "En revision", "Responsable de Calidad de Programa"),
-        ("En revision", "Devolver a evaluacion", "En curso", "DPGC"),
+        # avance operativo del propio trabajo -> self_approval=1 (no es un control de aprobación)
+        ("Planificada", "Iniciar evaluacion", "En curso", "Responsable de Calidad de Programa", 1),
+        ("En curso", "Enviar a revision", "En revision", "Responsable de Calidad de Programa", 1),
+        ("En revision", "Devolver a evaluacion", "En curso", "DPGC", 1),  # devolución, afloja
+        # consolidar/cerrar la autoevaluación es el entregable de acreditación:
+        # self_approval=0 (default) -> DPGC no puede consolidar/cerrar la AE que
+        # ella misma creó; requiere que otra cuenta con rol DPGC lo haga.
         ("En revision", "Consolidar", "Consolidada", "DPGC"),
         ("Consolidada", "Cerrar", "Cerrada", "DPGC"),
     ],
@@ -68,12 +72,15 @@ WF_NC = {
         ("Cerrada no eficaz", "0", "DPGC"),
     ],
     "transitions": [
-        ("Abierta", "Analizar causa", "En analisis", "Responsable de Calidad de Programa"),
-        ("En analisis", "Tratar", "En tratamiento", "Responsable de Calidad de Programa"),
-        ("En tratamiento", "Enviar a verificacion", "En verificacion", "Responsable de Calidad de Programa"),
+        # avance operativo del propio tratamiento -> self_approval=1
+        ("Abierta", "Analizar causa", "En analisis", "Responsable de Calidad de Programa", 1),
+        ("En analisis", "Tratar", "En tratamiento", "Responsable de Calidad de Programa", 1),
+        ("En tratamiento", "Enviar a verificacion", "En verificacion", "Responsable de Calidad de Programa", 1),
+        # cerrar la NC es el control (verificar eficacia de lo que uno mismo trató):
+        # self_approval=0 (default) -> quien abrió/trató la NC no puede cerrarla sola.
         ("En verificacion", "Cerrar eficaz", "Cerrada eficaz", "DPGC"),
         ("En verificacion", "Cerrar no eficaz", "Cerrada no eficaz", "DPGC"),
-        ("En verificacion", "Reabrir tratamiento", "En tratamiento", "DPGC"),
+        ("En verificacion", "Reabrir tratamiento", "En tratamiento", "DPGC", 1),  # reapertura, afloja
     ],
 }
 
@@ -114,8 +121,8 @@ def _upsert_workflow(spec):
     # 1) asegurar los maestros globales de estados y acciones
     for state, _docstatus, _allow_edit in spec["states"]:
         _ensure_workflow_state(state)
-    for _from, action, _to, _allowed in spec["transitions"]:
-        _ensure_workflow_action(action)
+    for t in spec["transitions"]:
+        _ensure_workflow_action(t[1])
 
     # 2) upsert del Workflow
     if frappe.db.exists("Workflow", spec["name"]):
@@ -138,13 +145,22 @@ def _upsert_workflow(spec):
             "allow_edit": allow_edit,
         })
 
-    for from_state, action, next_state, allowed in spec["transitions"]:
+    for t in spec["transitions"]:
+        from_state, action, next_state, allowed = t[:4]
+        # Fase 1 (2026-07-19, hallazgo H1): antes esto era SIEMPRE 1 para las 43
+        # transiciones de los 9 workflows -> allow_self_approval=1 anula la
+        # segregación de funciones nativa de Frappe (permite que quien CREÓ el
+        # documento ejecute también su propia aprobación/cierre/verificación).
+        # Default ahora SEGURO (0): cada spec marca explícitamente con un 5º
+        # elemento `1` SOLO las transiciones de avance operativo o devolución/
+        # reapertura (que aflojan un control, no lo superan).
+        self_approval = t[4] if len(t) > 4 else 0
         doc.append("transitions", {
             "state": from_state,
             "action": action,
             "next_state": next_state,
             "allowed": allowed,
-            "allow_self_approval": 1,
+            "allow_self_approval": self_approval,
         })
 
     doc.save(ignore_permissions=True)

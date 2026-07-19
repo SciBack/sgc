@@ -32,8 +32,10 @@ WF_APLICACION = {
         ("Cerrada", "0", "DPGC"),
     ],
     "transitions": [
-        ("Planificada", "Iniciar campo", "En campo", "Responsable de Calidad de Programa"),
-        ("En campo", "Devolver a planificada", "Planificada", "DPGC"),
+        ("Planificada", "Iniciar campo", "En campo", "Responsable de Calidad de Programa", 1),  # avance operativo
+        ("En campo", "Devolver a planificada", "Planificada", "DPGC", 1),  # devuelve, afloja
+        # cerrar la aplicación fija los resultados que alimentan indicadores de
+        # acreditación -> self_approval=0 (default).
         ("En campo", "Cerrar aplicacion", "Cerrada", "DPGC"),
     ],
 }

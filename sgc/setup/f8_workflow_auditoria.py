@@ -35,9 +35,12 @@ WF_PROGRAMA = {
         ("Cerrado", "0", "DPGC"),
     ],
     "transitions": [
+        # aprobar/cerrar el programa: control real de DPGC sobre el trabajo del
+        # auditor -> self_approval=0 (default). Evita que Auditor+DPGC en la
+        # misma persona (H1 caso 2) se autoapruebe el programa.
         ("Borrador", "Aprobar programa", "Aprobado", "DPGC"),
-        ("Aprobado", "Iniciar ejecucion", "En ejecucion", "Auditor Interno"),
-        ("Aprobado", "Devolver a borrador", "Borrador", "DPGC"),
+        ("Aprobado", "Iniciar ejecucion", "En ejecucion", "Auditor Interno", 1),  # avance operativo
+        ("Aprobado", "Devolver a borrador", "Borrador", "DPGC", 1),  # devuelve, afloja
         ("En ejecucion", "Cerrar programa", "Cerrado", "DPGC"),
     ],
 }
@@ -57,12 +60,17 @@ WF_AUDITORIA = {
         ("Cerrada", "0", "DPGC"),
     ],
     "transitions": [
-        ("Planificada", "Iniciar auditoria", "En ejecucion", "Auditor Interno"),
-        ("En ejecucion", "Marcar ejecutada", "Ejecutada", "Auditor Interno"),
-        ("Ejecutada", "Emitir informe", "Informe emitido", "Auditor Interno"),
-        ("Ejecutada", "Devolver a ejecucion", "En ejecucion", "Auditor Interno"),
+        # avance operativo de la propia auditoría (todas el mismo rol
+        # ejecutor) -> self_approval=1. El control real de independencia de
+        # auditoría (ISO 19011) es el cierre por DPGC, abajo.
+        ("Planificada", "Iniciar auditoria", "En ejecucion", "Auditor Interno", 1),
+        ("En ejecucion", "Marcar ejecutada", "Ejecutada", "Auditor Interno", 1),
+        ("Ejecutada", "Emitir informe", "Informe emitido", "Auditor Interno", 1),
+        ("Ejecutada", "Devolver a ejecucion", "En ejecucion", "Auditor Interno", 1),
+        # cerrar la auditoría: control real -> self_approval=0 (default).
+        # Evita que Auditor+DPGC en la misma persona cierre su propia auditoría.
         ("Informe emitido", "Cerrar auditoria", "Cerrada", "DPGC"),
-        ("Informe emitido", "Reabrir", "Ejecutada", "DPGC"),
+        ("Informe emitido", "Reabrir", "Ejecutada", "DPGC", 1),  # reapertura, afloja
     ],
 }
 

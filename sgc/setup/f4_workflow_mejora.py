@@ -30,8 +30,9 @@ WF_PLAN = {
         ("Cerrado", "0", "DPGC"),
     ],
     "transitions": [
+        # aprobar y cerrar el plan: control real -> self_approval=0 (default)
         ("Borrador", "Aprobar y ejecutar", "En ejecucion", "DPGC"),
-        ("En ejecucion", "Devolver a borrador", "Borrador", "DPGC"),
+        ("En ejecucion", "Devolver a borrador", "Borrador", "DPGC", 1),  # devolución, afloja
         ("En ejecucion", "Cerrar plan", "Cerrado", "DPGC"),
     ],
 }
@@ -50,11 +51,13 @@ WF_ACCION = {
         ("Verificada no eficaz", "0", "DPGC"),
     ],
     "transitions": [
-        ("Planificada", "Iniciar", "En ejecucion", "Responsable de Calidad de Programa"),
-        ("En ejecucion", "Marcar ejecutada", "Ejecutada", "Responsable de Calidad de Programa"),
+        # avance operativo de la propia acción -> self_approval=1
+        ("Planificada", "Iniciar", "En ejecucion", "Responsable de Calidad de Programa", 1),
+        ("En ejecucion", "Marcar ejecutada", "Ejecutada", "Responsable de Calidad de Programa", 1),
+        # verificar eficacia es el control -> self_approval=0 (default)
         ("Ejecutada", "Verificar eficaz", "Verificada eficaz", "DPGC"),
         ("Ejecutada", "Verificar no eficaz", "Verificada no eficaz", "DPGC"),
-        ("Verificada no eficaz", "Reabrir", "En ejecucion", "DPGC"),
+        ("Verificada no eficaz", "Reabrir", "En ejecucion", "DPGC", 1),  # reapertura, afloja
     ],
 }
 
