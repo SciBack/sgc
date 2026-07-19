@@ -55,12 +55,12 @@ registro; lo que falta es la lógica que lo automatiza.
 | Módulo | Estado | Detalle |
 |---|---|---|
 | **M16** Seguridad, usuarios y roles | 🟡 Parcial | Autenticación por SSO y RBAC aplicados; falta segundo factor para administradores. |
-| **M17** Notificaciones y alertas | 🟡 Parcial | Reglas de vencimiento activas (documentos, evidencias, planes y acciones), notificando en el sistema; el envío por correo requiere configurar la cuenta de correo saliente. |
+| **M17** Notificaciones y alertas | ✅ Operativo | Reglas de vencimiento (documentos, evidencias, planes y acciones) notificando por correo al responsable de calidad y a quien tiene el registro a cargo. |
 | **M18** API de integración | 🔴 Pendiente | Interoperabilidad con sistemas académicos y entes externos. Fase posterior. |
 
 ## Resumen
 
-**10 operativos** · **5 parciales** · **3 pendientes**.
+**11 operativos** · **4 parciales** · **3 pendientes**.
 
 El núcleo de un ciclo de acreditación completo — **M01 + M03 + M08 + M09**, con **M11** para la
 mejora — está operativo: permite llevar un programa desde el marco normativo hasta el informe de
