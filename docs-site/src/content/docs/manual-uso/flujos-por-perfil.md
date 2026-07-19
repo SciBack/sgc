@@ -55,8 +55,10 @@ La autoridad que da el visto final a un documento (p. ej. Rector o Decano). **Pu
 documento una vez aprobado (*Publicar*: Aprobado → Publicado).
 
 ### Auditor Interno
-Aseguramiento independiente. Registra **hallazgos de auditoría** (programa, ejecución e informe).
-No valora autoevaluaciones ni cierra planes: su función es constatar, no ejecutar ni aprobar.
+Aseguramiento independiente. Planifica y ejecuta el **programa de auditorías** y cada
+**auditoría**, registra sus hallazgos y emite el informe — dos workflows completos (ver
+abajo). No valora autoevaluaciones ni cierra planes: su función es constatar, no ejecutar
+ni aprobar. El cierre de la auditoría lo hace la DPGC, no el propio auditor.
 
 ### Miembro de Comité de Calidad
 Integrante del comité de un programa. Colabora con el Responsable de Calidad de Programa en la
@@ -115,6 +117,48 @@ Cada flujo es una máquina de estados; la tabla indica **quién** ejecuta cada p
 | Aprobado | Observar | Observado | DPGC |
 | Aprobado | Publicar | Publicado | Autoridad Aprobadora |
 | Publicado | Derogar | Obsoleto | DPGC |
+
+### Programa de Auditoría
+| Desde | Acción | Hacia | Rol |
+|---|---|---|---|
+| Borrador | Aprobar programa | Aprobado | DPGC |
+| Aprobado | Iniciar ejecución | En ejecución | Auditor Interno |
+| Aprobado | Devolver a borrador | Borrador | DPGC |
+| En ejecución | Cerrar programa | Cerrado | DPGC |
+
+### Auditoría
+| Desde | Acción | Hacia | Rol |
+|---|---|---|---|
+| Planificada | Iniciar auditoría | En ejecución | Auditor Interno |
+| En ejecución | Marcar ejecutada | Ejecutada | Auditor Interno |
+| Ejecutada | Emitir informe | Informe emitido | Auditor Interno |
+| Ejecutada | Devolver a ejecución | En ejecución | Auditor Interno |
+| Informe emitido | Cerrar auditoría | Cerrada | DPGC |
+| Informe emitido | Reabrir | Ejecutada | DPGC |
+
+El cierre lo hace la DPGC, no el propio auditor — es el punto de independencia de
+auditoría (ISO 19011): si una misma persona tuviera ambos roles, no podría cerrar su
+propia auditoría (ver `allow_self_approval` en [RBAC](/sgc/desarrollo/rbac/)).
+
+### Aplicación de Instrumento (M12, encuestas)
+| Desde | Acción | Hacia | Rol |
+|---|---|---|---|
+| Planificada | Iniciar campo | En campo | Responsable de Calidad de Programa |
+| En campo | Devolver a planificada | Planificada | DPGC |
+| En campo | Cerrar aplicación | Cerrada | DPGC |
+
+### Revisión por la Dirección
+| Desde | Acción | Hacia | Rol |
+|---|---|---|---|
+| Planificada | Realizar revisión | Realizada | DPGC |
+| Realizada | Devolver a planificada | Planificada | DPGC |
+| Realizada | Cerrar revisión | Cerrada | DPGC |
+| Cerrada | Reabrir revisión | Realizada | DPGC |
+
+Las 4 transiciones las gobierna en exclusiva la DPGC (preside la revisión por la
+dirección, ISO 9001 §9.3) — es la única excepción del sistema donde la autoaprobación
+queda permitida a propósito, documentada como riesgo residual: ver
+[RBAC](/sgc/desarrollo/rbac/).
 
 ## Quién puede crear cada cosa
 

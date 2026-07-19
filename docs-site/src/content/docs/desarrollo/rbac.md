@@ -1,13 +1,23 @@
 ---
 title: "RBAC: Roles y permisos"
-description: Los 13 roles institucionales, la matriz de permisos y el permlevel del nivel oficial de acreditación.
+description: Los 14 roles institucionales, la matriz de permisos (46 DocTypes) y el permlevel del nivel oficial de acreditación.
 ---
 
 El control de acceso institucional se define en `sgc/setup/f3b_rbac.py`, que aplica
-**13 roles** + una matriz rol × DocType × permiso, más una regla especial de
-permlevel para el campo oficial de nivel de acreditación.
+**14 roles** + una matriz rol × DocType × permiso que cubre los **46 DocTypes de
+negocio** del SGC, más una regla especial de permlevel para el campo oficial de
+nivel de acreditación.
 
-## Los 13 roles
+:::note[Actualizado 2026-07-19]
+Hasta esa fecha la matriz solo cubría 18 de los 46 DocTypes — los 28 restantes,
+incluido `No Conformidad` pese a tener workflow activo, solo eran accesibles por
+`System Manager`. Se extendió a los 46 y se agregó el rol "Autoridad Aprobadora"
+(existía en el workflow de Control Documental sin ningún permiso — el workflow era
+inejecutable). Ver también el fix de `allow_self_approval` en
+[Flujos por perfil](/sgc/manual-uso/flujos-por-perfil/).
+:::
+
+## Los 14 roles
 
 | Rol | Ámbito |
 |---|---|
@@ -22,7 +32,8 @@ permlevel para el campo oficial de nivel de acreditación.
 | **Rectorado/VR (lectura)** | Alta dirección, solo lectura |
 | **Decano/Director (lectura)** | Autoridad de línea, lectura de su ámbito |
 | **Responsable de Sede** | Coordinación territorial |
-| **Lector Externo** | Evaluador de una acreditadora — **sin acceso al Desk**, solo portal acotado |
+| **Autoridad Aprobadora** | Publica documentos aprobados y aprueba la Política de Calidad (p. ej. Rector o Decano) |
+| **Lector Externo** | Evaluador de una acreditadora — **sin acceso al Desk**. Rol creado, **aún sin ningún permiso ni portal**: dárselo requiere construir primero el portal/web-form acotado, que todavía no existe en el repo |
 | **System Manager** | SysAdmin (rol núcleo de Frappe, no se recrea) |
 
 ## Principio de diseño
@@ -65,8 +76,29 @@ Paquetes reutilizables de roles para asignación rápida:
 
 ## Importante para desarrollo/pruebas
 
-**System Manager tiene `create=0` (solo lectura) por diseño** sobre los DocTypes de
-negocio del SGC — los datos los crean los roles funcionales. Para probar o demostrar
-el sistema, usa un usuario con un rol de comité (p. ej. `Comité de Programa`), **no**
-System Manager: con System Manager no vas a poder crear autoevaluaciones, evidencias
-ni documentos.
+**System Manager tiene `create=0` (solo lectura) por diseño en los DocTypes que
+están en la matriz** — los datos los crean los roles funcionales. Para probar o
+demostrar el sistema, usa un usuario con un rol de comité (p. ej. `Comité de
+Programa`), **no** System Manager: con System Manager no vas a poder crear
+autoevaluaciones, evidencias ni documentos en esos DocTypes.
+
+(Matiz técnico: en los DocType fuera de la matriz de este script, `System Manager`
+conserva los permisos por defecto del `.json` del DocType, incluido `delete` —
+ningún rol SGC tiene `delete` en ningún DocType de la matriz, por diseño.)
+
+## Segregación de funciones en los workflows (`allow_self_approval`)
+
+Los 9 workflows nativos del SGC (`f2_workflow.py`, `f4_workflow_mejora.py`,
+`f5_workflow_documental.py`, `f8_workflow_auditoria.py`, `f9_workflow_encuestas.py`,
+`f10_workflow_revision.py`) usan el flag nativo de Frappe `allow_self_approval` por
+transición: en `0`, quien **creó** el documento no puede ejecutar esa transición
+(la tiene que ejecutar otra persona con el rol permitido). Por defecto está en `0`;
+se marca `1` explícitamente solo en el avance operativo del propio trabajo o en una
+devolución/reapertura (que afloja un control, no lo supera). Las transiciones de
+aprobación/verificación/cierre reales quedan en `0`.
+
+**Excepción documentada:** `Revision Direccion SGC` mantiene `1` en sus 4
+transiciones — las cuatro las ejecuta el rol `DPGC` en exclusiva, así que ponerlas
+en `0` dejaría el workflow inejecutable (nadie más puede tocarlo). Es un riesgo
+residual aceptado hasta que se decida un segundo rol aprobador (candidato natural:
+`Rectorado/VR (lectura)`, promovido a coaprobador activo).
