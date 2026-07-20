@@ -18,6 +18,7 @@ class IntegrationTestLoginPortada(IntegrationTestCase):
     PREFIJO = "TEST-LOGIN-PORTADA"
 
     def setUp(self):
+        super().setUp()
         frappe.cache.delete_value(_CACHE_KEY)
         self._user_anterior = frappe.session.user
         frappe.set_user("Administrator")
@@ -27,8 +28,11 @@ class IntegrationTestLoginPortada(IntegrationTestCase):
             frappe.db.delete(doctype)
 
     def tearDown(self):
-        frappe.cache.delete_value(_CACHE_KEY)
-        frappe.set_user(self._user_anterior)
+        try:
+            frappe.cache.delete_value(_CACHE_KEY)
+            frappe.set_user(self._user_anterior)
+        finally:
+            super().tearDown()
 
     def _insertar(self, doctype, codigo, **values):
         return frappe.get_doc({"doctype": doctype, "codigo": codigo, **values}).insert(
@@ -108,8 +112,10 @@ class IntegrationTestLoginPortada(IntegrationTestCase):
         self.assertEqual(set(payload["autoevaluaciones"]), {"activas", "total", "pct"})
         self.assertEqual(set(payload["evidencias"]), {"vigentes", "con_vigencia", "pct"})
         self.assertEqual(payload["programas"], {"activos": 3, "sedes": 2})
-        self.assertEqual(payload["autoevaluaciones"], {"activas": 3, "total": 5, "pct": 60.0})
+        self.assertEqual(payload["autoevaluaciones"], {"activas": 3, "total": 5, "pct": 60})
         self.assertEqual(payload["evidencias"], {"vigentes": 2, "con_vigencia": 3, "pct": 67})
+        self.assertIsInstance(payload["autoevaluaciones"]["pct"], int)
+        self.assertIsInstance(payload["evidencias"]["pct"], int)
         self.assertRegex(payload["calculado_en"], re.compile(r"[+-]\d{2}:\d{2}$"))
         self.assertIn(metricas_portada, frappe.whitelisted)
         self.assertIn(metricas_portada, frappe.allowed_guest_methods)
@@ -125,6 +131,11 @@ class IntegrationTestLoginPortada(IntegrationTestCase):
     def test_segunda_llamada_usa_cache_aunque_cambie_la_base(self):
         programa = self._crear_programa_sede("CACHE", "CACHE")
         primero = metricas_portada()
+        redis_key = frappe.cache.make_key(_CACHE_KEY)
+        frappe.local.cache.pop(redis_key, None)
+        ttl = frappe.cache.ttl(redis_key)
+        self.assertGreaterEqual(ttl, 1)
+        self.assertLessEqual(ttl, 300)
 
         frappe.db.set_value(
             "Programa Sede", programa.name, "estado", "inactivo", update_modified=False
