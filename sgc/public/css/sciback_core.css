@@ -1,0 +1,59 @@
+/* SciBack Design System 2.0 — núcleo visual agnóstico a instituciones. */
+:root {
+  --color-fondo: #f7f7f8;
+  --color-superficie: #ffffff;
+  --color-superficie-2: #fafafa;
+  --color-superficie-3: #f1f1f3;
+  --color-borde: #e4e4e7;
+  --color-borde-fuerte: #d1d1d6;
+  --color-tinta: #18181b;
+  --color-tinta-suave: #52525b;
+  --color-tinta-tenue: #71717a;
+
+  --color-accion: var(--color-marca-primaria-600);
+  --color-accion-hover: var(--color-marca-primaria-700);
+  --color-foco: var(--color-marca-primaria-500);
+  --color-info: #2563eb;
+  --color-exito: #15803d;
+  --color-aviso: #a16207;
+  --color-peligro: #b91c1c;
+
+  --color-serie-1: #4f46e5;
+  --color-serie-2: #0f766e;
+  --color-serie-5: #0284c7;
+  --color-serie-3: #c2410c;
+  --color-serie-4: #9333ea;
+  --color-rejilla: #e4e4e7;
+
+  --color-nivel-1: #71717a;
+  --color-nivel-2: #4f46e5;
+  --color-nivel-3: #4338ca;
+  --color-nivel-4: #3730a3;
+  --color-nivel-5: #a16207;
+  --color-nivel-6: #854d0e;
+}
+
+.dark {
+  --color-fondo: #0b0b0f;
+  --color-superficie: #141419;
+  --color-superficie-2: #1b1b21;
+  --color-superficie-3: #24242c;
+  --color-borde: #2d2d36;
+  --color-borde-fuerte: #3f3f4a;
+  --color-tinta: #f4f4f5;
+  --color-tinta-suave: #c4c4cc;
+  --color-tinta-tenue: #a1a1aa;
+
+  --color-serie-1: #818cf8;
+  --color-serie-2: #2dd4bf;
+  --color-serie-5: #38bdf8;
+  --color-serie-3: #fb923c;
+  --color-serie-4: #c084fc;
+  --color-rejilla: #2d2d36;
+  --color-nivel-1: #a1a1aa;
+  --color-nivel-2: #818cf8;
+  --color-nivel-3: #a5b4fc;
+  --color-nivel-4: #c4b5fd;
+  --color-nivel-5: #f59e0b;
+  --color-nivel-6: #fbbf24;
+}

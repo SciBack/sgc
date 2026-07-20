@@ -1,0 +1,26 @@
+/* UPeU — capa institucional de marca para SciBack Design System 2.0. */
+:root {
+  --color-marca-primaria-50: #eef4fa;
+  --color-marca-primaria-100: #d8e6f3;
+  --color-marca-primaria-200: #b3cde6;
+  --color-marca-primaria-300: #7fadd4;
+  --color-marca-primaria-400: #4a90d9;
+  --color-marca-primaria-500: #2166ac;
+  --color-marca-primaria-600: #0f4c81;
+  --color-marca-primaria-700: #003366;
+  --color-marca-primaria-800: #002a54;
+  --color-marca-primaria-900: #001f3f;
+
+  --color-marca-secundaria-50: #fff8e6;
+  --color-marca-secundaria-100: #ffefc2;
+  --color-marca-secundaria-200: #ffe08a;
+  --color-marca-secundaria-300: #fcc94d;
+  --color-marca-secundaria-400: #fab724;
+  --color-marca-secundaria-500: #f8a900;
+  --color-marca-secundaria-600: #d98f00;
+  --color-marca-secundaria-700: #b45309;
+  --color-marca-secundaria-800: #92400e;
+
+  --color-sobre-marca-primaria: #ffffff;
+  --color-sobre-marca-secundaria: #17253a;
+}

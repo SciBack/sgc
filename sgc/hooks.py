@@ -27,7 +27,11 @@ app_include_css = "/assets/sgc/css/sgc_desk.css"
 # app_include_js = "/assets/sgc/js/sgc.js"
 
 # include js, css files in header of web template
-web_include_css = "/assets/sgc/css/sgc_web.css"
+web_include_css = [
+	"/assets/sgc/css/sciback_core.css",
+	"/assets/sgc/css/themes/upeu.css",
+	"/assets/sgc/css/sgc_web.css",
+]
 web_include_js = "/assets/sgc/js/sgc_web.js"
 
 # include custom scss in every website theme (without file extension ".scss")
@@ -294,4 +298,3 @@ scheduler_events = {
 # ------------
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
-

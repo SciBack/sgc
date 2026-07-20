@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "verify:login-design:canary": "node scripts/verificar-capa-institucional-canary.mjs",
+    "verify:login-design": "node scripts/verificar-capa-institucional.mjs ../sgc/public/css/themes/upeu.css && npm run verify:login-design:canary && node scripts/verificar-tokens-login.mjs && node scripts/verificar-contraste-login.mjs"
   },
   "dependencies": {
     "frappe-ui": "1.0.0-beta.21",
