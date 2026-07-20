@@ -57,9 +57,15 @@
     return stat;
   }
 
-  function crearEstructura() {
+  function crearEstructura(contenedor) {
     var existente = document.getElementById("sgc-login-cover");
-    if (existente) return existente;
+    if (existente) {
+      if (contenedor && !contenedor.contains(existente)) {
+        contenedor.insertBefore(existente, contenedor.firstChild);
+      }
+      return existente;
+    }
+    if (!contenedor) return null;
 
     var cover = crearElemento("div", "sgc-login-cover");
     cover.id = "sgc-login-cover";
@@ -126,7 +132,7 @@
         "© 2026 SGC UPeU · Universidad Peruana Unión · Dirección de Gestión de la Calidad",
       ),
     );
-    document.body.insertBefore(cover, document.body.firstChild);
+    contenedor.insertBefore(cover, contenedor.firstChild);
     return cover;
   }
 
@@ -312,12 +318,22 @@
     return presentada && presentada.querySelector("a.btn-keycloak") ? presentada : null;
   }
 
+  function encontrarMainNativo(card) {
+    var pageContent = document.querySelector(".page-content");
+    if (pageContent && pageContent.tagName === "MAIN") return pageContent;
+    if (pageContent && pageContent.closest("main")) return pageContent.closest("main");
+    if (card && card.closest("main")) return card.closest("main");
+    return document.querySelector("main.container, main");
+  }
+
   function aplicar() {
     if (esLoginLocal() || !esPaginaLogin()) return;
     var card = encontrarTarjetaFuente();
     if (!card) return false;
+    var main = encontrarMainNativo(card);
+    if (!main) return false;
     document.body.classList.add("sgc-login");
-    crearEstructura();
+    crearEstructura(main);
     adaptarTarjeta(card);
     return true;
   }

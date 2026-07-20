@@ -51,8 +51,12 @@ test("el montaje es idempotente y conserva los nodos nativos", async (t) => {
   dom.window.SGCLogin.start();
   await settle();
 
+  const main = dom.window.document.querySelector("main");
+  const cover = dom.window.document.querySelector("#sgc-login-cover");
   assert.equal(dom.window.document.querySelectorAll("#sgc-login-cover").length, 1);
   assert.equal(dom.window.document.querySelectorAll("main").length, 1);
+  assert.equal(main.contains(cover), true);
+  assert.equal(main.contains(cta), true);
   assert.deepEqual(
     [...dom.window.document.querySelectorAll(".sgc-login-stat")].map((node) => node.tagName),
     ["DIV", "DIV", "DIV"],
@@ -92,6 +96,8 @@ test("sin CTA conserva el login nativo y monta cuando Frappe publica el enlace",
   assert.equal(document.querySelectorAll("#sgc-login-cover").length, 1);
   assert.equal(document.body.classList.contains("sgc-login"), true);
   assert.equal(document.querySelectorAll("main").length, 1);
+  assert.equal(document.querySelector("main").contains(document.querySelector("#sgc-login-cover")), true);
+  assert.equal(document.querySelector("main").contains(card), true);
   assert.strictEqual(document.querySelector(".sgc-login-card-slot a.btn-keycloak"), cta);
   assert.equal(cta.href, oauthHref);
 });
@@ -121,8 +127,14 @@ test("un re-render de Frappe reemplaza la tarjeta presentada con los nodos nuevo
   await settle();
 
   const slot = document.querySelector(".sgc-login-card-slot");
+  const main = document.querySelector("main");
+  const cover = document.querySelector("#sgc-login-cover");
   assert.equal(document.querySelectorAll("#sgc-login-cover").length, 1);
+  assert.equal(document.querySelectorAll("main").length, 1);
+  assert.equal(main.contains(cover), true);
+  assert.equal(main.contains(nuevaTarjeta), true);
   assert.strictEqual(slot.querySelector("a.btn-keycloak"), nuevoCta);
+  assert.equal(main.contains(nuevoCta), true);
   assert.equal(nuevoCta.href, oauthHref.replace("state=ORIGINAL", "state=NEW"));
   assert.match(nuevoCta.href, /state=NEW$/);
   assert.strictEqual(slot.querySelector('[role="alert"]'), nuevaAlerta);
