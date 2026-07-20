@@ -29,8 +29,9 @@ const normalizarHex = (valor) => {
   if (/^#[0-9a-f]{3}$/.test(hex)) return `#${[...hex.slice(1)].map((c) => c + c).join('')}`
   return null
 }
+const sinImportant = (valor) => valor.replace(/\s*!important\s*$/i, '').trim()
 const resolver = (valor, visitados = new Set()) => {
-  const limpio = valor.trim()
+  const limpio = sinImportant(valor)
   const hex = normalizarHex(limpio)
   if (hex) return hex
   const referencia = limpio.match(/^var\(\s*(--color-[\w-]+)\s*\)$/)
@@ -48,9 +49,10 @@ const selector = (nombre, propiedad) => {
 }
 const extraerColor = (decl) => {
   if (!decl) return null
-  const valorDirecto = resolver(decl.value)
+  const valor = sinImportant(decl.value)
+  const valorDirecto = resolver(valor)
   if (valorDirecto) return valorDirecto
-  const color = decl.value.match(/(var\(\s*--color-[\w-]+\s*\)|#[0-9a-fA-F]{3,6})\s*$/)?.[1]
+  const color = valor.match(/(var\(\s*--color-[\w-]+\s*\)|#[0-9a-fA-F]{3,6})\s*$/)?.[1]
   return color ? resolver(color) : null
 }
 const luminancia = (hex) => {
@@ -63,16 +65,16 @@ const contraste = (a, b) => {
   return (alta + 0.05) / (baja + 0.05)
 }
 
-const tarjeta = 'body.sgc-login .page-card.login-content'
-const titulo = 'body.sgc-login .page-card-head-text h4'
-const subtitulo = 'body.sgc-login .page-card-subtitle'
-const cta = 'body.sgc-login .btn-login-option.btn-keycloak'
+const tarjeta = '.sgc-login-card'
+const titulo = '.sgc-login-card-title'
+const copia = '.sgc-login-card-copy'
+const cta = '.sgc-login-cta'
 const estilos = {
   fondoTarjeta: selector(tarjeta, 'background'),
   textoTarjeta: selector(tarjeta, 'color'),
   bordeTarjeta: selector(tarjeta, 'border'),
   titulo: selector(titulo, 'color'),
-  subtitulo: selector(subtitulo, 'color'),
+  copia: selector(copia, 'color'),
   fondoCta: selector(cta, 'background'),
   textoCta: selector(cta, 'color'),
 }
@@ -81,11 +83,11 @@ const esperados = [
   ['texto CTA', estilos.textoCta, 'var(--color-sobre-marca-primaria)'],
   ['texto de tarjeta', estilos.textoTarjeta, '#17253a'],
   ['título', estilos.titulo, '#17253a'],
-  ['subtítulo', estilos.subtitulo, '#62748c'],
+  ['copy', estilos.copia, '#53657b'],
 ]
 let fallos = 0
 for (const [nombre, decl, esperado] of esperados) {
-  if (!decl || decl.value.trim().toLowerCase() !== esperado) {
+  if (!decl || sinImportant(decl.value).toLowerCase() !== esperado) {
     fallos += 1
     console.error(`✗ ${nombre}: se esperaba ${esperado}, se encontró ${decl?.value ?? 'declaración ausente'}.`)
   }
@@ -99,7 +101,7 @@ const fondoTarjeta = extraerColor(estilos.fondoTarjeta)
 const pruebas = [
   ['CTA', extraerColor(estilos.textoCta), extraerColor(estilos.fondoCta), 4.5],
   ['título', extraerColor(estilos.titulo), fondoTarjeta, 4.5],
-  ['subtítulo', extraerColor(estilos.subtitulo), fondoTarjeta, 4.5],
+  ['copy', extraerColor(estilos.copia), fondoTarjeta, 4.5],
   ['cromo de borde', extraerColor(estilos.bordeTarjeta), fondoTarjeta, 3],
 ]
 for (const [nombre, frente, fondo, minimo] of pruebas) {
