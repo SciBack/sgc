@@ -15,7 +15,7 @@ _AE_ACTIVAS = ("Planificada", "En curso", "En revision")
 
 
 def _pct(numerador, denominador):
-    return round(numerador * 100 / denominador, 1) if denominador else None
+    return round(numerador * 100 / denominador) if denominador else None
 
 
 @frappe.whitelist(allow_guest=True)

@@ -109,7 +109,7 @@ class IntegrationTestLoginPortada(IntegrationTestCase):
         self.assertEqual(set(payload["evidencias"]), {"vigentes", "con_vigencia", "pct"})
         self.assertEqual(payload["programas"], {"activos": 3, "sedes": 2})
         self.assertEqual(payload["autoevaluaciones"], {"activas": 3, "total": 5, "pct": 60.0})
-        self.assertEqual(payload["evidencias"], {"vigentes": 2, "con_vigencia": 3, "pct": 66.7})
+        self.assertEqual(payload["evidencias"], {"vigentes": 2, "con_vigencia": 3, "pct": 67})
         self.assertRegex(payload["calculado_en"], re.compile(r"[+-]\d{2}:\d{2}$"))
         self.assertIn(metricas_portada, frappe.whitelisted)
         self.assertIn(metricas_portada, frappe.allowed_guest_methods)
