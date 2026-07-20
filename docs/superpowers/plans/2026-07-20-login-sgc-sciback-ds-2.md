@@ -289,8 +289,12 @@ Expected: verificador institucional, canary, tokens y contraste en verde.
 - Create: `sgc/public/fonts/public-sans-latin-400-normal.woff2`
 - Create: `sgc/public/fonts/public-sans-latin-600-normal.woff2`
 - Create: `sgc/public/fonts/public-sans-latin-700-normal.woff2`
+- Create: `sgc/public/fonts/LICENSE-Archivo.txt`
+- Create: `sgc/public/fonts/LICENSE-Public-Sans.txt`
 - Modify: `frontend/package.json`
 - Modify: `frontend/package-lock.json`
+- Delete: `frontend/yarn.lock`
+- Modify: `sgc/www/sgc.py`
 
 - [ ] **Step 1: Verificar las fuentes exactas**
 
@@ -307,16 +311,20 @@ mkdir -p sgc/public/media/login
 cp /Users/alberto/proyectos/productos/devsupeu/canonico/frontend/public/oficinas-dti.mp4 sgc/public/media/login/oficinas-dti.mp4
 cp /Users/alberto/proyectos/productos/devsupeu/canonico/frontend/public/oficinas-dti-poster.jpg sgc/public/media/login/oficinas-dti-poster.jpg
 cp /Users/alberto/proyectos/upeu/branding/logos/2026-web/upeu-logo-2026-white.svg sgc/public/media/login/upeu-logo-2026-white.svg
-cd frontend && npm install --save-dev @fontsource/archivo @fontsource/public-sans && cd ..
+cd frontend && /Users/alberto/.nvm/versions/node/v24.15.0/bin/node /Users/alberto/.nvm/versions/node/v24.15.0/lib/node_modules/npm/bin/npm-cli.js install --save-dev --package-lock-only --ignore-scripts @fontsource/archivo @fontsource/public-sans && cd ..
 mkdir -p sgc/public/fonts
 cp frontend/node_modules/@fontsource/archivo/files/archivo-latin-700-normal.woff2 sgc/public/fonts/archivo-latin-700-normal.woff2
 cp frontend/node_modules/@fontsource/public-sans/files/public-sans-latin-400-normal.woff2 sgc/public/fonts/public-sans-latin-400-normal.woff2
 cp frontend/node_modules/@fontsource/public-sans/files/public-sans-latin-600-normal.woff2 sgc/public/fonts/public-sans-latin-600-normal.woff2
 cp frontend/node_modules/@fontsource/public-sans/files/public-sans-latin-700-normal.woff2 sgc/public/fonts/public-sans-latin-700-normal.woff2
+cp frontend/node_modules/@fontsource/archivo/LICENSE sgc/public/fonts/LICENSE-Archivo.txt
+cp frontend/node_modules/@fontsource/public-sans/LICENSE sgc/public/fonts/LICENSE-Public-Sans.txt
 ```
 
 Esta es una operación local de construcción del repo, no un despliegue por `scp`.
-`package-lock.json` fija las versiones exactas resueltas de Fontsource.
+`package-lock.json` fija las versiones exactas resueltas de Fontsource. npm 11.12.1 es
+el gestor canónico, Node 24 es el runtime mínimo y `frontend/yarn.lock` se elimina para
+evitar dos fuentes de verdad.
 
 - [ ] **Step 3: Verificar codecs y faststart**
 
@@ -334,14 +342,17 @@ No recomprimir si ya cumple.
 file sgc/public/media/login/*
 du -h sgc/public/media/login/*
 file sgc/public/fonts/*.woff2
+cmp frontend/node_modules/@fontsource/archivo/LICENSE sgc/public/fonts/LICENSE-Archivo.txt
+cmp frontend/node_modules/@fontsource/public-sans/LICENSE sgc/public/fonts/LICENSE-Public-Sans.txt
 ```
 
-Expected: tipos correctos; ningún activo externo ni symlink.
+Expected: tipos correctos; ningún activo externo ni symlink; licencias completas con
+copyright/attribution y el texto OFL preservados.
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add sgc/public/media/login sgc/public/fonts frontend/package.json frontend/package-lock.json
+git add sgc/public/media/login sgc/public/fonts frontend/package.json frontend/package-lock.json frontend/yarn.lock sgc/www/sgc.py docs/superpowers/plans/2026-07-20-login-sgc-sciback-ds-2.md
 git commit -m "feat(ui): autoaloja media de la portada SGC"
 ```
 

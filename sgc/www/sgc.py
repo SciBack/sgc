@@ -1,5 +1,5 @@
 """SGC SPA — punto de entrada. Sirve el bundle Vue/frappe-ui (www/sgc.html,
-generado por `yarn build` en frontend/) para toda ruta bajo /sgc/* (ver
+generado por `npm run build` en frontend/) para toda ruta bajo /sgc/* (ver
 website_route_rules en hooks.py). El enrutado real lo hace vue-router en
 el cliente; este handler solo inyecta el boot context (csrf_token, usuario).
 """
