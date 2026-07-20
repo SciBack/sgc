@@ -61,6 +61,41 @@ test("el montaje es idempotente y conserva los nodos nativos", async (t) => {
   assert.equal(alert.textContent.trim(), "No se pudo completar el acceso.");
 });
 
+test("un re-render de Frappe reemplaza la tarjeta presentada con los nodos nuevos", async (t) => {
+  const dom = createPage();
+  t.after(() => closePage(dom));
+  const document = dom.window.document;
+  const oldCta = document.querySelector("a.btn-keycloak");
+
+  dom.window.eval(source);
+  dom.window.SGCLogin.start();
+  await settle();
+
+  const nuevaTarjeta = document.createElement("section");
+  nuevaTarjeta.className = "login-content";
+  const nuevaAlerta = document.createElement("div");
+  nuevaAlerta.className = "alert alert-danger";
+  nuevaAlerta.setAttribute("role", "alert");
+  nuevaAlerta.textContent = "La sesión institucional expiró.";
+  const nuevoCta = document.createElement("a");
+  nuevoCta.className = "btn-keycloak";
+  nuevoCta.href = oauthHref.replace("state=ORIGINAL", "state=NEW");
+  nuevoCta.textContent = "Reintentar acceso institucional";
+  nuevaTarjeta.append(nuevaAlerta, nuevoCta);
+  document.querySelector(".page-content").replaceChildren(nuevaTarjeta);
+  await settle();
+
+  const slot = document.querySelector(".sgc-login-card-slot");
+  assert.equal(document.querySelectorAll("#sgc-login-cover").length, 1);
+  assert.strictEqual(slot.querySelector("a.btn-keycloak"), nuevoCta);
+  assert.equal(nuevoCta.href, oauthHref.replace("state=ORIGINAL", "state=NEW"));
+  assert.match(nuevoCta.href, /state=NEW$/);
+  assert.strictEqual(slot.querySelector('[role="alert"]'), nuevaAlerta);
+  assert.equal(nuevaAlerta.textContent, "La sesión institucional expiró.");
+  assert.equal(slot.contains(oldCta), false);
+  assert.equal(oldCta.isConnected, false);
+});
+
 test("login_local deja intacto el login de emergencia", async (t) => {
   const dom = createPage({ query: "?login_local=1" });
   t.after(() => closePage(dom));

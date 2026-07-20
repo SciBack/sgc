@@ -292,11 +292,19 @@
     }
   }
 
+  function encontrarTarjetaFuente() {
+    var tarjetas = document.querySelectorAll(".login-content");
+    for (var indice = 0; indice < tarjetas.length; indice += 1) {
+      if (!tarjetas[indice].closest("#sgc-login-cover")) return tarjetas[indice];
+    }
+    return document.querySelector("#sgc-login-cover .login-content");
+  }
+
   function aplicar() {
     if (esLoginLocal() || !esPaginaLogin()) return;
     document.body.classList.add("sgc-login");
     crearEstructura();
-    adaptarTarjeta(document.querySelector(".login-content"));
+    adaptarTarjeta(encontrarTarjetaFuente());
   }
 
   function detenerObserver() {
