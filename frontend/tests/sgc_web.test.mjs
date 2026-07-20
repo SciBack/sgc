@@ -143,6 +143,61 @@ test("un re-render de Frappe reemplaza la tarjeta presentada con los nodos nuevo
   assert.equal(oldCta.isConnected, false);
 });
 
+test("un re-render conserva cover, video, metricas y una sola carga API", async (t) => {
+  const payload = {
+    programas: { activos: 22, sedes: 3 },
+    autoevaluaciones: { activas: 6, total: 10, pct: 60 },
+    evidencias: { vigentes: 8, con_vigencia: 10, pct: 80 },
+  };
+  let fetchCalls = 0;
+  const dom = createPage({
+    fetchImpl: async () => {
+      fetchCalls += 1;
+      return { ok: true, json: async () => ({ message: payload }) };
+    },
+  });
+  t.after(() => closePage(dom));
+  const document = dom.window.document;
+
+  dom.window.eval(source);
+  dom.window.SGCLogin.start();
+  await settle();
+
+  const cover = document.querySelector("#sgc-login-cover");
+  const video = cover.querySelector("video.sgc-login-video");
+  assert.deepEqual(
+    [...cover.querySelectorAll("[data-metric-value]")].map((node) => node.textContent),
+    ["22", "6", "80%"],
+  );
+
+  const nuevaTarjeta = document.createElement("section");
+  nuevaTarjeta.className = "login-content";
+  const nuevaAlerta = document.createElement("div");
+  nuevaAlerta.setAttribute("role", "alert");
+  nuevaAlerta.textContent = "Se requiere un nuevo acceso.";
+  const nuevoCta = document.createElement("a");
+  nuevoCta.className = "btn-keycloak";
+  nuevoCta.href = oauthHref.replace("state=ORIGINAL", "state=NEW");
+  nuevaTarjeta.append(nuevaAlerta, nuevoCta);
+  document.querySelector(".page-content").replaceChildren(nuevaTarjeta);
+  await settle();
+
+  const main = document.querySelector("main");
+  assert.equal(document.querySelectorAll("#sgc-login-cover").length, 1);
+  assert.strictEqual(document.querySelector("#sgc-login-cover"), cover);
+  assert.strictEqual(cover.querySelector("video.sgc-login-video"), video);
+  assert.equal(main.contains(cover), true);
+  assert.equal(main.contains(nuevaTarjeta), true);
+  assert.strictEqual(cover.querySelector("a.btn-keycloak"), nuevoCta);
+  assert.equal(nuevoCta.href, oauthHref.replace("state=ORIGINAL", "state=NEW"));
+  assert.strictEqual(cover.querySelector('[role="alert"]'), nuevaAlerta);
+  assert.deepEqual(
+    [...cover.querySelectorAll("[data-metric-value]")].map((node) => node.textContent),
+    ["22", "6", "80%"],
+  );
+  assert.equal(fetchCalls, 1);
+});
+
 test("login_local deja intacto el login de emergencia", async (t) => {
   const dom = createPage({ query: "?login_local=1" });
   t.after(() => closePage(dom));

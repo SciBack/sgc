@@ -9,6 +9,7 @@
 
   var document = window.document;
   var estado = {
+    cover: null,
     observer: null,
     observerTimer: null,
     metricasSolicitadas: false,
@@ -58,8 +59,9 @@
   }
 
   function crearEstructura(contenedor) {
-    var existente = document.getElementById("sgc-login-cover");
+    var existente = document.getElementById("sgc-login-cover") || estado.cover;
     if (existente) {
+      estado.cover = existente;
       if (contenedor && !contenedor.contains(existente)) {
         contenedor.insertBefore(existente, contenedor.firstChild);
       }
@@ -69,6 +71,7 @@
 
     var cover = crearElemento("div", "sgc-login-cover");
     cover.id = "sgc-login-cover";
+    estado.cover = cover;
 
     var video = crearElemento("video", "sgc-login-video");
     video.setAttribute("aria-hidden", "true");
