@@ -14,6 +14,42 @@ class TestLoginAssets(TestCase):
 		self.css = (public / "css" / "sgc_web.css").read_text(encoding="utf-8")
 		self.js = (public / "js" / "sgc_web.js").read_text(encoding="utf-8")
 
+	def assert_backdrop_filter_restringido_a_stats(self, css):
+		css_normalizado = re.sub(r"/\*.*?\*/", "", css, flags=re.S).lower()
+		reglas = []
+		for coincidencia in re.finditer(r"([^{}]+)\{([^{}]*)\}", css_normalizado, re.S):
+			propiedades = re.findall(
+				r"(?:^|;)\s*(-webkit-backdrop-filter|backdrop-filter)\s*:",
+				coincidencia.group(2),
+			)
+			if propiedades:
+				selectores = [
+					selector.strip() for selector in coincidencia.group(1).split(",")
+				]
+				reglas.append((selectores, propiedades))
+
+		self.assertEqual(
+			1,
+			len(reglas),
+			"Debe existir exactamente una regla lógica con backdrop-filter.",
+		)
+		selectores, propiedades = reglas[0]
+		self.assertEqual(
+			[".sgc-login-stat"],
+			selectores,
+			"backdrop-filter solo puede aplicarse a .sgc-login-stat.",
+		)
+		self.assertIn(
+			"backdrop-filter",
+			propiedades,
+			"La declaración estándar backdrop-filter es obligatoria.",
+		)
+		self.assertEqual(
+			len(propiedades),
+			len(set(propiedades)),
+			"Cada variante de backdrop-filter puede declararse una sola vez.",
+		)
+
 	def test_javascript_conserva_el_login_nativo_y_sus_fallbacks(self):
 		js = self.js
 
@@ -91,8 +127,22 @@ class TestLoginAssets(TestCase):
 		self.assertIsNotNone(video)
 		self.assertNotIn("filter:", video.group(1))
 
-		for regla in re.finditer(r"([^{}]+)\{([^{}]*backdrop-filter\s*:.*?)\}", css_normalizado, re.S):
-			self.assertIn("sgc-login-stat", regla.group(1))
+		self.assert_backdrop_filter_restringido_a_stats(self.css)
+
+	def test_contrato_de_vidrio_detecta_ausencias_y_selectores_prohibidos(self):
+		sin_vidrio = re.sub(
+			r"^\s*(?:-webkit-)?backdrop-filter\s*:[^;]+;\s*$",
+			"",
+			self.css,
+			flags=re.M,
+		)
+		with self.assertRaises(AssertionError):
+			self.assert_backdrop_filter_restringido_a_stats(sin_vidrio)
+
+		for selector in (".sgc-login-card", ".sgc-login-video", ".sgc-login-layout"):
+			with self.subTest(selector=selector), self.assertRaises(AssertionError):
+				css_invalido = f"{self.css}\n{selector} {{ backdrop-filter: blur(2px); }}\n"
+				self.assert_backdrop_filter_restringido_a_stats(css_invalido)
 
 	def test_css_conserva_controles_reales_y_alertas_accesibles(self):
 		self.assertIn('card.querySelector("a.btn-keycloak")', self.js)
