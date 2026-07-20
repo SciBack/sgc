@@ -19,10 +19,11 @@ body.sgc-login .page-card.login-content {
   width: 100%;
   margin: 0;
   background: #fff;
+  color: #17253a;
   border-radius: 18px;
   padding: 44px 38px 40px;
   box-shadow: 0 12px 48px rgba(15, 43, 76, 0.14);
-  border: 1px solid rgba(15, 43, 76, 0.06);
+  border: 1px solid var(--color-marca-primaria-400);
 }
 
 body.sgc-login .page-card-head {
@@ -39,21 +40,21 @@ body.sgc-login .app-logo {
 body.sgc-login .page-card-head-text h4 {
   font-size: 21px;
   font-weight: 700;
-  color: #0f2b4c;
+  color: #17253a;
   margin: 0 0 8px;
   letter-spacing: -0.2px;
 }
 
 body.sgc-login .page-card-subtitle {
-  color: #6b7a90;
+  color: #62748c;
   font-size: 14px;
   line-height: 1.5;
   margin: 0;
 }
 
 body.sgc-login .btn-login-option.btn-keycloak {
-  background: #0f2b4c !important;
-  color: #fff !important;
+  background: var(--color-marca-primaria-700) !important;
+  color: var(--color-sobre-marca-primaria) !important;
   border: none !important;
   border-radius: 11px;
   padding: 14px 18px;

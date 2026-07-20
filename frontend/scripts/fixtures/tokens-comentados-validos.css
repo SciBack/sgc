@@ -1,0 +1,5 @@
+:root {
+  --color-real: #ffffff;
+  color: var(--color-real) /* var(--color-fantasma-en-valor) */;
+  /* var(--color-fantasma); --color-ignorado: #000000; */
+}

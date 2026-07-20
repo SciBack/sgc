@@ -1,16 +1,57 @@
 #!/usr/bin/env node
 
 import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import postcss from 'postcss'
 
-const core = readFileSync(new URL('../../sgc/public/css/sciback_core.css', import.meta.url), 'utf8')
-const tema = readFileSync(new URL('../../sgc/public/css/themes/upeu.css', import.meta.url), 'utf8')
-const login = readFileSync(new URL('../../sgc/public/css/sgc_web.css', import.meta.url), 'utf8')
-const css = `${core}\n${tema}`
+const rutas = {
+  core: fileURLToPath(new URL('../../sgc/public/css/sciback_core.css', import.meta.url)),
+  tema: fileURLToPath(new URL('../../sgc/public/css/themes/upeu.css', import.meta.url)),
+  login: fileURLToPath(new URL('../../sgc/public/css/sgc_web.css', import.meta.url)),
+}
+const raices = {}
+for (const [nombre, archivo] of Object.entries(rutas)) {
+  try {
+    raices[nombre] = postcss.parse(readFileSync(archivo, 'utf8'), { from: archivo })
+  } catch (error) {
+    console.error(`✗ No se pudo analizar ${archivo}: ${error.message}`)
+    process.exit(2)
+  }
+}
 
-const valorToken = (token) => {
-  const match = css.match(new RegExp(`${token.replaceAll('-', '\\-')}\\s*:\\s*(#[0-9a-fA-F]{6})\\b`))
-  if (!match) throw new Error(`No se encontró un valor hexadecimal real para ${token}.`)
-  return match[1]
+const tokens = new Map()
+for (const raiz of [raices.core, raices.tema]) {
+  raiz.walkRules(':root', (regla) => regla.walkDecls(/^--color-/, (decl) => tokens.set(decl.prop, decl.value.trim())))
+}
+const normalizarHex = (valor) => {
+  const hex = valor.toLowerCase()
+  if (/^#[0-9a-f]{6}$/.test(hex)) return hex
+  if (/^#[0-9a-f]{3}$/.test(hex)) return `#${[...hex.slice(1)].map((c) => c + c).join('')}`
+  return null
+}
+const resolver = (valor, visitados = new Set()) => {
+  const limpio = valor.trim()
+  const hex = normalizarHex(limpio)
+  if (hex) return hex
+  const referencia = limpio.match(/^var\(\s*(--color-[\w-]+)\s*\)$/)
+  if (!referencia || visitados.has(referencia[1]) || !tokens.has(referencia[1])) return null
+  visitados.add(referencia[1])
+  return resolver(tokens.get(referencia[1]), visitados)
+}
+const selector = (nombre, propiedad) => {
+  let encontrada
+  raices.login.walkRules((regla) => {
+    if (!regla.selectors?.includes(nombre)) return
+    regla.walkDecls(propiedad, (decl) => { encontrada = decl })
+  })
+  return encontrada
+}
+const extraerColor = (decl) => {
+  if (!decl) return null
+  const valorDirecto = resolver(decl.value)
+  if (valorDirecto) return valorDirecto
+  const color = decl.value.match(/(var\(\s*--color-[\w-]+\s*\)|#[0-9a-fA-F]{3,6})\s*$/)?.[1]
+  return color ? resolver(color) : null
 }
 const luminancia = (hex) => {
   const rgb = [1, 3, 5].map((inicio) => Number.parseInt(hex.slice(inicio, inicio + 2), 16) / 255)
@@ -22,31 +63,65 @@ const contraste = (a, b) => {
   return (alta + 0.05) / (baja + 0.05)
 }
 
-const blanco = '#ffffff'
-const pruebas = [
-  ['texto blanco / primaria 700', blanco, valorToken('--color-marca-primaria-700'), 4.5],
-  ['texto sobre marca secundaria / blanco', valorToken('--color-sobre-marca-secundaria'), blanco, 4.5],
-  ['texto secundario / blanco', '#62748c', blanco, 4.5],
-  ['cromo primaria 400 / blanco', valorToken('--color-marca-primaria-400'), blanco, 3],
+const tarjeta = 'body.sgc-login .page-card.login-content'
+const titulo = 'body.sgc-login .page-card-head-text h4'
+const subtitulo = 'body.sgc-login .page-card-subtitle'
+const cta = 'body.sgc-login .btn-login-option.btn-keycloak'
+const estilos = {
+  fondoTarjeta: selector(tarjeta, 'background'),
+  textoTarjeta: selector(tarjeta, 'color'),
+  bordeTarjeta: selector(tarjeta, 'border'),
+  titulo: selector(titulo, 'color'),
+  subtitulo: selector(subtitulo, 'color'),
+  fondoCta: selector(cta, 'background'),
+  textoCta: selector(cta, 'color'),
+}
+const esperados = [
+  ['fondo CTA', estilos.fondoCta, 'var(--color-marca-primaria-700)'],
+  ['texto CTA', estilos.textoCta, 'var(--color-sobre-marca-primaria)'],
+  ['texto de tarjeta', estilos.textoTarjeta, '#17253a'],
+  ['título', estilos.titulo, '#17253a'],
+  ['subtítulo', estilos.subtitulo, '#62748c'],
 ]
 let fallos = 0
+for (const [nombre, decl, esperado] of esperados) {
+  if (!decl || decl.value.trim().toLowerCase() !== esperado) {
+    fallos += 1
+    console.error(`✗ ${nombre}: se esperaba ${esperado}, se encontró ${decl?.value ?? 'declaración ausente'}.`)
+  }
+}
+if (!estilos.bordeTarjeta?.value.includes('var(--color-marca-primaria-400)')) {
+  fallos += 1
+  console.error('✗ Borde de tarjeta: debe usar var(--color-marca-primaria-400).')
+}
 
+const fondoTarjeta = extraerColor(estilos.fondoTarjeta)
+const pruebas = [
+  ['CTA', extraerColor(estilos.textoCta), extraerColor(estilos.fondoCta), 4.5],
+  ['título', extraerColor(estilos.titulo), fondoTarjeta, 4.5],
+  ['subtítulo', extraerColor(estilos.subtitulo), fondoTarjeta, 4.5],
+  ['cromo de borde', extraerColor(estilos.bordeTarjeta), fondoTarjeta, 3],
+]
 for (const [nombre, frente, fondo, minimo] of pruebas) {
+  if (!frente || !fondo) {
+    fallos += 1
+    console.error(`✗ ${nombre}: no se pudieron resolver los colores aplicados.`)
+    continue
+  }
   const ratio = contraste(frente, fondo)
-  const pasa = ratio >= minimo
-  if (!pasa) fallos += 1
-  console.log(`${pasa ? '✓' : '✗'} ${nombre}: ${ratio.toFixed(2)}:1 (mínimo ${minimo}:1)`)
+  if (ratio < minimo) fallos += 1
+  console.log(`${ratio >= minimo ? '✓' : '✗'} ${nombre}: ${frente} / ${fondo} = ${ratio.toFixed(2)}:1 (mínimo ${minimo}:1)`)
 }
 
-const dorados = [...tema.matchAll(/--color-marca-secundaria-[\w-]+\s*:\s*(#[0-9a-fA-F]{6})/g)]
-  .map((match) => match[1].toLowerCase())
-const tintaDorada = [...login.matchAll(/(?:^|[;{])\s*color\s*:\s*([^;}]*)/gim)]
-  .filter((match) => /--color-marca-secundaria/.test(match[1]) || dorados.includes(match[1].trim().toLowerCase()))
-
-if (tintaDorada.length) {
-  fallos += tintaDorada.length
-  console.error('✗ El dorado institucional solo puede usarse como relleno o acento, no como texto normal.')
-}
+const dorados = new Set([...tokens.entries()]
+  .filter(([token]) => token.startsWith('--color-marca-secundaria-'))
+  .map(([, valor]) => resolver(valor)))
+raices.login.walkDecls('color', (decl) => {
+  if (decl.value.includes('--color-marca-secundaria-') || dorados.has(resolver(decl.value))) {
+    fallos += 1
+    console.error(`✗ ${rutas.login}:${decl.source?.start?.line ?? 1} usa dorado como tinta normal.`)
+  }
+})
 
 if (fallos) process.exit(1)
-console.log('✓ Contraste del login y uso del dorado cumplen WCAG.')
+console.log('✓ Los estilos aplicados del login cumplen contraste WCAG y reservan el dorado a relleno/acento.')
