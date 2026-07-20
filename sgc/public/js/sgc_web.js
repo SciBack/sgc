@@ -30,7 +30,7 @@
   }
 
   function crearStat(nombre, etiqueta, tipo) {
-    var stat = crearElemento("article", "sgc-login-stat");
+    var stat = crearElemento("div", "sgc-login-stat");
     stat.setAttribute("data-metric", nombre);
 
     var label = crearElemento("p", "sgc-login-stat-label", etiqueta);
@@ -95,7 +95,7 @@
     header.appendChild(crearElemento("span", "sgc-login-product", "SGC UPeU"));
     cover.appendChild(header);
 
-    var layout = crearElemento("main", "sgc-login-layout");
+    var layout = crearElemento("div", "sgc-login-layout");
     var hero = crearElemento("section", "sgc-login-hero");
     hero.appendChild(crearElemento("p", "sgc-login-eyebrow", "Dirección de Gestión de la Calidad"));
     hero.appendChild(crearElemento("h1", "sgc-login-title", "Calidad que se demuestra."));
@@ -243,12 +243,18 @@
   }
 
   function pintarEvidencias(data) {
+    var porcentajeEsperado =
+      data && esEnteroNoNegativo(data.con_vigencia) && data.con_vigencia > 0
+        ? Math.round((data.vigentes * 100) / data.con_vigencia)
+        : null;
     if (
       !data ||
       !esEnteroNoNegativo(data.vigentes) ||
       !esEnteroNoNegativo(data.con_vigencia) ||
       data.vigentes > data.con_vigencia ||
-      (data.pct !== null && !esPorcentaje(data.pct))
+      (data.con_vigencia === 0
+        ? data.pct !== null
+        : !esPorcentaje(data.pct) || data.pct !== porcentajeEsperado)
     ) {
       fallbackStat("evidencias");
       return;
@@ -295,16 +301,25 @@
   function encontrarTarjetaFuente() {
     var tarjetas = document.querySelectorAll(".login-content");
     for (var indice = 0; indice < tarjetas.length; indice += 1) {
-      if (!tarjetas[indice].closest("#sgc-login-cover")) return tarjetas[indice];
+      if (
+        !tarjetas[indice].closest("#sgc-login-cover") &&
+        tarjetas[indice].querySelector("a.btn-keycloak")
+      ) {
+        return tarjetas[indice];
+      }
     }
-    return document.querySelector("#sgc-login-cover .login-content");
+    var presentada = document.querySelector("#sgc-login-cover .login-content");
+    return presentada && presentada.querySelector("a.btn-keycloak") ? presentada : null;
   }
 
   function aplicar() {
     if (esLoginLocal() || !esPaginaLogin()) return;
+    var card = encontrarTarjetaFuente();
+    if (!card) return false;
     document.body.classList.add("sgc-login");
     crearEstructura();
-    adaptarTarjeta(encontrarTarjetaFuente());
+    adaptarTarjeta(card);
+    return true;
   }
 
   function detenerObserver() {
@@ -316,12 +331,11 @@
 
   function start() {
     if (esLoginLocal() || !esPaginaLogin()) return;
-    aplicar();
-    cargarMetricas();
+    if (aplicar()) cargarMetricas();
     detenerObserver();
     if (window.MutationObserver && document.body) {
       estado.observer = new window.MutationObserver(function () {
-        aplicar();
+        if (aplicar()) cargarMetricas();
       });
       estado.observer.observe(document.body, { childList: true, subtree: true });
       estado.observerTimer = window.setTimeout(detenerObserver, 5000);

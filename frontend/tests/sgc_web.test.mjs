@@ -52,6 +52,11 @@ test("el montaje es idempotente y conserva los nodos nativos", async (t) => {
   await settle();
 
   assert.equal(dom.window.document.querySelectorAll("#sgc-login-cover").length, 1);
+  assert.equal(dom.window.document.querySelectorAll("main").length, 1);
+  assert.deepEqual(
+    [...dom.window.document.querySelectorAll(".sgc-login-stat")].map((node) => node.tagName),
+    ["DIV", "DIV", "DIV"],
+  );
   assert.strictEqual(dom.window.document.querySelector("a.btn-keycloak"), cta);
   assert.equal(cta.href, oauthHref);
   assert.match(cta.href, /state=ORIGINAL$/);
@@ -59,6 +64,36 @@ test("el montaje es idempotente y conserva los nodos nativos", async (t) => {
   assert.notEqual(cta.getAttribute("role"), "alert");
   assert.strictEqual(dom.window.document.querySelector('[role="alert"]'), alert);
   assert.equal(alert.textContent.trim(), "No se pudo completar el acceso.");
+});
+
+test("sin CTA conserva el login nativo y monta cuando Frappe publica el enlace", async (t) => {
+  const dom = createPage();
+  t.after(() => closePage(dom));
+  const document = dom.window.document;
+  const card = document.querySelector(".login-content");
+  document.querySelector("a.btn-keycloak").remove();
+
+  dom.window.eval(source);
+  dom.window.SGCLogin.start();
+  await settle();
+
+  assert.equal(document.querySelector("#sgc-login-cover"), null);
+  assert.equal(document.body.classList.contains("sgc-login"), false);
+  assert.equal(document.querySelectorAll("main").length, 1);
+  assert.strictEqual(document.querySelector("main .login-content"), card);
+
+  const cta = document.createElement("a");
+  cta.className = "btn-keycloak";
+  cta.href = oauthHref;
+  cta.textContent = "Ingresar con cuenta institucional";
+  card.appendChild(cta);
+  await settle();
+
+  assert.equal(document.querySelectorAll("#sgc-login-cover").length, 1);
+  assert.equal(document.body.classList.contains("sgc-login"), true);
+  assert.equal(document.querySelectorAll("main").length, 1);
+  assert.strictEqual(document.querySelector(".sgc-login-card-slot a.btn-keycloak"), cta);
+  assert.equal(cta.href, oauthHref);
 });
 
 test("un re-render de Frappe reemplaza la tarjeta presentada con los nodos nuevos", async (t) => {
@@ -168,6 +203,27 @@ test("evidencias sin control no generan NaN ni una barra invalida", async (t) =>
     dom.window.document.querySelector('[data-metric="autoevaluaciones"] [data-metric-text]').textContent,
     "sin autoevaluaciones registradas",
   );
+});
+
+test("evidencias contradictorias no presentan porcentaje incoherente", async (t) => {
+  const payload = {
+    programas: { activos: 1, sedes: 1 },
+    autoevaluaciones: { activas: 1, total: 2, pct: 50 },
+    evidencias: { vigentes: 8, con_vigencia: 10, pct: 20 },
+  };
+  const dom = createPage({
+    fetchImpl: async () => ({ ok: true, json: async () => ({ message: payload }) }),
+  });
+  t.after(() => closePage(dom));
+  dom.window.eval(source);
+  dom.window.SGCLogin.start();
+  await settle();
+
+  const evidencia = dom.window.document.querySelector('[data-metric="evidencias"]');
+  assert.equal(evidencia.querySelector("[data-metric-value]").textContent, "—");
+  assert.equal(evidencia.querySelector("[data-metric-text]").textContent, "Datos no disponibles");
+  assert.equal(evidencia.querySelector(".sgc-login-stat-bar-fill").style.transform, "scaleX(0)");
+  assert.doesNotMatch(evidencia.textContent, /20%|80%/);
 });
 
 test("reduced motion no activa autoplay", async (t) => {
