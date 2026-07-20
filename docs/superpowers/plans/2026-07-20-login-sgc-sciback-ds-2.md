@@ -56,7 +56,7 @@ self.assertEqual(set(payload["programas"]), {"activos", "sedes"})
 self.assertEqual(set(payload["autoevaluaciones"]), {"activas", "total", "pct"})
 self.assertEqual(set(payload["evidencias"]), {"vigentes", "con_vigencia", "pct"})
 self.assertIn(metricas_portada, frappe.whitelisted)
-self.assertIn(metricas_portada, frappe.allowed_guest_methods)
+self.assertIn(metricas_portada, frappe.guest_methods)
 ```
 
 Añadir casos independientes para:

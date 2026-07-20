@@ -118,7 +118,7 @@ class IntegrationTestLoginPortada(IntegrationTestCase):
         self.assertIsInstance(payload["evidencias"]["pct"], int)
         self.assertRegex(payload["calculado_en"], re.compile(r"[+-]\d{2}:\d{2}$"))
         self.assertIn(metricas_portada, frappe.whitelisted)
-        self.assertIn(metricas_portada, frappe.allowed_guest_methods)
+        self.assertIn(metricas_portada, frappe.guest_methods)
 
     def test_pct_evidencias_es_none_si_no_hay_vigencias(self):
         factories.crear_evidencia(codigo=f"{self.PREFIJO}-EV-SIN-VIGENCIA")
