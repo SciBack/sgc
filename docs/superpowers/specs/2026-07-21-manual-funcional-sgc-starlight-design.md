@@ -220,9 +220,11 @@ La separación será física y entre repositorios:
   `UPeU-Infra/upeu-ops`, y checkout productivo `/opt/sgc/upeu-ops/services/sgc/manual/`; contiene
   `institution.css`, Compose, plantilla Caddy y parámetros del host.
 
-El overlay monta `institution.css` como archivo estático sobre el punto de extensión; no copia ni
-modifica el manual. `docs-site/` no contendrá tokens, cuentas, datos, activos ni configuración de
-despliegue UPeU.
+El Dockerfile final del overlay usa contextos BuildKit con nombre (`canonical` y `overlay`):
+construye el `docs-site/` canónico y copia `institution.css` dentro de la imagen final. Así el
+digest identifica contenido y marca juntos; no queda CSS mutable montado desde el host. El overlay
+no modifica el manual. `docs-site/` no contendrá tokens, cuentas, datos, activos ni configuración
+de despliegue UPeU.
 
 ### 7.2 Experiencia
 
@@ -348,15 +350,18 @@ presenta como una publicación ordinaria del manual.
 2. commit y push a GitHub;
 3. `git pull` en los checkouts persistentes `/opt/sgc/src/sgc` y `/opt/sgc/upeu-ops` del EC2
    `sgc-app`;
-4. construir `sgc-manual:<git-sha>` y registrar su digest;
-5. iniciar un contenedor candidato `sgc-manual-<short-sha>` sin modificar todavía el upstream
+4. construir `sgc-manual:<canonical-short-sha>-<overlay-short-sha>` con ambos contextos y
+   registrar `CANONICAL_SHA`, `OVERLAY_SHA`, digest y nombre de contenedor;
+5. iniciar un contenedor candidato
+   `sgc-manual-<canonical-short-sha>-<overlay-short-sha>` sin modificar todavía el upstream
    activo y esperar estado `healthy`;
 6. guardar el release activo y el Caddyfile vigente;
 7. generar el Caddyfile candidato apuntando al nombre exacto del contenedor saludable y ejecutar
    `caddy validate`;
 8. recargar Caddy en caliente y ejecutar smoke tests anónimos y autenticados;
-9. solo si pasan los smoke tests, promover el candidato a release vigente y detener el contenedor
-   anterior; si fallan, restaurar Caddy y retirar el candidato;
+9. solo si pasan los smoke tests, promover el candidato cambiando un único puntero atómico
+   `current` al directorio inmutable del release y detener el contenedor anterior; si fallan,
+   restaurar Caddy y retirar el candidato;
 10. confirmar que los contenedores Frappe conservan estado y tiempo de actividad.
 
 No se usará `scp`. Las publicaciones posteriores de contenido o estilo no reconstruyen Frappe:
@@ -383,20 +388,27 @@ contexto del navegador se destruye al terminar.
 
 El contenedor del manual es reemplazable y no comparte volúmenes de escritura con Frappe. Las
 imágenes usan tags inmutables por commit, nunca `latest`; el Compose productivo vive en
-`/opt/sgc/upeu-ops/services/sgc/manual/`. El estado de releases usa tres archivos separados:
-`state/candidate.env`, `state/current.env` y `state/previous.env`, cada uno con nombre, SHA y
-digest. Solo después de aprobar los smoke tests se mueve atómicamente `current.env` a
-`previous.env` y `candidate.env` a `current.env`. La configuración fuente está versionada en
-`UPeU-Infra/upeu-ops`; antes de cada recarga se respalda el Caddyfile vigente con timestamp y
-commit.
+`/opt/sgc/upeu-ops/services/sgc/manual/`. Cada release tiene un directorio inmutable
+`/opt/sgc/manual/releases/<canonical-sha>-<overlay-sha>/` cuyo `release.env` guarda
+`CANONICAL_SHA`, `OVERLAY_SHA`, `IMAGE_DIGEST`, `CONTAINER_NAME` y `PREVIOUS_RELEASE_ID`.
 
-Rollback del manual: seleccionar el SHA/digest anterior, recrear solo `sgc-manual`, validar y
-recargar Caddy, luego repetir la matriz HTTP. Si el contenedor no queda saludable, se retira el
-handler `/manual*` y el resto del host continúa hacia Frappe.
+El único estado mutable es el symlink `/opt/sgc/manual/current`. La promoción crea
+`current.new` y ejecuta un único `rename` atómico sobre `current`; si el proceso cae antes, el
+release anterior sigue activo. El release nuevo conserva el ID anterior en
+`PREVIOUS_RELEASE_ID`, por lo que no hace falta coordinar un segundo puntero. La configuración
+fuente está versionada en `UPeU-Infra/upeu-ops`; antes de cada recarga se respalda el Caddyfile
+vigente con timestamp y ambos commits.
 
-Rollback del bootstrap de autorización: restaurar el tag/digest Frappe anterior y su Compose,
-reemplazar los servicios afectados con aprobación, validar login y `/sgc/`, y retirar temporalmente
-la ruta del manual. Los servicios de datos no requieren migración.
+Rollback del manual: leer `PREVIOUS_RELEASE_ID` del release vigente, arrancar el
+`CONTAINER_NAME` exacto de ese release con su digest, esperar `healthy`, regenerar y validar Caddy
+hacia ese nombre, recargar, repetir la matriz HTTP y finalmente mover `current` con un único
+rename atómico. Si el contenedor no queda saludable, se retira el handler `/manual*` y el resto
+del host continúa hacia Frappe.
+
+Rollback de la habilitación de autorización: restaurar el tag/digest Frappe anterior y su
+Compose, reemplazar exclusivamente `backend` mediante
+`docker compose up -d --no-deps backend` con aprobación, validar login y `/sgc/`, y retirar
+temporalmente la ruta del manual. Los servicios de datos no requieren migración.
 
 Antes y después del despliegue se registrará:
 
