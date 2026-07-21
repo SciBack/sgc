@@ -23,9 +23,9 @@ export default {
         },
       },
       fontFamily: {
-        // Serif institucional — solo para títulos de página/sección (no
-        // reemplaza el sans-serif base de frappe-ui en el cuerpo de texto).
-        display: ['Iowan Old Style', 'Palatino Linotype', 'Palatino', 'Georgia', 'Times New Roman', 'serif'],
+        // La SPA es una herramienta de trabajo: la misma sans variable en
+        // títulos, datos y controles evita el contraste editorial anticuado.
+        display: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
     },
   },

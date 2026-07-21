@@ -41,7 +41,7 @@ function openRow(name) {
 
 <template>
   <ScrollArea class="min-h-0 flex-1">
-    <div class="mx-auto max-w-4xl px-5 py-6 sm:px-8">
+    <div class="mx-auto max-w-7xl px-6 py-8 sm:px-8 xl:px-10">
       <div class="mb-4 flex items-center justify-between">
         <PageHeaderTitle :title="doctype" />
         <Button variant="solid" :route="{ name: 'DocNew', params: { doctype } }">

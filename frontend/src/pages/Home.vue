@@ -8,7 +8,7 @@ const router = useRouter()
 
 // Guía rápida por rol (mini-manual en contexto). Empieza ABIERTA para que una
 // persona nueva la vea al entrar; se puede contraer con un clic.
-const guiaAbierta = ref(true)
+const guiaAbierta = ref(false)
 const guiaSel = ref(0)
 const guia = computed(() => GUIAS_ROL[guiaSel.value])
 const MANUAL_URL = 'https://sciback.github.io/sgc/manual-uso/primeros-pasos/'
@@ -59,19 +59,24 @@ function abrirAcceso(a) {
 
 <template>
   <ScrollArea class="min-h-0 flex-1">
-    <div class="mx-auto max-w-5xl px-5 py-6 sm:px-8">
+    <div class="sgc-home mx-auto max-w-7xl px-6 py-8 sm:px-8 xl:px-10">
       <!-- Encabezado -->
-      <div class="mb-5">
-        <div class="text-xs font-semibold uppercase tracking-wide text-upeu-navy opacity-75">
+      <div class="mb-8 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <div class="text-xs font-semibold uppercase tracking-[0.1em] text-upeu-navy opacity-75">
           Universidad Peruana Unión · Dirección de Gestión de la Calidad
+          </div>
+          <h1 class="mt-1.5 text-3xl font-semibold tracking-[-0.035em] text-ink-gray-9 sm:text-4xl">Inicio</h1>
         </div>
-        <h1 class="mt-1 font-display text-3xl font-bold tracking-tight text-upeu-navy">Inicio</h1>
+        <p class="max-w-md text-p-sm leading-6 text-ink-gray-5">
+          Panorama operativo de acreditación, evidencias y mejora continua.
+        </p>
       </div>
 
       <!-- Guía rápida por rol (mini-manual en contexto) -->
-      <section class="mb-6 overflow-hidden rounded-xl border border-outline-gray-1 bg-surface-base">
+      <section class="mb-8 overflow-hidden rounded-2xl border border-outline-gray-1 bg-surface-white shadow-sm">
         <button
-          class="flex w-full items-center gap-3 px-5 py-3.5 text-left transition-colors duration-150 hover:bg-surface-gray-1"
+          class="flex w-full items-center gap-3 px-5 py-4 text-left transition-colors duration-150 hover:bg-surface-gray-1"
           @click="guiaAbierta = !guiaAbierta"
         >
           <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-upeu-navy-050 text-upeu-navy">
@@ -88,7 +93,7 @@ function abrirAcceso(a) {
           />
         </button>
 
-        <div v-if="guiaAbierta" class="border-t border-outline-gray-1 px-5 py-4">
+        <div v-if="guiaAbierta" class="border-t border-outline-gray-1 px-5 py-5">
           <div class="mb-4 flex flex-wrap gap-2">
             <button
               v-for="(g, i) in GUIAS_ROL"
@@ -159,16 +164,20 @@ function abrirAcceso(a) {
           </p>
         </div>
 
-        <div v-else class="grid gap-3 sm:grid-cols-2">
+        <div
+          v-else
+          class="grid gap-4"
+          :class="autoevals.length === 1 ? 'max-w-4xl grid-cols-1' : 'md:grid-cols-2 2xl:grid-cols-3'"
+        >
           <button
             v-for="ae in autoevals"
             :key="ae.name"
-            class="group flex flex-col rounded-xl border border-outline-gray-1 bg-gradient-to-b from-upeu-navy-050 to-surface-base p-5 text-left transition-[transform,box-shadow,border-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-0.5 hover:border-upeu-navy/25 hover:shadow-md active:scale-[0.99]"
+            class="group flex min-h-[172px] flex-col rounded-2xl border border-outline-gray-1 bg-surface-white p-6 text-left shadow-sm transition-[transform,box-shadow,border-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-0.5 hover:border-upeu-navy/30 hover:shadow-md active:scale-[0.99]"
             @click="abrirAutoeval(ae)"
           >
             <div class="flex items-start justify-between gap-2">
               <div class="min-w-0">
-                <h3 class="truncate font-display text-lg font-bold text-upeu-navy">
+                <h3 class="truncate text-lg font-semibold tracking-[-0.02em] text-ink-gray-9">
                   {{ ae.programa_sede || ae.titulo || ae.name }}
                 </h3>
                 <div class="mt-0.5 truncate text-p-xs text-ink-gray-5">
@@ -183,7 +192,7 @@ function abrirAcceso(a) {
             <div class="mt-4">
               <div class="mb-1 flex items-baseline justify-between">
                 <span class="text-p-xs font-medium text-ink-gray-6">Avance</span>
-                <span class="font-display text-base font-bold text-upeu-navy">{{ avanceDe(ae) }}%</span>
+                <span class="text-base font-semibold tabular-nums text-upeu-navy">{{ avanceDe(ae) }}%</span>
               </div>
               <div class="h-2 w-full overflow-hidden rounded-full bg-surface-gray-3">
                 <div
@@ -219,16 +228,16 @@ function abrirAcceso(a) {
           <div v-for="i in 6" :key="i" class="h-24 animate-pulse rounded-lg border border-outline-gray-1 bg-surface-gray-1" />
         </div>
 
-        <div v-else class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <div v-else class="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
           <button
             v-for="p in pendientes"
             :key="p.clave"
-            class="group flex flex-col items-start rounded-lg border p-4 text-left transition-[transform,box-shadow,border-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-0.5 hover:shadow-md active:scale-[0.99]"
+            class="group flex min-h-[112px] flex-col items-start rounded-xl border p-4 text-left transition-[transform,box-shadow,border-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-0.5 hover:shadow-md active:scale-[0.99]"
             :class="tono(p).card"
             @click="irA(p.doctype)"
           >
             <div class="flex w-full items-center justify-between">
-              <span class="font-display text-3xl font-bold" :class="tono(p).num">{{ p.valor }}</span>
+              <span class="text-3xl font-semibold tabular-nums" :class="tono(p).num">{{ p.valor }}</span>
               <span
                 v-if="tono(p).al_dia"
                 class="lucide-check size-4 text-ink-green-6"
@@ -243,11 +252,11 @@ function abrirAcceso(a) {
       <!-- Accesos rápidos -->
       <section class="mb-8">
         <h2 class="mb-3 text-lg font-semibold text-ink-gray-9">Accesos rápidos</h2>
-        <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div class="grid grid-cols-2 gap-3 md:grid-cols-4">
           <button
             v-for="a in accesos"
             :key="a.label"
-            class="group flex flex-col items-center gap-2 rounded-lg border border-outline-gray-1 bg-surface-base p-4 text-center transition-[transform,box-shadow,border-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-0.5 hover:border-upeu-navy/25 hover:shadow-md active:scale-[0.98]"
+            class="group flex min-h-[132px] flex-col items-center justify-center gap-2 rounded-xl border border-outline-gray-1 bg-surface-white p-4 text-center shadow-sm transition-[transform,box-shadow,border-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-0.5 hover:border-upeu-navy/25 hover:shadow-md active:scale-[0.98]"
             @click="abrirAcceso(a)"
           >
             <span

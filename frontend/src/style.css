@@ -6,7 +6,7 @@
 /* Capa transversal de la SPA SGC. No toca el Desk de Frappe: solo las
    interfaces existentes servidas bajo /sgc/. */
 :root {
-  --sgc-page: #f5f8fc;
+  --sgc-page: #f7f8fb;
   --sgc-header: rgb(255 255 255 / 0.9);
   --sgc-line: rgb(15 76 129 / 0.12);
   --sgc-focus: 0 0 0 3px rgb(33 102 172 / 0.24);
@@ -28,7 +28,7 @@ html[data-theme='dark'] {
 
 .sgc-shell {
   background:
-    radial-gradient(circle at 80% -10%, rgb(179 205 230 / 0.34), transparent 32rem),
+    radial-gradient(circle at 78% -12%, rgb(179 205 230 / 0.2), transparent 32rem),
     var(--sgc-page) !important;
 }
 

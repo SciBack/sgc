@@ -64,7 +64,7 @@ const informeUrl = computed(() =>
 
 <template>
   <ScrollArea class="min-h-0 flex-1">
-    <div class="mx-auto max-w-3xl px-5 py-6 sm:px-8">
+    <div class="mx-auto max-w-6xl px-6 py-8 sm:px-8 xl:px-10">
       <LoadingText v-if="doc.loading && !doc.doc" />
       <ErrorMessage v-else-if="doc.error" :message="doc.error.message" />
 

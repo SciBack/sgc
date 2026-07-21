@@ -38,7 +38,7 @@ function areaFor(doctype) {
 }
 
 const breadcrumbs = computed(() => {
-  const items = [{ label: 'Inicio', route: { name: 'Home' } }]
+  const items = [{ label: 'SGC UPeU', route: { name: 'Home' } }]
   if (route.name === 'DoctypeList' || route.name === 'DocNew') {
     const { area, item } = areaFor(route.params.doctype)
     if (area) items.push({ label: area.label })
@@ -86,7 +86,7 @@ const initials = computed(() =>
     <DesktopShell>
       <template #sidebar>
         <Sidebar
-          width="15rem"
+          width="14rem"
           data-theme="dark"
           class="sgc-app-sidebar border-r border-black/20 bg-gradient-to-b from-[#023052] via-upeu-navy to-[#00477e]"
         >
@@ -95,24 +95,24 @@ const initials = computed(() =>
                es un enlace a Inicio con feedback de press. -->
           <router-link
             :to="{ name: 'Home' }"
-            class="brand-header group block shrink-0 px-2.5 pb-1 pt-2.5"
+            class="brand-header group block shrink-0 px-2.5 pb-2 pt-3"
           >
             <div
-              class="brand-card flex items-center justify-center rounded-lg bg-white px-3 py-2.5 shadow-sm ring-1 ring-black/5 transition-[transform,box-shadow] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:shadow-md group-active:scale-[0.98]"
+              class="brand-card flex items-center justify-center rounded-xl bg-white px-3 py-2 shadow-sm ring-1 ring-black/5 transition-[transform,box-shadow] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:shadow-md group-active:scale-[0.98]"
             >
-              <img :src="upeuLogo" alt="Universidad Peruana Unión" class="h-9 w-full object-contain" />
+              <img :src="upeuLogo" alt="Universidad Peruana Unión" class="h-8 w-full object-contain" />
             </div>
             <div class="mt-2.5 px-0.5">
               <div class="flex items-center gap-1.5">
                 <span class="h-3 w-1 rounded-full bg-upeu-gold" aria-hidden="true" />
-                <span class="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/70">
+                <span class="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/70">
                   Sistema de Gestión de la Calidad
                 </span>
               </div>
             </div>
           </router-link>
 
-          <ScrollArea class="min-h-0 flex-1" viewport-class="px-2 pt-0.5 pb-10">
+          <ScrollArea class="min-h-0 flex-1" viewport-class="px-2.5 pt-1 pb-10">
             <nav class="space-y-0.5">
               <SidebarItem :to="{ name: 'Home' }">
                 <template #prefix>
@@ -134,7 +134,7 @@ const initials = computed(() =>
               </SidebarItem>
             </nav>
 
-            <div v-for="area in AREAS" :key="area.label" class="mt-4">
+            <div v-for="area in AREAS" :key="area.label" class="mt-5">
               <div class="flex h-7 items-center">
                 <SidebarLabel>{{ area.label }}</SidebarLabel>
               </div>
@@ -208,6 +208,30 @@ const initials = computed(() =>
 </template>
 
 <style scoped>
+.sgc-app-sidebar :deep([data-slot='sidebar-item']) {
+  height: 2rem;
+  border-radius: 8px;
+  color: rgb(255 255 255 / 0.72) !important;
+}
+
+.sgc-app-sidebar :deep([data-slot='sidebar-item'][data-state='active']) {
+  background: rgb(255 255 255 / 0.14) !important;
+  box-shadow: inset 2px 0 0 #f7a800;
+  color: #ffffff !important;
+}
+
+.sgc-app-sidebar :deep([data-slot='sidebar-item'] a) {
+  color: inherit !important;
+}
+
+.sgc-app-sidebar :deep([data-slot='sidebar-label'] h3) {
+  color: rgb(255 255 255 / 0.5) !important;
+  font-size: 0.68rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 /* La marca es un enlace ocasional (navegación), así que un feedback sutil de
    press es apropiado; se anula bajo prefers-reduced-motion. */
 @media (prefers-reduced-motion: reduce) {

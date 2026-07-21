@@ -47,7 +47,7 @@ function abrirAutoeval(p) {
 
 <template>
   <ScrollArea class="min-h-0 flex-1">
-    <div class="mx-auto max-w-5xl px-5 py-6 sm:px-8">
+    <div class="mx-auto max-w-7xl px-6 py-8 sm:px-8 xl:px-10">
       <div class="mb-5">
         <div class="text-xs font-semibold uppercase tracking-wide text-upeu-navy opacity-75">
           Acreditación institucional

@@ -61,7 +61,7 @@ function displayValue(row) {
 
 <template>
   <ScrollArea class="min-h-0 flex-1">
-    <div class="mx-auto max-w-4xl px-5 py-6 sm:px-8">
+    <div class="mx-auto max-w-6xl px-6 py-8 sm:px-8 xl:px-10">
       <PageHeaderTitle title="Tablero de indicadores" class="mb-1" />
       <p class="mb-5 text-p-sm text-ink-gray-6">
         Último valor calculado por indicador, agrupado por categoría. Los cálculos vienen del motor de
