@@ -9,7 +9,11 @@
     "preview": "astro preview",
     "astro": "astro",
     "verify:coverage": "node scripts/verify-coverage.mjs",
-    "test:coverage": "node --test tests/verify-coverage.test.mjs"
+    "test:coverage": "node --test tests/verify-coverage.test.mjs",
+    "verify:config": "node --test tests/config.test.mjs"
+    ,"verify:links": "node scripts/verify-links.mjs"
+    ,"verify:privacy": "node scripts/verify-privacy.mjs"
+    ,"verify:orphans": "node scripts/verify-orphans.mjs"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.41.3",

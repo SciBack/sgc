@@ -33,7 +33,7 @@ sgc/
 └── sgc_auditoria/    ← auditoría interna y revisión por la dirección
 ```
 
-Ver el detalle de DocTypes de cada uno en [Módulos](/sgc/modulos/nucleo/).
+Ver el detalle de DocTypes de cada uno en [Módulos](../modulos/nucleo/).
 
 ## Lógica transversal (fuera de los DocTypes)
 
@@ -65,7 +65,7 @@ Frappe sirve dos interfaces sobre los mismos DocTypes:
 La SPA es **genérica sobre el meta de cada DocType** (no hay un formulario hardcodeado
 por tipo de documento): lee la definición del DocType vía `useDoctypeMeta` y renderiza
 campos, tablas hijas y conexiones (Document Links) dinámicamente. Ver
-[Frontend SPA](/sgc/desarrollo/frontend-spa/) para el detalle de componentes.
+[Frontend SPA](../desarrollo/frontend-spa/) para el detalle de componentes.
 
 ## Reportes PDF
 

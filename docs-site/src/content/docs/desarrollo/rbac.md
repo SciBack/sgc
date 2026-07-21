@@ -14,7 +14,7 @@ incluido `No Conformidad` pese a tener workflow activo, solo eran accesibles por
 `System Manager`. Se extendió a los 46 y se agregó el rol "Autoridad Aprobadora"
 (existía en el workflow de Control Documental sin ningún permiso — el workflow era
 inejecutable). Ver también el fix de `allow_self_approval` en
-[Flujos por perfil](/sgc/manual-uso/flujos-por-perfil/).
+[Flujos por perfil](../../manual-uso/flujos-por-perfil/).
 :::
 
 ## Los 14 roles
@@ -60,7 +60,7 @@ sin poder ver o escribir ese campo específico:
 
 Esto es lo que separa "el motor propone, el sistema puede mostrarlo a cualquiera" de
 "solo el comité y DPGC pueden fijar el nivel oficial" — ver
-[Autoevaluación](/sgc/manual-uso/autoevaluacion/).
+[Autoevaluación](../../manual-uso/autoevaluacion/).
 
 ## Role Profiles
 

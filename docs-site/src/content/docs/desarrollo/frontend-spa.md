@@ -50,7 +50,7 @@ frontend/src/
 6. Conexiones: `DocConnections.vue` lee el bloque `links` del meta para listar y
    crear inline registros de otros DocTypes que apuntan a este documento — es el
    mecanismo genérico detrás de, por ejemplo, vincular una Evidencia a un criterio
-   vía Trazabilidad (ver [Evidencias y trazabilidad](/sgc/manual-uso/evidencias-trazabilidad/)).
+   vía Trazabilidad (ver [Evidencias y trazabilidad](../../manual-uso/evidencias-trazabilidad/)).
 
 ## Componente específico: `CriterioRow.vue`
 

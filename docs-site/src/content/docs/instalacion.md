@@ -130,7 +130,7 @@ cd apps/sgc
 pre-commit install
 ```
 
-Ver [Tests](/sgc/desarrollo/tests/) para correr la suite antes de enviar un cambio.
+Ver [Tests](../desarrollo/tests/) para correr la suite antes de enviar un cambio.
 
 ## Licencia
 
