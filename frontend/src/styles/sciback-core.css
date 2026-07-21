@@ -1,0 +1,115 @@
+/* SciBack Design System 2.0.0 — núcleo visual.
+   Portado a CSS variables porque SGC conserva Tailwind 3 + Vue. La institución
+   solo aporta las variables `marca-*` en themes/upeu.css. */
+:root {
+  --color-fondo: #f7f7f8;
+  --color-superficie: #ffffff;
+  --color-superficie-2: #fafafa;
+  --color-superficie-3: #f1f1f3;
+  --color-borde: #e4e4e7;
+  --color-borde-fuerte: #d1d1d6;
+  --color-tinta: #18181b;
+  --color-tinta-suave: #52525b;
+  --color-tinta-tenue: #71717a;
+  --color-info: #2563eb;
+  --color-exito: #15803d;
+  --color-aviso: #a16207;
+  --color-peligro: #b91c1c;
+  --color-serie-1: #4f46e5;
+  --color-serie-2: #0f766e;
+  --color-serie-3: #c2410c;
+  --color-serie-4: #9333ea;
+  --color-serie-5: #0284c7;
+  --color-rejilla: #e4e4e7;
+  --sb-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+html[data-theme='dark'] {
+  --color-fondo: #0b0b0f;
+  --color-superficie: #141419;
+  --color-superficie-2: #1b1b21;
+  --color-superficie-3: #24242c;
+  --color-borde: #2d2d36;
+  --color-borde-fuerte: #3f3f4a;
+  --color-tinta: #f4f4f5;
+  --color-tinta-suave: #c4c4cc;
+  --color-tinta-tenue: #a1a1aa;
+  --color-serie-1: #818cf8;
+  --color-serie-2: #2dd4bf;
+  --color-serie-3: #fb923c;
+  --color-serie-4: #c084fc;
+  --color-serie-5: #38bdf8;
+  --color-rejilla: #2d2d36;
+}
+
+.sb-card {
+  border: 1px solid var(--color-borde);
+  border-radius: 1rem;
+  background: var(--color-superficie);
+  box-shadow: 0 1px 2px rgb(24 24 27 / 0.05);
+}
+
+.sb-section-label {
+  color: var(--color-tinta-tenue);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.sb-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: linear-gradient(110deg, var(--color-marca-primaria-900), var(--color-marca-primaria-700) 52%, var(--color-marca-primaria-600));
+  box-shadow: 0 10px 26px -18px color-mix(in srgb, var(--color-marca-primaria-900) 78%, transparent);
+}
+
+.sb-hero::before {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 4px;
+  background: var(--color-marca-secundaria-500);
+  content: '';
+}
+
+.sb-hero::after {
+  position: absolute;
+  top: -7rem;
+  right: -4rem;
+  width: 17rem;
+  height: 17rem;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 999px;
+  box-shadow: 0 0 0 3rem rgb(255 255 255 / 0.035), 0 0 0 6rem rgb(255 255 255 / 0.025);
+  content: '';
+}
+
+.sb-interactive {
+  transition: transform 180ms var(--sb-ease-out), border-color 180ms var(--sb-ease-out), box-shadow 180ms var(--sb-ease-out), background-color 180ms var(--sb-ease-out);
+}
+
+.sb-interactive:active,
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sb-interactive:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--color-marca-primaria-500) 38%, var(--color-borde));
+    box-shadow: 0 10px 20px -16px rgb(24 24 27 / 0.34);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sb-interactive,
+  .btn-press {
+    transition: none;
+  }
+  .sb-interactive:active,
+  .btn-press:active {
+    transform: none;
+  }
+}

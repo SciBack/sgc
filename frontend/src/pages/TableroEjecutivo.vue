@@ -49,10 +49,10 @@ function abrirAutoeval(p) {
   <ScrollArea class="min-h-0 flex-1">
     <div class="mx-auto max-w-7xl px-6 py-8 sm:px-8 xl:px-10">
       <div class="mb-5">
-        <div class="text-xs font-semibold uppercase tracking-wide text-upeu-navy opacity-75">
+        <div class="text-xs font-semibold uppercase tracking-wide text-marca-primaria-700 opacity-75">
           Acreditación institucional
         </div>
-        <h1 class="mt-1 font-display text-3xl font-bold tracking-tight text-upeu-navy">Tablero ejecutivo</h1>
+        <h1 class="mt-1 font-display text-3xl font-bold tracking-tight text-marca-primaria-700">Tablero ejecutivo</h1>
       </div>
 
       <div v-if="panel.loading" class="space-y-3">
@@ -62,19 +62,19 @@ function abrirAutoeval(p) {
       <template v-else>
         <!-- Cobertura + mejora -->
         <section class="mb-6 grid gap-3 sm:grid-cols-3">
-          <div class="rounded-xl border border-outline-gray-1 bg-gradient-to-b from-upeu-navy-050 to-surface-base p-5 sm:col-span-2">
-            <div class="text-xs font-semibold uppercase tracking-wide text-upeu-navy opacity-75">
+          <div class="rounded-xl border border-outline-gray-1 bg-gradient-to-b from-marca-primaria-50 to-surface-base p-5 sm:col-span-2">
+            <div class="text-xs font-semibold uppercase tracking-wide text-marca-primaria-700 opacity-75">
               Cobertura de autoevaluación
             </div>
             <div class="mt-1 flex items-baseline gap-2">
-              <span class="font-display text-3xl font-bold text-upeu-navy">
+              <span class="font-display text-3xl font-bold text-marca-primaria-700">
                 {{ cobertura.con_autoevaluacion }} <span class="text-ink-gray-5">/ {{ cobertura.programas_total }}</span>
               </span>
               <span class="text-p-sm text-ink-gray-6">programas con autoevaluación iniciada</span>
             </div>
             <div class="mt-3 h-2 w-full overflow-hidden rounded-full bg-surface-gray-3">
               <div
-                class="h-full rounded-full bg-upeu-navy transition-[width] duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
+                class="h-full rounded-full bg-marca-primaria-700 transition-[width] duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
                 :style="{ width: cobertura.pct + '%' }"
               />
             </div>
@@ -167,7 +167,7 @@ function abrirAutoeval(p) {
             <button
               v-for="p in programas"
               :key="p.name"
-              class="flex w-full flex-wrap items-center gap-3 rounded-lg border border-outline-gray-1 bg-surface-base p-4 text-left transition-[transform,box-shadow,border-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-0.5 hover:border-upeu-navy/25 hover:shadow-md active:scale-[0.99]"
+              class="sb-interactive flex w-full flex-wrap items-center gap-3 rounded-xl border border-outline-gray-1 bg-surface-base p-4 text-left"
               @click="abrirAutoeval(p)"
             >
               <div class="min-w-[160px] flex-1">
@@ -186,9 +186,9 @@ function abrirAutoeval(p) {
                 </span>
               </div>
               <div class="w-28 shrink-0">
-                <div class="mb-1 text-right text-p-xs font-semibold text-upeu-navy">{{ Math.round(p.avance_pct || 0) }}%</div>
+                <div class="mb-1 text-right text-p-xs font-semibold text-marca-primaria-700">{{ Math.round(p.avance_pct || 0) }}%</div>
                 <div class="h-1.5 w-full overflow-hidden rounded-full bg-surface-gray-3">
-                  <div class="h-full rounded-full bg-upeu-navy" :style="{ width: Math.round(p.avance_pct || 0) + '%' }" />
+                  <div class="h-full rounded-full bg-marca-primaria-700" :style="{ width: Math.round(p.avance_pct || 0) + '%' }" />
                 </div>
               </div>
             </button>

@@ -94,7 +94,7 @@ function displayValue(row) {
               </div>
               <div class="mt-0.5 text-p-xs text-ink-gray-4">{{ row.fuente }} · {{ row.fecha }}</div>
             </div>
-            <div class="font-display text-xl font-bold text-upeu-navy">{{ displayValue(row) }}</div>
+            <div class="font-display text-xl font-bold text-marca-primaria-700">{{ displayValue(row) }}</div>
           </div>
         </div>
       </section>

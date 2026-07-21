@@ -6,8 +6,8 @@ import { GUIAS_ROL } from '@/data/guias-rol'
 
 const router = useRouter()
 
-// Guía rápida por rol (mini-manual en contexto). Empieza ABIERTA para que una
-// persona nueva la vea al entrar; se puede contraer con un clic.
+// Guía rápida por rol (mini-manual en contexto). Permanece disponible sin
+// desplazar los datos operativos que la persona consulta a diario.
 const guiaAbierta = ref(false)
 const guiaSel = ref(0)
 const guia = computed(() => GUIAS_ROL[guiaSel.value])
@@ -60,26 +60,39 @@ function abrirAcceso(a) {
 <template>
   <ScrollArea class="min-h-0 flex-1">
     <div class="sgc-home mx-auto max-w-7xl px-6 py-8 sm:px-8 xl:px-10">
-      <!-- Encabezado -->
-      <div class="mb-8 flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <div class="text-xs font-semibold uppercase tracking-[0.1em] text-upeu-navy opacity-75">
-          Universidad Peruana Unión · Dirección de Gestión de la Calidad
+      <!-- Hero SciBack: cromo institucional; los indicadores siguen siendo los
+           mismos datos operativos de Inicio, no un módulo adicional. -->
+      <section class="sb-hero mb-8 px-6 py-7 text-white sm:px-8">
+        <div class="relative z-10 flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.14em] text-white/70">
+              Universidad Peruana Unión · Dirección de Gestión de la Calidad
+            </p>
+            <h1 class="mt-2 font-display text-3xl font-bold tracking-[-0.035em] sm:text-4xl">Panel de calidad</h1>
+            <p class="mt-2 max-w-xl text-p-sm leading-6 text-white/75">
+              Panorama operativo de acreditación, evidencias y mejora continua.
+            </p>
           </div>
-          <h1 class="mt-1.5 text-3xl font-semibold tracking-[-0.035em] text-ink-gray-9 sm:text-4xl">Inicio</h1>
+          <div class="flex gap-6 text-sm">
+            <div>
+              <div class="text-2xl font-bold tabular-nums text-marca-secundaria-300">{{ programasTotal }}</div>
+              <div class="mt-0.5 text-xs font-semibold uppercase tracking-[0.08em] text-white/60">Programas</div>
+            </div>
+            <div>
+              <div class="text-2xl font-bold tabular-nums text-white">{{ totalAtencion }}</div>
+              <div class="mt-0.5 text-xs font-semibold uppercase tracking-[0.08em] text-white/60">Pendientes</div>
+            </div>
+          </div>
         </div>
-        <p class="max-w-md text-p-sm leading-6 text-ink-gray-5">
-          Panorama operativo de acreditación, evidencias y mejora continua.
-        </p>
-      </div>
+      </section>
 
       <!-- Guía rápida por rol (mini-manual en contexto) -->
-      <section class="mb-8 overflow-hidden rounded-2xl border border-outline-gray-1 bg-surface-white shadow-sm">
+      <section class="sb-card mb-8 overflow-hidden">
         <button
-          class="flex w-full items-center gap-3 px-5 py-4 text-left transition-colors duration-150 hover:bg-surface-gray-1"
+          class="btn-press flex w-full items-center gap-3 px-5 py-4 text-left transition-[background-color] duration-150 hover:bg-surface-gray-1"
           @click="guiaAbierta = !guiaAbierta"
         >
-          <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-upeu-navy-050 text-upeu-navy">
+          <span class="flex size-9 shrink-0 items-center justify-center rounded-xl bg-marca-primaria-50 text-marca-primaria-700">
             <span class="lucide-compass size-4" aria-hidden="true" />
           </span>
           <span class="flex-1">
@@ -99,7 +112,7 @@ function abrirAcceso(a) {
               v-for="(g, i) in GUIAS_ROL"
               :key="g.rol"
               class="rounded-full border px-3 py-1 text-p-sm font-medium transition-colors duration-150"
-              :class="i === guiaSel ? 'border-upeu-navy bg-upeu-navy text-white' : 'border-outline-gray-2 text-ink-gray-6 hover:border-upeu-navy/40'"
+              :class="i === guiaSel ? 'border-marca-primaria-700 bg-marca-primaria-700 text-white' : 'border-outline-gray-2 text-ink-gray-6 hover:border-marca-primaria-300'"
               @click="guiaSel = i"
             >
               {{ g.corto }}
@@ -111,7 +124,7 @@ function abrirAcceso(a) {
           </p>
           <ol class="space-y-2">
             <li v-for="(paso, i) in guia.pasos" :key="i" class="flex gap-2.5 text-p-sm text-ink-gray-7">
-              <span class="flex size-5 shrink-0 items-center justify-center rounded-full bg-upeu-navy-050 text-xs font-bold text-upeu-navy">
+              <span class="flex size-5 shrink-0 items-center justify-center rounded-full bg-marca-primaria-50 text-xs font-bold text-marca-primaria-700">
                 {{ i + 1 }}
               </span>
               <span>{{ paso }}</span>
@@ -124,7 +137,7 @@ function abrirAcceso(a) {
             :href="MANUAL_URL"
             target="_blank"
             rel="noopener"
-            class="mt-3 inline-flex items-center gap-1 text-p-sm font-medium text-upeu-navy hover:opacity-70"
+            class="mt-3 inline-flex items-center gap-1 text-p-sm font-semibold text-marca-primaria-700 hover:opacity-70"
           >
             Ver la guía completa
             <span class="lucide-external-link size-3.5" aria-hidden="true" />
@@ -138,12 +151,12 @@ function abrirAcceso(a) {
           <h2 class="text-lg font-semibold text-ink-gray-9">Autoevaluaciones</h2>
           <span
             v-if="!panel.loading && programasTotal"
-            class="rounded-full bg-upeu-navy-050 px-2.5 py-0.5 text-xs font-semibold text-upeu-navy"
+            class="rounded-full bg-marca-primaria-50 px-2.5 py-0.5 text-xs font-semibold text-marca-primaria-700"
           >
             {{ autoevals.length }} de {{ programasTotal }} programas iniciados
           </span>
           <button
-            class="ml-auto text-p-sm font-medium text-upeu-navy transition-opacity hover:opacity-70"
+            class="ml-auto text-p-sm font-semibold text-marca-primaria-700 transition-opacity hover:opacity-70"
             @click="irA('Autoevaluacion')"
           >
             Ver todas →
@@ -172,7 +185,7 @@ function abrirAcceso(a) {
           <button
             v-for="ae in autoevals"
             :key="ae.name"
-            class="group flex min-h-[172px] flex-col rounded-2xl border border-outline-gray-1 bg-surface-white p-6 text-left shadow-sm transition-[transform,box-shadow,border-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-0.5 hover:border-upeu-navy/30 hover:shadow-md active:scale-[0.99]"
+            class="sb-card sb-interactive group flex min-h-[172px] flex-col p-6 text-left"
             @click="abrirAutoeval(ae)"
           >
             <div class="flex items-start justify-between gap-2">
@@ -192,11 +205,11 @@ function abrirAcceso(a) {
             <div class="mt-4">
               <div class="mb-1 flex items-baseline justify-between">
                 <span class="text-p-xs font-medium text-ink-gray-6">Avance</span>
-                <span class="text-base font-semibold tabular-nums text-upeu-navy">{{ avanceDe(ae) }}%</span>
+                <span class="text-base font-semibold tabular-nums text-marca-primaria-700">{{ avanceDe(ae) }}%</span>
               </div>
               <div class="h-2 w-full overflow-hidden rounded-full bg-surface-gray-3">
                 <div
-                  class="h-full rounded-full bg-upeu-navy transition-[width] duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
+                  class="h-full rounded-full bg-marca-primaria-700 transition-[width] duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
                   :style="{ width: avanceDe(ae) + '%' }"
                 />
               </div>
@@ -232,7 +245,7 @@ function abrirAcceso(a) {
           <button
             v-for="p in pendientes"
             :key="p.clave"
-            class="group flex min-h-[112px] flex-col items-start rounded-xl border p-4 text-left transition-[transform,box-shadow,border-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-0.5 hover:shadow-md active:scale-[0.99]"
+            class="sb-interactive group flex min-h-[112px] flex-col items-start rounded-xl border p-4 text-left"
             :class="tono(p).card"
             @click="irA(p.doctype)"
           >
@@ -256,11 +269,11 @@ function abrirAcceso(a) {
           <button
             v-for="a in accesos"
             :key="a.label"
-            class="group flex min-h-[132px] flex-col items-center justify-center gap-2 rounded-xl border border-outline-gray-1 bg-surface-white p-4 text-center shadow-sm transition-[transform,box-shadow,border-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-0.5 hover:border-upeu-navy/25 hover:shadow-md active:scale-[0.98]"
+            class="sb-card sb-interactive group flex min-h-[132px] flex-col items-center justify-center gap-2 p-4 text-center"
             @click="abrirAcceso(a)"
           >
             <span
-              class="flex size-10 items-center justify-center rounded-full bg-upeu-navy-050 text-upeu-navy transition-colors group-hover:bg-upeu-navy group-hover:text-white"
+              class="flex size-10 items-center justify-center rounded-xl bg-marca-primaria-50 text-marca-primaria-700 transition-[background-color,color] duration-150 group-hover:bg-marca-primaria-700 group-hover:text-white"
             >
               <span :class="a.icon" class="size-5" aria-hidden="true" />
             </span>

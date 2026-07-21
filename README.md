@@ -2,6 +2,13 @@
 
 Sistema de Gestion de la Calidad - UPeU (SciBack)
 
+### Diseño
+
+La SPA de SGC adopta **SciBack Design System 2.0.0**: núcleo visual canónico
+en `frontend/src/styles/sciback-core.css` y capa de marca UPeU en
+`frontend/src/styles/themes/upeu.css`. Los activos institucionales se toman de
+la fuente autorizada `~/proyectos/upeu/branding/`.
+
 ### Documentación
 
 Manuales de uso, referencia de módulos y guía de arquitectura en `docs-site/`

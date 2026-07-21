@@ -15,7 +15,6 @@ import {
 } from 'frappe-ui'
 import { AREAS } from '@/data/areas'
 import { useSessionStore } from '@/stores/session'
-import upeuLogo from '@/assets/upeu-logo.png'
 
 const route = useRoute()
 const session = useSessionStore()
@@ -30,6 +29,11 @@ onMounted(() => {
 const themeActionLabel = computed(() =>
   currentTheme.value === 'dark' ? 'Activar modo claro' : 'Activar modo oscuro',
 )
+
+// Activo institucional oficial, ya publicado por la app para la portada SSO.
+// Sobre el cromo navy se usa su versión blanca, sin una tarjeta blanca ajena al
+// patrón SciBack. La fuente autoritativa vive en ~/proyectos/upeu/branding/.
+const upeuLogo = '/assets/sgc/media/login/upeu-logo-2026-white.svg'
 
 function areaFor(doctype) {
   const area = AREAS.find((a) => a.items.some((i) => i.doctype === doctype))
@@ -88,31 +92,29 @@ const initials = computed(() =>
         <Sidebar
           width="14rem"
           data-theme="dark"
-          class="sgc-app-sidebar border-r border-black/20 bg-gradient-to-b from-[#023052] via-upeu-navy to-[#00477e]"
+          class="sgc-app-sidebar border-r border-black/20"
         >
           <!-- Marca institucional = acceso a Inicio. El logo UPeU es azul marino,
                así que va sobre una tarjeta blanca (contraste). Toda la cabecera
                es un enlace a Inicio con feedback de press. -->
           <router-link
             :to="{ name: 'Home' }"
-            class="brand-header group block shrink-0 px-2.5 pb-2 pt-3"
+            class="brand-header group block shrink-0 px-4 pb-3 pt-4"
           >
-            <div
-              class="brand-card flex items-center justify-center rounded-xl bg-white px-3 py-2 shadow-sm ring-1 ring-black/5 transition-[transform,box-shadow] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:shadow-md group-active:scale-[0.98]"
-            >
-              <img :src="upeuLogo" alt="Universidad Peruana Unión" class="h-8 w-full object-contain" />
+            <div class="brand-card flex items-center gap-3 rounded-xl px-1 py-1.5 transition-[transform,background-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:bg-white/5 group-active:scale-[0.98]">
+              <img :src="upeuLogo" alt="Universidad Peruana Unión" class="h-9 w-auto max-w-[9.5rem] object-contain" />
             </div>
-            <div class="mt-2.5 px-0.5">
+            <div class="mt-3 px-0.5">
               <div class="flex items-center gap-1.5">
-                <span class="h-3 w-1 rounded-full bg-upeu-gold" aria-hidden="true" />
-                <span class="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/70">
+                <span class="h-3 w-1 rounded-full bg-marca-secundaria-500" aria-hidden="true" />
+                <span class="text-[10px] font-bold uppercase tracking-[0.15em] text-white/75">
                   Sistema de Gestión de la Calidad
                 </span>
               </div>
             </div>
           </router-link>
 
-          <ScrollArea class="min-h-0 flex-1" viewport-class="px-2.5 pt-1 pb-10">
+          <ScrollArea class="min-h-0 flex-1" viewport-class="px-3 pt-1 pb-10">
             <nav class="space-y-0.5">
               <SidebarItem :to="{ name: 'Home' }">
                 <template #prefix>
@@ -145,7 +147,7 @@ const initials = computed(() =>
                   :to="{ name: 'DoctypeList', params: { doctype: item.doctype } }"
                 >
                   <template #prefix>
-                    <span :class="area.icon" class="size-4" aria-hidden="true" />
+                    <span :class="item.icon || area.icon" class="size-4" aria-hidden="true" />
                   </template>
                   <span class="flex-1 truncate text-sm">{{ item.label }}</span>
                 </SidebarItem>
@@ -153,15 +155,15 @@ const initials = computed(() =>
             </div>
           </ScrollArea>
 
-          <div class="mt-auto flex items-center gap-2 border-t border-white/10 p-2">
+          <div class="mt-auto flex items-center gap-2 border-t border-white/10 p-3">
             <Dropdown :options="userMenu">
               <template #default="{ open }">
                 <button
-                  class="flex w-full items-center gap-2 rounded p-1.5 text-left hover:bg-white/10"
+                  class="flex w-full items-center gap-2 rounded-xl p-1.5 text-left transition-colors duration-150 hover:bg-white/10"
                   :class="{ 'bg-white/10': open }"
                 >
                   <Avatar :label="session.displayName" size="sm">{{ initials }}</Avatar>
-                  <span class="flex-1 truncate text-sm text-ink-gray-8">{{ session.displayName }}</span>
+                  <span class="flex-1 truncate text-sm text-white/85">{{ session.displayName }}</span>
                 </button>
               </template>
             </Dropdown>
@@ -216,7 +218,7 @@ const initials = computed(() =>
 
 .sgc-app-sidebar :deep([data-slot='sidebar-item'][data-state='active']) {
   background: rgb(255 255 255 / 0.14) !important;
-  box-shadow: inset 2px 0 0 #f7a800;
+  box-shadow: inset 2px 0 0 var(--color-marca-secundaria-500);
   color: #ffffff !important;
 }
 

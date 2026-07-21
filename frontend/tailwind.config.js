@@ -12,14 +12,38 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Marca institucional UPeU — accesorios (logo, hero, píldoras de
-        // estado). El resto de la UI usa los tokens semánticos de frappe-ui
-        // (text-ink-*, bg-surface-*) para heredar dark mode gratis.
-        upeu: {
-          navy: '#003865',
-          'navy-700': '#01477e',
-          'navy-050': '#eaf1f7',
-          gold: '#f7a800',
+        // SciBack DS 2.0: los colores se piden por función. UPeU solo reviste
+        // `marca-*`; los neutros y estados permanecen canónicos.
+        marca: {
+          primaria: {
+            50: 'var(--color-marca-primaria-50)',
+            100: 'var(--color-marca-primaria-100)',
+            200: 'var(--color-marca-primaria-200)',
+            300: 'var(--color-marca-primaria-300)',
+            400: 'var(--color-marca-primaria-400)',
+            500: 'var(--color-marca-primaria-500)',
+            600: 'var(--color-marca-primaria-600)',
+            700: 'var(--color-marca-primaria-700)',
+            800: 'var(--color-marca-primaria-800)',
+            900: 'var(--color-marca-primaria-900)',
+          },
+          secundaria: {
+            50: 'var(--color-marca-secundaria-50)',
+            100: 'var(--color-marca-secundaria-100)',
+            200: 'var(--color-marca-secundaria-200)',
+            300: 'var(--color-marca-secundaria-300)',
+            400: 'var(--color-marca-secundaria-400)',
+            500: 'var(--color-marca-secundaria-500)',
+            600: 'var(--color-marca-secundaria-600)',
+            700: 'var(--color-marca-secundaria-700)',
+            800: 'var(--color-marca-secundaria-800)',
+          },
+        },
+        sciback: {
+          fondo: 'var(--color-fondo)',
+          superficie: 'var(--color-superficie)',
+          borde: 'var(--color-borde)',
+          tinta: 'var(--color-tinta)',
         },
       },
       fontFamily: {
