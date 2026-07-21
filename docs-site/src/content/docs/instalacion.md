@@ -37,19 +37,13 @@ Antes de publicar, verificar desde la raíz de la app:
 ```bash
 python -m unittest sgc.tests.test_login_assets
 python -m compileall -q sgc
-cd frontend
-npm ci --ignore-scripts
-npm run test:login-dom
-npm run verify:login-design
-npm run build
+(cd frontend && npm ci --ignore-scripts && npm run test:login-dom && npm run verify:login-design && npm run build)
 ```
 
 El build de documentación se comprueba por separado:
 
 ```bash
-cd docs-site
-npm ci
-npm run build
+(cd docs-site && npm ci && npm run build)
 ```
 
 ## Portada de inicio de sesión
@@ -64,12 +58,15 @@ npm run build
   expuestos bajo `/assets/sgc/media/login/` y `/assets/sgc/fonts/`.
 
 La validación completa del backend requiere un bench real. Antes de desplegar se
-deben ejecutar en la imagen o EC2, sin marcarlas como aprobadas solo con la
+deben ejecutar en un site aislado y desechable, con su propia base de datos y
+servicios Redis. **Nunca ejecutar estas pruebas sobre el site productivo**: la
+preparación de los casos modifica temporalmente tablas completas y depende del
+rollback transaccional de Frappe. No se deben marcar como aprobadas solo con la
 verificación local:
 
 ```bash
-bench --site <tu-site> run-tests --app sgc --module sgc.tests.test_login_portada
-bench --site <tu-site> run-tests --app sgc
+bench --site <site-descartable> run-tests --app sgc --module sgc.tests.test_login_portada
+bench --site <site-descartable> run-tests --app sgc
 ```
 
 ## Construir y desplegar el overlay Docker

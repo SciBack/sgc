@@ -1,5 +1,8 @@
 # BASE_IMAGE se deriva de la imagen backend activa; no usar un default ni un tag hardcodeado.
 ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
+USER root
+RUN rm -rf /home/frappe/frappe-bench/apps/sgc
 COPY --chown=frappe:frappe . /home/frappe/frappe-bench/apps/sgc
+USER frappe
 RUN cd /home/frappe/frappe-bench && bench build --app sgc
