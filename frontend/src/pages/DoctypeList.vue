@@ -1,7 +1,6 @@
 <script setup>
 import { useCall } from 'frappe-ui'
 import { useRouter } from 'vue-router'
-import { List, ListRow, ListRows, ListCell, ListHeader, ListHeaderCell } from 'frappe-ui/list'
 import { Button, PageHeaderTitle, ScrollArea, LoadingText, ErrorMessage } from 'frappe-ui'
 
 const router = useRouter()
@@ -37,6 +36,16 @@ function openRow(name) {
     router.push({ name: 'DocForm', params: { doctype: props.doctype, name } })
   }
 }
+
+function formatModified(value) {
+  if (!value) return 'Sin fecha'
+  const date = new Date(String(value).replace(' ', 'T'))
+  if (Number.isNaN(date.getTime())) return value
+  return new Intl.DateTimeFormat('es-PE', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  }).format(date)
+}
 </script>
 
 <template>
@@ -62,33 +71,43 @@ function openRow(name) {
       <p v-else-if="!list.data?.length" class="sb-empty-state text-p-sm">
         Sin registros todavía.
       </p>
-      <List v-else class="sb-card w-full overflow-hidden">
-        <ListHeader>
-          <ListHeaderCell>Registro</ListHeaderCell>
-          <ListHeaderCell align="end">Modificado</ListHeaderCell>
-          <ListHeaderCell />
-        </ListHeader>
-        <ListRows :items="list.data" v-slot="{ item, value }">
-          <ListRow :value="value" class="cursor-pointer transition-colors duration-150 hover:bg-surface-gray-1" @click="openRow(item.name)">
-            <ListCell>
-              <span class="truncate text-base text-ink-gray-8">{{ item.name }}</span>
-            </ListCell>
-            <ListCell class="justify-end">
-              <span class="text-sm text-ink-gray-5">{{ item.modified }}</span>
-            </ListCell>
-            <ListCell class="justify-end">
-              <a
-                :href="deskUrl(item.name)"
-                target="_blank"
-                class="text-p-xs text-ink-gray-4 hover:text-ink-gray-7 hover:underline"
-                @click.stop
-              >
-                Desk
-              </a>
-            </ListCell>
-          </ListRow>
-        </ListRows>
-      </List>
+      <div v-else class="sb-card w-full overflow-hidden">
+        <div class="grid grid-cols-[minmax(0,1fr)_auto] gap-4 border-b border-outline-gray-1 bg-surface-gray-1 px-5 py-3 sm:grid-cols-[minmax(0,1fr)_11rem_4rem]">
+          <span class="sb-section-label">Registro</span>
+          <span class="sb-section-label hidden sm:block">Actualizado</span>
+          <span class="hidden sm:block" aria-hidden="true" />
+        </div>
+        <div class="divide-y divide-outline-gray-1">
+          <div
+            v-for="item in list.data"
+            :key="item.name"
+            class="group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 py-3.5 transition-colors duration-150 hover:bg-surface-gray-1 sm:grid-cols-[minmax(0,1fr)_11rem_4rem]"
+          >
+            <button
+              type="button"
+              class="btn-press flex min-w-0 items-center gap-3 text-left"
+              @click="openRow(item.name)"
+            >
+              <span class="flex size-9 shrink-0 items-center justify-center rounded-xl bg-marca-primaria-50 text-marca-primaria-700">
+                <span class="lucide-file-text size-4" aria-hidden="true" />
+              </span>
+              <span class="min-w-0">
+                <span class="block truncate text-p-base font-semibold text-ink-gray-8">{{ item.name }}</span>
+                <span class="mt-0.5 block text-p-xs text-ink-gray-5 sm:hidden">{{ formatModified(item.modified) }}</span>
+              </span>
+            </button>
+            <time class="hidden text-right text-p-xs text-ink-gray-5 sm:block">{{ formatModified(item.modified) }}</time>
+            <a
+              :href="deskUrl(item.name)"
+              target="_blank"
+              class="justify-self-end rounded-lg px-2 py-1 text-p-xs font-semibold text-ink-gray-5 transition-colors hover:bg-marca-primaria-50 hover:text-marca-primaria-700"
+              @click.stop
+            >
+              Desk
+            </a>
+          </div>
+        </div>
+      </div>
       <p class="mt-4 text-p-xs text-ink-gray-5">
         Vista genérica dirigida por metadata (F2). El enlace "Desk" es un acceso directo de respaldo
         para administración.
