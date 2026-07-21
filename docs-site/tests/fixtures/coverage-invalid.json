@@ -1,0 +1,7 @@
+{
+  "roles": [
+    {"id":"duplicado","kind":"role","page":"roles/no-existe.md","sources":["sgc/no-existe.py"],"status":"operativo"},
+    {"id":"duplicado","kind":"role","page":"roles/no-existe.md","sources":[],"status":"inventado"}
+  ],
+  "flows": []
+}

@@ -97,4 +97,4 @@ criterios. Tu recorrido es el mismo de esa sección, en modo colaboración.
 ---
 
 ¿Quieres el detalle completo de cada flujo (todos los estados y quién ejecuta cada paso)? Está en
-[Flujos de tarea por perfil](/sgc/manual-uso/flujos-por-perfil/).
+[Flujos de tarea por perfil](../flujos-por-perfil/).

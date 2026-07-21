@@ -40,7 +40,7 @@ registro; lo que falta es la lógica que lo automatiza.
 
 | Módulo | Estado | Detalle |
 |---|---|---|
-| **M07** Roles y comités | 🟡 Parcial | RBAC con 14 roles cubriendo los 46 DocTypes de negocio (extendido 2026-07-19, ver [RBAC](/sgc/desarrollo/rbac/)) y comités operando; el acotamiento de visibilidad por programa está construido (opt-in) y listo para activarse asignando el programa a cada responsable. |
+| **M07** Roles y comités | 🟡 Parcial | RBAC con 14 roles cubriendo los 46 DocTypes de negocio (extendido 2026-07-19, ver [RBAC](../desarrollo/rbac/)) y comités operando; el acotamiento de visibilidad por programa está construido (opt-in) y listo para activarse asignando el programa a cada responsable. |
 | **M08** Autoevaluación | ✅ Operativo | Motor que propone el nivel por estándar y la vigencia; el comité confirma el nivel oficial. |
 | **M09** Evidencias de acreditación | ✅ Operativo | Carga de archivo o enlace, vigencia y trazabilidad N:M contra criterios y procesos. |
 | **M10** Indicadores de acreditación | ✅ Operativo | Catálogo de indicadores con fichas y tablero. |

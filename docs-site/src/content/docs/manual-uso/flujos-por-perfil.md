@@ -138,7 +138,7 @@ Cada flujo es una máquina de estados; la tabla indica **quién** ejecuta cada p
 
 El cierre lo hace la DPGC, no el propio auditor — es el punto de independencia de
 auditoría (ISO 19011): si una misma persona tuviera ambos roles, no podría cerrar su
-propia auditoría (ver `allow_self_approval` en [RBAC](/sgc/desarrollo/rbac/)).
+propia auditoría (ver `allow_self_approval` en [RBAC](../../desarrollo/rbac/)).
 
 ### Aplicación de Instrumento (M12, encuestas)
 | Desde | Acción | Hacia | Rol |
@@ -158,7 +158,7 @@ propia auditoría (ver `allow_self_approval` en [RBAC](/sgc/desarrollo/rbac/)).
 Las 4 transiciones las gobierna en exclusiva la DPGC (preside la revisión por la
 dirección, ISO 9001 §9.3) — es la única excepción del sistema donde la autoaprobación
 queda permitida a propósito, documentada como riesgo residual: ver
-[RBAC](/sgc/desarrollo/rbac/).
+[RBAC](../../desarrollo/rbac/).
 
 ## Quién puede crear cada cosa
 
@@ -169,4 +169,4 @@ Los permisos de creación no dependen del workflow sino del RBAC. En resumen:
 - El **nivel oficial de acreditación** (permlevel 1) solo lo escriben **DPGC** y **Responsable
   de Calidad de Programa**; los demás roles pueden verlo pero no cambiarlo.
 
-Para el detalle técnico del modelo de permisos, ver [RBAC](/sgc/desarrollo/rbac/).
+Para el detalle técnico del modelo de permisos, ver [RBAC](../../desarrollo/rbac/).

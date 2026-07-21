@@ -22,7 +22,7 @@ lo devuelve en vez de duplicar.
 
 :::tip
 Un Hallazgo también puede originarse en una auditoría interna
-(`Hallazgo Auditoria`, ver [módulo Auditoría](/sgc/modulos/auditoria/)) — mismo
+(`Hallazgo Auditoria`, ver [módulo Auditoría](../../modulos/auditoria/)) — mismo
 concepto, distinto punto de entrada.
 :::
 

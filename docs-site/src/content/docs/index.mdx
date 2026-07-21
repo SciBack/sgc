@@ -1,64 +1,41 @@
 ---
-title: SGC — Sistema de Gestión de la Calidad
-description: Documentación del producto canónico SciBack — eQMS para acreditación universitaria (CONEAU/SINEACE, CBC, ISO 21001).
+title: Manual funcional del SGC
+description: Prueba el Sistema de Gestión de la Calidad con roles, estados y resultados verificables.
 template: splash
 hero:
-  tagline: eQMS para acreditación universitaria — CONEAU/SINEACE, Condiciones Básicas de Calidad y gestión de procesos ISO 21001.
+  tagline: Guía funcional para conocer el sistema, recorrerlo de punta a punta y ejecutar una regresión con evidencia útil.
   actions:
-    - text: Empezar por la arquitectura
-      link: /sgc/arquitectura/
+    - text: Preparar las pruebas
+      link: ./preparacion-pruebas/
       icon: right-arrow
-    - text: Manual de uso
-      link: /sgc/manual-uso/autoevaluacion/
+    - text: Recorrido E2E
+      link: ./recorrido-e2e/
       icon: open-book
       variant: minimal
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-**SGC** es un producto SciBack: un eQMS construido como app
-[Frappe](https://frappeframework.com/) v16, pensado para que universidades peruanas
-gestionen su proceso de **acreditación** (CONEAU, SINEACE) y sus **Condiciones Básicas
-de Calidad (CBC)** ante SUNEDU, con una capa de gestión de procesos alineada a
-ISO 21001.
+Este manual describe únicamente comportamientos respaldados por el código vigente de SGC. Cuando
+una función depende de cuentas, catálogos, correo, scheduler o integraciones externas, la página lo
+señala como precondición operativa.
 
-Esta documentación cubre la **capa canónica** del producto: el código agnóstico a
-cualquier institución. La parametrización específica de un cliente (dominio,
-branding, integraciones SSO, credenciales) vive en la capa de esa institución, no
-aquí.
-
-## Qué resuelve
-
-<CardGrid stagger>
-	<Card title="Autoevaluación de acreditación" icon="seti:markdown">
-		El sistema **propone** un nivel de cumplimiento por estándar (NL/L/LP) y el
-		comité **confirma** oficialmente.
-	</Card>
-	<Card title="Diagnóstico de CBC" icon="approve-check">
-		Las 8 Condiciones Básicas de Calidad de SUNEDU, con semáforo de cumplimiento
-		e informe PDF listo para presentar.
-	</Card>
-	<Card title="Control documental" icon="document">
-		Ciclo de vida de documentos controlados (ISO 21001 §7.5) con workflow de
-		aprobación y trazabilidad de versiones.
-	</Card>
-	<Card title="No conformidades y mejora (CAPA)" icon="rocket">
-		Cadena Hallazgo → No Conformidad → Plan de Mejora → Acción de Mejora, con
-		seguimiento de avance y vencimientos.
-	</Card>
-	<Card title="Evidencias" icon="open-book">
-		Repositorio de evidencias vinculadas (N:M) a criterios normativos y
-		procesos, con expiración de vigencia.
-	</Card>
-	<Card title="Procesos, riesgos, gobierno y auditoría" icon="setting">
-		Módulos de soporte del sistema de gestión completo.
-	</Card>
+<CardGrid>
+  <Card title="Entender el sistema" icon="information">
+    Revisa el [propósito y mapa](./proposito/) y los [conceptos y reglas](./conceptos/).
+  </Card>
+  <Card title="Probar como cada rol" icon="approve-check">
+    Usa las 14 [guías independientes por rol](./roles/) y respeta la segregación de funciones.
+  </Card>
+  <Card title="Ejecutar flujos" icon="rocket">
+    Cada [flujo funcional](./flujos/) incluye precondiciones, pasos, estados, casos negativos y evidencia.
+  </Card>
+  <Card title="Cerrar la regresión" icon="document">
+    Completa el [checklist](./checklist-regresion/) y [reporta hallazgos](./reportar-hallazgo/).
+  </Card>
 </CardGrid>
 
-## Principio de diseño
-
-El sistema separa siempre **lo que el motor propone** de **lo que el humano
-confirma**. Ningún cálculo automático (nivel de estándar, vigencia de acreditación,
-semáforo CBC) se escribe como oficial sin una acción humana explícita — ver
-[Autoevaluación](/sgc/manual-uso/autoevaluacion/) para el caso más representativo de este
-principio.
+:::caution[Acceso protegido]
+El manual usa la misma sesión institucional que SGC. No compartas capturas con nombres, DNI,
+correos personales, cookies ni datos reales de producción.
+:::

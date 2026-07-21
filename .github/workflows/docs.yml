@@ -1,7 +1,12 @@
-name: Deploy docs
+name: Validar manual funcional
 
 on:
   push:
+    branches: [main]
+    paths:
+      - "docs-site/**"
+      - ".github/workflows/docs.yml"
+  pull_request:
     branches: [main]
     paths:
       - "docs-site/**"
@@ -10,28 +15,29 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build:
+  verify:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: docs-site
+    env:
+      DOCS_SITE: https://calidad.upeu.edu.pe
+      DOCS_BASE: /manual
+      PLAYWRIGHT_HTML_OPEN: never
     steps:
-      - uses: actions/checkout@v5
-      - uses: withastro/action@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          path: docs-site
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: docs-site/package-lock.json
+      - run: npm ci
+      - run: npm run verify
+      - run: docker build -t sgc-manual:${{ github.sha }} .

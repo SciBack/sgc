@@ -2,8 +2,11 @@ __pycache__/
 *.pyc
 *.log
 node_modules/
+.astro/
 .build/
 frontend/.vite/
 site/
 .superpowers/
 .worktrees/
+docs-site/test-results/
+docs-site/playwright-report/

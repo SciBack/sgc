@@ -7,6 +7,9 @@ frontend/node_modules
 frontend/dist
 docs-site/node_modules
 docs-site/dist
+docs-site/.astro
+docs-site/test-results
+docs-site/playwright-report
 
 **/__pycache__
 **/*.pyc
