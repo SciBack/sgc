@@ -3,4 +3,3 @@ ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
 COPY --chown=frappe:frappe . /home/frappe/frappe-bench/apps/sgc
 RUN cd /home/frappe/frappe-bench && bench build --app sgc
-
