@@ -8,7 +8,7 @@ _PROVIDER = "keycloak"
 
 
 @frappe.whitelist(allow_guest=True)
-def acceso_m365(redirect_to: str = "/app/sgc"):
+def acceso_m365(redirect_to: str = "/sgc/"):
     """Inicia el login M365 de un clic (OIDC Keycloak) sin pasar por /login.
 
     Genera la URL de autorización del proveedor `keycloak` (que en el realm
@@ -22,7 +22,7 @@ def acceso_m365(redirect_to: str = "/app/sgc"):
 
     frappe.local.response["type"] = "redirect"
     frappe.local.response["location"] = get_oauth2_authorize_url(
-        _PROVIDER, redirect_to or "/app/sgc"
+        _PROVIDER, redirect_to or "/sgc/"
     )
 
 

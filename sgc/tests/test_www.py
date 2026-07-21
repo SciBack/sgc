@@ -22,6 +22,8 @@ Los `get_context` que leen parámetros de página los toman de `frappe.form_dict
 aquí se simulan poblando `frappe.form_dict` antes de llamar y limpiándolo en
 tearDown. El objeto `context` se simula con un `frappe._dict()` vacío.
 """
+import inspect
+
 import frappe
 from frappe.tests import IntegrationTestCase
 
@@ -330,3 +332,7 @@ class IntegrationTestWww(IntegrationTestCase):
         self.assertTrue(callable(api.acceso_m365))
         # Está registrado como método whitelisted de Frappe (redirect SSO).
         self.assertIn(api.acceso_m365, frappe.whitelisted)
+        self.assertEqual(
+            inspect.signature(api.acceso_m365).parameters["redirect_to"].default,
+            "/sgc/",
+        )

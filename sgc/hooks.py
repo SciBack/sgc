@@ -15,7 +15,9 @@ add_to_apps_screen = [
 	{
 		"name": "sgc",
 		"title": "SGC UPeU",
-		"route": "/app/sgc",
+		# La experiencia canónica es la SPA SGC, no el Desk de Frappe.
+		# Frappe usa esta ruta como destino por defecto tras el callback OIDC.
+		"route": "/sgc/",
 	}
 ]
 
