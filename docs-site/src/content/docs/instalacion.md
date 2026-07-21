@@ -58,7 +58,8 @@ npm run build
 - Acceso local de emergencia (*break-glass*): `/login?login_local=1`. Esta ruta
   conserva el formulario nativo de Frappe y omite la portada institucional.
 - Métricas públicas: `/api/method/sgc.login_portada.metricas_portada`.
-- El video, póster, logo y fuentes se sirven provisionalmente desde
+- El video `oficinas-dti.mp4` y su póster se reutilizan provisionalmente desde
+  Pulso DTI; junto con el logo y las fuentes se sirven desde
   `sgc/public/media/login/` y `sgc/public/fonts/`. En despliegues Frappe quedan
   expuestos bajo `/assets/sgc/media/login/` y `/assets/sgc/fonts/`.
 
