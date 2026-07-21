@@ -1,8 +1,9 @@
 # BASE_IMAGE se deriva de la imagen backend activa; no usar un default ni un tag hardcodeado.
+# Se limpian la app y su enlace de assets para no heredar archivos eliminados.
 ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
 USER root
-RUN rm -rf /home/frappe/frappe-bench/apps/sgc
+RUN rm -rf /home/frappe/frappe-bench/apps/sgc /home/frappe/frappe-bench/assets/sgc
 COPY --chown=frappe:frappe . /home/frappe/frappe-bench/apps/sgc
 USER frappe
 RUN cd /home/frappe/frappe-bench && bench build --app sgc
