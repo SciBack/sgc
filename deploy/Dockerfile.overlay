@@ -6,4 +6,4 @@ USER root
 RUN rm -rf /home/frappe/frappe-bench/apps/sgc /home/frappe/frappe-bench/assets/sgc
 COPY --chown=frappe:frappe . /home/frappe/frappe-bench/apps/sgc
 USER frappe
-RUN cd /home/frappe/frappe-bench && ln -s apps/sgc/sgc/public assets/sgc && bench build --app sgc
+RUN cd /home/frappe/frappe-bench && ln -s ../apps/sgc/sgc/public assets/sgc && bench build --app sgc
