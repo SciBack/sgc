@@ -1,0 +1,23 @@
+.git
+.superpowers
+.worktrees
+.playwright-cli
+
+frontend/node_modules
+frontend/dist
+docs-site/node_modules
+docs-site/dist
+
+**/__pycache__
+**/*.pyc
+
+# Artefactos locales y temporales; los assets publicados de SGC no se excluyen.
+*.log
+*.tmp
+*.temp
+.tmp/
+tmp/
+.DS_Store
+coverage
+.coverage
+htmlcov

@@ -9,7 +9,8 @@ description: Cómo instalar la app SGC en un bench Frappe.
   (branch `version-16`).
 - PostgreSQL como base de datos del site (la app usa tipos/consultas compatibles con
   Postgres; no se ha validado sobre MariaDB).
-- Node ≥20 y Python ≥3.14 para compilar la SPA (`frontend/`).
+- Node **24.15** y npm **11.12** para compilar la SPA (`frontend/`) y la
+  documentación (`docs-site/`). Python ≥3.14 para la app.
 
 ## Instalar la app
 
@@ -30,6 +31,81 @@ bench --site <tu-site> migrate
 La SPA (`frontend/`) se compila con Vite y sus assets se sirven desde
 `sgc/public/frontend/`. En un bench estándar, `bench build --app sgc` la incluye en el
 pipeline normal de build de Frappe.
+
+Antes de publicar, verificar desde la raíz de la app:
+
+```bash
+python -m unittest sgc.tests.test_login_assets
+python -m compileall -q sgc
+cd frontend
+npm ci --ignore-scripts
+npm run test:login-dom
+npm run verify:login-design
+npm run build
+```
+
+El build de documentación se comprueba por separado:
+
+```bash
+cd docs-site
+npm ci
+npm run build
+```
+
+## Portada de inicio de sesión
+
+- Acceso normal: `/login?redirect-to=/sgc`.
+- Acceso local de emergencia (*break-glass*): `/login?login_local=1`. Esta ruta
+  conserva el formulario nativo de Frappe y omite la portada institucional.
+- Métricas públicas: `/api/method/sgc.login_portada.metricas_portada`.
+- El video, póster, logo y fuentes se sirven provisionalmente desde
+  `sgc/public/media/login/` y `sgc/public/fonts/`. En despliegues Frappe quedan
+  expuestos bajo `/assets/sgc/media/login/` y `/assets/sgc/fonts/`.
+
+La validación completa del backend requiere un bench real. Antes de desplegar se
+deben ejecutar en la imagen o EC2, sin marcarlas como aprobadas solo con la
+verificación local:
+
+```bash
+bench --site <tu-site> run-tests --app sgc --module sgc.tests.test_login_portada
+bench --site <tu-site> run-tests --app sgc
+```
+
+## Construir y desplegar el overlay Docker
+
+`deploy/Dockerfile.overlay` añade el checkout de SGC sobre la imagen backend que
+ya está activa y ejecuta `bench build --app sgc`. La imagen base se obtiene de la
+configuración efectiva del servicio backend; no se supone ni se fija un tag:
+
+```bash
+docker compose config --images
+docker inspect --format '{{.Config.Image}}' <contenedor-backend-activo>
+docker build --build-arg BASE_IMAGE=<imagen-backend-activa> -f deploy/Dockerfile.overlay -t <imagen-overlay-nueva> .
+```
+
+Actualizar el tag del backend en el archivo Compose del entorno, validar primero
+con `docker compose config` y conservar tanto el tag anterior como una copia del
+Compose efectivo. **No reiniciar ni recrear servicios o contenedores críticos sin
+aprobación previa.**
+
+Para rollback, restaurar juntos el tag/Compose anterior y los assets compatibles
+de `sgc/public/css/`, `sgc/public/js/` y `sgc/public/media/`; después validar el
+Compose antes de solicitar la recreación del backend. No mezclar CSS o JS nuevos
+con media o imagen backend antiguas.
+
+Tras el despliegue, comprobar:
+
+```bash
+docker compose ps
+curl -fsS 'https://<dominio>/api/method/sgc.login_portada.metricas_portada'
+curl -fsSI 'https://<dominio>/login?redirect-to=/sgc'
+curl -fsSI 'https://<dominio>/assets/sgc/media/login/oficinas-dti-poster.jpg'
+```
+
+Completar la verificación en navegador en escritorio, tableta, móvil,
+`prefers-reduced-motion: reduce`, fallo de la API y modo `login_local=1`; confirmar
+que no haya overflow horizontal, que el enlace SSO conserve sus parámetros y que
+el formulario nativo siga disponible en *break-glass*.
 
 ## Datos de arranque
 
