@@ -120,7 +120,7 @@ class TestLoginAssets(TestCase):
 	def test_css_evitar_patrones_de_movimiento_y_vidrio_no_aprobados(self):
 		css_normalizado = re.sub(r"/\*.*?\*/", "", self.css, flags=re.S).lower()
 		self.assertNotIn("transition: all", css_normalizado)
-		self.assertNotIn("ease-in", css_normalizado)
+		self.assertNotRegex(css_normalizado, r"(?<![-\w])ease-in(?![-\w])")
 		self.assertNotRegex(css_normalizado, r"scale\(0(?:\.0+)?\)")
 
 		video = re.search(r"\.sgc-login-video\s*\{([^}]*)\}", css_normalizado, re.S)
@@ -128,6 +128,34 @@ class TestLoginAssets(TestCase):
 		self.assertNotIn("filter:", video.group(1))
 
 		self.assert_backdrop_filter_restringido_a_stats(self.css)
+
+	def test_reduced_motion_anula_el_press_sin_eliminar_transiciones_de_color(self):
+		media = re.search(
+			r"@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{(.*)\}\s*$",
+			self.css,
+			re.S,
+		)
+		self.assertIsNotNone(media)
+		reglas = {
+			tuple(selector.strip() for selector in coincidencia.group(1).split(",")): coincidencia.group(2)
+			for coincidencia in re.finditer(r"([^{}]+)\{([^{}]*)\}", media.group(1), re.S)
+		}
+
+		cta_base = reglas[(".sgc-login-cta", ".sgc-login-card .btn-keycloak")]
+		self.assertNotIn("transition: none", cta_base)
+		self.assertRegex(
+			cta_base,
+			r"transition:\s*color\s+\d+ms\s+cubic-bezier\([^;]+\),\s*"
+			r"background-color\s+\d+ms\s+cubic-bezier\([^;]+\)",
+		)
+		duraciones = [int(valor) for valor in re.findall(r"(\d+)ms", cta_base)]
+		self.assertEqual(2, len(duraciones))
+		self.assertTrue(all(duracion <= 160 for duracion in duraciones))
+		self.assertNotIn("transform", cta_base)
+
+		cta_activo = reglas[(".sgc-login-cta:active", ".sgc-login-card .btn-keycloak:active")]
+		self.assertRegex(cta_activo, r"transform:\s*none")
+		self.assertRegex(reglas[(".sgc-login-stat-bar-fill",)], r"transition:\s*none")
 
 	def test_contrato_de_vidrio_detecta_ausencias_y_selectores_prohibidos(self):
 		sin_vidrio = re.sub(

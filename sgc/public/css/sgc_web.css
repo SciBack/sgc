@@ -253,7 +253,7 @@ body.sgc-login main.page-content {
 .sgc-login-cta:focus-visible,
 .sgc-login-card .btn-keycloak:focus-visible,
 .sgc-login-guide:focus-visible {
-  outline: 3px solid var(--color-marca-secundaria-400);
+  outline: 3px solid var(--color-marca-primaria-700);
   outline-offset: 3px;
 }
 
@@ -468,7 +468,17 @@ body.sgc-login main.page-content {
   }
 
   .sgc-login-cta,
-  .sgc-login-card .btn-keycloak,
+  .sgc-login-card .btn-keycloak {
+    transition:
+      color 120ms cubic-bezier(0.23, 1, 0.32, 1),
+      background-color 120ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .sgc-login-cta:active,
+  .sgc-login-card .btn-keycloak:active {
+    transform: none;
+  }
+
   .sgc-login-stat-bar-fill {
     transition: none;
   }
