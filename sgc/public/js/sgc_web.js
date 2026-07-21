@@ -10,6 +10,9 @@
   var document = window.document;
   var estado = {
     cover: null,
+    movimientoHandler: null,
+    movimientoMedia: null,
+    movimientoVideo: null,
     observer: null,
     observerTimer: null,
     metricasSolicitadas: false,
@@ -58,6 +61,70 @@
     return stat;
   }
 
+  function aplicarPreferenciaMovimiento(video, mediaQuery) {
+    if (mediaQuery && mediaQuery.matches) {
+      if (typeof video.pause === "function") video.pause();
+      video.removeAttribute("autoplay");
+      if (video.hasAttribute("src")) {
+        video.removeAttribute("src");
+        if (typeof video.load === "function") video.load();
+      }
+      return;
+    }
+
+    video.setAttribute("src", "/assets/sgc/media/login/oficinas-dti.mp4");
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.setAttribute("muted", "");
+    video.setAttribute("loop", "");
+    video.setAttribute("playsinline", "");
+    video.setAttribute("autoplay", "");
+    if (video.isConnected && typeof video.play === "function") {
+      try {
+        var reproduccion = video.play();
+        if (reproduccion && typeof reproduccion.catch === "function") {
+          reproduccion.catch(function () {});
+        }
+      } catch (error) {
+        // El poster permanece visible si el navegador bloquea la reproducción.
+      }
+    }
+  }
+
+  function limpiarPreferenciaMovimiento() {
+    if (estado.movimientoMedia && estado.movimientoHandler) {
+      if (typeof estado.movimientoMedia.removeEventListener === "function") {
+        estado.movimientoMedia.removeEventListener("change", estado.movimientoHandler);
+      } else if (typeof estado.movimientoMedia.removeListener === "function") {
+        estado.movimientoMedia.removeListener(estado.movimientoHandler);
+      }
+    }
+    estado.movimientoHandler = null;
+    estado.movimientoMedia = null;
+    estado.movimientoVideo = null;
+  }
+
+  function configurarPreferenciaMovimiento(video) {
+    if (estado.movimientoVideo === video && estado.movimientoHandler) return;
+    limpiarPreferenciaMovimiento();
+    var mediaQuery = window.matchMedia
+      ? window.matchMedia("(prefers-reduced-motion: reduce)")
+      : { matches: false };
+    var handler = function (evento) {
+      aplicarPreferenciaMovimiento(video, evento);
+    };
+    estado.movimientoVideo = video;
+    estado.movimientoMedia = mediaQuery;
+    estado.movimientoHandler = handler;
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", handler);
+    } else if (typeof mediaQuery.addListener === "function") {
+      mediaQuery.addListener(handler);
+    }
+    aplicarPreferenciaMovimiento(video, mediaQuery);
+  }
+
   function crearEstructura(contenedor) {
     var existente = document.getElementById("sgc-login-cover") || estado.cover;
     if (existente) {
@@ -65,6 +132,7 @@
       if (contenedor && !contenedor.contains(existente)) {
         contenedor.insertBefore(existente, contenedor.firstChild);
       }
+      configurarPreferenciaMovimiento(existente.querySelector("video.sgc-login-video"));
       return existente;
     }
     if (!contenedor) return null;
@@ -75,16 +143,7 @@
 
     var video = crearElemento("video", "sgc-login-video");
     video.setAttribute("aria-hidden", "true");
-    video.setAttribute("src", "/assets/sgc/media/login/oficinas-dti.mp4");
     video.setAttribute("poster", "/assets/sgc/media/login/oficinas-dti-poster.jpg");
-    video.muted = true;
-    video.loop = true;
-    video.playsInline = true;
-    video.setAttribute("muted", "");
-    video.setAttribute("loop", "");
-    video.setAttribute("playsinline", "");
-    var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!reduceMotion) video.setAttribute("autoplay", "");
     cover.appendChild(video);
 
     ["vertical", "horizontal", "radial"].forEach(function (tipo) {
@@ -136,6 +195,7 @@
       ),
     );
     contenedor.insertBefore(cover, contenedor.firstChild);
+    configurarPreferenciaMovimiento(video);
     return cover;
   }
 
@@ -348,6 +408,11 @@
     estado.observerTimer = null;
   }
 
+  function destroy() {
+    detenerObserver();
+    limpiarPreferenciaMovimiento();
+  }
+
   function start() {
     if (esLoginLocal() || !esPaginaLogin()) return;
     if (aplicar()) cargarMetricas();
@@ -370,7 +435,7 @@
     pintarMetricas: pintarMetricas,
     activarFallback: activarFallback,
     start: start,
-    destroy: detenerObserver,
+    destroy: destroy,
   };
 
   if (document.readyState !== "loading") start();

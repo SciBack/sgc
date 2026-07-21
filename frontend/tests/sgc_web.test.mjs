@@ -13,19 +13,41 @@ const fixture = `<!doctype html>
   <a class="btn-keycloak" href="${oauthHref}">Ingresar con cuenta institucional</a>
 </section></main></body></html>`;
 
-function createPage({ query = "", fetchImpl, reducedMotion = false } = {}) {
+function createMediaQuery(initialMatches = false) {
+  let listener = null;
+  return {
+    matches: initialMatches,
+    media: "(prefers-reduced-motion: reduce)",
+    addEventListener(type, callback) {
+      if (type === "change") listener = callback;
+    },
+    removeEventListener(type, callback) {
+      if (type === "change" && listener === callback) listener = null;
+    },
+    addListener(callback) {
+      listener = callback;
+    },
+    removeListener(callback) {
+      if (listener === callback) listener = null;
+    },
+    emit(matches) {
+      this.matches = matches;
+      listener?.({ matches, media: this.media });
+    },
+  };
+}
+
+function createPage({ query = "", fetchImpl, reducedMotion = false, mediaQuery } = {}) {
   const dom = new JSDOM(fixture, {
     url: `https://calidad.upeu.edu.pe/login${query}`,
     runScripts: "outside-only",
     pretendToBeVisual: true,
   });
   dom.window.fetch = fetchImpl ?? (() => Promise.reject(new Error("API no disponible")));
-  dom.window.matchMedia = () => ({
-    matches: reducedMotion,
-    media: "(prefers-reduced-motion: reduce)",
-    addEventListener() {},
-    removeEventListener() {},
-  });
+  dom.window.matchMedia = () => mediaQuery ?? createMediaQuery(reducedMotion);
+  dom.window.HTMLMediaElement.prototype.play = () => Promise.resolve();
+  dom.window.HTMLMediaElement.prototype.pause = () => {};
+  dom.window.HTMLMediaElement.prototype.load = () => {};
   return dom;
 }
 
@@ -303,9 +325,52 @@ test("reduced motion no activa autoplay", async (t) => {
   const video = dom.window.document.querySelector("video.sgc-login-video");
   assert.ok(video);
   assert.equal(video.hasAttribute("autoplay"), false);
-  assert.equal(video.muted, true);
-  assert.equal(video.loop, true);
-  assert.equal(video.playsInline, true);
+  assert.equal(video.hasAttribute("src"), false);
+  assert.equal(
+    video.getAttribute("poster"),
+    "/assets/sgc/media/login/oficinas-dti-poster.jpg",
+  );
+});
+
+test("un cambio dinamico de movimiento detiene y restaura el video", async (t) => {
+  const mediaQuery = createMediaQuery(false);
+  const dom = createPage({ mediaQuery });
+  t.after(() => closePage(dom));
+  let playCalls = 0;
+  let pauseCalls = 0;
+  let loadCalls = 0;
+  dom.window.HTMLMediaElement.prototype.play = () => {
+    playCalls += 1;
+    return Promise.resolve();
+  };
+  dom.window.HTMLMediaElement.prototype.pause = () => {
+    pauseCalls += 1;
+  };
+  dom.window.HTMLMediaElement.prototype.load = () => {
+    loadCalls += 1;
+  };
+
+  dom.window.eval(source);
+  dom.window.SGCLogin.start();
+  await settle();
+
+  const video = dom.window.document.querySelector("video.sgc-login-video");
+  assert.equal(video.getAttribute("src"), "/assets/sgc/media/login/oficinas-dti.mp4");
+  assert.equal(video.hasAttribute("autoplay"), true);
+  assert.equal(playCalls, 1);
+
+  mediaQuery.emit(true);
+  await settle();
+  assert.equal(video.hasAttribute("src"), false);
+  assert.equal(video.hasAttribute("autoplay"), false);
+  assert.equal(pauseCalls, 1);
+  assert.equal(loadCalls, 1);
+
+  mediaQuery.emit(false);
+  await settle();
+  assert.equal(video.getAttribute("src"), "/assets/sgc/media/login/oficinas-dti.mp4");
+  assert.equal(video.hasAttribute("autoplay"), true);
+  assert.equal(playCalls, 2);
 });
 
 test("datos malformados usan fallback sin inyectar HTML ni bloquear SSO", async (t) => {
