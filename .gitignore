@@ -8,3 +8,5 @@ frontend/.vite/
 site/
 .superpowers/
 .worktrees/
+docs-site/test-results/
+docs-site/playwright-report/

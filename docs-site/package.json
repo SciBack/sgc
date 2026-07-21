@@ -10,14 +10,33 @@
     "astro": "astro",
     "verify:coverage": "node scripts/verify-coverage.mjs",
     "test:coverage": "node --test tests/verify-coverage.test.mjs",
-    "verify:config": "node --test tests/config.test.mjs"
-    ,"verify:links": "node scripts/verify-links.mjs"
-    ,"verify:privacy": "node scripts/verify-privacy.mjs"
-    ,"verify:orphans": "node scripts/verify-orphans.mjs"
+    "verify:config": "node --test tests/config.test.mjs",
+    "verify:links": "node scripts/verify-links.mjs",
+    "verify:privacy": "node scripts/verify-privacy.mjs",
+    "verify:orphans": "node scripts/verify-orphans.mjs",
+    "check": "astro check",
+    "verify:dist": "node scripts/verify-dist.mjs",
+    "verify:cache": "node scripts/verify-cache-config.mjs nginx.conf",
+    "verify:contrast": "playwright test tests/contrast.spec.mjs",
+    "verify:visual": "playwright test tests/visual.spec.mjs",
+    "canary:links": "node scripts/run-canary.mjs links",
+    "canary:coverage": "node scripts/run-canary.mjs coverage",
+    "canary:privacy": "node scripts/run-canary.mjs privacy",
+    "canary:contrast": "node scripts/run-canary.mjs contrast",
+    "canary:cache-base": "node scripts/run-canary.mjs cache-base",
+    "verify:canaries": "npm run canary:links && npm run canary:coverage && npm run canary:privacy && npm run canary:contrast && npm run canary:cache-base",
+    "verify": "npm run verify:config && npm run test:coverage && node scripts/verify-coverage.mjs --require-pages && npm run check && npm run build && npm run verify:links && npm run verify:privacy && npm run verify:orphans && npm run verify:dist && npm run verify:cache && npm run verify:canaries && npm run verify:contrast && npm run verify:visual",
+    "verify:docker": "docker build -t sgc-manual:verify ."
   },
   "dependencies": {
     "@astrojs/starlight": "^0.41.3",
     "astro": "^7.0.2",
     "sharp": "^0.34.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.6",
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.55.0",
+    "typescript": "^5.9.3"
   }
 }
