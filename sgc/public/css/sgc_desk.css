@@ -191,3 +191,463 @@ a:not(.btn),
     transform: none;
   }
 }
+
+/* ============================================================
+   SciBack Design System 2.0 — escritorio autenticado
+
+   La portada web y el Desk de Frappe son superficies distintas.
+   Esta capa adapta el escritorio real: navegación, páginas, listas,
+   formularios, controles, diálogos y estados. El tema claro es la base;
+   Frappe activa el oscuro con data-theme="dark".
+   ============================================================ */
+:root {
+  --sgc-page: #f4f7fb;
+  --sgc-surface: #ffffff;
+  --sgc-surface-raised: #fbfcfe;
+  --sgc-sidebar: #062c4c;
+  --sgc-sidebar-deep: #021e36;
+  --sgc-sidebar-hover: rgba(255, 255, 255, 0.1);
+  --sgc-focus: 0 0 0 3px rgba(33, 102, 172, 0.24);
+  --sgc-radius-lg: 16px;
+  --sgc-radius-md: 10px;
+  --sgc-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
+  --bg-color: var(--sgc-page);
+  --card-bg: var(--sgc-surface);
+  --control-bg: var(--sgc-surface);
+  --fg-color: #eef4fa;
+  --subtle-fg: #eef4fa;
+  --border-color: #dce6f0;
+  --dark-border-color: #d3dfeb;
+  --text-color: #17253a;
+  --text-muted: #52657a;
+  --text-light: #718296;
+  --heading-color: #102f50;
+  --primary: #003366;
+  --primary-color: #003366;
+  --primary-color-hover: #0f4c81;
+  --link-color: #0f4c81;
+  --navbar-bg: rgba(255, 255, 255, 0.94);
+  --surface-menu-bar: var(--sgc-sidebar);
+  --sidebar-hover-color: var(--sgc-sidebar-hover);
+  --sidebar-active-color: rgba(255, 255, 255, 0.16);
+  --sidebar-border-color: rgba(255, 255, 255, 0.1);
+  --shadow-sm: 0 2px 8px rgba(5, 41, 74, 0.06);
+  --shadow-md: 0 12px 30px rgba(5, 41, 74, 0.1);
+  --shadow-lg: 0 24px 52px rgba(5, 41, 74, 0.14);
+}
+
+/* Marco de aplicación: claro, espacioso y sin el aspecto genérico del Desk. */
+body,
+.main-section,
+.page-container,
+.layout-main-section-wrapper,
+.layout-main-section,
+.page-body,
+.workspace-body {
+  background: var(--sgc-page) !important;
+  color: var(--text-color);
+}
+
+.navbar {
+  min-height: 58px;
+  background: var(--navbar-bg) !important;
+  border-bottom-color: rgba(20, 53, 82, 0.1) !important;
+  box-shadow: 0 2px 14px rgba(5, 41, 74, 0.05);
+  backdrop-filter: blur(16px);
+}
+
+.navbar .search-bar input,
+.navbar .search-bar .search-icon {
+  border-radius: 9px;
+}
+
+.navbar .search-bar input {
+  border-color: transparent;
+  background: #edf3f8;
+}
+
+.navbar .search-bar input:focus {
+  background: #ffffff;
+  box-shadow: var(--sgc-focus) !important;
+}
+
+/* Navegación: azul UPeU profundo, identidad fija y estados legibles. */
+.body-sidebar {
+  width: 58px;
+  padding: 10px 8px 12px;
+  gap: 12px;
+  background: linear-gradient(180deg, var(--sgc-sidebar) 0%, var(--sgc-sidebar-deep) 100%) !important;
+  border-right: 0;
+  box-shadow: 10px 0 30px rgba(2, 30, 54, 0.12);
+  transition: width 180ms var(--sgc-ease-out), box-shadow 180ms var(--sgc-ease-out);
+}
+
+.body-sidebar-container.expanded .body-sidebar,
+.body-sidebar:hover {
+  width: 244px;
+}
+
+.body-sidebar .standard-sidebar-item,
+.body-sidebar .standard-sidebar-item .item-anchor,
+.body-sidebar .sidebar-item-label,
+.body-sidebar .collapse-sidebar-link,
+.body-sidebar .sidebar-user-button {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.body-sidebar .standard-sidebar-item {
+  min-height: 34px;
+  margin-bottom: 3px;
+  border-radius: 9px;
+  transition: background-color 160ms var(--sgc-ease-out), transform 160ms var(--sgc-ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .body-sidebar .standard-sidebar-item:hover {
+    background: var(--sgc-sidebar-hover) !important;
+    transform: translateX(2px);
+  }
+}
+
+.body-sidebar .standard-sidebar-item.selected,
+.body-sidebar .standard-sidebar-item.active-sidebar {
+  background: rgba(247, 168, 0, 0.18) !important;
+  box-shadow: inset 3px 0 0 #f7a800;
+}
+
+.body-sidebar .standard-sidebar-item.selected .sidebar-item-label,
+.body-sidebar .standard-sidebar-item.selected a,
+.body-sidebar .standard-sidebar-item.active-sidebar .sidebar-item-label {
+  color: #ffffff !important;
+  font-weight: 650;
+}
+
+.body-sidebar .divider {
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+/* Cabeceras y zonas de contenido. */
+.page-head,
+.page-head .page-head-content,
+.page-head .page-head-content .page-title {
+  background: transparent;
+}
+
+.page-head {
+  padding-top: 24px;
+  padding-bottom: 14px;
+}
+
+.page-head .page-title .title-text,
+.page-title .title-text,
+.form-title {
+  color: #102f50 !important;
+  font-weight: 730;
+  letter-spacing: -0.022em;
+}
+
+.breadcrumb a,
+.breadcrumb .breadcrumb-item a {
+  color: #52708d !important;
+}
+
+.breadcrumb .active,
+.breadcrumb .breadcrumb-item.active {
+  color: #102f50 !important;
+}
+
+.layout-main-section {
+  padding-bottom: 32px;
+}
+
+/* Widgets y bloques del workspace. */
+.widget,
+.number-widget-box,
+.shortcut-widget-box,
+.links-widget-box,
+.form-dashboard-section,
+.form-section.card-section,
+.report-summary,
+.dashboard-widget-box {
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--sgc-radius-lg) !important;
+  background: var(--sgc-surface) !important;
+  box-shadow: var(--shadow-sm);
+}
+
+.widget,
+.shortcut-widget-box,
+.links-widget-box,
+.dashboard-widget-box {
+  overflow: hidden;
+}
+
+.widget .widget-head,
+.shortcut-widget-box .widget-head,
+.links-widget-box .widget-head {
+  padding-top: 2px;
+}
+
+.widget .widget-title,
+.shortcut-widget-box .widget-title,
+.links-widget-box .widget-title {
+  color: #102f50 !important;
+  font-weight: 680;
+}
+
+/* Listas: la lectura de registros manda sobre los bordes y cajas. */
+.frappe-list {
+  margin: 0 !important;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: var(--sgc-radius-lg);
+  background: var(--sgc-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.list-row-container {
+  padding-inline: 16px;
+  border-radius: 0;
+  transition: background-color 150ms var(--sgc-ease-out);
+}
+
+.list-row-container:hover,
+.list-row-container:focus-within {
+  background: #f1f7fc !important;
+}
+
+.list-row {
+  min-height: 52px;
+  border-bottom-color: #e6edf4;
+}
+
+.list-row-head,
+.list-row-head .level-right {
+  background: #edf3f8 !important;
+  color: #52657a;
+  font-size: 0.72rem;
+  font-weight: 720;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.list-subject a,
+.list-row-col a {
+  color: #17253a !important;
+  font-weight: 560;
+}
+
+.list-row .level-right {
+  background: var(--sgc-surface) !important;
+  border-left-color: #edf3f8;
+}
+
+.list-row-container:hover .level-right {
+  background: #f1f7fc !important;
+  box-shadow: none !important;
+}
+
+/* Formularios, tablas hijas y controles. */
+.std-form-layout > .form-layout > .form-page {
+  border: 1px solid var(--border-color);
+  border-radius: var(--sgc-radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-section,
+.form-dashboard-section {
+  padding: 6px 20px 20px;
+}
+
+.form-section.card-section {
+  margin-bottom: 14px;
+}
+
+.form-section .section-head,
+.form-dashboard-section .section-head {
+  color: #102f50;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.control-label,
+.grid-heading-row,
+.form-column .column-label {
+  color: #52657a !important;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.035em;
+}
+
+.form-control,
+.form-control.input-with-feedback,
+.awesomplete input,
+.input-with-feedback,
+.frappe-control .control-input,
+.frappe-control .ql-editor {
+  min-height: 38px;
+  border: 1px solid #ccd9e6 !important;
+  border-radius: 9px !important;
+  background: #ffffff !important;
+  color: #17253a !important;
+  box-shadow: none !important;
+  transition: border-color 150ms var(--sgc-ease-out), box-shadow 150ms var(--sgc-ease-out);
+}
+
+.form-control:focus,
+.awesomplete input:focus,
+.frappe-control .control-input:focus-within,
+.frappe-control .ql-editor:focus {
+  border-color: #2166ac !important;
+  box-shadow: var(--sgc-focus) !important;
+}
+
+.grid-heading-row,
+.grid-row {
+  border-color: #dce6f0 !important;
+}
+
+.grid-heading-row {
+  background: #edf3f8 !important;
+}
+
+/* Acciones y retroalimentación. */
+.btn {
+  border-radius: 9px;
+  font-weight: 620;
+  transition: background-color 150ms var(--sgc-ease-out), border-color 150ms var(--sgc-ease-out), color 150ms var(--sgc-ease-out), transform 120ms var(--sgc-ease-out), box-shadow 150ms var(--sgc-ease-out);
+}
+
+.btn-primary,
+.btn-primary:focus,
+.btn-primary:active {
+  background: #003366 !important;
+  border-color: #003366 !important;
+  color: #ffffff !important;
+  box-shadow: 0 5px 14px rgba(0, 51, 102, 0.18);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn-primary:hover {
+    background: #0f4c81 !important;
+    border-color: #0f4c81 !important;
+    box-shadow: 0 8px 18px rgba(0, 51, 102, 0.22);
+  }
+}
+
+.btn:active,
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+.btn:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none !important;
+  box-shadow: var(--sgc-focus) !important;
+}
+
+.dropdown-menu,
+.modal-content,
+.popover,
+.frappe-control .awesomplete > ul {
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.modal-header,
+.modal-footer {
+  border-color: #e3ebf3;
+}
+
+.indicator-pill,
+.badge {
+  border-radius: 6px;
+  font-weight: 650;
+}
+
+/* Tema oscuro: Frappe ya lo selecciona en preferencias del usuario. */
+[data-theme="dark"] {
+  --sgc-page: #0b1520;
+  --sgc-surface: #111f2d;
+  --sgc-surface-raised: #172838;
+  --sgc-sidebar: #061b2d;
+  --sgc-sidebar-deep: #031321;
+  --bg-color: var(--sgc-page);
+  --card-bg: var(--sgc-surface);
+  --control-bg: var(--sgc-surface-raised);
+  --fg-color: #172838;
+  --subtle-fg: #182b3d;
+  --border-color: #274057;
+  --dark-border-color: #35516a;
+  --text-color: #eef5fb;
+  --text-muted: #b5c7d7;
+  --text-light: #91a8bb;
+  --heading-color: #f3f8fc;
+  --navbar-bg: rgba(11, 21, 32, 0.94);
+  --surface-menu-bar: var(--sgc-sidebar);
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.18);
+  --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 24px 52px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .page-head .page-title .title-text,
+[data-theme="dark"] .page-title .title-text,
+[data-theme="dark"] .form-title,
+[data-theme="dark"] .widget .widget-title,
+[data-theme="dark"] .shortcut-widget-box .widget-title,
+[data-theme="dark"] .links-widget-box .widget-title,
+[data-theme="dark"] .form-section .section-head,
+[data-theme="dark"] .form-dashboard-section .section-head,
+[data-theme="dark"] .list-subject a,
+[data-theme="dark"] .list-row-col a {
+  color: #f3f8fc !important;
+}
+
+[data-theme="dark"] .navbar .search-bar input {
+  background: #172838;
+  color: #eef5fb;
+}
+
+[data-theme="dark"] .navbar .search-bar input:focus,
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-control.input-with-feedback,
+[data-theme="dark"] .awesomplete input,
+[data-theme="dark"] .input-with-feedback,
+[data-theme="dark"] .frappe-control .control-input,
+[data-theme="dark"] .frappe-control .ql-editor {
+  background: #172838 !important;
+  border-color: #36536c !important;
+  color: #eef5fb !important;
+}
+
+[data-theme="dark"] .list-row-head,
+[data-theme="dark"] .list-row-head .level-right,
+[data-theme="dark"] .grid-heading-row {
+  background: #182b3d !important;
+}
+
+[data-theme="dark"] .list-row .level-right {
+  background: var(--sgc-surface) !important;
+}
+
+[data-theme="dark"] .list-row-container:hover,
+[data-theme="dark"] .list-row-container:focus-within,
+[data-theme="dark"] .list-row-container:hover .level-right {
+  background: #1a3043 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .body-sidebar,
+  .body-sidebar .standard-sidebar-item,
+  .list-row-container,
+  .form-control,
+  .awesomplete input,
+  .btn {
+    transition: none !important;
+  }
+}
