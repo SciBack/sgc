@@ -206,15 +206,23 @@ personales ni datos reales.
 
 - SciBack: tipografía, escala, espaciado, radios, neutros, superficies, estados, componentes y
   movimiento.
-- UPeU: `#003366`, `#f8a900`, tintas sobre marca y activos institucionales.
+- La implementación UPeU: `#003366`, `#f8a900`, tintas sobre marca y activos institucionales.
 
 La capa UPeU no redefinirá fondo, superficie, tinta, estados ni colores de gráficos. El ámbar se
 usará como acento o relleno con tinta oscura; nunca como texto normal sobre una superficie clara.
 
-La separación será física: `docs-site/src/styles/sciback.css` contendrá la capa neutral y
-`docs-site/src/styles/instituciones/upeu.css` solo los tokens de marca derivados de la fuente
-canónica. `docs-site/` no contendrá cuentas, datos ni activos operativos del cliente. La
-configuración productiva UPeU vivirá bajo `deploy/upeu/manual/`, separada del contenido funcional.
+La separación será física y entre repositorios:
+
+- producto canónico: `/Users/alberto/proyectos/productos/sgc/canonico/docs-site/` y checkout
+  productivo `/opt/sgc/src/sgc/docs-site/`; contiene contenido funcional, estilos SciBack
+  neutrales y un punto de extensión institucional genérico;
+- overlay UPeU: `/Users/alberto/proyectos/upeu/upeu-ops/services/sgc/manual/` en el repo
+  `UPeU-Infra/upeu-ops`, y checkout productivo `/opt/sgc/upeu-ops/services/sgc/manual/`; contiene
+  `institution.css`, Compose, plantilla Caddy y parámetros del host.
+
+El overlay monta `institution.css` como archivo estático sobre el punto de extensión; no copia ni
+modifica el manual. `docs-site/` no contendrá tokens, cuentas, datos, activos ni configuración de
+despliegue UPeU.
 
 ### 7.2 Experiencia
 
@@ -230,8 +238,8 @@ configuración productiva UPeU vivirá bajo `deploy/upeu/manual/`, separada del 
 
 ### 7.3 Configuración Astro
 
-- `site: 'https://calidad.upeu.edu.pe'`;
-- `base: '/manual'`;
+- `site` parametrizado por `DOCS_SITE` y obligatorio en build productivo;
+- `base` parametrizado por `DOCS_BASE`, con valor canónico `/manual`;
 - salida estática;
 - sitemap habilitado para el host y base nuevos;
 - búsqueda local de Starlight;
@@ -239,7 +247,9 @@ configuración productiva UPeU vivirá bajo `deploy/upeu/manual/`, separada del 
 - eliminación de canónicas, enlaces de edición y referencias de salida a
   `sciback.github.io/sgc` o `/sgc`.
 
-CI inspeccionará `dist/` y fallará ante cualquiera de esos hosts/prefijos anteriores.
+CI canónico construirá con un host de prueba no institucional; el overlay productivo construirá
+con `DOCS_SITE=https://calidad.upeu.edu.pe` y `DOCS_BASE=/manual`. Ambos inspeccionarán `dist/` y
+fallarán ante referencias a los hosts/prefijos anteriores.
 
 ## 8. Calidad y verificadores
 
@@ -302,13 +312,16 @@ El workflow del manual se cambiará de publicación en GitHub Pages a validació
 productivo. Debe ejecutarse cuando cambien:
 
 - `docs-site/**`;
-- `deploy/upeu/manual/**`;
 - `sgc/manual_auth.py` y sus pruebas;
 - `frontend/src/router.js`, `frontend/src/layouts/**`, `frontend/src/pages/**`;
 - `sgc/hooks.py`, `sgc/scoring.py`, `sgc/confirmacion.py`, `sgc/capa.py`, `sgc/informe.py`,
   `sgc/lista_maestra.py`, `sgc/tasks.py`, `sgc/permissions.py`;
 - `sgc/setup/f*_workflow*.py`, `sgc/setup/f3b_rbac.py`;
 - `sgc/sgc_*/doctype/**`.
+
+El repo cliente `UPeU-Infra/upeu-ops` tendrá su propio workflow para
+`services/sgc/manual/**`; comprobará el overlay, construirá el manual canónico con los parámetros
+UPeU y ejecutará la integración completa Caddy + autenticación simulada + contenedor.
 
 CI no manejará secretos productivos. La prueba de autenticación utilizará un upstream simulado
 con respuestas Guest, autenticado y `5xx`. `.github/workflows/docs.yml` perderá permisos y pasos
@@ -322,25 +335,29 @@ manual. Retirar el workflow no cuenta como despublicación.
 
 El primer despliegue tiene dos fases explícitas:
 
-**Bootstrap de autorización (una sola vez):** desplegar `sgc/manual_auth.py` y su prueba dentro de
-la imagen Frappe, con aprobación previa para reemplazar servicios críticos. Se captura estado y
-uptime, se reemplazan los servicios según el flujo existente, se prueba el contrato 204/302/5xx
-y se conserva el tag/digest anterior para rollback. Esta fase no se disfraza como un despliegue
-aislado del manual.
+**Habilitación inicial de autorización (una sola vez):** desplegar `sgc/manual_auth.py` y su
+prueba dentro de la imagen Frappe, con aprobación previa para reemplazar únicamente el servicio
+`frappe-prod-backend-1` mediante `docker compose up -d --no-deps backend`. Frontend, websocket,
+scheduler, workers, Redis y PostgreSQL no se reemplazan. Se captura estado y uptime, se prueba el
+contrato 204/302/5xx y se conserva el tag/digest backend anterior para rollback. Esta fase no se
+presenta como una publicación ordinaria del manual.
 
 **Manual y proxy:**
 
 1. modificar y verificar localmente;
 2. commit y push a GitHub;
-3. `git pull` en un checkout persistente del EC2 `sgc-app`;
+3. `git pull` en los checkouts persistentes `/opt/sgc/src/sgc` y `/opt/sgc/upeu-ops` del EC2
+   `sgc-app`;
 4. construir `sgc-manual:<git-sha>` y registrar su digest;
-5. comprobar el healthcheck del contenedor antes de publicar la ruta;
-6. guardar el SHA/digest anterior y el Caddyfile vigente;
-7. validar `caddy validate` con la configuración candidata;
-8. desplegar o reemplazar solo `sgc-manual`;
-9. recargar Caddy en caliente;
-10. ejecutar smoke tests anónimos y autenticados;
-11. confirmar que los contenedores Frappe conservan estado y tiempo de actividad.
+5. iniciar un contenedor candidato `sgc-manual-<short-sha>` sin modificar todavía el upstream
+   activo y esperar estado `healthy`;
+6. guardar el release activo y el Caddyfile vigente;
+7. generar el Caddyfile candidato apuntando al nombre exacto del contenedor saludable y ejecutar
+   `caddy validate`;
+8. recargar Caddy en caliente y ejecutar smoke tests anónimos y autenticados;
+9. solo si pasan los smoke tests, promover el candidato a release vigente y detener el contenedor
+   anterior; si fallan, restaurar Caddy y retirar el candidato;
+10. confirmar que los contenedores Frappe conservan estado y tiempo de actividad.
 
 No se usará `scp`. Las publicaciones posteriores de contenido o estilo no reconstruyen Frappe:
 solo reemplazan `sgc-manual` y recargan Caddy.
@@ -366,9 +383,12 @@ contexto del navegador se destruye al terminar.
 
 El contenedor del manual es reemplazable y no comparte volúmenes de escritura con Frappe. Las
 imágenes usan tags inmutables por commit, nunca `latest`; el Compose productivo vive en
-`/opt/sgc/manual/` y conserva `MANUAL_IMAGE` con SHA/digest anterior y vigente. La configuración
-fuente está versionada en `deploy/upeu/manual/`; antes de cada recarga se respalda el Caddyfile
-vigente con timestamp y commit.
+`/opt/sgc/upeu-ops/services/sgc/manual/`. El estado de releases usa tres archivos separados:
+`state/candidate.env`, `state/current.env` y `state/previous.env`, cada uno con nombre, SHA y
+digest. Solo después de aprobar los smoke tests se mueve atómicamente `current.env` a
+`previous.env` y `candidate.env` a `current.env`. La configuración fuente está versionada en
+`UPeU-Infra/upeu-ops`; antes de cada recarga se respalda el Caddyfile vigente con timestamp y
+commit.
 
 Rollback del manual: seleccionar el SHA/digest anterior, recrear solo `sgc-manual`, validar y
 recargar Caddy, luego repetir la matriz HTTP. Si el contenedor no queda saludable, se retira el
@@ -403,8 +423,9 @@ La entrega se considera completa cuando:
 - `/manual` redirige, `/manual/` y una página interna responden 200 con sesión, y una ruta
   inexistente responde 404;
 - escritorio y móvil no tienen desbordamiento horizontal;
-- el despliegue afecta únicamente el servicio necesario para el manual y la recarga en caliente
-  del proxy;
+- la habilitación inicial reemplaza únicamente `frappe-prod-backend-1` con aprobación; las
+  publicaciones ordinarias afectan solo un contenedor candidato del manual y la recarga en
+  caliente del proxy;
 - la entrega final informa URL, ruta, páginas, roles, flujos, verificaciones, commit, estado de
   producción, limitaciones y datos/cuentas faltantes.
 
