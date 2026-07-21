@@ -7,7 +7,9 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "verify:coverage": "node scripts/verify-coverage.mjs",
+    "test:coverage": "node --test tests/verify-coverage.test.mjs"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.41.3",
