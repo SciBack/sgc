@@ -97,8 +97,11 @@ website_route_rules = [
 # Installation
 # ------------
 
-# before_install = "sgc.install.before_install"
-# after_install = "sgc.install.after_install"
+# Un site nuevo debe quedar con el mismo contrato funcional que uno migrado.
+# Sin este hook, `bench new-site --install-app sgc` sincroniza los DocTypes pero
+# deja los workflows/RBAC sin crear; cualquier `apply_workflow()` obtiene nombre
+# vacío y falla con `Workflow  not found` hasta ejecutar un migrate adicional.
+after_install = "sgc.setup.f_deploy_run_all.run"
 
 # Migration
 # ------------
