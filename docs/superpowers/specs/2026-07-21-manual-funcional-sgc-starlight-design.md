@@ -52,31 +52,49 @@ RBAC, tareas periódicas, reportes y pruebas.
 2. `docs-site/Dockerfile`: build multi-stage reproducible y servidor estático mínimo.
 3. Configuración del servidor estático: 404 real, cabeceras y caché selectiva.
 4. `sgc-manual`: contenedor independiente conectado a la red externa `sgc-proxy`.
-5. Caddy: autenticación y enrutamiento por prefijo.
-6. Frappe: endpoint mínimo de autorización basado en la sesión existente.
+5. Caddy: autenticación y enrutamiento por prefijo; conectado de forma declarativa a
+   `sgc-proxy` y `sgc-prod-net`.
+6. Frappe: endpoint mínimo `sgc.manual_auth.authorize`, basado en la sesión existente.
+
+La topología productiva comprobada el 2026-07-21 es: `sgc-caddy` está conectado a
+`sgc-proxy` y `sgc-prod-net`; `frappe-prod-frontend-1` está en `sgc-prod-net` con alias
+`frontend`. Esa conexión no seguirá siendo un ajuste manual: el Compose versionado de Caddy
+declarará ambas redes externas y el Compose del manual declarará `sgc-proxy`.
 
 ### 4.2 Enrutamiento
 
 El host mantiene una sola entrada TLS:
 
 1. `/manual` responde con redirección permanente a `/manual/` sin cambiar esquema ni host.
-2. `/manual/*` ejecuta una subsolicitud de autorización a Frappe conservando la cookie de
-   sesión.
-3. Si el usuario es `Guest`, la respuesta redirige a `/login?redirect-to=/manual/`.
+2. `/manual/*` ejecuta una subsolicitud `GET` a
+   `/api/method/sgc.manual_auth.authorize`, conservando la cookie de sesión solo hacia Frappe.
+3. El contrato exacto del endpoint es: sesión válida `204`; `Guest`, sesión expirada o revocada
+   `302` con `Location: /login?redirect-to=/manual/`; error interno `5xx`.
 4. Si la sesión es válida, Caddy elimina el prefijo `/manual` al hacer proxy al contenedor.
 5. Las demás rutas continúan hacia `frontend:8080`, como en producción actualmente.
 
-El endpoint de autorización no devuelve datos personales ni permisos del usuario. Solo comunica
-si la sesión es válida. La URL de retorno debe validarse como ruta local para impedir redirecciones
-abiertas.
+El endpoint usa `frappe.session.user`, nunca las cookies auxiliares `user_id`, `full_name` o
+`system_user`. No recibe una URL de retorno arbitraria: la redirección es fija y local. Responde
+siempre con `Cache-Control: private, no-store`; no devuelve identidad, roles ni datos personales.
+Los `5xx` fallan cerrados y nunca habilitan el manual.
+
+Después de autorizar, Caddy elimina `Cookie`, `Authorization`, cabeceras `X-Frappe-*` y cualquier
+cabecera de identidad antes del proxy a `sgc-manual`. El servidor estático no registra cookies ni
+puede alcanzar `sgc-prod-net`.
 
 ### 4.3 Respuestas y caché
 
-- HTML y sitemap: sin caché larga.
-- Assets con hash bajo `_astro/`: `public, max-age=31536000, immutable`.
-- Assets no versionados: caché corta o revalidación.
+- HTML, 404, sitemap, manifiestos e índices de búsqueda/Pagefind:
+  `private, no-store`.
+- Assets con hash bajo `_astro/`: `private, max-age=31536000, immutable`.
+- Assets no versionados: `private, no-cache`.
 - Rutas inexistentes: estado HTTP 404 y página propia, nunca `index.html` de la SPA.
 - Healthcheck: archivo estático interno que no depende de Frappe.
+
+El servidor estático será `nginxinc/nginx-unprivileged:1.28-alpine`, fijado además por digest al
+implementar; el build usará `node:24-alpine`, también fijado por digest, y `npm ci` sobre el
+lockfile. La resolución será exactamente `archivo` → `directorio/index.html` → `=404`, con
+`error_page 404 /404.html` conservando el estado 404. No existe fallback a `index.html`.
 
 ## 5. Arquitectura de información
 
@@ -113,6 +131,35 @@ los roles de lectura y administración. Cada guía explicará:
 un portal acotado. `System Manager` se documentará como rol administrativo, incluyendo sus
 restricciones deliberadas dentro de la matriz SGC.
 
+El inventario cerrado inicial contiene 14 guías:
+
+1. DPGC;
+2. Analista de Calidad (DPGC);
+3. Coordinador de Calidad de Facultad;
+4. Responsable de Calidad de Programa;
+5. Miembro de Comité de Calidad;
+6. Dueño de Proceso;
+7. Data Steward;
+8. Auditor Interno;
+9. Rectorado/VR (lectura);
+10. Decano/Director (lectura);
+11. Responsable de Sede;
+12. Lector Externo;
+13. Autoridad Aprobadora;
+14. System Manager.
+
+`docs-site/src/data/coverage.json` será el manifiesto versionado de cobertura. Para cada rol y
+flujo registrará `id`, `kind`, `page`, `sources` y `status`. CI rechazará IDs o páginas duplicadas,
+páginas ausentes, fuentes inexistentes y fuentes funcionales sin cobertura declarada.
+
+El inventario inicial de workflows contiene los 14 definidos actualmente en `sgc/setup/`:
+Autoevaluación, No Conformidad, Plan de Mejora, Acción de Mejora, Documento Controlado, Programa
+de Auditoría, Auditoría, Aplicación de Instrumento, Revisión por la Dirección, Informe de
+Cumplimiento CBC, Hallazgo, Evidencia, Riesgo y Tratamiento de Riesgo. Los flujos sin Workflow
+nativo —por ejemplo trazabilidad, scoring/confirmación, indicadores, gobierno, procesos,
+obligaciones, reportes y tareas periódicas— tendrán también entradas propias si el análisis de
+controladores confirma acciones funcionales independientes.
+
 ### 5.2 Plantilla obligatoria de flujo
 
 Cada flujo funcional incluirá:
@@ -131,9 +178,8 @@ Cada flujo funcional incluirá:
 12. relación con otros módulos;
 13. fuente de verdad en el código.
 
-El inventario definitivo de páginas se cerrará después de extraer todos los workflows,
-controladores y endpoints. No se fusionarán dos flujos si tienen actores, estados o reglas de
-aprobación diferentes.
+El manifiesto se completará antes de escribir las páginas y será el inventario definitivo. No se
+fusionarán dos flujos si tienen actores, estados o reglas de aprobación diferentes.
 
 ## 6. Investigación y trazabilidad
 
@@ -165,6 +211,11 @@ personales ni datos reales.
 La capa UPeU no redefinirá fondo, superficie, tinta, estados ni colores de gráficos. El ámbar se
 usará como acento o relleno con tinta oscura; nunca como texto normal sobre una superficie clara.
 
+La separación será física: `docs-site/src/styles/sciback.css` contendrá la capa neutral y
+`docs-site/src/styles/instituciones/upeu.css` solo los tokens de marca derivados de la fuente
+canónica. `docs-site/` no contendrá cuentas, datos ni activos operativos del cliente. La
+configuración productiva UPeU vivirá bajo `deploy/upeu/manual/`, separada del contenido funcional.
+
 ### 7.2 Experiencia
 
 - Starlight conserva búsqueda, navegación responsive, índice, foco y temas claro/oscuro.
@@ -177,39 +228,60 @@ usará como acento o relleno con tinta oscura; nunca como texto normal sobre una
 - Zonas táctiles de al menos 44×44 px.
 - Contraste mínimo: 4.5:1 para texto y 3:1 para cromo/controles en claro y oscuro.
 
+### 7.3 Configuración Astro
+
+- `site: 'https://calidad.upeu.edu.pe'`;
+- `base: '/manual'`;
+- salida estática;
+- sitemap habilitado para el host y base nuevos;
+- búsqueda local de Starlight;
+- enlaces internos sin prefijos escritos a mano;
+- eliminación de canónicas, enlaces de edición y referencias de salida a
+  `sciback.github.io/sgc` o `/sgc`.
+
+CI inspeccionará `dist/` y fallará ante cualquiera de esos hosts/prefijos anteriores.
+
 ## 8. Calidad y verificadores
 
 ### 8.1 Comprobaciones locales y CI
 
-- frontend principal: build y pruebas existentes;
-- documentación: `astro check` y build;
-- enlaces internos y referencias a anchors;
-- sitemap y página 404;
-- contraste medido en claro y oscuro;
-- búsqueda de secretos y PII prohibida;
-- reglas de caché;
-- imagen Docker completa del manual;
-- integración Caddy + manual + aplicación simulada;
-- pruebas HTTP de rutas y estados;
-- pruebas responsive con navegador real;
-- detección de desbordamiento horizontal.
+- frontend principal: `npm ci`, `npm run build`, `npm run test:login-dom` y verificadores
+  existentes;
+- documentación: `npm run check` (`astro check`) y `npm run build`;
+- `npm run verify:links`: script Node que resuelve páginas, assets y anchors desde `dist/`;
+- `npm run verify:coverage`: valida `src/data/coverage.json`, páginas y fuentes;
+- `npm run verify:privacy`: patrones prohibidos de secretos, DNI, correos personales y fixtures
+  conocidas sobre fuente y artefacto;
+- `npm run verify:contrast`: Playwright + axe-core en claro y oscuro;
+- `npm run verify:dist`: sitemap, 404, host/base, búsqueda y ausencia del host/prefijo anterior;
+- `npm run verify:docker`: build de imagen por SHA y prueba de Nginx/headers;
+- `npm run verify:integration`: Compose efímero con Caddy, upstream Frappe simulado y manual;
+- `npm run verify:visual`: Playwright a 1440 y 390 px, temas claro/oscuro y
+  `scrollWidth <= clientWidth`.
 
-Los verificadores críticos tendrán un canario negativo versionado: se ejecutará una fixture
-deliberadamente inválida y el check solo pasará si el verificador la rechaza.
+En `docs-site/tests/fixtures/` habrá casos deliberadamente inválidos para enlaces, cobertura,
+PII, contraste y configuración de caché/base. Cada canario solo pasa si su verificador termina
+con código distinto de cero. El workflow ejecutará explícitamente los cinco canarios.
 
 ### 8.2 Matriz HTTP mínima
 
 | Caso | Resultado esperado |
 | --- | --- |
-| `/` | La aplicación conserva su respuesta vigente |
-| `/sgc/` | La SPA conserva su respuesta y autenticación |
-| `/manual` | 308/301 a `/manual/`, conservando HTTPS |
-| `/manual/` sin sesión | Redirección al login institucional |
+| `/` | Conserva el código y `Location` vigentes |
+| `/sgc/` | Conserva su respuesta y autenticación |
+| `/manual` | 308 a `https://calidad.upeu.edu.pe/manual/` |
+| `/manual/` sin sesión | 302 a `/login?redirect-to=/manual/` |
 | `/manual/` con sesión | 200 |
 | Página interna con sesión | 200 |
 | Ruta inexistente del manual con sesión | 404 propio |
-| Asset versionado | 200 + caché immutable |
-| HTML | 200 sin caché larga |
+| Asset `_astro` versionado | 200 + `private, max-age=31536000, immutable` |
+| HTML, sitemap, 404 e índice de búsqueda | `private, no-store` |
+| `/manualfoo` | Continúa hacia Frappe; no entra al manual |
+| `HEAD` de página válida/inexistente | Mismo estado y cabeceras que GET, sin cuerpo |
+| Frappe de autorización en `5xx` | Manual no servido; respuesta cerrada |
+
+Las pruebas de autorización incluyen sesión válida, expirada, revocada y cookie `user_id`
+falsificada sin `sid` válido.
 
 ### 8.3 Verificación visual
 
@@ -217,6 +289,10 @@ Se revisará como mínimo a 1440 px y 390 px de ancho, en temas claro y oscuro. 
 confirmarán navegación, búsqueda, foco visible, tablas, bloques de flujo y ausencia de scroll
 horizontal. Se usará el navegador para inspección real; una captura aislada no sustituye las
 mediciones de DOM y contraste.
+
+El contenedor añadirá `X-Content-Type-Options: nosniff`, `Referrer-Policy: same-origin`, una
+política de framing `SAMEORIGIN`/`frame-ancestors 'self'` y una CSP compatible con el build real
+de Starlight. CI comprobará que la CSP no bloquea CSS, búsqueda ni scripts propios.
 
 ## 9. CI y despliegue
 
@@ -226,29 +302,54 @@ El workflow del manual se cambiará de publicación en GitHub Pages a validació
 productivo. Debe ejecutarse cuando cambien:
 
 - `docs-site/**`;
-- configuración del contenedor o proxy;
-- endpoint de autorización;
-- fuentes funcionales que puedan volver obsoleto el manual, según un inventario mantenible.
+- `deploy/upeu/manual/**`;
+- `sgc/manual_auth.py` y sus pruebas;
+- `frontend/src/router.js`, `frontend/src/layouts/**`, `frontend/src/pages/**`;
+- `sgc/hooks.py`, `sgc/scoring.py`, `sgc/confirmacion.py`, `sgc/capa.py`, `sgc/informe.py`,
+  `sgc/lista_maestra.py`, `sgc/tasks.py`, `sgc/permissions.py`;
+- `sgc/setup/f*_workflow*.py`, `sgc/setup/f3b_rbac.py`;
+- `sgc/sgc_*/doctype/**`.
 
 CI no manejará secretos productivos. La prueba de autenticación utilizará un upstream simulado
-con respuestas Guest/autenticado.
+con respuestas Guest, autenticado y `5xx`. `.github/workflows/docs.yml` perderá permisos y pasos
+de GitHub Pages; solo validará y publicará como artefacto temporal el `dist/` y los reportes.
+
+Antes de publicar el nuevo contenido protegido se deshabilitará GitHub Pages mediante la API de
+GitHub (`DELETE /repos/SciBack/sgc/pages`) y se verificará que la URL anterior ya no expone el
+manual. Retirar el workflow no cuenta como despublicación.
 
 ### 9.2 Producción
+
+El primer despliegue tiene dos fases explícitas:
+
+**Bootstrap de autorización (una sola vez):** desplegar `sgc/manual_auth.py` y su prueba dentro de
+la imagen Frappe, con aprobación previa para reemplazar servicios críticos. Se captura estado y
+uptime, se reemplazan los servicios según el flujo existente, se prueba el contrato 204/302/5xx
+y se conserva el tag/digest anterior para rollback. Esta fase no se disfraza como un despliegue
+aislado del manual.
+
+**Manual y proxy:**
 
 1. modificar y verificar localmente;
 2. commit y push a GitHub;
 3. `git pull` en un checkout persistente del EC2 `sgc-app`;
-4. construir la imagen del manual;
-5. desplegar o reemplazar solo `sgc-manual`;
-6. validar la configuración de Caddy;
-7. recargar Caddy en caliente;
-8. ejecutar smoke tests anónimos y autenticados;
-9. confirmar que los contenedores Frappe conservan estado y tiempo de actividad.
+4. construir `sgc-manual:<git-sha>` y registrar su digest;
+5. comprobar el healthcheck del contenedor antes de publicar la ruta;
+6. guardar el SHA/digest anterior y el Caddyfile vigente;
+7. validar `caddy validate` con la configuración candidata;
+8. desplegar o reemplazar solo `sgc-manual`;
+9. recargar Caddy en caliente;
+10. ejecutar smoke tests anónimos y autenticados;
+11. confirmar que los contenedores Frappe conservan estado y tiempo de actividad.
 
-No se usará `scp`. Si fuese necesario modificar el endpoint de autorización dentro de la imagen
-Frappe, ese cambio se desplegará por el flujo versionado normal y se solicitará aprobación antes
-de reemplazar cualquier servicio crítico. La integración se diseñará para evitar esta sustitución
-si Caddy puede validar la sesión mediante un endpoint nativo seguro ya existente.
+No se usará `scp`. Las publicaciones posteriores de contenido o estilo no reconstruyen Frappe:
+solo reemplazan `sgc-manual` y recargan Caddy.
+
+El smoke autenticado usará un script Playwright que lee credenciales desde variables de entorno
+ya existentes, crea la sesión mediante la API de login, mantiene cookies solo en memoria y nunca
+imprime identidad, contraseña ni `sid`. Si el login local no está habilitado, se ejecutará una
+sesión interactiva SSO. No se pasan secretos por argumentos, no se escribe `storageState` y el
+contexto del navegador se destruye al terminar.
 
 ## 10. Seguridad y privacidad
 
@@ -263,10 +364,19 @@ si Caddy puede validar la sesión mediante un endpoint nativo seguro ya existent
 
 ## 11. Operación y rollback
 
-El contenedor del manual es reemplazable y no comparte volúmenes de escritura con Frappe. El
-rollback consiste en volver a la imagen anterior y recargar Caddy. Si la ruta se retira, Caddy
-vuelve a enviar todo al frontend actual. Los servicios de datos y ejecución no requieren
-migración ni rollback.
+El contenedor del manual es reemplazable y no comparte volúmenes de escritura con Frappe. Las
+imágenes usan tags inmutables por commit, nunca `latest`; el Compose productivo vive en
+`/opt/sgc/manual/` y conserva `MANUAL_IMAGE` con SHA/digest anterior y vigente. La configuración
+fuente está versionada en `deploy/upeu/manual/`; antes de cada recarga se respalda el Caddyfile
+vigente con timestamp y commit.
+
+Rollback del manual: seleccionar el SHA/digest anterior, recrear solo `sgc-manual`, validar y
+recargar Caddy, luego repetir la matriz HTTP. Si el contenedor no queda saludable, se retira el
+handler `/manual*` y el resto del host continúa hacia Frappe.
+
+Rollback del bootstrap de autorización: restaurar el tag/digest Frappe anterior y su Compose,
+reemplazar los servicios afectados con aprobación, validar login y `/sgc/`, y retirar temporalmente
+la ruta del manual. Los servicios de datos no requieren migración.
 
 Antes y después del despliegue se registrará:
 
@@ -283,7 +393,9 @@ La entrega se considera completa cuando:
 
 - el manual está disponible exactamente en `https://calidad.upeu.edu.pe/manual/`;
 - solo usuarios autenticados pueden leerlo;
+- GitHub Pages anterior está despublicado y ya no expone el contenido;
 - existe una guía por rol y una página por flujo confirmado;
+- el manifiesto de cobertura valida los 14 roles, los 14 workflows y los flujos programáticos;
 - cada flujo cumple la plantilla funcional obligatoria;
 - contenido y estados coinciden con el código actual;
 - los builds, enlaces, contraste, Docker e integración pasan;
