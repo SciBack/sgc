@@ -2,3 +2,92 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Capa transversal de la SPA SGC. No toca el Desk de Frappe: solo las
+   interfaces existentes servidas bajo /sgc/. */
+:root {
+  --sgc-page: #f5f8fc;
+  --sgc-header: rgb(255 255 255 / 0.9);
+  --sgc-line: rgb(15 76 129 / 0.12);
+  --sgc-focus: 0 0 0 3px rgb(33 102 172 / 0.24);
+  --sgc-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+html {
+  background: var(--sgc-page);
+  color-scheme: light;
+}
+
+html[data-theme='dark'] {
+  --sgc-page: #0b1622;
+  --sgc-header: rgb(15 31 46 / 0.9);
+  --sgc-line: rgb(179 205 230 / 0.16);
+  --sgc-focus: 0 0 0 3px rgb(127 173 212 / 0.35);
+  color-scheme: dark;
+}
+
+.sgc-shell {
+  background:
+    radial-gradient(circle at 80% -10%, rgb(179 205 230 / 0.34), transparent 32rem),
+    var(--sgc-page) !important;
+}
+
+html[data-theme='dark'] .sgc-shell {
+  background:
+    radial-gradient(circle at 80% -10%, rgb(33 102 172 / 0.2), transparent 30rem),
+    var(--sgc-page) !important;
+}
+
+.sgc-app-header {
+  border-bottom: 1px solid var(--sgc-line) !important;
+  background: var(--sgc-header) !important;
+  box-shadow: 0 2px 16px rgb(4 40 70 / 0.04);
+  backdrop-filter: blur(16px);
+}
+
+.sgc-app-sidebar {
+  box-shadow: 12px 0 30px rgb(0 31 63 / 0.1);
+}
+
+.sgc-theme-toggle {
+  transition: border-color 150ms var(--sgc-ease-out), background-color 150ms var(--sgc-ease-out),
+    color 150ms var(--sgc-ease-out), transform 120ms var(--sgc-ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sgc-theme-toggle:hover {
+    border-color: rgb(33 102 172 / 0.42);
+    background: #eef4fa;
+    color: #003865;
+  }
+}
+
+.sgc-theme-toggle:active {
+  transform: scale(0.96);
+}
+
+.sgc-shell :where(input, textarea, select):focus-visible,
+.sgc-shell button:focus-visible,
+.sgc-shell a:focus-visible {
+  outline: none;
+  box-shadow: var(--sgc-focus);
+}
+
+.sgc-shell :where(input, textarea, select) {
+  transition: border-color 150ms var(--sgc-ease-out), box-shadow 150ms var(--sgc-ease-out),
+    background-color 150ms var(--sgc-ease-out);
+}
+
+html[data-theme='dark'] .sgc-theme-toggle {
+  border-color: rgb(179 205 230 / 0.22);
+  background: rgb(23 45 64 / 0.9);
+  color: #d8e6f3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sgc-app-header,
+  .sgc-theme-toggle,
+  .sgc-shell :where(input, textarea, select) {
+    transition: none;
+  }
+}

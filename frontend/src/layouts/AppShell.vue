@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import {
   Avatar,
@@ -11,6 +11,7 @@ import {
   Sidebar,
   SidebarItem,
   SidebarLabel,
+  useTheme,
 } from 'frappe-ui'
 import { AREAS } from '@/data/areas'
 import { useSessionStore } from '@/stores/session'
@@ -18,6 +19,17 @@ import upeuLogo from '@/assets/upeu-logo.png'
 
 const route = useRoute()
 const session = useSessionStore()
+const { currentTheme, toggleTheme, setTheme } = useTheme()
+
+// El producto inicia en claro; cada persona puede seleccionar oscuro y su
+// preferencia queda persistida por frappe-ui en localStorage.
+onMounted(() => {
+  if (!localStorage.getItem('theme')) setTheme('light')
+})
+
+const themeActionLabel = computed(() =>
+  currentTheme.value === 'dark' ? 'Activar modo claro' : 'Activar modo oscuro',
+)
 
 function areaFor(doctype) {
   const area = AREAS.find((a) => a.items.some((i) => i.doctype === doctype))
@@ -70,13 +82,13 @@ const initials = computed(() =>
 </script>
 
 <template>
-  <div class="h-screen w-full bg-surface-base text-ink-gray-9">
+  <div class="sgc-shell h-screen w-full bg-surface-base text-ink-gray-9">
     <DesktopShell>
       <template #sidebar>
         <Sidebar
           width="15rem"
           data-theme="dark"
-          class="border-r border-black/20 bg-gradient-to-b from-[#023052] via-upeu-navy to-[#00477e]"
+          class="sgc-app-sidebar border-r border-black/20 bg-gradient-to-b from-[#023052] via-upeu-navy to-[#00477e]"
         >
           <!-- Marca institucional = acceso a Inicio. El logo UPeU es azul marino,
                así que va sobre una tarjeta blanca (contraste). Toda la cabecera
@@ -157,7 +169,7 @@ const initials = computed(() =>
         </Sidebar>
       </template>
 
-      <PageHeader>
+      <PageHeader class="sgc-app-header">
         <Breadcrumbs :items="breadcrumbs" />
         <div class="flex items-center gap-3">
           <div
@@ -167,9 +179,22 @@ const initials = computed(() =>
             <span class="lucide-search size-3.5" aria-hidden="true" />
             <span>Buscar en el sistema…</span>
           </div>
+          <button
+            type="button"
+            class="sgc-theme-toggle flex size-9 items-center justify-center rounded-md border border-outline-gray-2 bg-surface-white text-ink-gray-6"
+            :aria-label="themeActionLabel"
+            :title="themeActionLabel"
+            @click="toggleTheme"
+          >
+            <span
+              :class="currentTheme === 'dark' ? 'lucide-sun' : 'lucide-moon'"
+              class="size-4"
+              aria-hidden="true"
+            />
+          </button>
           <Dropdown :options="userMenu">
             <template #default>
-              <button class="rounded-full hover:opacity-80">
+              <button class="rounded-full transition-opacity duration-150 hover:opacity-80">
                 <Avatar :label="session.displayName" size="lg">{{ initials }}</Avatar>
               </button>
             </template>
