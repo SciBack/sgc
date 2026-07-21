@@ -7,6 +7,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 import frappe
+from frappe.query_builder.functions import Count
 from frappe.utils import get_system_timezone, nowdate
 
 _CACHE_KEY = "sgc:login-portada:v1"
@@ -48,9 +49,12 @@ def metricas_portada():
         "Evidencia",
         {"vigencia_hasta": [">=", hoy]},
     )
-    evidencias_con_vigencia = frappe.db.count(
-        "Evidencia",
-        {"vigencia_hasta": ["is", "set"]},
+    evidencia = frappe.qb.DocType("Evidencia")
+    evidencias_con_vigencia = (
+        frappe.qb.from_(evidencia)
+        .select(Count(evidencia.name))
+        .where(evidencia.vigencia_hasta.isnotnull())
+        .run()[0][0]
     )
 
     payload = {
