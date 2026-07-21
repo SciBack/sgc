@@ -48,12 +48,24 @@ function abrirAutoeval(p) {
 <template>
   <ScrollArea class="min-h-0 flex-1">
     <div class="mx-auto max-w-7xl px-6 py-8 sm:px-8 xl:px-10">
-      <div class="mb-5">
-        <div class="text-xs font-semibold uppercase tracking-wide text-marca-primaria-700 opacity-75">
-          Acreditación institucional
+      <section class="sb-hero mb-8 px-6 py-7 text-white sm:px-8">
+        <div class="relative z-10 flex flex-wrap items-end justify-between gap-5">
+          <div class="flex items-start gap-4">
+            <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-white/10 text-marca-secundaria-300">
+              <span class="lucide-gauge size-5" aria-hidden="true" />
+            </span>
+            <div>
+              <p class="text-xs font-bold uppercase tracking-[0.14em] text-white/65">Acreditación institucional</p>
+              <h1 class="mt-1 font-display text-3xl font-bold tracking-tight">Tablero ejecutivo</h1>
+              <p class="mt-2 text-p-sm text-white/75">Cobertura, niveles y alertas de los programas de la UPeU.</p>
+            </div>
+          </div>
+          <div class="rounded-xl border border-white/15 bg-white/[0.07] px-4 py-3">
+            <div class="text-2xl font-bold tabular-nums text-marca-secundaria-300">{{ cobertura.pct }}%</div>
+            <div class="text-xs font-semibold uppercase tracking-[0.08em] text-white/65">Cobertura actual</div>
+          </div>
         </div>
-        <h1 class="mt-1 font-display text-3xl font-bold tracking-tight text-marca-primaria-700">Tablero ejecutivo</h1>
-      </div>
+      </section>
 
       <div v-if="panel.loading" class="space-y-3">
         <div v-for="i in 3" :key="i" class="h-28 animate-pulse rounded-xl border border-outline-gray-1 bg-surface-gray-1" />
@@ -62,7 +74,7 @@ function abrirAutoeval(p) {
       <template v-else>
         <!-- Cobertura + mejora -->
         <section class="mb-6 grid gap-3 sm:grid-cols-3">
-          <div class="rounded-xl border border-outline-gray-1 bg-gradient-to-b from-marca-primaria-50 to-surface-base p-5 sm:col-span-2">
+          <div class="sb-card bg-gradient-to-b from-marca-primaria-50 to-surface-base p-5 sm:col-span-2">
             <div class="text-xs font-semibold uppercase tracking-wide text-marca-primaria-700 opacity-75">
               Cobertura de autoevaluación
             </div>
@@ -82,13 +94,13 @@ function abrirAutoeval(p) {
           </div>
 
           <div class="grid gap-3">
-            <div class="rounded-xl border p-4" :class="mejora.nc_abiertas ? 'border-outline-red-1 bg-surface-red-1' : 'border-outline-gray-1'">
+            <div class="sb-card p-4" :class="mejora.nc_abiertas ? 'border-outline-red-1 bg-surface-red-1' : ''">
               <div class="font-display text-2xl font-bold" :class="mejora.nc_abiertas ? 'text-ink-red-5' : 'text-ink-gray-4'">
                 {{ mejora.nc_abiertas }}
               </div>
               <div class="text-p-xs text-ink-gray-6">No conformidades abiertas</div>
             </div>
-            <div class="rounded-xl border p-4" :class="mejora.planes_riesgo ? 'border-outline-red-1 bg-surface-red-1' : 'border-outline-gray-1'">
+            <div class="sb-card p-4" :class="mejora.planes_riesgo ? 'border-outline-red-1 bg-surface-red-1' : ''">
               <div class="font-display text-2xl font-bold" :class="mejora.planes_riesgo ? 'text-ink-red-5' : 'text-ink-gray-4'">
                 {{ mejora.planes_riesgo }}
               </div>
@@ -98,7 +110,7 @@ function abrirAutoeval(p) {
         </section>
 
         <!-- Distribución de niveles -->
-        <section class="mb-6 rounded-xl border border-outline-gray-1 bg-surface-base p-5">
+        <section class="sb-card mb-6 p-5">
           <h2 class="mb-3 text-lg font-semibold text-ink-gray-9">Estándares por nivel</h2>
           <div v-if="!totalEstandares" class="text-p-sm text-ink-gray-5">
             Aún no hay estándares valorados.
@@ -129,7 +141,7 @@ function abrirAutoeval(p) {
         </section>
 
         <!-- CBC -->
-        <section v-if="cbc" class="mb-6 rounded-xl border border-outline-gray-1 bg-surface-base p-5">
+        <section v-if="cbc" class="sb-card mb-6 p-5">
           <div class="mb-3 flex flex-wrap items-center gap-2">
             <h2 class="text-lg font-semibold text-ink-gray-9">Condiciones Básicas de Calidad</h2>
             <span
@@ -160,7 +172,7 @@ function abrirAutoeval(p) {
         <!-- Por programa -->
         <section>
           <h2 class="mb-3 text-lg font-semibold text-ink-gray-9">Por programa</h2>
-          <div v-if="!programas.length" class="rounded-xl border border-dashed border-outline-gray-2 bg-surface-gray-1 p-6 text-center text-p-sm text-ink-gray-6">
+          <div v-if="!programas.length" class="sb-empty-state text-p-sm">
             Aún no hay autoevaluaciones iniciadas.
           </div>
           <div v-else class="space-y-2">

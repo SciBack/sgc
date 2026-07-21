@@ -63,16 +63,16 @@ const estadoTheme = {
 </script>
 
 <template>
-  <div class="rounded-md border border-outline-gray-1 p-3">
+  <div class="rounded-xl border border-outline-gray-1 bg-surface-base p-4">
     <div class="flex flex-wrap items-center gap-3">
       <div class="min-w-0 flex-1">
-        <span class="rounded bg-surface-gray-2 px-1.5 py-0.5 font-mono text-2xs font-semibold text-ink-gray-6">
+        <span class="rounded-lg bg-marca-primaria-50 px-2 py-1 font-mono text-2xs font-semibold text-marca-primaria-700">
           {{ row.cr_codigo }}
         </span>
         <span class="ml-2 text-p-sm text-ink-gray-8">{{ row.cr_denominacion }}</span>
       </div>
-      <FormControl type="select" v-model="values.cumple" :options="cumpleOptions" class="w-40" />
-      <FormControl type="select" v-model="values.estado" :options="estadoOptions" class="w-36" />
+      <FormControl type="select" variant="outline" v-model="values.cumple" :options="cumpleOptions" class="w-40" />
+      <FormControl type="select" variant="outline" v-model="values.estado" :options="estadoOptions" class="w-36" />
       <button
         type="button"
         class="text-p-xs text-ink-gray-5 hover:text-ink-gray-8 hover:underline"
@@ -80,15 +80,15 @@ const estadoTheme = {
       >
         {{ expanded ? 'ocultar detalle' : 'detalle' }}
       </button>
-      <Button size="sm" variant="outline" :loading="doctype.setValue.loading" @click="save">Guardar</Button>
+      <Button size="sm" variant="solid" class="sb-primary-action btn-press" :loading="doctype.setValue.loading" @click="save">Guardar</Button>
       <span v-if="saved" class="text-p-xs text-ink-green-6">Guardado.</span>
     </div>
 
     <div v-if="expanded" class="detalle mt-3 space-y-4 border-t border-outline-gray-1 pt-3">
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <FormControl type="textarea" label="Observación" v-model="values.observacion" :rows="2" />
-        <FormControl type="textarea" label="Debilidad / OM" v-model="values.debilidad" :rows="2" />
-        <FormControl type="textarea" label="Comentario (sustento)" v-model="values.comentario" :rows="2" />
+        <FormControl type="textarea" variant="outline" label="Observación" v-model="values.observacion" :rows="2" />
+        <FormControl type="textarea" variant="outline" label="Debilidad / OM" v-model="values.debilidad" :rows="2" />
+        <FormControl type="textarea" variant="outline" label="Comentario (sustento)" v-model="values.comentario" :rows="2" />
       </div>
 
       <!-- Evidencias que sustentan el criterio -->

@@ -69,22 +69,34 @@ const informeUrl = computed(() =>
       <ErrorMessage v-else-if="doc.error" :message="doc.error.message" />
 
       <template v-else-if="doc.doc">
-        <div class="mb-5 flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <div class="text-xs font-semibold uppercase tracking-wide text-ink-gray-5">Autoevaluación</div>
-            <h1 class="font-display text-2xl font-bold text-ink-gray-9">{{ doc.doc.codigo }}</h1>
-            <p class="mt-1 text-p-sm text-ink-gray-6">
-              {{ doc.doc.marco_normativo }} · {{ doc.doc.estado }}
-              <span v-if="doc.doc.avance_pct != null"> · {{ doc.doc.avance_pct }}% de avance</span>
-            </p>
+        <section class="sb-hero mb-8 px-6 py-7 text-white sm:px-8">
+          <div class="relative z-10 flex flex-wrap items-start justify-between gap-5">
+            <div class="flex items-start gap-4">
+              <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-white/10 text-marca-secundaria-300">
+                <span class="lucide-clipboard-check size-5" aria-hidden="true" />
+              </span>
+              <div>
+                <p class="text-xs font-bold uppercase tracking-[0.14em] text-white/65">Autoevaluación</p>
+                <h1 class="mt-1 font-display text-3xl font-bold">{{ doc.doc.codigo }}</h1>
+                <p class="mt-2 text-p-sm text-white/75">
+                  {{ doc.doc.marco_normativo }} · {{ doc.doc.estado }}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div v-if="doc.doc.avance_pct != null" class="rounded-xl border border-white/15 bg-white/[0.07] px-4 py-3">
+                <div class="text-2xl font-bold tabular-nums text-marca-secundaria-300">{{ doc.doc.avance_pct }}%</div>
+                <div class="text-xs font-semibold uppercase tracking-[0.08em] text-white/65">Avance</div>
+              </div>
+              <a :href="informeUrl" target="_blank">
+                <Button variant="solid" class="btn-press border-white/15 bg-white !text-marca-primaria-700 hover:bg-marca-secundaria-50">
+                  <template #prefix><span class="lucide-file-text size-4" aria-hidden="true" /></template>
+                  Generar informe
+                </Button>
+              </a>
+            </div>
           </div>
-          <a :href="informeUrl" target="_blank">
-            <Button variant="solid">
-              <template #prefix><span class="lucide-file-text size-4" aria-hidden="true" /></template>
-              Generar informe (PDF)
-            </Button>
-          </a>
-        </div>
+        </section>
 
         <LoadingText v-if="estandares.loading && !estandares.data" />
         <ErrorMessage v-else-if="estandares.error" :message="estandares.error.message" />

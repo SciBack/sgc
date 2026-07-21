@@ -42,26 +42,34 @@ function openRow(name) {
 <template>
   <ScrollArea class="min-h-0 flex-1">
     <div class="mx-auto max-w-7xl px-6 py-8 sm:px-8 xl:px-10">
-      <div class="mb-4 flex items-center justify-between">
-        <PageHeaderTitle :title="doctype" />
-        <Button variant="solid" :route="{ name: 'DocNew', params: { doctype } }">
+      <div class="sb-page-heading mb-6">
+        <div class="flex min-w-0 items-start gap-3">
+          <span class="sb-page-heading__icon" aria-hidden="true"><span class="lucide-list size-5" /></span>
+          <div>
+            <div class="sb-section-label">Gestión de registros</div>
+            <PageHeaderTitle :title="doctype" class="mt-1" />
+            <p class="mt-1 text-p-sm text-ink-gray-5">Registros disponibles, ordenados por su última actualización.</p>
+          </div>
+        </div>
+        <Button variant="solid" class="sb-primary-action btn-press shrink-0" :route="{ name: 'DocNew', params: { doctype } }">
+          <template #prefix><span class="lucide-plus size-4" aria-hidden="true" /></template>
           Nuevo
         </Button>
       </div>
 
       <LoadingText v-if="list.loading && !list.data" />
       <ErrorMessage v-else-if="list.error" :message="list.error.message" />
-      <p v-else-if="!list.data?.length" class="text-p-sm text-ink-gray-6">
+      <p v-else-if="!list.data?.length" class="sb-empty-state text-p-sm">
         Sin registros todavía.
       </p>
-      <List v-else class="w-full">
+      <List v-else class="sb-card w-full overflow-hidden">
         <ListHeader>
           <ListHeaderCell>Registro</ListHeaderCell>
           <ListHeaderCell align="end">Modificado</ListHeaderCell>
           <ListHeaderCell />
         </ListHeader>
         <ListRows :items="list.data" v-slot="{ item, value }">
-          <ListRow :value="value" class="cursor-pointer" @click="openRow(item.name)">
+          <ListRow :value="value" class="cursor-pointer transition-colors duration-150 hover:bg-surface-gray-1" @click="openRow(item.name)">
             <ListCell>
               <span class="truncate text-base text-ink-gray-8">{{ item.name }}</span>
             </ListCell>

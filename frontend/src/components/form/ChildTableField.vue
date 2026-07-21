@@ -64,7 +64,7 @@ function removeRow(idx) {
 
 <template>
   <div class="space-y-1.5">
-    <label class="block text-base text-ink-gray-5">{{ label }}</label>
+    <label class="sb-field-label block">{{ label }}</label>
 
     <LoadingText v-if="loading" text="Cargando columnas…" />
     <p v-else-if="error" class="rounded bg-surface-gray-1 px-2.5 py-1.5 text-p-sm text-ink-gray-6">
@@ -73,7 +73,7 @@ function removeRow(idx) {
 
     <template v-else>
       <!-- Grilla: cabecera + una fila por registro. Scroll horizontal si no cabe. -->
-      <div v-if="safeRows.length" class="ctf-scroll overflow-x-auto rounded-md border border-outline-gray-2">
+      <div v-if="safeRows.length" class="ctf-scroll overflow-x-auto rounded-xl border border-outline-gray-2">
         <div class="ctf-grid" :style="gridStyle" role="table">
           <!-- cabecera -->
           <div
@@ -113,7 +113,7 @@ function removeRow(idx) {
       </div>
 
       <!-- estado vacío -->
-      <p v-else class="ctf-empty rounded-md border border-dashed border-outline-gray-2 bg-surface-gray-1 px-3 py-3 text-center text-p-sm text-ink-gray-5">
+      <p v-else class="ctf-empty rounded-xl border border-dashed border-outline-gray-2 bg-surface-gray-1 px-3 py-3 text-center text-p-sm text-ink-gray-5">
         Sin filas todavía.
       </p>
 

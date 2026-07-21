@@ -45,10 +45,10 @@ function onSuccess(fileDoc) {
 
 <template>
   <div class="space-y-1.5">
-    <label class="block text-base text-ink-gray-5">{{ label }}</label>
+    <label class="sb-field-label block">{{ label }}</label>
 
     <!-- Con archivo: tarjeta con vista/descarga y (si editable) quitar -->
-    <div v-if="value" class="attach-card flex items-center gap-3 rounded-md border border-outline-gray-2 bg-surface-gray-1 p-2">
+    <div v-if="value" class="attach-card flex items-center gap-3 rounded-xl border border-outline-gray-2 bg-surface-gray-1 p-3">
       <img
         v-if="isImage"
         :src="value"
@@ -57,7 +57,7 @@ function onSuccess(fileDoc) {
       />
       <span
         v-else
-        class="flex size-10 shrink-0 items-center justify-center rounded bg-surface-gray-3 text-ink-gray-6"
+        class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-marca-primaria-50 text-marca-primaria-700"
         aria-hidden="true"
       >
         <span class="lucide-file-text size-5" />
@@ -94,7 +94,7 @@ function onSuccess(fileDoc) {
       <template #default="{ uploading, progress, openFileSelector }">
         <button
           type="button"
-          class="attach-drop flex w-full items-center justify-center gap-2 rounded-md border border-dashed border-outline-gray-2 bg-surface-white px-3 py-3 text-p-sm text-ink-gray-6"
+        class="attach-drop flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-outline-gray-2 bg-surface-white px-4 py-4 text-p-sm font-medium text-ink-gray-6"
           :disabled="uploading"
           @click="openFileSelector"
         >

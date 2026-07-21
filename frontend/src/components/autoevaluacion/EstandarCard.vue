@@ -33,30 +33,30 @@ async function save() {
 </script>
 
 <template>
-  <div class="rounded-lg border border-outline-gray-1 bg-surface-base p-4">
-    <div class="mb-3 flex items-baseline gap-2">
-      <span class="rounded bg-surface-gray-2 px-1.5 py-0.5 font-mono text-xs font-semibold text-ink-gray-6">
+  <div class="sb-card p-5">
+    <div class="mb-4 flex items-start gap-3">
+      <span class="rounded-lg bg-marca-primaria-50 px-2 py-1 font-mono text-xs font-semibold text-marca-primaria-700">
         {{ row.em_codigo }}
       </span>
-      <h3 class="font-display text-base font-semibold text-ink-gray-9">{{ row.em_denominacion }}</h3>
+      <h3 class="font-display text-base font-semibold leading-5 text-ink-gray-9">{{ row.em_denominacion }}</h3>
     </div>
 
     <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
       <div>
-        <label class="mb-1.5 block text-base text-ink-gray-5">Nivel (NL/L/LP)</label>
+        <label class="sb-field-label mb-1.5 block">Nivel (NL/L/LP)</label>
         <NivelSelect v-model="values.nivel" />
       </div>
-      <FormControl type="select" label="Estado" v-model="values.estado" :options="estadoOptions" />
+      <FormControl type="select" variant="outline" label="Estado" v-model="values.estado" :options="estadoOptions" />
     </div>
 
-    <FormControl class="mt-3" type="textarea" label="Justificación" v-model="values.justificacion" :rows="3" />
+    <FormControl class="mt-4" type="textarea" variant="outline" label="Justificación" v-model="values.justificacion" :rows="3" />
 
-    <FormControl class="mt-3" type="checkbox" label="Confirmado por humano"
+    <FormControl class="mt-4" type="checkbox" variant="outline" label="Confirmado por humano"
       :model-value="Boolean(Number(values.confirmado))"
       @update:model-value="values.confirmado = $event ? 1 : 0" />
 
-    <div class="mt-3 flex items-center gap-3 border-t border-outline-gray-1 pt-3">
-      <Button variant="outline" :loading="doctype.setValue.loading" @click="save">Guardar estándar</Button>
+    <div class="mt-4 flex items-center gap-3 border-t border-outline-gray-1 pt-4">
+      <Button variant="solid" class="sb-primary-action btn-press" :loading="doctype.setValue.loading" @click="save">Guardar estándar</Button>
       <span v-if="saved" class="text-p-sm text-ink-green-6">Guardado.</span>
       <ErrorMessage v-if="doctype.setValue.error" :message="doctype.setValue.error.message" />
     </div>

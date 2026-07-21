@@ -62,39 +62,49 @@ function displayValue(row) {
 <template>
   <ScrollArea class="min-h-0 flex-1">
     <div class="mx-auto max-w-6xl px-6 py-8 sm:px-8 xl:px-10">
-      <PageHeaderTitle title="Tablero de indicadores" class="mb-1" />
-      <p class="mb-5 text-p-sm text-ink-gray-6">
-        Último valor calculado por indicador, agrupado por categoría. Los cálculos vienen del motor de
-        indicadores (Oracle LAMB); acá solo se muestran.
-      </p>
+      <section class="sb-hero mb-8 px-6 py-7 text-white sm:px-8">
+        <div class="relative z-10 flex items-start gap-4">
+          <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-white/10 text-marca-secundaria-300">
+            <span class="lucide-chart-no-axes-column-increasing size-5" aria-hidden="true" />
+          </span>
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.14em] text-white/65">Seguimiento institucional</p>
+            <PageHeaderTitle title="Tablero de indicadores" class="mt-1 text-white [&_h1]:text-white" />
+            <p class="mt-2 max-w-2xl text-p-sm leading-6 text-white/75">
+              Último valor calculado por indicador, agrupado por categoría.
+            </p>
+          </div>
+        </div>
+      </section>
 
       <LoadingText v-if="values.loading && !values.data" />
       <ErrorMessage v-else-if="values.error" :message="values.error.message" />
-      <p v-else-if="!grouped.length" class="rounded-lg border border-outline-gray-1 bg-surface-gray-1 p-4 text-p-sm text-ink-gray-6">
+      <p v-else-if="!grouped.length" class="sb-empty-state text-p-sm">
         Todavía no hay valores calculados en este entorno. El motor de indicadores corre contra Oracle
         LAMB — en producción ya hay valores reales; en el lab de desarrollo esta tabla está vacía.
       </p>
 
       <section v-for="group in grouped" :key="group.categoria" class="mb-7">
-        <h2 class="mb-2.5 border-b border-outline-gray-1 pb-2 text-sm-medium uppercase tracking-wide text-ink-gray-5">
+        <h2 class="sb-section-label mb-3 flex items-center gap-2">
+          <span class="h-1.5 w-1.5 rounded-full bg-marca-secundaria-500" aria-hidden="true" />
           {{ group.label }}
         </h2>
-        <div class="divide-y divide-outline-gray-1 rounded-lg border border-outline-gray-1 bg-surface-base">
+        <div class="sb-card divide-y divide-outline-gray-1 overflow-hidden">
           <div
             v-for="row in group.items"
             :key="row.indicador"
-            class="flex items-center justify-between gap-4 px-4 py-3"
+            class="flex items-center justify-between gap-4 px-5 py-4"
           >
             <div class="min-w-0">
               <div class="flex items-center gap-2">
-                <span class="rounded bg-surface-gray-2 px-1.5 py-0.5 font-mono text-xs font-semibold text-ink-gray-6">
+                <span class="rounded-lg bg-marca-primaria-50 px-2 py-1 font-mono text-xs font-semibold text-marca-primaria-700">
                   {{ row.indicador_codigo }}
                 </span>
                 <span class="truncate text-p-sm text-ink-gray-8">{{ row.indicador_nombre }}</span>
               </div>
               <div class="mt-0.5 text-p-xs text-ink-gray-4">{{ row.fuente }} · {{ row.fecha }}</div>
             </div>
-            <div class="font-display text-xl font-bold text-marca-primaria-700">{{ displayValue(row) }}</div>
+            <div class="font-display text-2xl font-bold tabular-nums text-marca-primaria-700">{{ displayValue(row) }}</div>
           </div>
         </div>
       </section>

@@ -37,7 +37,7 @@ function rowsFor(fieldtype) {
 
 <template>
   <div v-if="field.fieldtype === 'Link'" class="space-y-1.5">
-    <label v-if="!hideLabel" class="block text-base text-ink-gray-5">{{ label }}</label>
+    <label v-if="!hideLabel" class="sb-field-label block">{{ label }}</label>
     <LinkField
       v-model="value"
       :doctype="field.options"
@@ -56,7 +56,7 @@ function rowsFor(fieldtype) {
   />
 
   <div v-else-if="field.fieldtype === 'Dynamic Link'" class="space-y-1.5">
-    <FormControl v-model="value" type="text" :label="hideLabel ? undefined : label" :disabled="readOnly" />
+    <FormControl v-model="value" type="text" variant="outline" :label="hideLabel ? undefined : label" :disabled="readOnly" />
     <p v-if="!hideLabel" class="text-p-xs text-ink-gray-4">
       Enlace dinámico — el tipo de documento lo define otro campo. Si no es evidente, editar desde el Desk.
     </p>
@@ -65,6 +65,7 @@ function rowsFor(fieldtype) {
   <FormControl
     v-else-if="field.fieldtype === 'Select'"
     type="select"
+    variant="outline"
     v-model="value"
     :label="hideLabel ? undefined : label"
     :options="selectOptions"
@@ -74,6 +75,7 @@ function rowsFor(fieldtype) {
   <FormControl
     v-else-if="field.fieldtype === 'Check'"
     type="checkbox"
+    variant="outline"
     :label="hideLabel ? undefined : label"
     :model-value="Boolean(Number(value))"
     :disabled="readOnly"
@@ -83,6 +85,7 @@ function rowsFor(fieldtype) {
   <FormControl
     v-else-if="field.fieldtype === 'Date'"
     type="date"
+    variant="outline"
     v-model="value"
     :label="hideLabel ? undefined : label"
     :disabled="readOnly"
@@ -91,6 +94,7 @@ function rowsFor(fieldtype) {
   <FormControl
     v-else-if="field.fieldtype === 'Datetime'"
     type="datetime"
+    variant="outline"
     v-model="value"
     :label="hideLabel ? undefined : label"
     :disabled="readOnly"
@@ -99,6 +103,7 @@ function rowsFor(fieldtype) {
   <FormControl
     v-else-if="NUMBER_TYPES.has(field.fieldtype)"
     type="number"
+    variant="outline"
     v-model="value"
     :label="hideLabel ? undefined : label"
     :disabled="readOnly"
@@ -116,11 +121,12 @@ function rowsFor(fieldtype) {
   <FormControl
     v-else-if="TEXTAREA_TYPES.has(field.fieldtype)"
     type="textarea"
+    variant="outline"
     v-model="value"
     :label="hideLabel ? undefined : label"
     :rows="rowsFor(field.fieldtype)"
     :disabled="readOnly"
   />
 
-  <FormControl v-else type="text" v-model="value" :label="hideLabel ? undefined : label" :disabled="readOnly" />
+  <FormControl v-else type="text" variant="outline" v-model="value" :label="hideLabel ? undefined : label" :disabled="readOnly" />
 </template>

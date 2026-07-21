@@ -196,12 +196,17 @@ async function save() {
 <template>
   <ScrollArea class="min-h-0 flex-1">
     <div class="mx-auto max-w-3xl px-5 py-6 sm:px-8">
-      <div class="mb-5 flex items-start justify-between gap-4">
-        <div>
-          <div class="text-xs font-semibold uppercase tracking-wide text-ink-gray-5">{{ doctype }}</div>
-          <h1 class="font-display text-2xl font-bold text-ink-gray-9">{{ title }}</h1>
+      <div class="sb-page-heading mb-6">
+        <div class="flex min-w-0 items-start gap-3">
+          <span class="sb-page-heading__icon" aria-hidden="true"><span class="lucide-file-pen-line size-5" /></span>
+          <div>
+            <div class="sb-section-label">{{ doctype }}</div>
+            <h1 class="mt-1 font-display text-2xl font-bold text-ink-gray-9">{{ title }}</h1>
+            <p class="mt-1 text-p-sm text-ink-gray-5">Completa los campos necesarios y guarda los cambios.</p>
+          </div>
         </div>
-        <a :href="deskUrl()" target="_blank" class="whitespace-nowrap text-p-sm text-ink-gray-5 hover:text-ink-gray-8 hover:underline">
+        <a :href="deskUrl()" target="_blank" class="btn-press whitespace-nowrap rounded-xl border border-outline-gray-2 px-3 py-2 text-p-sm font-semibold text-ink-gray-6 transition-colors hover:bg-surface-gray-1 hover:text-ink-gray-8">
+          <span class="lucide-external-link mr-1 inline size-3.5 align-text-bottom" aria-hidden="true" />
           Ver en el Desk
         </a>
       </div>
@@ -210,7 +215,7 @@ async function save() {
       <ErrorMessage v-else-if="metaError" :message="metaError.message" />
       <ErrorMessage v-else-if="!isNew && doc.error" :message="doc.error.message" />
 
-      <form v-else class="space-y-4" @submit.prevent="save">
+      <form v-else class="sb-form-card space-y-5" @submit.prevent="save">
         <div v-for="f in visibleFields" :key="f.fieldname">
           <FieldInput
             v-model="values[f.fieldname]"
@@ -221,8 +226,8 @@ async function save() {
           />
         </div>
 
-        <div class="flex items-center gap-3 border-t border-outline-gray-1 pt-4">
-          <Button variant="solid" type="submit" :loading="saving">
+        <div class="flex items-center gap-3 border-t border-outline-gray-1 pt-5">
+          <Button variant="solid" class="sb-primary-action btn-press" type="submit" :loading="saving">
             {{ isNew ? 'Crear' : 'Guardar' }}
           </Button>
           <span v-if="saved" class="text-p-sm text-ink-green-6">Guardado.</span>
@@ -231,7 +236,7 @@ async function save() {
       </form>
 
       <!-- Conexiones (Document Links del meta): p.ej. Evidencia -> Trazabilidad -->
-      <div v-if="!metaLoading && (meta?.links || []).length" class="mt-8 space-y-6 border-t border-outline-gray-1 pt-6">
+      <div v-if="!metaLoading && (meta?.links || []).length" class="sb-form-card mt-8 space-y-6">
         <DocConnections
           v-for="lnk in meta.links"
           :key="lnk.link_doctype + lnk.link_fieldname"

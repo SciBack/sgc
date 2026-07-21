@@ -96,16 +96,16 @@ async function removeLink(name) {
 </script>
 
 <template>
-  <section class="space-y-2">
+  <section class="space-y-3">
     <div class="flex items-center justify-between">
-      <h3 class="text-p-sm font-semibold text-ink-gray-7">{{ title }}</h3>
+      <h3 class="sb-field-label">{{ title }}</h3>
       <Button v-if="!isNew && !adding" variant="ghost" size="sm" @click="startAdd">
         <template #prefix><span class="lucide-plus size-3.5" /></template>
         Vincular
       </Button>
     </div>
 
-    <p v-if="isNew" class="rounded-md bg-surface-gray-1 px-3 py-2 text-p-xs text-ink-gray-5">
+    <p v-if="isNew" class="rounded-xl bg-surface-gray-1 px-3 py-2 text-p-xs text-ink-gray-5">
       Guarda primero para poder crear vínculos.
     </p>
 
@@ -114,7 +114,7 @@ async function removeLink(name) {
         <li
           v-for="row in rows"
           :key="row.name"
-          class="conn-row group flex items-center gap-2 rounded-md border border-outline-gray-1 bg-surface-white px-3 py-2"
+          class="conn-row group flex items-center gap-2 rounded-xl border border-outline-gray-1 bg-surface-white px-3 py-2"
         >
           <div class="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
             <span
@@ -136,7 +136,7 @@ async function removeLink(name) {
       <p v-else-if="!adding" class="text-p-xs text-ink-gray-4">Sin vínculos todavía.</p>
 
       <!-- alta inline -->
-      <div v-if="adding" class="conn-form space-y-3 rounded-md border border-outline-gray-2 bg-surface-gray-1 p-3">
+      <div v-if="adding" class="conn-form space-y-3 rounded-xl border border-outline-gray-2 bg-surface-gray-1 p-4">
         <FieldInput
           v-for="f in formFields"
           :key="f.fieldname"
@@ -144,7 +144,7 @@ async function removeLink(name) {
           :field="f"
         />
         <div class="flex items-center gap-2">
-          <Button variant="solid" size="sm" :loading="saving" @click="saveLink">Guardar vínculo</Button>
+          <Button variant="solid" size="sm" class="sb-primary-action btn-press" :loading="saving" @click="saveLink">Guardar vínculo</Button>
           <Button variant="ghost" size="sm" @click="adding = false">Cancelar</Button>
           <ErrorMessage v-if="saveError" :message="saveError.message" />
         </div>
