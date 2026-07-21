@@ -9,10 +9,14 @@ from sgc.manual_auth import LOGIN_LOCATION, authorize
 class IntegrationTestManualAuth(IntegrationTestCase):
     def setUp(self):
         self.previous_user = frappe.session.user
+        self.previous_form_dict = frappe.local.form_dict
+        self.previous_response = frappe.local.response
         frappe.local.response = {}
 
     def tearDown(self):
         frappe.set_user(self.previous_user)
+        frappe.local.form_dict = self.previous_form_dict
+        frappe.local.response = self.previous_response
 
     def test_authenticated_session_returns_204_without_identity(self):
         frappe.set_user("Administrator")
@@ -34,7 +38,7 @@ class IntegrationTestManualAuth(IntegrationTestCase):
 
     def test_request_cannot_override_redirect_target(self):
         frappe.set_user("Guest")
-        frappe.form_dict = {"redirect_to": "https://example.invalid"}
+        frappe.local.form_dict = frappe._dict({"redirect_to": "https://example.invalid"})
 
         authorize()
 
