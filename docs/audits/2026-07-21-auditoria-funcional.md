@@ -1,7 +1,9 @@
 # Auditoría de preparación funcional del SGC
 
-**Fecha:** 21 de julio de 2026  
-**Alcance:** código canónico, interfaz SPA, datos de producción y CI  
+**Fecha:** 21 de julio de 2026
+
+**Alcance:** código canónico, interfaz SPA, datos de producción y CI
+
 **Objetivo:** determinar qué funciona realmente y en qué orden debe terminarse el sistema antes de convertir el manual en una guía operativa.
 
 ## Conclusión ejecutiva
@@ -75,42 +77,48 @@ El backend define, entre otras, las transiciones de autoevaluación:
 
 La SPA no invoca `get_transitions`, `apply_workflow`, `submit` ni `cancel`. Las expresiones “Iniciar evaluación”, “Enviar a revisión”, “Consolidar”, “Aprobar” y “Publicar” aparecen en las guías de rol, pero no están implementadas como acciones de interfaz.
 
-**Impacto:** una guía operativa basada en esos botones sería falsa.  
+**Impacto:** una guía operativa basada en esos botones sería falsa.
+
 **Aceptación:** cada transición debe estar disponible solo al rol autorizado, mostrar el estado resultante y persistir el historial.
 
 ### P0-02 — La segregación por programa está abierta por defecto
 
 El filtro de permisos por programa es optativo: si el usuario no tiene `User Permission` para `Programa Sede`, no se restringen los registros. En producción hay cero asignaciones.
 
-**Impacto:** incorporar usuarios funcionales sin corregir esto puede exponer datos de todos los programas.  
+**Impacto:** incorporar usuarios funcionales sin corregir esto puede exponer datos de todos los programas.
+
 **Aceptación:** un usuario de programa sin asignación debe ver cero registros protegidos, no todos; las cuentas de prueba deben tener asignaciones explícitas.
 
 ### P0-03 — Cierre e inmutabilidad están rotos en CI
 
 La ejecución actual de 305 pruebas termina con 3 fallos y 9 errores. Los fallos afectan creación/edición después del cierre, confirmación, cierre nativo, snapshots y estados iniciales de evidencia.
 
-**Impacto:** no es posible confiar en puntajes, informes ni congelamiento de datos cerrados.  
+**Impacto:** no es posible confiar en puntajes, informes ni congelamiento de datos cerrados.
+
 **Aceptación:** suite completa verde y una prueba de regresión que demuestre que un documento cerrado ya no puede modificarse.
 
 ### P0-04 — La interfaz permite saltarse servicios de dominio
 
 La pantalla de detalle modifica directamente estado, nivel oficial, confirmación y justificación. El backend ya tiene funciones específicas para confirmar y finalizar vigencias, pero la SPA no las usa.
 
-**Impacto:** pueden aparecer combinaciones de estado inválidas, como la autoevaluación de producción `Planificada` con avance 100%.  
+**Impacto:** pueden aparecer combinaciones de estado inválidas, como la autoevaluación de producción `Planificada` con avance 100%.
+
 **Aceptación:** los campos derivados/oficiales deben ser de solo lectura; los cambios deben pasar por comandos de dominio auditables.
 
 ### P1-01 — Producción contiene una muestra, no un caso representativo
 
 Hay una sola autoevaluación para 32 programas-sede. Sus seis evidencias son demo y están vencidas; no existe ninguna trazabilidad. También faltan informes de cumplimiento.
 
-**Impacto:** el sistema no ha demostrado el flujo con datos representativos.  
+**Impacto:** el sistema no ha demostrado el flujo con datos representativos.
+
 **Aceptación:** crear un conjunto de prueba aislado, vigente y trazable para un programa piloto.
 
 ### P1-02 — Los scripts llamados E2E no simulan usuarios reales
 
 Los scripts de fases F2/F3 crean y mutan documentos con `ignore_permissions=True` y banderas de patch. Verifican lógica backend, pero no sesión, menú, permisos, workflow ni navegación.
 
-**Impacto:** pueden pasar aunque un usuario real no pueda completar ninguna tarea.  
+**Impacto:** pueden pasar aunque un usuario real no pueda completar ninguna tarea.
+
 **Aceptación:** pruebas de navegador con cuentas reales, permisos reales y sin bypass de autorización.
 
 ## Primer recorrido que debe terminarse
