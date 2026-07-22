@@ -4,6 +4,7 @@
 import frappe
 from frappe import _
 from frappe.model.document import Document
+from frappe.utils import now_datetime
 
 
 class ValoracionCriterio(Document):
@@ -28,6 +29,17 @@ class ValoracionCriterio(Document):
 				),
 				title=_("Autoevaluación cerrada"),
 			)
+
+		# El estado operativo se deriva del juicio y nunca de una selección del
+		# navegador. Así una escritura genérica no puede declarar una valoración
+		# revisada o valorada sin haber registrado el resultado correspondiente.
+		self.estado = "Valorado" if self.cumple else "Pendiente"
+		if not self.cumple:
+			self.valorado_por = None
+			self.fecha = None
+		elif self.is_new() or self.has_value_changed("cumple"):
+			self.valorado_por = frappe.session.user
+			self.fecha = now_datetime()
 
 	def on_update(self):
 		"""Al valorar un criterio, recomputar el nivel propuesto de su estándar.

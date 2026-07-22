@@ -132,6 +132,13 @@ class IntegrationTestConfirmacion(IntegrationTestCase):
     # ======================================================================
     # confirmar_nivel — errores
     # ======================================================================
+    def test_confirmar_nivel_rechaza_usuario_sin_rol_autorizado(self):
+        """El whitelist no convierte la confirmación oficial en una acción pública."""
+        frappe.set_user("Guest")
+        with self.assertRaises(frappe.PermissionError):
+            confirmacion.confirmar_nivel(self.ae, self.estandares[0], "L")
+        self.assertIsNone(self._valoracion(self.estandares[0]))
+
     def test_confirmar_nivel_sigla_invalida_lanza(self):
         """Una sigla fuera de NL/L/LP se rechaza con ValidationError."""
         est = self.estandares[0]

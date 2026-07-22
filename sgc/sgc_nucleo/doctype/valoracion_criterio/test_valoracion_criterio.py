@@ -49,6 +49,35 @@ class IntegrationTestValoracionCriterio(IntegrationTestCase):
 	Use this class for testing interactions between multiple components.
 	"""
 
+	def test_estado_se_deriva_del_juicio_y_no_del_cliente(self):
+		"""El cliente solo expresa el juicio; el servidor gobierna el estado.
+
+		Una valoración con juicio queda ``Valorado`` aunque el navegador intente
+		mandar otro estado. Al retirar el juicio vuelve a ``Pendiente``.
+		"""
+		prefijo = "TESTVC0"
+		marco = factories.crear_marco_prueba(n_estandares=1, n_criterios=1, prefijo=prefijo)
+		ae = factories.crear_autoevaluacion(marco, prefijo=prefijo)
+		criterio = marco["criterios"][marco["estandares"][0]][0]
+
+		vc = frappe.get_doc({
+			"doctype": "Valoracion Criterio",
+			"autoevaluacion": ae.name,
+			"criterio": criterio,
+			"cumple": "Cumple",
+			"estado": "Revisado",
+		}).insert(ignore_permissions=True)
+		self.assertEqual(vc.estado, "Valorado")
+		self.assertEqual(vc.valorado_por, "Administrator")
+		self.assertTrue(vc.fecha)
+
+		vc.cumple = None
+		vc.estado = "En analisis"
+		vc.save(ignore_permissions=True)
+		self.assertEqual(vc.estado, "Pendiente")
+		self.assertFalse(vc.valorado_por)
+		self.assertFalse(vc.fecha)
+
 	def test_valorar_criterio_en_borrador_funciona_normal(self):
 		"""Con la Autoevaluacion en Planificada (docstatus=0), crear y editar una
 		Valoracion Criterio funciona sin cambios de comportamiento (guard no aplica)."""
