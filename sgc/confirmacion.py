@@ -39,6 +39,7 @@ from sgc import scoring
 
 NIVELES_VALIDOS = {"NL", "L", "LP"}
 TOTAL_ESTANDARES = 10
+ROLES_CONFIRMACION = ("DPGC", "Responsable de Calidad de Programa", "System Manager")
 
 # Propuesta del motor (sin tilde) -> opción oficial (con tilde) de resultado_vigencia.
 _VIGENCIA_PROPUESTA_A_OFICIAL = {
@@ -95,6 +96,8 @@ def confirmar_nivel(autoevaluacion, estandar, nivel_sigla, comentario=None):
     LP no es mecánico: al confirmar LP se espera que `comentario` refiera la revisión
     de indicadores (±3%, 4 semestres). No se fuerza, pero se deja el campo.
     """
+    frappe.only_for(ROLES_CONFIRMACION)
+
     if not autoevaluacion or not estandar:
         frappe.throw(_("Se requieren `autoevaluacion` y `estandar`."))
 
@@ -148,6 +151,8 @@ def confirmar_todos_propuestos(autoevaluacion):
     Confirma `nivel` = el propuesto por el motor. Idempotente: los ya confirmados se
     saltan. Útil para cerrar rápido y para el E2E. Devuelve cuántos confirmó.
     """
+    frappe.only_for(ROLES_CONFIRMACION)
+
     if not autoevaluacion:
         frappe.throw(_("Se requiere `autoevaluacion`."))
 
@@ -185,6 +190,8 @@ def finalizar_vigencia(autoevaluacion):
       del campo `Autoevaluacion.resultado_vigencia`.
     Idempotente. Devuelve {ok: True, vigencia: "<oficial>"}.
     """
+    frappe.only_for(ROLES_CONFIRMACION)
+
     if not autoevaluacion:
         frappe.throw(_("Se requiere `autoevaluacion`."))
 

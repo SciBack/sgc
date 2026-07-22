@@ -3,10 +3,15 @@ import { computed } from 'vue'
 import { Button, ErrorMessage, LoadingText, ScrollArea, useCall, useDoc } from 'frappe-ui'
 import EstandarCard from '@/components/autoevaluacion/EstandarCard.vue'
 import CriterioRow from '@/components/autoevaluacion/CriterioRow.vue'
+import WorkflowActions from '@/components/workflow/WorkflowActions.vue'
 
 const props = defineProps({ name: { type: String, required: true } })
 
 const PRINT_FORMAT = 'Informe de Autoevaluacion SINEACE'
+const CONFIRMATION_ROLES = new Set(['DPGC', 'Responsable de Calidad de Programa', 'System Manager'])
+const canConfirmStandard = computed(() =>
+  (window.user_roles || []).some((role) => CONFIRMATION_ROLES.has(role)),
+)
 
 const doc = useDoc({ doctype: 'Autoevaluacion', name: props.name })
 
@@ -16,7 +21,8 @@ const estandares = useCall({
     doctype: 'Valoracion Estandar',
     filters: JSON.stringify({ autoevaluacion: props.name }),
     fields: JSON.stringify([
-      'name', 'elemento_marco', 'nivel', 'estado', 'confirmado', 'justificacion',
+      'name', 'elemento_marco', 'nivel', 'nivel_propuesto', 'estado', 'confirmado', 'justificacion',
+      'nivel.sigla as nivel_sigla',
       'elemento_marco.codigo as em_codigo',
       'elemento_marco.denominacion as em_denominacion',
     ]),
@@ -60,6 +66,18 @@ function criteriosDe(emCodigo) {
 const informeUrl = computed(() =>
   `/api/method/frappe.utils.print_format.download_pdf?doctype=Autoevaluacion&name=${encodeURIComponent(props.name)}&format=${encodeURIComponent(PRINT_FORMAT)}`,
 )
+
+async function workflowCompleted() {
+  await Promise.all([doc.reload(), estandares.reload(), criterios.reload()])
+}
+
+async function standardUpdated() {
+  await estandares.reload()
+}
+
+async function criterionUpdated() {
+  await Promise.all([criterios.reload(), estandares.reload()])
+}
 </script>
 
 <template>
@@ -98,14 +116,23 @@ const informeUrl = computed(() =>
           </div>
         </section>
 
+        <WorkflowActions class="mb-8" :document="doc.doc" @completed="workflowCompleted" />
+
         <LoadingText v-if="estandares.loading && !estandares.data" />
         <ErrorMessage v-else-if="estandares.error" :message="estandares.error.message" />
 
         <div v-else class="space-y-5">
-          <EstandarCard v-for="e in estandaresOrdenados" :key="e.name" :row="e">
+          <EstandarCard
+            v-for="e in estandaresOrdenados"
+            :key="e.name"
+            :row="e"
+            :autoevaluacion="name"
+            :can-confirm="canConfirmStandard"
+            @updated="standardUpdated"
+          >
             <template #criterios>
               <div v-if="criterios.loading && !criterios.data" class="text-p-xs text-ink-gray-4">Cargando criterios…</div>
-              <CriterioRow v-for="c in criteriosDe(e.em_codigo)" :key="c.name" :row="c" />
+              <CriterioRow v-for="c in criteriosDe(e.em_codigo)" :key="c.name" :row="c" @updated="criterionUpdated" />
             </template>
           </EstandarCard>
         </div>

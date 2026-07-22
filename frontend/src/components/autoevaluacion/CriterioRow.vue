@@ -5,10 +5,10 @@ import { Badge, Button, ErrorMessage, FormControl, useCall, useDoctype } from 'f
 const props = defineProps({
   row: { type: Object, required: true }, // Valoracion Criterio + cr_* joins
 })
+const emit = defineEmits(['updated'])
 
 const values = reactive({
   cumple: props.row.cumple,
-  estado: props.row.estado,
   observacion: props.row.observacion,
   debilidad: props.row.debilidad,
   comentario: props.row.comentario,
@@ -20,13 +20,6 @@ const cumpleOptions = [
   { label: 'No cumple', value: 'No cumple' },
   { label: 'No aplica', value: 'No aplica' },
 ]
-const estadoOptions = [
-  { label: 'Pendiente', value: 'Pendiente' },
-  { label: 'En análisis', value: 'En analisis' },
-  { label: 'Valorado', value: 'Valorado' },
-  { label: 'Revisado', value: 'Revisado' },
-]
-
 const doctype = useDoctype('Valoracion Criterio')
 const saved = ref(false)
 const expanded = ref(false)
@@ -34,7 +27,9 @@ const expanded = ref(false)
 async function save() {
   saved.value = false
   await doctype.setValue.submit({ name: props.row.name, ...values })
+  if (doctype.setValue.error) return
   saved.value = true
+  emit('updated')
   setTimeout(() => (saved.value = false), 2000)
 }
 
@@ -72,7 +67,7 @@ const estadoTheme = {
         <span class="ml-2 text-p-sm text-ink-gray-8">{{ row.cr_denominacion }}</span>
       </div>
       <FormControl type="select" variant="outline" v-model="values.cumple" :options="cumpleOptions" class="w-40" />
-      <FormControl type="select" variant="outline" v-model="values.estado" :options="estadoOptions" class="w-36" />
+      <Badge :label="row.estado || 'Pendiente'" :theme="row.estado === 'Valorado' ? 'blue' : 'gray'" variant="subtle" size="sm" />
       <button
         type="button"
         class="text-p-xs text-ink-gray-5 hover:text-ink-gray-8 hover:underline"

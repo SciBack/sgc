@@ -19,6 +19,7 @@ def get_context(context):
 		"csrf_token": get_csrf_token(),
 		"user": frappe.session.user,
 		"user_fullname": frappe.utils.get_fullname(frappe.session.user),
+		"user_roles": frappe.get_roles(),
 		# solo el admin (System Manager) ve el acceso al Escritorio (Desk)
 		"is_system_manager": "System Manager" in frappe.get_roles(),
 	}

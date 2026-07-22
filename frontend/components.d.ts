@@ -21,5 +21,6 @@ declare module 'vue' {
     NivelSelect: typeof import('./src/components/autoevaluacion/NivelSelect.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    WorkflowActions: typeof import('./src/components/workflow/WorkflowActions.vue')['default']
   }
 }
