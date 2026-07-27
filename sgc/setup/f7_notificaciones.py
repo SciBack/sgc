@@ -185,13 +185,10 @@ def _upsert_notification(cfg):
         accion = "creada"
 
     event = cfg.get("event", "Days Before")
-    n.update({
+    campos = {
         "subject": cfg["subject"],
         "document_type": cfg["document_type"],
         "event": event,
-        # channel casi siempre System (agnóstico, sin SMTP); algunas reglas
-        # declarativas pueden pedir otro canal explícito (ninguna lo hace hoy).
-        "channel": cfg.get("channel", "System Notification"),
         "condition": cfg.get("condition"),
         "message": cfg["message"],
         "enabled": 1,
@@ -200,7 +197,20 @@ def _upsert_notification(cfg):
         # adjuntar el PDF a la notificación es una decisión aparte, no algo
         # que un script de setup declarativo deba encender solo.
         "attach_print": cfg.get("attach_print", 0),
-    })
+    }
+
+    # `Notification.channel` tiene set_only_once=1 en Frappe: reasignarlo sobre un
+    # documento YA existente lanza CannotChangeConstantError. Por eso el canal solo
+    # se fija al CREAR. Al actualizar se respeta el que haya en el sitio, que es
+    # deliberado: el canal es configuración de RUNTIME (en producción las 4 reglas
+    # de vencimiento están en "Email" con SMTP real, mientras el canónico declara
+    # "System Notification" por ser agnóstico). Antes de este cambio, `f7` fallaba
+    # en TODOS los `bench migrate` de producción y había que aplicar a mano un
+    # bypass de 3 pasos después de cada despliegue.
+    if accion == "creada":
+        campos["channel"] = cfg.get("channel", "System Notification")
+
+    n.update(campos)
     # date_changed/days_in_advance solo aplican a reglas basadas en fecha
     # (Days Before/After); una regla "New" (p.ej. convocatoria) no los usa.
     if event in ("Days Before", "Days After"):
