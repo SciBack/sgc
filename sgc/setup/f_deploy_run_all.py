@@ -37,9 +37,15 @@ Ejecutar manualmente:
 Se ejecuta también solo, vía `after_migrate` (ver hooks.py).
 """
 import os
+import re
 import time
 
 import frappe
+
+# Los locks de DOCUMENTO de Frappe se nombran con el hash del documento
+# (frappe/utils/file_lock.py); los del framework tienen nombre legible
+# (`bench_migrate`, `scheduler`…). Solo los primeros son seguros de borrar.
+_ES_LOCK_DE_DOCUMENTO = re.compile(r"[0-9a-f]{16,}")
 
 from sgc.setup import (
     f1_run_all, f2_run_all, f3b_rbac, f4_workflow_mejora,
@@ -94,20 +100,26 @@ def _correr_paso(name, mod, reintentos=2):
             # (frappe/utils/file_lock.py), no entradas de caché. Los que deja el propio
             # migrate ya no tienen proceso detrás cuando llegamos a after_migrate, así
             # que se borran los caducados y se reintenta.
-            # El discriminador seguro NO es la antigüedad del lock (los que deja este
-            # mismo migrate son recientes), sino el CONTEXTO: dentro de `after_migrate`
-            # el sitio está en despliegue, sin actividad concurrente de usuarios, así que
-            # ningún lock vivo puede ser de otro. Fuera de migrate se respeta la ventana
-            # de expiración de Frappe (600s) y no se borra nada reciente.
+            # ⚠️ En ese MISMO directorio viven también los locks con nombre del
+            # framework — sobre todo `bench_migrate.lock`, que crea
+            # `frappe.utils.synchronization.filelock` y es lo que impide que dos
+            # `bench migrate` corran a la vez. Borrarlo dejaría el sitio sin esa
+            # protección justo durante un despliegue. Por eso NO se barre el
+            # directorio: solo se borran los locks de DOCUMENTO, cuyo nombre es un
+            # hash hexadecimal (`create_lock(name)` sobre el hash del doc), nunca
+            # un lock con nombre legible como `bench_migrate` o `scheduler`.
             try:
                 locks_dir = frappe.get_site_path("locks")
                 if os.path.isdir(locks_dir):
-                    en_migrate = bool(getattr(frappe.flags, "in_migrate", False))
-                    limite = time.time() - (0 if en_migrate else 600)
                     for f in os.listdir(locks_dir):
-                        ruta = os.path.join(locks_dir, f)
-                        if f.endswith(".lock") and os.path.getmtime(ruta) <= limite:
-                            os.remove(ruta)
+                        if not f.endswith(".lock"):
+                            continue
+                        if not _ES_LOCK_DE_DOCUMENTO.fullmatch(f[: -len(".lock")]):
+                            continue  # lock con nombre del framework: intocable
+                        try:
+                            os.remove(os.path.join(locks_dir, f))
+                        except FileNotFoundError:
+                            pass  # otro proceso lo liberó primero
             except Exception:
                 pass
             time.sleep(2)

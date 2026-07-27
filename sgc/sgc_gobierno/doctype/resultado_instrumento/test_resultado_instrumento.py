@@ -324,6 +324,113 @@ class IntegrationTestResultadoInstrumento(IntegrationTestCase):
                 vi_original,
             )
 
+    def test_republicar_tras_corregir_el_indicador_no_pisa_el_valor_anterior(self):
+        """Regresión: corregir el Indicador de una fila ya publicada NO puede
+        colapsar dos grupos sobre el mismo Valor Indicador.
+
+        El back-link de la fila corregida sigue apuntando al Valor Indicador del
+        indicador ANTERIOR. Si la identidad se resolviera solo por `name`, el
+        grupo nuevo reutilizaría ese documento y lo pisaría: quedaría UN solo
+        Valor Indicador y el del indicador viejo desaparecería en silencio, sin
+        auto-sanarse nunca. Es el caso de uso que documenta `publicar_indicadores`
+        ("si se corrige el Indicador declarado, Calidad puede re-publicar").
+        """
+        ind_a = _crear_indicador()
+        ind_b = _crear_indicador()
+        r1 = factories.crear_resultado_instrumento(
+            self.apl, dimension="Trato", valor=80.0, n=100, indicador=ind_a, prefijo=PREF
+        )
+        r2 = factories.crear_resultado_instrumento(
+            self.apl, dimension="Aulas", valor=60.0, n=100, indicador=ind_a, prefijo=PREF
+        )
+        primera = publicar_valores_indicador(self.apl.name)
+        self.assertEqual(primera["n_publicados"], 1)  # ambas filas -> un indicador
+        vi_a = primera["publicados"][0]["valor_indicador"]
+
+        # Calidad corrige: la 2ª fila en realidad tributa a otro indicador.
+        frappe.db.set_value("Resultado Instrumento", r2.name, "indicador", ind_b,
+                            update_modified=False)
+
+        res = publicar_valores_indicador(self.apl.name)
+        self.assertEqual(res["n_publicados"], 2)
+
+        por_ind = {p["indicador"]: p for p in res["publicados"]}
+        self.assertEqual(sorted(por_ind), sorted([ind_a, ind_b]))
+        # Dos documentos DISTINTOS: ninguno pisó al otro.
+        self.assertNotEqual(por_ind[ind_a]["valor_indicador"],
+                            por_ind[ind_b]["valor_indicador"])
+        # El valor de cada indicador es el de su propia fila, sin mezclarse.
+        self.assertEqual(
+            frappe.db.get_value("Valor Indicador", por_ind[ind_a]["valor_indicador"],
+                                "valor_num"), 80.0)
+        self.assertEqual(
+            frappe.db.get_value("Valor Indicador", por_ind[ind_b]["valor_indicador"],
+                                "valor_num"), 60.0)
+        # El Valor Indicador original sigue vivo y sigue siendo el de ind_a.
+        self.assertTrue(frappe.db.exists("Valor Indicador", vi_a))
+        self.assertEqual(
+            frappe.db.get_value("Valor Indicador", vi_a, "indicador"), ind_a)
+        self.assertEqual(
+            frappe.db.get_value("Resultado Instrumento", r1.name, "valor_indicador"), vi_a)
+
+    def test_publicar_no_pisa_un_valor_indicador_de_otra_fuente(self):
+        """Regresión: `Resultado Instrumento.valor_indicador` es un Link EDITABLE
+        (DPGC/Analista/Data Steward tienen escritura). Si alguien lo apunta a un
+        Valor Indicador cargado por los conectores MidPoint/Oracle, este motor no
+        puede reescribirlo: crearía un valor de encuesta encima de una medición
+        institucional, y `ignore_version` borraría hasta el rastro en el historial.
+        """
+        ind = _crear_indicador()
+        ajeno = frappe.get_doc({
+            "doctype": "Valor Indicador",
+            "indicador": ind,
+            "valor_num": 1234.0,
+            "fuente": "midpoint",
+            "calculado": 1,
+        })
+        ajeno.insert(ignore_permissions=True)
+
+        r1 = factories.crear_resultado_instrumento(
+            self.apl, dimension="Trato", valor=5.0, n=10, indicador=ind, prefijo=PREF
+        )
+        frappe.db.set_value("Resultado Instrumento", r1.name, "valor_indicador",
+                            ajeno.name, update_modified=False)
+
+        res = publicar_valores_indicador(self.apl.name)
+
+        # Se publicó en un documento NUEVO, no en el ajeno.
+        self.assertEqual(res["n_publicados"], 1)
+        self.assertNotEqual(res["publicados"][0]["valor_indicador"], ajeno.name)
+        # El ajeno quedó intacto: mismo valor, misma fuente, no fue borrado.
+        self.assertTrue(frappe.db.exists("Valor Indicador", ajeno.name))
+        ajeno_ahora = frappe.db.get_value(
+            "Valor Indicador", ajeno.name, ["valor_num", "fuente"], as_dict=True)
+        self.assertEqual(ajeno_ahora.valor_num, 1234.0)
+        self.assertEqual(ajeno_ahora.fuente, "midpoint")
+
+    def test_publicar_sin_n_en_una_fila_usa_promedio_simple(self):
+        """Regresión: `n` es Int (NOT NULL DEFAULT 0), así que "no lo llenaron"
+        es indistinguible de 0. Ponderar con un `n` faltante le daría peso CERO a
+        esa fila, borrándola del promedio en silencio. Si a alguna fila con valor
+        le falta `n`, el grupo entero cae a promedio simple.
+        """
+        ind = _crear_indicador()
+        factories.crear_resultado_instrumento(
+            self.apl, dimension="Trato", valor=10.0, n=1000, indicador=ind, prefijo=PREF
+        )
+        factories.crear_resultado_instrumento(
+            self.apl, dimension="Aulas", valor=20.0, indicador=ind, prefijo=PREF
+        )  # sin n
+
+        res = publicar_valores_indicador(self.apl.name)
+
+        # Ponderado habría dado ~10.0 (la 2ª fila pesaría 0); simple da 15.0.
+        self.assertEqual(
+            frappe.db.get_value(
+                "Valor Indicador", res["publicados"][0]["valor_indicador"], "valor_num"),
+            15.0,
+        )
+
     def test_publicar_aplicacion_inexistente_falla(self):
         with self.assertRaises(frappe.ValidationError):
             publicar_valores_indicador("APL-9999-99999")

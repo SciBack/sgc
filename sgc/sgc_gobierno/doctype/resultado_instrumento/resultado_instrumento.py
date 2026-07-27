@@ -213,7 +213,8 @@ def publicar_valores_indicador(aplicacion):
             continue
         g = grupos.setdefault(
             indicador,
-            {"filas": [], "valores": [], "n": 0, "suma_pond": 0.0, "unidad": f.unidad},
+            {"filas": [], "valores": [], "n": 0, "suma_pond": 0.0,
+             "n_completo": True, "unidad": f.unidad},
         )
         g["filas"].append(f)
         # Solo las filas CON valor entran en la media: sumar el `n` de una fila
@@ -234,6 +235,9 @@ def publicar_valores_indicador(aplicacion):
             g["valores"].append(f.valor)
             g["n"] += (f.n or 0)
             g["suma_pond"] += f.valor * (f.n or 0)
+            if not f.n:
+                # Sin `n` no se puede ponderar esta fila (ver nota en el cálculo).
+                g["n_completo"] = False
         if not g["unidad"] and f.unidad:
             g["unidad"] = f.unidad
 
@@ -248,7 +252,14 @@ def publicar_valores_indicador(aplicacion):
             dimensiones_omitidas.extend((f.dimension or "") for f in g["filas"])
             continue
 
-        if g["n"]:
+        # `n` es Int de Frappe => NOT NULL DEFAULT 0, la MISMA ambigüedad que
+        # `valor`: no se distingue "0 respuestas" de "no lo llenaron". Ponderar
+        # con un `n` faltante le da peso CERO a esa fila, o sea la borra del
+        # promedio en silencio. Por eso el ponderado solo se usa cuando TODAS
+        # las filas con valor traen su `n`; si a alguna le falta, se cae al
+        # promedio simple para el grupo entero: menos preciso, pero no descarta
+        # ninguna medición sin avisar.
+        if g["n"] and g["n_completo"]:
             valor_num = round(g["suma_pond"] / g["n"], 4)     # ponderado por n
         else:
             valor_num = round(sum(g["valores"]) / len(g["valores"]), 4)  # simple
@@ -298,20 +309,38 @@ def _upsert_valor_indicador(apl, indicador, valor_num, grupo, fecha):
     enlazados = [f.valor_indicador for f in grupo["filas"] if f.valor_indicador]
     # Se re-consulta en vez de confiar en el back-link: el Valor Indicador pudo
     # haberse borrado a mano (Link colgado) -> en ese caso se crea uno nuevo.
+    #
+    # Se filtra por `indicador` Y por `fuente`, no solo por `name`. Ambos filtros
+    # evitan una pérdida de dato SILENCIOSA:
+    #  - por `indicador`: si Calidad corrige el Indicador de una fila ya publicada
+    #    (caso de uso explícito de `publicar_indicadores`), su back-link sigue
+    #    apuntando al Valor Indicador del indicador ANTERIOR. Sin este filtro, el
+    #    grupo nuevo reutilizaría ese mismo documento y lo pisaría, dejando UN solo
+    #    Valor Indicador y borrando el del indicador viejo — sin error y sin
+    #    auto-sanarse nunca.
+    #  - por `fuente`: `Resultado Instrumento.valor_indicador` es un Link editable
+    #    (DPGC/Analista/Data Steward tienen escritura). Si alguien lo apunta a mano
+    #    a uno de los Valor Indicador que cargan los conectores MidPoint/Oracle,
+    #    este motor lo reescribiría entero — y `ignore_version` suprimiría el
+    #    historial. Solo se reutiliza lo que este motor mismo publicó.
     candidatos = frappe.get_all(
         "Valor Indicador",
-        filters={"name": ["in", enlazados]},
+        filters={
+            "name": ["in", enlazados],
+            "indicador": indicador,
+            "fuente": FUENTE_ENCUESTA,
+        },
         pluck="name",
         order_by="creation asc",
     ) if enlazados else []
 
     if candidatos:
+        # `candidatos` ya viene acotado a (indicador, fuente=encuesta), así que
+        # todos son de este motor: los extras son duplicados reales y se pueden
+        # consolidar en el más antiguo.
         vi = frappe.get_doc("Valor Indicador", candidatos[0])
         for extra in candidatos[1:]:
-            if frappe.db.get_value("Valor Indicador", extra, "fuente") == FUENTE_ENCUESTA:
-                frappe.delete_doc(
-                    "Valor Indicador", extra, force=1, ignore_permissions=True
-                )
+            frappe.delete_doc("Valor Indicador", extra, force=1, ignore_permissions=True)
     else:
         vi = frappe.new_doc("Valor Indicador")
 
