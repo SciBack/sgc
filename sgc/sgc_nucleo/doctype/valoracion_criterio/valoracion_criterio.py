@@ -6,6 +6,8 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import now_datetime
 
+from sgc.sgc_nucleo.doctype.trazabilidad.trazabilidad import sincronizar_evidencia_enlace
+
 
 class ValoracionCriterio(Document):
 	def validate(self):
@@ -40,6 +42,37 @@ class ValoracionCriterio(Document):
 		elif self.is_new() or self.has_value_changed("cumple"):
 			self.valorado_por = frappe.session.user
 			self.fecha = now_datetime()
+
+		# Último paso: va DESPUÉS del guard de autoevaluación cerrada, para que
+		# una autoevaluación ya cerrada no pueda generar Trazabilidad nueva.
+		self._sincronizar_trazabilidad()
+
+	# ------------------------------------------------------------ trazabilidad
+
+	def _sincronizar_trazabilidad(self):
+		"""Auto-sincroniza el picklist `evidencia` con Trazabilidad (RNF09).
+
+		Este es el enganche del flujo de AUTOEVALUACIÓN hacia Trazabilidad, que
+		es lo que `sgc.informe._evidencias_de_elementos` consulta para listar
+		las evidencias de cada estándar (filtra `elemento_marco in (estándar +
+		sus criterios)`). Sin esto, una evidencia vinculada al valorar un
+		criterio queda invisible para el informe de autoevaluación y no cuenta
+		para el gate `Evidencia._validar_trazabilidad_si_valida`.
+
+		Destino: solo `elemento_marco` = el criterio valorado. `Valoracion
+		Criterio` no tiene proceso ni forma explícita de derivarlo (el criterio
+		es un `Elemento Marco`, no un proceso) y NO se infiere: se deja el
+		vínculo solo al elemento, que `Trazabilidad.validate()` acepta.
+
+		Aditivo, igual que en `Informe Cumplimiento` y `Hallazgo Auditoria`:
+		desvincular una evidencia del picklist NO borra la Trazabilidad ya
+		creada; para retirarla del informe hay que borrar la Trazabilidad.
+		"""
+		if not self.criterio:
+			return
+		# `.get()`, no `.evidencia`: si el DocType aún no migró en el entorno
+		# (campo nuevo), el acceso por punto reventaría; así degrada a None.
+		sincronizar_evidencia_enlace(self.get("evidencia"), elemento_marco=self.criterio)
 
 	def on_update(self):
 		"""Al valorar un criterio, recomputar el nivel propuesto de su estándar.

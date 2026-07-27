@@ -36,6 +36,9 @@ Ejecutar manualmente:
     bench --site <site> execute sgc.setup.f_deploy_run_all.run
 Se ejecuta también solo, vía `after_migrate` (ver hooks.py).
 """
+import os
+import time
+
 import frappe
 
 from sgc.setup import (
@@ -65,12 +68,57 @@ STEPS = [
 ]
 
 
+def _correr_paso(name, mod, reintentos=2):
+    """Ejecuta un paso, reintentando si el DocType quedó bloqueado por el propio migrate.
+
+    Cuando un deploy cambia el .json de un DocType, `bench migrate` lo sincroniza y lo
+    deja LOCKED/encolado. Como este orquestador corre en `after_migrate`, un paso que
+    escriba sobre ese mismo DocType (típicamente `f3b_rbac`, que aplica DocPerm sobre los
+    46 DocTypes de negocio) revienta con `DocumentLockedError` — y el RBAC se queda sin
+    reaplicar en producción, en silencio salvo por el Error Log.
+
+    El lock es transitorio: liberarlo y reintentar basta (verificado en el lab 2026-07-27,
+    donde el paso suelto pasaba y dentro de migrate no). Se reintenta SOLO ante lock, no
+    ante cualquier error: un fallo real debe seguir fallando.
+    """
+    for intento in range(reintentos + 1):
+        try:
+            mod.run()
+            frappe.db.commit()
+            return True
+        except frappe.exceptions.DocumentLockedError:
+            frappe.db.rollback()
+            if intento == reintentos:
+                raise
+            # Los locks de documento de Frappe son ARCHIVOS en sites/<site>/locks/
+            # (frappe/utils/file_lock.py), no entradas de caché. Los que deja el propio
+            # migrate ya no tienen proceso detrás cuando llegamos a after_migrate, así
+            # que se borran los caducados y se reintenta.
+            # El discriminador seguro NO es la antigüedad del lock (los que deja este
+            # mismo migrate son recientes), sino el CONTEXTO: dentro de `after_migrate`
+            # el sitio está en despliegue, sin actividad concurrente de usuarios, así que
+            # ningún lock vivo puede ser de otro. Fuera de migrate se respeta la ventana
+            # de expiración de Frappe (600s) y no se borra nada reciente.
+            try:
+                locks_dir = frappe.get_site_path("locks")
+                if os.path.isdir(locks_dir):
+                    en_migrate = bool(getattr(frappe.flags, "in_migrate", False))
+                    limite = time.time() - (0 if en_migrate else 600)
+                    for f in os.listdir(locks_dir):
+                        ruta = os.path.join(locks_dir, f)
+                        if f.endswith(".lock") and os.path.getmtime(ruta) <= limite:
+                            os.remove(ruta)
+            except Exception:
+                pass
+            time.sleep(2)
+    return False
+
+
 def run():
     ok, fallidos = [], []
     for name, mod in STEPS:
         try:
-            mod.run()
-            frappe.db.commit()
+            _correr_paso(name, mod)
             ok.append(name)
         except Exception:
             frappe.db.rollback()

@@ -132,3 +132,109 @@ class IntegrationTestValoracionCriterio(IntegrationTestCase):
 		})
 		with self.assertRaises(frappe.ValidationError):
 			nueva.insert()
+
+	# ------------------------------------------------------- puente Trazabilidad
+
+	def test_vincular_evidencia_al_valorar_crea_trazabilidad(self):
+		"""RNF09: el picklist `evidencia` de la valoración genera su Trazabilidad
+		hacia el criterio, con origen 'Auto-sincronizado'."""
+		prefijo = "TESTVC4"
+		marco = factories.crear_marco_prueba(n_estandares=1, n_criterios=1, prefijo=prefijo)
+		ae = factories.crear_autoevaluacion(marco, prefijo=prefijo)
+		criterio = marco["criterios"][marco["estandares"][0]][0]
+		ev = factories.crear_evidencia(prefijo=prefijo)
+
+		# `factories.valorar_criterio` no acepta overrides -> se construye el doc.
+		frappe.get_doc({
+			"doctype": "Valoracion Criterio",
+			"autoevaluacion": ae.name,
+			"criterio": criterio,
+			"cumple": "Cumple",
+			"evidencia": [{"evidencia": ev.name}],
+		}).insert(ignore_permissions=True)
+
+		traza = frappe.db.get_value(
+			"Trazabilidad",
+			{"evidencia": ev.name, "elemento_marco": criterio},
+			["name", "origen"],
+			as_dict=True,
+		)
+		self.assertTrue(traza, "el puente autoevaluación -> Trazabilidad no creó el vínculo")
+		self.assertEqual(traza.origen, "Auto-sincronizado")
+
+	def test_sincronizacion_de_evidencia_es_idempotente(self):
+		"""Re-guardar la valoración no duplica la Trazabilidad (patrón `db.exists`)."""
+		prefijo = "TESTVC5"
+		marco = factories.crear_marco_prueba(n_estandares=1, n_criterios=1, prefijo=prefijo)
+		ae = factories.crear_autoevaluacion(marco, prefijo=prefijo)
+		criterio = marco["criterios"][marco["estandares"][0]][0]
+		ev = factories.crear_evidencia(prefijo=prefijo)
+
+		vc = frappe.get_doc({
+			"doctype": "Valoracion Criterio",
+			"autoevaluacion": ae.name,
+			"criterio": criterio,
+			"cumple": "Cumple",
+			"evidencia": [{"evidencia": ev.name}],
+		}).insert(ignore_permissions=True)
+
+		vc.observacion = "Se ajusta el sustento"
+		vc.save(ignore_permissions=True)
+		vc.observacion = "Se ajusta otra vez"
+		vc.save(ignore_permissions=True)
+
+		self.assertEqual(
+			frappe.db.count("Trazabilidad", {"evidencia": ev.name, "elemento_marco": criterio}),
+			1,
+		)
+
+	def test_evidencia_de_la_valoracion_llega_al_informe_sineace(self):
+		"""El motor del informe (sgc.informe) lee la Trazabilidad del criterio y
+		la muestra bajo su estándar padre — el puente completo, extremo a extremo."""
+		from sgc import informe
+
+		prefijo = "TESTVC6"
+		marco = factories.crear_marco_prueba(n_estandares=1, n_criterios=1, prefijo=prefijo)
+		ae = factories.crear_autoevaluacion(marco, prefijo=prefijo)
+		criterio = marco["criterios"][marco["estandares"][0]][0]
+		ev = factories.crear_evidencia(prefijo=prefijo)
+
+		frappe.get_doc({
+			"doctype": "Valoracion Criterio",
+			"autoevaluacion": ae.name,
+			"criterio": criterio,
+			"cumple": "Cumple",
+			"evidencia": [{"evidencia": ev.name}],
+		}).insert(ignore_permissions=True)
+
+		ctx = informe.consolidar(ae.name)
+		codigos = {e["ev_id"] for e in ctx["todas_evidencias"]}
+		self.assertIn(ev.codigo, codigos)
+		# Y aparece en el bloque del estándar padre, no solo en el anexo global.
+		por_estandar = {e["ev_id"] for est in ctx["estandares"] for e in est["evidencias"]}
+		self.assertIn(ev.codigo, por_estandar)
+
+	def test_autoevaluacion_cerrada_no_genera_trazabilidad_nueva(self):
+		"""El sync corre DESPUÉS del guard de cierre: una autoevaluación cerrada
+		ni siquiera llega a crear la Trazabilidad."""
+		prefijo = "TESTVC7"
+		marco = factories.crear_marco_prueba(n_estandares=1, n_criterios=1, prefijo=prefijo)
+		ae = factories.crear_autoevaluacion(marco, prefijo=prefijo)
+		criterio = marco["criterios"][marco["estandares"][0]][0]
+		ev = factories.crear_evidencia(prefijo=prefijo)
+
+		_cerrar_autoevaluacion(ae)
+
+		nueva = frappe.get_doc({
+			"doctype": "Valoracion Criterio",
+			"autoevaluacion": ae.name,
+			"criterio": criterio,
+			"cumple": "Cumple",
+			"evidencia": [{"evidencia": ev.name}],
+		})
+		with self.assertRaises(frappe.ValidationError):
+			nueva.insert()
+
+		self.assertFalse(
+			frappe.db.exists("Trazabilidad", {"evidencia": ev.name, "elemento_marco": criterio})
+		)

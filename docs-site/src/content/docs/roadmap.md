@@ -34,7 +34,7 @@ registro; lo que falta es la lógica que lo automatiza.
 | **M03** Control documental | ✅ Operativo | Código SGC automático, versiones, flujo de tres firmas, historial de cambios y export de la Lista Maestra a Excel. |
 | **M04** Procesos e indicadores de proceso | 🟡 Parcial | Los indicadores operan; las fichas de proceso esperan la carga del mapa de procesos institucional (es un dato, no código). |
 | **M05** No conformidades | ✅ Operativo | Registro con validaciones incrementales por etapa y flujo hasta el cierre. |
-| **M06** Auditorías internas | ✅ Operativo | Programa anual, ejecución de auditorías (equipo, criterios), hallazgos con escalamiento a No Conformidad e informe consolidado, con workflow. |
+| **M06** Auditorías internas | ✅ Operativo | Programa anual, ejecución de auditorías (equipo, criterios), hallazgos con escalamiento a No Conformidad e informe consolidado, con workflow. Auditorías, hallazgos y revisión por la dirección se agregan en el tablero ejecutivo (M13). |
 
 ## Bloque C — Acreditación
 
@@ -45,8 +45,8 @@ registro; lo que falta es la lógica que lo automatiza.
 | **M09** Evidencias de acreditación | ✅ Operativo | Carga de archivo o enlace, vigencia y trazabilidad N:M contra criterios y procesos. |
 | **M10** Indicadores de acreditación | ✅ Operativo | Catálogo de indicadores con fichas y tablero. |
 | **M11** Planes de mejora | ✅ Operativo | Planes y acciones con flujo, avance acumulado y semáforo por vencimiento. |
-| **M12** Encuestas a grupos de interés | ✅ Operativo | Instrumentos aplicados a grupos de interés por periodo, con tabulación y agregación de resultados y workflow de campo. |
-| **M13** Tablero ejecutivo | ✅ Operativo | Vista institucional: cobertura de autoevaluación, distribución de estándares por nivel, semáforo de CBC, riesgos abiertos y avance por programa. |
+| **M12** Encuestas a grupos de interés | ✅ Operativo | Instrumentos aplicados a grupos de interés por periodo, con tabulación y agregación de resultados y workflow de campo. Al cerrar la aplicación, los resultados con indicador declarado se publican como valores de indicador (fuente "encuesta") y entran al tablero de indicadores (M10). |
+| **M13** Tablero ejecutivo | ✅ Operativo | Vista institucional: cobertura de autoevaluación, distribución de estándares por nivel, semáforo de CBC, avance por programa, riesgos abiertos por estado y nivel, auditorías y hallazgos, y estado de la última revisión por la dirección. |
 | **M14** Acreditación internacional | 🔴 Pendiente | Fase posterior. |
 | **M15** Reportería BI | 🔴 Pendiente | Fase posterior. |
 
@@ -68,4 +68,4 @@ autoevaluación con sus evidencias trazadas.
 
 ---
 
-*Última actualización: 2026-07-15.*
+*Última actualización: 2026-07-27.*

@@ -10,17 +10,47 @@ Verifica el controlador (`resultado_instrumento.py`):
 
 La aplicación padre tiene Workflow; se desactiva en setUp para poder prepararla
 con fechas sin transicionar.
+
+Además prueba el PUENTE Encuestas -> Indicadores
+(`publicar_valores_indicador`): agrupación por indicador EXPLÍCITO, herencia
+desde `Instrumento.indicador`, omisión (nunca inferencia) de las filas sin
+indicador declarado, promedio ponderado por `n`, back-link
+`Resultado Instrumento.valor_indicador` e idempotencia del upsert.
 """
 import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, nowdate
 
+from sgc.sgc_gobierno.doctype.resultado_instrumento.resultado_instrumento import (
+    publicar_valores_indicador,
+)
 from sgc.tests import factories
 
 EXTRA_TEST_RECORD_DEPENDENCIES = []
 IGNORE_TEST_RECORD_DEPENDENCIES = []
 
 PREF = "TESTM12R"
+
+_seq_ind = iter(range(1, 10000))
+
+
+def _crear_indicador(categoria="Satisfaccion"):
+    """Indicador mínimo (autoname field:codigo; solo codigo+nombre son reqd).
+
+    Se crea aquí y no en `sgc/tests/factories.py` porque ese archivo es
+    compartido y queda fuera del alcance de este cambio.
+    """
+    codigo = f"{PREF}-IND-{next(_seq_ind)}"
+    if frappe.db.exists("Indicador", codigo):
+        return codigo
+    doc = frappe.get_doc({
+        "doctype": "Indicador",
+        "codigo": codigo,
+        "nombre": f"Indicador de prueba {codigo}",
+        "categoria": categoria,
+    })
+    doc.insert(ignore_permissions=True)
+    return doc.name
 
 
 class IntegrationTestResultadoInstrumento(IntegrationTestCase):
@@ -65,3 +95,240 @@ class IntegrationTestResultadoInstrumento(IntegrationTestCase):
             self.apl, dimension="Trato", valor=4.0, n=5, fecha_corte=corte, prefijo=PREF
         )
         self.assertEqual(str(res.fecha_corte), corte)
+
+    # ======================================================================
+    # Puente Encuestas -> Indicadores (publicar_valores_indicador)
+    # ======================================================================
+    def test_publicar_sin_indicador_declarado_omite_todo(self):
+        """Regla dura: sin enlace explícito NO se adivina por el texto de la
+        dimensión — la fila se omite y se cuenta."""
+        factories.crear_resultado_instrumento(
+            self.apl, dimension="Satisfacción general", valor=4.0, n=10, prefijo=PREF
+        )
+        res = publicar_valores_indicador(self.apl.name)
+        self.assertEqual(res["n_publicados"], 0)
+        self.assertEqual(res["publicados"], [])
+        self.assertEqual(res["omitidas"], 1)
+        self.assertEqual(res["dimensiones_omitidas"], ["Satisfacción general"])
+
+    def test_publicar_agrupa_por_indicador_explicito_con_ponderado(self):
+        """Dos dimensiones que tributan al MISMO indicador se fusionan en un
+        único Valor Indicador con el promedio ponderado por n."""
+        ind = _crear_indicador()
+        factories.crear_resultado_instrumento(
+            self.apl, dimension="Trato", valor=4.0, n=10, indicador=ind, prefijo=PREF
+        )
+        factories.crear_resultado_instrumento(
+            self.apl, dimension="Aulas", valor=2.0, n=30, indicador=ind, prefijo=PREF
+        )
+        res = publicar_valores_indicador(self.apl.name)
+
+        self.assertEqual(res["n_publicados"], 1)
+        self.assertEqual(res["omitidas"], 0)
+        pub = res["publicados"][0]
+        self.assertEqual(pub["indicador"], ind)
+        self.assertEqual(pub["n"], 40)
+        self.assertEqual(pub["n_filas"], 2)
+        # Ponderado: (4*10 + 2*30) / 40 = 2.5 (el simple sería 3.0).
+        self.assertEqual(pub["valor_num"], 2.5)
+        self.assertEqual(
+            frappe.db.get_value("Valor Indicador", pub["valor_indicador"], "valor_num"), 2.5
+        )
+
+    def test_publicar_separa_indicadores_distintos(self):
+        ind_a = _crear_indicador()
+        ind_b = _crear_indicador()
+        factories.crear_resultado_instrumento(
+            self.apl, dimension="Trato", valor=4.0, n=10, indicador=ind_a, prefijo=PREF
+        )
+        factories.crear_resultado_instrumento(
+            self.apl, dimension="Aulas", valor=2.0, n=10, indicador=ind_b, prefijo=PREF
+        )
+        res = publicar_valores_indicador(self.apl.name)
+        self.assertEqual(res["n_publicados"], 2)
+        por_ind = {p["indicador"]: p for p in res["publicados"]}
+        self.assertEqual(por_ind[ind_a]["valor_num"], 4.0)
+        self.assertEqual(por_ind[ind_b]["valor_num"], 2.0)
+
+    def test_publicar_hereda_indicador_del_instrumento(self):
+        """La fila sin `indicador` hereda el de la plantilla `Instrumento`."""
+        ind = _crear_indicador()
+        instrumento = factories.crear_instrumento(prefijo=PREF, indicador=ind).name
+        apl = factories.crear_aplicacion_instrumento(instrumento=instrumento, prefijo=PREF)
+        factories.crear_resultado_instrumento(
+            apl, dimension="Trato", valor=3.0, n=5, prefijo=PREF
+        )
+        res = publicar_valores_indicador(apl.name)
+        self.assertEqual(res["omitidas"], 0)
+        self.assertEqual(res["publicados"][0]["indicador"], ind)
+
+    def test_publicar_la_fila_gana_sobre_la_plantilla(self):
+        ind_plantilla = _crear_indicador()
+        ind_fila = _crear_indicador()
+        instrumento = factories.crear_instrumento(prefijo=PREF, indicador=ind_plantilla).name
+        apl = factories.crear_aplicacion_instrumento(instrumento=instrumento, prefijo=PREF)
+        factories.crear_resultado_instrumento(
+            apl, dimension="Trato", valor=3.0, n=5, indicador=ind_fila, prefijo=PREF
+        )
+        res = publicar_valores_indicador(apl.name)
+        self.assertEqual([p["indicador"] for p in res["publicados"]], [ind_fila])
+
+    def test_publicar_mezcla_declaradas_y_omitidas(self):
+        ind = _crear_indicador()
+        factories.crear_resultado_instrumento(
+            self.apl, dimension="Trato", valor=4.0, n=10, indicador=ind, prefijo=PREF
+        )
+        factories.crear_resultado_instrumento(
+            self.apl, dimension="Huérfana", valor=1.0, n=99, prefijo=PREF
+        )
+        res = publicar_valores_indicador(self.apl.name)
+        self.assertEqual(res["n_publicados"], 1)
+        self.assertEqual(res["omitidas"], 1)
+        self.assertEqual(res["dimensiones_omitidas"], ["Huérfana"])
+        # La fila omitida NO contamina el n del valor publicado.
+        self.assertEqual(res["publicados"][0]["n"], 10)
+
+    def test_publicar_sin_n_cae_a_promedio_simple(self):
+        ind = _crear_indicador()
+        factories.crear_resultado_instrumento(
+            self.apl, dimension="Trato", valor=5.0, indicador=ind, prefijo=PREF
+        )
+        factories.crear_resultado_instrumento(
+            self.apl, dimension="Aulas", valor=2.0, indicador=ind, prefijo=PREF
+        )
+        res = publicar_valores_indicador(self.apl.name)
+        # n total = 0 -> no hay ponderación posible: (5+2)/2 = 3.5
+        self.assertEqual(res["publicados"][0]["valor_num"], 3.5)
+
+    def test_publicar_omite_grupo_sin_valor_numerico(self):
+        ind = _crear_indicador()
+        factories.crear_resultado_instrumento(
+            self.apl, dimension="Trato", n=10, indicador=ind, prefijo=PREF
+        )
+        res = publicar_valores_indicador(self.apl.name)
+        self.assertEqual(res["n_publicados"], 0)
+        self.assertEqual(res["omitidas"], 1)
+
+    def test_publicar_escribe_el_back_link_en_las_filas(self):
+        ind = _crear_indicador()
+        r1 = factories.crear_resultado_instrumento(
+            self.apl, dimension="Trato", valor=4.0, n=10, indicador=ind, prefijo=PREF
+        )
+        r2 = factories.crear_resultado_instrumento(
+            self.apl, dimension="Aulas", valor=2.0, n=10, indicador=ind, prefijo=PREF
+        )
+        res = publicar_valores_indicador(self.apl.name)
+        vi = res["publicados"][0]["valor_indicador"]
+        self.assertEqual(
+            frappe.db.get_value("Resultado Instrumento", r1.name, "valor_indicador"), vi
+        )
+        self.assertEqual(
+            frappe.db.get_value("Resultado Instrumento", r2.name, "valor_indicador"), vi
+        )
+
+    def test_publicar_marca_fuente_encuesta_y_calculado(self):
+        ind = _crear_indicador()
+        self.apl.fecha_inicio = add_days(nowdate(), -10)
+        self.apl.fecha_fin = nowdate()
+        self.apl.save(ignore_permissions=True)
+        factories.crear_resultado_instrumento(
+            self.apl, dimension="Trato", valor=4.0, n=10, indicador=ind, prefijo=PREF
+        )
+        res = publicar_valores_indicador(self.apl.name)
+        vi = frappe.get_doc("Valor Indicador", res["publicados"][0]["valor_indicador"])
+        self.assertEqual(vi.fuente, "encuesta")
+        self.assertEqual(vi.calculado, 1)
+        self.assertEqual(vi.indicador, ind)
+        self.assertIn(self.apl.name, vi.valor_texto)
+        # La fecha del valor es el corte real del campo (fin de la aplicación).
+        self.assertEqual(str(vi.fecha)[:10], nowdate())
+
+    def test_publicar_copia_el_ambito_de_la_aplicacion(self):
+        ind = _crear_indicador()
+        codigo_periodo = f"{PREF}-PER-1"
+        if not frappe.db.exists("Periodo Academico", codigo_periodo):
+            frappe.get_doc({
+                "doctype": "Periodo Academico",
+                "codigo": codigo_periodo,
+                "anio": 2026,
+                "semestre": "I",
+            }).insert(ignore_permissions=True)
+        apl = factories.crear_aplicacion_instrumento(
+            prefijo=PREF, periodo_academico=codigo_periodo
+        )
+        factories.crear_resultado_instrumento(
+            apl, dimension="Trato", valor=4.0, n=10, indicador=ind, prefijo=PREF
+        )
+        res = publicar_valores_indicador(apl.name)
+        self.assertEqual(
+            frappe.db.get_value(
+                "Valor Indicador", res["publicados"][0]["valor_indicador"], "periodo_academico"
+            ),
+            codigo_periodo,
+        )
+
+    def test_publicar_es_idempotente(self):
+        """Re-publicar no duplica: actualiza el mismo Valor Indicador."""
+        ind = _crear_indicador()
+        r1 = factories.crear_resultado_instrumento(
+            self.apl, dimension="Trato", valor=4.0, n=10, indicador=ind, prefijo=PREF
+        )
+        primera = publicar_valores_indicador(self.apl.name)
+        vi = primera["publicados"][0]["valor_indicador"]
+
+        # Cambia el dato de origen y vuelve a publicar.
+        frappe.db.set_value("Resultado Instrumento", r1.name, "valor", 2.0)
+        segunda = publicar_valores_indicador(self.apl.name)
+
+        self.assertEqual(segunda["publicados"][0]["valor_indicador"], vi)
+        self.assertEqual(
+            frappe.db.count("Valor Indicador", {"indicador": ind, "fuente": "encuesta"}), 1
+        )
+        self.assertEqual(frappe.db.get_value("Valor Indicador", vi, "valor_num"), 2.0)
+
+    def test_publicar_auto_sana_valores_duplicados(self):
+        """Si el grupo apunta a más de un Valor Indicador (publicaciones
+        concurrentes), se conserva el más antiguo y se reapuntan las filas."""
+        ind = _crear_indicador()
+        r1 = factories.crear_resultado_instrumento(
+            self.apl, dimension="Trato", valor=4.0, n=10, indicador=ind, prefijo=PREF
+        )
+        r2 = factories.crear_resultado_instrumento(
+            self.apl, dimension="Aulas", valor=4.0, n=10, indicador=ind, prefijo=PREF
+        )
+        vi_original = publicar_valores_indicador(self.apl.name)["publicados"][0][
+            "valor_indicador"
+        ]
+
+        # Simula el duplicado: un segundo Valor Indicador del mismo motor al que
+        # apunta una de las filas.
+        duplicado = frappe.get_doc({
+            "doctype": "Valor Indicador",
+            "indicador": ind,
+            "valor_num": 99.0,
+            "fuente": "encuesta",
+            "calculado": 1,
+        })
+        duplicado.insert(ignore_permissions=True)
+        frappe.db.set_value(
+            "Resultado Instrumento", r2.name, "valor_indicador", duplicado.name,
+            update_modified=False,
+        )
+
+        res = publicar_valores_indicador(self.apl.name)
+        self.assertEqual(res["publicados"][0]["valor_indicador"], vi_original)
+        self.assertFalse(frappe.db.exists("Valor Indicador", duplicado.name))
+        for r in (r1, r2):
+            self.assertEqual(
+                frappe.db.get_value("Resultado Instrumento", r.name, "valor_indicador"),
+                vi_original,
+            )
+
+    def test_publicar_aplicacion_inexistente_falla(self):
+        with self.assertRaises(frappe.ValidationError):
+            publicar_valores_indicador("APL-9999-99999")
+
+    def test_publicar_aplicacion_vacia_no_crea_nada(self):
+        res = publicar_valores_indicador(self.apl.name)
+        self.assertEqual(res["n_publicados"], 0)
+        self.assertEqual(res["omitidas"], 0)

@@ -15,7 +15,8 @@
   "valorado_por",
   "fecha",
   "debilidad",
-  "comentario"
+  "comentario",
+  "evidencia"
  ],
  "fields": [
   {
@@ -77,6 +78,13 @@
    "fieldname": "comentario",
    "fieldtype": "Text",
    "label": "Comentario (sustento)"
+  },
+  {
+   "description": "Evidencias que sustentan el juicio. Cada una genera su Trazabilidad hacia el criterio (RNF09), que es lo que consume el informe de autoevaluación.",
+   "fieldname": "evidencia",
+   "fieldtype": "Table MultiSelect",
+   "label": "Evidencias",
+   "options": "Evidencia Enlace"
   }
  ],
  "grid_page_length": 50,

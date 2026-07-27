@@ -17,6 +17,38 @@ const niveles = computed(() => panel.data?.niveles || { NL: 0, L: 0, LP: 0, sin_
 const cbc = computed(() => panel.data?.cbc || null)
 const mejora = computed(() => panel.data?.mejora || { nc_abiertas: 0, planes_riesgo: 0 })
 
+// GRC — riesgos (ISO 9001 §6.1), auditoría (§9.2) y revisión por la dirección (§9.3).
+const NIVELES_RIESGO_VACIO = { Bajo: 0, Moderado: 0, Alto: 0, Extremo: 0, sin_evaluar: 0 }
+const riesgos = computed(() => panel.data?.riesgos || {
+  total: 0, abiertos: 0, criticos: 0, materializados: 0, cerrados: 0,
+  por_estado: {}, por_nivel: { ...NIVELES_RIESGO_VACIO },
+})
+const auditoria = computed(() => panel.data?.auditoria || {
+  total: 0, por_estado: {}, hallazgos: { total: 0, abiertos: 0, por_tipo: {}, por_estado: {} },
+})
+const revision = computed(() => panel.data?.revision_direccion || { total: 0, por_estado: {}, ultima: null })
+
+// Niveles de riesgo, de mayor a menor severidad (el nivel sale de Evaluacion
+// Riesgo: residual y, si no hay, inherente; `sin_evaluar` es dato faltante).
+const NIVELES_RIESGO = [
+  { clave: 'Extremo', chip: 'bg-surface-red-2 text-ink-red-6' },
+  { clave: 'Alto', chip: 'bg-surface-red-1 text-ink-red-5' },
+  { clave: 'Moderado', chip: 'bg-surface-amber-2 text-ink-amber-7' },
+  { clave: 'Bajo', chip: 'bg-surface-green-2 text-ink-green-6' },
+  { clave: 'sin_evaluar', chip: 'bg-surface-gray-2 text-ink-gray-6' },
+]
+
+const ESTADOS_AUDITORIA = ['Planificada', 'En ejecucion', 'Ejecutada', 'Informe emitido', 'Cerrada']
+
+// Solo los tipos de hallazgo con conteo > 0 (la lista completa son 6 y satura).
+const tiposHallazgo = computed(() =>
+  Object.entries(auditoria.value.hallazgos?.por_tipo || {}).filter(([, n]) => n > 0),
+)
+
+function irA(doctype) {
+  router.push({ name: 'DoctypeList', params: { doctype } })
+}
+
 const totalEstandares = computed(() =>
   Object.values(niveles.value).reduce((n, v) => n + (v || 0), 0),
 )
@@ -167,6 +199,127 @@ function abrirAutoeval(p) {
               <div class="text-p-xs text-ink-gray-6">No cumple</div>
             </div>
           </div>
+        </section>
+
+        <!-- Riesgos (ISO 9001 §6.1) -->
+        <section class="sb-card mb-6 p-5">
+          <div class="mb-3 flex flex-wrap items-center gap-2">
+            <h2 class="text-lg font-semibold text-ink-gray-9">Riesgos abiertos</h2>
+            <button class="sb-interactive ml-auto text-p-xs font-semibold text-marca-primaria-700" @click="irA('Riesgo')">
+              Ver inventario
+            </button>
+          </div>
+          <div v-if="!riesgos.total" class="text-p-sm text-ink-gray-5">
+            Aún no hay riesgos registrados.
+          </div>
+          <template v-else>
+            <div class="grid gap-3 sm:grid-cols-3">
+              <div class="rounded-lg bg-surface-gray-1 p-3">
+                <div class="font-display text-2xl font-bold text-ink-gray-8">{{ riesgos.abiertos }}</div>
+                <div class="text-p-xs text-ink-gray-6">Abiertos (de {{ riesgos.total }})</div>
+              </div>
+              <div class="rounded-lg p-3" :class="riesgos.criticos ? 'bg-surface-red-1' : 'bg-surface-gray-1'">
+                <div class="font-display text-2xl font-bold" :class="riesgos.criticos ? 'text-ink-red-5' : 'text-ink-gray-4'">
+                  {{ riesgos.criticos }}
+                </div>
+                <div class="text-p-xs text-ink-gray-6">Nivel Alto o Extremo</div>
+              </div>
+              <div class="rounded-lg p-3" :class="riesgos.materializados ? 'bg-surface-red-1' : 'bg-surface-gray-1'">
+                <div class="font-display text-2xl font-bold" :class="riesgos.materializados ? 'text-ink-red-5' : 'text-ink-gray-4'">
+                  {{ riesgos.materializados }}
+                </div>
+                <div class="text-p-xs text-ink-gray-6">Materializados</div>
+              </div>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-2">
+              <span
+                v-for="n in NIVELES_RIESGO"
+                :key="n.clave"
+                class="rounded-full px-2.5 py-0.5 text-xs font-semibold"
+                :class="n.chip"
+              >
+                {{ n.clave === 'sin_evaluar' ? 'Sin evaluar' : n.clave }}: {{ riesgos.por_nivel?.[n.clave] || 0 }}
+              </span>
+            </div>
+            <p v-if="riesgos.por_nivel?.sin_evaluar" class="mt-2 text-p-xs text-ink-gray-5">
+              «Sin evaluar» son riesgos abiertos sin evaluación de nivel registrada: el nivel no se estima.
+            </p>
+          </template>
+        </section>
+
+        <!-- Auditoría interna (ISO 9001 §9.2) -->
+        <section class="sb-card mb-6 p-5">
+          <div class="mb-3 flex flex-wrap items-center gap-2">
+            <h2 class="text-lg font-semibold text-ink-gray-9">Auditoría interna</h2>
+            <button class="sb-interactive ml-auto text-p-xs font-semibold text-marca-primaria-700" @click="irA('Hallazgo Auditoria')">
+              Ver hallazgos
+            </button>
+          </div>
+          <div v-if="!auditoria.total" class="text-p-sm text-ink-gray-5">
+            Aún no hay auditorías registradas.
+          </div>
+          <template v-else>
+            <div class="grid gap-3 sm:grid-cols-3">
+              <div class="rounded-lg bg-surface-gray-1 p-3">
+                <div class="font-display text-2xl font-bold text-ink-gray-8">{{ auditoria.total }}</div>
+                <div class="text-p-xs text-ink-gray-6">Auditorías</div>
+              </div>
+              <div class="rounded-lg bg-surface-gray-1 p-3">
+                <div class="font-display text-2xl font-bold text-ink-gray-8">{{ auditoria.hallazgos?.total || 0 }}</div>
+                <div class="text-p-xs text-ink-gray-6">Hallazgos</div>
+              </div>
+              <div class="rounded-lg p-3" :class="auditoria.hallazgos?.abiertos ? 'bg-surface-amber-1' : 'bg-surface-gray-1'">
+                <div class="font-display text-2xl font-bold" :class="auditoria.hallazgos?.abiertos ? 'text-ink-amber-7' : 'text-ink-gray-4'">
+                  {{ auditoria.hallazgos?.abiertos || 0 }}
+                </div>
+                <div class="text-p-xs text-ink-gray-6">Hallazgos abiertos</div>
+              </div>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-2">
+              <span
+                v-for="e in ESTADOS_AUDITORIA"
+                :key="e"
+                v-show="auditoria.por_estado?.[e]"
+                class="rounded-full bg-surface-gray-2 px-2.5 py-0.5 text-xs font-semibold text-ink-gray-7"
+              >
+                {{ e }}: {{ auditoria.por_estado[e] }}
+              </span>
+            </div>
+            <div v-if="tiposHallazgo.length" class="mt-2 flex flex-wrap gap-2">
+              <span
+                v-for="[tipo, n] in tiposHallazgo"
+                :key="tipo"
+                class="rounded-full bg-surface-amber-1 px-2.5 py-0.5 text-xs font-semibold text-ink-amber-7"
+              >
+                {{ tipo }}: {{ n }}
+              </span>
+            </div>
+          </template>
+        </section>
+
+        <!-- Revisión por la dirección (ISO 9001 §9.3) -->
+        <section class="sb-card mb-6 p-5">
+          <div class="mb-3 flex flex-wrap items-center gap-2">
+            <h2 class="text-lg font-semibold text-ink-gray-9">Revisión por la dirección</h2>
+            <button class="sb-interactive ml-auto text-p-xs font-semibold text-marca-primaria-700" @click="irA('Revision Direccion')">
+              Ver revisiones
+            </button>
+          </div>
+          <div v-if="!revision.ultima" class="text-p-sm text-ink-gray-5">
+            Aún no se ha registrado ninguna revisión por la dirección (§9.3).
+          </div>
+          <template v-else>
+            <div class="flex flex-wrap items-baseline gap-2">
+              <span class="font-semibold text-ink-gray-9">{{ revision.ultima.titulo || revision.ultima.codigo }}</span>
+              <span class="rounded-full bg-surface-gray-2 px-2.5 py-0.5 text-xs font-semibold text-ink-gray-7">
+                {{ revision.ultima.estado }}
+              </span>
+              <span class="text-p-xs text-ink-gray-5">{{ revision.ultima.fecha || 'sin fecha' }}</span>
+            </div>
+            <div class="mt-2 text-p-xs text-ink-gray-5">
+              Última de {{ revision.total }} revisión(es) registrada(s).
+            </div>
+          </template>
         </section>
 
         <!-- Por programa -->

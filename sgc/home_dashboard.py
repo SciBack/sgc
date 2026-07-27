@@ -5,7 +5,8 @@
 
 Consolida, para la vista Home de la SPA, lo que el comité de calidad necesita al
 entrar: sus pendientes reales (evidencias por vencer/vencidas, no conformidades
-abiertas, planes/acciones en riesgo, documentos por revisar) y el estado de la
+abiertas, planes/acciones en riesgo, riesgos críticos abiertos, hallazgos de
+auditoría abiertos, documentos por revisar) y el estado de la
 autoevaluación activa (avance, criterios sin valorar, vigencia propuesta).
 
 Es la fuente de verdad del tablero de Inicio: la SPA solo renderiza el payload.
@@ -20,10 +21,26 @@ from frappe.utils import add_days, nowdate
 _NC_CERRADAS = ("Cerrada eficaz", "Cerrada no eficaz")
 _EVIDENCIA_ACTIVAS = ("Pendiente", "Valida")
 _ACCION_ABIERTAS = ("Planificada", "En ejecucion")
+# Hallazgo de auditoría que sigue vivo: escalado a NC todavía exige seguimiento.
+_HALLAZGO_ABIERTOS = ("Abierto", "Escalado a NC")
 
 
 def _cnt(doctype, filtros):
     return frappe.db.count(doctype, filtros)
+
+
+def _riesgos_criticos():
+    """Riesgos abiertos de nivel Alto/Extremo.
+
+    Reutiliza la resolución de nivel del tablero ejecutivo (import local, mismo
+    patrón que `from sgc import scoring` más abajo) para no duplicar la regla
+    residual-antes-que-inherente. Los `sin_evaluar` NO se cuentan como críticos:
+    dato faltante no es dato grave.
+    """
+    from sgc.tablero_ejecutivo import _RIESGO_NIVELES_CRITICOS, niveles_de_riesgos_abiertos
+
+    por_nivel = niveles_de_riesgos_abiertos()
+    return sum(por_nivel.get(n, 0) for n in _RIESGO_NIVELES_CRITICOS)
 
 
 @frappe.whitelist()
@@ -85,6 +102,23 @@ def resumen_inicio(horizonte_dias=30):
             ),
             "tono": "ambar",
             "doctype": "Accion Mejora",
+        },
+        {
+            # El nivel del riesgo NO está en `Riesgo`: se resuelve por su
+            # `Evaluacion Riesgo` (ver sgc.tablero_ejecutivo). Aquí solo se
+            # muestran los abiertos de nivel Alto/Extremo.
+            "clave": "riesgos_criticos",
+            "label": "Riesgos críticos abiertos",
+            "valor": _riesgos_criticos(),
+            "tono": "rojo",
+            "doctype": "Riesgo",
+        },
+        {
+            "clave": "hallazgos_abiertos",
+            "label": "Hallazgos de auditoría abiertos",
+            "valor": _cnt("Hallazgo Auditoria", {"estado": ["in", _HALLAZGO_ABIERTOS]}),
+            "tono": "ambar",
+            "doctype": "Hallazgo Auditoria",
         },
         {
             "clave": "docs_por_revisar",

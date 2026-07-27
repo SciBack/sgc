@@ -23,6 +23,7 @@ Hereda de IntegrationTestCase: cada test corre en su propia transacción con
 rollback automático.
 """
 import frappe
+from frappe.model.workflow import apply_workflow
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, nowdate
 
@@ -170,3 +171,124 @@ class IntegrationTestAplicacionInstrumento(IntegrationTestCase):
 
         with self.assertRaises(frappe.ValidationError):
             tabular_aplicacion("APL-9999-99999")
+
+    # ======================================================================
+    # Seam manual de publicación (fuera de la transición)
+    # ======================================================================
+    def test_publicar_indicadores_exige_estado_cerrada(self):
+        apl = self._apl(estado="En campo", fecha_inicio=nowdate())
+        with self.assertRaises(frappe.ValidationError):
+            apl.publicar_indicadores()
+
+
+# ==========================================================================
+# Puente Encuestas -> Indicadores disparado por el CIERRE real del workflow
+# ==========================================================================
+# Acciones del Workflow "Aplicacion Instrumento SGC" en orden hasta "Cerrada"
+# (ver sgc/setup/f9_workflow_encuestas.py WF_APLICACION["transitions"]).
+_CADENA_CIERRE = ("Iniciar campo", "Cerrar aplicacion")
+
+
+class IntegrationTestCierreAplicacionPublicaIndicadores(IntegrationTestCase):
+    """El cierre por Workflow materializa los `Valor Indicador` (A2).
+
+    NO se llama `factories.desactivar_workflow`: se necesita el Workflow ACTIVO
+    porque el disparo real es `apply_workflow` -> `doc.save()` -> `on_update`.
+    Reasignar `estado` a mano y guardar NO es el camino a probar (gotcha
+    conocido del repo).
+    """
+
+    def setUp(self):
+        self.instrumento = factories.crear_instrumento(prefijo=PREF).name
+
+    def _indicador(self):
+        """Indicador mínimo (solo codigo+nombre son reqd). Creado inline: la
+        factory compartida `sgc/tests/factories.py` está fuera de alcance."""
+        codigo = f"{PREF}-IND-{frappe.generate_hash(length=8)}"
+        doc = frappe.get_doc({
+            "doctype": "Indicador",
+            "codigo": codigo,
+            "nombre": f"Satisfacción de prueba {codigo}",
+            "categoria": "Satisfaccion",
+        })
+        doc.insert(ignore_permissions=True)
+        return doc.name
+
+    def _cerrar(self, apl):
+        """Recorre la cadena REAL de transiciones hasta 'Cerrada'."""
+        doc = frappe.get_doc("Aplicacion Instrumento", apl.name)
+        for accion in _CADENA_CIERRE:
+            doc = apply_workflow(doc, accion)
+        doc.reload()
+        return doc
+
+    def test_cerrar_publica_el_valor_indicador(self):
+        ind = self._indicador()
+        apl = factories.crear_aplicacion_instrumento(
+            instrumento=self.instrumento,
+            prefijo=PREF,
+            fecha_inicio=add_days(nowdate(), -10),
+            fecha_fin=nowdate(),
+        )
+        res = factories.crear_resultado_instrumento(
+            apl, dimension="Trato", valor=4.0, n=10, indicador=ind, prefijo=PREF
+        )
+
+        # Antes de cerrar no existe nada publicado.
+        self.assertEqual(frappe.db.count("Valor Indicador", {"indicador": ind}), 0)
+
+        cerrada = self._cerrar(apl)
+        self.assertEqual(cerrada.estado, "Cerrada")
+
+        vi = frappe.db.get_value(
+            "Resultado Instrumento", res.name, "valor_indicador"
+        )
+        self.assertTrue(vi, "el cierre debe escribir el back-link valor_indicador")
+        doc_vi = frappe.get_doc("Valor Indicador", vi)
+        self.assertEqual(doc_vi.indicador, ind)
+        self.assertEqual(doc_vi.valor_num, 4.0)
+        self.assertEqual(doc_vi.fuente, "encuesta")
+        self.assertEqual(doc_vi.calculado, 1)
+
+    def test_cerrar_sin_indicador_declarado_no_publica(self):
+        """Sin enlace explícito el cierre no rompe: simplemente no publica."""
+        apl = factories.crear_aplicacion_instrumento(
+            instrumento=self.instrumento,
+            prefijo=PREF,
+            fecha_inicio=add_days(nowdate(), -10),
+            fecha_fin=nowdate(),
+        )
+        res = factories.crear_resultado_instrumento(
+            apl, dimension="Satisfacción general", valor=4.0, n=10, prefijo=PREF
+        )
+        cerrada = self._cerrar(apl)
+        self.assertEqual(cerrada.estado, "Cerrada")
+        self.assertFalse(
+            frappe.db.get_value("Resultado Instrumento", res.name, "valor_indicador")
+        )
+
+    def test_republicar_tras_el_cierre_no_duplica(self):
+        """Resultados cargados DESPUÉS del cierre se incorporan al re-publicar,
+        sobre el MISMO Valor Indicador."""
+        ind = self._indicador()
+        apl = factories.crear_aplicacion_instrumento(
+            instrumento=self.instrumento,
+            prefijo=PREF,
+            fecha_inicio=add_days(nowdate(), -10),
+            fecha_fin=nowdate(),
+        )
+        factories.crear_resultado_instrumento(
+            apl, dimension="Trato", valor=4.0, n=10, indicador=ind, prefijo=PREF
+        )
+        cerrada = self._cerrar(apl)
+        vi_inicial = cerrada.publicar_indicadores()["publicados"][0]["valor_indicador"]
+
+        # Llega un resultado tardío que baja el promedio ponderado.
+        factories.crear_resultado_instrumento(
+            apl, dimension="Aulas", valor=2.0, n=30, indicador=ind, prefijo=PREF
+        )
+        res = cerrada.publicar_indicadores()
+
+        self.assertEqual(res["publicados"][0]["valor_indicador"], vi_inicial)
+        self.assertEqual(res["publicados"][0]["valor_num"], 2.5)  # (4*10+2*30)/40
+        self.assertEqual(frappe.db.count("Valor Indicador", {"indicador": ind}), 1)

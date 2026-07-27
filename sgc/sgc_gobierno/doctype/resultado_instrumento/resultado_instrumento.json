@@ -9,6 +9,7 @@
  "field_order": [
   "aplicacion_instrumento",
   "dimension",
+  "indicador",
   "valor",
   "unidad",
   "n",
@@ -29,6 +30,13 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Dimensi\u00f3n"
+  },
+  {
+   "description": "Indicador al que tributa esta fila (EXPL\u00cdCITO). Si est\u00e1 vac\u00edo se hereda de Instrumento.indicador; sin ninguno de los dos la fila NO se publica (nunca se infiere por el texto de la dimensi\u00f3n).",
+   "fieldname": "indicador",
+   "fieldtype": "Link",
+   "label": "Indicador",
+   "options": "Indicador"
   },
   {
    "fieldname": "valor",

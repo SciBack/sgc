@@ -12,11 +12,18 @@ El DocType no tiene campo `estado` de flujo → NO lleva Workflow.
 
 `tabular_aplicacion` es el método whitelisted de agregación que consume un
 tablero: promedio simple, promedio ponderado por `n` y desglose por dimensión.
+
+`publicar_valores_indicador` es el PUENTE Encuestas -> Indicadores: al cerrar la
+`Aplicacion Instrumento` materializa un `Valor Indicador` (fuente "encuesta") por
+cada Indicador DECLARADO y escribe el back-link `valor_indicador` en las filas
+que lo sustentan. El enlace al Indicador es siempre EXPLÍCITO (campo `indicador`
+de la fila, o herencia de `Instrumento.indicador`): nunca se infiere desde el
+texto libre de `dimension`.
 """
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from frappe.utils import nowdate
+from frappe.utils import get_datetime, now_datetime, nowdate
 
 
 class ResultadoInstrumento(Document):
@@ -71,7 +78,7 @@ def tabular_aplicacion(aplicacion):
     filas = frappe.get_all(
         "Resultado Instrumento",
         filters={"aplicacion_instrumento": aplicacion},
-        fields=["dimension", "valor", "unidad", "n", "fecha_corte"],
+        fields=["dimension", "indicador", "valor", "unidad", "n", "fecha_corte"],
         order_by="dimension asc",
     )
 
@@ -92,7 +99,8 @@ def tabular_aplicacion(aplicacion):
         d = acum.setdefault(
             dim,
             {"dimension": dim, "n_resultados": 0, "valores": [],
-             "n": 0, "suma_pond": 0.0, "unidad": f.unidad},
+             "n": 0, "suma_pond": 0.0, "unidad": f.unidad,
+             "indicador": f.indicador},
         )
         d["n_resultados"] += 1
         if f.valor is not None:
@@ -102,6 +110,9 @@ def tabular_aplicacion(aplicacion):
         # Conserva la primera unidad no vacía vista para la dimensión.
         if not d["unidad"] and f.unidad:
             d["unidad"] = f.unidad
+        # Ídem con el indicador declarado (informativo para el tablero).
+        if not d["indicador"] and f.indicador:
+            d["indicador"] = f.indicador
 
     dimensiones = []
     for dim, d in acum.items():
@@ -110,6 +121,7 @@ def tabular_aplicacion(aplicacion):
         pct_muestra = round(d["n"] * 100.0 / n_total, 2) if n_total else None
         dimensiones.append({
             "dimension": dim,
+            "indicador": d["indicador"] or "",
             "unidad": d["unidad"] or "",
             "n_resultados": d["n_resultados"],
             "n": d["n"],
@@ -129,3 +141,194 @@ def tabular_aplicacion(aplicacion):
         "promedio_ponderado": promedio_ponderado,
         "dimensiones": dimensiones,
     }
+
+
+# ===========================================================================
+# Puente Encuestas -> Indicadores (A2)
+# ===========================================================================
+# Fuente que se estampa en `Valor Indicador.fuente`; también es la marca que
+# identifica los valores creados por ESTE motor (auto-sanación de duplicados).
+FUENTE_ENCUESTA = "encuesta"
+
+
+def publicar_valores_indicador(aplicacion):
+    """Materializa los `Valor Indicador` de una `Aplicacion Instrumento` cerrada.
+
+    Agrupa las filas de `Resultado Instrumento` POR INDICADOR DECLARADO:
+
+        indicador_de_la_fila = Resultado Instrumento.indicador
+                               or Instrumento.indicador (herencia de plantilla)
+
+    Nunca se infiere el Indicador desde `dimension` (texto libre): la fila sin
+    indicador declarado ni heredable se OMITE y se cuenta en el retorno.
+
+    Por grupo publica UN `Valor Indicador` con el promedio PONDERADO por `n`
+    (fallback a promedio simple si la suma de `n` es 0), `fuente="encuesta"`,
+    `calculado=1`, y el ámbito (periodo/programa-sede/unidad) copiado de la
+    aplicación. Es IDEMPOTENTE: la clave es el back-link
+    `Resultado Instrumento.valor_indicador` de las filas del grupo — si ya
+    apunta a un Valor Indicador vivo se actualiza ése; si no, se crea y se
+    escribe el back-link en TODAS las filas del grupo.
+
+    Devuelve un dict con `publicados` (uno por indicador), `omitidas`
+    (nº de filas sin indicador declarado) y `dimensiones_omitidas`.
+    """
+    if not aplicacion:
+        frappe.throw(_("Falta la aplicación de instrumento a publicar."))
+
+    apl = frappe.db.get_value(
+        "Aplicacion Instrumento",
+        aplicacion,
+        ["name", "instrumento", "periodo_academico", "programa_sede",
+         "unidad_organica", "fecha_fin"],
+        as_dict=True,
+    )
+    if not apl:
+        frappe.throw(_("La aplicación de instrumento {0} no existe.").format(aplicacion))
+
+    # Indicador de plantilla (1 por instrumento): se hereda cuando la fila no
+    # declara el suyo.
+    indicador_plantilla = (
+        frappe.db.get_value("Instrumento", apl.instrumento, "indicador")
+        if apl.instrumento
+        else None
+    )
+
+    filas = frappe.get_all(
+        "Resultado Instrumento",
+        filters={"aplicacion_instrumento": apl.name},
+        fields=["name", "dimension", "indicador", "valor", "unidad", "n", "valor_indicador"],
+        order_by="creation asc",
+    )
+
+    grupos = {}
+    omitidas = 0
+    dimensiones_omitidas = []
+    for f in filas:
+        indicador = f.indicador or indicador_plantilla
+        # Sin enlace explícito (ni heredado), o con un Link colgado: se omite.
+        if not indicador or not frappe.db.exists("Indicador", indicador):
+            omitidas += 1
+            dimensiones_omitidas.append(f.dimension or "")
+            continue
+        g = grupos.setdefault(
+            indicador,
+            {"filas": [], "valores": [], "n": 0, "suma_pond": 0.0, "unidad": f.unidad},
+        )
+        g["filas"].append(f)
+        # Solo las filas CON valor entran en la media: sumar el `n` de una fila
+        # sin valor inflaría el denominador y hundiría el ponderado.
+        #
+        # `valor` es un Float de Frappe => la columna es NOT NULL DEFAULT 0.0
+        # (verificado en Postgres), asi que una fila NUNCA llenada llega como
+        # 0.0 y es INDISTINGUIBLE de un 0 medido de verdad. Ante esa ambiguedad
+        # se elige el lado seguro: 0.0 se trata como "sin dato" y se OMITE.
+        # Publicar un 0 fantasma seria peor que omitir un 0 real -- este valor
+        # termina en un indicador reportado a SINEACE, y una omision queda
+        # visible en `omitidas`/`dimensiones_omitidas`, mientras que un 0
+        # inventado se reportaria como "0% de satisfaccion" sin dejar rastro.
+        # Si Calidad necesita registrar ceros reales, la via correcta es hacer
+        # el campo representable (p.ej. un `valor_declarado` Check) -- decision
+        # de negocio pendiente, no se asume aqui.
+        if f.valor:
+            g["valores"].append(f.valor)
+            g["n"] += (f.n or 0)
+            g["suma_pond"] += f.valor * (f.n or 0)
+        if not g["unidad"] and f.unidad:
+            g["unidad"] = f.unidad
+
+    # La fecha del valor es el corte real del campo (fin de la aplicación).
+    fecha = get_datetime(apl.fecha_fin) if apl.fecha_fin else now_datetime()
+
+    publicados = []
+    for indicador, g in grupos.items():
+        if not g["valores"]:
+            # Grupo sin ningún `valor` numérico: no hay nada que publicar.
+            omitidas += len(g["filas"])
+            dimensiones_omitidas.extend((f.dimension or "") for f in g["filas"])
+            continue
+
+        if g["n"]:
+            valor_num = round(g["suma_pond"] / g["n"], 4)     # ponderado por n
+        else:
+            valor_num = round(sum(g["valores"]) / len(g["valores"]), 4)  # simple
+
+        vi = _upsert_valor_indicador(apl, indicador, valor_num, g, fecha)
+
+        # Back-link en todas las filas que sustentan el valor. db.set_value con
+        # update_modified=False para no re-disparar validaciones en cadena ni
+        # ensuciar el `modified` de los resultados (mismo patrón que M06).
+        for f in g["filas"]:
+            if f.valor_indicador != vi:
+                frappe.db.set_value(
+                    "Resultado Instrumento", f.name, "valor_indicador", vi,
+                    update_modified=False,
+                )
+
+        publicados.append({
+            "indicador": indicador,
+            "valor_indicador": vi,
+            "valor_num": valor_num,
+            "n": g["n"],
+            "n_filas": len(g["filas"]),
+            "unidad": g["unidad"] or "",
+        })
+
+    publicados.sort(key=lambda x: x["indicador"])
+
+    return {
+        "aplicacion": apl.name,
+        "publicados": publicados,
+        "n_publicados": len(publicados),
+        "omitidas": omitidas,
+        "dimensiones_omitidas": dimensiones_omitidas,
+    }
+
+
+def _upsert_valor_indicador(apl, indicador, valor_num, grupo, fecha):
+    """Crea o actualiza el `Valor Indicador` del par (aplicación, indicador).
+
+    La identidad se resuelve por el back-link ya escrito en las filas del grupo
+    (no por los campos del Valor Indicador: los Links vacíos en Postgres son
+    ambiguos entre NULL y ''). Si el grupo apunta a más de un Valor Indicador
+    —dos publicaciones concurrentes— se conserva el más antiguo y se borran los
+    extras QUE ESTE MOTOR CREÓ (fuente "encuesta"), para que el tablero no
+    cuente el mismo indicador dos veces. Devuelve el `name`.
+    """
+    enlazados = [f.valor_indicador for f in grupo["filas"] if f.valor_indicador]
+    # Se re-consulta en vez de confiar en el back-link: el Valor Indicador pudo
+    # haberse borrado a mano (Link colgado) -> en ese caso se crea uno nuevo.
+    candidatos = frappe.get_all(
+        "Valor Indicador",
+        filters={"name": ["in", enlazados]},
+        pluck="name",
+        order_by="creation asc",
+    ) if enlazados else []
+
+    if candidatos:
+        vi = frappe.get_doc("Valor Indicador", candidatos[0])
+        for extra in candidatos[1:]:
+            if frappe.db.get_value("Valor Indicador", extra, "fuente") == FUENTE_ENCUESTA:
+                frappe.delete_doc(
+                    "Valor Indicador", extra, force=1, ignore_permissions=True
+                )
+    else:
+        vi = frappe.new_doc("Valor Indicador")
+
+    vi.indicador = indicador
+    vi.periodo_academico = apl.periodo_academico
+    vi.programa_sede = apl.programa_sede
+    vi.unidad_organica = apl.unidad_organica
+    vi.valor_num = valor_num
+    # `valor_texto` es Data(140): trazabilidad corta y truncada por seguridad.
+    vi.valor_texto = f"{apl.name} · n={grupo['n']}"[:140]
+    vi.calculado = 1
+    vi.fuente = FUENTE_ENCUESTA
+    vi.fecha = fecha
+    if not vi.registrado_por:
+        vi.registrado_por = frappe.session.user
+    vi.flags.ignore_permissions = True
+    # ignore_version evita ruido de versión al re-publicar en cada save.
+    vi.flags.ignore_version = True
+    vi.save(ignore_permissions=True)
+    return vi.name

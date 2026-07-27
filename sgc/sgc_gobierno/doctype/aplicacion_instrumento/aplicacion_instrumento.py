@@ -11,6 +11,10 @@ ciclo de campo de la encuesta mediante el Select `estado`:
 y por eso lleva Workflow nativo (`sgc/setup/f9_workflow_encuestas.py`). Las
 validaciones son INCREMENTALES por etapa (mismo patrón que No Conformidad, M05):
 cada estado exige, de forma acumulativa, lo que esa etapa requiere.
+
+Al llegar a "Cerrada" dispara el puente Encuestas -> Indicadores
+(`resultado_instrumento.publicar_valores_indicador`): los resultados tabulados
+se materializan como `Valor Indicador` (fuente "encuesta") para el motor A2.
 """
 import frappe
 from frappe import _
@@ -31,6 +35,21 @@ class AplicacionInstrumento(Document):
         self._validar_fechas()
         self._calcular_tasa_respuesta()
         self._validar_por_etapa()
+
+    def on_update(self):
+        """Al quedar Cerrada, publica los indicadores de la encuesta (A2).
+
+        `Aplicacion Instrumento` NO es submittable (los 3 estados del Workflow
+        F9 tienen doc_status "0"), así que no hay `on_submit`: el seam es
+        `on_update` comprobando el estado, porque `apply_workflow` hace
+        `doc.save()` -> validate -> on_update.
+
+        El puente es IDEMPOTENTE, así que re-guardar una aplicación ya cerrada
+        simplemente re-publica los mismos valores (y recoge los resultados que
+        se hayan cargado después del cierre).
+        """
+        if self.estado == "Cerrada":
+            self._publicar_indicadores()
 
     # ------------------------------------------------------------------ helpers
     def _validar_coherencia_muestral(self):
@@ -91,3 +110,27 @@ class AplicacionInstrumento(Document):
         )
 
         return tabular_aplicacion(self.name)
+
+    # ------------------------------------------------- puente -> indicadores
+    @frappe.whitelist()
+    def publicar_indicadores(self):
+        """Re-publica a mano los `Valor Indicador` de esta aplicación.
+
+        Espejo de `tabular()`: mismo seam único, pero de escritura. Existe
+        porque el disparo automático ocurre al guardar en estado "Cerrada"; si
+        se cargan resultados DESPUÉS del cierre (o se corrige el Indicador
+        declarado), Calidad puede re-publicar sin re-transicionar el workflow.
+        """
+        if self.estado != "Cerrada":
+            frappe.throw(
+                _("Solo se publican indicadores de una aplicación cerrada "
+                  "(estado actual: {0}).").format(self.estado or "-")
+            )
+        return self._publicar_indicadores()
+
+    def _publicar_indicadores(self):
+        from sgc.sgc_gobierno.doctype.resultado_instrumento.resultado_instrumento import (
+            publicar_valores_indicador,
+        )
+
+        return publicar_valores_indicador(self.name)
