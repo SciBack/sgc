@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { Button, LoadingText } from 'frappe-ui'
+import { Plus, Trash } from 'reicon-vue'
 import { useDoctypeMeta } from '@/composables/useDoctypeMeta'
 import FieldInput from './FieldInput.vue'
 
@@ -67,13 +68,13 @@ function removeRow(idx) {
     <label class="sb-field-label block">{{ label }}</label>
 
     <LoadingText v-if="loading" text="Cargando columnas…" />
-    <p v-else-if="error" class="rounded bg-surface-gray-1 px-2.5 py-1.5 text-p-sm text-ink-gray-6">
+    <p v-else-if="error" class="rounded bg-superficie-2 px-2.5 py-1.5 text-p-sm text-tinta-suave">
       No se pudieron cargar las columnas de «{{ field.options }}». Editar en el Desk.
     </p>
 
     <template v-else>
       <!-- Grilla: cabecera + una fila por registro. Scroll horizontal si no cabe. -->
-      <div v-if="safeRows.length" class="ctf-scroll overflow-x-auto rounded-xl border border-outline-gray-2">
+      <div v-if="safeRows.length" class="ctf-scroll overflow-x-auto rounded-xl border border-borde-fuerte">
         <div class="ctf-grid" :style="gridStyle" role="table">
           <!-- cabecera -->
           <div
@@ -101,11 +102,12 @@ function removeRow(idx) {
             <div v-if="!readOnly" class="ctf-cell ctf-cell-action">
               <button
                 type="button"
-                class="ctf-rm flex size-7 items-center justify-center rounded text-ink-gray-4 hover:bg-surface-gray-3 hover:text-ink-gray-7"
+                class="ctf-rm flex size-7 items-center justify-center rounded text-tinta-tenue hover:bg-superficie-3 hover:text-tinta-suave"
                 title="Eliminar fila"
+                aria-label="Eliminar fila"
                 @click="removeRow(idx)"
               >
-                <span class="lucide-trash-2 size-4" aria-hidden="true" />
+                <Trash :size="16" aria-hidden="true" />
               </button>
             </div>
           </template>
@@ -113,12 +115,12 @@ function removeRow(idx) {
       </div>
 
       <!-- estado vacío -->
-      <p v-else class="ctf-empty rounded-xl border border-dashed border-outline-gray-2 bg-surface-gray-1 px-3 py-3 text-center text-p-sm text-ink-gray-5">
+      <p v-else class="ctf-empty rounded-xl border border-dashed border-borde-fuerte bg-superficie-2 px-3 py-3 text-center text-p-sm text-tinta-tenue">
         Sin filas todavía.
       </p>
 
       <Button v-if="!readOnly" variant="ghost" size="sm" class="ctf-add" @click="addRow">
-        <template #prefix><span class="lucide-plus size-3.5" /></template>
+        <template #prefix><Plus :size="14" /></template>
         Agregar fila
       </Button>
     </template>
@@ -141,9 +143,9 @@ function removeRow(idx) {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.02em;
-  color: var(--ink-gray-5, #7c7c7c);
-  background-color: var(--surface-gray-1, #f4f4f6);
-  border-bottom: 1px solid var(--outline-gray-2, #e0e0e0);
+  color: var(--color-tinta-tenue);
+  background-color: var(--color-superficie-2);
+  border-bottom: 1px solid var(--color-borde-fuerte);
 }
 .ctf-head-action {
   padding: 0;
@@ -151,7 +153,7 @@ function removeRow(idx) {
 
 .ctf-cell {
   padding: 0.5rem 0.625rem;
-  border-bottom: 1px solid var(--outline-gray-1, #f0f0f0);
+  border-bottom: 1px solid var(--color-borde);
 }
 .ctf-cell-action {
   display: flex;

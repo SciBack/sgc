@@ -1,6 +1,7 @@
 <script setup>
 import { computed, reactive, ref, watch } from 'vue'
 import { Button, ErrorMessage, useCall, useDoctype } from 'frappe-ui'
+import { Plus, X } from 'reicon-vue'
 import { useDoctypeMeta } from '@/composables/useDoctypeMeta'
 import FieldInput from './FieldInput.vue'
 
@@ -100,12 +101,12 @@ async function removeLink(name) {
     <div class="flex items-center justify-between">
       <h3 class="sb-field-label">{{ title }}</h3>
       <Button v-if="!isNew && !adding" variant="ghost" size="sm" @click="startAdd">
-        <template #prefix><span class="lucide-plus size-3.5" /></template>
+        <template #prefix><Plus :size="14" aria-hidden="true" /></template>
         Vincular
       </Button>
     </div>
 
-    <p v-if="isNew" class="rounded-xl bg-surface-gray-1 px-3 py-2 text-p-xs text-ink-gray-5">
+    <p v-if="isNew" class="rounded-xl bg-superficie-2 px-3 py-2 text-p-xs text-tinta-tenue">
       Guarda primero para poder crear vínculos.
     </p>
 
@@ -114,29 +115,29 @@ async function removeLink(name) {
         <li
           v-for="row in rows"
           :key="row.name"
-          class="conn-row group flex items-center gap-2 rounded-xl border border-outline-gray-1 bg-surface-white px-3 py-2"
+          class="conn-row group flex items-center gap-2 rounded-xl border border-borde bg-superficie px-3 py-2"
         >
           <div class="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
             <span
               v-for="(v, i) in summaryOf(row)"
               :key="i"
-              class="truncate rounded bg-surface-gray-2 px-1.5 py-0.5 text-p-xs text-ink-gray-7"
+              class="truncate rounded bg-superficie-3 px-1.5 py-0.5 text-p-xs text-tinta-suave"
             >{{ v }}</span>
           </div>
           <button
             type="button"
-            class="conn-rm flex size-6 shrink-0 items-center justify-center rounded text-ink-gray-4 opacity-0 hover:bg-surface-gray-3 hover:text-ink-gray-7 group-hover:opacity-100"
+            class="conn-rm flex size-6 shrink-0 items-center justify-center rounded text-tinta-tenue opacity-0 hover:bg-superficie-3 hover:text-tinta-suave group-hover:opacity-100"
             title="Quitar vínculo"
             @click="removeLink(row.name)"
           >
-            <span class="lucide-x size-3.5" aria-hidden="true" />
+            <X :size="14" aria-hidden="true" />
           </button>
         </li>
       </ul>
-      <p v-else-if="!adding" class="text-p-xs text-ink-gray-4">Sin vínculos todavía.</p>
+      <p v-else-if="!adding" class="text-p-xs text-tinta-tenue">Sin vínculos todavía.</p>
 
       <!-- alta inline -->
-      <div v-if="adding" class="conn-form space-y-3 rounded-xl border border-outline-gray-2 bg-surface-gray-1 p-4">
+      <div v-if="adding" class="conn-form space-y-3 rounded-xl border border-borde-fuerte bg-superficie-2 p-4">
         <FieldInput
           v-for="f in formFields"
           :key="f.fieldname"

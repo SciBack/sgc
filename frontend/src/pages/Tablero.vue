@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useCall, ErrorMessage, LoadingText, PageHeaderTitle, ScrollArea } from 'frappe-ui'
+import { ChartBar } from 'reicon-vue'
 
 const CATEGORIA_LABEL = {
   Acreditacion: 'Acreditación',
@@ -65,7 +66,7 @@ function displayValue(row) {
       <section class="sb-hero mb-8 px-6 py-7 text-white sm:px-8">
         <div class="relative z-10 flex items-start gap-4">
           <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-white/10 text-marca-secundaria-300">
-            <span class="lucide-chart-no-axes-column-increasing size-5" aria-hidden="true" />
+            <ChartBar :size="20" aria-hidden="true" />
           </span>
           <div>
             <p class="text-xs font-bold uppercase tracking-[0.14em] text-white/65">Seguimiento institucional</p>
@@ -89,7 +90,7 @@ function displayValue(row) {
           <span class="h-1.5 w-1.5 rounded-full bg-marca-secundaria-500" aria-hidden="true" />
           {{ group.label }}
         </h2>
-        <div class="sb-card divide-y divide-outline-gray-1 overflow-hidden">
+        <div class="sb-card divide-y divide-borde overflow-hidden">
           <div
             v-for="row in group.items"
             :key="row.indicador"
@@ -100,9 +101,9 @@ function displayValue(row) {
                 <span class="rounded-lg bg-marca-primaria-50 px-2 py-1 font-mono text-xs font-semibold text-marca-primaria-700">
                   {{ row.indicador_codigo }}
                 </span>
-                <span class="truncate text-p-sm text-ink-gray-8">{{ row.indicador_nombre }}</span>
+                <span class="truncate text-p-sm text-tinta">{{ row.indicador_nombre }}</span>
               </div>
-              <div class="mt-0.5 text-p-xs text-ink-gray-4">{{ row.fuente }} · {{ row.fecha }}</div>
+              <div class="mt-0.5 text-p-xs text-tinta-tenue">{{ row.fuente }} · {{ row.fecha }}</div>
             </div>
             <div class="font-display text-2xl font-bold tabular-nums text-marca-primaria-700">{{ displayValue(row) }}</div>
           </div>

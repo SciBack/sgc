@@ -2,6 +2,7 @@
 import { useCall } from 'frappe-ui'
 import { useRouter } from 'vue-router'
 import { Button, PageHeaderTitle, ScrollArea, LoadingText, ErrorMessage } from 'frappe-ui'
+import { DocText, List, Plus } from 'reicon-vue'
 
 const router = useRouter()
 
@@ -53,15 +54,15 @@ function formatModified(value) {
     <div class="mx-auto max-w-7xl px-6 py-8 sm:px-8 xl:px-10">
       <div class="sb-page-heading mb-6">
         <div class="flex min-w-0 items-start gap-3">
-          <span class="sb-page-heading__icon" aria-hidden="true"><span class="lucide-list size-5" /></span>
+          <span class="sb-page-heading__icon" aria-hidden="true"><List :size="20" /></span>
           <div>
             <div class="sb-section-label">Gestión de registros</div>
             <PageHeaderTitle :title="doctype" class="mt-1" />
-            <p class="mt-1 text-p-sm text-ink-gray-5">Registros disponibles, ordenados por su última actualización.</p>
+            <p class="mt-1 text-p-sm text-tinta-tenue">Registros disponibles, ordenados por su última actualización.</p>
           </div>
         </div>
         <Button variant="solid" class="sb-primary-action btn-press shrink-0" :route="{ name: 'DocNew', params: { doctype } }">
-          <template #prefix><span class="lucide-plus size-4" aria-hidden="true" /></template>
+          <template #prefix><Plus :size="16" aria-hidden="true" /></template>
           Nuevo
         </Button>
       </div>
@@ -72,16 +73,16 @@ function formatModified(value) {
         Sin registros todavía.
       </p>
       <div v-else class="sb-card w-full overflow-hidden">
-        <div class="grid grid-cols-[minmax(0,1fr)_auto] gap-4 border-b border-outline-gray-1 bg-surface-gray-1 px-5 py-3 sm:grid-cols-[minmax(0,1fr)_11rem_4rem]">
+        <div class="grid grid-cols-[minmax(0,1fr)_auto] gap-4 border-b border-borde bg-superficie-2 px-5 py-3 sm:grid-cols-[minmax(0,1fr)_11rem_4rem]">
           <span class="sb-section-label">Registro</span>
           <span class="sb-section-label hidden sm:block">Actualizado</span>
           <span class="hidden sm:block" aria-hidden="true" />
         </div>
-        <div class="divide-y divide-outline-gray-1">
+        <div class="divide-y divide-borde">
           <div
             v-for="item in list.data"
             :key="item.name"
-            class="group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 py-3.5 transition-colors duration-150 hover:bg-surface-gray-1 sm:grid-cols-[minmax(0,1fr)_11rem_4rem]"
+            class="group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 py-3.5 transition-colors duration-150 hover:bg-superficie-2 sm:grid-cols-[minmax(0,1fr)_11rem_4rem]"
           >
             <button
               type="button"
@@ -89,18 +90,18 @@ function formatModified(value) {
               @click="openRow(item.name)"
             >
               <span class="flex size-9 shrink-0 items-center justify-center rounded-xl bg-marca-primaria-50 text-marca-primaria-700">
-                <span class="lucide-file-text size-4" aria-hidden="true" />
+                <DocText :size="16" aria-hidden="true" />
               </span>
               <span class="min-w-0">
-                <span class="block truncate text-p-base font-semibold text-ink-gray-8">{{ item.name }}</span>
-                <span class="mt-0.5 block text-p-xs text-ink-gray-5 sm:hidden">{{ formatModified(item.modified) }}</span>
+                <span class="block truncate text-p-base font-semibold text-tinta">{{ item.name }}</span>
+                <span class="mt-0.5 block text-p-xs text-tinta-tenue sm:hidden">{{ formatModified(item.modified) }}</span>
               </span>
             </button>
-            <time class="hidden text-right text-p-xs text-ink-gray-5 sm:block">{{ formatModified(item.modified) }}</time>
+            <time class="hidden text-right text-p-xs text-tinta-tenue sm:block">{{ formatModified(item.modified) }}</time>
             <a
               :href="deskUrl(item.name)"
               target="_blank"
-              class="justify-self-end rounded-lg px-2 py-1 text-p-xs font-semibold text-ink-gray-5 transition-colors hover:bg-marca-primaria-50 hover:text-marca-primaria-700"
+              class="justify-self-end rounded-lg px-2 py-1 text-p-xs font-semibold text-tinta-tenue transition-colors hover:bg-marca-primaria-50 hover:text-marca-primaria-700"
               @click.stop
             >
               Desk
@@ -108,7 +109,7 @@ function formatModified(value) {
           </div>
         </div>
       </div>
-      <p class="mt-4 text-p-xs text-ink-gray-5">
+      <p class="mt-4 text-p-xs text-tinta-tenue">
         Vista genérica dirigida por metadata (F2). El enlace "Desk" es un acceso directo de respaldo
         para administración.
       </p>

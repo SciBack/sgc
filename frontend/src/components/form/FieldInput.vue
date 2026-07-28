@@ -57,7 +57,7 @@ function rowsFor(fieldtype) {
 
   <div v-else-if="field.fieldtype === 'Dynamic Link'" class="space-y-1.5">
     <FormControl v-model="value" type="text" variant="outline" :label="hideLabel ? undefined : label" :disabled="readOnly" />
-    <p v-if="!hideLabel" class="text-p-xs text-ink-gray-4">
+    <p v-if="!hideLabel" class="text-p-xs text-tinta-tenue">
       Enlace dinámico — el tipo de documento lo define otro campo. Si no es evidente, editar desde el Desk.
     </p>
   </div>

@@ -39,11 +39,39 @@ export default {
             800: 'var(--color-marca-secundaria-800)',
           },
         },
-        sciback: {
-          fondo: 'var(--color-fondo)',
-          superficie: 'var(--color-superficie)',
-          borde: 'var(--color-borde)',
-          tinta: 'var(--color-tinta)',
+        // Semánticos canónicos, SIN namespace: el estilo SciBack los escribe
+        // `bg-superficie`, `text-tinta-tenue`, `border-borde`. Antes vivían bajo
+        // `sciback-*` y solo estaban 4 de los 13, así que escribir la clase del
+        // canon no generaba NADA y el estilo se perdía en silencio — el error nº2
+        // del catálogo del método, que ni `tsc` ni el linter detectan.
+        // Se declaran COMPLETOS a propósito: una escala a medias es justo lo que
+        // hace que una clase válida no exista.
+        fondo: 'var(--color-fondo)',
+        superficie: {
+          DEFAULT: 'var(--color-superficie)',
+          2: 'var(--color-superficie-2)',
+          3: 'var(--color-superficie-3)',
+        },
+        borde: {
+          DEFAULT: 'var(--color-borde)',
+          fuerte: 'var(--color-borde-fuerte)',
+        },
+        tinta: {
+          DEFAULT: 'var(--color-tinta)',
+          suave: 'var(--color-tinta-suave)',
+          tenue: 'var(--color-tinta-tenue)',
+        },
+        info: 'var(--color-info)',
+        exito: 'var(--color-exito)',
+        aviso: 'var(--color-aviso)',
+        peligro: 'var(--color-peligro)',
+        rejilla: 'var(--color-rejilla)',
+        serie: {
+          1: 'var(--color-serie-1)',
+          2: 'var(--color-serie-2)',
+          3: 'var(--color-serie-3)',
+          4: 'var(--color-serie-4)',
+          5: 'var(--color-serie-5)',
         },
       },
       fontFamily: {

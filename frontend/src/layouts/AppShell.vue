@@ -13,6 +13,7 @@ import {
   SidebarLabel,
   useTheme,
 } from 'frappe-ui'
+import { Chart, Exit, Gauge, Layout, Moon, Search, Sun } from 'reicon-vue'
 import { AREAS } from '@/data/areas'
 import { useSessionStore } from '@/stores/session'
 
@@ -68,7 +69,7 @@ const breadcrumbs = computed(() => {
 const userMenu = [
   {
     label: 'Cerrar sesión',
-    icon: 'lucide-log-out',
+    icon: Exit,
     onClick: () => session.logout(),
   },
 ]
@@ -86,7 +87,7 @@ const initials = computed(() =>
 </script>
 
 <template>
-  <div class="sgc-shell h-screen w-full bg-surface-base text-ink-gray-9">
+  <div class="sgc-shell h-screen w-full bg-fondo text-tinta">
     <DesktopShell>
       <template #sidebar>
         <Sidebar
@@ -118,19 +119,19 @@ const initials = computed(() =>
             <nav class="space-y-0.5">
               <SidebarItem :to="{ name: 'Home' }">
                 <template #prefix>
-                  <span class="lucide-layout-dashboard size-4" aria-hidden="true" />
+                  <Layout :size="16" aria-hidden="true" />
                 </template>
                 <span class="flex-1 truncate text-sm">Inicio</span>
               </SidebarItem>
               <SidebarItem :to="{ name: 'TableroEjecutivo' }">
                 <template #prefix>
-                  <span class="lucide-gauge size-4" aria-hidden="true" />
+                  <Gauge :size="16" aria-hidden="true" />
                 </template>
                 <span class="flex-1 truncate text-sm">Tablero ejecutivo</span>
               </SidebarItem>
               <SidebarItem :to="{ name: 'Tablero' }">
                 <template #prefix>
-                  <span class="lucide-bar-chart-3 size-4" aria-hidden="true" />
+                  <Chart :size="16" aria-hidden="true" />
                 </template>
                 <span class="flex-1 truncate text-sm">Tablero de indicadores</span>
               </SidebarItem>
@@ -147,7 +148,7 @@ const initials = computed(() =>
                   :to="{ name: 'DoctypeList', params: { doctype: item.doctype } }"
                 >
                   <template #prefix>
-                    <span :class="item.icon || area.icon" class="size-4" aria-hidden="true" />
+                    <component :is="item.icon || area.icon" :size="16" aria-hidden="true" />
                   </template>
                   <span class="flex-1 truncate text-sm">{{ item.label }}</span>
                 </SidebarItem>
@@ -175,22 +176,22 @@ const initials = computed(() =>
         <Breadcrumbs :items="breadcrumbs" />
         <div class="flex items-center gap-3">
           <div
-            class="hidden items-center gap-2 rounded-md border border-outline-gray-2 bg-surface-gray-1 px-3 py-1.5 text-sm text-ink-gray-5 sm:flex"
+            class="hidden items-center gap-2 rounded-md border border-borde-fuerte bg-superficie-2 px-3 py-1.5 text-sm text-tinta-tenue sm:flex"
             title="Búsqueda global — próximamente"
           >
-            <span class="lucide-search size-3.5" aria-hidden="true" />
+            <Search :size="16" aria-hidden="true" />
             <span>Buscar en el sistema…</span>
           </div>
           <button
             type="button"
-            class="sgc-theme-toggle flex size-9 items-center justify-center rounded-md border border-outline-gray-2 bg-surface-white text-ink-gray-6"
+            class="sgc-theme-toggle flex size-9 items-center justify-center rounded-md border border-borde-fuerte bg-superficie text-tinta-suave"
             :aria-label="themeActionLabel"
             :title="themeActionLabel"
             @click="toggleTheme"
           >
-            <span
-              :class="currentTheme === 'dark' ? 'lucide-sun' : 'lucide-moon'"
-              class="size-4"
+            <component
+              :is="currentTheme === 'dark' ? Sun : Moon"
+              :size="16"
               aria-hidden="true"
             />
           </button>

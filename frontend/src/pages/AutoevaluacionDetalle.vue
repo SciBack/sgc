@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { Button, ErrorMessage, LoadingText, ScrollArea, useCall, useDoc } from 'frappe-ui'
+import { ClipboardCheck, DocText } from 'reicon-vue'
 import EstandarCard from '@/components/autoevaluacion/EstandarCard.vue'
 import CriterioRow from '@/components/autoevaluacion/CriterioRow.vue'
 import WorkflowActions from '@/components/workflow/WorkflowActions.vue'
@@ -91,7 +92,7 @@ async function criterionUpdated() {
           <div class="relative z-10 flex flex-wrap items-start justify-between gap-5">
             <div class="flex items-start gap-4">
               <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-white/10 text-marca-secundaria-300">
-                <span class="lucide-clipboard-check size-5" aria-hidden="true" />
+                <ClipboardCheck :size="20" aria-hidden="true" />
               </span>
               <div>
                 <p class="text-xs font-bold uppercase tracking-[0.14em] text-white/65">Autoevaluación</p>
@@ -108,7 +109,7 @@ async function criterionUpdated() {
               </div>
               <a :href="informeUrl" target="_blank">
                 <Button variant="solid" class="btn-press border-white/15 bg-white !text-marca-primaria-700 hover:bg-marca-secundaria-50">
-                  <template #prefix><span class="lucide-file-text size-4" aria-hidden="true" /></template>
+                  <template #prefix><DocText :size="16" aria-hidden="true" /></template>
                   Generar informe
                 </Button>
               </a>
@@ -131,7 +132,7 @@ async function criterionUpdated() {
             @updated="standardUpdated"
           >
             <template #criterios>
-              <div v-if="criterios.loading && !criterios.data" class="text-p-xs text-ink-gray-4">Cargando criterios…</div>
+              <div v-if="criterios.loading && !criterios.data" class="text-p-xs text-tinta-tenue">Cargando criterios…</div>
               <CriterioRow v-for="c in criteriosDe(e.em_codigo)" :key="c.name" :row="c" @updated="criterionUpdated" />
             </template>
           </EstandarCard>
