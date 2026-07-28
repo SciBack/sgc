@@ -111,6 +111,12 @@ async function criterionUpdated() {
                 <div class="text-2xl font-bold tabular-nums text-marca-secundaria-300">{{ doc.doc.avance_pct }}%</div>
                 <div class="text-xs font-semibold uppercase tracking-[0.08em] text-white/65">Avance</div>
               </div>
+              <!-- Superficie de marca FIJA, ciega al tema a propósito (método §1.5):
+                   este botón vive dentro del `.sb-hero`, que es navy en modo claro y
+                   en oscuro. Por eso el blanco y el oro NO se derivan de
+                   `--color-superficie` como el resto: aquí el fondo no cambia nunca.
+                   El comentario existe para que el aviso de `verificar-clases-color`
+                   se pueda dar por revisado en vez de "arreglarlo" y romperlo. -->
               <a :href="informeUrl" target="_blank">
                 <Boton variante="primario" class="border-white/15 bg-white text-marca-primaria-700 hover:bg-marca-secundaria-50">
                   <DocText :size="16" aria-hidden="true" />
