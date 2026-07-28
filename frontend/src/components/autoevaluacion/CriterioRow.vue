@@ -66,7 +66,7 @@ const estadoTheme = {
   <div class="rounded-xl border border-borde bg-superficie p-4">
     <div class="flex flex-wrap items-center gap-3">
       <div class="min-w-0 flex-1">
-        <span class="rounded-lg bg-marca-primaria-50 px-2 py-1 font-mono text-xs font-semibold text-marca-primaria-700">
+        <span class="rounded-lg superficie-marca px-2 py-1 font-mono text-xs font-semibold ">
           {{ row.cr_codigo }}
         </span>
         <span class="ml-2 text-sm text-tinta">{{ row.cr_denominacion }}</span>

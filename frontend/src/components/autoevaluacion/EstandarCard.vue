@@ -50,7 +50,7 @@ async function confirm() {
 <template>
   <div class="sb-card p-5">
     <div class="mb-4 flex items-start gap-3">
-      <span class="rounded-lg bg-marca-primaria-50 px-2 py-1 font-mono text-xs font-semibold text-marca-primaria-700">
+      <span class="rounded-lg superficie-marca px-2 py-1 font-mono text-xs font-semibold ">
         {{ row.em_codigo }}
       </span>
       <div class="min-w-0 flex-1">

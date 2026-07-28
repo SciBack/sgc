@@ -95,7 +95,7 @@ function abrirAcceso(a) {
           class="btn-press flex w-full items-center gap-3 px-5 py-4 text-left transition-[background-color] duration-150 hover:bg-superficie-2"
           @click="guiaAbierta = !guiaAbierta"
         >
-          <span class="flex size-9 shrink-0 items-center justify-center rounded-xl bg-marca-primaria-50 text-marca-primaria-700">
+          <span class="flex size-9 shrink-0 items-center justify-center rounded-xl superficie-marca">
             <Compass :size="16" aria-hidden="true" />
           </span>
           <span class="flex-1">
@@ -128,7 +128,7 @@ function abrirAcceso(a) {
           </p>
           <ol class="space-y-2">
             <li v-for="(paso, i) in guia.pasos" :key="i" class="flex gap-2.5 text-sm text-tinta-suave">
-              <span class="flex size-5 shrink-0 items-center justify-center rounded-full bg-marca-primaria-50 text-xs font-bold text-marca-primaria-700">
+              <span class="flex size-5 shrink-0 items-center justify-center rounded-full superficie-marca text-xs font-bold ">
                 {{ i + 1 }}
               </span>
               <span>{{ paso }}</span>
@@ -155,7 +155,7 @@ function abrirAcceso(a) {
           <h2 class="text-lg font-semibold text-tinta">Autoevaluaciones</h2>
           <span
             v-if="!panel.loading && programasTotal"
-            class="rounded-full bg-marca-primaria-50 px-2.5 py-0.5 text-xs font-semibold text-marca-primaria-700"
+            class="rounded-full superficie-marca px-2.5 py-0.5 text-xs font-semibold "
           >
             {{ autoevals.length }} de {{ programasTotal }} programas iniciados
           </span>
@@ -278,7 +278,7 @@ function abrirAcceso(a) {
             @click="abrirAcceso(a)"
           >
             <span
-              class="flex size-10 items-center justify-center rounded-xl bg-marca-primaria-50 text-marca-primaria-700 transition-[background-color,color] duration-150 group-hover:bg-marca-primaria-700 group-hover:text-white"
+              class="flex size-10 items-center justify-center rounded-xl superficie-marca transition-[background-color,color] duration-150 group-hover:bg-marca-primaria-700 group-hover:text-white"
             >
               <component :is="a.icon" :size="20" aria-hidden="true" />
             </span>

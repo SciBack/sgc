@@ -108,7 +108,7 @@ function abrirAutoeval(p) {
       <template v-else>
         <!-- Cobertura + mejora -->
         <section class="mb-6 grid gap-3 sm:grid-cols-3">
-          <div class="sb-card bg-gradient-to-b from-marca-primaria-50 to-superficie p-5 sm:col-span-2">
+          <div class="sb-card bg-gradient-to-b from-[color-mix(in_srgb,var(--color-marca-primaria-500)_10%,var(--color-superficie))] to-superficie p-5 sm:col-span-2">
             <div class="text-xs font-semibold uppercase tracking-wide text-marca-primaria-700 opacity-75">
               Cobertura de autoevaluación
             </div>

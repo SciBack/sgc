@@ -102,7 +102,7 @@ function displayValue(row) {
           >
             <div class="min-w-0">
               <div class="flex items-center gap-2">
-                <span class="rounded-lg bg-marca-primaria-50 px-2 py-1 font-mono text-xs font-semibold text-marca-primaria-700">
+                <span class="rounded-lg superficie-marca px-2 py-1 font-mono text-xs font-semibold ">
                   {{ row.indicador_codigo }}
                 </span>
                 <span class="truncate text-sm text-tinta">{{ row.indicador_nombre }}</span>

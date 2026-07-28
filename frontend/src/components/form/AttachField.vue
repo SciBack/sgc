@@ -58,7 +58,7 @@ function onSuccess(fileDoc) {
       />
       <span
         v-else
-        class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-marca-primaria-50 text-marca-primaria-700"
+        class="flex size-10 shrink-0 items-center justify-center rounded-xl superficie-marca"
         aria-hidden="true"
       >
         <DocText :size="20" />

@@ -10,6 +10,14 @@
  * Estado activo del estilo §3.1: fondo blanco al 14% + filete de 2px de la marca
  * secundaria a la izquierda. Reconocible sin ser estridente; los inactivos
  * quedan al 72%.
+ *
+ * `isExactActive`, NO `isActive`. Detectado mirando la pantalla renderizada: con
+ * `isActive`, «Inicio» —que apunta a `/sgc/`— salía resaltado en TODAS las
+ * páginas, porque su ruta es ancestro de cualquier otra. Se veían dos entradas
+ * encendidas a la vez y, peor, había dos `aria-current="page"` en el mismo
+ * documento: un lector de pantalla anuncia dos «páginas actuales».
+ * Todas las entradas de este lateral apuntan a rutas hoja, así que la
+ * coincidencia exacta es la correcta para todas.
  */
 import { cn } from '@/lib/utils'
 
@@ -18,7 +26,7 @@ defineProps({ to: { type: [Object, String], required: true } })
 
 <template>
   <RouterLink
-    v-slot="{ isActive, href, navigate }"
+    v-slot="{ isExactActive: isActive, href, navigate }"
     :to="to"
     custom
   >

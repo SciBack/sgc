@@ -88,8 +88,15 @@ const userMenu = [{ label: 'Cerrar sesión', icon: Exit, onClick: () => session.
     >
       <!-- La marca es el acceso a Inicio. Feedback de press sutil: es navegación
            ocasional, no una acción que se repita cientos de veces al día. -->
+      <!-- `aria-current-value="false"` no es un adorno. RouterLink marca
+           `aria-current="page"` por su cuenta al coincidir la ruta, y como la
+           marca tambien lleva a Inicio, en la portada habia DOS elementos
+           anunciandose como pagina actual: el logo y la entrada «Inicio». La
+           marca es un atajo, no la posicion en el menu. Detectado leyendo el DOM
+           renderizado; no lo ve ningun verificador ni el build. -->
       <RouterLink
         :to="{ name: 'Home' }"
+        aria-current-value="false"
         class="brand-header group block shrink-0 px-4 pb-3 pt-4 focus-visible:outline-none"
       >
         <div

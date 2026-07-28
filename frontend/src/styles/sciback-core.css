@@ -61,6 +61,23 @@ html[data-theme='dark'] {
 .campo:disabled { opacity: 0.6; cursor: not-allowed; }
 @media (prefers-reduced-motion: reduce) { .campo { transition: none; } }
 
+/* Superficie TENUE DE MARCA (teselas de icono, chips de código, contadores).
+   Detectado mirando la pantalla en modo oscuro: se usaba `bg-marca-primaria-50`
+   con `text-marca-primaria-700` encima, y la escala de marca NO conmuta con el
+   tema —la institución la declara una sola vez—. Resultado: 14 parches casi
+   blancos flotando sobre el fondo oscuro.
+   Se mezcla con `--color-superficie` en vez de con `transparent`, y por eso
+   sigue al tema solo. La tinta se sube a `marca-primaria-300` de noche: bajar
+   el fondo sin subir la tinta habría dejado navy sobre navy. */
+.superficie-marca {
+  background-color: color-mix(in srgb, var(--color-marca-primaria-500) 10%, var(--color-superficie));
+  color: var(--color-marca-primaria-700);
+}
+html[data-theme='dark'] .superficie-marca {
+  background-color: color-mix(in srgb, var(--color-marca-primaria-500) 22%, var(--color-superficie));
+  color: var(--color-marca-primaria-300);
+}
+
 /* Superficies TENUES de estado.
    El canon define los estados como TINTA (--color-exito/aviso/peligro) y las
    superficies como neutras (superficie-1/2/3): no hay «superficie de peligro».
@@ -100,8 +117,15 @@ html[data-theme='dark'] {
   flex: none;
   place-items: center;
   border-radius: 0.75rem;
-  background: var(--color-marca-primaria-50);
+  background: color-mix(in srgb, var(--color-marca-primaria-500) 10%, var(--color-superficie));
   color: var(--color-marca-primaria-700);
+}
+
+/* La tinta también sube de noche. Oscurecer el fondo sin tocarla dejaba el navy
+   de `marca-primaria-700` sobre un fondo casi igual de oscuro: ilegible. */
+html[data-theme='dark'] .sb-page-heading__icon {
+  background: color-mix(in srgb, var(--color-marca-primaria-500) 22%, var(--color-superficie));
+  color: var(--color-marca-primaria-300);
 }
 
 .sb-empty-state {

@@ -93,7 +93,7 @@ function formatModified(value) {
               class="btn-press flex min-w-0 items-center gap-3 text-left"
               @click="openRow(item.name)"
             >
-              <span class="flex size-9 shrink-0 items-center justify-center rounded-xl bg-marca-primaria-50 text-marca-primaria-700">
+              <span class="flex size-9 shrink-0 items-center justify-center rounded-xl superficie-marca">
                 <DocText :size="16" aria-hidden="true" />
               </span>
               <span class="min-w-0">
@@ -105,7 +105,7 @@ function formatModified(value) {
             <a
               :href="deskUrl(item.name)"
               target="_blank"
-              class="justify-self-end rounded-lg px-2 py-1 text-xs font-semibold text-tinta-tenue transition-colors hover:bg-marca-primaria-50 hover:text-marca-primaria-700"
+              class="justify-self-end rounded-lg px-2 py-1 text-xs font-semibold text-tinta-tenue transition-colors hover:superficie-marca"
               @click.stop
             >
               Desk
