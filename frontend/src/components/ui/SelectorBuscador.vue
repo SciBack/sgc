@@ -1,13 +1,26 @@
 <script setup>
 /**
- * Selector con búsqueda. Reemplaza al `Combobox` de frappe-ui.
+ * Selector con búsqueda. Sobre las primitivas Combobox de reka-ui.
  *
- * Sobre reka-ui: teclado (flechas, Enter, Esc), foco y accesibilidad ya
- * resueltos por la primitiva. Aquí solo se pone el aspecto de la casa.
+ * ES EL ÚNICO COMPONENTE QUE NO ENVUELVE UNO DEL REGISTRO, y conviene dejar
+ * escrito el porqué para que nadie lo "arregle" migrándolo.
  *
- * Emite `update:query` para que el llamador busque en el servidor — así el
- * componente no sabe de dónde salen las opciones y sirve igual para una lista
- * fija que para un Link a un DocType.
+ * El combobox de shadcn-vue se compone de `Popover` + `Command`, y `Command`
+ * FILTRA EN CLIENTE de forma incondicional (`useFilter` + `filterItems`, sin
+ * prop para desactivarlo). Aquí las opciones llegan YA filtradas por el servidor
+ * de Frappe, que busca a la vez por `name` y por título. Pasarlas por su
+ * `contains` volvería a cribarlas y escondería resultados válidos — un documento
+ * encontrado por su título desaparecería por no contener el texto en su `name`.
+ * Sería una pérdida de datos silenciosa, no una diferencia estética.
+ *
+ * La primitiva SÍ es la misma que usa shadcn (reka-ui), así que el teclado
+ * —flechas, Enter, Esc—, el foco y la accesibilidad vienen igual de resueltos.
+ * El aspecto se escribe con los mismos tokens semánticos que los componentes del
+ * registro (`bg-popover`, `border-input`…), de modo que no desentona.
+ *
+ * Emite `update:query` para que el llamador busque en el servidor: el componente
+ * no sabe de dónde salen las opciones y sirve igual para una lista fija que para
+ * un Link a un DocType.
  */
 import { computed } from 'vue'
 import {
@@ -42,10 +55,12 @@ const etiquetaActual = computed(
     @update:model-value="emit('update:modelValue', $event)"
   >
     <ComboboxAnchor
-      :class="cn('campo flex h-11 w-full items-center gap-2 rounded-xl px-3 text-sm', disabled && 'opacity-60')"
+      :class="cn('border-input flex h-11 w-full items-center gap-2 rounded-xl border bg-transparent px-3 text-sm',
+         'transition-[color,box-shadow] focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-3',
+         disabled && 'opacity-60')"
     >
       <ComboboxInput
-        class="flex-1 bg-transparent outline-none placeholder:text-tinta-tenue"
+        class="flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
         :placeholder="placeholder"
         :display-value="() => etiquetaActual"
         @input="emit('update:query', $event.target.value)"
@@ -58,7 +73,7 @@ const etiquetaActual = computed(
 
     <ComboboxContent
       :class="[
-        'absolute z-50 mt-1 w-full overflow-hidden rounded-xl border border-borde bg-superficie shadow-xl',
+        'absolute z-50 mt-1 w-full overflow-hidden rounded-xl border bg-popover text-popover-foreground shadow-md',
         // Entra con ease-out y desde scale(0.97), nunca desde 0: nada aparece de
         // la nada. Y desde su disparador, no desde el centro (estilo §6).
         'origin-[var(--reka-combobox-content-transform-origin)]',
@@ -68,12 +83,12 @@ const etiquetaActual = computed(
       position="popper"
     >
       <ComboboxViewport class="max-h-60 overflow-y-auto p-1">
-        <ComboboxEmpty class="px-3 py-2 text-sm text-tinta-tenue">Sin resultados</ComboboxEmpty>
+        <ComboboxEmpty class="px-3 py-2 text-sm text-muted-foreground">Sin resultados</ComboboxEmpty>
         <ComboboxItem
           v-for="o in normalizadas"
           :key="o.value"
           :value="o.value"
-          class="flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 text-sm text-tinta data-[highlighted]:bg-superficie-2 data-[highlighted]:outline-none"
+          class="flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 text-sm text-tinta data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground data-[highlighted]:outline-none"
         >
           <span class="min-w-0">
             <span class="block truncate">{{ o.label }}</span>
@@ -82,7 +97,7 @@ const etiquetaActual = computed(
             <span v-if="o.description" class="block truncate text-xs text-tinta-tenue">{{ o.description }}</span>
           </span>
           <ComboboxItemIndicator>
-            <Check :size="16" class="text-marca-primaria-700" aria-hidden="true" />
+            <Check :size="16" class="text-primary" aria-hidden="true" />
           </ComboboxItemIndicator>
         </ComboboxItem>
       </ComboboxViewport>

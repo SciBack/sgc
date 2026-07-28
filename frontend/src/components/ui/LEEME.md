@@ -51,3 +51,20 @@ local con `@fontsource`, y el import externo añadía una dependencia de red y
 filtraba la IP de cada usuario a un tercero.
 
 Si alguien vuelve a correr `init`, hay que revisar el diff de `style.css` entero.
+
+## Lo que NO se adopta, y por qué
+
+Traer todo del registro por seguir la forma sería un error. Dos casos medidos:
+
+**`Cargando`** — el registro tiene `spinner`. Se trajo, se leyó y se descartó:
+es un icono de lucide con `animate-spin`, sin texto ni `aria-live`. El nuestro
+avisa a los lectores de pantalla y no obliga a un segundo pack de iconos.
+
+**`SelectorBuscador`** — el combobox de shadcn es `Popover` + `Command`, y
+`Command` filtra en cliente sin poder desactivarlo. Aquí las opciones llegan ya
+filtradas por Frappe, que busca por `name` y por título a la vez; volver a
+cribarlas escondería resultados válidos. Sería pérdida de datos silenciosa, no
+una diferencia estética. Se queda sobre reka-ui, que es la misma primitiva.
+
+`TituloPagina` y `EnlaceLateral` tampoco tienen equivalente: el lateral del SGC
+es cromo de marca propio, no el `sidebar` de shadcn con su proveedor de estado.

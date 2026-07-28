@@ -1,5 +1,12 @@
 <script setup>
-/** Espera. Reemplaza al `LoadingText` de frappe-ui.
+/** Espera. Propio a propósito: el registro tiene `spinner`, pero NO es mejor.
+ *
+ *  Se trajo y se descartó tras leerlo: su `Spinner` es un icono de lucide con
+ *  `animate-spin` y nada más. No trae texto ni `aria-live`, así que quien use
+ *  lector de pantalla no se entera de que hay una espera en curso; y obligaría a
+ *  mantener un segundo pack de iconos solo para eso. Adoptarlo habría sido
+ *  cambiar algo mejor por algo peor por seguir la forma.
+ *
  *  Estilo §3: nunca un salto en seco. El spinner gira rápido a propósito —
  *  un spinner veloz hace percibir la carga como más corta con el mismo tiempo real. */
 import { Loader } from 'reicon-vue'

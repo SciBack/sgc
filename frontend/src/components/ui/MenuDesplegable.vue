@@ -1,17 +1,23 @@
 <script setup>
 /**
- * Menú desplegable. Reemplaza al `Dropdown` de frappe-ui.
+ * Menú desplegable. Envoltorio del `DropdownMenu` de shadcn-vue.
  *
- * Sobre reka-ui: foco atrapado, `Esc` cierra, navegación con flechas y cierre
- * al pulsar fuera vienen resueltos — no se rehacen a mano (estilo §6).
+ * Antes montaba las primitivas de reka-ui a mano con las animaciones escritas al
+ * vuelo. Los suyos ya traen el juego completo de estados —entrada y SALIDA, y
+ * el desplazamiento según el lado en que el menú acabe abriéndose— que yo había
+ * puesto solo para `state=open`: al cerrarse, el mío desaparecía de golpe.
  *
- * Escala desde SU DISPARADOR, no desde el centro: eso es un popover, y
- * confundirlo con un modal se nota aunque nadie sepa decir por qué (§6).
+ * Se conserva del original lo que sigue siendo doctrina de la casa (§6): escala
+ * desde SU DISPARADOR, no desde el centro. Confundir un popover con un modal se
+ * nota aunque nadie sepa decir por qué. Eso ya viene en su `DropdownMenuContent`
+ * vía `--reka-dropdown-menu-content-transform-origin`.
+ *
+ * La API por `opciones` se mantiene: el AppShell la usa y no hay motivo para
+ * obligar a componer seis componentes donde basta una lista.
  */
 import {
-  DropdownMenuRoot, DropdownMenuTrigger, DropdownMenuPortal,
-  DropdownMenuContent, DropdownMenuItem,
-} from 'reka-ui'
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 defineProps({
   opciones: { type: Array, default: () => [] }, // [{ label, icon, onClick }]
@@ -20,30 +26,24 @@ defineProps({
 </script>
 
 <template>
-  <DropdownMenuRoot>
+  <DropdownMenu>
     <DropdownMenuTrigger as-child>
       <slot />
     </DropdownMenuTrigger>
-    <DropdownMenuPortal>
-      <DropdownMenuContent
-        :align="alineacion"
-        :side-offset="6"
-        class="z-50 min-w-48 rounded-xl border border-borde bg-superficie p-1 shadow-xl
-               origin-[var(--reka-dropdown-menu-content-transform-origin)]
-               data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95
-               duration-150 ease-out motion-reduce:animate-none"
+    <DropdownMenuContent
+      :align="alineacion"
+      :side-offset="6"
+      class="min-w-48 rounded-xl"
+    >
+      <DropdownMenuItem
+        v-for="o in opciones"
+        :key="o.label"
+        class="cursor-pointer rounded-lg px-3 py-2 text-sm"
+        @select="o.onClick"
       >
-        <DropdownMenuItem
-          v-for="o in opciones"
-          :key="o.label"
-          class="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm text-tinta
-                 data-[highlighted]:bg-superficie-2 data-[highlighted]:outline-none"
-          @select="o.onClick"
-        >
-          <component :is="o.icon" v-if="o.icon" :size="16" aria-hidden="true" />
-          <span>{{ o.label }}</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenuPortal>
-  </DropdownMenuRoot>
+        <component :is="o.icon" v-if="o.icon" :size="16" aria-hidden="true" />
+        <span>{{ o.label }}</span>
+      </DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
 </template>

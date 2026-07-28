@@ -1,15 +1,22 @@
 <script setup>
-/** Chip de estado. Reemplaza al `Badge` de frappe-ui.
+/** Chip de estado. Envoltorio del `Badge` de shadcn-vue.
  *
  *  Estilo §3: SIEMPRE con texto, nunca color solo. El color acompaña al
  *  significado, no lo sustituye — la identidad de un estado no puede depender
  *  únicamente del tono (método §2.3).
+ *
+ *  Del suyo llegan detalles que el `<span>` pelado no tenía: dimensiona los SVG
+ *  interiores (`[&>svg]:size-3`), impide que el chip se encoja o parta línea
+ *  (`w-fit whitespace-nowrap shrink-0`) y trae anillo de foco para cuando el
+ *  chip sea un enlace. Sus cuatro variantes son de MARCA, no de estado, así que
+ *  se usa `outline` como base neutra y los tonos los pone la casa.
  *
  *  Los temas siguen nombrándose por COLOR (`green`, `blue`…) porque es la API
  *  que ya usaban las pantallas; se traducen aquí a tokens semánticos para no
  *  tener que tocar cada llamada. Lo nuevo debería pasar `tono` semántico.
  */
 import { computed } from 'vue'
+import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 
 const props = defineProps({
@@ -33,7 +40,6 @@ const TONOS = {
 const clases = computed(() => {
   const t = props.tono ?? DE_COLOR_A_TONO[props.theme] ?? 'neutro'
   return cn(
-    'inline-flex items-center gap-1 rounded-full border font-medium',
     props.size === 'sm' ? 'px-2 py-0.5 text-xs' : 'px-2.5 py-1 text-sm',
     TONOS[t] ?? TONOS.neutro,
   )
@@ -41,5 +47,5 @@ const clases = computed(() => {
 </script>
 
 <template>
-  <span :class="clases"><slot>{{ label }}</slot></span>
+  <Badge variant="outline" :class="clases"><slot>{{ label }}</slot></Badge>
 </template>
