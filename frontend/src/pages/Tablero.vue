@@ -1,7 +1,11 @@
 <script setup>
 import { computed } from 'vue'
-import { useCall, ErrorMessage, LoadingText, PageHeaderTitle, ScrollArea } from 'frappe-ui'
+import { useCall } from 'frappe-ui'
 import { ChartBar } from 'reicon-vue'
+import Alerta from '@/components/ui/Alerta.vue'
+import Cargando from '@/components/ui/Cargando.vue'
+import TituloPagina from '@/components/ui/TituloPagina.vue'
+import AreaScroll from '@/components/ui/AreaScroll.vue'
 
 const CATEGORIA_LABEL = {
   Acreditacion: 'Acreditación',
@@ -61,7 +65,7 @@ function displayValue(row) {
 </script>
 
 <template>
-  <ScrollArea class="min-h-0 flex-1">
+  <AreaScroll class="min-h-0 flex-1">
     <div class="mx-auto max-w-6xl px-6 py-8 sm:px-8 xl:px-10">
       <section class="sb-hero mb-8 px-6 py-7 text-white sm:px-8">
         <div class="relative z-10 flex items-start gap-4">
@@ -70,7 +74,7 @@ function displayValue(row) {
           </span>
           <div>
             <p class="text-xs font-bold uppercase tracking-[0.14em] text-white/65">Seguimiento institucional</p>
-            <PageHeaderTitle title="Tablero de indicadores" class="mt-1 text-white [&_h1]:text-white" />
+            <TituloPagina title="Tablero de indicadores" class="mt-1 text-white" />
             <p class="mt-2 max-w-2xl text-p-sm leading-6 text-white/75">
               Último valor calculado por indicador, agrupado por categoría.
             </p>
@@ -78,8 +82,8 @@ function displayValue(row) {
         </div>
       </section>
 
-      <LoadingText v-if="values.loading && !values.data" />
-      <ErrorMessage v-else-if="values.error" :message="values.error.message" />
+      <Cargando v-if="values.loading && !values.data" />
+      <Alerta v-else-if="values.error" :message="values.error.message" />
       <p v-else-if="!grouped.length" class="sb-empty-state text-p-sm">
         Todavía no hay valores calculados en este entorno. El motor de indicadores corre contra Oracle
         LAMB — en producción ya hay valores reales; en el lab de desarrollo esta tabla está vacía.
@@ -110,5 +114,5 @@ function displayValue(row) {
         </div>
       </section>
     </div>
-  </ScrollArea>
+  </AreaScroll>
 </template>

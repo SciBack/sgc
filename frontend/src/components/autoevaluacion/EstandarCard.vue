@@ -1,6 +1,10 @@
 <script setup>
 import { ref, watch } from 'vue'
-import { Badge, Button, ErrorMessage, FormControl, useCall } from 'frappe-ui'
+import { useCall } from 'frappe-ui'
+import Boton from '@/components/ui/Boton.vue'
+import Alerta from '@/components/ui/Alerta.vue'
+import Campo from '@/components/ui/Campo.vue'
+import EstadoBadge from '@/components/ui/EstadoBadge.vue'
 
 const props = defineProps({
   row: { type: Object, required: true },
@@ -54,7 +58,7 @@ async function confirm() {
         <div class="mt-2 flex flex-wrap items-center gap-2 text-p-xs text-tinta-tenue">
           <span>Nivel propuesto: <strong class="text-tinta">{{ row.nivel_propuesto || 'Pendiente' }}</strong></span>
           <span aria-hidden="true">·</span>
-          <Badge :label="row.confirmado ? 'Confirmado' : (row.estado || 'Borrador')" :theme="row.confirmado ? 'green' : 'gray'" variant="subtle" />
+          <EstadoBadge :label="row.confirmado ? 'Confirmado' : (row.estado || 'Borrador')" :theme="row.confirmado ? 'green' : 'gray'" />
           <span v-if="row.nivel_sigla">Oficial: <strong class="text-tinta">{{ row.nivel_sigla }}</strong></span>
         </div>
       </div>
@@ -74,21 +78,21 @@ async function confirm() {
           <option value="LP">LP · Logrado plenamente</option>
         </select>
       </label>
-      <FormControl type="textarea" variant="outline" label="Justificación" v-model="justificacion" :rows="3" />
+      <Campo type="textarea"
+            :rows="3" label="Justificación" v-model="justificacion" />
     </div>
 
     <div v-if="canConfirm" class="mt-4 flex flex-wrap items-center gap-3 border-t border-borde pt-4">
-      <Button
-        variant="solid"
-        class="sb-primary-action btn-press"
-        :loading="confirmation.loading"
-        :disabled="!nivelSigla"
+      <Boton
+        variante="primario"
+        :cargando="confirmation.loading"
+        :deshabilitado="!nivelSigla"
         @click="confirm"
       >
         {{ row.confirmado ? 'Actualizar confirmación' : 'Confirmar nivel' }}
-      </Button>
+      </Boton>
       <span v-if="saved" class="text-p-sm text-exito">Nivel confirmado.</span>
-      <ErrorMessage v-if="confirmation.error" :message="confirmation.error.message" />
+      <Alerta v-if="confirmation.error" :message="confirmation.error.message" />
     </div>
     <p v-else class="mt-4 rounded-lg bg-superficie-2 px-3 py-2 text-p-xs text-tinta-suave">
       La confirmación oficial corresponde a DPGC o al Responsable de Calidad del Programa.

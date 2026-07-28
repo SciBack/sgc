@@ -1,7 +1,8 @@
 <script setup>
 import { computed, ref } from 'vue'
-import { ScrollArea, useCall } from 'frappe-ui'
+import { useCall } from 'frappe-ui'
 import { useRouter } from 'vue-router'
+import AreaScroll from '@/components/ui/AreaScroll.vue'
 import { AngleDown, Check, ClipboardCheck, Compass, Flag, Link2, Paperclip, ShieldCheck } from 'reicon-vue'
 import { GUIAS_ROL } from '@/data/guias-rol'
 
@@ -60,7 +61,7 @@ function abrirAcceso(a) {
 </script>
 
 <template>
-  <ScrollArea class="min-h-0 flex-1">
+  <AreaScroll class="min-h-0 flex-1">
     <div class="sgc-home mx-auto max-w-7xl px-6 py-8 sm:px-8 xl:px-10">
       <!-- Hero SciBack: cromo institucional; los indicadores siguen siendo los
            mismos datos operativos de Inicio, no un módulo adicional. -->
@@ -290,5 +291,5 @@ function abrirAcceso(a) {
         El menú de la izquierda te lleva a cada área del sistema; las migas de pan (arriba) indican dónde estás.
       </p>
     </div>
-  </ScrollArea>
+  </AreaScroll>
 </template>

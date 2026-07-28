@@ -11,16 +11,28 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Alerta: typeof import('./src/components/ui/Alerta.vue')['default']
+    AreaScroll: typeof import('./src/components/ui/AreaScroll.vue')['default']
     AttachField: typeof import('./src/components/form/AttachField.vue')['default']
+    Avatar: typeof import('./src/components/ui/Avatar.vue')['default']
+    Boton: typeof import('./src/components/ui/Boton.vue')['default']
+    Campo: typeof import('./src/components/ui/Campo.vue')['default']
+    Cargando: typeof import('./src/components/ui/Cargando.vue')['default']
     ChildTableField: typeof import('./src/components/form/ChildTableField.vue')['default']
     CriterioRow: typeof import('./src/components/autoevaluacion/CriterioRow.vue')['default']
     DocConnections: typeof import('./src/components/form/DocConnections.vue')['default']
+    EnlaceLateral: typeof import('./src/components/ui/EnlaceLateral.vue')['default']
+    EstadoBadge: typeof import('./src/components/ui/EstadoBadge.vue')['default']
     EstandarCard: typeof import('./src/components/autoevaluacion/EstandarCard.vue')['default']
     FieldInput: typeof import('./src/components/form/FieldInput.vue')['default']
     LinkField: typeof import('./src/components/form/LinkField.vue')['default']
+    MenuDesplegable: typeof import('./src/components/ui/MenuDesplegable.vue')['default']
+    Migas: typeof import('./src/components/ui/Migas.vue')['default']
     NivelSelect: typeof import('./src/components/autoevaluacion/NivelSelect.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SelectorBuscador: typeof import('./src/components/ui/SelectorBuscador.vue')['default']
+    TituloPagina: typeof import('./src/components/ui/TituloPagina.vue')['default']
     WorkflowActions: typeof import('./src/components/workflow/WorkflowActions.vue')['default']
   }
 }

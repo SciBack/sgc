@@ -1,8 +1,10 @@
 <script setup>
 import { computed, reactive, ref, watch } from 'vue'
-import { Button, ErrorMessage, useCall, useDoctype } from 'frappe-ui'
+import { useCall, useDoctype } from 'frappe-ui'
 import { Plus, X } from 'reicon-vue'
 import { useDoctypeMeta } from '@/composables/useDoctypeMeta'
+import Boton from '@/components/ui/Boton.vue'
+import Alerta from '@/components/ui/Alerta.vue'
 import FieldInput from './FieldInput.vue'
 
 // Conexiones de un documento: lista y crea los registros de otro DocType que
@@ -100,10 +102,10 @@ async function removeLink(name) {
   <section class="space-y-3">
     <div class="flex items-center justify-between">
       <h3 class="sb-field-label">{{ title }}</h3>
-      <Button v-if="!isNew && !adding" variant="ghost" size="sm" @click="startAdd">
-        <template #prefix><Plus :size="14" aria-hidden="true" /></template>
+      <Boton v-if="!isNew && !adding" variante="fantasma" tamano="sm" @click="startAdd">
+        <Plus :size="14" aria-hidden="true" />
         Vincular
-      </Button>
+      </Boton>
     </div>
 
     <p v-if="isNew" class="rounded-xl bg-superficie-2 px-3 py-2 text-p-xs text-tinta-tenue">
@@ -145,9 +147,9 @@ async function removeLink(name) {
           :field="f"
         />
         <div class="flex items-center gap-2">
-          <Button variant="solid" size="sm" class="sb-primary-action btn-press" :loading="saving" @click="saveLink">Guardar vínculo</Button>
-          <Button variant="ghost" size="sm" @click="adding = false">Cancelar</Button>
-          <ErrorMessage v-if="saveError" :message="saveError.message" />
+          <Boton variante="primario" tamano="sm" :cargando="saving" @click="saveLink">Guardar vínculo</Boton>
+          <Boton variante="fantasma" tamano="sm" @click="adding = false">Cancelar</Boton>
+          <Alerta v-if="saveError" :message="saveError.message" />
         </div>
       </div>
     </template>

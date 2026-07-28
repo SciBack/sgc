@@ -1,7 +1,11 @@
 <script setup>
 import { computed } from 'vue'
-import { Button, ErrorMessage, LoadingText, ScrollArea, useCall, useDoc } from 'frappe-ui'
+import { useCall, useDoc } from 'frappe-ui'
 import { ClipboardCheck, DocText } from 'reicon-vue'
+import Boton from '@/components/ui/Boton.vue'
+import Alerta from '@/components/ui/Alerta.vue'
+import Cargando from '@/components/ui/Cargando.vue'
+import AreaScroll from '@/components/ui/AreaScroll.vue'
 import EstandarCard from '@/components/autoevaluacion/EstandarCard.vue'
 import CriterioRow from '@/components/autoevaluacion/CriterioRow.vue'
 import WorkflowActions from '@/components/workflow/WorkflowActions.vue'
@@ -82,10 +86,10 @@ async function criterionUpdated() {
 </script>
 
 <template>
-  <ScrollArea class="min-h-0 flex-1">
+  <AreaScroll class="min-h-0 flex-1">
     <div class="mx-auto max-w-6xl px-6 py-8 sm:px-8 xl:px-10">
-      <LoadingText v-if="doc.loading && !doc.doc" />
-      <ErrorMessage v-else-if="doc.error" :message="doc.error.message" />
+      <Cargando v-if="doc.loading && !doc.doc" />
+      <Alerta v-else-if="doc.error" :message="doc.error.message" />
 
       <template v-else-if="doc.doc">
         <section class="sb-hero mb-8 px-6 py-7 text-white sm:px-8">
@@ -108,10 +112,10 @@ async function criterionUpdated() {
                 <div class="text-xs font-semibold uppercase tracking-[0.08em] text-white/65">Avance</div>
               </div>
               <a :href="informeUrl" target="_blank">
-                <Button variant="solid" class="btn-press border-white/15 bg-white !text-marca-primaria-700 hover:bg-marca-secundaria-50">
-                  <template #prefix><DocText :size="16" aria-hidden="true" /></template>
+                <Boton variante="primario" class="border-white/15 bg-white text-marca-primaria-700 hover:bg-marca-secundaria-50">
+                  <DocText :size="16" aria-hidden="true" />
                   Generar informe
-                </Button>
+                </Boton>
               </a>
             </div>
           </div>
@@ -119,8 +123,8 @@ async function criterionUpdated() {
 
         <WorkflowActions class="mb-8" :document="doc.doc" @completed="workflowCompleted" />
 
-        <LoadingText v-if="estandares.loading && !estandares.data" />
-        <ErrorMessage v-else-if="estandares.error" :message="estandares.error.message" />
+        <Cargando v-if="estandares.loading && !estandares.data" />
+        <Alerta v-else-if="estandares.error" :message="estandares.error.message" />
 
         <div v-else class="space-y-5">
           <EstandarCard
@@ -139,5 +143,5 @@ async function criterionUpdated() {
         </div>
       </template>
     </div>
-  </ScrollArea>
+  </AreaScroll>
 </template>

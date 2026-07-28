@@ -1,8 +1,9 @@
 <script setup>
 import { computed } from 'vue'
-import { ScrollArea, useCall } from 'frappe-ui'
+import { useCall } from 'frappe-ui'
 import { Gauge } from 'reicon-vue'
 import { useRouter } from 'vue-router'
+import AreaScroll from '@/components/ui/AreaScroll.vue'
 
 const router = useRouter()
 
@@ -79,7 +80,7 @@ function abrirAutoeval(p) {
 </script>
 
 <template>
-  <ScrollArea class="min-h-0 flex-1">
+  <AreaScroll class="min-h-0 flex-1">
     <div class="mx-auto max-w-7xl px-6 py-8 sm:px-8 xl:px-10">
       <section class="sb-hero mb-8 px-6 py-7 text-white sm:px-8">
         <div class="relative z-10 flex flex-wrap items-end justify-between gap-5">
@@ -362,5 +363,5 @@ function abrirAutoeval(p) {
         </section>
       </template>
     </div>
-  </ScrollArea>
+  </AreaScroll>
 </template>

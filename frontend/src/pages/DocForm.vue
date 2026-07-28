@@ -1,8 +1,12 @@
 <script setup>
 import { computed, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { Button, ErrorMessage, LoadingText, ScrollArea, call, useDoc, useDoctype } from 'frappe-ui'
+import { call, useDoc, useDoctype } from 'frappe-ui'
 import { FileContent, Link2 } from 'reicon-vue'
+import Boton from '@/components/ui/Boton.vue'
+import Alerta from '@/components/ui/Alerta.vue'
+import Cargando from '@/components/ui/Cargando.vue'
+import AreaScroll from '@/components/ui/AreaScroll.vue'
 import { useDoctypeMeta } from '@/composables/useDoctypeMeta'
 import FieldInput from '@/components/form/FieldInput.vue'
 import DocConnections from '@/components/form/DocConnections.vue'
@@ -195,7 +199,7 @@ async function save() {
 </script>
 
 <template>
-  <ScrollArea class="min-h-0 flex-1">
+  <AreaScroll class="min-h-0 flex-1">
     <div class="mx-auto max-w-3xl px-5 py-6 sm:px-8">
       <div class="sb-page-heading mb-6">
         <div class="flex min-w-0 items-start gap-3">
@@ -212,9 +216,9 @@ async function save() {
         </a>
       </div>
 
-      <LoadingText v-if="metaLoading || (!isNew && doc.loading && !doc.doc)" />
-      <ErrorMessage v-else-if="metaError" :message="metaError.message" />
-      <ErrorMessage v-else-if="!isNew && doc.error" :message="doc.error.message" />
+      <Cargando v-if="metaLoading || (!isNew && doc.loading && !doc.doc)" />
+      <Alerta v-else-if="metaError" :message="metaError.message" />
+      <Alerta v-else-if="!isNew && doc.error" :message="doc.error.message" />
 
       <form v-else class="sb-form-card space-y-5" @submit.prevent="save">
         <div v-for="f in visibleFields" :key="f.fieldname">
@@ -228,11 +232,11 @@ async function save() {
         </div>
 
         <div class="flex items-center gap-3 border-t border-borde pt-5">
-          <Button variant="solid" class="sb-primary-action btn-press" type="submit" :loading="saving">
+          <Boton variante="primario" type="submit" :cargando="saving">
             {{ isNew ? 'Crear' : 'Guardar' }}
-          </Button>
+          </Boton>
           <span v-if="saved" class="text-p-sm text-exito">Guardado.</span>
-          <ErrorMessage v-if="saveError" :message="saveError.message" />
+          <Alerta v-if="saveError" :message="saveError.message" />
         </div>
       </form>
 
@@ -247,5 +251,5 @@ async function save() {
         />
       </div>
     </div>
-  </ScrollArea>
+  </AreaScroll>
 </template>

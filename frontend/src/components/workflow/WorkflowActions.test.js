@@ -18,16 +18,9 @@ const api = vi.hoisted(() => ({
   },
 }))
 
+// Solo se simula la capa de datos de frappe-ui; los componentes visuales
+// (Boton, Alerta) son los reales de la casa.
 vi.mock('frappe-ui', () => ({
-  Button: {
-    props: ['loading', 'disabled', 'variant'],
-    emits: ['click'],
-    template: '<button :disabled="disabled" @click="$emit(\'click\')"><slot /></button>',
-  },
-  ErrorMessage: {
-    props: ['message'],
-    template: '<p data-test="error">{{ message }}</p>',
-  },
   useCall: vi.fn((options) =>
     options.url.includes('get_transitions') ? api.transitions : api.apply,
   ),
@@ -89,7 +82,7 @@ describe('WorkflowActions', () => {
     await wrapper.get('button').trigger('click')
     await flushPromises()
 
-    expect(wrapper.get('[data-test="error"]').text()).toContain('Self approval is not allowed')
+    expect(wrapper.get('[role="alert"]').text()).toContain('Self approval is not allowed')
     expect(wrapper.emitted('completed')).toBeUndefined()
   })
 })

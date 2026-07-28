@@ -1,7 +1,11 @@
 <script setup>
 import { reactive, ref, watch } from 'vue'
-import { Badge, Button, ErrorMessage, FormControl, useCall, useDoctype } from 'frappe-ui'
+import { useCall, useDoctype } from 'frappe-ui'
 import { Link2 } from 'reicon-vue'
+import Alerta from '@/components/ui/Alerta.vue'
+import Boton from '@/components/ui/Boton.vue'
+import Campo from '@/components/ui/Campo.vue'
+import EstadoBadge from '@/components/ui/EstadoBadge.vue'
 
 const props = defineProps({
   row: { type: Object, required: true }, // Valoracion Criterio + cr_* joins
@@ -67,8 +71,8 @@ const estadoTheme = {
         </span>
         <span class="ml-2 text-p-sm text-tinta">{{ row.cr_denominacion }}</span>
       </div>
-      <FormControl type="select" variant="outline" v-model="values.cumple" :options="cumpleOptions" class="w-40" />
-      <Badge :label="row.estado || 'Pendiente'" :theme="row.estado === 'Valorado' ? 'blue' : 'gray'" variant="subtle" size="sm" />
+      <Campo type="select" v-model="values.cumple" :options="cumpleOptions" class="w-40" />
+      <EstadoBadge :label="row.estado || 'Pendiente'" :theme="row.estado === 'Valorado' ? 'blue' : 'gray'" size="sm" />
       <button
         type="button"
         class="text-p-xs text-tinta-tenue hover:text-tinta hover:underline"
@@ -76,15 +80,18 @@ const estadoTheme = {
       >
         {{ expanded ? 'ocultar detalle' : 'detalle' }}
       </button>
-      <Button size="sm" variant="solid" class="sb-primary-action btn-press" :loading="doctype.setValue.loading" @click="save">Guardar</Button>
+      <Boton tamano="sm" variante="primario" :cargando="doctype.setValue.loading" @click="save">Guardar</Boton>
       <span v-if="saved" class="text-p-xs text-exito">Guardado.</span>
     </div>
 
     <div v-if="expanded" class="detalle mt-3 space-y-4 border-t border-borde pt-3">
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <FormControl type="textarea" variant="outline" label="Observación" v-model="values.observacion" :rows="2" />
-        <FormControl type="textarea" variant="outline" label="Debilidad / OM" v-model="values.debilidad" :rows="2" />
-        <FormControl type="textarea" variant="outline" label="Comentario (sustento)" v-model="values.comentario" :rows="2" />
+        <Campo type="textarea"
+            :rows="2" label="Observación" v-model="values.observacion" />
+        <Campo type="textarea"
+            :rows="2" label="Debilidad / OM" v-model="values.debilidad" />
+        <Campo type="textarea"
+            :rows="2" label="Comentario (sustento)" v-model="values.comentario" />
       </div>
 
       <!-- Evidencias que sustentan el criterio -->
@@ -103,7 +110,7 @@ const estadoTheme = {
           >
             <span class="font-mono text-2xs font-semibold text-tinta-tenue">{{ ev.codigo }}</span>
             <span class="min-w-0 flex-1 truncate text-p-xs text-tinta" :title="ev.titulo">{{ ev.titulo }}</span>
-            <Badge :label="ev.estado" :theme="estadoTheme[ev.estado] || 'gray'" variant="subtle" size="sm" />
+            <EstadoBadge :label="ev.estado" :theme="estadoTheme[ev.estado] || 'gray'" size="sm" />
             <a
               v-if="ev.archivo"
               :href="ev.archivo"
@@ -121,7 +128,7 @@ const estadoTheme = {
         </p>
       </div>
     </div>
-    <ErrorMessage v-if="doctype.setValue.error" class="mt-2" :message="doctype.setValue.error.message" />
+    <Alerta v-if="doctype.setValue.error" class="mt-2" :message="doctype.setValue.error.message" />
   </div>
 </template>
 

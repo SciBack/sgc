@@ -17,9 +17,13 @@
     "verify:login-design": "node scripts/verificar-capa-institucional.mjs ../sgc/public/css/themes/upeu.css && npm run verify:login-design:canary && node scripts/verificar-tokens-login.mjs && node scripts/verificar-contraste-login.mjs"
   },
   "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "frappe-ui": "1.0.0-beta.21",
     "pinia": "^2.1.7",
     "reicon-vue": "^1.1.102",
+    "reka-ui": "^2.10.1",
+    "tailwind-merge": "^3.6.0",
     "vue": "^3.5.13",
     "vue-router": "^4.3.0"
   },

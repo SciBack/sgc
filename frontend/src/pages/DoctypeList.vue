@@ -1,7 +1,11 @@
 <script setup>
 import { useCall } from 'frappe-ui'
 import { useRouter } from 'vue-router'
-import { Button, PageHeaderTitle, ScrollArea, LoadingText, ErrorMessage } from 'frappe-ui'
+import Boton from '@/components/ui/Boton.vue'
+import TituloPagina from '@/components/ui/TituloPagina.vue'
+import AreaScroll from '@/components/ui/AreaScroll.vue'
+import Cargando from '@/components/ui/Cargando.vue'
+import Alerta from '@/components/ui/Alerta.vue'
 import { DocText, List, Plus } from 'reicon-vue'
 
 const router = useRouter()
@@ -50,25 +54,25 @@ function formatModified(value) {
 </script>
 
 <template>
-  <ScrollArea class="min-h-0 flex-1">
+  <AreaScroll class="min-h-0 flex-1">
     <div class="mx-auto max-w-7xl px-6 py-8 sm:px-8 xl:px-10">
       <div class="sb-page-heading mb-6">
         <div class="flex min-w-0 items-start gap-3">
           <span class="sb-page-heading__icon" aria-hidden="true"><List :size="20" /></span>
           <div>
             <div class="sb-section-label">Gestión de registros</div>
-            <PageHeaderTitle :title="doctype" class="mt-1" />
+            <TituloPagina :title="doctype" class="mt-1" />
             <p class="mt-1 text-p-sm text-tinta-tenue">Registros disponibles, ordenados por su última actualización.</p>
           </div>
         </div>
-        <Button variant="solid" class="sb-primary-action btn-press shrink-0" :route="{ name: 'DocNew', params: { doctype } }">
-          <template #prefix><Plus :size="16" aria-hidden="true" /></template>
+        <Boton variante="primario" class="shrink-0" :route="{ name: 'DocNew', params: { doctype } }">
+          <Plus :size="16" aria-hidden="true" />
           Nuevo
-        </Button>
+        </Boton>
       </div>
 
-      <LoadingText v-if="list.loading && !list.data" />
-      <ErrorMessage v-else-if="list.error" :message="list.error.message" />
+      <Cargando v-if="list.loading && !list.data" />
+      <Alerta v-else-if="list.error" :message="list.error.message" />
       <p v-else-if="!list.data?.length" class="sb-empty-state text-p-sm">
         Sin registros todavía.
       </p>
@@ -114,5 +118,5 @@ function formatModified(value) {
         para administración.
       </p>
     </div>
-  </ScrollArea>
+  </AreaScroll>
 </template>

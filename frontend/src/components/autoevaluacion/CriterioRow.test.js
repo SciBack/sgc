@@ -5,15 +5,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const setValue = vi.hoisted(() => ({ loading: false, error: null, submit: vi.fn() }))
 
+// Solo se simulan los hooks de datos: los componentes visuales ya son los de la
+// casa (@/components/ui) y se montan de verdad.
 vi.mock('frappe-ui', () => ({
-  Badge: { props: ['label'], template: '<span>{{ label }}</span>' },
-  Button: { emits: ['click'], template: '<button @click="$emit(\'click\')"><slot /></button>' },
-  ErrorMessage: { props: ['message'], template: '<p>{{ message }}</p>' },
-  FormControl: {
-    props: ['modelValue', 'options', 'type'],
-    emits: ['update:modelValue'],
-    template: '<select :value="modelValue" @change="$emit(\'update:modelValue\', $event.target.value)"><option v-for="option in options || []" :value="option.value">{{ option.label }}</option></select>',
-  },
   useCall: vi.fn(() => ({ data: [], loading: false, error: null, submit: vi.fn() })),
   useDoctype: vi.fn(() => ({ setValue })),
 }))

@@ -1,7 +1,8 @@
 <script setup>
 import { computed } from 'vue'
-import { Button, LoadingText } from 'frappe-ui'
 import { Plus, Trash } from 'reicon-vue'
+import Boton from '@/components/ui/Boton.vue'
+import Cargando from '@/components/ui/Cargando.vue'
 import { useDoctypeMeta } from '@/composables/useDoctypeMeta'
 import FieldInput from './FieldInput.vue'
 
@@ -67,7 +68,7 @@ function removeRow(idx) {
   <div class="space-y-1.5">
     <label class="sb-field-label block">{{ label }}</label>
 
-    <LoadingText v-if="loading" text="Cargando columnas…" />
+    <Cargando v-if="loading" texto="Cargando columnas…" />
     <p v-else-if="error" class="rounded bg-superficie-2 px-2.5 py-1.5 text-p-sm text-tinta-suave">
       No se pudieron cargar las columnas de «{{ field.options }}». Editar en el Desk.
     </p>
@@ -119,10 +120,12 @@ function removeRow(idx) {
         Sin filas todavía.
       </p>
 
-      <Button v-if="!readOnly" variant="ghost" size="sm" class="ctf-add" @click="addRow">
-        <template #prefix><Plus :size="14" /></template>
+      <!-- Boton no tiene slot #prefix: el icono va en el slot por defecto y el
+           propio Boton pone la separación (gap-2). -->
+      <Boton v-if="!readOnly" variante="fantasma" tamano="sm" @click="addRow">
+        <Plus :size="14" aria-hidden="true" />
         Agregar fila
-      </Button>
+      </Boton>
     </template>
   </div>
 </template>
@@ -175,8 +178,7 @@ function removeRow(idx) {
   }
 }
 
-.ctf-rm,
-.ctf-add {
+.ctf-rm {
   transition: background-color 150ms ease, color 150ms ease,
     transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
 }
@@ -187,8 +189,7 @@ function removeRow(idx) {
 @media (prefers-reduced-motion: reduce) {
   .ctf-grid,
   .ctf-empty,
-  .ctf-rm,
-  .ctf-add {
+  .ctf-rm {
     transition-property: opacity, background-color, color;
   }
 }

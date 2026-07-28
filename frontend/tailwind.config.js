@@ -46,6 +46,9 @@ export default {
         // del catálogo del método, que ni `tsc` ni el linter detectan.
         // Se declaran COMPLETOS a propósito: una escala a medias es justo lo que
         // hace que una clase válida no exista.
+        // Tinta sobre las superficies de marca. La declara la INSTITUCION
+        // (themes/upeu.css), no SciBack: es la unica tinta que le corresponde.
+        'sobre-marca-primaria': 'var(--color-sobre-marca-primaria)',
         fondo: 'var(--color-fondo)',
         superficie: {
           DEFAULT: 'var(--color-superficie)',
