@@ -14,7 +14,8 @@
     "test": "vitest run src",
     "test:login-dom": "node --test tests/sgc_web.test.mjs",
     "verify:login-design:canary": "node scripts/verificar-capa-institucional-canary.mjs",
-    "verify:login-design": "node scripts/verificar-capa-institucional.mjs ../sgc/public/css/themes/upeu.css && npm run verify:login-design:canary && node scripts/verificar-tokens-login.mjs && node scripts/verificar-contraste-login.mjs"
+    "verify:login-design": "node scripts/verificar-capa-institucional.mjs ../sgc/public/css/themes/upeu.css && npm run verify:login-design:canary && node scripts/verificar-tokens-login.mjs && node scripts/verificar-contraste-login.mjs",
+    "verify:design": "node scripts/design-system/verificar-stack.mjs src && node scripts/design-system/verificar-iconos.mjs src --sin-legado"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
