@@ -87,7 +87,7 @@ watch(
     </div>
 
     <div class="workflow-actions__controls">
-      <span v-if="transitions.loading && !transitions.data" class="text-p-sm text-tinta-tenue">
+      <span v-if="transitions.loading && !transitions.data" class="text-sm text-tinta-tenue">
         Consultando acciones…
       </span>
       <template v-else-if="actions.length">
@@ -102,7 +102,7 @@ watch(
           {{ actionLabel(transition.action) }}
         </Boton>
       </template>
-      <p v-else class="text-p-sm text-tinta-tenue">
+      <p v-else class="text-sm text-tinta-tenue">
         No hay acciones disponibles para tu rol en este estado.
       </p>
     </div>

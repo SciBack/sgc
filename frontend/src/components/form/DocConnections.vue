@@ -108,7 +108,7 @@ async function removeLink(name) {
       </Boton>
     </div>
 
-    <p v-if="isNew" class="rounded-xl bg-superficie-2 px-3 py-2 text-p-xs text-tinta-tenue">
+    <p v-if="isNew" class="rounded-xl bg-superficie-2 px-3 py-2 text-xs text-tinta-tenue">
       Guarda primero para poder crear vínculos.
     </p>
 
@@ -123,7 +123,7 @@ async function removeLink(name) {
             <span
               v-for="(v, i) in summaryOf(row)"
               :key="i"
-              class="truncate rounded bg-superficie-3 px-1.5 py-0.5 text-p-xs text-tinta-suave"
+              class="truncate rounded bg-superficie-3 px-1.5 py-0.5 text-xs text-tinta-suave"
             >{{ v }}</span>
           </div>
           <button
@@ -136,7 +136,7 @@ async function removeLink(name) {
           </button>
         </li>
       </ul>
-      <p v-else-if="!adding" class="text-p-xs text-tinta-tenue">Sin vínculos todavía.</p>
+      <p v-else-if="!adding" class="text-xs text-tinta-tenue">Sin vínculos todavía.</p>
 
       <!-- alta inline -->
       <div v-if="adding" class="conn-form space-y-3 rounded-xl border border-borde-fuerte bg-superficie-2 p-4">

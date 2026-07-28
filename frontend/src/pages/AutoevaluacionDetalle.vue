@@ -101,7 +101,7 @@ async function criterionUpdated() {
               <div>
                 <p class="text-xs font-bold uppercase tracking-[0.14em] text-white/65">Autoevaluación</p>
                 <h1 class="mt-1 font-display text-3xl font-bold">{{ doc.doc.codigo }}</h1>
-                <p class="mt-2 text-p-sm text-white/75">
+                <p class="mt-2 text-sm text-white/75">
                   {{ doc.doc.marco_normativo }} · {{ doc.doc.estado }}
                 </p>
               </div>
@@ -136,7 +136,7 @@ async function criterionUpdated() {
             @updated="standardUpdated"
           >
             <template #criterios>
-              <div v-if="criterios.loading && !criterios.data" class="text-p-xs text-tinta-tenue">Cargando criterios…</div>
+              <div v-if="criterios.loading && !criterios.data" class="text-xs text-tinta-tenue">Cargando criterios…</div>
               <CriterioRow v-for="c in criteriosDe(e.em_codigo)" :key="c.name" :row="c" @updated="criterionUpdated" />
             </template>
           </EstandarCard>

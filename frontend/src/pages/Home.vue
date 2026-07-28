@@ -72,7 +72,7 @@ function abrirAcceso(a) {
               Universidad Peruana Unión · Dirección de Gestión de la Calidad
             </p>
             <h1 class="mt-2 font-display text-3xl font-bold tracking-[-0.035em] sm:text-4xl">Panel de calidad</h1>
-            <p class="mt-2 max-w-xl text-p-sm leading-6 text-white/75">
+            <p class="mt-2 max-w-xl text-sm leading-6 text-white/75">
               Panorama operativo de acreditación, evidencias y mejora continua.
             </p>
           </div>
@@ -99,8 +99,8 @@ function abrirAcceso(a) {
             <Compass :size="16" aria-hidden="true" />
           </span>
           <span class="flex-1">
-            <span class="block text-p-base font-semibold text-tinta">¿No sabes por dónde empezar?</span>
-            <span class="block text-p-xs text-tinta-tenue">Guía rápida según tu rol — qué hacer, paso a paso.</span>
+            <span class="block text-sm font-semibold text-tinta">¿No sabes por dónde empezar?</span>
+            <span class="block text-xs text-tinta-tenue">Guía rápida según tu rol — qué hacer, paso a paso.</span>
           </span>
           <AngleDown
             :size="20"
@@ -115,7 +115,7 @@ function abrirAcceso(a) {
             <button
               v-for="(g, i) in GUIAS_ROL"
               :key="g.rol"
-              class="rounded-full border px-3 py-1 text-p-sm font-medium transition-colors duration-150"
+              class="rounded-full border px-3 py-1 text-sm font-medium transition-colors duration-150"
               :class="i === guiaSel ? 'border-marca-primaria-700 bg-marca-primaria-700 text-white' : 'border-borde-fuerte text-tinta-suave hover:border-marca-primaria-300'"
               @click="guiaSel = i"
             >
@@ -123,25 +123,25 @@ function abrirAcceso(a) {
             </button>
           </div>
 
-          <p class="mb-3 text-p-sm text-tinta-suave">
+          <p class="mb-3 text-sm text-tinta-suave">
             <b class="text-tinta">{{ guia.rol }}.</b> {{ guia.resumen }}
           </p>
           <ol class="space-y-2">
-            <li v-for="(paso, i) in guia.pasos" :key="i" class="flex gap-2.5 text-p-sm text-tinta-suave">
+            <li v-for="(paso, i) in guia.pasos" :key="i" class="flex gap-2.5 text-sm text-tinta-suave">
               <span class="flex size-5 shrink-0 items-center justify-center rounded-full bg-marca-primaria-50 text-xs font-bold text-marca-primaria-700">
                 {{ i + 1 }}
               </span>
               <span>{{ paso }}</span>
             </li>
           </ol>
-          <p class="mt-3 rounded-lg bg-superficie-2 px-3 py-2 text-p-xs text-tinta-suave">
+          <p class="mt-3 rounded-lg bg-superficie-2 px-3 py-2 text-xs text-tinta-suave">
             <Flag :size="14" class="mr-1 inline align-text-bottom" aria-hidden="true" />{{ guia.fin }}
           </p>
           <a
             :href="MANUAL_URL"
             target="_blank"
             rel="noopener"
-            class="mt-3 inline-flex items-center gap-1 text-p-sm font-semibold text-marca-primaria-700 hover:opacity-70"
+            class="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-marca-primaria-700 hover:opacity-70"
           >
             Ver la guía completa
             <Link2 :size="14" aria-hidden="true" />
@@ -160,7 +160,7 @@ function abrirAcceso(a) {
             {{ autoevals.length }} de {{ programasTotal }} programas iniciados
           </span>
           <button
-            class="ml-auto text-p-sm font-semibold text-marca-primaria-700 transition-opacity hover:opacity-70"
+            class="ml-auto text-sm font-semibold text-marca-primaria-700 transition-opacity hover:opacity-70"
             @click="irA('Autoevaluacion')"
           >
             Ver todas →
@@ -175,8 +175,8 @@ function abrirAcceso(a) {
           v-else-if="!autoevals.length"
           class="rounded-xl border border-dashed border-borde-fuerte bg-superficie-2 p-6 text-center"
         >
-          <p class="text-p-base font-medium text-tinta-suave">Aún no hay autoevaluaciones iniciadas.</p>
-          <p class="mt-1 text-p-sm text-tinta-tenue">
+          <p class="text-sm font-medium text-tinta-suave">Aún no hay autoevaluaciones iniciadas.</p>
+          <p class="mt-1 text-sm text-tinta-tenue">
             Los {{ programasTotal }} programas de la UPeU están configurados; crea la primera desde Autoevaluación.
           </p>
         </div>
@@ -197,7 +197,7 @@ function abrirAcceso(a) {
                 <h3 class="truncate text-lg font-semibold tracking-[-0.02em] text-tinta">
                   {{ ae.programa_sede || ae.titulo || ae.name }}
                 </h3>
-                <div class="mt-0.5 truncate text-p-xs text-tinta-tenue">
+                <div class="mt-0.5 truncate text-xs text-tinta-tenue">
                   {{ ae.periodo_academico }} · {{ ae.marco_normativo }}
                 </div>
               </div>
@@ -208,7 +208,7 @@ function abrirAcceso(a) {
 
             <div class="mt-4">
               <div class="mb-1 flex items-baseline justify-between">
-                <span class="text-p-xs font-medium text-tinta-suave">Avance</span>
+                <span class="text-xs font-medium text-tinta-suave">Avance</span>
                 <span class="text-base font-semibold tabular-nums text-marca-primaria-700">{{ avanceDe(ae) }}%</span>
               </div>
               <div class="h-2 w-full overflow-hidden rounded-full bg-superficie-3">
@@ -217,7 +217,7 @@ function abrirAcceso(a) {
                   :style="{ width: avanceDe(ae) + '%' }"
                 />
               </div>
-              <div class="mt-1.5 text-p-xs text-tinta-tenue">
+              <div class="mt-1.5 text-xs text-tinta-tenue">
                 {{ ae.criterios_valorados }} de {{ ae.criterios_total }} criterios
                 <template v-if="ae.criterios_pendientes">
                   · <b class="text-aviso">{{ ae.criterios_pendientes }} sin valorar</b>
@@ -262,7 +262,7 @@ function abrirAcceso(a) {
                 aria-hidden="true"
               />
             </div>
-            <span class="mt-1.5 text-p-sm font-medium text-tinta-suave">{{ p.label }}</span>
+            <span class="mt-1.5 text-sm font-medium text-tinta-suave">{{ p.label }}</span>
           </button>
         </div>
       </section>
@@ -282,12 +282,12 @@ function abrirAcceso(a) {
             >
               <component :is="a.icon" :size="20" aria-hidden="true" />
             </span>
-            <span class="text-p-sm font-medium text-tinta">{{ a.label }}</span>
+            <span class="text-sm font-medium text-tinta">{{ a.label }}</span>
           </button>
         </div>
       </section>
 
-      <p class="text-p-xs text-tinta-tenue">
+      <p class="text-xs text-tinta-tenue">
         El menú de la izquierda te lleva a cada área del sistema; las migas de pan (arriba) indican dónde estás.
       </p>
     </div>

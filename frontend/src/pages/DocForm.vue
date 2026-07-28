@@ -207,10 +207,10 @@ async function save() {
           <div>
             <div class="sb-section-label">{{ doctype }}</div>
             <h1 class="mt-1 font-display text-2xl font-bold text-tinta">{{ title }}</h1>
-            <p class="mt-1 text-p-sm text-tinta-tenue">Completa los campos necesarios y guarda los cambios.</p>
+            <p class="mt-1 text-sm text-tinta-tenue">Completa los campos necesarios y guarda los cambios.</p>
           </div>
         </div>
-        <a :href="deskUrl()" target="_blank" class="btn-press whitespace-nowrap rounded-xl border border-borde-fuerte px-3 py-2 text-p-sm font-semibold text-tinta-suave transition-colors hover:bg-superficie-2 hover:text-tinta">
+        <a :href="deskUrl()" target="_blank" class="btn-press whitespace-nowrap rounded-xl border border-borde-fuerte px-3 py-2 text-sm font-semibold text-tinta-suave transition-colors hover:bg-superficie-2 hover:text-tinta">
           <Link2 :size="14" class="mr-1 inline align-text-bottom" aria-hidden="true" />
           Ver en el Desk
         </a>
@@ -235,7 +235,7 @@ async function save() {
           <Boton variante="primario" type="submit" :cargando="saving">
             {{ isNew ? 'Crear' : 'Guardar' }}
           </Boton>
-          <span v-if="saved" class="text-p-sm text-exito">Guardado.</span>
+          <span v-if="saved" class="text-sm text-exito">Guardado.</span>
           <Alerta v-if="saveError" :message="saveError.message" />
         </div>
       </form>

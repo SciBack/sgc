@@ -75,7 +75,7 @@ function displayValue(row) {
           <div>
             <p class="text-xs font-bold uppercase tracking-[0.14em] text-white/65">Seguimiento institucional</p>
             <TituloPagina title="Tablero de indicadores" class="mt-1 text-white" />
-            <p class="mt-2 max-w-2xl text-p-sm leading-6 text-white/75">
+            <p class="mt-2 max-w-2xl text-sm leading-6 text-white/75">
               Último valor calculado por indicador, agrupado por categoría.
             </p>
           </div>
@@ -84,7 +84,7 @@ function displayValue(row) {
 
       <Cargando v-if="values.loading && !values.data" />
       <Alerta v-else-if="values.error" :message="values.error.message" />
-      <p v-else-if="!grouped.length" class="sb-empty-state text-p-sm">
+      <p v-else-if="!grouped.length" class="sb-empty-state text-sm">
         Todavía no hay valores calculados en este entorno. El motor de indicadores corre contra Oracle
         LAMB — en producción ya hay valores reales; en el lab de desarrollo esta tabla está vacía.
       </p>
@@ -105,9 +105,9 @@ function displayValue(row) {
                 <span class="rounded-lg bg-marca-primaria-50 px-2 py-1 font-mono text-xs font-semibold text-marca-primaria-700">
                   {{ row.indicador_codigo }}
                 </span>
-                <span class="truncate text-p-sm text-tinta">{{ row.indicador_nombre }}</span>
+                <span class="truncate text-sm text-tinta">{{ row.indicador_nombre }}</span>
               </div>
-              <div class="mt-0.5 text-p-xs text-tinta-tenue">{{ row.fuente }} · {{ row.fecha }}</div>
+              <div class="mt-0.5 text-xs text-tinta-tenue">{{ row.fuente }} · {{ row.fecha }}</div>
             </div>
             <div class="font-display text-2xl font-bold tabular-nums text-marca-primaria-700">{{ displayValue(row) }}</div>
           </div>

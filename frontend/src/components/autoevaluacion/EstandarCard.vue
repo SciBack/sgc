@@ -55,7 +55,7 @@ async function confirm() {
       </span>
       <div class="min-w-0 flex-1">
         <h3 class="font-display text-base font-semibold leading-5 text-tinta">{{ row.em_denominacion }}</h3>
-        <div class="mt-2 flex flex-wrap items-center gap-2 text-p-xs text-tinta-tenue">
+        <div class="mt-2 flex flex-wrap items-center gap-2 text-xs text-tinta-tenue">
           <span>Nivel propuesto: <strong class="text-tinta">{{ row.nivel_propuesto || 'Pendiente' }}</strong></span>
           <span aria-hidden="true">·</span>
           <EstadoBadge :label="row.confirmado ? 'Confirmado' : (row.estado || 'Borrador')" :theme="row.confirmado ? 'green' : 'gray'" />
@@ -70,7 +70,7 @@ async function confirm() {
         <select
           v-model="nivelSigla"
           data-test="nivel-sigla"
-          class="h-9 w-full rounded border border-borde-fuerte bg-superficie px-3 text-p-sm text-tinta outline-none focus:border-marca-primaria-500 focus:ring-2 focus:ring-marca-primaria-100"
+          class="h-9 w-full rounded border border-borde-fuerte bg-superficie px-3 text-sm text-tinta outline-none focus:border-marca-primaria-500 focus:ring-2 focus:ring-marca-primaria-100"
         >
           <option value="" disabled>Seleccionar…</option>
           <option value="NL">NL · No logrado</option>
@@ -91,10 +91,10 @@ async function confirm() {
       >
         {{ row.confirmado ? 'Actualizar confirmación' : 'Confirmar nivel' }}
       </Boton>
-      <span v-if="saved" class="text-p-sm text-exito">Nivel confirmado.</span>
+      <span v-if="saved" class="text-sm text-exito">Nivel confirmado.</span>
       <Alerta v-if="confirmation.error" :message="confirmation.error.message" />
     </div>
-    <p v-else class="mt-4 rounded-lg bg-superficie-2 px-3 py-2 text-p-xs text-tinta-suave">
+    <p v-else class="mt-4 rounded-lg bg-superficie-2 px-3 py-2 text-xs text-tinta-suave">
       La confirmación oficial corresponde a DPGC o al Responsable de Calidad del Programa.
     </p>
 

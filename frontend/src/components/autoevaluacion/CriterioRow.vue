@@ -66,22 +66,22 @@ const estadoTheme = {
   <div class="rounded-xl border border-borde bg-superficie p-4">
     <div class="flex flex-wrap items-center gap-3">
       <div class="min-w-0 flex-1">
-        <span class="rounded-lg bg-marca-primaria-50 px-2 py-1 font-mono text-2xs font-semibold text-marca-primaria-700">
+        <span class="rounded-lg bg-marca-primaria-50 px-2 py-1 font-mono text-xs font-semibold text-marca-primaria-700">
           {{ row.cr_codigo }}
         </span>
-        <span class="ml-2 text-p-sm text-tinta">{{ row.cr_denominacion }}</span>
+        <span class="ml-2 text-sm text-tinta">{{ row.cr_denominacion }}</span>
       </div>
       <Campo type="select" v-model="values.cumple" :options="cumpleOptions" class="w-40" />
       <EstadoBadge :label="row.estado || 'Pendiente'" :theme="row.estado === 'Valorado' ? 'blue' : 'gray'" size="sm" />
       <button
         type="button"
-        class="text-p-xs text-tinta-tenue hover:text-tinta hover:underline"
+        class="text-xs text-tinta-tenue hover:text-tinta hover:underline"
         @click="expanded = !expanded"
       >
         {{ expanded ? 'ocultar detalle' : 'detalle' }}
       </button>
       <Boton tamano="sm" variante="primario" :cargando="doctype.setValue.loading" @click="save">Guardar</Boton>
-      <span v-if="saved" class="text-p-xs text-exito">Guardado.</span>
+      <span v-if="saved" class="text-xs text-exito">Guardado.</span>
     </div>
 
     <div v-if="expanded" class="detalle mt-3 space-y-4 border-t border-borde pt-3">
@@ -97,19 +97,19 @@ const estadoTheme = {
       <!-- Evidencias que sustentan el criterio -->
       <div>
         <div class="mb-1.5 flex items-center gap-2">
-          <span class="text-p-xs font-semibold uppercase tracking-wide text-tinta-tenue">Evidencias</span>
-          <span v-if="evidencias.data" class="text-2xs text-tinta-tenue">{{ evidencias.data.length }}</span>
+          <span class="text-xs font-semibold uppercase tracking-wide text-tinta-tenue">Evidencias</span>
+          <span v-if="evidencias.data" class="text-xs text-tinta-tenue">{{ evidencias.data.length }}</span>
         </div>
 
-        <div v-if="evidencias.loading" class="text-p-xs text-tinta-tenue">Cargando…</div>
+        <div v-if="evidencias.loading" class="text-xs text-tinta-tenue">Cargando…</div>
         <ul v-else-if="(evidencias.data || []).length" class="space-y-1">
           <li
             v-for="ev in evidencias.data"
             :key="ev.name"
             class="flex items-center gap-2 rounded border border-borde bg-superficie px-2.5 py-1.5"
           >
-            <span class="font-mono text-2xs font-semibold text-tinta-tenue">{{ ev.codigo }}</span>
-            <span class="min-w-0 flex-1 truncate text-p-xs text-tinta" :title="ev.titulo">{{ ev.titulo }}</span>
+            <span class="font-mono text-xs font-semibold text-tinta-tenue">{{ ev.codigo }}</span>
+            <span class="min-w-0 flex-1 truncate text-xs text-tinta" :title="ev.titulo">{{ ev.titulo }}</span>
             <EstadoBadge :label="ev.estado" :theme="estadoTheme[ev.estado] || 'gray'" size="sm" />
             <a
               v-if="ev.archivo"
@@ -123,7 +123,7 @@ const estadoTheme = {
             </a>
           </li>
         </ul>
-        <p v-else class="text-p-xs text-tinta-tenue">
+        <p v-else class="text-xs text-tinta-tenue">
           Sin evidencias vinculadas — cárgalas en el módulo Evidencias y vincúlalas a este criterio.
         </p>
       </div>

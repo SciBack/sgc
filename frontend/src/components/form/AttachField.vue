@@ -68,7 +68,7 @@ function onSuccess(fileDoc) {
         :href="value"
         target="_blank"
         rel="noopener"
-        class="min-w-0 flex-1 truncate text-p-sm text-tinta hover:text-tinta hover:underline"
+        class="min-w-0 flex-1 truncate text-sm text-tinta hover:text-tinta hover:underline"
         :title="fileName"
       >
         {{ fileName }}
@@ -95,7 +95,7 @@ function onSuccess(fileDoc) {
       <template #default="{ uploading, progress, openFileSelector }">
         <button
           type="button"
-        class="attach-drop flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-borde-fuerte bg-superficie px-4 py-4 text-p-sm font-medium text-tinta-suave"
+        class="attach-drop flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-borde-fuerte bg-superficie px-4 py-4 text-sm font-medium text-tinta-suave"
           :disabled="uploading"
           @click="openFileSelector"
         >
@@ -112,7 +112,7 @@ function onSuccess(fileDoc) {
     </FileUploader>
 
     <!-- Vacío + solo lectura -->
-    <p v-else class="text-p-sm text-tinta-tenue">Sin archivo.</p>
+    <p v-else class="text-sm text-tinta-tenue">Sin archivo.</p>
   </div>
 </template>
 

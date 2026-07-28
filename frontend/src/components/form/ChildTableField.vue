@@ -69,7 +69,7 @@ function removeRow(idx) {
     <label class="sb-field-label block">{{ label }}</label>
 
     <Cargando v-if="loading" texto="Cargando columnas…" />
-    <p v-else-if="error" class="rounded bg-superficie-2 px-2.5 py-1.5 text-p-sm text-tinta-suave">
+    <p v-else-if="error" class="rounded bg-superficie-2 px-2.5 py-1.5 text-sm text-tinta-suave">
       No se pudieron cargar las columnas de «{{ field.options }}». Editar en el Desk.
     </p>
 
@@ -116,7 +116,7 @@ function removeRow(idx) {
       </div>
 
       <!-- estado vacío -->
-      <p v-else class="ctf-empty rounded-xl border border-dashed border-borde-fuerte bg-superficie-2 px-3 py-3 text-center text-p-sm text-tinta-tenue">
+      <p v-else class="ctf-empty rounded-xl border border-dashed border-borde-fuerte bg-superficie-2 px-3 py-3 text-center text-sm text-tinta-tenue">
         Sin filas todavía.
       </p>
 
