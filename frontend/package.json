@@ -18,6 +18,7 @@
     "verify:design": "node scripts/design-system/verificar-stack.mjs src && node scripts/design-system/verificar-iconos.mjs src --sin-legado"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "frappe-ui": "1.0.0-beta.21",
@@ -30,13 +31,13 @@
   },
   "devDependencies": {
     "@fontsource/archivo": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
     "@fontsource/public-sans": "^5.3.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vue/test-utils": "^2.4.6",
-    "autoprefixer": "^10.4.19",
     "jsdom": "^26.1.0",
     "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.3",
+    "tailwindcss": "^4.3.3",
     "vite": "^5.2.8",
     "vitest": "^2.1.9"
   }

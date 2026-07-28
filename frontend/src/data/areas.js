@@ -11,6 +11,7 @@ import {
   AlertCircle,
   AlertTriangle,
   Award,
+  Bank,
   Book,
   BranchDown,
   Building,
@@ -25,6 +26,7 @@ import {
   CheckListSquare,
   ClipboardCheck,
   ClipboardList,
+  ClipboardText,
   CodeScan,
   DocText,
   DocumentText,
@@ -33,6 +35,7 @@ import {
   FileError,
   FileText,
   GraduationCap,
+  Grid,
   Hierarchy,
   Layers,
   List3,
@@ -47,7 +50,7 @@ import {
   UserCheck,
   UserId,
   Users,
-  Verified,
+  Verified
 } from 'reicon-vue'
 
 export const AREAS = [
@@ -101,7 +104,7 @@ export const AREAS = [
   },
   {
     label: 'Gobierno de la calidad',
-    icon: Users,
+    icon: Bank,
     items: [
       { label: 'Comité', doctype: 'Comite', icon: Users },
       { label: 'Política Calidad', doctype: 'Politica Calidad', icon: DocumentText },
@@ -114,7 +117,7 @@ export const AREAS = [
     icon: ClipboardList,
     items: [
       { label: 'Grupo de Interés', doctype: 'Grupo Interes', icon: UserId },
-      { label: 'Instrumento', doctype: 'Instrumento', icon: ClipboardList },
+      { label: 'Instrumento', doctype: 'Instrumento', icon: ClipboardText },
       { label: 'Aplicación Instrumento', doctype: 'Aplicacion Instrumento', icon: Send },
     ],
   },
@@ -123,7 +126,7 @@ export const AREAS = [
     icon: ShieldAlert,
     items: [
       { label: 'Riesgo', doctype: 'Riesgo', icon: AlertTriangle },
-      { label: 'Matriz Riesgo', doctype: 'Matriz Riesgo', icon: List3 },
+      { label: 'Matriz Riesgo', doctype: 'Matriz Riesgo', icon: Grid },
       { label: 'Evaluación Riesgo', doctype: 'Evaluacion Riesgo', icon: ClipboardCheck },
       { label: 'Tratamiento Riesgo', doctype: 'Tratamiento Riesgo', icon: ShieldCheck },
       { label: 'Obligación Ente', doctype: 'Obligacion Ente', icon: Scale },
