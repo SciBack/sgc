@@ -12,7 +12,7 @@
  *  · Error inline junto al campo, con `role="alert"`.
  */
 import { computed, useId } from 'vue'
-import { cn } from '@/lib/cn'
+import { cn } from '@/lib/utils'
 
 const props = defineProps({
   type: { type: String, default: 'text' }, // text|number|textarea|select|checkbox|date|datetime

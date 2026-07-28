@@ -11,7 +11,7 @@
  * secundaria a la izquierda. Reconocible sin ser estridente; los inactivos
  * quedan al 72%.
  */
-import { cn } from '@/lib/cn'
+import { cn } from '@/lib/utils'
 
 defineProps({ to: { type: [Object, String], required: true } })
 </script>

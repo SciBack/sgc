@@ -3,7 +3,7 @@
  *  Sin imagen: las iniciales son el contenido, y el `title` da el nombre completo
  *  a quien use lector de pantalla o pase el cursor. */
 import { computed } from 'vue'
-import { cn } from '@/lib/cn'
+import { cn } from '@/lib/utils'
 
 const props = defineProps({
   nombre: { type: String, default: '' },

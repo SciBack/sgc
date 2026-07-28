@@ -4,7 +4,7 @@
  *  poder distinguir un error de un aviso sin depender del tono. */
 import { computed } from 'vue'
 import { AlertCircle, AlertTriangle, CheckCircle, InfoCircle } from 'reicon-vue'
-import { cn } from '@/lib/cn'
+import { cn } from '@/lib/utils'
 
 const props = defineProps({
   message: { type: String, default: '' },

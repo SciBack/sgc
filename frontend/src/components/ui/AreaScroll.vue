@@ -5,7 +5,7 @@
  *  teclado y el arrastre de la barra ya vienen resueltos, sin imponer estética.
  */
 import { ScrollAreaRoot, ScrollAreaViewport, ScrollAreaScrollbar, ScrollAreaThumb } from 'reka-ui'
-import { cn } from '@/lib/cn'
+import { cn } from '@/lib/utils'
 
 defineProps({ viewportClass: { type: String, default: '' } })
 </script>

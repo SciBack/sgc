@@ -15,7 +15,7 @@ import {
   ComboboxContent, ComboboxViewport, ComboboxItem, ComboboxItemIndicator, ComboboxEmpty,
 } from 'reka-ui'
 import { AngleDown, Check, Loader } from 'reicon-vue'
-import { cn } from '@/lib/cn'
+import { cn } from '@/lib/utils'
 
 const props = defineProps({
   modelValue: { type: [String, Number], default: null },

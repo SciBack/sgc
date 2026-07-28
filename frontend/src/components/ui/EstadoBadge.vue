@@ -10,7 +10,7 @@
  *  tener que tocar cada llamada. Lo nuevo debería pasar `tono` semántico.
  */
 import { computed } from 'vue'
-import { cn } from '@/lib/cn'
+import { cn } from '@/lib/utils'
 
 const props = defineProps({
   label: { type: String, default: '' },
