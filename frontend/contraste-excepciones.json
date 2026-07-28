@@ -1,0 +1,22 @@
+[
+  {
+    "archivo": "pages/Home.vue",
+    "clases": ["text-marca-secundaria-300"],
+    "motivo": "Cifra del Hero. El Hero es superficie de marca (degradado navy institucional), no --color-superficie: el ámbar da 8.17:1 sobre #003366, muy por encima del 4.5 exigido. Medido contra blanco daría 1.54:1, que es lo que ve el verificador al no poder deducir el fondo."
+  },
+  {
+    "archivo": "pages/Tablero.vue",
+    "clases": ["text-marca-secundaria-300"],
+    "motivo": "Icono dentro de la baldosa bg-white/10 del Hero navy."
+  },
+  {
+    "archivo": "pages/TableroEjecutivo.vue",
+    "clases": ["text-marca-secundaria-300"],
+    "motivo": "Icono e indicador de cobertura, ambos dentro del Hero navy."
+  },
+  {
+    "archivo": "pages/AutoevaluacionDetalle.vue",
+    "clases": ["text-marca-secundaria-300"],
+    "motivo": "Icono y cifra de avance, ambos dentro del Hero navy de la cabecera de alto contexto."
+  }
+]
