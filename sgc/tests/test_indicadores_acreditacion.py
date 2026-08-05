@@ -200,6 +200,26 @@ class IntegrationTestIndicadoresAcreditacion(IntegrationTestCase):
         self.assertTrue(m["provisional"])
         self.assertEqual(m["cobertura"], 77.6)
 
+    def test_parseo_extrae_el_marco_normativo_declarado(self):
+        """El marco que declara el productor se separa para poder mostrarlo.
+
+        Sin él, un "no alcanza la meta" se lee como incumplimiento normativo. El
+        mismo porcentaje puede estar en regla ante un régimen obligatorio y
+        quedarse corto ante un sello voluntario, porque cada uno fija su umbral.
+        """
+        m = ia._parsear_valor_texto(TEXTO_CUMPLE)
+        self.assertEqual(m["marco"], "Coneau 2026")
+
+        # Un productor que no declare marco no inventa uno.
+        sin_marco = ia._parsear_valor_texto("n=10 · meta 80% (cumple)")
+        self.assertEqual(sin_marco["marco"], "")
+
+    def test_marco_no_se_contamina_con_los_segmentos_siguientes(self):
+        """El marco termina donde empieza el siguiente campo del contrato."""
+        m = ia._parsear_valor_texto(TEXTO_PROVISIONAL)
+        self.assertEqual(m["marco"], "Coneau 2026")
+        self.assertNotIn("n=", m["marco"])
+
     def test_parseo_tolera_texto_libre_y_texto_vacio(self):
         """Un texto fuera de convención no rompe: queda crudo y sin reconocer."""
         m = ia._parsear_valor_texto("Cargado a mano por la DPGC")
@@ -223,8 +243,11 @@ class IntegrationTestIndicadoresAcreditacion(IntegrationTestCase):
     # ======================================================================
     def test_toma_nombre_del_catalogo_y_unidad_de_la_ficha(self):
         """El nombre viene de `Indicador` y la unidad de su `Ficha Indicador`."""
+        # Código propio: las factories son idempotentes por código, así que
+        # reusar uno que otro test ya creó devolvería aquel documento y este
+        # test compararía contra el nombre del otro, no contra el suyo.
         ind = factories.crear_indicador(
-            codigo="TEST-ID10", nombre="% de estudiantes aprobados por asignatura"
+            codigo="TEST-ID10-NOMBRE", nombre="% de estudiantes aprobados por asignatura"
         )
         frappe.get_doc({
             "doctype": "Ficha Indicador",

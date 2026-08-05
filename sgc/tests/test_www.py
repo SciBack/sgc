@@ -210,7 +210,7 @@ class IntegrationTestWww(IntegrationTestCase):
         ind = factories.crear_indicador(codigo="TEST-WWW-ID10", nombre="Aprobados")
         factories.crear_valor_indicador(
             ind, ps, periodo, valor_num=88.22, fuente="dw",
-            valor_texto="DW v1 · n=452 · meta 80% (cumple)",
+            valor_texto="DW v1-norma Coneau 2026 · n=452 · meta 80% (cumple)",
         )
         # Segundo productor del MISMO par -> debe aparecer como advertencia.
         otro = factories.crear_indicador(codigo="TEST-WWW-ID6")
@@ -227,6 +227,11 @@ class IntegrationTestWww(IntegrationTestCase):
 
         # La otra fuente se reporta para que la plantilla pueda advertirla.
         self.assertEqual(ctx.indicadores_otras_fuentes, [{"fuente": "lamb", "n_indicadores": 1}])
+
+        # El marco declarado viaja al contexto: la nota al pie lo cita para que
+        # "no alcanza la meta" quede atado a SU régimen y no se lea como una
+        # falta normativa.
+        self.assertEqual(ctx.marcos_declarados, ["Coneau 2026"])
 
         # El contador cuenta indicadores distintos de TODAS las fuentes (2), no
         # los que tienen el Link `autoevaluacion` poblado (0, como antes).

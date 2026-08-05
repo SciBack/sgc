@@ -145,6 +145,13 @@ def get_context(context):
     context.indicadores_otras_fuentes = _seguro(
         indicadores_acreditacion.otras_fuentes, ae.name, default=[]
     )
+    # Marcos normativos que declaran las filas mostradas. La nota al pie los cita
+    # para que el juicio "no alcanza la meta" quede atado a SU régimen: el mismo
+    # valor puede estar en regla ante una norma obligatoria y quedarse corto ante
+    # un sello voluntario, porque cada una fija su umbral y su universo.
+    context.marcos_declarados = sorted({
+        i["marco"] for i in context.indicadores if i.get("marco")
+    })
 
     # ruta al registro en el escritorio (para editar)
     context.desk_url = "/app/autoevaluacion/" + ae.name

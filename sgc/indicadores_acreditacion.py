@@ -75,6 +75,11 @@ _RE_COBERTURA = re.compile(r"\bcobertura\s*(-?[\d.,]+)\s*%?", re.IGNORECASE)
 _RE_NO_CUMPLE = re.compile(r"\bno\s+cumple\b", re.IGNORECASE)
 _RE_CUMPLE = re.compile(r"\bcumple\b", re.IGNORECASE)
 _RE_PROVISIONAL = re.compile(r"\bprovisional\b", re.IGNORECASE)
+# El productor declara contra qué norma juzga: "…v1-norma Coneau 2026 · n=…".
+# Importa mostrarlo: el MISMO valor puede cumplir un marco y no otro, porque los
+# umbrales los fija cada régimen. Un "no cumple" sin marco se lee como
+# incumplimiento legal cuando puede ser solo "no alcanza un sello voluntario".
+_RE_MARCO = re.compile(r"\bnorma\s+([^·\n]+)", re.IGNORECASE)
 
 # Separa un código en (prefijo, número) para ordenarlo como lo lee una persona:
 # ID6 antes que ID10, y ambos antes que INST-ID11.
@@ -109,12 +114,17 @@ def _parsear_valor_texto(texto):
         "meta_operador": "",
         "meta_sufijo": "",
         "cumple": None,
+        "marco": "",
         "provisional": False,
         "cobertura": None,
         "contrato_reconocido": False,
     }
     if not crudo:
         return meta
+
+    m = _RE_MARCO.search(crudo)
+    if m:
+        meta["marco"] = m.group(1).strip()
 
     m = _RE_N.search(crudo)
     if m:
@@ -144,6 +154,7 @@ def _parsear_valor_texto(texto):
         meta["meta"] is not None,
         meta["cumple"] is not None,
         meta["provisional"],
+        bool(meta["marco"]),
     ))
     return meta
 
