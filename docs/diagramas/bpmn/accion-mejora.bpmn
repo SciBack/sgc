@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:sgc="https://sciback.com/schema/sgc/1.0" id="Definitions_1" targetNamespace="https://sciback.com/schema/sgc/1.0" exporter="SGC" exporterVersion="1.0">
+  <bpmn:collaboration id="Collaboration_1">
+    <bpmn:participant id="Participant_Accion_Mejora" name="Accion de Mejora SGC" processRef="Process_Accion_Mejora" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_Accion_Mejora" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_Responsable_de_Calidad_de_Programa" name="Responsable de Calidad de Programa">
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Planificada</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_En_ejecucion</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Ejecutada</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Ejecutada</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_DPGC" name="DPGC">
+        <bpmn:flowNodeRef>Task_Verificada_eficaz</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Verificada_no_eficaz</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Verificada_eficaz</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="StartEvent_1" name="Inicio">
+      <bpmn:outgoing>Flow_inicio</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="Task_Planificada" name="Planificada">
+      <bpmn:incoming>Flow_inicio</bpmn:incoming>
+      <bpmn:outgoing>Flow_Planificada__Iniciar</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_En_ejecucion" name="En ejecucion">
+      <bpmn:incoming>Flow_Planificada__Iniciar</bpmn:incoming>
+      <bpmn:incoming>Flow_Verificada_no_eficaz__Reabrir</bpmn:incoming>
+      <bpmn:outgoing>Flow_En_ejecucion__Marcar_ejecutada</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Ejecutada" name="Ejecutada">
+      <bpmn:incoming>Flow_En_ejecucion__Marcar_ejecutada</bpmn:incoming>
+      <bpmn:outgoing>Flow_gw_Ejecutada</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Verificada_eficaz" name="Verificada eficaz">
+      <bpmn:incoming>Flow_Ejecutada__Verificar_eficaz</bpmn:incoming>
+      <bpmn:outgoing>Flow_fin_Verificada_eficaz</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Verificada_no_eficaz" name="Verificada no eficaz">
+      <bpmn:incoming>Flow_Ejecutada__Verificar_no_eficaz</bpmn:incoming>
+      <bpmn:outgoing>Flow_Verificada_no_eficaz__Reabrir</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_Ejecutada">
+      <bpmn:incoming>Flow_gw_Ejecutada</bpmn:incoming>
+      <bpmn:outgoing>Flow_Ejecutada__Verificar_eficaz</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Ejecutada__Verificar_no_eficaz</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_Verificada_eficaz" name="Fin">
+      <bpmn:incoming>Flow_fin_Verificada_eficaz</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Task_Planificada">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Planificada__Iniciar" sourceRef="Task_Planificada" targetRef="Task_En_ejecucion" name="Iniciar">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="Responsable de Calidad de Programa" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_En_ejecucion__Marcar_ejecutada" sourceRef="Task_En_ejecucion" targetRef="Task_Ejecutada" name="Marcar ejecutada">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="Responsable de Calidad de Programa" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_Ejecutada" sourceRef="Task_Ejecutada" targetRef="Gateway_Ejecutada">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Ejecutada__Verificar_eficaz" sourceRef="Gateway_Ejecutada" targetRef="Task_Verificada_eficaz" name="Verificar eficaz">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="0" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Ejecutada__Verificar_no_eficaz" sourceRef="Gateway_Ejecutada" targetRef="Task_Verificada_no_eficaz" name="Verificar no eficaz">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="0" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_fin_Verificada_eficaz" sourceRef="Task_Verificada_eficaz" targetRef="End_Verificada_eficaz">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Verificada_no_eficaz__Reabrir" sourceRef="Task_Verificada_no_eficaz" targetRef="Task_En_ejecucion" name="Reabrir">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_1">
+    <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
+      <bpmndi:BPMNShape id="Shape_Participant_Accion_Mejora" bpmnElement="Participant_Accion_Mejora" isHorizontal="true">
+        <dc:Bounds x="200" y="80" width="1146" height="320" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Responsable_de_Calidad_de_Programa" bpmnElement="Lane_Responsable_de_Calidad_de_Programa" isHorizontal="true">
+        <dc:Bounds x="230" y="80" width="1116" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
+        <dc:Bounds x="230" y="240" width="1116" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
+        <dc:Bounds x="230" y="142" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Planificada" bpmnElement="Task_Planificada">
+        <dc:Bounds x="430" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_En_ejecucion" bpmnElement="Task_En_ejecucion">
+        <dc:Bounds x="630" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Ejecutada" bpmnElement="Task_Ejecutada">
+        <dc:Bounds x="830" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Verificada_eficaz" bpmnElement="Task_Verificada_eficaz">
+        <dc:Bounds x="1030" y="280" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Verificada_no_eficaz" bpmnElement="Task_Verificada_no_eficaz">
+        <dc:Bounds x="1030" y="280" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Gateway_Ejecutada" bpmnElement="Gateway_Ejecutada">
+        <dc:Bounds x="930" y="135" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_End_Verificada_eficaz" bpmnElement="End_Verificada_eficaz">
+        <dc:Bounds x="1230" y="302" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
+        <di:waypoint x="266" y="160" />
+        <di:waypoint x="430" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Planificada__Iniciar" bpmnElement="Flow_Planificada__Iniciar">
+        <di:waypoint x="550" y="160" />
+        <di:waypoint x="630" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_En_ejecucion__Marcar_ejecutada" bpmnElement="Flow_En_ejecucion__Marcar_ejecutada">
+        <di:waypoint x="750" y="160" />
+        <di:waypoint x="830" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_Ejecutada" bpmnElement="Flow_gw_Ejecutada">
+        <di:waypoint x="950" y="160" />
+        <di:waypoint x="930" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Ejecutada__Verificar_eficaz" bpmnElement="Flow_Ejecutada__Verificar_eficaz">
+        <di:waypoint x="980" y="160" />
+        <di:waypoint x="1030" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Ejecutada__Verificar_no_eficaz" bpmnElement="Flow_Ejecutada__Verificar_no_eficaz">
+        <di:waypoint x="980" y="160" />
+        <di:waypoint x="1030" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_fin_Verificada_eficaz" bpmnElement="Flow_fin_Verificada_eficaz">
+        <di:waypoint x="1150" y="320" />
+        <di:waypoint x="1230" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Verificada_no_eficaz__Reabrir" bpmnElement="Flow_Verificada_no_eficaz__Reabrir">
+        <di:waypoint x="1030" y="320" />
+        <di:waypoint x="750" y="160" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

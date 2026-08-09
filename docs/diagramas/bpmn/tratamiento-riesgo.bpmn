@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:sgc="https://sciback.com/schema/sgc/1.0" id="Definitions_1" targetNamespace="https://sciback.com/schema/sgc/1.0" exporter="SGC" exporterVersion="1.0">
+  <bpmn:collaboration id="Collaboration_1">
+    <bpmn:participant id="Participant_Tratamiento_Riesgo" name="Tratamiento Riesgo SGC" processRef="Process_Tratamiento_Riesgo" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_Tratamiento_Riesgo" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_Dueno_de_Proceso" name="Dueño de Proceso">
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Planificado</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_En_ejecucion</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Implementado</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_DPGC" name="DPGC">
+        <bpmn:flowNodeRef>Task_Verificado</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Verificado</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="StartEvent_1" name="Inicio">
+      <bpmn:outgoing>Flow_inicio</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="Task_Planificado" name="Planificado">
+      <bpmn:incoming>Flow_inicio</bpmn:incoming>
+      <bpmn:outgoing>Flow_Planificado__Iniciar</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_En_ejecucion" name="En ejecucion">
+      <bpmn:incoming>Flow_Planificado__Iniciar</bpmn:incoming>
+      <bpmn:outgoing>Flow_En_ejecucion__Marcar_implementado</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Implementado" name="Implementado">
+      <bpmn:incoming>Flow_En_ejecucion__Marcar_implementado</bpmn:incoming>
+      <bpmn:outgoing>Flow_Implementado__Verificar</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Verificado" name="Verificado">
+      <bpmn:incoming>Flow_Implementado__Verificar</bpmn:incoming>
+      <bpmn:outgoing>Flow_fin_Verificado</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="End_Verificado" name="Fin">
+      <bpmn:incoming>Flow_fin_Verificado</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Task_Planificado">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Planificado__Iniciar" sourceRef="Task_Planificado" targetRef="Task_En_ejecucion" name="Iniciar">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="Dueño de Proceso" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_En_ejecucion__Marcar_implementado" sourceRef="Task_En_ejecucion" targetRef="Task_Implementado" name="Marcar implementado">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="Dueño de Proceso" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Implementado__Verificar" sourceRef="Task_Implementado" targetRef="Task_Verificado" name="Verificar">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="0" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_fin_Verificado" sourceRef="Task_Verificado" targetRef="End_Verificado">
+    </bpmn:sequenceFlow>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_1">
+    <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
+      <bpmndi:BPMNShape id="Shape_Participant_Tratamiento_Riesgo" bpmnElement="Participant_Tratamiento_Riesgo" isHorizontal="true">
+        <dc:Bounds x="200" y="80" width="1146" height="320" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Dueno_de_Proceso" bpmnElement="Lane_Dueno_de_Proceso" isHorizontal="true">
+        <dc:Bounds x="230" y="80" width="1116" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
+        <dc:Bounds x="230" y="240" width="1116" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
+        <dc:Bounds x="230" y="142" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Planificado" bpmnElement="Task_Planificado">
+        <dc:Bounds x="430" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_En_ejecucion" bpmnElement="Task_En_ejecucion">
+        <dc:Bounds x="630" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Implementado" bpmnElement="Task_Implementado">
+        <dc:Bounds x="830" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Verificado" bpmnElement="Task_Verificado">
+        <dc:Bounds x="1030" y="280" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_End_Verificado" bpmnElement="End_Verificado">
+        <dc:Bounds x="1230" y="302" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
+        <di:waypoint x="266" y="160" />
+        <di:waypoint x="430" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Planificado__Iniciar" bpmnElement="Flow_Planificado__Iniciar">
+        <di:waypoint x="550" y="160" />
+        <di:waypoint x="630" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_En_ejecucion__Marcar_implementado" bpmnElement="Flow_En_ejecucion__Marcar_implementado">
+        <di:waypoint x="750" y="160" />
+        <di:waypoint x="830" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Implementado__Verificar" bpmnElement="Flow_Implementado__Verificar">
+        <di:waypoint x="950" y="160" />
+        <di:waypoint x="1030" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_fin_Verificado" bpmnElement="Flow_fin_Verificado">
+        <di:waypoint x="1150" y="320" />
+        <di:waypoint x="1230" y="320" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

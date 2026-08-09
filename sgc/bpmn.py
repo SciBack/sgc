@@ -33,6 +33,7 @@ ejecutar aquí (gateways paralelos, temporizadores, subprocesos). La traducción
 inversa tiene que rechazar lo que no sea representable en vez de ignorarlo.
 """
 
+import unicodedata
 from xml.sax.saxutils import escape, quoteattr
 
 NS = {
@@ -53,10 +54,94 @@ X_ORIGEN, Y_ORIGEN = 200, 80
 ANCHO_ETIQUETA = 30   # margen izquierdo del pool para el nombre vertical
 
 
-def _id(prefijo, texto):
-    """Identificador XML estable y legible a partir de un nombre de negocio."""
-    limpio = "".join(c if c.isalnum() else "_" for c in str(texto))
-    return f"{prefijo}_{limpio}"
+def specs_de_workflows():
+    """Descubre las definiciones de workflow declaradas en `sgc/setup/`.
+
+    Una definición es cualquier diccionario de nivel de módulo que tenga
+    `document_type`, `states` y `transitions`. Se descubren en vez de listarse a
+    mano para que un workflow nuevo entre solo: una lista fija se queda corta en
+    silencio, que es justo como trece de ellos llevaban sin documentar.
+
+    Devuelve [(nombre_modulo, spec)], sin duplicados por DocType.
+    """
+    import importlib
+    import pathlib
+
+    aqui = pathlib.Path(__file__).parent / "setup"
+    vistos, encontradas = set(), []
+    for archivo in sorted(aqui.glob("f*workflow*.py")):
+        try:
+            mod = importlib.import_module(f"sgc.setup.{archivo.stem}")
+        except Exception:
+            # Un módulo que no importa no debe tumbar la exportación del resto,
+            # pero tampoco desaparecer sin dejar rastro.
+            print(f"  [SKIP] no se pudo importar {archivo.name}")
+            continue
+        for nombre in dir(mod):
+            valor = getattr(mod, nombre)
+            if (isinstance(valor, dict) and "document_type" in valor
+                    and "states" in valor and "transitions" in valor):
+                if valor["document_type"] in vistos:
+                    continue
+                vistos.add(valor["document_type"])
+                encontradas.append((archivo.stem, valor))
+    return encontradas
+
+
+def nombre_archivo(document_type):
+    """`No Conformidad` -> `no-conformidad.bpmn`."""
+    limpio = "".join(c.lower() if c.isalnum() else "-" for c in document_type)
+    while "--" in limpio:
+        limpio = limpio.replace("--", "-")
+    return limpio.strip("-") + ".bpmn"
+
+
+def exportar_todos(destino):
+    """Escribe un `.bpmn` por cada workflow declarado. Devuelve el informe."""
+    import pathlib
+
+    dir_destino = pathlib.Path(destino)
+    dir_destino.mkdir(parents=True, exist_ok=True)
+    informe = []
+    for modulo, spec in specs_de_workflows():
+        ruta = dir_destino / nombre_archivo(spec["document_type"])
+        ruta.write_text(construir(spec), encoding="utf-8")
+        informe.append({
+            "document_type": spec["document_type"],
+            "estados": len(spec["states"]),
+            "transiciones": len(spec["transitions"]),
+            "modulo": modulo,
+            "archivo": ruta.name,
+        })
+    return informe
+
+
+def _id(prefijo, texto, usados=None):
+    """Identificador XML estable y legible a partir de un nombre de negocio.
+
+    `xs:ID` exige unicidad en todo el documento. Si se pasa `usados`, el
+    identificador se sufija hasta ser único: hay workflows con DOS transiciones
+    del mismo estado, con la misma acción y distinto rol autorizado (el patrón de
+    doble aprobación), y sin esto ambas colisionarían en el mismo id y el fichero
+    dejaría de validar.
+    """
+    # Los identificadores tienen que ser ASCII PURO. El XSD de la OMG acepta
+    # `ñ` y tildes (XML permite letras Unicode en un NCName), pero bpmn-moddle
+    # —la librería que usan bpmn-js, Camunda Modeler y casi todo el ecosistema—
+    # los rechaza con "illegal ID" y descarta el elemento entero. Ojo con el
+    # atajo `str.isalnum()`: en Python "ñ".isalnum() es True.
+    # Solo se transliteran los IDs; el `name` visible conserva sus tildes.
+    normal = unicodedata.normalize("NFKD", str(texto))
+    sin_tildes = "".join(c for c in normal if not unicodedata.combining(c))
+    limpio = "".join(c if (c.isascii() and c.isalnum()) else "_" for c in sin_tildes)
+    base = f"{prefijo}_{limpio}"
+    if usados is None:
+        return base
+    candidato, n = base, 2
+    while candidato in usados:
+        candidato, n = f"{base}_{n}", n + 1
+    usados.add(candidato)
+    return candidato
 
 
 def _centro(x, y, ancho, alto):
@@ -145,6 +230,7 @@ def construir(spec):
         salidas.setdefault(t[0], []).append(t)
 
     nodos, flujos = {}, []
+    ids_usados = set()
 
     # El evento de inicio ocupa la columna 0 y los estados se corren una a la
     # derecha: si el inicio fuera a la columna -1 quedaría FUERA del pool, con la
@@ -158,7 +244,7 @@ def construir(spec):
         nid = _id("Task", estado)
         nodos[nid] = _Nodo(nid, "userTask", estado, editor_de[estado],
                            columna[estado] + 1, fila_de[editor_de[estado]])
-    flujos.append((_id("Flow", "inicio"), nid_inicio, _id("Task", inicial), "", None))
+    flujos.append((_id("Flow", "inicio", ids_usados), nid_inicio, _id("Task", inicial), "", None))
 
     for estado in estados:
         salientes = salidas.get(estado, [])
@@ -169,7 +255,7 @@ def construir(spec):
             nid_fin = _id("End", estado)
             nodos[nid_fin] = _Nodo(nid_fin, "endEvent", "Fin", editor_de[estado],
                                    columna[estado] + 2, fila_de[editor_de[estado]])
-            flujos.append((_id("Flow", f"fin_{estado}"), origen, nid_fin, "", None))
+            flujos.append((_id("Flow", f"fin_{estado}", ids_usados), origen, nid_fin, "", None))
             continue
 
         if len(salientes) > 1:
@@ -180,14 +266,14 @@ def construir(spec):
             nid_gw = _id("Gateway", estado)
             nodos[nid_gw] = _Nodo(nid_gw, "exclusiveGateway", "", editor_de[estado],
                                   columna[estado] + 1.5, fila_de[editor_de[estado]])
-            flujos.append((_id("Flow", f"gw_{estado}"), origen, nid_gw, "", None))
+            flujos.append((_id("Flow", f"gw_{estado}", ids_usados), origen, nid_gw, "", None))
             origen = nid_gw
 
         for t in salientes:
             desde, accion, hacia, rol = t[0], t[1], t[2], t[3]
             autoaprob = t[4] if len(t) > 4 else 0
             flujos.append((
-                _id("Flow", f"{desde}__{accion}"),
+                _id("Flow", f"{desde}__{accion}", ids_usados),
                 origen, _id("Task", hacia), accion,
                 {"rol": rol, "autoaprobacion": autoaprob},
             ))

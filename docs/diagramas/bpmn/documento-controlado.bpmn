@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:sgc="https://sciback.com/schema/sgc/1.0" id="Definitions_1" targetNamespace="https://sciback.com/schema/sgc/1.0" exporter="SGC" exporterVersion="1.0">
+  <bpmn:collaboration id="Collaboration_1">
+    <bpmn:participant id="Participant_Documento_Controlado" name="Documento Controlado SGC" processRef="Process_Documento_Controlado" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_Documento_Controlado" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_Dueno_de_Proceso" name="Dueño de Proceso">
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Borrador</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Observado</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_DPGC" name="DPGC">
+        <bpmn:flowNodeRef>Task_En_revision</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Publicado</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Obsoleto</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_En_revision</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Obsoleto</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Autoridad_Aprobadora" name="Autoridad Aprobadora">
+        <bpmn:flowNodeRef>Task_Aprobado</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Aprobado</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="StartEvent_1" name="Inicio">
+      <bpmn:outgoing>Flow_inicio</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="Task_Borrador" name="Borrador">
+      <bpmn:incoming>Flow_inicio</bpmn:incoming>
+      <bpmn:incoming>Flow_Observado__Corregir</bpmn:incoming>
+      <bpmn:outgoing>Flow_Borrador__Enviar_a_revision</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_En_revision" name="En revision">
+      <bpmn:incoming>Flow_Borrador__Enviar_a_revision</bpmn:incoming>
+      <bpmn:outgoing>Flow_gw_En_revision</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Observado" name="Observado">
+      <bpmn:incoming>Flow_En_revision__Observar</bpmn:incoming>
+      <bpmn:incoming>Flow_Aprobado__Observar</bpmn:incoming>
+      <bpmn:outgoing>Flow_Observado__Corregir</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Aprobado" name="Aprobado">
+      <bpmn:incoming>Flow_En_revision__Aprobar</bpmn:incoming>
+      <bpmn:outgoing>Flow_gw_Aprobado</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Publicado" name="Publicado">
+      <bpmn:incoming>Flow_Aprobado__Publicar</bpmn:incoming>
+      <bpmn:outgoing>Flow_Publicado__Derogar</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Obsoleto" name="Obsoleto">
+      <bpmn:incoming>Flow_Publicado__Derogar</bpmn:incoming>
+      <bpmn:outgoing>Flow_fin_Obsoleto</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_En_revision">
+      <bpmn:incoming>Flow_gw_En_revision</bpmn:incoming>
+      <bpmn:outgoing>Flow_En_revision__Observar</bpmn:outgoing>
+      <bpmn:outgoing>Flow_En_revision__Aprobar</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Gateway_Aprobado">
+      <bpmn:incoming>Flow_gw_Aprobado</bpmn:incoming>
+      <bpmn:outgoing>Flow_Aprobado__Observar</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Aprobado__Publicar</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_Obsoleto" name="Fin">
+      <bpmn:incoming>Flow_fin_Obsoleto</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Task_Borrador">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Borrador__Enviar_a_revision" sourceRef="Task_Borrador" targetRef="Task_En_revision" name="Enviar a revision">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="Dueño de Proceso" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_En_revision" sourceRef="Task_En_revision" targetRef="Gateway_En_revision">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_En_revision__Observar" sourceRef="Gateway_En_revision" targetRef="Task_Observado" name="Observar">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_En_revision__Aprobar" sourceRef="Gateway_En_revision" targetRef="Task_Aprobado" name="Aprobar">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="0" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Observado__Corregir" sourceRef="Task_Observado" targetRef="Task_Borrador" name="Corregir">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="Dueño de Proceso" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_Aprobado" sourceRef="Task_Aprobado" targetRef="Gateway_Aprobado">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Aprobado__Observar" sourceRef="Gateway_Aprobado" targetRef="Task_Observado" name="Observar">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Aprobado__Publicar" sourceRef="Gateway_Aprobado" targetRef="Task_Publicado" name="Publicar">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="Autoridad Aprobadora" autoaprobacion="0" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Publicado__Derogar" sourceRef="Task_Publicado" targetRef="Task_Obsoleto" name="Derogar">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="0" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_fin_Obsoleto" sourceRef="Task_Obsoleto" targetRef="End_Obsoleto">
+    </bpmn:sequenceFlow>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_1">
+    <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
+      <bpmndi:BPMNShape id="Shape_Participant_Documento_Controlado" bpmnElement="Participant_Documento_Controlado" isHorizontal="true">
+        <dc:Bounds x="200" y="80" width="1346" height="480" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Dueno_de_Proceso" bpmnElement="Lane_Dueno_de_Proceso" isHorizontal="true">
+        <dc:Bounds x="230" y="80" width="1316" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
+        <dc:Bounds x="230" y="240" width="1316" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Autoridad_Aprobadora" bpmnElement="Lane_Autoridad_Aprobadora" isHorizontal="true">
+        <dc:Bounds x="230" y="400" width="1316" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
+        <dc:Bounds x="230" y="142" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Borrador" bpmnElement="Task_Borrador">
+        <dc:Bounds x="430" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_En_revision" bpmnElement="Task_En_revision">
+        <dc:Bounds x="630" y="280" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Observado" bpmnElement="Task_Observado">
+        <dc:Bounds x="830" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Aprobado" bpmnElement="Task_Aprobado">
+        <dc:Bounds x="830" y="440" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Publicado" bpmnElement="Task_Publicado">
+        <dc:Bounds x="1030" y="280" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Obsoleto" bpmnElement="Task_Obsoleto">
+        <dc:Bounds x="1230" y="280" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Gateway_En_revision" bpmnElement="Gateway_En_revision">
+        <dc:Bounds x="730" y="295" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Gateway_Aprobado" bpmnElement="Gateway_Aprobado">
+        <dc:Bounds x="930" y="455" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_End_Obsoleto" bpmnElement="End_Obsoleto">
+        <dc:Bounds x="1430" y="302" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
+        <di:waypoint x="266" y="160" />
+        <di:waypoint x="430" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Borrador__Enviar_a_revision" bpmnElement="Flow_Borrador__Enviar_a_revision">
+        <di:waypoint x="550" y="160" />
+        <di:waypoint x="630" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_En_revision" bpmnElement="Flow_gw_En_revision">
+        <di:waypoint x="750" y="320" />
+        <di:waypoint x="730" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_En_revision__Observar" bpmnElement="Flow_En_revision__Observar">
+        <di:waypoint x="780" y="320" />
+        <di:waypoint x="830" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_En_revision__Aprobar" bpmnElement="Flow_En_revision__Aprobar">
+        <di:waypoint x="780" y="320" />
+        <di:waypoint x="830" y="480" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Observado__Corregir" bpmnElement="Flow_Observado__Corregir">
+        <di:waypoint x="830" y="160" />
+        <di:waypoint x="550" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_Aprobado" bpmnElement="Flow_gw_Aprobado">
+        <di:waypoint x="950" y="480" />
+        <di:waypoint x="930" y="480" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Aprobado__Observar" bpmnElement="Flow_Aprobado__Observar">
+        <di:waypoint x="930" y="480" />
+        <di:waypoint x="950" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Aprobado__Publicar" bpmnElement="Flow_Aprobado__Publicar">
+        <di:waypoint x="980" y="480" />
+        <di:waypoint x="1030" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Publicado__Derogar" bpmnElement="Flow_Publicado__Derogar">
+        <di:waypoint x="1150" y="320" />
+        <di:waypoint x="1230" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_fin_Obsoleto" bpmnElement="Flow_fin_Obsoleto">
+        <di:waypoint x="1350" y="320" />
+        <di:waypoint x="1430" y="320" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:sgc="https://sciback.com/schema/sgc/1.0" id="Definitions_1" targetNamespace="https://sciback.com/schema/sgc/1.0" exporter="SGC" exporterVersion="1.0">
+  <bpmn:collaboration id="Collaboration_1">
+    <bpmn:participant id="Participant_Revision_Direccion" name="Revision Direccion SGC" processRef="Process_Revision_Direccion" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_Revision_Direccion" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_DPGC" name="DPGC">
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Planificada</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Realizada</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Cerrada</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Realizada</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="StartEvent_1" name="Inicio">
+      <bpmn:outgoing>Flow_inicio</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="Task_Planificada" name="Planificada">
+      <bpmn:incoming>Flow_inicio</bpmn:incoming>
+      <bpmn:incoming>Flow_Realizada__Devolver_a_planificada</bpmn:incoming>
+      <bpmn:outgoing>Flow_Planificada__Realizar_revision</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Realizada" name="Realizada">
+      <bpmn:incoming>Flow_Planificada__Realizar_revision</bpmn:incoming>
+      <bpmn:incoming>Flow_Cerrada__Reabrir_revision</bpmn:incoming>
+      <bpmn:outgoing>Flow_gw_Realizada</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Cerrada" name="Cerrada">
+      <bpmn:incoming>Flow_Realizada__Cerrar_revision</bpmn:incoming>
+      <bpmn:outgoing>Flow_Cerrada__Reabrir_revision</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_Realizada">
+      <bpmn:incoming>Flow_gw_Realizada</bpmn:incoming>
+      <bpmn:outgoing>Flow_Realizada__Devolver_a_planificada</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Realizada__Cerrar_revision</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Task_Planificada">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Planificada__Realizar_revision" sourceRef="Task_Planificada" targetRef="Task_Realizada" name="Realizar revision">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_Realizada" sourceRef="Task_Realizada" targetRef="Gateway_Realizada">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Realizada__Devolver_a_planificada" sourceRef="Gateway_Realizada" targetRef="Task_Planificada" name="Devolver a planificada">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Realizada__Cerrar_revision" sourceRef="Gateway_Realizada" targetRef="Task_Cerrada" name="Cerrar revision">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="Rectorado/VR (lectura)" autoaprobacion="0" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Cerrada__Reabrir_revision" sourceRef="Task_Cerrada" targetRef="Task_Realizada" name="Reabrir revision">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_1">
+    <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
+      <bpmndi:BPMNShape id="Shape_Participant_Revision_Direccion" bpmnElement="Participant_Revision_Direccion" isHorizontal="true">
+        <dc:Bounds x="200" y="80" width="830" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
+        <dc:Bounds x="230" y="80" width="800" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
+        <dc:Bounds x="230" y="142" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Planificada" bpmnElement="Task_Planificada">
+        <dc:Bounds x="430" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Realizada" bpmnElement="Task_Realizada">
+        <dc:Bounds x="630" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Cerrada" bpmnElement="Task_Cerrada">
+        <dc:Bounds x="830" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Gateway_Realizada" bpmnElement="Gateway_Realizada">
+        <dc:Bounds x="730" y="135" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
+        <di:waypoint x="266" y="160" />
+        <di:waypoint x="430" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Planificada__Realizar_revision" bpmnElement="Flow_Planificada__Realizar_revision">
+        <di:waypoint x="550" y="160" />
+        <di:waypoint x="630" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_Realizada" bpmnElement="Flow_gw_Realizada">
+        <di:waypoint x="750" y="160" />
+        <di:waypoint x="730" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Realizada__Devolver_a_planificada" bpmnElement="Flow_Realizada__Devolver_a_planificada">
+        <di:waypoint x="730" y="160" />
+        <di:waypoint x="550" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Realizada__Cerrar_revision" bpmnElement="Flow_Realizada__Cerrar_revision">
+        <di:waypoint x="780" y="160" />
+        <di:waypoint x="830" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Cerrada__Reabrir_revision" bpmnElement="Flow_Cerrada__Reabrir_revision">
+        <di:waypoint x="830" y="160" />
+        <di:waypoint x="750" y="160" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

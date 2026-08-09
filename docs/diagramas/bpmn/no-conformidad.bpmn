@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:sgc="https://sciback.com/schema/sgc/1.0" id="Definitions_1" targetNamespace="https://sciback.com/schema/sgc/1.0" exporter="SGC" exporterVersion="1.0">
+  <bpmn:collaboration id="Collaboration_1">
+    <bpmn:participant id="Participant_No_Conformidad" name="No Conformidad SGC" processRef="Process_No_Conformidad" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_No_Conformidad" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_Responsable_de_Calidad_de_Programa" name="Responsable de Calidad de Programa">
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Abierta</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_En_analisis</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_En_tratamiento</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_DPGC" name="DPGC">
+        <bpmn:flowNodeRef>Task_En_verificacion</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Cerrada_eficaz</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Cerrada_no_eficaz</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_En_verificacion</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Cerrada_eficaz</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Cerrada_no_eficaz</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="StartEvent_1" name="Inicio">
+      <bpmn:outgoing>Flow_inicio</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="Task_Abierta" name="Abierta">
+      <bpmn:incoming>Flow_inicio</bpmn:incoming>
+      <bpmn:outgoing>Flow_Abierta__Analizar_causa</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_En_analisis" name="En analisis">
+      <bpmn:incoming>Flow_Abierta__Analizar_causa</bpmn:incoming>
+      <bpmn:outgoing>Flow_En_analisis__Tratar</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_En_tratamiento" name="En tratamiento">
+      <bpmn:incoming>Flow_En_analisis__Tratar</bpmn:incoming>
+      <bpmn:incoming>Flow_En_verificacion__Reabrir_tratamiento</bpmn:incoming>
+      <bpmn:outgoing>Flow_En_tratamiento__Enviar_a_verificacion</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_En_verificacion" name="En verificacion">
+      <bpmn:incoming>Flow_En_tratamiento__Enviar_a_verificacion</bpmn:incoming>
+      <bpmn:outgoing>Flow_gw_En_verificacion</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Cerrada_eficaz" name="Cerrada eficaz">
+      <bpmn:incoming>Flow_En_verificacion__Cerrar_eficaz</bpmn:incoming>
+      <bpmn:outgoing>Flow_fin_Cerrada_eficaz</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Cerrada_no_eficaz" name="Cerrada no eficaz">
+      <bpmn:incoming>Flow_En_verificacion__Cerrar_no_eficaz</bpmn:incoming>
+      <bpmn:outgoing>Flow_fin_Cerrada_no_eficaz</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_En_verificacion">
+      <bpmn:incoming>Flow_gw_En_verificacion</bpmn:incoming>
+      <bpmn:outgoing>Flow_En_verificacion__Cerrar_eficaz</bpmn:outgoing>
+      <bpmn:outgoing>Flow_En_verificacion__Cerrar_no_eficaz</bpmn:outgoing>
+      <bpmn:outgoing>Flow_En_verificacion__Reabrir_tratamiento</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_Cerrada_eficaz" name="Fin">
+      <bpmn:incoming>Flow_fin_Cerrada_eficaz</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="End_Cerrada_no_eficaz" name="Fin">
+      <bpmn:incoming>Flow_fin_Cerrada_no_eficaz</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Task_Abierta">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Abierta__Analizar_causa" sourceRef="Task_Abierta" targetRef="Task_En_analisis" name="Analizar causa">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="Responsable de Calidad de Programa" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_En_analisis__Tratar" sourceRef="Task_En_analisis" targetRef="Task_En_tratamiento" name="Tratar">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="Responsable de Calidad de Programa" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_En_tratamiento__Enviar_a_verificacion" sourceRef="Task_En_tratamiento" targetRef="Task_En_verificacion" name="Enviar a verificacion">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="Responsable de Calidad de Programa" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_En_verificacion" sourceRef="Task_En_verificacion" targetRef="Gateway_En_verificacion">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_En_verificacion__Cerrar_eficaz" sourceRef="Gateway_En_verificacion" targetRef="Task_Cerrada_eficaz" name="Cerrar eficaz">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="0" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_En_verificacion__Cerrar_no_eficaz" sourceRef="Gateway_En_verificacion" targetRef="Task_Cerrada_no_eficaz" name="Cerrar no eficaz">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="0" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_En_verificacion__Reabrir_tratamiento" sourceRef="Gateway_En_verificacion" targetRef="Task_En_tratamiento" name="Reabrir tratamiento">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_fin_Cerrada_eficaz" sourceRef="Task_Cerrada_eficaz" targetRef="End_Cerrada_eficaz">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_fin_Cerrada_no_eficaz" sourceRef="Task_Cerrada_no_eficaz" targetRef="End_Cerrada_no_eficaz">
+    </bpmn:sequenceFlow>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_1">
+    <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
+      <bpmndi:BPMNShape id="Shape_Participant_No_Conformidad" bpmnElement="Participant_No_Conformidad" isHorizontal="true">
+        <dc:Bounds x="200" y="80" width="1346" height="320" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Responsable_de_Calidad_de_Programa" bpmnElement="Lane_Responsable_de_Calidad_de_Programa" isHorizontal="true">
+        <dc:Bounds x="230" y="80" width="1316" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
+        <dc:Bounds x="230" y="240" width="1316" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
+        <dc:Bounds x="230" y="142" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Abierta" bpmnElement="Task_Abierta">
+        <dc:Bounds x="430" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_En_analisis" bpmnElement="Task_En_analisis">
+        <dc:Bounds x="630" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_En_tratamiento" bpmnElement="Task_En_tratamiento">
+        <dc:Bounds x="830" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_En_verificacion" bpmnElement="Task_En_verificacion">
+        <dc:Bounds x="1030" y="280" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Cerrada_eficaz" bpmnElement="Task_Cerrada_eficaz">
+        <dc:Bounds x="1230" y="280" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Cerrada_no_eficaz" bpmnElement="Task_Cerrada_no_eficaz">
+        <dc:Bounds x="1230" y="280" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Gateway_En_verificacion" bpmnElement="Gateway_En_verificacion">
+        <dc:Bounds x="1130" y="295" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_End_Cerrada_eficaz" bpmnElement="End_Cerrada_eficaz">
+        <dc:Bounds x="1430" y="302" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_End_Cerrada_no_eficaz" bpmnElement="End_Cerrada_no_eficaz">
+        <dc:Bounds x="1430" y="302" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
+        <di:waypoint x="266" y="160" />
+        <di:waypoint x="430" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Abierta__Analizar_causa" bpmnElement="Flow_Abierta__Analizar_causa">
+        <di:waypoint x="550" y="160" />
+        <di:waypoint x="630" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_En_analisis__Tratar" bpmnElement="Flow_En_analisis__Tratar">
+        <di:waypoint x="750" y="160" />
+        <di:waypoint x="830" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_En_tratamiento__Enviar_a_verificacion" bpmnElement="Flow_En_tratamiento__Enviar_a_verificacion">
+        <di:waypoint x="950" y="160" />
+        <di:waypoint x="1030" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_En_verificacion" bpmnElement="Flow_gw_En_verificacion">
+        <di:waypoint x="1150" y="320" />
+        <di:waypoint x="1130" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_En_verificacion__Cerrar_eficaz" bpmnElement="Flow_En_verificacion__Cerrar_eficaz">
+        <di:waypoint x="1180" y="320" />
+        <di:waypoint x="1230" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_En_verificacion__Cerrar_no_eficaz" bpmnElement="Flow_En_verificacion__Cerrar_no_eficaz">
+        <di:waypoint x="1180" y="320" />
+        <di:waypoint x="1230" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_En_verificacion__Reabrir_tratamiento" bpmnElement="Flow_En_verificacion__Reabrir_tratamiento">
+        <di:waypoint x="1130" y="320" />
+        <di:waypoint x="950" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_fin_Cerrada_eficaz" bpmnElement="Flow_fin_Cerrada_eficaz">
+        <di:waypoint x="1350" y="320" />
+        <di:waypoint x="1430" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_fin_Cerrada_no_eficaz" bpmnElement="Flow_fin_Cerrada_no_eficaz">
+        <di:waypoint x="1350" y="320" />
+        <di:waypoint x="1430" y="320" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
