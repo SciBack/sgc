@@ -96,8 +96,32 @@ def nombre_archivo(document_type):
     return limpio.strip("-") + ".bpmn"
 
 
-def exportar_todos(destino):
-    """Escribe un `.bpmn` por cada workflow declarado. Devuelve el informe."""
+def layout_de(xml):
+    """Extrae las posiciones de un `.bpmn` ya existente: {id: (x, y, w, h)}.
+
+    Sirve para NO pisar el trabajo de quien recolocó el diagrama a mano. Un
+    generador que reimpone su propio layout en cada corrida obliga a repetir esa
+    edición cada vez que cambia el proceso, y entonces nadie la hace.
+    """
+    import re
+
+    posiciones = {}
+    patron = re.compile(
+        r'bpmnElement="([^"]+)"[^>]*>\s*<dc:Bounds\s+x="([-\d.]+)"\s+y="([-\d.]+)"'
+        r'\s+width="([\d.]+)"\s+height="([\d.]+)"')
+    for m in patron.finditer(xml or ""):
+        posiciones[m.group(1)] = tuple(float(v) for v in m.groups()[1:])
+    return posiciones
+
+
+def exportar_todos(destino, preservar_layout=True):
+    """Escribe un `.bpmn` por cada workflow declarado. Devuelve el informe.
+
+    Con `preservar_layout`, las posiciones de un fichero ya existente se
+    conservan y solo se calculan las de los elementos nuevos. Así la semántica
+    (que sale del código) se actualiza sola sin destruir el ajuste visual (que
+    lo hace una persona con criterio).
+    """
     import pathlib
 
     dir_destino = pathlib.Path(destino)
@@ -105,13 +129,18 @@ def exportar_todos(destino):
     informe = []
     for modulo, spec in specs_de_workflows():
         ruta = dir_destino / nombre_archivo(spec["document_type"])
-        ruta.write_text(construir(spec), encoding="utf-8")
+        previo = {}
+        if preservar_layout and ruta.exists():
+            previo = layout_de(ruta.read_text(encoding="utf-8"))
+        xml = construir(spec, layout_previo=previo)
+        ruta.write_text(xml, encoding="utf-8")
         informe.append({
             "document_type": spec["document_type"],
             "estados": len(spec["states"]),
             "transiciones": len(spec["transitions"]),
             "modulo": modulo,
             "archivo": ruta.name,
+            "posiciones_conservadas": len(previo),
         })
     return informe
 
@@ -212,8 +241,11 @@ def _ordenar_por_alcance(estados, transiciones, inicial, carril_de=None):
     return columna
 
 
-def construir(spec):
+def construir(spec, layout_previo=None):
     """Devuelve el XML BPMN 2.0 de un workflow.
+
+    `layout_previo` ({id: (x, y, w, h)}) conserva las posiciones que alguien
+    ya ajustó a mano; los elementos que no estén ahí se colocan calculados.
 
     `spec` es el diccionario que define el workflow: `name`, `document_type`,
     `states` [(estado, doc_status, rol_editor)] y `transitions`
@@ -285,15 +317,22 @@ def construir(spec):
                 {"rol": rol, "autoaprobacion": autoaprob},
             ))
 
-    return _serializar(spec, carriles, nodos, flujos)
+    return _serializar(spec, carriles, nodos, flujos, layout_previo or {})
 
 
-def _serializar(spec, carriles, nodos, flujos):
+def _serializar(spec, carriles, nodos, flujos, layout_previo=None):
+    layout_previo = layout_previo or {}
+
+    def geom(nodo):
+        """Posición del nodo: la ajustada a mano si existe, si no la calculada."""
+        if nodo.id in layout_previo:
+            return layout_previo[nodo.id]
+        return (nodo.x, nodo.y, nodo.ancho, nodo.alto)
     proc_id = _id("Process", spec["document_type"])
     part_id = _id("Participant", spec["document_type"])
     collab_id = "Collaboration_1"
 
-    ancho_max = max((n.x + n.ancho for n in nodos.values()), default=800)
+    ancho_max = max((geom(n)[0] + geom(n)[2] for n in nodos.values()), default=800)
     alto_pool = len(carriles) * ALTO_CARRIL
     ancho_pool = ancho_max - X_ORIGEN + 80
 
@@ -361,32 +400,35 @@ def _serializar(spec, carriles, nodos, flujos):
           f'width="{ancho_pool - ANCHO_ETIQUETA}" height="{ALTO_CARRIL}" />')
         a("      </bpmndi:BPMNShape>")
     for n in nodos.values():
+        gx, gy, gw, gh = geom(n)
         a(f'      <bpmndi:BPMNShape id="Shape_{n.id}" bpmnElement="{n.id}">')
-        a(f'        <dc:Bounds x="{int(n.x)}" y="{int(n.y)}" '
-          f'width="{n.ancho}" height="{n.alto}" />')
+        a(f'        <dc:Bounds x="{int(gx)}" y="{int(gy)}" '
+          f'width="{int(gw)}" height="{int(gh)}" />')
         a("      </bpmndi:BPMNShape>")
     for fid, src, tgt, _nombre, _ext in flujos:
         ns, nt = nodos[src], nodos[tgt]
-        cx1, cy1 = _centro(ns.x, ns.y, ns.ancho, ns.alto)
-        cx2, cy2 = _centro(nt.x, nt.y, nt.ancho, nt.alto)
+        sx, sy, sw, sh = geom(ns)
+        tx, ty, tw, th = geom(nt)
+        cx1, cy1 = _centro(sx, sy, sw, sh)
+        cx2, cy2 = _centro(tx, ty, tw, th)
         # Salir por el borde, no por el centro: una flecha centro a centro
         # atraviesa las dos cajas y el diagrama se lee mal. Si el destino está a
         # la izquierda (una devolución), se sale por el borde contrario.
         a(f'      <bpmndi:BPMNEdge id="Edge_{fid}" bpmnElement="{fid}">')
-        if ns.fila == nt.fila:
-            # mismo carril: recta horizontal de borde a borde
+        if abs(cy1 - cy2) < 1:
+            # misma altura: recta horizontal de borde a borde
             if cx2 >= cx1:
-                x1, x2 = ns.x + ns.ancho, nt.x
+                x1, x2 = sx + sw, tx
             else:
-                x1, x2 = ns.x, nt.x + nt.ancho
+                x1, x2 = sx, tx + tw
             a(f'        <di:waypoint x="{int(x1)}" y="{int(cy1)}" />')
             a(f'        <di:waypoint x="{int(x2)}" y="{int(cy2)}" />')
         else:
             # cambia de carril: codo en L. Sale por arriba o por abajo, recorre
             # el desnivel en vertical y entra por el lado del destino. Una recta
             # diagonal entre dos carriles cruza el resto del dibujo.
-            y1 = ns.y + ns.alto if nt.fila > ns.fila else ns.y
-            x2 = nt.x if cx2 >= cx1 else nt.x + nt.ancho
+            y1 = sy + sh if cy2 > cy1 else sy
+            x2 = tx if cx2 >= cx1 else tx + tw
             a(f'        <di:waypoint x="{int(cx1)}" y="{int(y1)}" />')
             a(f'        <di:waypoint x="{int(cx1)}" y="{int(cy2)}" />')
             a(f'        <di:waypoint x="{int(x2)}" y="{int(cy2)}" />')

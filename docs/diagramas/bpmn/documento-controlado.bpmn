@@ -111,16 +111,16 @@
   <bpmndi:BPMNDiagram id="Diagram_1">
     <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
       <bpmndi:BPMNShape id="Shape_Participant_Documento_Controlado" bpmnElement="Participant_Documento_Controlado" isHorizontal="true">
-        <dc:Bounds x="200" y="80" width="746" height="480" />
+        <dc:Bounds x="200" y="80" width="746.0" height="480" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_Dueno_de_Proceso" bpmnElement="Lane_Dueno_de_Proceso" isHorizontal="true">
-        <dc:Bounds x="230" y="80" width="716" height="160" />
+        <dc:Bounds x="230" y="80" width="716.0" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
-        <dc:Bounds x="230" y="240" width="716" height="160" />
+        <dc:Bounds x="230" y="240" width="716.0" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_Autoridad_Aprobadora" bpmnElement="Lane_Autoridad_Aprobadora" isHorizontal="true">
-        <dc:Bounds x="230" y="400" width="716" height="160" />
+        <dc:Bounds x="230" y="400" width="716.0" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
         <dc:Bounds x="300" y="142" width="36" height="36" />

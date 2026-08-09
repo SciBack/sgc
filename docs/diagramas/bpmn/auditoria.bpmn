@@ -99,13 +99,13 @@
   <bpmndi:BPMNDiagram id="Diagram_1">
     <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
       <bpmndi:BPMNShape id="Shape_Participant_Auditoria" bpmnElement="Participant_Auditoria" isHorizontal="true">
-        <dc:Bounds x="200" y="80" width="1146" height="320" />
+        <dc:Bounds x="200" y="80" width="1146.0" height="320" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_Auditor_Interno" bpmnElement="Lane_Auditor_Interno" isHorizontal="true">
-        <dc:Bounds x="230" y="80" width="1116" height="160" />
+        <dc:Bounds x="230" y="80" width="1116.0" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
-        <dc:Bounds x="230" y="240" width="1116" height="160" />
+        <dc:Bounds x="230" y="240" width="1116.0" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
         <dc:Bounds x="300" y="142" width="36" height="36" />

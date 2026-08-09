@@ -105,16 +105,16 @@
   <bpmndi:BPMNDiagram id="Diagram_1">
     <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
       <bpmndi:BPMNShape id="Shape_Participant_Evidencia" bpmnElement="Participant_Evidencia" isHorizontal="true">
-        <dc:Bounds x="200" y="80" width="546" height="480" />
+        <dc:Bounds x="200" y="80" width="546.0" height="480" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_Responsable_de_Calidad_de_Programa" bpmnElement="Lane_Responsable_de_Calidad_de_Programa" isHorizontal="true">
-        <dc:Bounds x="230" y="80" width="516" height="160" />
+        <dc:Bounds x="230" y="80" width="516.0" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
-        <dc:Bounds x="230" y="240" width="516" height="160" />
+        <dc:Bounds x="230" y="240" width="516.0" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_Analista_de_Calidad__DPGC_" bpmnElement="Lane_Analista_de_Calidad__DPGC_" isHorizontal="true">
-        <dc:Bounds x="230" y="400" width="516" height="160" />
+        <dc:Bounds x="230" y="400" width="516.0" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
         <dc:Bounds x="300" y="142" width="36" height="36" />
