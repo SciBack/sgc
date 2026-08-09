@@ -99,16 +99,16 @@
   <bpmndi:BPMNDiagram id="Diagram_1">
     <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
       <bpmndi:BPMNShape id="Shape_Participant_Auditoria" bpmnElement="Participant_Auditoria" isHorizontal="true">
-        <dc:Bounds x="200" y="80" width="1346" height="320" />
+        <dc:Bounds x="200" y="80" width="1146" height="320" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_Auditor_Interno" bpmnElement="Lane_Auditor_Interno" isHorizontal="true">
-        <dc:Bounds x="230" y="80" width="1316" height="160" />
+        <dc:Bounds x="230" y="80" width="1116" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
-        <dc:Bounds x="230" y="240" width="1316" height="160" />
+        <dc:Bounds x="230" y="240" width="1116" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
-        <dc:Bounds x="230" y="142" width="36" height="36" />
+        <dc:Bounds x="300" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Planificada" bpmnElement="Task_Planificada">
         <dc:Bounds x="430" y="120" width="120" height="80" />
@@ -123,7 +123,7 @@
         <dc:Bounds x="1030" y="120" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Cerrada" bpmnElement="Task_Cerrada">
-        <dc:Bounds x="1230" y="280" width="120" height="80" />
+        <dc:Bounds x="1030" y="280" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Gateway_Ejecutada" bpmnElement="Gateway_Ejecutada">
         <dc:Bounds x="930" y="135" width="50" height="50" />
@@ -132,10 +132,10 @@
         <dc:Bounds x="1130" y="135" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_End_Cerrada" bpmnElement="End_Cerrada">
-        <dc:Bounds x="1430" y="302" width="36" height="36" />
+        <dc:Bounds x="1230" y="302" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
-        <di:waypoint x="266" y="160" />
+        <di:waypoint x="336" y="160" />
         <di:waypoint x="430" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Planificada__Iniciar_auditoria" bpmnElement="Flow_Planificada__Iniciar_auditoria">
@@ -163,16 +163,17 @@
         <di:waypoint x="1130" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Informe_emitido__Cerrar_auditoria" bpmnElement="Flow_Informe_emitido__Cerrar_auditoria">
-        <di:waypoint x="1180" y="160" />
-        <di:waypoint x="1230" y="320" />
+        <di:waypoint x="1155" y="185" />
+        <di:waypoint x="1155" y="320" />
+        <di:waypoint x="1150" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Informe_emitido__Reabrir" bpmnElement="Flow_Informe_emitido__Reabrir">
         <di:waypoint x="1130" y="160" />
         <di:waypoint x="950" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_fin_Cerrada" bpmnElement="Flow_fin_Cerrada">
-        <di:waypoint x="1350" y="320" />
-        <di:waypoint x="1430" y="320" />
+        <di:waypoint x="1150" y="320" />
+        <di:waypoint x="1230" y="320" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

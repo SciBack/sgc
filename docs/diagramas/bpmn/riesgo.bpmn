@@ -95,16 +95,16 @@
   <bpmndi:BPMNDiagram id="Diagram_1">
     <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
       <bpmndi:BPMNShape id="Shape_Participant_Riesgo" bpmnElement="Participant_Riesgo" isHorizontal="true">
-        <dc:Bounds x="200" y="80" width="1346" height="320" />
+        <dc:Bounds x="200" y="80" width="1146" height="320" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_Dueno_de_Proceso" bpmnElement="Lane_Dueno_de_Proceso" isHorizontal="true">
-        <dc:Bounds x="230" y="80" width="1316" height="160" />
+        <dc:Bounds x="230" y="80" width="1116" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
-        <dc:Bounds x="230" y="240" width="1316" height="160" />
+        <dc:Bounds x="230" y="240" width="1116" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
-        <dc:Bounds x="230" y="142" width="36" height="36" />
+        <dc:Bounds x="300" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Identificado" bpmnElement="Task_Identificado">
         <dc:Bounds x="430" y="120" width="120" height="80" />
@@ -119,19 +119,19 @@
         <dc:Bounds x="1030" y="120" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Cerrado" bpmnElement="Task_Cerrado">
-        <dc:Bounds x="1230" y="280" width="120" height="80" />
+        <dc:Bounds x="1030" y="280" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Materializado" bpmnElement="Task_Materializado">
-        <dc:Bounds x="1230" y="280" width="120" height="80" />
+        <dc:Bounds x="1030" y="280" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Gateway_Monitoreado" bpmnElement="Gateway_Monitoreado">
         <dc:Bounds x="1130" y="135" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_End_Cerrado" bpmnElement="End_Cerrado">
-        <dc:Bounds x="1430" y="302" width="36" height="36" />
+        <dc:Bounds x="1230" y="302" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
-        <di:waypoint x="266" y="160" />
+        <di:waypoint x="336" y="160" />
         <di:waypoint x="430" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Identificado__Evaluar" bpmnElement="Flow_Identificado__Evaluar">
@@ -151,20 +151,22 @@
         <di:waypoint x="1130" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Monitoreado__Cerrar" bpmnElement="Flow_Monitoreado__Cerrar">
-        <di:waypoint x="1180" y="160" />
-        <di:waypoint x="1230" y="320" />
+        <di:waypoint x="1155" y="185" />
+        <di:waypoint x="1155" y="320" />
+        <di:waypoint x="1150" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Monitoreado__Materializar" bpmnElement="Flow_Monitoreado__Materializar">
-        <di:waypoint x="1180" y="160" />
-        <di:waypoint x="1230" y="320" />
+        <di:waypoint x="1155" y="185" />
+        <di:waypoint x="1155" y="320" />
+        <di:waypoint x="1150" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_fin_Cerrado" bpmnElement="Flow_fin_Cerrado">
-        <di:waypoint x="1350" y="320" />
-        <di:waypoint x="1430" y="320" />
+        <di:waypoint x="1150" y="320" />
+        <di:waypoint x="1230" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Materializado__Cerrar" bpmnElement="Flow_Materializado__Cerrar">
-        <di:waypoint x="1350" y="320" />
-        <di:waypoint x="1230" y="320" />
+        <di:waypoint x="1150" y="320" />
+        <di:waypoint x="1030" y="320" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

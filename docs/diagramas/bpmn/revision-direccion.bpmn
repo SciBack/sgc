@@ -69,7 +69,7 @@
         <dc:Bounds x="230" y="80" width="800" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
-        <dc:Bounds x="230" y="142" width="36" height="36" />
+        <dc:Bounds x="300" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Planificada" bpmnElement="Task_Planificada">
         <dc:Bounds x="430" y="120" width="120" height="80" />
@@ -84,7 +84,7 @@
         <dc:Bounds x="730" y="135" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
-        <di:waypoint x="266" y="160" />
+        <di:waypoint x="336" y="160" />
         <di:waypoint x="430" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Planificada__Realizar_revision" bpmnElement="Flow_Planificada__Realizar_revision">

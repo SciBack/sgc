@@ -180,24 +180,31 @@ class _Nodo:
         return base + (ALTO_CARRIL - self.alto) / 2
 
 
-def _ordenar_por_alcance(estados, transiciones, inicial):
+def _ordenar_por_alcance(estados, transiciones, inicial, carril_de=None):
     """Columna de cada estado = distancia en pasos desde el estado inicial.
 
     Un recorrido en anchura basta y da un orden estable: los estados a los que
     solo se llega retrocediendo (devoluciones) conservan la columna de su primera
     aparición, que es lo que hace legible el diagrama.
+
+    Con una excepción que mejora mucho el resultado: **si el paso cambia de
+    carril, el destino se queda en la MISMA columna**. Así el flujo baja en
+    vertical al carril de abajo en vez de irse en diagonal hacia la derecha, que
+    es lo que hace que un diagrama con varios responsables se lea de un vistazo.
     """
     salidas = {}
     for desde, _accion, hacia, *_resto in transiciones:
         salidas.setdefault(desde, []).append(hacia)
 
+    carril_de = carril_de or {}
     columna = {inicial: 0}
     cola = [inicial]
     while cola:
         actual = cola.pop(0)
         for siguiente in salidas.get(actual, []):
             if siguiente not in columna:
-                columna[siguiente] = columna[actual] + 1
+                cambia_de_carril = (carril_de.get(siguiente) != carril_de.get(actual))
+                columna[siguiente] = columna[actual] + (0 if cambia_de_carril else 1)
                 cola.append(siguiente)
     # estados inalcanzables: se colocan al final en vez de descartarlos en silencio
     for estado in estados:
@@ -224,7 +231,7 @@ def construir(spec):
             carriles.append(editor_de[estado])
     fila_de = {rol: i for i, rol in enumerate(carriles)}
 
-    columna = _ordenar_por_alcance(estados, transiciones, inicial)
+    columna = _ordenar_por_alcance(estados, transiciones, inicial, editor_de)
     salidas = {}
     for t in transiciones:
         salidas.setdefault(t[0], []).append(t)
@@ -237,7 +244,7 @@ def construir(spec):
     # primera flecha entrando desde la nada.
     nid_inicio = "StartEvent_1"
     nodos[nid_inicio] = _Nodo(nid_inicio, "startEvent", "Inicio",
-                              editor_de[inicial], 0, fila_de[editor_de[inicial]])
+                              editor_de[inicial], 0.35, fila_de[editor_de[inicial]])
 
     # Una tarea por estado
     for estado in estados:
@@ -365,13 +372,24 @@ def _serializar(spec, carriles, nodos, flujos):
         # Salir por el borde, no por el centro: una flecha centro a centro
         # atraviesa las dos cajas y el diagrama se lee mal. Si el destino está a
         # la izquierda (una devolución), se sale por el borde contrario.
-        if cx2 >= cx1:
-            x1, x2 = ns.x + ns.ancho, nt.x
-        else:
-            x1, x2 = ns.x, nt.x + nt.ancho
         a(f'      <bpmndi:BPMNEdge id="Edge_{fid}" bpmnElement="{fid}">')
-        a(f'        <di:waypoint x="{int(x1)}" y="{int(cy1)}" />')
-        a(f'        <di:waypoint x="{int(x2)}" y="{int(cy2)}" />')
+        if ns.fila == nt.fila:
+            # mismo carril: recta horizontal de borde a borde
+            if cx2 >= cx1:
+                x1, x2 = ns.x + ns.ancho, nt.x
+            else:
+                x1, x2 = ns.x, nt.x + nt.ancho
+            a(f'        <di:waypoint x="{int(x1)}" y="{int(cy1)}" />')
+            a(f'        <di:waypoint x="{int(x2)}" y="{int(cy2)}" />')
+        else:
+            # cambia de carril: codo en L. Sale por arriba o por abajo, recorre
+            # el desnivel en vertical y entra por el lado del destino. Una recta
+            # diagonal entre dos carriles cruza el resto del dibujo.
+            y1 = ns.y + ns.alto if nt.fila > ns.fila else ns.y
+            x2 = nt.x if cx2 >= cx1 else nt.x + nt.ancho
+            a(f'        <di:waypoint x="{int(cx1)}" y="{int(y1)}" />')
+            a(f'        <di:waypoint x="{int(cx1)}" y="{int(cy2)}" />')
+            a(f'        <di:waypoint x="{int(x2)}" y="{int(cy2)}" />')
         a("      </bpmndi:BPMNEdge>")
     a("    </bpmndi:BPMNPlane>")
     a("  </bpmndi:BPMNDiagram>")

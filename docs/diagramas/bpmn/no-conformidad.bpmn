@@ -102,16 +102,16 @@
   <bpmndi:BPMNDiagram id="Diagram_1">
     <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
       <bpmndi:BPMNShape id="Shape_Participant_No_Conformidad" bpmnElement="Participant_No_Conformidad" isHorizontal="true">
-        <dc:Bounds x="200" y="80" width="1346" height="320" />
+        <dc:Bounds x="200" y="80" width="1146" height="320" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_Responsable_de_Calidad_de_Programa" bpmnElement="Lane_Responsable_de_Calidad_de_Programa" isHorizontal="true">
-        <dc:Bounds x="230" y="80" width="1316" height="160" />
+        <dc:Bounds x="230" y="80" width="1116" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
-        <dc:Bounds x="230" y="240" width="1316" height="160" />
+        <dc:Bounds x="230" y="240" width="1116" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
-        <dc:Bounds x="230" y="142" width="36" height="36" />
+        <dc:Bounds x="300" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Abierta" bpmnElement="Task_Abierta">
         <dc:Bounds x="430" y="120" width="120" height="80" />
@@ -123,25 +123,25 @@
         <dc:Bounds x="830" y="120" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_En_verificacion" bpmnElement="Task_En_verificacion">
-        <dc:Bounds x="1030" y="280" width="120" height="80" />
+        <dc:Bounds x="830" y="280" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Cerrada_eficaz" bpmnElement="Task_Cerrada_eficaz">
-        <dc:Bounds x="1230" y="280" width="120" height="80" />
+        <dc:Bounds x="1030" y="280" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Cerrada_no_eficaz" bpmnElement="Task_Cerrada_no_eficaz">
-        <dc:Bounds x="1230" y="280" width="120" height="80" />
+        <dc:Bounds x="1030" y="280" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Gateway_En_verificacion" bpmnElement="Gateway_En_verificacion">
-        <dc:Bounds x="1130" y="295" width="50" height="50" />
+        <dc:Bounds x="930" y="295" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_End_Cerrada_eficaz" bpmnElement="End_Cerrada_eficaz">
-        <dc:Bounds x="1430" y="302" width="36" height="36" />
+        <dc:Bounds x="1230" y="302" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_End_Cerrada_no_eficaz" bpmnElement="End_Cerrada_no_eficaz">
-        <dc:Bounds x="1430" y="302" width="36" height="36" />
+        <dc:Bounds x="1230" y="302" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
-        <di:waypoint x="266" y="160" />
+        <di:waypoint x="336" y="160" />
         <di:waypoint x="430" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Abierta__Analizar_causa" bpmnElement="Flow_Abierta__Analizar_causa">
@@ -153,32 +153,34 @@
         <di:waypoint x="830" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_En_tratamiento__Enviar_a_verificacion" bpmnElement="Flow_En_tratamiento__Enviar_a_verificacion">
-        <di:waypoint x="950" y="160" />
-        <di:waypoint x="1030" y="320" />
+        <di:waypoint x="890" y="200" />
+        <di:waypoint x="890" y="320" />
+        <di:waypoint x="830" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_En_verificacion" bpmnElement="Flow_gw_En_verificacion">
-        <di:waypoint x="1150" y="320" />
-        <di:waypoint x="1130" y="320" />
+        <di:waypoint x="950" y="320" />
+        <di:waypoint x="930" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_En_verificacion__Cerrar_eficaz" bpmnElement="Flow_En_verificacion__Cerrar_eficaz">
-        <di:waypoint x="1180" y="320" />
-        <di:waypoint x="1230" y="320" />
+        <di:waypoint x="980" y="320" />
+        <di:waypoint x="1030" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_En_verificacion__Cerrar_no_eficaz" bpmnElement="Flow_En_verificacion__Cerrar_no_eficaz">
-        <di:waypoint x="1180" y="320" />
-        <di:waypoint x="1230" y="320" />
+        <di:waypoint x="980" y="320" />
+        <di:waypoint x="1030" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_En_verificacion__Reabrir_tratamiento" bpmnElement="Flow_En_verificacion__Reabrir_tratamiento">
-        <di:waypoint x="1130" y="320" />
+        <di:waypoint x="955" y="295" />
+        <di:waypoint x="955" y="160" />
         <di:waypoint x="950" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_fin_Cerrada_eficaz" bpmnElement="Flow_fin_Cerrada_eficaz">
-        <di:waypoint x="1350" y="320" />
-        <di:waypoint x="1430" y="320" />
+        <di:waypoint x="1150" y="320" />
+        <di:waypoint x="1230" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_fin_Cerrada_no_eficaz" bpmnElement="Flow_fin_Cerrada_no_eficaz">
-        <di:waypoint x="1350" y="320" />
-        <di:waypoint x="1430" y="320" />
+        <di:waypoint x="1150" y="320" />
+        <di:waypoint x="1230" y="320" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
