@@ -6,87 +6,87 @@
   <bpmn:process id="Process_Riesgo" isExecutable="false">
     <bpmn:laneSet id="LaneSet_1">
       <bpmn:lane id="Lane_Dueno_de_Proceso" name="Dueño de Proceso">
+        <bpmn:flowNodeRef>Task_Identificado__Evaluar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Evaluado__Iniciar_tratamiento</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_En_tratamiento__Monitorear</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Task_Identificado</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Task_Evaluado</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Task_En_tratamiento</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Task_Monitoreado</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Gateway_Monitoreado</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_DPGC" name="DPGC">
-        <bpmn:flowNodeRef>Task_Cerrado</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Task_Materializado</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Monitoreado__Cerrar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Monitoreado__Materializar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Materializado__Cerrar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Monitoreado</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>End_Cerrado</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
+    <bpmn:userTask id="Task_Identificado__Evaluar" name="Evaluar">
+      <bpmn:incoming>Flow_inicio</bpmn:incoming>
+      <bpmn:outgoing>Flow_Identificado_Evaluar_hacia_Evaluado</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Evaluado__Iniciar_tratamiento" name="Iniciar tratamiento">
+      <bpmn:incoming>Flow_Identificado_Evaluar_hacia_Evaluado</bpmn:incoming>
+      <bpmn:outgoing>Flow_Evaluado_Iniciar_tratamiento_hacia_En_tratamiento</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_En_tratamiento__Monitorear" name="Monitorear">
+      <bpmn:incoming>Flow_Evaluado_Iniciar_tratamiento_hacia_En_tratamiento</bpmn:incoming>
+      <bpmn:outgoing>Flow_En_tratamiento_Monitorear_hacia_Monitoreado</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Monitoreado__Cerrar" name="Cerrar">
+      <bpmn:incoming>Flow_gw_Monitoreado_Cerrar</bpmn:incoming>
+      <bpmn:outgoing>Flow_Monitoreado_Cerrar_hacia_Cerrado</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Monitoreado__Materializar" name="Materializar">
+      <bpmn:incoming>Flow_gw_Monitoreado_Materializar</bpmn:incoming>
+      <bpmn:outgoing>Flow_Monitoreado_Materializar_hacia_Materializado</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Materializado__Cerrar" name="Cerrar">
+      <bpmn:incoming>Flow_Monitoreado_Materializar_hacia_Materializado</bpmn:incoming>
+      <bpmn:outgoing>Flow_Materializado_Cerrar_hacia_Cerrado</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_Monitoreado" name="Monitoreado">
+      <bpmn:incoming>Flow_En_tratamiento_Monitorear_hacia_Monitoreado</bpmn:incoming>
+      <bpmn:outgoing>Flow_gw_Monitoreado_Cerrar</bpmn:outgoing>
+      <bpmn:outgoing>Flow_gw_Monitoreado_Materializar</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_Cerrado" name="Cerrado">
+      <bpmn:incoming>Flow_Monitoreado_Cerrar_hacia_Cerrado</bpmn:incoming>
+      <bpmn:incoming>Flow_Materializado_Cerrar_hacia_Cerrado</bpmn:incoming>
+    </bpmn:endEvent>
     <bpmn:startEvent id="StartEvent_1" name="Inicio">
       <bpmn:outgoing>Flow_inicio</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:userTask id="Task_Identificado" name="Identificado">
-      <bpmn:incoming>Flow_inicio</bpmn:incoming>
-      <bpmn:outgoing>Flow_Identificado__Evaluar</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:userTask id="Task_Evaluado" name="Evaluado">
-      <bpmn:incoming>Flow_Identificado__Evaluar</bpmn:incoming>
-      <bpmn:outgoing>Flow_Evaluado__Iniciar_tratamiento</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:userTask id="Task_En_tratamiento" name="En tratamiento">
-      <bpmn:incoming>Flow_Evaluado__Iniciar_tratamiento</bpmn:incoming>
-      <bpmn:outgoing>Flow_En_tratamiento__Monitorear</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:userTask id="Task_Monitoreado" name="Monitoreado">
-      <bpmn:incoming>Flow_En_tratamiento__Monitorear</bpmn:incoming>
-      <bpmn:outgoing>Flow_gw_Monitoreado</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:userTask id="Task_Cerrado" name="Cerrado">
-      <bpmn:incoming>Flow_Monitoreado__Cerrar</bpmn:incoming>
-      <bpmn:incoming>Flow_Materializado__Cerrar</bpmn:incoming>
-      <bpmn:outgoing>Flow_fin_Cerrado</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:userTask id="Task_Materializado" name="Materializado">
-      <bpmn:incoming>Flow_Monitoreado__Materializar</bpmn:incoming>
-      <bpmn:outgoing>Flow_Materializado__Cerrar</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:exclusiveGateway id="Gateway_Monitoreado">
-      <bpmn:incoming>Flow_gw_Monitoreado</bpmn:incoming>
-      <bpmn:outgoing>Flow_Monitoreado__Cerrar</bpmn:outgoing>
-      <bpmn:outgoing>Flow_Monitoreado__Materializar</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:endEvent id="End_Cerrado" name="Fin">
-      <bpmn:incoming>Flow_fin_Cerrado</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Task_Identificado">
+    <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Task_Identificado__Evaluar">
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_Identificado__Evaluar" sourceRef="Task_Identificado" targetRef="Task_Evaluado" name="Evaluar">
+    <bpmn:sequenceFlow id="Flow_Identificado_Evaluar_hacia_Evaluado" sourceRef="Task_Identificado__Evaluar" targetRef="Task_Evaluado__Iniciar_tratamiento">
       <bpmn:extensionElements>
         <sgc:transicion rol="Dueño de Proceso" autoaprobacion="1" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_Evaluado__Iniciar_tratamiento" sourceRef="Task_Evaluado" targetRef="Task_En_tratamiento" name="Iniciar tratamiento">
+    <bpmn:sequenceFlow id="Flow_Evaluado_Iniciar_tratamiento_hacia_En_tratamiento" sourceRef="Task_Evaluado__Iniciar_tratamiento" targetRef="Task_En_tratamiento__Monitorear">
       <bpmn:extensionElements>
         <sgc:transicion rol="Dueño de Proceso" autoaprobacion="1" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_En_tratamiento__Monitorear" sourceRef="Task_En_tratamiento" targetRef="Task_Monitoreado" name="Monitorear">
+    <bpmn:sequenceFlow id="Flow_En_tratamiento_Monitorear_hacia_Monitoreado" sourceRef="Task_En_tratamiento__Monitorear" targetRef="Gateway_Monitoreado">
       <bpmn:extensionElements>
         <sgc:transicion rol="Dueño de Proceso" autoaprobacion="1" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_gw_Monitoreado" sourceRef="Task_Monitoreado" targetRef="Gateway_Monitoreado">
+    <bpmn:sequenceFlow id="Flow_gw_Monitoreado_Cerrar" sourceRef="Gateway_Monitoreado" targetRef="Task_Monitoreado__Cerrar">
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_Monitoreado__Cerrar" sourceRef="Gateway_Monitoreado" targetRef="Task_Cerrado" name="Cerrar">
+    <bpmn:sequenceFlow id="Flow_Monitoreado_Cerrar_hacia_Cerrado" sourceRef="Task_Monitoreado__Cerrar" targetRef="End_Cerrado">
       <bpmn:extensionElements>
         <sgc:transicion rol="DPGC" autoaprobacion="0" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_Monitoreado__Materializar" sourceRef="Gateway_Monitoreado" targetRef="Task_Materializado" name="Materializar">
+    <bpmn:sequenceFlow id="Flow_gw_Monitoreado_Materializar" sourceRef="Gateway_Monitoreado" targetRef="Task_Monitoreado__Materializar">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Monitoreado_Materializar_hacia_Materializado" sourceRef="Task_Monitoreado__Materializar" targetRef="Task_Materializado__Cerrar">
       <bpmn:extensionElements>
         <sgc:transicion rol="DPGC" autoaprobacion="0" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_fin_Cerrado" sourceRef="Task_Cerrado" targetRef="End_Cerrado">
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_Materializado__Cerrar" sourceRef="Task_Materializado" targetRef="Task_Cerrado" name="Cerrar">
+    <bpmn:sequenceFlow id="Flow_Materializado_Cerrar_hacia_Cerrado" sourceRef="Task_Materializado__Cerrar" targetRef="End_Cerrado">
       <bpmn:extensionElements>
         <sgc:transicion rol="DPGC" autoaprobacion="0" />
       </bpmn:extensionElements>
@@ -95,78 +95,77 @@
   <bpmndi:BPMNDiagram id="Diagram_1">
     <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
       <bpmndi:BPMNShape id="Shape_Participant_Riesgo" bpmnElement="Participant_Riesgo" isHorizontal="true">
-        <dc:Bounds x="200" y="80" width="1146.0" height="320" />
+        <dc:Bounds x="200" y="80" width="1746" height="320" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_Dueno_de_Proceso" bpmnElement="Lane_Dueno_de_Proceso" isHorizontal="true">
-        <dc:Bounds x="230" y="80" width="1116.0" height="160" />
+        <dc:Bounds x="230" y="80" width="1716" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
-        <dc:Bounds x="230" y="240" width="1116.0" height="160" />
+        <dc:Bounds x="230" y="240" width="1716" height="160" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
-        <dc:Bounds x="300" y="142" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Task_Identificado" bpmnElement="Task_Identificado">
+      <bpmndi:BPMNShape id="Shape_Task_Identificado__Evaluar" bpmnElement="Task_Identificado__Evaluar">
         <dc:Bounds x="430" y="120" width="120" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Task_Evaluado" bpmnElement="Task_Evaluado">
+      <bpmndi:BPMNShape id="Shape_Task_Evaluado__Iniciar_tratamiento" bpmnElement="Task_Evaluado__Iniciar_tratamiento">
         <dc:Bounds x="630" y="120" width="120" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Task_En_tratamiento" bpmnElement="Task_En_tratamiento">
+      <bpmndi:BPMNShape id="Shape_Task_En_tratamiento__Monitorear" bpmnElement="Task_En_tratamiento__Monitorear">
         <dc:Bounds x="830" y="120" width="120" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Task_Monitoreado" bpmnElement="Task_Monitoreado">
-        <dc:Bounds x="1030" y="120" width="120" height="80" />
+      <bpmndi:BPMNShape id="Shape_Task_Monitoreado__Cerrar" bpmnElement="Task_Monitoreado__Cerrar">
+        <dc:Bounds x="1230" y="280" width="120" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Task_Cerrado" bpmnElement="Task_Cerrado">
-        <dc:Bounds x="1030" y="280" width="120" height="80" />
+      <bpmndi:BPMNShape id="Shape_Task_Monitoreado__Materializar" bpmnElement="Task_Monitoreado__Materializar">
+        <dc:Bounds x="1430" y="280" width="120" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Task_Materializado" bpmnElement="Task_Materializado">
-        <dc:Bounds x="1030" y="280" width="120" height="80" />
+      <bpmndi:BPMNShape id="Shape_Task_Materializado__Cerrar" bpmnElement="Task_Materializado__Cerrar">
+        <dc:Bounds x="1630" y="280" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Gateway_Monitoreado" bpmnElement="Gateway_Monitoreado">
-        <dc:Bounds x="1130" y="135" width="50" height="50" />
+        <dc:Bounds x="1030" y="295" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_End_Cerrado" bpmnElement="End_Cerrado">
-        <dc:Bounds x="1230" y="302" width="36" height="36" />
+        <dc:Bounds x="1830" y="302" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
+        <dc:Bounds x="230" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
-        <di:waypoint x="336" y="160" />
+        <di:waypoint x="266" y="160" />
         <di:waypoint x="430" y="160" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Edge_Flow_Identificado__Evaluar" bpmnElement="Flow_Identificado__Evaluar">
+      <bpmndi:BPMNEdge id="Edge_Flow_Identificado_Evaluar_hacia_Evaluado" bpmnElement="Flow_Identificado_Evaluar_hacia_Evaluado">
         <di:waypoint x="550" y="160" />
         <di:waypoint x="630" y="160" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Edge_Flow_Evaluado__Iniciar_tratamiento" bpmnElement="Flow_Evaluado__Iniciar_tratamiento">
+      <bpmndi:BPMNEdge id="Edge_Flow_Evaluado_Iniciar_tratamiento_hacia_En_tratamiento" bpmnElement="Flow_Evaluado_Iniciar_tratamiento_hacia_En_tratamiento">
         <di:waypoint x="750" y="160" />
         <di:waypoint x="830" y="160" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Edge_Flow_En_tratamiento__Monitorear" bpmnElement="Flow_En_tratamiento__Monitorear">
-        <di:waypoint x="950" y="160" />
-        <di:waypoint x="1030" y="160" />
+      <bpmndi:BPMNEdge id="Edge_Flow_En_tratamiento_Monitorear_hacia_Monitoreado" bpmnElement="Flow_En_tratamiento_Monitorear_hacia_Monitoreado">
+        <di:waypoint x="890" y="200" />
+        <di:waypoint x="890" y="320" />
+        <di:waypoint x="1030" y="320" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Edge_Flow_gw_Monitoreado" bpmnElement="Flow_gw_Monitoreado">
-        <di:waypoint x="1150" y="160" />
-        <di:waypoint x="1130" y="160" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Edge_Flow_Monitoreado__Cerrar" bpmnElement="Flow_Monitoreado__Cerrar">
-        <di:waypoint x="1155" y="185" />
-        <di:waypoint x="1155" y="320" />
-        <di:waypoint x="1150" y="320" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Edge_Flow_Monitoreado__Materializar" bpmnElement="Flow_Monitoreado__Materializar">
-        <di:waypoint x="1155" y="185" />
-        <di:waypoint x="1155" y="320" />
-        <di:waypoint x="1150" y="320" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Edge_Flow_fin_Cerrado" bpmnElement="Flow_fin_Cerrado">
-        <di:waypoint x="1150" y="320" />
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_Monitoreado_Cerrar" bpmnElement="Flow_gw_Monitoreado_Cerrar">
+        <di:waypoint x="1080" y="320" />
         <di:waypoint x="1230" y="320" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Edge_Flow_Materializado__Cerrar" bpmnElement="Flow_Materializado__Cerrar">
-        <di:waypoint x="1150" y="320" />
-        <di:waypoint x="1030" y="320" />
+      <bpmndi:BPMNEdge id="Edge_Flow_Monitoreado_Cerrar_hacia_Cerrado" bpmnElement="Flow_Monitoreado_Cerrar_hacia_Cerrado">
+        <di:waypoint x="1350" y="320" />
+        <di:waypoint x="1830" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_Monitoreado_Materializar" bpmnElement="Flow_gw_Monitoreado_Materializar">
+        <di:waypoint x="1080" y="320" />
+        <di:waypoint x="1430" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Monitoreado_Materializar_hacia_Materializado" bpmnElement="Flow_Monitoreado_Materializar_hacia_Materializado">
+        <di:waypoint x="1550" y="320" />
+        <di:waypoint x="1630" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Materializado_Cerrar_hacia_Cerrado" bpmnElement="Flow_Materializado_Cerrar_hacia_Cerrado">
+        <di:waypoint x="1750" y="320" />
+        <di:waypoint x="1830" y="320" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

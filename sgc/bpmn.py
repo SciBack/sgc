@@ -209,113 +209,123 @@ class _Nodo:
         return base + (ALTO_CARRIL - self.alto) / 2
 
 
-def _ordenar_por_alcance(estados, transiciones, inicial, carril_de=None):
-    """Columna de cada estado = distancia en pasos desde el estado inicial.
+def _columnas_por_alcance(nodos_ids, flujos, inicio):
+    """Columna de cada nodo = distancia en pasos desde el inicio.
 
-    Un recorrido en anchura basta y da un orden estable: los estados a los que
-    solo se llega retrocediendo (devoluciones) conservan la columna de su primera
-    aparición, que es lo que hace legible el diagrama.
-
-    Con una excepción que mejora mucho el resultado: **si el paso cambia de
-    carril, el destino se queda en la MISMA columna**. Así el flujo baja en
-    vertical al carril de abajo en vez de irse en diagonal hacia la derecha, que
-    es lo que hace que un diagrama con varios responsables se lea de un vistazo.
+    Recorrido en anchura sobre el grafo REAL de nodos (no sobre los estados):
+    así los retrocesos conservan la columna de su primera aparición, que es lo
+    que mantiene el diagrama legible en vez de estirarlo por cada devolución.
     """
     salidas = {}
-    for desde, _accion, hacia, *_resto in transiciones:
-        salidas.setdefault(desde, []).append(hacia)
-
-    carril_de = carril_de or {}
-    columna = {inicial: 0}
-    cola = [inicial]
+    for _fid, src, tgt, _n, _e in flujos:
+        salidas.setdefault(src, []).append(tgt)
+    col = {inicio: 0}
+    cola = [inicio]
     while cola:
         actual = cola.pop(0)
-        for siguiente in salidas.get(actual, []):
-            if siguiente not in columna:
-                cambia_de_carril = (carril_de.get(siguiente) != carril_de.get(actual))
-                columna[siguiente] = columna[actual] + (0 if cambia_de_carril else 1)
-                cola.append(siguiente)
-    # estados inalcanzables: se colocan al final en vez de descartarlos en silencio
-    for estado in estados:
-        columna.setdefault(estado, max(columna.values(), default=0) + 1)
-    return columna
+        for sig in salidas.get(actual, []):
+            if sig not in col:
+                col[sig] = col[actual] + 1
+                cola.append(sig)
+    for nid in nodos_ids:
+        col.setdefault(nid, max(col.values(), default=0) + 1)
+    return col
 
 
 def construir(spec, layout_previo=None):
     """Devuelve el XML BPMN 2.0 de un workflow.
 
-    `layout_previo` ({id: (x, y, w, h)}) conserva las posiciones que alguien
-    ya ajustó a mano; los elementos que no estén ahí se colocan calculados.
+    **La tarea es la ACCIÓN, no el estado.** En BPMN una `userTask` es una
+    actividad y se lee como un verbo: "Consolidar", "Enviar a revisión". Un
+    estado ("En revisión") no es algo que alguien haga, es donde el documento
+    espera; dibujarlo como tarea produce un diagrama que valida contra el
+    esquema pero que a quien lee procesos le resulta ajeno.
 
-    `spec` es el diccionario que define el workflow: `name`, `document_type`,
-    `states` [(estado, doc_status, rol_editor)] y `transitions`
-    [(desde, accion, hacia, rol[, autoaprobacion])].
+    De ahí el mapeo:
+
+        transición                 -> userTask con el nombre de la acción,
+                                      en el carril de quien la EJECUTA
+        estado con varias salidas  -> exclusiveGateway con el nombre del estado
+                                      (es donde se decide)
+        estado con una sola salida -> no se dibuja: encadena directo
+        estado sin salidas         -> endEvent
+
+    El carril es el rol AUTORIZADO a ejecutar la acción, no el que puede editar
+    el documento: es lo que de verdad gobierna quién puede mover el proceso, y
+    hace visible la segregación de funciones.
+
+    `layout_previo` ({id: (x, y, w, h)}) conserva posiciones ya ajustadas a mano.
     """
     estados = [e[0] for e in spec["states"]]
-    editor_de = {e[0]: e[2] for e in spec["states"]}
     transiciones = spec["transitions"]
     inicial = estados[0]
 
-    # Carriles: un rol por carril, en el orden en que aparecen en los estados.
-    carriles = []
-    for estado in estados:
-        if editor_de[estado] not in carriles:
-            carriles.append(editor_de[estado])
-    fila_de = {rol: i for i, rol in enumerate(carriles)}
-
-    columna = _ordenar_por_alcance(estados, transiciones, inicial, editor_de)
     salidas = {}
     for t in transiciones:
         salidas.setdefault(t[0], []).append(t)
 
+    # Carriles: el rol que ejecuta cada acción, en orden de aparición.
+    carriles = []
+    for t in transiciones:
+        if t[3] not in carriles:
+            carriles.append(t[3])
+    if not carriles:
+        carriles = ["Sistema"]
+    fila_de = {rol: i for i, rol in enumerate(carriles)}
+
+    usados = set()
+    id_tarea = {}      # (estado_origen, accion, indice) -> id
+    for i, t in enumerate(transiciones):
+        id_tarea[i] = _id("Task", f"{t[0]}__{t[1]}", usados)
+    id_gw = {e: _id("Gateway", e, usados) for e in estados if len(salidas.get(e, [])) > 1}
+    id_fin = {e: _id("End", e, usados) for e in estados if not salidas.get(e)}
+
+    def entrada_a(estado):
+        """Nodo que representa 'el documento llega a este estado'."""
+        if estado in id_gw:
+            return id_gw[estado]
+        if salidas.get(estado):
+            return id_tarea[transiciones.index(salidas[estado][0])]
+        return id_fin[estado]
+
     nodos, flujos = {}, []
-    ids_usados = set()
-
-    # El evento de inicio ocupa la columna 0 y los estados se corren una a la
-    # derecha: si el inicio fuera a la columna -1 quedaría FUERA del pool, con la
-    # primera flecha entrando desde la nada.
     nid_inicio = "StartEvent_1"
-    nodos[nid_inicio] = _Nodo(nid_inicio, "startEvent", "Inicio",
-                              editor_de[inicial], 0.35, fila_de[editor_de[inicial]])
 
-    # Una tarea por estado
-    for estado in estados:
-        nid = _id("Task", estado)
-        nodos[nid] = _Nodo(nid, "userTask", estado, editor_de[estado],
-                           columna[estado] + 1, fila_de[editor_de[estado]])
-    flujos.append((_id("Flow", "inicio", ids_usados), nid_inicio, _id("Task", inicial), "", None))
+    for i, t in enumerate(transiciones):
+        rol = t[3]
+        nodos[id_tarea[i]] = _Nodo(id_tarea[i], "userTask", t[1], rol, 0, fila_de[rol])
+    for estado, gid in id_gw.items():
+        rol = salidas[estado][0][3]          # quien decide es quien puede actuar
+        nodos[gid] = _Nodo(gid, "exclusiveGateway", estado, rol, 0, fila_de[rol])
+    for estado, eid in id_fin.items():
+        llegan = [t for t in transiciones if t[2] == estado]
+        rol = llegan[0][3] if llegan else carriles[0]
+        nodos[eid] = _Nodo(eid, "endEvent", estado, rol, 0, fila_de[rol])
+    rol_inicio = salidas[inicial][0][3] if salidas.get(inicial) else carriles[0]
+    nodos[nid_inicio] = _Nodo(nid_inicio, "startEvent", "Inicio", rol_inicio, 0,
+                              fila_de[rol_inicio])
 
-    for estado in estados:
-        salientes = salidas.get(estado, [])
-        origen = _id("Task", estado)
+    flujos.append((_id("Flow", "inicio", usados), nid_inicio, entrada_a(inicial), "", None))
+    for i, t in enumerate(transiciones):
+        tid = id_tarea[i]
+        if t[0] in id_gw:
+            # el rombo reparte hacia cada acción posible
+            flujos.append((_id("Flow", f"gw_{t[0]}_{t[1]}", usados), id_gw[t[0]], tid, "", None))
+        flujos.append((
+            _id("Flow", f"{t[0]}_{t[1]}_hacia_{t[2]}", usados), tid, entrada_a(t[2]), "",
+            {"rol": t[3], "autoaprobacion": t[4] if len(t) > 4 else 0},
+        ))
 
-        if not salientes:
-            # estado terminal: se cierra con un evento de fin
-            nid_fin = _id("End", estado)
-            nodos[nid_fin] = _Nodo(nid_fin, "endEvent", "Fin", editor_de[estado],
-                                   columna[estado] + 2, fila_de[editor_de[estado]])
-            flujos.append((_id("Flow", f"fin_{estado}", ids_usados), origen, nid_fin, "", None))
-            continue
-
-        if len(salientes) > 1:
-            # varias salidas excluyentes: en BPMN eso es un gateway exclusivo, no
-            # varias flechas sueltas saliendo de la tarea
-            # Media columna a la derecha de su tarea: en la misma columna se
-            # solapaba con ella y el diagrama salía ilegible.
-            nid_gw = _id("Gateway", estado)
-            nodos[nid_gw] = _Nodo(nid_gw, "exclusiveGateway", "", editor_de[estado],
-                                  columna[estado] + 1.5, fila_de[editor_de[estado]])
-            flujos.append((_id("Flow", f"gw_{estado}", ids_usados), origen, nid_gw, "", None))
-            origen = nid_gw
-
-        for t in salientes:
-            desde, accion, hacia, rol = t[0], t[1], t[2], t[3]
-            autoaprob = t[4] if len(t) > 4 else 0
-            flujos.append((
-                _id("Flow", f"{desde}__{accion}", ids_usados),
-                origen, _id("Task", hacia), accion,
-                {"rol": rol, "autoaprobacion": autoaprob},
-            ))
+    # --- posiciones: columna por alcance, fila por carril, sin solapes ---
+    col = _columnas_por_alcance(list(nodos), flujos, nid_inicio)
+    ocupadas = set()
+    for nid in sorted(nodos, key=lambda n: (col[n], nodos[n].fila)):
+        n = nodos[nid]
+        c = col[nid]
+        while (c, n.fila) in ocupadas:   # dos nodos del mismo carril y columna
+            c += 1                       # se pisarían: se corre el segundo
+        ocupadas.add((c, n.fila))
+        n.col = c
 
     return _serializar(spec, carriles, nodos, flujos, layout_previo or {})
 

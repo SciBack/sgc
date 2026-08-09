@@ -6,55 +6,64 @@
   <bpmn:process id="Process_Revision_Direccion" isExecutable="false">
     <bpmn:laneSet id="LaneSet_1">
       <bpmn:lane id="Lane_DPGC" name="DPGC">
-        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Task_Planificada</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Task_Realizada</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Task_Cerrada</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Planificada__Realizar_revision</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Realizada__Devolver_a_planificada</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Cerrada__Reabrir_revision</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_Realizada</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Rectorado_VR__lectura_" name="Rectorado/VR (lectura)">
+        <bpmn:flowNodeRef>Task_Realizada__Cerrar_revision</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
+    <bpmn:userTask id="Task_Planificada__Realizar_revision" name="Realizar revision">
+      <bpmn:incoming>Flow_inicio</bpmn:incoming>
+      <bpmn:incoming>Flow_Realizada_Devolver_a_planificada_hacia_Planificada</bpmn:incoming>
+      <bpmn:outgoing>Flow_Planificada_Realizar_revision_hacia_Realizada</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Realizada__Devolver_a_planificada" name="Devolver a planificada">
+      <bpmn:incoming>Flow_gw_Realizada_Devolver_a_planificada</bpmn:incoming>
+      <bpmn:outgoing>Flow_Realizada_Devolver_a_planificada_hacia_Planificada</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Realizada__Cerrar_revision" name="Cerrar revision">
+      <bpmn:incoming>Flow_gw_Realizada_Cerrar_revision</bpmn:incoming>
+      <bpmn:outgoing>Flow_Realizada_Cerrar_revision_hacia_Cerrada</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Cerrada__Reabrir_revision" name="Reabrir revision">
+      <bpmn:incoming>Flow_Realizada_Cerrar_revision_hacia_Cerrada</bpmn:incoming>
+      <bpmn:outgoing>Flow_Cerrada_Reabrir_revision_hacia_Realizada</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_Realizada" name="Realizada">
+      <bpmn:incoming>Flow_Planificada_Realizar_revision_hacia_Realizada</bpmn:incoming>
+      <bpmn:incoming>Flow_Cerrada_Reabrir_revision_hacia_Realizada</bpmn:incoming>
+      <bpmn:outgoing>Flow_gw_Realizada_Devolver_a_planificada</bpmn:outgoing>
+      <bpmn:outgoing>Flow_gw_Realizada_Cerrar_revision</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
     <bpmn:startEvent id="StartEvent_1" name="Inicio">
       <bpmn:outgoing>Flow_inicio</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:userTask id="Task_Planificada" name="Planificada">
-      <bpmn:incoming>Flow_inicio</bpmn:incoming>
-      <bpmn:incoming>Flow_Realizada__Devolver_a_planificada</bpmn:incoming>
-      <bpmn:outgoing>Flow_Planificada__Realizar_revision</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:userTask id="Task_Realizada" name="Realizada">
-      <bpmn:incoming>Flow_Planificada__Realizar_revision</bpmn:incoming>
-      <bpmn:incoming>Flow_Cerrada__Reabrir_revision</bpmn:incoming>
-      <bpmn:outgoing>Flow_gw_Realizada</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:userTask id="Task_Cerrada" name="Cerrada">
-      <bpmn:incoming>Flow_Realizada__Cerrar_revision</bpmn:incoming>
-      <bpmn:outgoing>Flow_Cerrada__Reabrir_revision</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:exclusiveGateway id="Gateway_Realizada">
-      <bpmn:incoming>Flow_gw_Realizada</bpmn:incoming>
-      <bpmn:outgoing>Flow_Realizada__Devolver_a_planificada</bpmn:outgoing>
-      <bpmn:outgoing>Flow_Realizada__Cerrar_revision</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Task_Planificada">
+    <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Task_Planificada__Realizar_revision">
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_Planificada__Realizar_revision" sourceRef="Task_Planificada" targetRef="Task_Realizada" name="Realizar revision">
+    <bpmn:sequenceFlow id="Flow_Planificada_Realizar_revision_hacia_Realizada" sourceRef="Task_Planificada__Realizar_revision" targetRef="Gateway_Realizada">
       <bpmn:extensionElements>
         <sgc:transicion rol="DPGC" autoaprobacion="1" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_gw_Realizada" sourceRef="Task_Realizada" targetRef="Gateway_Realizada">
+    <bpmn:sequenceFlow id="Flow_gw_Realizada_Devolver_a_planificada" sourceRef="Gateway_Realizada" targetRef="Task_Realizada__Devolver_a_planificada">
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_Realizada__Devolver_a_planificada" sourceRef="Gateway_Realizada" targetRef="Task_Planificada" name="Devolver a planificada">
+    <bpmn:sequenceFlow id="Flow_Realizada_Devolver_a_planificada_hacia_Planificada" sourceRef="Task_Realizada__Devolver_a_planificada" targetRef="Task_Planificada__Realizar_revision">
       <bpmn:extensionElements>
         <sgc:transicion rol="DPGC" autoaprobacion="1" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_Realizada__Cerrar_revision" sourceRef="Gateway_Realizada" targetRef="Task_Cerrada" name="Cerrar revision">
+    <bpmn:sequenceFlow id="Flow_gw_Realizada_Cerrar_revision" sourceRef="Gateway_Realizada" targetRef="Task_Realizada__Cerrar_revision">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Realizada_Cerrar_revision_hacia_Cerrada" sourceRef="Task_Realizada__Cerrar_revision" targetRef="Task_Cerrada__Reabrir_revision">
       <bpmn:extensionElements>
         <sgc:transicion rol="Rectorado/VR (lectura)" autoaprobacion="0" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_Cerrada__Reabrir_revision" sourceRef="Task_Cerrada" targetRef="Task_Realizada" name="Reabrir revision">
+    <bpmn:sequenceFlow id="Flow_Cerrada_Reabrir_revision_hacia_Realizada" sourceRef="Task_Cerrada__Reabrir_revision" targetRef="Gateway_Realizada">
       <bpmn:extensionElements>
         <sgc:transicion rol="DPGC" autoaprobacion="1" />
       </bpmn:extensionElements>
@@ -63,49 +72,61 @@
   <bpmndi:BPMNDiagram id="Diagram_1">
     <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
       <bpmndi:BPMNShape id="Shape_Participant_Revision_Direccion" bpmnElement="Participant_Revision_Direccion" isHorizontal="true">
-        <dc:Bounds x="200" y="80" width="830.0" height="160" />
+        <dc:Bounds x="200" y="80" width="1030" height="320" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
-        <dc:Bounds x="230" y="80" width="800.0" height="160" />
+        <dc:Bounds x="230" y="80" width="1000" height="160" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
-        <dc:Bounds x="300" y="142" width="36" height="36" />
+      <bpmndi:BPMNShape id="Shape_Lane_Rectorado_VR__lectura_" bpmnElement="Lane_Rectorado_VR__lectura_" isHorizontal="true">
+        <dc:Bounds x="230" y="240" width="1000" height="160" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Task_Planificada" bpmnElement="Task_Planificada">
+      <bpmndi:BPMNShape id="Shape_Task_Planificada__Realizar_revision" bpmnElement="Task_Planificada__Realizar_revision">
         <dc:Bounds x="430" y="120" width="120" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Task_Realizada" bpmnElement="Task_Realizada">
-        <dc:Bounds x="630" y="120" width="120" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Task_Cerrada" bpmnElement="Task_Cerrada">
+      <bpmndi:BPMNShape id="Shape_Task_Realizada__Devolver_a_planificada" bpmnElement="Task_Realizada__Devolver_a_planificada">
         <dc:Bounds x="830" y="120" width="120" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Realizada__Cerrar_revision" bpmnElement="Task_Realizada__Cerrar_revision">
+        <dc:Bounds x="830" y="280" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Cerrada__Reabrir_revision" bpmnElement="Task_Cerrada__Reabrir_revision">
+        <dc:Bounds x="1030" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Gateway_Realizada" bpmnElement="Gateway_Realizada">
-        <dc:Bounds x="730" y="135" width="50" height="50" />
+        <dc:Bounds x="630" y="135" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
+        <dc:Bounds x="230" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
-        <di:waypoint x="336" y="160" />
+        <di:waypoint x="266" y="160" />
         <di:waypoint x="430" y="160" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Edge_Flow_Planificada__Realizar_revision" bpmnElement="Flow_Planificada__Realizar_revision">
+      <bpmndi:BPMNEdge id="Edge_Flow_Planificada_Realizar_revision_hacia_Realizada" bpmnElement="Flow_Planificada_Realizar_revision_hacia_Realizada">
         <di:waypoint x="550" y="160" />
         <di:waypoint x="630" y="160" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Edge_Flow_gw_Realizada" bpmnElement="Flow_gw_Realizada">
-        <di:waypoint x="750" y="160" />
-        <di:waypoint x="730" y="160" />
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_Realizada_Devolver_a_planificada" bpmnElement="Flow_gw_Realizada_Devolver_a_planificada">
+        <di:waypoint x="680" y="160" />
+        <di:waypoint x="830" y="160" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Edge_Flow_Realizada__Devolver_a_planificada" bpmnElement="Flow_Realizada__Devolver_a_planificada">
-        <di:waypoint x="730" y="160" />
+      <bpmndi:BPMNEdge id="Edge_Flow_Realizada_Devolver_a_planificada_hacia_Planificada" bpmnElement="Flow_Realizada_Devolver_a_planificada_hacia_Planificada">
+        <di:waypoint x="830" y="160" />
         <di:waypoint x="550" y="160" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Edge_Flow_Realizada__Cerrar_revision" bpmnElement="Flow_Realizada__Cerrar_revision">
-        <di:waypoint x="780" y="160" />
-        <di:waypoint x="830" y="160" />
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_Realizada_Cerrar_revision" bpmnElement="Flow_gw_Realizada_Cerrar_revision">
+        <di:waypoint x="655" y="185" />
+        <di:waypoint x="655" y="320" />
+        <di:waypoint x="830" y="320" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Edge_Flow_Cerrada__Reabrir_revision" bpmnElement="Flow_Cerrada__Reabrir_revision">
-        <di:waypoint x="830" y="160" />
-        <di:waypoint x="750" y="160" />
+      <bpmndi:BPMNEdge id="Edge_Flow_Realizada_Cerrar_revision_hacia_Cerrada" bpmnElement="Flow_Realizada_Cerrar_revision_hacia_Cerrada">
+        <di:waypoint x="890" y="280" />
+        <di:waypoint x="890" y="160" />
+        <di:waypoint x="1030" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Cerrada_Reabrir_revision_hacia_Realizada" bpmnElement="Flow_Cerrada_Reabrir_revision_hacia_Realizada">
+        <di:waypoint x="1030" y="160" />
+        <di:waypoint x="680" y="160" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
