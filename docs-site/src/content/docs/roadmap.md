@@ -42,20 +42,20 @@ tiene datos demo aparece como **en uso ❌**.
 |---|---|---|---|
 | **M03** Control documental | ✅ | ❌ | Código SGC automático, versiones, flujo de tres firmas, historial y export de la Lista Maestra. **Los 5 documentos existentes son de demostración**; faltan los documentos reales del SGC. |
 | **M04** Procesos e indicadores de proceso | ✅ | 🟡 | **22 procesos oficiales cargados** (dato real). El motor de indicadores por proceso está desplegado, pero espera las **fichas de caracterización (SIPOC)** del Mapa de Procesos: hoy hay una sola, de demostración. |
-| **M05** No conformidades | ✅ | 🟡 | Registro con validaciones incrementales por etapa y flujo hasta el cierre. **1 no conformidad real** en curso. |
+| **M05** No conformidades | ✅ | ❌ | Registro con validaciones incrementales por etapa y flujo hasta el cierre. **Las 2 no conformidades existentes son de demostración**: ninguna se ha levantado en un proceso real. |
 | **M06** Auditorías internas | ✅ | ❌ | Programa anual, ejecución con equipo y criterios, hallazgos con escalamiento a No Conformidad, informe consolidado y workflow. **Todo el dato existente es de demostración**: aún no se ha ejecutado una auditoría real en el sistema. |
 
 ## Bloque C — Acreditación
 
 | Módulo | Construido | En uso | Estado real y qué falta |
 |---|---|---|---|
-| **M07** Roles y comités | ✅ | 🟡 | RBAC de 14 roles sobre los 46 DocTypes de negocio (ver [RBAC](../desarrollo/rbac/)). El acotamiento de visibilidad por programa está construido y listo para activarse. **3 usuarios operando.** |
-| **M08** Autoevaluación | ✅ | ✅ | Motor que propone el nivel por estándar y la vigencia; el comité confirma el nivel oficial. **En uso real: la autoevaluación de la EP de Enfermería, con sus 53 criterios valorados y 10 estándares con nivel confirmado.** |
+| **M07** Roles y comités | ✅ | 🟡 | RBAC de 14 roles sobre los 46 DocTypes de negocio (ver [RBAC](../desarrollo/rbac/)). El acotamiento de visibilidad por programa está construido y listo para activarse. **Hay una sola cuenta de persona activa** (más una cuenta de servicio para los conectores); faltan las altas del comité de calidad. |
+| **M08** Autoevaluación | ✅ | ❌ | Motor que propone el nivel por estándar y la vigencia; el comité confirma el nivel oficial. **La única autoevaluación cargada (`AE-ENF-LIMA-2026I`, Enfermería) es de demostración**: sus 53 valoraciones y sus 10 niveles los generó la prueba automatizada de extremo a extremo, no el comité. Ningún criterio ha sido valorado todavía por una persona. |
 | **M09** Evidencias de acreditación | ✅ | ❌ | Carga de archivo o enlace, vigencia y trazabilidad N:M contra criterios y procesos. **No hay ninguna evidencia real cargada**, y por tanto ningún criterio tiene evidencia trazada. Es el principal frente abierto. |
-| **M10** Indicadores de acreditación | ✅ | 🟡 | Catálogo de 66 indicadores con fichas y tablero, más conectores automáticos hacia las fuentes institucionales. **7 indicadores (10.6%) tienen dato real**; el resto espera fuente (ver M04 y M12). |
-| **M11** Planes de mejora | ✅ | 🟡 | Planes y acciones con flujo, avance acumulado y semáforo por vencimiento. **1 plan de mejora real** en curso. |
+| **M10** Indicadores de acreditación | ✅ | 🟡 | Catálogo de 71 indicadores con fichas y tablero, más conectores automáticos hacia las fuentes institucionales. **12 de 71 indicadores (17%) tienen dato real**, alimentados a diario por el almacén de datos institucional; el resto espera fuente (ver M04 y M12). El panel que los muestra está construido pero **aún no desplegado**. |
+| **M11** Planes de mejora | ✅ | ❌ | Planes y acciones con flujo, avance acumulado y semáforo por vencimiento. **El único plan existente es de demostración**, derivado de la prueba de extremo a extremo de M08. |
 | **M12** Encuestas a grupos de interés | ✅ | ❌ | Instrumentos por periodo con tabulación, promedio ponderado y workflow de campo. Al cerrar una aplicación, **sus resultados se publican como indicadores automáticamente**. Falta registrar los instrumentos reales de la institución. |
-| **M13** Tablero ejecutivo | ✅ | 🟡 | Vista institucional: cobertura de autoevaluación, niveles por estándar, semáforo de CBC, avance por programa, riesgos, auditorías y última revisión por la dirección. Refleja el dato que exista. |
+| **M13** Tablero ejecutivo | ✅ | 🟡 | Vista institucional: cobertura de autoevaluación, niveles por estándar, semáforo de CBC, avance por programa, riesgos, auditorías y última revisión por la dirección. Refleja el dato que exista; hoy, casi todo lo que muestra proviene de datos de demostración. |
 | **M14** Acreditación internacional | 🔴 | — | Fase posterior. |
 | **M15** Reportería BI | 🔴 | — | Fase posterior. Vinculada a la iniciativa de **Data Mart institucional**, hoy en evaluación. |
 
@@ -72,8 +72,8 @@ tiene datos demo aparece como **en uso ❌**.
 **Construido:** 13 operativos · 2 parciales · 3 pendientes. Los 3 pendientes son de fase posterior,
 fuera del alcance comprometido para esta etapa.
 
-**En uso con dato institucional real:** 2 módulos plenamente (**M08** autoevaluación y **M17**
-notificaciones), 7 parcialmente y 6 todavía sin dato real.
+**En uso con dato institucional real:** 1 módulo plenamente (**M17** notificaciones), 5
+parcialmente y 9 todavía sin dato real.
 
 ### Qué significa esto
 
@@ -81,18 +81,21 @@ La **capacidad está construida y verificada**: un ciclo completo de acreditaci�
 normativo al informe, con trazabilidad de evidencias, planes de mejora y notificaciones— existe,
 está desplegado y respaldado por pruebas automatizadas.
 
-Lo que falta ya **no es desarrollo, es carga de información institucional**. El sistema tiene hoy
-una autoevaluación real en curso (Enfermería), los 22 procesos oficiales del Mapa y los indicadores
-que se alimentan solos desde las fuentes institucionales. Los demás módulos esperan que las áreas
+Lo que falta ya **no es desarrollo, es carga de información institucional**. Lo que hoy es dato real
+son los 22 procesos oficiales del Mapa, los 3 marcos normativos con sus 185 elementos y los
+indicadores que se alimentan solos desde las fuentes institucionales. **La cadena de acreditación
+propiamente dicha todavía no ha sido ejercida por nadie**: la autoevaluación, sus valoraciones, la
+no conformidad y el plan de mejora que existen en el sistema los generó una prueba automatizada para
+demostrar que el circuito funciona de extremo a extremo. Los demás módulos esperan que las áreas
 dueñas del dato carguen evidencias, documentos, instrumentos de encuesta y fichas de proceso.
 
 ### Hitos
 
 | Cuándo | Qué | De qué depende |
 |---|---|---|
-| **Agosto 2026** | Informe de Autoevaluación de la EP de Enfermería (CONEAU) | Cargar las evidencias y vincularlas a los criterios (**M09**) |
+| **Agosto 2026** | Informe de Autoevaluación de la EP de Enfermería (CONEAU) | Cargar las evidencias y vincularlas a los criterios (**M09**), y que el comité valore los criterios en el sistema (**M08**). **A la fecha no se ha iniciado**: no hay ninguna evidencia real cargada ni ninguna valoración hecha por una persona. |
 | **31 de marzo de 2027** | Informe Anual de Cumplimiento (SUNEDU) | Generar el diagnóstico de las 8 CBC con dato real (**M01**) |
 
 ---
 
-*Última actualización: 2026-07-27.*
+*Última actualización: 2026-08-14.*
