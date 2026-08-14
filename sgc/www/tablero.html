@@ -230,8 +230,12 @@
         <div>
           <div class="ind-name">{{ i.nombre or i.indicador }}</div>
           <div class="ind-sub">
-            {# "%g" imprime la meta como la escribió el productor: 80, no 80.0 #}
-            {% if i.meta is not none %}<span>Meta {{ i.meta_operador }} {{ "%g"|format(i.meta) }}{{ i.meta_sufijo or i.sufijo }}{% if i.marco %} · {{ i.marco }}{% endif %}</span>{% endif %}
+            {# `meta_texto` ya viene compuesta (operador, número y unidad, con el
+               espaciado que corresponda). Antes se armaba aquí y se completaba la
+               unidad que faltara con la del VALOR (`i.sufijo`), que no tiene por
+               qué ser la misma: una meta en años junto a un valor en % se habría
+               impreso como porcentaje. #}
+            {% if i.meta is not none %}<span>Meta {{ i.meta_texto }}{% if i.marco %} · {{ i.marco }}{% endif %}</span>{% endif %}
             {% if i.n is not none %}<span>n = {{ i.n|int }}</span>{% endif %}
             {% if i.unidad and not i.sufijo %}<span>{{ i.unidad }}</span>{% endif %}
             {% if not i.contrato_reconocido and i.texto %}<span>{{ i.texto }}</span>{% endif %}

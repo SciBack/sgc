@@ -238,6 +238,43 @@ class IntegrationTestIndicadoresAcreditacion(IntegrationTestCase):
         self.assertEqual(m["meta_operador"], "≥")
         self.assertIs(m["cumple"], True)
 
+    def test_la_meta_no_se_asume_en_porcentaje(self):
+        """Una meta en años se lee en años, no como un número pelado.
+
+        Es el caso de `ID25` (egreso→titulación, meta `<= 2 años`). Mientras todo
+        el catálogo publicado fue `>=` en `%` esto no se notaba; el día que entren
+        los indicadores de tiempo, dar la unidad por supuesta convierte «2 años»
+        en «2 %» —un dato falso con toda la apariencia de ser correcto—.
+        """
+        m = ia._parsear_valor_texto(
+            "DW v1-norma Coneau 2026 · n=312 · meta <= 2 años (cumple)")
+        self.assertEqual(m["meta"], 2.0)
+        self.assertEqual(m["meta_operador"], "<=")
+        self.assertEqual(m["meta_sufijo"], "años")
+        self.assertEqual(m["meta_texto"], "<= 2 años")
+        self.assertEqual(m["marco"], "Coneau 2026")
+
+    def test_la_meta_compuesta_pega_el_porcentaje_y_separa_la_unidad(self):
+        """"80%" va junto y "2 años" separado: la plantilla no decide esto."""
+        pct = ia._parsear_valor_texto("n=10 · meta >= 80% (cumple)")
+        self.assertEqual(pct["meta_texto"], ">= 80%")
+
+        años = ia._parsear_valor_texto("n=10 · meta < 2 años (NO cumple)")
+        self.assertEqual(años["meta_texto"], "< 2 años")
+
+        sin_operador = ia._parsear_valor_texto("n=10 · meta 0% (NO cumple)")
+        self.assertEqual(sin_operador["meta_texto"], "0%")
+
+    def test_el_formato_de_meta_vigente_sigue_leyendose_igual(self):
+        """El cambio no rompe lo que el DW publica hoy: 136 filas en `meta <X>%`."""
+        m = ia._parsear_valor_texto(
+            "DW v1-norma Coneau 2026 · n=1588 · meta 80% (cumple)")
+        self.assertEqual(m["meta"], 80.0)
+        self.assertEqual(m["meta_operador"], "")
+        self.assertEqual(m["meta_sufijo"], "%")
+        self.assertEqual(m["meta_texto"], "80%")
+        self.assertIs(m["cumple"], True)
+
     # ======================================================================
     # Presentación derivada del catálogo (nombre, unidad, orden)
     # ======================================================================

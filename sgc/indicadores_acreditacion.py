@@ -70,7 +70,14 @@ _RE_N = re.compile(r"\bn\s*=\s*([\d.,]+)", re.IGNORECASE)
 # La meta puede venir con operador ("meta ≥ 80%") o sin él ("meta 80 %"). El
 # símbolo se captura en vez de descartarse: si el productor escribió "%", la
 # meta es un porcentaje según ÉL, y eso vale más que deducirlo aquí.
-_RE_META = re.compile(r"\bmeta\s*([<>≥≤]?\s*=?)\s*(-?[\d.,]+)\s*(%?)", re.IGNORECASE)
+#
+# La unidad NO se asume porcentaje. Habia un `(%?)` que solo sabia leer "%", y
+# con el catalogo de hoy —todo `>=` en %— nunca se noto. Pero hay indicadores de
+# TIEMPO en camino ("meta <= 2 años", egreso->titulacion): con el patron viejo la
+# meta se leia como un 2 pelado, sin unidad, y la vista acababa completandola con
+# la unidad del VALOR, que no tiene por que ser la misma. Se lee lo que el
+# productor escribio, sea "%", "años" o "meses".
+_RE_META = re.compile(r"\bmeta\s*([<>≥≤]?\s*=?)\s*(-?[\d.,]+)\s*([^\s·()]*)", re.IGNORECASE)
 _RE_COBERTURA = re.compile(r"\bcobertura\s*(-?[\d.,]+)\s*%?", re.IGNORECASE)
 _RE_NO_CUMPLE = re.compile(r"\bno\s+cumple\b", re.IGNORECASE)
 _RE_CUMPLE = re.compile(r"\bcumple\b", re.IGNORECASE)
@@ -99,6 +106,25 @@ def _num(texto):
         return None
 
 
+def _componer_meta(meta):
+    """La meta ya escrita para mostrar: "≥ 80%", "≤ 2 años", "0%".
+
+    Se compone aquí y no en la plantilla porque el espaciado depende de la
+    unidad: "%" se pega al número y "años" no, y una plantilla que concatene sin
+    mirar acaba imprimiendo "2años".
+    """
+    if meta.get("meta") is None:
+        return ""
+    numero = f"{meta['meta']:g}"
+    unidad = (meta.get("meta_sufijo") or "").strip()
+    if unidad and unidad != "%":
+        numero = f"{numero} {unidad}"
+    else:
+        numero = f"{numero}{unidad}"
+    operador = (meta.get("meta_operador") or "").strip()
+    return f"{operador} {numero}".strip()
+
+
 def _parsear_valor_texto(texto):
     """Extrae los metadatos de la convención del productor.
 
@@ -113,6 +139,7 @@ def _parsear_valor_texto(texto):
         "meta": None,
         "meta_operador": "",
         "meta_sufijo": "",
+        "meta_texto": "",
         "cumple": None,
         "marco": "",
         "provisional": False,
@@ -135,6 +162,7 @@ def _parsear_valor_texto(texto):
         meta["meta"] = _num(m.group(2))
         meta["meta_operador"] = (m.group(1) or "").replace(" ", "")
         meta["meta_sufijo"] = m.group(3) or ""
+        meta["meta_texto"] = _componer_meta(meta)
 
     # "NO cumple" contiene "cumple": se descarta primero el negativo, si no
     # cualquier incumplimiento se leería como cumplimiento.
