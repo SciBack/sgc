@@ -20,7 +20,7 @@ export default defineConfig({
       title: 'Manual funcional SGC',
       description: 'Guía funcional verificable del Sistema de Gestión de la Calidad.',
       pagefind: true,
-      tableOfContents: { minHeadingLevel: 2, maxHeadingLevel: 3 },
+      tableOfContents: false,
       lastUpdated: true,
       customCss: ['./src/styles/sciback.css'],
       components: { Head: './src/components/Head.astro' },
