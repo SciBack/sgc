@@ -7,3 +7,10 @@ RUN rm -rf /home/frappe/frappe-bench/apps/sgc /home/frappe/frappe-bench/assets/s
 COPY --chown=frappe:frappe . /home/frappe/frappe-bench/apps/sgc
 USER frappe
 RUN cd /home/frappe/frappe-bench && ln -s ../apps/sgc/sgc/public assets/sgc && bench build --app sgc
+# `bench build` puede terminar en exito y aun asi dejar `assets.json` vacio (`{}`):
+# si a la imagen base le falta Node, no genera ningun bundle, el HTML acaba pidiendo
+# los ficheros sin hash, devuelven 404 y el login queda inutilizable. Ya ocurrio una
+# vez y las comprobaciones posteriores —ping, login, migracion— salieron todas en
+# verde igual, asi que no sirven para detectarlo. Se verifica aqui para que una
+# imagen con los assets rotos ni siquiera llegue a existir.
+RUN python3 -c "import json,sys; d=json.load(open('/home/frappe/frappe-bench/sites/assets/assets.json')); print('assets.json:', len(d), 'entradas,', sum('sgc' in k for k in d), 'de sgc'); sys.exit(0 if len(d) >= 20 else 'assets.json incompleto: la imagen se descarta. Revisar que la imagen base traiga Node antes de reintentar.')"
