@@ -7,10 +7,32 @@ RUN rm -rf /home/frappe/frappe-bench/apps/sgc /home/frappe/frappe-bench/assets/s
 COPY --chown=frappe:frappe . /home/frappe/frappe-bench/apps/sgc
 USER frappe
 RUN cd /home/frappe/frappe-bench && ln -s ../apps/sgc/sgc/public assets/sgc && bench build --app sgc
-# `bench build` puede terminar en exito y aun asi dejar `assets.json` vacio (`{}`):
-# si a la imagen base le falta Node, no genera ningun bundle, el HTML acaba pidiendo
-# los ficheros sin hash, devuelven 404 y el login queda inutilizable. Ya ocurrio una
-# vez y las comprobaciones posteriores —ping, login, migracion— salieron todas en
-# verde igual, asi que no sirven para detectarlo. Se verifica aqui para que una
-# imagen con los assets rotos ni siquiera llegue a existir.
-RUN python3 -c "import json,sys; d=json.load(open('/home/frappe/frappe-bench/sites/assets/assets.json')); print('assets.json:', len(d), 'entradas,', sum('sgc' in k for k in d), 'de sgc'); sys.exit(0 if len(d) >= 20 else 'assets.json incompleto: la imagen se descarta. Revisar que la imagen base traiga Node antes de reintentar.')"
+
+# Hay DOS `assets.json` y confundirlos cuesta un despliegue:
+#
+#   assets/assets.json        <- el de la imagen. Es el bueno: trae el mapping
+#                                nombre->fichero-con-hash de los ~35 bundles del core.
+#   sites/assets/assets.json  <- en runtime lo tapa el volumen de `sites`, asi que
+#                                dentro de la imagen no se usa para nada... salvo en
+#                                un caso: al crear un sitio NUEVO, de ahi se copia.
+#
+# El `bench build --app sgc` de arriba corre sin el volumen montado y deja el segundo
+# en `{}` — la app no aporta bundles propios (la SPA va precompilada, no pasa por el
+# bundler de Frappe). Eso es inofensivo para un sitio que ya existe y veneno para uno
+# nuevo: nace sin mapping, el HTML pide los ficheros sin hash, dan 404 y el login queda
+# inutilizable. Le paso exactamente eso a `sgc-frappe:v83-staging` el 28-jul-2026, y
+# durante semanas se atribuyo a que a la imagen le faltaba Node. No era eso: v81, v82 y
+# v83-staging tienen los assets identicos y prod nunca se rompio porque su volumen se
+# habia poblado antes. Se restaura para que un despliegue de recuperacion no herede el
+# problema.
+RUN cd /home/frappe/frappe-bench \
+    && cp assets/assets.json sites/assets/assets.json \
+    && cp assets/assets-rtl.json sites/assets/assets-rtl.json
+
+# Ninguna comprobacion posterior al despliegue detecta esto —ping, login y migracion
+# salen en verde igual—, asi que se verifica aqui: una imagen con el mapping roto no
+# llega ni a existir. Se miran las dos rutas, porque cada una se rompe por su lado.
+RUN python3 -c "import json,sys; \
+    m={p: json.load(open('/home/frappe/frappe-bench/'+p)) for p in ('assets/assets.json','sites/assets/assets.json')}; \
+    [print(p+':', len(d), 'entradas') for p, d in m.items()]; \
+    sys.exit(0 if all(len(d) >= 20 for d in m.values()) else 'mapping de assets incompleto: la imagen se descarta. Comprobar que la imagen base traiga Node y que bench build no haya vaciado el fichero.')"
