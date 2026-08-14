@@ -255,3 +255,79 @@ def otorgar_programa(user, programa_sede):
         up.insert(ignore_permissions=True)
         creadas += 1
     return {"user": user, "programa_sede": programa_sede, "user_permissions_creadas": creadas}
+
+
+# Dimensiones de ámbito que el framework resuelve por sí solo. Son DocTypes
+# árbol: una User Permission sobre un nodo alcanza a sus descendientes sin
+# configuración extra, así que aquí SÍ conviene apply_to_all_doctypes=1 (a
+# diferencia de Programa Sede, acotado por DocType para no restringir de rebote
+# las relaciones N:M como Evidencia).
+DIMENSIONES_ARBOL = ("Unidad Organica", "Proceso")
+
+
+@frappe.whitelist()
+def otorgar_ambito(user, unidad_organica=None, programa_sede=None, proceso=None):
+    """Siembra el ámbito de una persona en las dimensiones que se le indiquen.
+
+    Es el procedimiento de activación: mientras nadie llame a esto, el usuario
+    ve todo (opt-in). Idempotente: repetirlo no duplica User Permission.
+
+    Las dimensiones se INTERSECTAN. Dar sede y proceso a la vez deja ver solo lo
+    que cumple ambas, que es cómo el motor de permisos une condiciones de
+    doctypes distintos. Dar dos valores de la misma dimensión los suma.
+
+        bench --site <site> execute sgc.permissions.otorgar_ambito \\
+            --kwargs '{"user":"x@dominio","unidad_organica":"SEDE-X","proceso":"P-01"}'
+    """
+    frappe.only_for(("DPGC", "System Manager"))
+    resultado = {"user": user, "creadas": 0, "ya_existian": 0, "dimensiones": []}
+
+    if programa_sede:
+        # Delegado: Programa Sede tiene su propia semántica por DocType.
+        r = otorgar_programa(user, programa_sede)
+        resultado["creadas"] += r["user_permissions_creadas"]
+        resultado["dimensiones"].append(f"Programa Sede={programa_sede}")
+
+    for allow, valor in (("Unidad Organica", unidad_organica), ("Proceso", proceso)):
+        if not valor:
+            continue
+        if not frappe.db.exists(allow, valor):
+            frappe.throw(f"No existe {allow} «{valor}»")
+        if frappe.db.exists("User Permission",
+                            {"user": user, "allow": allow, "for_value": valor}):
+            resultado["ya_existian"] += 1
+            continue
+        up = frappe.get_doc({
+            "doctype": "User Permission", "user": user,
+            "allow": allow, "for_value": valor,
+            "apply_to_all_doctypes": 1,
+        })
+        up.flags.ignore_permissions = True
+        up.insert(ignore_permissions=True)
+        resultado["creadas"] += 1
+        resultado["dimensiones"].append(f"{allow}={valor}")
+
+    return resultado
+
+
+@frappe.whitelist()
+def ambito_de(user):
+    """Qué ámbito tiene sembrado una persona, por dimensión.
+
+    Sirve para verificar una activación sin leer la tabla a mano: si devuelve
+    todo vacío, esa persona ve TODO (el mecanismo está inactivo para ella).
+    """
+    filas = frappe.get_all(
+        "User Permission",
+        filters={"user": user},
+        fields=["allow", "for_value", "applicable_for"],
+    )
+    por_dimension = {}
+    for f in filas:
+        por_dimension.setdefault(f["allow"], set()).add(f["for_value"])
+    return {
+        "user": user,
+        "acotado": bool(por_dimension),
+        "exento_por_rol": es_exento(user),
+        "ambito": {k: sorted(v) for k, v in por_dimension.items()},
+    }

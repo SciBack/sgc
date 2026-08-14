@@ -92,6 +92,7 @@ AUDI   = "Auditor Interno"
 RECT   = "Rectorado/VR (lectura)"
 DECA   = "Decano/Director (lectura)"
 RSED   = "Responsable de Sede"
+LECT   = "Lector Externo"
 APROB  = "Autoridad Aprobadora"
 SYSM   = "System Manager"  # SysAdmin (core)
 
@@ -342,6 +343,23 @@ _ROWS = {
         DPGC: "crw", ANAL: "crw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
         DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
     },
+
+    # --- M16 · registro de auditoría (DocType core de Frappe) ---
+    # `Version` es el log de cambios: guarda el valor anterior de cada campo
+    # modificado en los DocTypes con track_changes. Es lo que exige el requisito
+    # de trazar toda modificación de dato crítico con usuario, fecha y valor
+    # previo, y no hubo que construirlo: ya existe.
+    #
+    # Solo LECTURA, para nadie más que gobierno y aseguramiento. Nadie escribe un
+    # log de auditoría; que sea de solo lectura por rol es la mitad barata del no
+    # repudio (la otra mitad, impedir el borrado por el administrador técnico, el
+    # framework no la da — queda como riesgo declarado en el issue #5).
+    #
+    # `Activity Log` (el registro de SESIONES: quién entró, cuándo, desde qué IP)
+    # NO se expone a ningún rol funcional, ni siquiera al Auditor Interno. Es dato
+    # personal del trabajador y auditar el sistema de calidad no requiere vigilar
+    # a las personas. Su ausencia aquí es deliberada; hay un test que la protege.
+    "Version": {DPGC: "r", AUDI: "r"},
 }
 
 # Expandir grupos -> DocTypes reales.
@@ -446,18 +464,61 @@ def _clear_sgc_perms(doctype):
 # 4) ROLE PROFILES (G Parte C — agrupan roles frecuentes)
 #    Un Role Profile es un paquete reutilizable del "qué".
 # ===========================================================================
+#
+# Los NOMBRES son los del requerimiento del área de calidad; los ROLES que
+# agrupan son la granularidad técnica. Es la capa de traducción entre ambos
+# vocabularios (issue #5, decisión D1): el área de calidad asigna "Jefe de
+# Escuela" y el motor de permisos ve el rol que corresponde.
+#
+# Dos correcciones deliberadas al requerimiento:
+#   1. "Coordinador de calidad" se desdobla en Facultad y Programa. El
+#      requerimiento los nombra igual, pero son ámbitos y permisos distintos:
+#      con un solo nombre el control de acceso es inexpresable.
+#   2. "Administrador SGC" NO incluye System Manager. El gobierno funcional del
+#      SGC y la administración técnica de la plataforma son cargos distintos;
+#      colapsarlos elimina el control interno más básico.
+#
+# Cuatro roles quedan fuera de todo perfil a propósito (Dueño de Proceso, Data
+# Steward, Responsable de Sede, Autoridad Aprobadora): no corresponden a un cargo
+# del requerimiento y se asignan individualmente.
 ROLE_PROFILES = {
-    # Comité de Programa = Responsable de Programa + Miembro de Comité (ej. Enfermería-Lima)
-    "Comité de Programa": [RPRO, MIEM],
-    # Coordinación Facultad
-    "Coordinación Facultad": [CFAC],
-    # Gobierno SGC = DPGC + Analista (staff que opera el día a día institucional)
-    "Gobierno SGC": [DPGC, ANAL],
-    # Auditoría = Auditor Interno (lee todo + crea Hallazgo)
-    "Auditoría": [AUDI],
-    # Lectura Institucional = Rectorado/VR (tableros globales, sin edición)
-    "Lectura Institucional": [RECT],
+    "Administrador SGC": [DPGC, ANAL],
+    "Coordinador de Calidad (Facultad)": [CFAC],
+    "Coordinador de Calidad (Programa)": [RPRO, MIEM],
+    "Jefe de Escuela": [DECA],
+    "Evaluador Externo": [LECT],
+    "Autoridad Rectoral": [RECT],
+    "Auditoría Interna": [AUDI],
 }
+
+# Nombres anteriores -> nombre canónico. Se RENOMBRA en vez de crear el nuevo y
+# dejar el viejo: renombrar preserva la asignación de los usuarios que ya lo
+# tienen (Frappe actualiza los Links), mientras que crear uno nuevo dejaría a
+# esas personas apuntando a un perfil huérfano.
+RENOMBRES_PROFILE = {
+    "Gobierno SGC": "Administrador SGC",
+    "Coordinación Facultad": "Coordinador de Calidad (Facultad)",
+    "Comité de Programa": "Coordinador de Calidad (Programa)",
+    "Lectura Institucional": "Autoridad Rectoral",
+    "Auditoría": "Auditoría Interna",
+}
+
+
+def _renombrar_role_profiles():
+    """Migra los Role Profiles al vocabulario del requerimiento, sin perder gente.
+
+    Solo renombra cuando el viejo existe y el nuevo no. Si ambos existen, no se
+    toca nada: fusionarlos movería usuarios entre perfiles en silencio, y eso lo
+    decide una persona, no un script idempotente.
+    """
+    n = 0
+    for viejo, nuevo in RENOMBRES_PROFILE.items():
+        if frappe.db.exists("Role Profile", viejo) and not frappe.db.exists("Role Profile", nuevo):
+            frappe.rename_doc("Role Profile", viejo, nuevo, force=True, show_alert=False)
+            n += 1
+        elif frappe.db.exists("Role Profile", viejo):
+            print(f"  [AVISO] coexisten «{viejo}» y «{nuevo}»: fusionar a mano")
+    return n
 
 
 def _ensure_role_profiles():
@@ -519,6 +580,9 @@ def run():
 
         dts_tocados.append(doctype)
 
+    # Renombrar ANTES de crear: si se crearan primero, el renombrado ya no
+    # tendría destino libre y los usuarios quedarían en el perfil viejo.
+    n_renombrados = _renombrar_role_profiles()
     n_profiles = _ensure_role_profiles()
 
     # Refrescar caché de permisos.
@@ -537,6 +601,7 @@ def run():
     for dt in dts_tocados:
         print(f"      - {dt}")
     print(f"  DocPerm (role×doctype×permlevel) escritos: {n_docperms}")
+    print(f"  Role Profiles renombrados al vocabulario del requerimiento: {n_renombrados}")
     print(f"  Role Profiles nuevos: {n_profiles} (total definidos: {len(ROLE_PROFILES)})")
     print("  permlevel 1 (Valoracion Estandar.nivel): write=DPGC + "
           "Responsable de Calidad de Programa; read=roles que ven el registro.")
