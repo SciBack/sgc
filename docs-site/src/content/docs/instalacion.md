@@ -81,6 +81,25 @@ docker inspect --format '{{.Config.Image}}' <contenedor-backend-activo>
 docker build --build-arg BASE_IMAGE=<imagen-backend-activa> -f deploy/Dockerfile.overlay -t <imagen-overlay-nueva> .
 ```
 
+### Los assets se verifican durante el build
+
+`bench build` puede **terminar en éxito y aun así dejar `sites/assets/assets.json`
+vacío** (`{}`) si a la imagen base le falta Node: no se genera ningún bundle, el HTML
+pide los ficheros sin hash, devuelven 404 y **el login queda inutilizable**. Las
+comprobaciones habituales —contenedor arriba, `/login` con 200, migración completa—
+salen en verde igual, así que no detectan este fallo.
+
+Por eso el propio `Dockerfile.overlay` valida el resultado y **aborta el build** si
+`assets.json` no tiene un número razonable de entradas. Una imagen con los assets
+rotos no llega a construirse. Si el build falla ahí, el mensaje lo indica: revisar que
+la imagen base traiga Node y reconstruir; no forzar el despliegue.
+
+Para inspeccionarlo a mano en una imagen ya construida:
+
+```bash
+docker run --rm <imagen-overlay> python3 -c "import json;d=json.load(open('/home/frappe/frappe-bench/sites/assets/assets.json'));print(len(d),'entradas')"
+```
+
 Actualizar el tag del backend en el archivo Compose del entorno, validar primero
 con `docker compose config` y conservar tanto el tag anterior como una copia del
 Compose efectivo. **No reiniciar ni recrear servicios o contenedores críticos sin
