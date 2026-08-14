@@ -277,6 +277,14 @@
         Esta autoevaluación no tiene programa-sede asignado, así que no se puede resolver a qué mediciones corresponde.
       {% elif indicadores_motivo == "autoevaluacion_sin_periodo" %}
         Esta autoevaluación no tiene periodo académico asignado, así que no se puede resolver a qué mediciones corresponde.
+      {% elif indicadores_motivo == "sin_mediciones_hay_de_otro_programa" %}
+        {# No es ausencia de dato: hay mediciones de este periodo, pero de otros
+           programas. Se nombra la causa probable en vez de dejar que parezca que
+           nadie ha publicado nada — que es como se leería el mensaje de abajo. #}
+        No hay indicadores para <strong>este</strong> programa en el periodo {{ ae.periodo_academico }},
+        pero «{{ indicadores_fuente }}» sí publicó mediciones de otros programas en ese mismo periodo.
+        Suele significar que el nombre del programa no coincide entre el sistema y quien publica los datos,
+        no que falte la medición. Conviene revisarlo antes de darlo por ausente.
       {% else %}
         Todavía no hay indicadores publicados{% if indicadores_fuente %} por «{{ indicadores_fuente }}»{% endif %}
         para este programa en el periodo {{ ae.periodo_academico }}.

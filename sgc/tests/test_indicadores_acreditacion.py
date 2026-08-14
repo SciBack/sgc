@@ -97,6 +97,34 @@ class IntegrationTestIndicadoresAcreditacion(IntegrationTestCase):
         self.assertEqual(res["filas"], [])
         self.assertEqual(res["motivo"], ia.SIN_MEDICIONES)
 
+    def test_distingue_no_haber_dato_de_no_saber_emparejarlo(self):
+        """Si el periodo tiene mediciones de OTRO programa, no es falta de dato.
+
+        El panel empareja por nombre de programa. Si el productor lo compone de
+        otra forma, o la institución lo renombra, deja de encontrar filas sin dar
+        ningún error: el productor sigue publicando y la pantalla dice «no hay
+        mediciones». Es el fallo que la regla 3.11 del contrato entre productos
+        solo puede mitigar pidiendo que alguien sospeche; aquí se nombra solo.
+        """
+        otro_ps = factories.crear_programa_sede().name
+        self._publicar("TEST-ID10", valor_num=88.22, programa_sede=otro_ps)
+
+        res = ia.indicadores_de_autoevaluacion(self.ae)
+
+        self.assertEqual(res["filas"], [])
+        self.assertEqual(res["motivo"], ia.SIN_MEDICIONES_PERO_HAY_DE_OTRO_PROGRAMA)
+
+    def test_otro_periodo_no_se_confunde_con_un_desajuste_de_nombre(self):
+        """Mediciones de otro PERIODO son ausencia normal, no desajuste."""
+        otro_ps = factories.crear_programa_sede().name
+        otro_periodo = factories.crear_periodo_academico().name
+        self._publicar("TEST-ID10", valor_num=1.0,
+                       programa_sede=otro_ps, periodo_academico=otro_periodo)
+
+        res = ia.indicadores_de_autoevaluacion(self.ae)
+
+        self.assertEqual(res["motivo"], ia.SIN_MEDICIONES)
+
     # ======================================================================
     # Regla 2 — una fuente a la vez; las demás se reportan, no se ocultan
     # ======================================================================
@@ -264,6 +292,29 @@ class IntegrationTestIndicadoresAcreditacion(IntegrationTestCase):
 
         sin_operador = ia._parsear_valor_texto("n=10 · meta 0% (NO cumple)")
         self.assertEqual(sin_operador["meta_texto"], "0%")
+
+    def test_meta_sin_unidad_y_valor_texto_sin_meta(self):
+        """Los dos casos del catálogo que no son porcentajes ni traen meta.
+
+        `INST-ID37` cuenta citas por docente: su meta es `> 15`, un número sin
+        unidad. `INST-ID31` no tiene meta declarada en el catálogo de Coneau, así
+        que el productor omite el segmento entero en vez de escribir una meta
+        falsa. Lo que no puede perderse en ese caso es el resto del contrato: el
+        marco y la `n` van siempre.
+        """
+        sin_unidad = ia._parsear_valor_texto(
+            "DW v1-norma Coneau 2026 · n=88 · meta > 15 (cumple)")
+        self.assertEqual(sin_unidad["meta"], 15.0)
+        self.assertEqual(sin_unidad["meta_operador"], ">")
+        self.assertEqual(sin_unidad["meta_sufijo"], "")
+        self.assertEqual(sin_unidad["meta_texto"], "> 15")
+
+        sin_meta = ia._parsear_valor_texto("DW v1-norma Coneau 2026 · n=42 (cumple)")
+        self.assertIsNone(sin_meta["meta"])
+        self.assertEqual(sin_meta["meta_texto"], "")
+        self.assertEqual(sin_meta["n"], 42.0)
+        self.assertEqual(sin_meta["marco"], "Coneau 2026")
+        self.assertTrue(sin_meta["contrato_reconocido"])
 
     def test_el_formato_de_meta_vigente_sigue_leyendose_igual(self):
         """El cambio no rompe lo que el DW publica hoy: 136 filas en `meta <X>%`."""

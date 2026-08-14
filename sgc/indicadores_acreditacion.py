@@ -65,6 +65,9 @@ CLAVE_DEFAULT_FUENTE = "sgc_fuente_indicadores"
 SIN_PROGRAMA = "autoevaluacion_sin_programa_sede"
 SIN_PERIODO = "autoevaluacion_sin_periodo"
 SIN_MEDICIONES = "sin_mediciones_para_el_par"
+# Hay mediciones de ese periodo, pero bajo otro `programa_sede`. Casi siempre es
+# un desajuste de nombre entre el productor y el catálogo, no falta de dato.
+SIN_MEDICIONES_PERO_HAY_DE_OTRO_PROGRAMA = "sin_mediciones_hay_de_otro_programa"
 
 _RE_N = re.compile(r"\bn\s*=\s*([\d.,]+)", re.IGNORECASE)
 # La meta puede venir con operador ("meta ≥ 80%") o sin él ("meta 80 %"). El
@@ -220,6 +223,36 @@ def _par_de_autoevaluacion(autoevaluacion):
     )
 
 
+def _motivo_de_ausencia(par, fuente):
+    """Distingue «no hay dato» de «hay dato que no logro emparejar».
+
+    Los dos se ven igual en pantalla —una tabla vacía— y no son lo mismo. El
+    panel empareja por el par `(programa_sede, periodo_academico)`, así que basta
+    con que el productor componga el nombre del programa de otra forma, o con que
+    la institución renombre uno, para que deje de encontrar filas **sin ningún
+    error**: el DW sigue publicando, el panel sigue respondiendo, y lo que se lee
+    es «este programa no tiene mediciones».
+
+    Si hay mediciones de ese periodo bajo OTRO `programa_sede`, eso ya no es
+    ausencia de dato: es un desajuste de nombre entre dos productos, y la
+    pantalla debe decirlo con esas palabras en vez de callarlo.
+    """
+    otros = frappe.get_all(
+        "Valor Indicador",
+        filters={
+            "periodo_academico": par["periodo_academico"],
+            "fuente": fuente,
+            "programa_sede": ["!=", par["programa_sede"]],
+        },
+        fields=["programa_sede"],
+        group_by="programa_sede",
+        limit_page_length=0,
+    )
+    if otros:
+        return SIN_MEDICIONES_PERO_HAY_DE_OTRO_PROGRAMA
+    return SIN_MEDICIONES
+
+
 def indicadores_de_autoevaluacion(autoevaluacion, fuente=None):
     """Indicadores medidos para el programa y periodo de una autoevaluación.
 
@@ -252,7 +285,7 @@ def indicadores_de_autoevaluacion(autoevaluacion, fuente=None):
         order_by="fecha desc, creation desc",
     )
     if not valores:
-        return {**vacio, "motivo": SIN_MEDICIONES}
+        return {**vacio, "motivo": _motivo_de_ausencia(par, fuente)}
 
     # Una fila por indicador: la primera que aparece es la más reciente.
     vistos = {}
