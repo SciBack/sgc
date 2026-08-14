@@ -1,9 +1,14 @@
 """F2 E2E — prueba end-to-end del flujo de autoevaluación Enfermería:
 estructura mínima -> autoevaluación -> valoraciones -> motor NL/L/LP -> CAPA.
 Ejecutar: echo 'from sgc.setup import f2_e2e_test; f2_e2e_test.run()' | bench --site sgc.localhost console
+
+Solo corre en sitios de pruebas: los registros que crea no llevan marca [DEMO] y
+en un sitio institucional se leen como dato real. Ver `sgc/setup/guardas.py`.
 """
 import frappe
-from sgc import scoring, capa
+
+from sgc import capa, scoring
+from sgc.setup.guardas import exigir_sitio_de_pruebas
 
 
 def _ensure(doctype, filters, doc):
@@ -21,6 +26,7 @@ def _name(x):
 
 
 def run():
+    exigir_sitio_de_pruebas("f2_e2e_test")
     frappe.flags.in_patch = True
     # --- estructura mínima Enfermería-Lima ---
     sede = _ensure("Unidad Organica", {"codigo": "SEDE-LIMA"},

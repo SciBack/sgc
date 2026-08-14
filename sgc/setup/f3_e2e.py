@@ -1,9 +1,15 @@
 """F3 E2E — completa la autoevaluación demo, confirma niveles, finaliza vigencia
 y genera el Informe SINEACE en PDF.
 Ejecutar: echo 'from sgc.setup import f3_e2e; f3_e2e.run()' | bench --site sgc.localhost console
+
+Solo corre en sitios de pruebas: completa y cierra una autoevaluación sin marca
+[DEMO], que en un sitio institucional se lee como dato real. Ver
+`sgc/setup/guardas.py`.
 """
 import frappe
+
 from sgc import confirmacion, informe
+from sgc.setup.guardas import exigir_sitio_de_pruebas
 
 AE = "AE-ENF-LIMA-2026I"
 
@@ -14,6 +20,7 @@ def _criterios(est):
 
 
 def run():
+    exigir_sitio_de_pruebas("f3_e2e")
     frappe.flags.in_patch = True
     frappe.local.lang = "es"
     # E1=LP, E2=NL, E3=L ya valorados; valorar E4..E10 como "Cumple" (-> LP)
