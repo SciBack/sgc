@@ -27,6 +27,13 @@ M03 / M09 (para los agentes de esos módulos)
     crear_evidencia(...)                  -> Evidencia
     crear_trazabilidad(evidencia, ...)    -> Trazabilidad
 
+Estructura académica + indicadores medidos (A2)
+-----------------------------------------------
+    crear_programa_sede(...)              -> Programa Sede (+ Programa + sede)
+    crear_periodo_academico(...)          -> Periodo Academico
+    crear_indicador(...)                  -> Indicador del catálogo
+    crear_valor_indicador(indicador, ...) -> Valor Indicador (como lo publica un conector)
+
 Todas las factories devuelven el/los documento(s) creado(s) (frappe Document),
 salvo `crear_marco_prueba` que devuelve un dict con el mapa del árbol.
 """
@@ -463,6 +470,73 @@ def crear_resultado_instrumento(aplicacion, dimension=None, valor=None,
         vals["n"] = n
     vals.update(overrides)
     return _insert("Resultado Instrumento", vals)
+
+
+# ---------------------------------------------------------------------------
+# Estructura académica + indicadores medidos (A2)
+# ---------------------------------------------------------------------------
+def crear_programa_sede(codigo=None, prefijo=PREFIJO, **overrides):
+    """Programa Sede con su Programa y su sede (Unidad Organica). Devuelve el doc.
+
+    Es el grano al que los conectores externos publican mediciones, así que
+    cualquier test de `sgc.indicadores_acreditacion` lo necesita.
+    """
+    codigo = codigo or f"{prefijo}-PS-{next(_seq)}"
+    programa = _ensure_named("Programa", f"{prefijo}-PROG-{codigo}", {
+        "nombre": f"Programa de prueba {codigo}",
+        "nivel": "pregrado",
+        "estado": "activo",
+    })
+    sede = _ensure_named("Unidad Organica", f"{prefijo}-SEDE-{codigo}", {
+        "nombre": f"Sede de prueba {codigo}",
+        "tipo": "Sede",
+    })
+    vals = {"programa": programa.name, "sede": sede.name, "estado": "activo"}
+    vals.update(overrides)
+    return _ensure_named("Programa Sede", codigo, vals)
+
+
+def crear_periodo_academico(codigo=None, prefijo=PREFIJO, **overrides):
+    """Periodo Academico (autoname field:codigo). Devuelve el doc."""
+    codigo = codigo or f"{prefijo}-2026-I-{next(_seq)}"
+    vals = {"anio": 2026, "semestre": "I", "estado": "abierto"}
+    vals.update(overrides)
+    return _ensure_named("Periodo Academico", codigo, vals)
+
+
+def crear_indicador(codigo=None, nombre=None, prefijo=PREFIJO, **overrides):
+    """Indicador del catálogo (autoname field:codigo). Devuelve el doc."""
+    codigo = codigo or f"{prefijo}-IND-{next(_seq)}"
+    vals = {
+        "nombre": nombre or f"Indicador de prueba {codigo}",
+        "categoria": "Acreditacion",
+    }
+    vals.update(overrides)
+    return _ensure_named("Indicador", codigo, vals)
+
+
+def crear_valor_indicador(indicador, programa_sede=None, periodo_academico=None,
+                          valor_num=None, valor_texto=None, fuente="dw", **overrides):
+    """Valor Indicador tal como lo publica un conector externo. Devuelve el doc.
+
+    Por defecto NO se pasa `autoevaluacion`: es exactamente lo que hacen los
+    conectores reales (enganchar la medición a un expediente es decisión del
+    proceso de Calidad), y es la condición que las vistas deben saber resolver.
+    """
+    ind = indicador.name if hasattr(indicador, "name") else indicador
+    vals = {"indicador": ind, "fuente": fuente, "calculado": 1}
+    if programa_sede is not None:
+        vals["programa_sede"] = programa_sede.name if hasattr(programa_sede, "name") else programa_sede
+    if periodo_academico is not None:
+        vals["periodo_academico"] = (
+            periodo_academico.name if hasattr(periodo_academico, "name") else periodo_academico
+        )
+    if valor_num is not None:
+        vals["valor_num"] = valor_num
+    if valor_texto is not None:
+        vals["valor_texto"] = valor_texto
+    vals.update(overrides)
+    return _insert("Valor Indicador", vals)
 
 
 def desactivar_workflow(document_type):

@@ -46,6 +46,12 @@ jobs:
       - name: Compilar la SPA
         working-directory: frontend
         run: npm run build
+      # Verificadores del design system (copiados desde sciback-design-system).
+      # Estaban escritos desde el 27-jul-2026 y no los lanzaba nada: una norma
+      # blindada por un script que nadie ejecuta es una norma escrita, nada más.
+      - name: Stack e iconos del design system
+        working-directory: frontend
+        run: npm run verify:design
 
   tests:
     name: Integración (PostgreSQL)

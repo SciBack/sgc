@@ -9,19 +9,9 @@ const confirmation = vi.hoisted(() => ({
   submit: vi.fn(),
 }))
 
+// Solo se simula la capa de datos de frappe-ui; los componentes visuales
+// (Boton, Campo, EstadoBadge, Alerta) son los reales de la casa.
 vi.mock('frappe-ui', () => ({
-  Badge: { props: ['label'], template: '<span>{{ label }}</span>' },
-  Button: {
-    props: ['loading', 'disabled'],
-    emits: ['click'],
-    template: '<button :disabled="disabled" @click="$emit(\'click\')"><slot /></button>',
-  },
-  ErrorMessage: { props: ['message'], template: '<p>{{ message }}</p>' },
-  FormControl: {
-    props: ['modelValue', 'label', 'options'],
-    emits: ['update:modelValue'],
-    template: '<label>{{ label }}<textarea v-if="label === \'Justificación\'" :value="modelValue" @input="$emit(\'update:modelValue\', $event.target.value)" /></label>',
-  },
   useCall: vi.fn(() => confirmation),
 }))
 

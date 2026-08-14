@@ -82,6 +82,21 @@
   .sgc-tablero .mx-card.accent .t{color:rgba(255,255,255,.8)}
   .sgc-tablero .mx-card.accent .dot{color:var(--gold)}
 
+  /* indicadores medidos */
+  .sgc-tablero .ind{display:grid;gap:10px}
+  .sgc-tablero .ind-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;box-shadow:var(--sh-sm)}
+  .sgc-tablero .ind-name{font-size:14.5px;font-weight:500;color:var(--ink)}
+  .sgc-tablero .ind-sub{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:12.5px;color:var(--muted);margin-top:4px}
+  .sgc-tablero .ind-val{font-size:22px;font-weight:800;color:var(--navy);letter-spacing:-.02em;text-align:right;white-space:nowrap}
+  .sgc-tablero .ind-val .u{font-size:13px;font-weight:700;color:var(--muted);margin-left:2px}
+  .sgc-tablero .ind-val .nd{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0}
+  .sgc-tablero .tag{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:100px;white-space:nowrap}
+  .sgc-tablero .tag.prov{background:var(--gold);color:#3a2a00}
+  .sgc-tablero .note{display:flex;align-items:flex-start;gap:10px;background:#fdf4e0;border:1px solid #f0dcae;border-radius:12px;padding:13px 16px;font-size:13px;color:#7a5b00;margin-bottom:14px}
+  .sgc-tablero .note b{font-weight:700}
+  .sgc-tablero .blank{background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:26px 20px;text-align:center;color:var(--muted);font-size:13.5px}
+  .sgc-tablero .marco-nota{margin:14px 2px 0;font-size:12.5px;line-height:1.6;color:var(--muted);max-width:78ch}
+
   /* capa flow */
   .sgc-tablero .capa{display:flex;flex-wrap:wrap;align-items:stretch;gap:12px}
   .sgc-tablero .capa-node{flex:1;min-width:170px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--sh-sm)}
@@ -184,6 +199,86 @@
       </a>
       {% endfor %}
     </div>
+  </div>
+</section>
+
+<section>
+  <div class="tw">
+    <div class="sec-h">
+      <h2>Indicadores medidos</h2>
+      <span class="meta">
+        {% if indicadores_fuente %}Fuente: {{ indicadores_fuente }} · {% endif %}{{ ae.periodo_academico }}
+      </span>
+    </div>
+
+    {% if indicadores_otras_fuentes %}
+    <div class="note">
+      <span aria-hidden="true">⚠</span>
+      <div>
+        Hay <b>otras fuentes</b> publicando indicadores de este programa y periodo:
+        {% for o in indicadores_otras_fuentes %}<b>{{ o.fuente }}</b> ({{ o.n_indicadores }}){% if not loop.last %}, {% endif %}{% endfor %}.
+        Se muestran solo los de <b>{{ indicadores_fuente }}</b>; las demás pueden dar cifras distintas del mismo indicador.
+      </div>
+    </div>
+    {% endif %}
+
+    {% if indicadores %}
+    <div class="ind">
+      {% for i in indicadores %}
+      <div class="ind-row">
+        <span class="std-code">{{ i.indicador }}</span>
+        <div>
+          <div class="ind-name">{{ i.nombre or i.indicador }}</div>
+          <div class="ind-sub">
+            {# "%g" imprime la meta como la escribió el productor: 80, no 80.0 #}
+            {% if i.meta is not none %}<span>Meta {{ i.meta_operador }} {{ "%g"|format(i.meta) }}{{ i.meta_sufijo or i.sufijo }}{% if i.marco %} · {{ i.marco }}{% endif %}</span>{% endif %}
+            {% if i.n is not none %}<span>n = {{ i.n|int }}</span>{% endif %}
+            {% if i.unidad and not i.sufijo %}<span>{{ i.unidad }}</span>{% endif %}
+            {% if not i.contrato_reconocido and i.texto %}<span>{{ i.texto }}</span>{% endif %}
+            {% if i.provisional %}
+            <span class="tag prov">Provisional{% if i.cobertura is not none %} · cobertura {{ "%g"|format(i.cobertura) }}%{% endif %}</span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="ind-val tabnums">
+          {% if i.valor_num is not none %}{{ "%.2f"|format(i.valor_num) }}<span class="u">{{ i.sufijo }}</span>
+          {% else %}<span class="nd">Sin dato</span>{% endif %}
+        </div>
+        {# El juicio es SIEMPRE respecto a la meta del marco que declaró el
+           productor, nunca un veredicto absoluto. "No alcanza la meta" en vez de
+           "No cumple": el mismo valor puede estar en regla ante un régimen
+           obligatorio y quedarse corto ante un sello voluntario, y el rojo de un
+           tablero no debe insinuar una falta legal que no existe. #}
+        {% if i.cumple is none %}
+        <span class="pill" style="background:#eef1f4;color:#5b6b7c">Sin meta declarada</span>
+        {% elif i.cumple %}
+        <span class="pill" style="background:var(--lp-bg);color:var(--lp)">Alcanza la meta</span>
+        {% else %}
+        <span class="pill" style="background:var(--nl-bg);color:var(--nl)">No alcanza la meta</span>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% if marcos_declarados %}
+    <p class="marco-nota">
+      Cada indicador se juzga contra la meta del marco que indica su fila
+      ({{ marcos_declarados|join(", ") }}). Un mismo valor puede alcanzar la meta de un marco y
+      no la de otro, porque cada régimen fija su propio umbral y su propio universo de cálculo:
+      no alcanzar una meta no equivale, por sí solo, a un incumplimiento normativo.
+    </p>
+    {% endif %}
+    {% else %}
+    <div class="blank">
+      {% if indicadores_motivo == "autoevaluacion_sin_programa_sede" %}
+        Esta autoevaluación no tiene programa-sede asignado, así que no se puede resolver a qué mediciones corresponde.
+      {% elif indicadores_motivo == "autoevaluacion_sin_periodo" %}
+        Esta autoevaluación no tiene periodo académico asignado, así que no se puede resolver a qué mediciones corresponde.
+      {% else %}
+        Todavía no hay indicadores publicados{% if indicadores_fuente %} por «{{ indicadores_fuente }}»{% endif %}
+        para este programa en el periodo {{ ae.periodo_academico }}.
+      {% endif %}
+    </div>
+    {% endif %}
   </div>
 </section>
 

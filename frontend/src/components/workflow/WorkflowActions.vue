@@ -1,6 +1,8 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
-import { Button, ErrorMessage, useCall } from 'frappe-ui'
+import { useCall } from 'frappe-ui'
+import Boton from '@/components/ui/Boton.vue'
+import Alerta from '@/components/ui/Alerta.vue'
 
 const props = defineProps({
   document: { type: Object, required: true },
@@ -85,28 +87,27 @@ watch(
     </div>
 
     <div class="workflow-actions__controls">
-      <span v-if="transitions.loading && !transitions.data" class="text-p-sm text-ink-gray-5">
+      <span v-if="transitions.loading && !transitions.data" class="text-sm text-tinta-tenue">
         Consultando acciones…
       </span>
       <template v-else-if="actions.length">
-        <Button
+        <Boton
           v-for="transition in actions"
           :key="transition.action"
-          :variant="isSecondary(transition.action) ? 'outline' : 'solid'"
-          :class="isSecondary(transition.action) ? 'btn-press' : 'sb-primary-action btn-press'"
-          :loading="activeAction === transition.action"
-          :disabled="Boolean(activeAction)"
+          :variante="isSecondary(transition.action) ? 'secundario' : 'primario'"
+          :cargando="activeAction === transition.action"
+          :deshabilitado="Boolean(activeAction)"
           @click="applyAction(transition.action)"
         >
           {{ actionLabel(transition.action) }}
-        </Button>
+        </Boton>
       </template>
-      <p v-else class="text-p-sm text-ink-gray-5">
+      <p v-else class="text-sm text-tinta-tenue">
         No hay acciones disponibles para tu rol en este estado.
       </p>
     </div>
 
-    <ErrorMessage v-if="errorMessage" :message="errorMessage" />
+    <Alerta v-if="errorMessage" :message="errorMessage" />
   </section>
 </template>
 

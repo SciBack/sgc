@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
-import { Combobox, useCall } from 'frappe-ui'
+import { useCall } from 'frappe-ui'
+import SelectorBuscador from '@/components/ui/SelectorBuscador.vue'
 
 // "Nivel Escala" está marcado istable=1 en el DocType (heredado del diseño
 // original) — eso hace que TODOS los endpoints genéricos de listado/búsqueda
@@ -24,7 +25,7 @@ const options = computed(() =>
 </script>
 
 <template>
-  <Combobox
+  <SelectorBuscador
     :model-value="modelValue"
     :options="options"
     :loading="niveles.loading"

@@ -1,7 +1,12 @@
 <script setup>
 import { computed, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { Button, ErrorMessage, LoadingText, ScrollArea, call, useDoc, useDoctype } from 'frappe-ui'
+import { call, useDoc, useDoctype } from 'frappe-ui'
+import { FileContent, Link2 } from 'reicon-vue'
+import Boton from '@/components/ui/Boton.vue'
+import Alerta from '@/components/ui/Alerta.vue'
+import Cargando from '@/components/ui/Cargando.vue'
+import AreaScroll from '@/components/ui/AreaScroll.vue'
 import { useDoctypeMeta } from '@/composables/useDoctypeMeta'
 import FieldInput from '@/components/form/FieldInput.vue'
 import DocConnections from '@/components/form/DocConnections.vue'
@@ -194,26 +199,26 @@ async function save() {
 </script>
 
 <template>
-  <ScrollArea class="min-h-0 flex-1">
+  <AreaScroll class="min-h-0 flex-1">
     <div class="mx-auto max-w-3xl px-5 py-6 sm:px-8">
       <div class="sb-page-heading mb-6">
         <div class="flex min-w-0 items-start gap-3">
-          <span class="sb-page-heading__icon" aria-hidden="true"><span class="lucide-file-pen-line size-5" /></span>
+          <span class="sb-page-heading__icon" aria-hidden="true"><FileContent :size="20" /></span>
           <div>
             <div class="sb-section-label">{{ doctype }}</div>
-            <h1 class="mt-1 font-display text-2xl font-bold text-ink-gray-9">{{ title }}</h1>
-            <p class="mt-1 text-p-sm text-ink-gray-5">Completa los campos necesarios y guarda los cambios.</p>
+            <h1 class="mt-1 font-display text-2xl font-bold text-tinta">{{ title }}</h1>
+            <p class="mt-1 text-sm text-tinta-tenue">Completa los campos necesarios y guarda los cambios.</p>
           </div>
         </div>
-        <a :href="deskUrl()" target="_blank" class="btn-press whitespace-nowrap rounded-xl border border-outline-gray-2 px-3 py-2 text-p-sm font-semibold text-ink-gray-6 transition-colors hover:bg-surface-gray-1 hover:text-ink-gray-8">
-          <span class="lucide-external-link mr-1 inline size-3.5 align-text-bottom" aria-hidden="true" />
+        <a :href="deskUrl()" target="_blank" class="btn-press whitespace-nowrap rounded-xl border border-borde-fuerte px-3 py-2 text-sm font-semibold text-tinta-suave transition-colors hover:bg-superficie-2 hover:text-tinta">
+          <Link2 :size="14" class="mr-1 inline align-text-bottom" aria-hidden="true" />
           Ver en el Desk
         </a>
       </div>
 
-      <LoadingText v-if="metaLoading || (!isNew && doc.loading && !doc.doc)" />
-      <ErrorMessage v-else-if="metaError" :message="metaError.message" />
-      <ErrorMessage v-else-if="!isNew && doc.error" :message="doc.error.message" />
+      <Cargando v-if="metaLoading || (!isNew && doc.loading && !doc.doc)" />
+      <Alerta v-else-if="metaError" :message="metaError.message" />
+      <Alerta v-else-if="!isNew && doc.error" :message="doc.error.message" />
 
       <form v-else class="sb-form-card space-y-5" @submit.prevent="save">
         <div v-for="f in visibleFields" :key="f.fieldname">
@@ -226,12 +231,12 @@ async function save() {
           />
         </div>
 
-        <div class="flex items-center gap-3 border-t border-outline-gray-1 pt-5">
-          <Button variant="solid" class="sb-primary-action btn-press" type="submit" :loading="saving">
+        <div class="flex items-center gap-3 border-t border-borde pt-5">
+          <Boton variante="primario" type="submit" :cargando="saving">
             {{ isNew ? 'Crear' : 'Guardar' }}
-          </Button>
-          <span v-if="saved" class="text-p-sm text-ink-green-6">Guardado.</span>
-          <ErrorMessage v-if="saveError" :message="saveError.message" />
+          </Boton>
+          <span v-if="saved" class="text-sm text-exito">Guardado.</span>
+          <Alerta v-if="saveError" :message="saveError.message" />
         </div>
       </form>
 
@@ -246,5 +251,5 @@ async function save() {
         />
       </div>
     </div>
-  </ScrollArea>
+  </AreaScroll>
 </template>

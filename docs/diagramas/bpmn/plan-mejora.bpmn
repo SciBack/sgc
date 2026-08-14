@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:sgc="https://sciback.com/schema/sgc/1.0" id="Definitions_1" targetNamespace="https://sciback.com/schema/sgc/1.0" exporter="SGC" exporterVersion="1.0">
+  <bpmn:collaboration id="Collaboration_1">
+    <bpmn:participant id="Participant_Plan_Mejora" name="Plan de Mejora SGC" processRef="Process_Plan_Mejora" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_Plan_Mejora" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_DPGC" name="DPGC">
+        <bpmn:flowNodeRef>Task_Borrador__Aprobar_y_ejecutar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_En_ejecucion__Devolver_a_borrador</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_En_ejecucion__Cerrar_plan</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_En_ejecucion</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Cerrado</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:userTask id="Task_Borrador__Aprobar_y_ejecutar" name="Aprobar y ejecutar">
+      <bpmn:incoming>Flow_inicio</bpmn:incoming>
+      <bpmn:incoming>Flow_En_ejecucion_Devolver_a_borrador_hacia_Borrador</bpmn:incoming>
+      <bpmn:outgoing>Flow_Borrador_Aprobar_y_ejecutar_hacia_En_ejecucion</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_En_ejecucion__Devolver_a_borrador" name="Devolver a borrador">
+      <bpmn:incoming>Flow_gw_En_ejecucion_Devolver_a_borrador</bpmn:incoming>
+      <bpmn:outgoing>Flow_En_ejecucion_Devolver_a_borrador_hacia_Borrador</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_En_ejecucion__Cerrar_plan" name="Cerrar plan">
+      <bpmn:incoming>Flow_gw_En_ejecucion_Cerrar_plan</bpmn:incoming>
+      <bpmn:outgoing>Flow_En_ejecucion_Cerrar_plan_hacia_Cerrado</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_En_ejecucion" name="En ejecucion">
+      <bpmn:incoming>Flow_Borrador_Aprobar_y_ejecutar_hacia_En_ejecucion</bpmn:incoming>
+      <bpmn:outgoing>Flow_gw_En_ejecucion_Devolver_a_borrador</bpmn:outgoing>
+      <bpmn:outgoing>Flow_gw_En_ejecucion_Cerrar_plan</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_Cerrado" name="Cerrado">
+      <bpmn:incoming>Flow_En_ejecucion_Cerrar_plan_hacia_Cerrado</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:startEvent id="StartEvent_1" name="Inicio">
+      <bpmn:outgoing>Flow_inicio</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Task_Borrador__Aprobar_y_ejecutar">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Borrador_Aprobar_y_ejecutar_hacia_En_ejecucion" sourceRef="Task_Borrador__Aprobar_y_ejecutar" targetRef="Gateway_En_ejecucion">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="0" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_En_ejecucion_Devolver_a_borrador" sourceRef="Gateway_En_ejecucion" targetRef="Task_En_ejecucion__Devolver_a_borrador">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_En_ejecucion_Devolver_a_borrador_hacia_Borrador" sourceRef="Task_En_ejecucion__Devolver_a_borrador" targetRef="Task_Borrador__Aprobar_y_ejecutar">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_En_ejecucion_Cerrar_plan" sourceRef="Gateway_En_ejecucion" targetRef="Task_En_ejecucion__Cerrar_plan">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_En_ejecucion_Cerrar_plan_hacia_Cerrado" sourceRef="Task_En_ejecucion__Cerrar_plan" targetRef="End_Cerrado">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="0" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_1">
+    <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
+      <bpmndi:BPMNShape id="Shape_Participant_Plan_Mejora" bpmnElement="Participant_Plan_Mejora" isHorizontal="true">
+        <dc:Bounds x="200" y="80" width="1146" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
+        <dc:Bounds x="230" y="80" width="1116" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Borrador__Aprobar_y_ejecutar" bpmnElement="Task_Borrador__Aprobar_y_ejecutar">
+        <dc:Bounds x="430" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_En_ejecucion__Devolver_a_borrador" bpmnElement="Task_En_ejecucion__Devolver_a_borrador">
+        <dc:Bounds x="830" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_En_ejecucion__Cerrar_plan" bpmnElement="Task_En_ejecucion__Cerrar_plan">
+        <dc:Bounds x="1030" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Gateway_En_ejecucion" bpmnElement="Gateway_En_ejecucion">
+        <dc:Bounds x="630" y="135" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_End_Cerrado" bpmnElement="End_Cerrado">
+        <dc:Bounds x="1230" y="142" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
+        <dc:Bounds x="230" y="142" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
+        <di:waypoint x="266" y="160" />
+        <di:waypoint x="430" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Borrador_Aprobar_y_ejecutar_hacia_En_ejecucion" bpmnElement="Flow_Borrador_Aprobar_y_ejecutar_hacia_En_ejecucion">
+        <di:waypoint x="550" y="160" />
+        <di:waypoint x="630" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_En_ejecucion_Devolver_a_borrador" bpmnElement="Flow_gw_En_ejecucion_Devolver_a_borrador">
+        <di:waypoint x="680" y="160" />
+        <di:waypoint x="830" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_En_ejecucion_Devolver_a_borrador_hacia_Borrador" bpmnElement="Flow_En_ejecucion_Devolver_a_borrador_hacia_Borrador">
+        <di:waypoint x="830" y="160" />
+        <di:waypoint x="550" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_En_ejecucion_Cerrar_plan" bpmnElement="Flow_gw_En_ejecucion_Cerrar_plan">
+        <di:waypoint x="680" y="160" />
+        <di:waypoint x="1030" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_En_ejecucion_Cerrar_plan_hacia_Cerrado" bpmnElement="Flow_En_ejecucion_Cerrar_plan_hacia_Cerrado">
+        <di:waypoint x="1150" y="160" />
+        <di:waypoint x="1230" y="160" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

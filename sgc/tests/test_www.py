@@ -193,6 +193,62 @@ class IntegrationTestWww(IntegrationTestCase):
         # No suma en ninguna categoría del semáforo.
         self.assertEqual(ctx.resumen, {"NL": 0, "L": 0, "LP": 0})
 
+    def test_tablero_muestra_indicadores_publicados_por_un_conector(self):
+        """El panel resuelve las mediciones por (programa_sede, periodo) de la AE.
+
+        Es el caso real: el conector externo publica sin poblar `autoevaluacion`,
+        así que una vista que filtre por ese Link no ve nada. Este test fija que
+        el tablero SÍ las ve, y que advierte cuando hay más de una fuente.
+        """
+        ps = factories.crear_programa_sede().name
+        periodo = factories.crear_periodo_academico().name
+        ae = factories.crear_autoevaluacion(
+            self.marco, programa_sede=ps, periodo_academico=periodo,
+            titulo="Tablero con indicadores",
+        ).name
+
+        ind = factories.crear_indicador(codigo="TEST-WWW-ID10", nombre="Aprobados")
+        factories.crear_valor_indicador(
+            ind, ps, periodo, valor_num=88.22, fuente="dw",
+            valor_texto="DW v1-norma Coneau 2026 · n=452 · meta 80% (cumple)",
+        )
+        # Segundo productor del MISMO par -> debe aparecer como advertencia.
+        otro = factories.crear_indicador(codigo="TEST-WWW-ID6")
+        factories.crear_valor_indicador(otro, ps, periodo, valor_num=-0.71, fuente="lamb")
+
+        ctx = self._ctx()
+        tablero.get_context(ctx)
+
+        self.assertEqual(ctx.ae["name"], ae)
+        self.assertEqual(ctx.indicadores_fuente, "dw")
+        self.assertEqual([i["indicador"] for i in ctx.indicadores], ["TEST-WWW-ID10"])
+        self.assertIs(ctx.indicadores[0]["cumple"], True)
+        self.assertIsNone(ctx.indicadores_motivo)
+
+        # La otra fuente se reporta para que la plantilla pueda advertirla.
+        self.assertEqual(ctx.indicadores_otras_fuentes, [{"fuente": "lamb", "n_indicadores": 1}])
+
+        # El marco declarado viaja al contexto: la nota al pie lo cita para que
+        # "no alcanza la meta" quede atado a SU régimen y no se lea como una
+        # falta normativa.
+        self.assertEqual(ctx.marcos_declarados, ["Coneau 2026"])
+
+        # El contador cuenta indicadores distintos de TODAS las fuentes (2), no
+        # los que tienen el Link `autoevaluacion` poblado (0, como antes).
+        self.assertEqual(ctx.n_indicadores, 2)
+
+    def test_tablero_sin_indicadores_expone_el_motivo(self):
+        """Sin mediciones el panel queda vacío pero dice por qué."""
+        frappe.db.set_value("Autoevaluacion", self.ae, "titulo", "Tablero sin indicadores")
+
+        ctx = self._ctx()
+        tablero.get_context(ctx)
+
+        self.assertEqual(ctx.indicadores, [])
+        # La AE base de setUp no tiene programa_sede -> el par no resuelve.
+        self.assertEqual(ctx.indicadores_motivo, "autoevaluacion_sin_programa_sede")
+        self.assertEqual(ctx.n_indicadores, 0)
+
     # ======================================================================
     # estandar.py — detalle de un estándar (?ae=&est=)
     # ======================================================================

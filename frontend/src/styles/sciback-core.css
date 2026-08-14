@@ -42,6 +42,58 @@ html[data-theme='dark'] {
   --color-rejilla: #2d2d36;
 }
 
+/* Patrón ÚNICO de campo (estilo §5). Centraliza input/select/textarea en vez de
+   clases sueltas por pantalla: Pulso DTI llegó a tener dos juegos y se
+   descolgaban entre sí. El anillo de foco es visible y de marca — nunca
+   `outline: none` sin reemplazo. */
+.campo {
+  background-color: var(--color-superficie);
+  border: 1px solid var(--color-borde-fuerte);
+  color: var(--color-tinta);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.campo::placeholder { color: var(--color-tinta-tenue); }
+.campo:focus-visible {
+  outline: none;
+  border-color: var(--color-marca-primaria-500);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-marca-primaria-500) 22%, transparent);
+}
+.campo:disabled { opacity: 0.6; cursor: not-allowed; }
+@media (prefers-reduced-motion: reduce) { .campo { transition: none; } }
+
+/* Superficie TENUE DE MARCA (teselas de icono, chips de código, contadores).
+   Detectado mirando la pantalla en modo oscuro: se usaba `bg-marca-primaria-50`
+   con `text-marca-primaria-700` encima, y la escala de marca NO conmuta con el
+   tema —la institución la declara una sola vez—. Resultado: 14 parches casi
+   blancos flotando sobre el fondo oscuro.
+   Se mezcla con `--color-superficie` en vez de con `transparent`, y por eso
+   sigue al tema solo. La tinta se sube a `marca-primaria-300` de noche: bajar
+   el fondo sin subir la tinta habría dejado navy sobre navy. */
+.superficie-marca {
+  background-color: color-mix(in srgb, var(--color-marca-primaria-500) 10%, var(--color-superficie));
+  color: var(--color-marca-primaria-700);
+}
+html[data-theme='dark'] .superficie-marca {
+  background-color: color-mix(in srgb, var(--color-marca-primaria-500) 22%, var(--color-superficie));
+  color: var(--color-marca-primaria-300);
+}
+
+/* Superficies TENUES de estado.
+   El canon define los estados como TINTA (--color-exito/aviso/peligro) y las
+   superficies como neutras (superficie-1/2/3): no hay «superficie de peligro».
+   En vez de inventar tokens nuevos —que afectaría a los cuatro productos— se
+   derivan con color-mix, que es lo que el método §1.4 ya bendice para el alfa
+   sobre un token.
+   NUNCA concatenando el alfa al token (`var(--color-peligro)1a`): eso produce
+   CSS inválido que el navegador descarta en silencio, sin error de build. */
+.bg-exito-tenue { background-color: color-mix(in srgb, var(--color-exito) 10%, transparent); }
+.bg-aviso-tenue { background-color: color-mix(in srgb, var(--color-aviso) 10%, transparent); }
+.bg-peligro-tenue { background-color: color-mix(in srgb, var(--color-peligro) 10%, transparent); }
+.bg-info-tenue { background-color: color-mix(in srgb, var(--color-info) 10%, transparent); }
+.border-exito-tenue { border-color: color-mix(in srgb, var(--color-exito) 28%, transparent); }
+.border-aviso-tenue { border-color: color-mix(in srgb, var(--color-aviso) 28%, transparent); }
+.border-peligro-tenue { border-color: color-mix(in srgb, var(--color-peligro) 28%, transparent); }
+
 .sb-card {
   border: 1px solid var(--color-borde);
   border-radius: 1rem;
@@ -65,8 +117,15 @@ html[data-theme='dark'] {
   flex: none;
   place-items: center;
   border-radius: 0.75rem;
-  background: var(--color-marca-primaria-50);
+  background: color-mix(in srgb, var(--color-marca-primaria-500) 10%, var(--color-superficie));
   color: var(--color-marca-primaria-700);
+}
+
+/* La tinta también sube de noche. Oscurecer el fondo sin tocarla dejaba el navy
+   de `marca-primaria-700` sobre un fondo casi igual de oscuro: ilegible. */
+html[data-theme='dark'] .sb-page-heading__icon {
+  background: color-mix(in srgb, var(--color-marca-primaria-500) 22%, var(--color-superficie));
+  color: var(--color-marca-primaria-300);
 }
 
 .sb-empty-state {

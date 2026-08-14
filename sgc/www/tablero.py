@@ -7,6 +7,7 @@ chrome de Frappe). El escritorio (/app) queda para carga/edición de datos.
 
 import frappe
 
+from sgc import indicadores_acreditacion
 from sgc.informe import _nivel_de_estandar
 
 # Semántica de niveles CONEAU-SINEACE (Sección IX).
@@ -23,6 +24,20 @@ def _count(doctype, filters=None):
         return frappe.db.count(doctype, filters) if filters else frappe.db.count(doctype)
     except Exception:
         return 0
+
+
+def _seguro(fn, *args, default=None):
+    """Ejecuta un lector y degrada a `default` si falla.
+
+    Misma política que `_count`: un bloque de esta portada que no se puede leer
+    (permisos del rol, dato a medio migrar) se muestra vacío en vez de tumbar la
+    página entera. El error queda en el log de Frappe, no se traga en silencio.
+    """
+    try:
+        return fn(*args)
+    except Exception:
+        frappe.log_error(title="tablero: lector de indicadores")
+        return default
 
 
 def get_context(context):
@@ -109,7 +124,34 @@ def get_context(context):
     # Indicador es el CATÁLOGO (29 institucionales) — mostrarlo sugiere medición
     # donde no la hay. Lo que corresponde en una vista de AE es cuántos de esos
     # indicadores tienen valor medido para este periodo/programa.
-    context.n_indicadores = _count("Valor Indicador", {"autoevaluacion": ae.name})
+    #
+    # 2026-08-04 (hallazgo): contaba `Valor Indicador` por el Link `autoevaluacion`,
+    # que los conectores externos dejan vacío a propósito (enganchar una medición
+    # a un expediente formal es decisión de Calidad, no del conector) -> el
+    # contador daba 0 aunque hubiera mediciones reales del programa. Ahora se
+    # resuelve por el par (programa_sede, periodo_academico), igual que el panel.
+    context.n_indicadores = _seguro(indicadores_acreditacion.contar_indicadores_medidos, ae.name, default=0)
+
+    # --- indicadores medidos por el conector externo ---
+    # Se muestra UNA fuente (la preferida de la institución) y se advierte si hay
+    # otras publicando el mismo par: dos productores con reglas distintas dan
+    # cifras distintas del mismo indicador, y elegir una en silencio es peor que
+    # decir que existen las dos.
+    ind = _seguro(indicadores_acreditacion.indicadores_de_autoevaluacion, ae.name,
+                  default={"fuente": "", "filas": [], "motivo": None})
+    context.indicadores = ind["filas"]
+    context.indicadores_fuente = ind["fuente"]
+    context.indicadores_motivo = ind["motivo"]
+    context.indicadores_otras_fuentes = _seguro(
+        indicadores_acreditacion.otras_fuentes, ae.name, default=[]
+    )
+    # Marcos normativos que declaran las filas mostradas. La nota al pie los cita
+    # para que el juicio "no alcanza la meta" quede atado a SU régimen: el mismo
+    # valor puede estar en regla ante una norma obligatoria y quedarse corto ante
+    # un sello voluntario, porque cada una fija su umbral y su universo.
+    context.marcos_declarados = sorted({
+        i["marco"] for i in context.indicadores if i.get("marco")
+    })
 
     # ruta al registro en el escritorio (para editar)
     context.desk_url = "/app/autoevaluacion/" + ae.name

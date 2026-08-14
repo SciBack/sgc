@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:sgc="https://sciback.com/schema/sgc/1.0" id="Definitions_1" targetNamespace="https://sciback.com/schema/sgc/1.0" exporter="SGC" exporterVersion="1.0">
+  <bpmn:collaboration id="Collaboration_1">
+    <bpmn:participant id="Participant_Informe_Cumplimiento" name="Informe Cumplimiento SGC" processRef="Process_Informe_Cumplimiento" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_Informe_Cumplimiento" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_DPGC" name="DPGC">
+        <bpmn:flowNodeRef>Task_Borrador__Enviar_a_revision</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_En_revision__Aprobar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Aprobado__Observar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Aprobado</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Autoridad_Aprobadora" name="Autoridad Aprobadora">
+        <bpmn:flowNodeRef>Task_Aprobado__Presentar_a_SUNEDU</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Presentado_a_SUNEDU</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:userTask id="Task_Borrador__Enviar_a_revision" name="Enviar a revision">
+      <bpmn:incoming>Flow_inicio</bpmn:incoming>
+      <bpmn:incoming>Flow_Aprobado_Observar_hacia_Borrador</bpmn:incoming>
+      <bpmn:outgoing>Flow_Borrador_Enviar_a_revision_hacia_En_revision</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_En_revision__Aprobar" name="Aprobar">
+      <bpmn:incoming>Flow_Borrador_Enviar_a_revision_hacia_En_revision</bpmn:incoming>
+      <bpmn:outgoing>Flow_En_revision_Aprobar_hacia_Aprobado</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Aprobado__Observar" name="Observar">
+      <bpmn:incoming>Flow_gw_Aprobado_Observar</bpmn:incoming>
+      <bpmn:outgoing>Flow_Aprobado_Observar_hacia_Borrador</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Aprobado__Presentar_a_SUNEDU" name="Presentar a SUNEDU">
+      <bpmn:incoming>Flow_gw_Aprobado_Presentar_a_SUNEDU</bpmn:incoming>
+      <bpmn:outgoing>Flow_Aprobado_Presentar_a_SUNEDU_hacia_Presentado_a_SUNEDU</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_Aprobado" name="Aprobado">
+      <bpmn:incoming>Flow_En_revision_Aprobar_hacia_Aprobado</bpmn:incoming>
+      <bpmn:outgoing>Flow_gw_Aprobado_Observar</bpmn:outgoing>
+      <bpmn:outgoing>Flow_gw_Aprobado_Presentar_a_SUNEDU</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_Presentado_a_SUNEDU" name="Presentado a SUNEDU">
+      <bpmn:incoming>Flow_Aprobado_Presentar_a_SUNEDU_hacia_Presentado_a_SUNEDU</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:startEvent id="StartEvent_1" name="Inicio">
+      <bpmn:outgoing>Flow_inicio</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Task_Borrador__Enviar_a_revision">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Borrador_Enviar_a_revision_hacia_En_revision" sourceRef="Task_Borrador__Enviar_a_revision" targetRef="Task_En_revision__Aprobar">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_En_revision_Aprobar_hacia_Aprobado" sourceRef="Task_En_revision__Aprobar" targetRef="Gateway_Aprobado">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="0" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_Aprobado_Observar" sourceRef="Gateway_Aprobado" targetRef="Task_Aprobado__Observar">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Aprobado_Observar_hacia_Borrador" sourceRef="Task_Aprobado__Observar" targetRef="Task_Borrador__Enviar_a_revision">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_Aprobado_Presentar_a_SUNEDU" sourceRef="Gateway_Aprobado" targetRef="Task_Aprobado__Presentar_a_SUNEDU">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Aprobado_Presentar_a_SUNEDU_hacia_Presentado_a_SUNEDU" sourceRef="Task_Aprobado__Presentar_a_SUNEDU" targetRef="End_Presentado_a_SUNEDU">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="Autoridad Aprobadora" autoaprobacion="0" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_1">
+    <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
+      <bpmndi:BPMNShape id="Shape_Participant_Informe_Cumplimiento" bpmnElement="Participant_Informe_Cumplimiento" isHorizontal="true">
+        <dc:Bounds x="200" y="80" width="1146" height="320" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
+        <dc:Bounds x="230" y="80" width="1116" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Autoridad_Aprobadora" bpmnElement="Lane_Autoridad_Aprobadora" isHorizontal="true">
+        <dc:Bounds x="230" y="240" width="1116" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Borrador__Enviar_a_revision" bpmnElement="Task_Borrador__Enviar_a_revision">
+        <dc:Bounds x="430" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_En_revision__Aprobar" bpmnElement="Task_En_revision__Aprobar">
+        <dc:Bounds x="630" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Aprobado__Observar" bpmnElement="Task_Aprobado__Observar">
+        <dc:Bounds x="1030" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Aprobado__Presentar_a_SUNEDU" bpmnElement="Task_Aprobado__Presentar_a_SUNEDU">
+        <dc:Bounds x="1030" y="280" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Gateway_Aprobado" bpmnElement="Gateway_Aprobado">
+        <dc:Bounds x="830" y="135" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_End_Presentado_a_SUNEDU" bpmnElement="End_Presentado_a_SUNEDU">
+        <dc:Bounds x="1230" y="302" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
+        <dc:Bounds x="230" y="142" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
+        <di:waypoint x="266" y="160" />
+        <di:waypoint x="430" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Borrador_Enviar_a_revision_hacia_En_revision" bpmnElement="Flow_Borrador_Enviar_a_revision_hacia_En_revision">
+        <di:waypoint x="550" y="160" />
+        <di:waypoint x="630" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_En_revision_Aprobar_hacia_Aprobado" bpmnElement="Flow_En_revision_Aprobar_hacia_Aprobado">
+        <di:waypoint x="750" y="160" />
+        <di:waypoint x="830" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_Aprobado_Observar" bpmnElement="Flow_gw_Aprobado_Observar">
+        <di:waypoint x="880" y="160" />
+        <di:waypoint x="1030" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Aprobado_Observar_hacia_Borrador" bpmnElement="Flow_Aprobado_Observar_hacia_Borrador">
+        <di:waypoint x="1030" y="160" />
+        <di:waypoint x="550" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_Aprobado_Presentar_a_SUNEDU" bpmnElement="Flow_gw_Aprobado_Presentar_a_SUNEDU">
+        <di:waypoint x="855" y="185" />
+        <di:waypoint x="855" y="320" />
+        <di:waypoint x="1030" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Aprobado_Presentar_a_SUNEDU_hacia_Presentado_a_SUNEDU" bpmnElement="Flow_Aprobado_Presentar_a_SUNEDU_hacia_Presentado_a_SUNEDU">
+        <di:waypoint x="1150" y="320" />
+        <di:waypoint x="1230" y="320" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

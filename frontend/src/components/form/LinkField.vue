@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, watch } from 'vue'
-import { Combobox } from 'frappe-ui'
+import SelectorBuscador from '@/components/ui/SelectorBuscador.vue'
 import { useLinkSearch } from '@/composables/useLinkSearch'
 
 const props = defineProps({
@@ -30,7 +30,7 @@ const options = computed(() =>
 )
 
 // Si el valor ya viene seteado pero aún no aparece en las opciones (p.ej. al
-// entrar directo al formulario), lo agregamos igual para que el Combobox
+// entrar directo al formulario), lo agregamos igual para que el selector
 // muestre algo con sentido en vez de dejarlo en blanco.
 const optionsWithCurrent = computed(() => {
   if (!props.modelValue || options.value.some((o) => o.value === props.modelValue)) {
@@ -45,7 +45,7 @@ function onQuery(txt) {
 </script>
 
 <template>
-  <Combobox
+  <SelectorBuscador
     :model-value="modelValue"
     :options="optionsWithCurrent"
     :loading="search.loading"

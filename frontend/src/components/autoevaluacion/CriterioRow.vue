@@ -1,6 +1,11 @@
 <script setup>
 import { reactive, ref, watch } from 'vue'
-import { Badge, Button, ErrorMessage, FormControl, useCall, useDoctype } from 'frappe-ui'
+import { useCall, useDoctype } from 'frappe-ui'
+import { Link2 } from 'reicon-vue'
+import Alerta from '@/components/ui/Alerta.vue'
+import Boton from '@/components/ui/Boton.vue'
+import Campo from '@/components/ui/Campo.vue'
+import EstadoBadge from '@/components/ui/EstadoBadge.vue'
 
 const props = defineProps({
   row: { type: Object, required: true }, // Valoracion Criterio + cr_* joins
@@ -58,69 +63,72 @@ const estadoTheme = {
 </script>
 
 <template>
-  <div class="rounded-xl border border-outline-gray-1 bg-surface-base p-4">
+  <div class="rounded-xl border border-borde bg-superficie p-4">
     <div class="flex flex-wrap items-center gap-3">
       <div class="min-w-0 flex-1">
-        <span class="rounded-lg bg-marca-primaria-50 px-2 py-1 font-mono text-2xs font-semibold text-marca-primaria-700">
+        <span class="rounded-lg superficie-marca px-2 py-1 font-mono text-xs font-semibold ">
           {{ row.cr_codigo }}
         </span>
-        <span class="ml-2 text-p-sm text-ink-gray-8">{{ row.cr_denominacion }}</span>
+        <span class="ml-2 text-sm text-tinta">{{ row.cr_denominacion }}</span>
       </div>
-      <FormControl type="select" variant="outline" v-model="values.cumple" :options="cumpleOptions" class="w-40" />
-      <Badge :label="row.estado || 'Pendiente'" :theme="row.estado === 'Valorado' ? 'blue' : 'gray'" variant="subtle" size="sm" />
+      <Campo type="select" v-model="values.cumple" :options="cumpleOptions" class="w-40" />
+      <EstadoBadge :label="row.estado || 'Pendiente'" :theme="row.estado === 'Valorado' ? 'blue' : 'gray'" size="sm" />
       <button
         type="button"
-        class="text-p-xs text-ink-gray-5 hover:text-ink-gray-8 hover:underline"
+        class="text-xs text-tinta-tenue hover:text-tinta hover:underline"
         @click="expanded = !expanded"
       >
         {{ expanded ? 'ocultar detalle' : 'detalle' }}
       </button>
-      <Button size="sm" variant="solid" class="sb-primary-action btn-press" :loading="doctype.setValue.loading" @click="save">Guardar</Button>
-      <span v-if="saved" class="text-p-xs text-ink-green-6">Guardado.</span>
+      <Boton tamano="sm" variante="primario" :cargando="doctype.setValue.loading" @click="save">Guardar</Boton>
+      <span v-if="saved" class="text-xs text-exito">Guardado.</span>
     </div>
 
-    <div v-if="expanded" class="detalle mt-3 space-y-4 border-t border-outline-gray-1 pt-3">
+    <div v-if="expanded" class="detalle mt-3 space-y-4 border-t border-borde pt-3">
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <FormControl type="textarea" variant="outline" label="Observación" v-model="values.observacion" :rows="2" />
-        <FormControl type="textarea" variant="outline" label="Debilidad / OM" v-model="values.debilidad" :rows="2" />
-        <FormControl type="textarea" variant="outline" label="Comentario (sustento)" v-model="values.comentario" :rows="2" />
+        <Campo type="textarea"
+            :rows="2" label="Observación" v-model="values.observacion" />
+        <Campo type="textarea"
+            :rows="2" label="Debilidad / OM" v-model="values.debilidad" />
+        <Campo type="textarea"
+            :rows="2" label="Comentario (sustento)" v-model="values.comentario" />
       </div>
 
       <!-- Evidencias que sustentan el criterio -->
       <div>
         <div class="mb-1.5 flex items-center gap-2">
-          <span class="text-p-xs font-semibold uppercase tracking-wide text-ink-gray-5">Evidencias</span>
-          <span v-if="evidencias.data" class="text-2xs text-ink-gray-4">{{ evidencias.data.length }}</span>
+          <span class="text-xs font-semibold uppercase tracking-wide text-tinta-tenue">Evidencias</span>
+          <span v-if="evidencias.data" class="text-xs text-tinta-tenue">{{ evidencias.data.length }}</span>
         </div>
 
-        <div v-if="evidencias.loading" class="text-p-xs text-ink-gray-4">Cargando…</div>
+        <div v-if="evidencias.loading" class="text-xs text-tinta-tenue">Cargando…</div>
         <ul v-else-if="(evidencias.data || []).length" class="space-y-1">
           <li
             v-for="ev in evidencias.data"
             :key="ev.name"
-            class="flex items-center gap-2 rounded border border-outline-gray-1 bg-surface-white px-2.5 py-1.5"
+            class="flex items-center gap-2 rounded border border-borde bg-superficie px-2.5 py-1.5"
           >
-            <span class="font-mono text-2xs font-semibold text-ink-gray-5">{{ ev.codigo }}</span>
-            <span class="min-w-0 flex-1 truncate text-p-xs text-ink-gray-8" :title="ev.titulo">{{ ev.titulo }}</span>
-            <Badge :label="ev.estado" :theme="estadoTheme[ev.estado] || 'gray'" variant="subtle" size="sm" />
+            <span class="font-mono text-xs font-semibold text-tinta-tenue">{{ ev.codigo }}</span>
+            <span class="min-w-0 flex-1 truncate text-xs text-tinta" :title="ev.titulo">{{ ev.titulo }}</span>
+            <EstadoBadge :label="ev.estado" :theme="estadoTheme[ev.estado] || 'gray'" size="sm" />
             <a
               v-if="ev.archivo"
               :href="ev.archivo"
               target="_blank"
               rel="noopener"
-              class="ev-open flex size-6 shrink-0 items-center justify-center rounded text-ink-gray-4 hover:bg-surface-gray-3 hover:text-ink-gray-7"
+              class="ev-open flex size-6 shrink-0 items-center justify-center rounded text-tinta-tenue hover:bg-superficie-3 hover:text-tinta-suave"
               title="Abrir archivo"
             >
-              <span class="lucide-external-link size-3.5" aria-hidden="true" />
+              <Link2 :size="14" aria-hidden="true" />
             </a>
           </li>
         </ul>
-        <p v-else class="text-p-xs text-ink-gray-4">
+        <p v-else class="text-xs text-tinta-tenue">
           Sin evidencias vinculadas — cárgalas en el módulo Evidencias y vincúlalas a este criterio.
         </p>
       </div>
     </div>
-    <ErrorMessage v-if="doctype.setValue.error" class="mt-2" :message="doctype.setValue.error.message" />
+    <Alerta v-if="doctype.setValue.error" class="mt-2" :message="doctype.setValue.error.message" />
   </div>
 </template>
 

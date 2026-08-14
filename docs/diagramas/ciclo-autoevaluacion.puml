@@ -1,0 +1,106 @@
+@startuml
+title Ciclo de autoevaluacion del SGC — estados y responsables reales
+
+' Apariencia
+' NO usar `top to bottom direction` ni `left to right direction`: son de los
+' diagramas de clases y componentes. En un diagrama de actividad hacen que
+' PlantUML asuma `class diagram` y falle en el primer carril con
+' "Syntax Error? (Assumed diagram type: class)". Los diagramas de actividad
+' ya fluyen de arriba abajo.
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Inter
+skinparam defaultFontColor #1F2937
+skinparam ArrowColor #64748B
+skinparam ArrowThickness 1.2
+
+skinparam activity {
+  BackgroundColor #FFF7ED
+  BorderColor #EA580C
+  FontColor #1F2937
+  StartColor #16A34A
+  EndColor #334155
+  DiamondBackgroundColor #FFF7ED
+  DiamondBorderColor #EA580C
+}
+
+' Leyenda de estados
+legend right
+|= Color |= Significado |
+|<#DCFCE7> | Realizado o aceptado |
+|<#FFF7ED> | Actividad o etapa normal |
+|<#FEF3C7> | Decision o control condicional |
+|<#FEE2E2> | Rechazo, bloqueo o devolucion |
+|<#E2E8F0> | Sistema o destino externo |
+endlegend
+
+|#FFF7ED|rp| Responsable de Calidad de Programa
+|#FEF9C3|mc| Miembro de Comite de Calidad
+|#E0F2FE|dp| DPGC
+|#E2E8F0|sis| Sistema SGC
+|#F1F5F9|dw| Conector externo (Data Warehouse)
+
+|rp|
+start
+:Crear autoevaluacion\n(programa-sede + periodo + marco normativo);
+:Iniciar evaluacion\n[Planificada -> En curso];
+
+|mc|
+:Cargar evidencias y vincularlas al criterio\n[Trazabilidad, N:M];
+:Valorar cada criterio\n(Cumple / Cumple parcial / No cumple / No aplica);
+
+|sis|
+:Proponer nivel del estandar\nNL / L / LP  [scoring.py]; <<#E2E8F0>>
+note right
+  El sistema PROPONE, el humano CONFIRMA.
+  El nivel oficial esta en permlevel 1:
+  solo DPGC y Responsable de Programa
+  lo escriben; el resto lo lee.
+end note
+
+|dw|
+:Publicar indicadores medidos\n(fuente="dw", por programa-sede y periodo); <<#E2E8F0>>
+
+|sis|
+:Mostrar indicadores en el tablero\nfiltrados por fuente y con su marco normativo; <<#E2E8F0>>
+
+|rp|
+if (¿Todos los criterios valorados?) then (Si)
+else (No)
+  :Completar valoraciones pendientes; <<#FEF3C7>>
+endif
+:Enviar a revision\n[En curso -> En revision];
+
+|dp|
+repeat
+  :Revisar la autoevaluacion;
+  backward:Corregir sin perder versiones\n(el avance y el nivel se recalculan);
+  repeat while (¿Conforme?) is (No: devolver a evaluacion) not (Si)
+  -[#16A34A]->
+
+:Confirmar el nivel oficial del estandar\n(permlevel 1); <<#DCFCE7>>
+:Consolidar\n[En revision -> Consolidada]\nNO puede consolidar quien creo la autoevaluacion; <<#DCFCE7>>
+:Cerrar\n[Consolidada -> Cerrada]; <<#DCFCE7>>
+
+|sis|
+:Congelar el marco en marco_snapshot\n(submit nativo, docstatus 0 -> 1); <<#E2E8F0>>
+note right
+  Desde el cierre, editar el marco vivo
+  ya no altera lo que se evaluo:
+  el informe lee la copia congelada.
+end note
+
+|rp|
+if (¿Se identificaron brechas?) then (Si)
+  :Registrar hallazgo y escalarlo\na No Conformidad; <<#FEF3C7>>
+  |dp|
+  :Tratar por el ciclo CAPA\n[workflow propio: Abierta -> ... -> Cerrada eficaz]; <<#FEF3C7>>
+else (No)
+endif
+
+|sis|
+:Generar el informe de autoevaluacion; <<#E2E8F0>>
+
+stop
+@enduml

@@ -1,6 +1,11 @@
 <script setup>
 import { computed } from 'vue'
-import { useCall, ErrorMessage, LoadingText, PageHeaderTitle, ScrollArea } from 'frappe-ui'
+import { useCall } from 'frappe-ui'
+import { ChartBar } from 'reicon-vue'
+import Alerta from '@/components/ui/Alerta.vue'
+import Cargando from '@/components/ui/Cargando.vue'
+import TituloPagina from '@/components/ui/TituloPagina.vue'
+import AreaScroll from '@/components/ui/AreaScroll.vue'
 
 const CATEGORIA_LABEL = {
   Acreditacion: 'Acreditación',
@@ -60,26 +65,26 @@ function displayValue(row) {
 </script>
 
 <template>
-  <ScrollArea class="min-h-0 flex-1">
+  <AreaScroll class="min-h-0 flex-1">
     <div class="mx-auto max-w-6xl px-6 py-8 sm:px-8 xl:px-10">
       <section class="sb-hero mb-8 px-6 py-7 text-white sm:px-8">
         <div class="relative z-10 flex items-start gap-4">
           <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-white/10 text-marca-secundaria-300">
-            <span class="lucide-chart-no-axes-column-increasing size-5" aria-hidden="true" />
+            <ChartBar :size="20" aria-hidden="true" />
           </span>
           <div>
             <p class="text-xs font-bold uppercase tracking-[0.14em] text-white/65">Seguimiento institucional</p>
-            <PageHeaderTitle title="Tablero de indicadores" class="mt-1 text-white [&_h1]:text-white" />
-            <p class="mt-2 max-w-2xl text-p-sm leading-6 text-white/75">
+            <TituloPagina title="Tablero de indicadores" class="mt-1 text-white" />
+            <p class="mt-2 max-w-2xl text-sm leading-6 text-white/75">
               Último valor calculado por indicador, agrupado por categoría.
             </p>
           </div>
         </div>
       </section>
 
-      <LoadingText v-if="values.loading && !values.data" />
-      <ErrorMessage v-else-if="values.error" :message="values.error.message" />
-      <p v-else-if="!grouped.length" class="sb-empty-state text-p-sm">
+      <Cargando v-if="values.loading && !values.data" />
+      <Alerta v-else-if="values.error" :message="values.error.message" />
+      <p v-else-if="!grouped.length" class="sb-empty-state text-sm">
         Todavía no hay valores calculados en este entorno. El motor de indicadores corre contra Oracle
         LAMB — en producción ya hay valores reales; en el lab de desarrollo esta tabla está vacía.
       </p>
@@ -89,7 +94,7 @@ function displayValue(row) {
           <span class="h-1.5 w-1.5 rounded-full bg-marca-secundaria-500" aria-hidden="true" />
           {{ group.label }}
         </h2>
-        <div class="sb-card divide-y divide-outline-gray-1 overflow-hidden">
+        <div class="sb-card divide-y divide-borde overflow-hidden">
           <div
             v-for="row in group.items"
             :key="row.indicador"
@@ -97,17 +102,17 @@ function displayValue(row) {
           >
             <div class="min-w-0">
               <div class="flex items-center gap-2">
-                <span class="rounded-lg bg-marca-primaria-50 px-2 py-1 font-mono text-xs font-semibold text-marca-primaria-700">
+                <span class="rounded-lg superficie-marca px-2 py-1 font-mono text-xs font-semibold ">
                   {{ row.indicador_codigo }}
                 </span>
-                <span class="truncate text-p-sm text-ink-gray-8">{{ row.indicador_nombre }}</span>
+                <span class="truncate text-sm text-tinta">{{ row.indicador_nombre }}</span>
               </div>
-              <div class="mt-0.5 text-p-xs text-ink-gray-4">{{ row.fuente }} · {{ row.fecha }}</div>
+              <div class="mt-0.5 text-xs text-tinta-tenue">{{ row.fuente }} · {{ row.fecha }}</div>
             </div>
             <div class="font-display text-2xl font-bold tabular-nums text-marca-primaria-700">{{ displayValue(row) }}</div>
           </div>
         </div>
       </section>
     </div>
-  </ScrollArea>
+  </AreaScroll>
 </template>
