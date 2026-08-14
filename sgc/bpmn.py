@@ -54,6 +54,48 @@ X_ORIGEN, Y_ORIGEN = 200, 80
 ANCHO_ETIQUETA = 30   # margen izquierdo del pool para el nombre vertical
 
 
+# ===========================================================================
+# Transiciones que el sistema hace SOLO, fuera del motor de workflow.
+#
+# El motor bloquea, a nivel de máquina de estados, cualquier transición que no
+# esté en su grafo. Por eso estos cambios se escriben directo a la base de datos:
+# son estados que pone el sistema, nunca una persona. Y por eso NO aparecen en la
+# definición del workflow y hay que declararlos aquí.
+#
+# Sin esto, un diagrama afirma que el proceso solo avanza cuando alguien actúa, y
+# es falso: una evidencia caduca sola. Es justo lo que un auditor pregunta.
+#
+# `disparador`: "timer" (pasa el tiempo) o "mensaje" (lo provoca otro documento).
+# `origen` apunta al código que la ejecuta: si se mueve, el test lo detecta.
+# ===========================================================================
+TRANSICIONES_AUTOMATICAS = [
+    {
+        "document_type": "Evidencia",
+        "desde": ("Pendiente", "Valida"),
+        "hasta": "Vencida",
+        "disparador": "timer",
+        "etiqueta": "Vence la vigencia",
+        "origen": "sgc.tasks.marcar_evidencias_vencidas",
+    },
+    {
+        "document_type": "Documento Controlado",
+        "desde": ("Publicado",),
+        "hasta": "Obsoleto",
+        "disparador": "mensaje",
+        "etiqueta": "Otro documento lo reemplaza",
+        "origen": "sgc.sgc_nucleo.doctype.documento_controlado.documento_controlado"
+                  ".DocumentoControlado._obsoletar_reemplazado",
+    },
+]
+
+CARRIL_SISTEMA = "Sistema (automático)"
+
+
+def automaticas_de(document_type):
+    """Transiciones automáticas declaradas para un DocType."""
+    return [a for a in TRANSICIONES_AUTOMATICAS if a["document_type"] == document_type]
+
+
 def specs_de_workflows():
     """Descubre las definiciones de workflow declaradas en `sgc/setup/`.
 
@@ -271,7 +313,11 @@ def construir(spec, layout_previo=None):
             carriles.append(t[3])
     if not carriles:
         carriles = ["Sistema"]
+    automaticas = automaticas_de(spec["document_type"])
+    if automaticas and CARRIL_SISTEMA not in carriles:
+        carriles.append(CARRIL_SISTEMA)   # abajo del todo: no lo ejecuta nadie
     fila_de = {rol: i for i, rol in enumerate(carriles)}
+    # (el carril del sistema ya está incluido si hay transiciones automáticas)
 
     usados = set()
     id_tarea = {}      # (estado_origen, accion, indice) -> id
@@ -306,6 +352,35 @@ def construir(spec, layout_previo=None):
                               fila_de[rol_inicio])
 
     flujos.append((_id("Flow", "inicio", usados), nid_inicio, entrada_a(inicial), "", None))
+
+    # --- lo que ocurre sin que nadie actúe ---
+    fin_automatico = {}   # un solo final por estado destino, no uno por origen
+    for auto in automaticas:
+        tipo = "intermediateCatchEvent" if auto["disparador"] == "timer" else "serviceTask"
+        for estado_origen in auto["desde"]:
+            if estado_origen not in estados:
+                continue          # el estado ya no existe: se omite, no se inventa
+            nid = _id("Auto", f"{estado_origen}__{auto['hasta']}", usados)
+            nodos[nid] = _Nodo(nid, tipo, auto["etiqueta"], CARRIL_SISTEMA, 0,
+                               fila_de[CARRIL_SISTEMA])
+            nodos[nid].disparador = auto["disparador"]
+            destino = (id_fin[auto["hasta"]] if auto["hasta"] in id_fin
+                       else entrada_a(auto["hasta"]) if auto["hasta"] in estados
+                       else None)
+            if destino is None:
+                # el estado destino no está en el workflow (es el caso normal:
+                # son estados que solo pone el sistema). Se dibuja su propio fin,
+                # UNO por estado: "Vencida" es un estado, no uno por cada origen.
+                if auto["hasta"] not in fin_automatico:
+                    nid_f = _id("End", auto["hasta"], usados)
+                    nodos[nid_f] = _Nodo(nid_f, "endEvent", auto["hasta"],
+                                         CARRIL_SISTEMA, 0, fila_de[CARRIL_SISTEMA])
+                    fin_automatico[auto["hasta"]] = nid_f
+                destino = fin_automatico[auto["hasta"]]
+            flujos.append((_id("Flow", f"auto_in_{estado_origen}_{auto['hasta']}", usados),
+                           entrada_a(estado_origen), nid, "", None))
+            flujos.append((_id("Flow", f"auto_out_{estado_origen}_{auto['hasta']}", usados),
+                           nid, destino, "", None))
     for i, t in enumerate(transiciones):
         tid = id_tarea[i]
         if t[0] in id_gw:
@@ -380,6 +455,9 @@ def _serializar(spec, carriles, nodos, flujos, layout_previo=None):
             a(f"      <bpmn:incoming>{fid}</bpmn:incoming>")
         for fid in salientes.get(n.id, []):
             a(f"      <bpmn:outgoing>{fid}</bpmn:outgoing>")
+        if getattr(n, "disparador", None) == "timer":
+            # el reloj dentro del círculo: esto ocurre porque pasa el tiempo
+            a(f'      <bpmn:timerEventDefinition id="Timer_{n.id}" />')
         a(f"    </bpmn:{n.tipo}>")
 
     for fid, src, tgt, nombre, ext in flujos:

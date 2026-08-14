@@ -22,6 +22,11 @@
       <bpmn:lane id="Lane_Dueno_de_Proceso" name="Dueño de Proceso">
         <bpmn:flowNodeRef>Task_Observada__Subsanar_2</bpmn:flowNodeRef>
       </bpmn:lane>
+      <bpmn:lane id="Lane_Sistema__automatico_" name="Sistema (automático)">
+        <bpmn:flowNodeRef>Auto_Pendiente__Vencida</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Vencida</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Auto_Valida__Vencida</bpmn:flowNodeRef>
+      </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:userTask id="Task_Pendiente__Validar" name="Validar">
       <bpmn:incoming>Flow_gw_Pendiente_Validar</bpmn:incoming>
@@ -49,6 +54,7 @@
     </bpmn:userTask>
     <bpmn:exclusiveGateway id="Gateway_Pendiente" name="Pendiente">
       <bpmn:incoming>Flow_inicio</bpmn:incoming>
+      <bpmn:outgoing>Flow_auto_in_Pendiente_Vencida</bpmn:outgoing>
       <bpmn:outgoing>Flow_gw_Pendiente_Validar</bpmn:outgoing>
       <bpmn:outgoing>Flow_gw_Pendiente_Observar</bpmn:outgoing>
     </bpmn:exclusiveGateway>
@@ -67,11 +73,34 @@
     <bpmn:endEvent id="End_Valida" name="Valida">
       <bpmn:incoming>Flow_Pendiente_Validar_hacia_Valida</bpmn:incoming>
       <bpmn:incoming>Flow_Subsanada_Validar_hacia_Valida</bpmn:incoming>
+      <bpmn:outgoing>Flow_auto_in_Valida_Vencida</bpmn:outgoing>
     </bpmn:endEvent>
     <bpmn:startEvent id="StartEvent_1" name="Inicio">
       <bpmn:outgoing>Flow_inicio</bpmn:outgoing>
     </bpmn:startEvent>
+    <bpmn:intermediateCatchEvent id="Auto_Pendiente__Vencida" name="Vence la vigencia">
+      <bpmn:incoming>Flow_auto_in_Pendiente_Vencida</bpmn:incoming>
+      <bpmn:outgoing>Flow_auto_out_Pendiente_Vencida</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="Timer_Auto_Pendiente__Vencida" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:endEvent id="End_Vencida" name="Vencida">
+      <bpmn:incoming>Flow_auto_out_Pendiente_Vencida</bpmn:incoming>
+      <bpmn:incoming>Flow_auto_out_Valida_Vencida</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:intermediateCatchEvent id="Auto_Valida__Vencida" name="Vence la vigencia">
+      <bpmn:incoming>Flow_auto_in_Valida_Vencida</bpmn:incoming>
+      <bpmn:outgoing>Flow_auto_out_Valida_Vencida</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="Timer_Auto_Valida__Vencida" />
+    </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Gateway_Pendiente">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_auto_in_Pendiente_Vencida" sourceRef="Gateway_Pendiente" targetRef="Auto_Pendiente__Vencida">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_auto_out_Pendiente_Vencida" sourceRef="Auto_Pendiente__Vencida" targetRef="End_Vencida">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_auto_in_Valida_Vencida" sourceRef="End_Valida" targetRef="Auto_Valida__Vencida">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_auto_out_Valida_Vencida" sourceRef="Auto_Valida__Vencida" targetRef="End_Vencida">
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_gw_Pendiente_Validar" sourceRef="Gateway_Pendiente" targetRef="Task_Pendiente__Validar">
     </bpmn:sequenceFlow>
@@ -119,7 +148,7 @@
   <bpmndi:BPMNDiagram id="Diagram_1">
     <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
       <bpmndi:BPMNShape id="Shape_Participant_Evidencia" bpmnElement="Participant_Evidencia" isHorizontal="true">
-        <dc:Bounds x="200" y="80" width="1630" height="480" />
+        <dc:Bounds x="200" y="80" width="1630" height="640" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_Analista_de_Calidad__DPGC_" bpmnElement="Lane_Analista_de_Calidad__DPGC_" isHorizontal="true">
         <dc:Bounds x="230" y="80" width="1600" height="160" />
@@ -129,6 +158,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_Dueno_de_Proceso" bpmnElement="Lane_Dueno_de_Proceso" isHorizontal="true">
         <dc:Bounds x="230" y="400" width="1600" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Sistema__automatico_" bpmnElement="Lane_Sistema__automatico_" isHorizontal="true">
+        <dc:Bounds x="230" y="560" width="1600" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Pendiente__Validar" bpmnElement="Task_Pendiente__Validar">
         <dc:Bounds x="630" y="120" width="120" height="80" />
@@ -163,9 +195,36 @@
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
         <dc:Bounds x="230" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Auto_Pendiente__Vencida" bpmnElement="Auto_Pendiente__Vencida">
+        <dc:Bounds x="630" y="622" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_End_Vencida" bpmnElement="End_Vencida">
+        <dc:Bounds x="830" y="622" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Auto_Valida__Vencida" bpmnElement="Auto_Valida__Vencida">
+        <dc:Bounds x="1030" y="622" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
         <di:waypoint x="266" y="160" />
         <di:waypoint x="430" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_auto_in_Pendiente_Vencida" bpmnElement="Flow_auto_in_Pendiente_Vencida">
+        <di:waypoint x="455" y="185" />
+        <di:waypoint x="455" y="640" />
+        <di:waypoint x="630" y="640" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_auto_out_Pendiente_Vencida" bpmnElement="Flow_auto_out_Pendiente_Vencida">
+        <di:waypoint x="666" y="640" />
+        <di:waypoint x="830" y="640" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_auto_in_Valida_Vencida" bpmnElement="Flow_auto_in_Valida_Vencida">
+        <di:waypoint x="1048" y="178" />
+        <di:waypoint x="1048" y="640" />
+        <di:waypoint x="1030" y="640" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_auto_out_Valida_Vencida" bpmnElement="Flow_auto_out_Valida_Vencida">
+        <di:waypoint x="1030" y="640" />
+        <di:waypoint x="866" y="640" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Pendiente_Validar" bpmnElement="Flow_gw_Pendiente_Validar">
         <di:waypoint x="480" y="160" />

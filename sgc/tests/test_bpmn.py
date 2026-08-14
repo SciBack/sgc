@@ -29,7 +29,10 @@ from sgc import bpmn
 
 M = "{http://www.omg.org/spec/BPMN/20100524/MODEL}"
 TIPOS_NODO = ("userTask", "serviceTask", "sendTask", "startEvent", "endEvent",
-              "exclusiveGateway", "parallelGateway")
+              "exclusiveGateway", "parallelGateway",
+              # los eventos intermedios llevan las transiciones automáticas: sin
+              # ellos aquí, sus flujos parecen apuntar a nodos inexistentes
+              "intermediateCatchEvent", "intermediateThrowEvent")
 
 
 def _grafo(xml):
@@ -186,6 +189,86 @@ class IntegrationTestBpmn(IntegrationTestCase):
         regenerado = bpmn.layout_de(bpmn.construir(spec, layout_previo=movido))
 
         self.assertEqual(regenerado[tarea], (x + 500, y + 40, w, h))
+
+    # ======================================================================
+    # Transiciones automáticas: lo que el sistema hace sin que nadie actúe
+    # ======================================================================
+    def test_las_transiciones_automaticas_aparecen_en_su_diagrama(self):
+        """Sin ellas, el diagrama afirma que el proceso solo avanza si alguien actúa.
+
+        Y es falso: una evidencia caduca sola. Es de las primeras cosas que
+        pregunta un auditor y de las que peor quedan si el diagrama las calla.
+        """
+        for auto in bpmn.TRANSICIONES_AUTOMATICAS:
+            xml = self.diagramas.get(auto["document_type"])
+            self.assertIsNotNone(xml, f"no hay diagrama de «{auto['document_type']}»")
+            self.assertIn(auto["etiqueta"], xml,
+                          f"«{auto['document_type']}» no muestra la transición automática "
+                          f"«{auto['etiqueta']}»")
+
+    def test_las_esperas_por_tiempo_llevan_reloj(self):
+        """Un disparador de tiempo se dibuja con `timerEventDefinition`.
+
+        Es lo que distingue "esto pasa cuando vence un plazo" de "esto lo lanza
+        otro documento". Si se dibujaran igual, el diagrama perdería el matiz.
+        """
+        for auto in bpmn.TRANSICIONES_AUTOMATICAS:
+            if auto["disparador"] != "timer":
+                continue
+            proceso = ET.fromstring(self.diagramas[auto["document_type"]]).find(f"{M}process")
+            eventos = [e for e in proceso.iter(f"{M}intermediateCatchEvent")
+                       if e.get("name") == auto["etiqueta"]]
+            self.assertTrue(eventos, f"«{auto['etiqueta']}» no se dibujó como evento intermedio")
+            for e in eventos:
+                self.assertIsNotNone(e.find(f"{M}timerEventDefinition"),
+                                     f"«{auto['etiqueta']}» no lleva temporizador")
+
+    def test_el_estado_destino_automatico_existe_en_el_doctype(self):
+        """Si alguien retira ese estado del DocType, esta declaración miente.
+
+        El estado no está en el workflow (por eso hay que declararlo), así que
+        nada más lo comprobaría: el diagrama seguiría dibujando una transición
+        hacia un estado que ya no se puede alcanzar.
+        """
+        for auto in bpmn.TRANSICIONES_AUTOMATICAS:
+            opciones = (frappe.get_meta(auto["document_type"])
+                        .get_field("estado").options or "").split("\n")
+            self.assertIn(auto["hasta"], opciones,
+                          f"«{auto['document_type']}» ya no admite el estado "
+                          f"«{auto['hasta']}»: la declaración está obsoleta")
+            for estado in auto["desde"]:
+                self.assertIn(estado, opciones,
+                              f"«{auto['document_type']}» ya no admite «{estado}»")
+
+    def test_el_codigo_que_ejecuta_la_transicion_automatica_existe(self):
+        """`origen` apunta al código real: si se mueve o se borra, esto lo canta."""
+        import importlib
+
+        for auto in bpmn.TRANSICIONES_AUTOMATICAS:
+            ruta = auto["origen"]
+            partes = ruta.split(".")
+            for corte in range(len(partes) - 1, 0, -1):
+                try:
+                    mod = importlib.import_module(".".join(partes[:corte]))
+                except ImportError:
+                    continue
+                objeto = mod
+                for atributo in partes[corte:]:
+                    objeto = getattr(objeto, atributo, None)
+                    self.assertIsNotNone(objeto, f"«{ruta}» ya no existe")
+                break
+            else:
+                self.fail(f"no se pudo importar nada de «{ruta}»")
+
+    def test_las_automaticas_no_se_confunden_con_las_humanas(self):
+        """Van en su propio carril: nadie las ejecuta, las hace el sistema."""
+        for auto in bpmn.TRANSICIONES_AUTOMATICAS:
+            _nodos, _flujos, carril_de = _grafo(self.diagramas[auto["document_type"]])
+            proceso = ET.fromstring(self.diagramas[auto["document_type"]]).find(f"{M}process")
+            for tipo in ("intermediateCatchEvent", "serviceTask"):
+                for e in proceso.iter(f"{M}{tipo}"):
+                    if e.get("name") == auto["etiqueta"]:
+                        self.assertEqual(carril_de.get(e.get("id")), bpmn.CARRIL_SISTEMA)
 
     def test_frappe_esta_disponible(self):
         """Guarda de contexto: estos tests corren dentro del sitio, no sueltos."""
