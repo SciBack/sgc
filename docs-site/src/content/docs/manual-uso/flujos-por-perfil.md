@@ -117,6 +117,11 @@ Cada flujo es una máquina de estados; la tabla indica **quién** ejecuta cada p
 | Aprobado | Observar | Observado | DPGC |
 | Aprobado | Publicar | Publicado | Autoridad Aprobadora |
 | Publicado | Derogar | Obsoleto | DPGC |
+| Publicado | *(automático)* Otro documento lo reemplaza | Obsoleto | Sistema |
+
+Un documento publicado llega a Obsoleto por dos caminos: DPGC lo deroga a mano, o el
+sistema lo obsoleta solo en cuanto se publica el documento que lo reemplaza
+(`reemplaza_a`) — nadie ejecuta esa segunda transición, no es una tarea de ningún rol.
 
 ### Programa de Auditoría
 | Desde | Acción | Hacia | Rol |

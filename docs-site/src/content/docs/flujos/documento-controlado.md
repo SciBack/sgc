@@ -20,10 +20,11 @@ Documento con código, versión, responsable y archivo/enlace documental disponi
 5. En estado **Aprobado**, inicia sesión como **DPGC** y ejecuta **Observar**. Resultado esperado: el registro queda en **Observado** y la acción aparece en su historial.
 6. En estado **Aprobado**, inicia sesión como **Autoridad Aprobadora** y ejecuta **Publicar**. Resultado esperado: el registro queda en **Publicado** y la acción aparece en su historial.
 7. En estado **Publicado**, inicia sesión como **DPGC** y ejecuta **Derogar**. Resultado esperado: el registro queda en **Obsoleto** y la acción aparece en su historial.
+8. Con un documento en estado **Publicado**, publica un segundo documento con `reemplaza_a` apuntando al primero. Resultado esperado: el primer documento pasa solo a **Obsoleto** (sin que nadie ejecute Derogar) y el historial registra la transición como automática, no como una acción de un usuario.
 
 ## Estados por los que pasa
 
-**Borrador** → **En revision** → **Observado** → **Aprobado** → **Publicado** → **Obsoleto**. Las devoluciones o reaperturas se muestran en la tabla, por lo que el recorrido no siempre es lineal.
+**Borrador** → **En revision** → **Observado** → **Aprobado** → **Publicado** → **Obsoleto**. Las devoluciones o reaperturas se muestran en la tabla, por lo que el recorrido no siempre es lineal. Publicado también llega a Obsoleto sin ninguna acción humana: ver la fila automática.
 
 | Desde | Acción | Hacia | Rol |
 |---|---|---|---|
@@ -34,6 +35,7 @@ Documento con código, versión, responsable y archivo/enlace documental disponi
 | Aprobado | Observar | Observado | DPGC |
 | Aprobado | Publicar | Publicado | Autoridad Aprobadora |
 | Publicado | Derogar | Obsoleto | DPGC |
+| Publicado | *(automático)* Otro documento lo reemplaza | Obsoleto | Sistema |
 
 ## Permisos
 
