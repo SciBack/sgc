@@ -1,4 +1,4 @@
-name: Validar manual funcional
+name: Manual — validar y publicar
 
 on:
   push:
@@ -41,3 +41,33 @@ jobs:
       - run: npm ci
       - run: npm run verify
       - run: docker build -t sgc-manual:${{ github.sha }} .
+
+  # Publica el mismo docs-site/, pero con la marca y base del sitio PÚBLICO
+  # (agnóstico, sin auth) en GitHub Pages — build institucional de "verify"
+  # arriba usa DOCS_SITE/DOCS_BASE de calidad.upeu.edu.pe y no sirve para esto,
+  # así que se recompila con las variables públicas antes de publicar.
+  deploy-public:
+    needs: verify
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      DOCS_SITE: https://sciback.github.io
+      DOCS_BASE: /sgc
+    steps:
+      - uses: actions/checkout@v4
+      - uses: withastro/action@v4
+        with:
+          path: docs-site
+      - id: deployment
+        uses: actions/deploy-pages@v4
