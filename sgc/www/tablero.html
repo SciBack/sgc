@@ -253,8 +253,15 @@
            "No cumple": el mismo valor puede estar en regla ante un régimen
            obligatorio y quedarse corto ante un sello voluntario, y el rojo de un
            tablero no debe insinuar una falta legal que no existe. #}
+        {# Sin juicio hay dos situaciones distintas y decir la que no es también
+           es afirmar algo falso: que no haya meta es un hecho del catálogo, que
+           el productor no se pronuncie teniéndola es un dato que falta. #}
         {% if i.cumple is none %}
+        {% if i.meta is none %}
         <span class="pill" style="background:#eef1f4;color:#5b6b7c">Sin meta declarada</span>
+        {% else %}
+        <span class="pill" style="background:#eef1f4;color:#5b6b7c">Sin juicio del productor</span>
+        {% endif %}
         {% elif i.cumple %}
         <span class="pill" style="background:var(--lp-bg);color:var(--lp)">Alcanza la meta</span>
         {% else %}

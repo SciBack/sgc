@@ -316,6 +316,25 @@ class IntegrationTestIndicadoresAcreditacion(IntegrationTestCase):
         self.assertEqual(sin_meta["marco"], "Coneau 2026")
         self.assertTrue(sin_meta["contrato_reconocido"])
 
+    def test_valor_texto_sin_meta_y_sin_juicio(self):
+        """Faltan DOS segmentos, no uno: ni meta ni `(cumple|NO cumple)`.
+
+        Es el formato que el DW publica desde el 17-ago para los indicadores sin
+        meta en el catálogo. Antes escribía un `(NO cumple)` derivado de un
+        `cumple_meta` NULL —pintaba de rojo lo que no se puede decidir—; ahora
+        omite el juicio. Lo que no puede perderse es el resto: marco y `n` van
+        siempre, y el texto tiene que seguir contando como contrato reconocido o
+        la vista lo trataría como prosa libre.
+        """
+        m = ia._parsear_valor_texto("DW v1-norma Coneau 2026 · n=42")
+
+        self.assertIsNone(m["meta"])
+        self.assertIsNone(m["cumple"])
+        self.assertEqual(m["meta_texto"], "")
+        self.assertEqual(m["n"], 42.0)
+        self.assertEqual(m["marco"], "Coneau 2026")
+        self.assertTrue(m["contrato_reconocido"])
+
     def test_el_formato_de_meta_vigente_sigue_leyendose_igual(self):
         """El cambio no rompe lo que el DW publica hoy: 136 filas en `meta <X>%`."""
         m = ia._parsear_valor_texto(
