@@ -173,21 +173,32 @@ class IntegrationTestBpmn(IntegrationTestCase):
         """El modelo: la tarea es lo que alguien hace; el rombo, donde se decide.
 
         Se comprueba contra la definición del workflow: cada nombre de tarea debe
-        ser una acción declarada, y cada rombo un estado con más de una salida.
+        ser una acción declarada, y cada rombo, un punto donde el proceso se
+        bifurca de verdad. Hay dos maneras de bifurcarse, y las dos son legítimas:
+
+          - **un estado con varias salidas** — alguien elige entre varias acciones;
+          - **un estado final que además caduca solo** — nadie elige, pero el
+            documento puede quedarse ahí o que le ocurra lo automático. Sin este
+            segundo caso el temporizador tendría que colgar del evento de fin, y
+            un fin no tiene salidas (lo prohíbe BPMN 2.0).
         """
         for _modulo, spec in self.specs:
-            xml = self.diagramas[spec["document_type"]]
+            dt = spec["document_type"]
+            xml = self.diagramas[dt]
             proceso = ET.fromstring(xml).find(f"{M}process")
             acciones = {t[1] for t in spec["transitions"]}
             for tarea in proceso.iter(f"{M}userTask"):
                 self.assertIn(tarea.get("name"), acciones,
-                              f"«{spec['document_type']}»: la tarea «{tarea.get('name')}» "
+                              f"«{dt}»: la tarea «{tarea.get('name')}» "
                               "no es ninguna acción del workflow")
             salidas = Counter(t[0] for t in spec["transitions"])
+            finales_que_caducan = ({e[0] for e in spec["states"]} - set(salidas)) & {
+                d for a in bpmn.automaticas_de(dt) for d in a["desde"]}
             for rombo in proceso.iter(f"{M}exclusiveGateway"):
-                self.assertGreater(salidas[rombo.get("name")], 1,
-                                   f"«{spec['document_type']}»: el rombo «{rombo.get('name')}» "
-                                   "no corresponde a un estado con varias salidas")
+                estado = rombo.get("name")
+                self.assertTrue(salidas[estado] > 1 or estado in finales_que_caducan,
+                                f"«{dt}»: el rombo «{estado}» no corresponde ni a un estado "
+                                "con varias salidas ni a uno que caduque solo")
 
     def test_el_carril_es_el_rol_autorizado_a_ejecutar(self):
         """Quien aparece en el carril debe poder ejecutar esa transición.
