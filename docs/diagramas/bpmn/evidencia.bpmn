@@ -13,6 +13,7 @@
         <bpmn:flowNodeRef>Gateway_Pendiente</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_Subsanada</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>End_Valida</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Valida_espera</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_Responsable_de_Calidad_de_Programa" name="Responsable de Calidad de Programa">
@@ -71,10 +72,14 @@
       <bpmn:outgoing>Flow_gw_Subsanada_Observar</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:endEvent id="End_Valida" name="Valida">
+      <bpmn:incoming>Flow_Valida_sigue</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="Gateway_Valida_espera" name="Valida">
       <bpmn:incoming>Flow_Pendiente_Validar_hacia_Valida</bpmn:incoming>
       <bpmn:incoming>Flow_Subsanada_Validar_hacia_Valida</bpmn:incoming>
+      <bpmn:outgoing>Flow_Valida_sigue</bpmn:outgoing>
       <bpmn:outgoing>Flow_auto_in_Valida_Vencida</bpmn:outgoing>
-    </bpmn:endEvent>
+    </bpmn:exclusiveGateway>
     <bpmn:startEvent id="StartEvent_1" name="Inicio">
       <bpmn:outgoing>Flow_inicio</bpmn:outgoing>
     </bpmn:startEvent>
@@ -92,19 +97,21 @@
       <bpmn:outgoing>Flow_auto_out_Valida_Vencida</bpmn:outgoing>
       <bpmn:timerEventDefinition id="Timer_Auto_Valida__Vencida" />
     </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_Valida_sigue" sourceRef="Gateway_Valida_espera" targetRef="End_Valida" name="Sigue vigente">
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Gateway_Pendiente">
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_auto_in_Pendiente_Vencida" sourceRef="Gateway_Pendiente" targetRef="Auto_Pendiente__Vencida">
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_auto_out_Pendiente_Vencida" sourceRef="Auto_Pendiente__Vencida" targetRef="End_Vencida">
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_auto_in_Valida_Vencida" sourceRef="End_Valida" targetRef="Auto_Valida__Vencida">
+    <bpmn:sequenceFlow id="Flow_auto_in_Valida_Vencida" sourceRef="Gateway_Valida_espera" targetRef="Auto_Valida__Vencida">
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_auto_out_Valida_Vencida" sourceRef="Auto_Valida__Vencida" targetRef="End_Vencida">
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_gw_Pendiente_Validar" sourceRef="Gateway_Pendiente" targetRef="Task_Pendiente__Validar">
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_Pendiente_Validar_hacia_Valida" sourceRef="Task_Pendiente__Validar" targetRef="End_Valida">
+    <bpmn:sequenceFlow id="Flow_Pendiente_Validar_hacia_Valida" sourceRef="Task_Pendiente__Validar" targetRef="Gateway_Valida_espera">
       <bpmn:extensionElements>
         <sgc:transicion rol="Analista de Calidad (DPGC)" autoaprobacion="0" />
       </bpmn:extensionElements>
@@ -132,7 +139,7 @@
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_gw_Subsanada_Validar" sourceRef="Gateway_Subsanada" targetRef="Task_Subsanada__Validar">
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_Subsanada_Validar_hacia_Valida" sourceRef="Task_Subsanada__Validar" targetRef="End_Valida">
+    <bpmn:sequenceFlow id="Flow_Subsanada_Validar_hacia_Valida" sourceRef="Task_Subsanada__Validar" targetRef="Gateway_Valida_espera">
       <bpmn:extensionElements>
         <sgc:transicion rol="Analista de Calidad (DPGC)" autoaprobacion="0" />
       </bpmn:extensionElements>
@@ -192,6 +199,9 @@
       <bpmndi:BPMNShape id="Shape_End_Valida" bpmnElement="End_Valida">
         <dc:Bounds x="1030" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Gateway_Valida_espera" bpmnElement="Gateway_Valida_espera">
+        <dc:Bounds x="1030" y="135" width="50" height="50" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
         <dc:Bounds x="230" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
@@ -204,6 +214,10 @@
       <bpmndi:BPMNShape id="Shape_Auto_Valida__Vencida" bpmnElement="Auto_Valida__Vencida">
         <dc:Bounds x="1030" y="622" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_Flow_Valida_sigue" bpmnElement="Flow_Valida_sigue">
+        <di:waypoint x="1030" y="160" />
+        <di:waypoint x="1066" y="160" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
         <di:waypoint x="266" y="160" />
         <di:waypoint x="430" y="160" />
@@ -218,9 +232,9 @@
         <di:waypoint x="830" y="640" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_auto_in_Valida_Vencida" bpmnElement="Flow_auto_in_Valida_Vencida">
-        <di:waypoint x="1048" y="178" />
-        <di:waypoint x="1048" y="640" />
-        <di:waypoint x="1030" y="640" />
+        <di:waypoint x="1055" y="185" />
+        <di:waypoint x="1055" y="640" />
+        <di:waypoint x="1066" y="640" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_auto_out_Valida_Vencida" bpmnElement="Flow_auto_out_Valida_Vencida">
         <di:waypoint x="1030" y="640" />
@@ -268,7 +282,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Subsanada_Validar_hacia_Valida" bpmnElement="Flow_Subsanada_Validar_hacia_Valida">
         <di:waypoint x="1430" y="160" />
-        <di:waypoint x="1066" y="160" />
+        <di:waypoint x="1080" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Subsanada_Observar" bpmnElement="Flow_gw_Subsanada_Observar">
         <di:waypoint x="1280" y="160" />

@@ -103,6 +103,65 @@ class IntegrationTestBpmn(IntegrationTestCase):
             self.assertFalse(sin_entrada, f"«{dt}»: nodos a los que no llega nada: {sin_entrada}")
             self.assertFalse(sin_salida, f"«{dt}»: nodos que no llevan a nada: {sin_salida}")
 
+    def test_un_final_no_tiene_salidas_ni_un_inicio_entradas(self):
+        """La regla simétrica de la anterior, y la que faltaba.
+
+        El test de arriba excluye los `endEvent` al buscar nodos sin salida —es
+        correcto: un final no lleva a ninguna parte—, pero nunca comprobaba lo
+        contrario. Así pasó desapercibido que el vencimiento de una evidencia
+        salía DEL final «Valida»: BPMN 2.0 lo prohíbe y ninguna herramienta lo
+        abre bien, y aun así el diagrama parecía sano en todo lo demás.
+        """
+        for dt, xml in self.diagramas.items():
+            nodos, flujos, _c = _grafo(xml)
+            finales = {n for n, t in nodos.items() if t == "endEvent"}
+            inicios = {n for n, t in nodos.items() if t == "startEvent"}
+            salen_de_un_fin = [f[0] for f in flujos if f[1] in finales]
+            entran_a_un_inicio = [f[0] for f in flujos if f[2] in inicios]
+            self.assertFalse(salen_de_un_fin,
+                             f"«{dt}»: hay flujos que salen de un evento de fin: {salen_de_un_fin}")
+            self.assertFalse(entran_a_un_inicio,
+                             f"«{dt}»: hay flujos que entran a un evento de inicio: {entran_a_un_inicio}")
+
+    def test_un_estado_final_que_caduca_solo_se_dibuja_con_rombo(self):
+        """Quedarse en el estado también es un desenlace, y tiene que verse.
+
+        Si un estado sin salidas humanas tiene además una transición automática,
+        el documento puede acabar de dos maneras: quedarse ahí o que le ocurra lo
+        automático. Dibujar solo el temporizador diría que toda evidencia válida
+        acaba venciendo, que es falso.
+        """
+        for _modulo, spec in self.specs:
+            dt = spec["document_type"]
+            automaticas = bpmn.automaticas_de(dt)
+            if not automaticas:
+                continue
+            salidas = {t[0] for t in spec["transitions"]}
+            estados_finales = {e[0] for e in spec["states"]} - salidas
+            desde_auto = {d for a in automaticas for d in a["desde"]}
+            nodos, flujos, _c = _grafo(self.diagramas[dt])
+            for estado in estados_finales & desde_auto:
+                esperado = bpmn._id("Gateway", f"{estado}_espera")
+                self.assertEqual(nodos.get(esperado), "exclusiveGateway",
+                                 f"«{dt}»: «{estado}» caduca solo y no lleva rombo")
+                salen = [f for f in flujos if f[1] == esperado]
+                self.assertEqual(len(salen), 2,
+                                 f"«{dt}»: el rombo de «{estado}» debe bifurcar en 2, no {len(salen)}")
+
+    def test_regenerar_sin_cambios_deja_el_fichero_igual(self):
+        """Generar dos veces tiene que dar lo mismo, byte a byte.
+
+        Sin esto no se puede comprobar si un diagrama está al día: bastaba
+        regenerar para que los 14 ficheros salieran distintos —el ancho del
+        contenedor se releía como decimal y volvía a escribirse «1146.0» donde
+        antes puso «1146»— y el ruido tapaba el cambio de verdad.
+        """
+        for _modulo, spec in self.specs:
+            primera = bpmn.construir(spec)
+            segunda = bpmn.construir(spec, layout_previo=bpmn.layout_de(primera))
+            self.assertEqual(primera, segunda,
+                             f"«{spec['document_type']}» cambia al regenerarlo sin tocar nada")
+
     def test_cada_nodo_esta_en_un_carril(self):
         """Un nodo fuera de todo carril no dice quién lo ejecuta."""
         for dt, xml in self.diagramas.items():

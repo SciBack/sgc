@@ -326,12 +326,27 @@ def construir(spec, layout_previo=None):
     id_gw = {e: _id("Gateway", e, usados) for e in estados if len(salidas.get(e, [])) > 1}
     id_fin = {e: _id("End", e, usados) for e in estados if not salidas.get(e)}
 
+    # Un estado sin salidas humanas puede, aun así, caducar solo. "Valida" es el
+    # caso: nadie actúa desde ahí, pero la vigencia se acaba. Sin esto el flujo
+    # del temporizador salía DEL endEvent, y un endEvent no tiene salidas —lo
+    # prohíbe BPMN 2.0 y ninguna herramienta lo abre bien—.
+    #
+    # Se resuelve con un rombo antes del final: el documento llega al estado y
+    # ahí se bifurca —o se queda, o le ocurre lo automático—. Es lo que pasa de
+    # verdad, y deja el desenlace "se quedó válida" a la vista, que es lo que se
+    # perdería si el temporizador fuera la única salida.
+    desde_automatico = {est for a in automaticas for est in a["desde"]}
+    id_gw_espera = {e: _id("Gateway", f"{e}_espera", usados)
+                    for e in id_fin if e in desde_automatico}
+
     def entrada_a(estado):
         """Nodo que representa 'el documento llega a este estado'."""
         if estado in id_gw:
             return id_gw[estado]
         if salidas.get(estado):
             return id_tarea[transiciones.index(salidas[estado][0])]
+        if estado in id_gw_espera:
+            return id_gw_espera[estado]
         return id_fin[estado]
 
     nodos, flujos = {}, []
@@ -347,6 +362,13 @@ def construir(spec, layout_previo=None):
         llegan = [t for t in transiciones if t[2] == estado]
         rol = llegan[0][3] if llegan else carriles[0]
         nodos[eid] = _Nodo(eid, "endEvent", estado, rol, 0, fila_de[rol])
+        if estado in id_gw_espera:
+            # El rombo va en el carril de quien dejó el documento en ese estado:
+            # la espera es suya, aunque el disparo no lo ejecute nadie.
+            gid = id_gw_espera[estado]
+            nodos[gid] = _Nodo(gid, "exclusiveGateway", estado, rol, 0, fila_de[rol])
+            flujos.append((_id("Flow", f"{estado}_sigue", usados), gid, eid,
+                           "Sigue vigente", None))
     rol_inicio = salidas[inicial][0][3] if salidas.get(inicial) else carriles[0]
     nodos[nid_inicio] = _Nodo(nid_inicio, "startEvent", "Inicio", rol_inicio, 0,
                               fila_de[rol_inicio])
@@ -417,7 +439,12 @@ def _serializar(spec, carriles, nodos, flujos, layout_previo=None):
     part_id = _id("Participant", spec["document_type"])
     collab_id = "Collaboration_1"
 
-    ancho_max = max((geom(n)[0] + geom(n)[2] for n in nodos.values()), default=800)
+    # `int`: las posiciones releídas de un fichero previo llegan como float, y sin
+    # esto el pool se serializaba "1146.0" donde la primera vez puso "1146". Los
+    # nodos ya se redondean al escribirlos; el pool se quedaba fuera, así que
+    # regenerar sin ningún cambio de proceso ensuciaba igual los 14 ficheros y
+    # hacía imposible comprobar si un diagrama está al día comparándolo.
+    ancho_max = int(max((geom(n)[0] + geom(n)[2] for n in nodos.values()), default=800))
     alto_pool = len(carriles) * ALTO_CARRIL
     ancho_pool = ancho_max - X_ORIGEN + 80
 
