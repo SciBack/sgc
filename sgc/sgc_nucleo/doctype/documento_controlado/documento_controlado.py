@@ -60,6 +60,13 @@ class DocumentoControlado(Document):
 			self.codigo = self._generar_codigo()
 		if not self.version:
 			self.version = "1.0"
+		# Quien crea el documento es quien lo elabora, salvo que se diga otra cosa.
+		# Sin esto el campo se quedaba vacio para siempre: ninguna validacion lo
+		# pedia y nadie lo rellena a mano, asi que un documento podia publicarse
+		# sin constar quien lo redacto —y la alerta "documento por revisar", que
+		# se dirige a `elaborado_por`, no llegaba a nadie mas que a la DPGC.
+		if not self.elaborado_por:
+			self.elaborado_por = frappe.session.user
 
 	def validate(self):
 		self._validar_transicion()
@@ -123,8 +130,11 @@ class DocumentoControlado(Document):
 			)
 
 	def _validar_requisitos_por_estado(self):
-		if self.estado == "En revision" and not self.archivo:
-			frappe.throw(_("Adjunte el archivo del documento antes de enviarlo a revision."))
+		if self.estado == "En revision":
+			if not self.archivo:
+				frappe.throw(_("Adjunte el archivo del documento antes de enviarlo a revision."))
+			if not self.elaborado_por:
+				frappe.throw(_("Indique quien elaboro el documento antes de enviarlo a revision."))
 
 		if self.estado == "Aprobado" and not self.revisado_por:
 			frappe.throw(_("Indique quien reviso el documento antes de aprobarlo."))
@@ -134,6 +144,8 @@ class DocumentoControlado(Document):
 			faltan = []
 			if not self.archivo:
 				faltan.append(_("el archivo"))
+			if not self.elaborado_por:
+				faltan.append(_("quien lo elaboro"))
 			if not self.aprobado_por:
 				faltan.append(_("quien lo aprobo"))
 			if faltan:
