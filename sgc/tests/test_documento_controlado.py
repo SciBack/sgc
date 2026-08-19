@@ -53,12 +53,20 @@ class IntegrationTestDocumentoControlado(IntegrationTestCase):
         self.assertIn("elaboro", str(ctx.exception))
 
     def test_no_se_publica_sin_elaborador(self):
-        """Y tampoco se llega a publicar con la firma en blanco."""
+        """Y tampoco se llega a publicar con la firma en blanco.
+
+        El documento se lleva por la cadena real —no se puede saltar de Borrador
+        a Publicado, el control de transiciones lo impide— y recién en Aprobado
+        se vacía el campo, como si lo hubiera dejado así una carga masiva.
+        """
         doc = factories.crear_documento_controlado(proceso=self.proceso)
         doc.archivo = "/files/cualquiera.pdf"
         doc.revisado_por = "Administrator"
         doc.aprobado_por = "Administrator"
         doc.save(ignore_permissions=True)
+        for estado in ("En revision", "Aprobado"):
+            doc.estado = estado
+            doc.save(ignore_permissions=True)
         frappe.db.set_value("Documento Controlado", doc.name, "elaborado_por", None,
                             update_modified=False)
 
