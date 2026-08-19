@@ -24,12 +24,19 @@ def marcar_evidencias_vencidas():
 	no esté en su grafo -- y "Vencida" es intencionalmente un estado que solo
 	pone el sistema, no una transición humana.
 	"""
+	# El "is set" NO es redundante: el constructor de consultas envuelve la
+	# comparacion en IFNULL(campo, '0001-01-01'), asi que una evidencia SIN fecha
+	# de vigencia se compara como si fuera del año 1 y sale siempre "vencida".
+	# `vigencia_hasta` es opcional a proposito —un acta o un reglamento no
+	# caducan—, de modo que sin este filtro el job marcaba Vencida toda evidencia
+	# que no declarara vencimiento, y ademas sin dejar rastro en el historial.
 	vencidas = frappe.get_all(
 		"Evidencia",
-		filters={
-			"estado": ["in", ("Pendiente", "Valida")],
-			"vigencia_hasta": ["<", getdate(nowdate())],
-		},
+		filters=[
+			["estado", "in", ("Pendiente", "Valida")],
+			["vigencia_hasta", "is", "set"],
+			["vigencia_hasta", "<", getdate(nowdate())],
+		],
 		pluck="name",
 	)
 	for name in vencidas:
@@ -47,12 +54,15 @@ def marcar_acuerdos_vencidos():
 	nativo, así que `frappe.db.set_value` es solo por consistencia con el
 	patrón del módulo, no por necesidad de bypass de motor.
 	"""
+	# Mismo motivo que en las evidencias: sin el "is set", un acuerdo sin fecha
+	# de compromiso se leeria como vencido el dia que corra el job.
 	vencidos = frappe.get_all(
 		"Acuerdo",
-		filters={
-			"estado": ["in", ("Pendiente", "En proceso")],
-			"fecha_compromiso": ["<", getdate(nowdate())],
-		},
+		filters=[
+			["estado", "in", ("Pendiente", "En proceso")],
+			["fecha_compromiso", "is", "set"],
+			["fecha_compromiso", "<", getdate(nowdate())],
+		],
 		pluck="name",
 	)
 	for name in vencidos:

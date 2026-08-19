@@ -102,6 +102,27 @@ class IntegrationTestTasks(IntegrationTestCase):
 
         self.assertEqual(frappe.db.get_value("Evidencia", ev.name, "estado"), "Pendiente")
 
+    def test_no_vence_una_evidencia_que_no_declara_vigencia(self):
+        """Sin fecha de vigencia no hay nada que vencer.
+
+        `vigencia_hasta` es opcional a propósito: un acta o un reglamento no
+        caducan. El job las marcaba Vencida igual, porque el constructor de
+        consultas envuelve la comparación en `IFNULL(campo, '0001-01-01')` y un
+        campo vacío se compara como si fuera del año 1 — siempre anterior a hoy.
+
+        Detectado recorriendo el flujo en producción: una evidencia recién
+        validada, sin vencimiento, aparecía como Vencida al correr el job. El
+        daño era doble, porque el flip no pasa por el motor y tampoco deja
+        rastro en el historial: la evidencia se invalidaba sola y en silencio.
+        """
+        ev = self._nueva_evidencia_pendiente()
+        frappe.db.set_value("Evidencia", ev.name, "estado", "Valida", update_modified=False)
+        frappe.db.set_value("Evidencia", ev.name, "vigencia_hasta", None, update_modified=False)
+
+        marcar_evidencias_vencidas()
+
+        self.assertEqual(frappe.db.get_value("Evidencia", ev.name, "estado"), "Valida")
+
     def test_no_toca_evidencia_en_otro_estado_de_gestion(self):
         """Observada + vigencia pasada -> el job la deja intacta (solo actúa sobre
         Pendiente/Valida, mismo alcance que `_marcar_vencida_si_expiro`).
@@ -179,6 +200,16 @@ class IntegrationTestTasks(IntegrationTestCase):
         frappe.db.set_value("Acuerdo", ac.name, "estado", "Pendiente", update_modified=False)
         maniana = add_days(nowdate(), 30)
         frappe.db.set_value("Acuerdo", ac.name, "fecha_compromiso", maniana, update_modified=False)
+
+        marcar_acuerdos_vencidos()
+
+        self.assertEqual(frappe.db.get_value("Acuerdo", ac.name, "estado"), "Pendiente")
+
+    def test_no_vence_un_acuerdo_sin_fecha_de_compromiso(self):
+        """Mismo fallo que en las evidencias, misma causa: el IFNULL del filtro."""
+        ac = self._nuevo_acuerdo_pendiente("TESTACJ3")
+        frappe.db.set_value("Acuerdo", ac.name, "estado", "Pendiente", update_modified=False)
+        frappe.db.set_value("Acuerdo", ac.name, "fecha_compromiso", None, update_modified=False)
 
         marcar_acuerdos_vencidos()
 
