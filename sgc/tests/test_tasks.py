@@ -207,7 +207,7 @@ class IntegrationTestTasks(IntegrationTestCase):
 
     def test_no_vence_un_acuerdo_sin_fecha_de_compromiso(self):
         """Mismo fallo que en las evidencias, misma causa: el IFNULL del filtro."""
-        ac = self._nuevo_acuerdo_pendiente("TESTACJ3")
+        ac = self._nuevo_acuerdo_pendiente("TESTACJ5")
         frappe.db.set_value("Acuerdo", ac.name, "estado", "Pendiente", update_modified=False)
         frappe.db.set_value("Acuerdo", ac.name, "fecha_compromiso", None, update_modified=False)
 
