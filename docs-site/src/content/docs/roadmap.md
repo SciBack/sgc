@@ -40,22 +40,22 @@ tiene datos demo aparece como **en uso ❌**.
 
 | Módulo | Construido | En uso | Estado real y qué falta |
 |---|---|---|---|
-| **M03** Control documental | ✅ | ❌ | Código SGC automático, versiones, flujo de tres firmas, historial y export de la Lista Maestra. **Los 5 documentos existentes son de demostración**; faltan los documentos reales del SGC. |
+| **M03** Control documental | ✅ | ❌ | Código SGC automático, versiones, flujo de tres firmas, historial y export de la Lista Maestra. **No hay ningún documento cargado**: los de demostración se retiraron. El Requerimiento define once tipos (política, mapa, manual, fichas, procedimientos…) y falta el primero. |
 | **M04** Procesos e indicadores de proceso | ✅ | 🟡 | **22 procesos oficiales cargados**, con las denominaciones del Mapa de Procesos v8.0 aprobado, y sus **22 indicadores de desempeño** con fórmula, periodicidad y meta (dato real). Falta el eslabón del medio: las **fichas de caracterización (SIPOC)**, una por proceso. Hasta que lleguen, el motor reporta cada proceso como «sin ficha» — que es el reflejo honesto de lo que falta, no un fallo. |
-| **M05** No conformidades | ✅ | ❌ | Registro con validaciones incrementales por etapa y flujo hasta el cierre. **Las 2 no conformidades existentes son de demostración**: ninguna se ha levantado en un proceso real. |
-| **M06** Auditorías internas | ✅ | ❌ | Programa anual, ejecución con equipo y criterios, hallazgos con escalamiento a No Conformidad, informe consolidado y workflow. **Todo el dato existente es de demostración**: aún no se ha ejecutado una auditoría real en el sistema. |
+| **M05** No conformidades | ✅ | ❌ | Registro con validaciones incrementales por etapa y flujo hasta el cierre. **No hay ninguna no conformidad registrada**: las de demostración se retiraron y aún no se ha levantado ninguna real. |
+| **M06** Auditorías internas | ✅ | ❌ | Programa anual, ejecución con equipo y criterios, hallazgos con escalamiento a No Conformidad, informe consolidado y workflow. **No hay ninguna auditoría registrada**: los datos de demostración se retiraron y aún no se ha ejecutado ninguna real. |
 
 ## Bloque C — Acreditación
 
 | Módulo | Construido | En uso | Estado real y qué falta |
 |---|---|---|---|
 | **M07** Roles y comités | ✅ | 🟡 | RBAC de 14 roles sobre los 46 DocTypes de negocio (ver [RBAC](../desarrollo/rbac/)). El acotamiento de visibilidad por programa está construido y listo para activarse. **Hay una sola cuenta de persona activa** (más una cuenta de servicio para los conectores); faltan las altas del comité de calidad. |
-| **M08** Autoevaluación | ✅ | ❌ | Motor que propone el nivel por estándar y la vigencia; el comité confirma el nivel oficial. **La única autoevaluación cargada (`AE-ENF-LIMA-2026I`, Enfermería) es de demostración**: sus 53 valoraciones y sus 10 niveles los generó la prueba automatizada de extremo a extremo, no el comité. Ningún criterio ha sido valorado todavía por una persona. |
+| **M08** Autoevaluación | ✅ | ❌ | Motor que propone el nivel por estándar y la vigencia; el comité confirma el nivel oficial. **No hay ninguna autoevaluación en curso.** La que existía (`AE-ENF-LIMA-2026I`) la había generado una prueba automatizada, no el comité, y se retiró junto con el resto de datos de demostración. Ningún criterio ha sido valorado todavía por una persona. |
 | **M09** Evidencias de acreditación | ✅ | ❌ | Carga de archivo o enlace, vigencia y trazabilidad N:M contra criterios y procesos. **No hay ninguna evidencia real cargada**, y por tanto ningún criterio tiene evidencia trazada. Es el principal frente abierto. |
 | **M10** Indicadores de acreditación | ✅ | 🟡 | Catálogo de 93 indicadores con fichas (71 de acreditación + 22 de proceso) y tablero, más conectores automáticos hacia las fuentes institucionales. **12 indicadores tienen dato real**, alimentados a diario por el almacén de datos institucional; el resto espera fuente (ver M04 y M12). El panel que los muestra ya está desplegado. |
-| **M11** Planes de mejora | ✅ | ❌ | Planes y acciones con flujo, avance acumulado y semáforo por vencimiento. **El único plan existente es de demostración**, derivado de la prueba de extremo a extremo de M08. |
+| **M11** Planes de mejora | ✅ | ❌ | Planes y acciones con flujo, avance acumulado y semáforo por vencimiento. **No hay ningún plan de mejora registrado**: el que existía venía de la prueba automatizada de M08 y se retiró. |
 | **M12** Encuestas a grupos de interés | ✅ | ❌ | Instrumentos por periodo con tabulación, promedio ponderado y workflow de campo. Al cerrar una aplicación, **sus resultados se publican como indicadores automáticamente**. Falta registrar los instrumentos reales de la institución. |
-| **M13** Tablero ejecutivo | ✅ | 🟡 | Vista institucional: cobertura de autoevaluación, niveles por estándar, semáforo de CBC, avance por programa, riesgos, auditorías y última revisión por la dirección. Refleja el dato que exista; hoy, casi todo lo que muestra proviene de datos de demostración. |
+| **M13** Tablero ejecutivo | ✅ | 🟡 | Vista institucional: cobertura de autoevaluación, niveles por estándar, semáforo de CBC, avance por programa, riesgos, auditorías y última revisión por la dirección. Refleja el dato que exista; hoy muestra los procesos, los marcos normativos y los indicadores del almacén de datos, que es lo único cargado. |
 | **M14** Acreditación internacional | 🔴 | — | Fase posterior. |
 | **M15** Reportería BI | 🔴 | — | Fase posterior. Vinculada a la iniciativa de **Data Mart institucional**, hoy en evaluación. |
 
@@ -84,10 +84,10 @@ está desplegado y respaldado por pruebas automatizadas.
 Lo que falta ya **no es desarrollo, es carga de información institucional**. Lo que hoy es dato real
 son los 22 procesos oficiales del Mapa, los 3 marcos normativos con sus 185 elementos y los
 indicadores que se alimentan solos desde las fuentes institucionales. **La cadena de acreditación
-propiamente dicha todavía no ha sido ejercida por nadie**: la autoevaluación, sus valoraciones, la
-no conformidad y el plan de mejora que existen en el sistema los generó una prueba automatizada para
-demostrar que el circuito funciona de extremo a extremo. Los demás módulos esperan que las áreas
-dueñas del dato carguen evidencias, documentos, instrumentos de encuesta y fichas de proceso.
+propiamente dicha todavía no ha sido ejercida por nadie.** El sistema se vació de datos de
+demostración el 19 de agosto, de modo que lo que se ve es exactamente lo que hay: los módulos
+esperan que las áreas dueñas del dato carguen evidencias, documentos, instrumentos de encuesta y
+las fichas de caracterización de proceso.
 
 ### Hitos
 
