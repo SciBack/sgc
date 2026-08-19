@@ -24,20 +24,19 @@ def marcar_evidencias_vencidas():
 	no esté en su grafo -- y "Vencida" es intencionalmente un estado que solo
 	pone el sistema, no una transición humana.
 	"""
-	# El "is set" NO es redundante: el constructor de consultas envuelve la
+	# Consulta explicita a proposito: el constructor de consultas envuelve la
 	# comparacion en IFNULL(campo, '0001-01-01'), asi que una evidencia SIN fecha
-	# de vigencia se compara como si fuera del año 1 y sale siempre "vencida".
+	# de vigencia se comparaba como si fuera del año 1 y salia siempre "vencida".
 	# `vigencia_hasta` es opcional a proposito —un acta o un reglamento no
 	# caducan—, de modo que sin este filtro el job marcaba Vencida toda evidencia
 	# que no declarara vencimiento, y ademas sin dejar rastro en el historial.
-	vencidas = frappe.get_all(
-		"Evidencia",
-		filters=[
-			["estado", "in", ("Pendiente", "Valida")],
-			["vigencia_hasta", "is", "set"],
-			["vigencia_hasta", "<", getdate(nowdate())],
-		],
-		pluck="name",
+	# El "is not null" en SQL plano no admite esa ambiguedad.
+	vencidas = frappe.db.sql_list(
+		"""select name from tabEvidencia
+		   where estado in ('Pendiente', 'Valida')
+		     and vigencia_hasta is not null
+		     and vigencia_hasta < %s""",
+		(getdate(nowdate()),),
 	)
 	for name in vencidas:
 		frappe.db.set_value("Evidencia", name, "estado", "Vencida", update_modified=False)
@@ -54,16 +53,14 @@ def marcar_acuerdos_vencidos():
 	nativo, así que `frappe.db.set_value` es solo por consistencia con el
 	patrón del módulo, no por necesidad de bypass de motor.
 	"""
-	# Mismo motivo que en las evidencias: sin el "is set", un acuerdo sin fecha
-	# de compromiso se leeria como vencido el dia que corra el job.
-	vencidos = frappe.get_all(
-		"Acuerdo",
-		filters=[
-			["estado", "in", ("Pendiente", "En proceso")],
-			["fecha_compromiso", "is", "set"],
-			["fecha_compromiso", "<", getdate(nowdate())],
-		],
-		pluck="name",
+	# Mismo motivo que en las evidencias: sin el "is not null", un acuerdo sin
+	# fecha de compromiso se leeria como vencido el dia que corra el job.
+	vencidos = frappe.db.sql_list(
+		"""select name from tabAcuerdo
+		   where estado in ('Pendiente', 'En proceso')
+		     and fecha_compromiso is not null
+		     and fecha_compromiso < %s""",
+		(getdate(nowdate()),),
 	)
 	for name in vencidos:
 		frappe.db.set_value("Acuerdo", name, "estado", "Vencido", update_modified=False)
