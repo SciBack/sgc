@@ -41,7 +41,7 @@ tiene datos demo aparece como **en uso ❌**.
 | Módulo | Construido | En uso | Estado real y qué falta |
 |---|---|---|---|
 | **M03** Control documental | ✅ | ❌ | Código SGC automático, versiones, flujo de tres firmas, historial y export de la Lista Maestra. **Los 5 documentos existentes son de demostración**; faltan los documentos reales del SGC. |
-| **M04** Procesos e indicadores de proceso | ✅ | 🟡 | **22 procesos oficiales cargados** (dato real). El motor de indicadores por proceso está desplegado, pero espera las **fichas de caracterización (SIPOC)** del Mapa de Procesos: hoy hay una sola, de demostración. |
+| **M04** Procesos e indicadores de proceso | ✅ | 🟡 | **22 procesos oficiales cargados**, con las denominaciones del Mapa de Procesos v8.0 aprobado, y sus **22 indicadores de desempeño** con fórmula, periodicidad y meta (dato real). Falta el eslabón del medio: las **fichas de caracterización (SIPOC)**, una por proceso. Hasta que lleguen, el motor reporta cada proceso como «sin ficha» — que es el reflejo honesto de lo que falta, no un fallo. |
 | **M05** No conformidades | ✅ | ❌ | Registro con validaciones incrementales por etapa y flujo hasta el cierre. **Las 2 no conformidades existentes son de demostración**: ninguna se ha levantado en un proceso real. |
 | **M06** Auditorías internas | ✅ | ❌ | Programa anual, ejecución con equipo y criterios, hallazgos con escalamiento a No Conformidad, informe consolidado y workflow. **Todo el dato existente es de demostración**: aún no se ha ejecutado una auditoría real en el sistema. |
 
@@ -52,7 +52,7 @@ tiene datos demo aparece como **en uso ❌**.
 | **M07** Roles y comités | ✅ | 🟡 | RBAC de 14 roles sobre los 46 DocTypes de negocio (ver [RBAC](../desarrollo/rbac/)). El acotamiento de visibilidad por programa está construido y listo para activarse. **Hay una sola cuenta de persona activa** (más una cuenta de servicio para los conectores); faltan las altas del comité de calidad. |
 | **M08** Autoevaluación | ✅ | ❌ | Motor que propone el nivel por estándar y la vigencia; el comité confirma el nivel oficial. **La única autoevaluación cargada (`AE-ENF-LIMA-2026I`, Enfermería) es de demostración**: sus 53 valoraciones y sus 10 niveles los generó la prueba automatizada de extremo a extremo, no el comité. Ningún criterio ha sido valorado todavía por una persona. |
 | **M09** Evidencias de acreditación | ✅ | ❌ | Carga de archivo o enlace, vigencia y trazabilidad N:M contra criterios y procesos. **No hay ninguna evidencia real cargada**, y por tanto ningún criterio tiene evidencia trazada. Es el principal frente abierto. |
-| **M10** Indicadores de acreditación | ✅ | 🟡 | Catálogo de 71 indicadores con fichas y tablero, más conectores automáticos hacia las fuentes institucionales. **12 de 71 indicadores (17%) tienen dato real**, alimentados a diario por el almacén de datos institucional; el resto espera fuente (ver M04 y M12). El panel que los muestra está construido pero **aún no desplegado**. |
+| **M10** Indicadores de acreditación | ✅ | 🟡 | Catálogo de 93 indicadores con fichas (71 de acreditación + 22 de proceso) y tablero, más conectores automáticos hacia las fuentes institucionales. **12 indicadores tienen dato real**, alimentados a diario por el almacén de datos institucional; el resto espera fuente (ver M04 y M12). El panel que los muestra ya está desplegado. |
 | **M11** Planes de mejora | ✅ | ❌ | Planes y acciones con flujo, avance acumulado y semáforo por vencimiento. **El único plan existente es de demostración**, derivado de la prueba de extremo a extremo de M08. |
 | **M12** Encuestas a grupos de interés | ✅ | ❌ | Instrumentos por periodo con tabulación, promedio ponderado y workflow de campo. Al cerrar una aplicación, **sus resultados se publican como indicadores automáticamente**. Falta registrar los instrumentos reales de la institución. |
 | **M13** Tablero ejecutivo | ✅ | 🟡 | Vista institucional: cobertura de autoevaluación, niveles por estándar, semáforo de CBC, avance por programa, riesgos, auditorías y última revisión por la dirección. Refleja el dato que exista; hoy, casi todo lo que muestra proviene de datos de demostración. |
@@ -98,4 +98,4 @@ dueñas del dato carguen evidencias, documentos, instrumentos de encuesta y fich
 
 ---
 
-*Última actualización: 2026-08-14.*
+*Última actualización: 2026-08-19.*
