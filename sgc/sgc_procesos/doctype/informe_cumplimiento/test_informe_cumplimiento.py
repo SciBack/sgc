@@ -201,7 +201,7 @@ class IntegrationTestInformeCumplimiento(IntegrationTestCase):
 		documento y ya no hay ningún save donde ponerlo.
 		"""
 		conds = [self._cond(e, factories.CUMPLE) for e in self.estandares]
-		doc = self._informe(2019, condiciones=conds)
+		doc = self._informe(2022, condiciones=conds)
 		self.assertFalse(doc.fecha_presentacion)
 		for estado in ("En revisión", "Aprobado", "Presentado a SUNEDU"):
 			doc.estado = estado
@@ -212,7 +212,7 @@ class IntegrationTestInformeCumplimiento(IntegrationTestCase):
 		"""Se presentó el viernes y se registra el lunes: gana la fecha real."""
 		real = add_days(nowdate(), -3)
 		conds = [self._cond(e, factories.CUMPLE) for e in self.estandares]
-		doc = self._informe(2020, condiciones=conds)
+		doc = self._informe(2023, condiciones=conds)
 		doc.fecha_presentacion = real
 		for estado in ("En revisión", "Aprobado", "Presentado a SUNEDU"):
 			doc.estado = estado
