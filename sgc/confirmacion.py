@@ -131,7 +131,10 @@ def confirmar_nivel(autoevaluacion, estandar, nivel_sigla, comentario=None):
         ).format(propuesto, sigla)
 
     ve.flags.ignore_version = True
-    # La función ES la acción autorizada -> se salta el permlevel de campo aquí dentro.
+    # La función ES la acción autorizada: se salta el permlevel de campo y se
+    # identifica ante el guard del controlador (_nivel_solo_via_confirmacion),
+    # que rechaza cualquier otra vía de escritura del nivel oficial.
+    ve.flags.via_confirmacion = True
     ve.save(ignore_permissions=True)
 
     return {

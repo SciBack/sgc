@@ -286,7 +286,14 @@ def crear_valoracion_estandar(autoevaluacion, estandar, nivel_propuesto=None,
         vals["nivel_propuesto"] = nivel_propuesto
     if nivel_sigla:
         vals["nivel"] = nivel_escala_por_sigla(nivel_sigla, prefijo)
-    return _insert("Valoracion Estandar", vals)
+    doc = frappe.get_doc({"doctype": "Valoracion Estandar", **vals})
+    doc.flags.ignore_permissions = True
+    # el guard del controlador exige que el nivel oficial llegue por la vía de
+    # confirmación; esta factoría REPLICA ese estado a sabiendas para armar
+    # escenarios, así que se identifica igual que confirmar_nivel
+    doc.flags.via_confirmacion = True
+    doc.insert(ignore_permissions=True)
+    return doc
 
 
 def confirmar_estandar(autoevaluacion, estandar, sigla, prefijo=PREFIJO):
@@ -313,6 +320,9 @@ def confirmar_estandar(autoevaluacion, estandar, sigla, prefijo=PREFIJO):
     if ve.meta.has_field("estado"):
         ve.estado = "Aprobado"
     ve.flags.ignore_permissions = True
+    # replica deliberada del estado que deja la confirmación humana -> se
+    # identifica ante el guard igual que sgc.confirmacion.confirmar_nivel
+    ve.flags.via_confirmacion = True
     ve.save(ignore_permissions=True)
     return ve
 

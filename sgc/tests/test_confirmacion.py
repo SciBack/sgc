@@ -286,3 +286,73 @@ class IntegrationTestConfirmacion(IntegrationTestCase):
         """Sin `autoevaluacion` la función corta con throw."""
         with self.assertRaises(frappe.exceptions.ValidationError):
             confirmacion.finalizar_vigencia(None)
+
+
+class IntegrationTestNivelSoloViaConfirmacion(IntegrationTestCase):
+    """El nivel oficial se confirma; no se escribe con un save cualquiera.
+
+    El permlevel 1 de `nivel` decide QUIÉN puede tocarlo, pero no CÓMO: un rol
+    autorizado podía fijarlo con una edición normal y saltarse todo lo que hace
+    de la confirmación un acto auditable — la traza del override contra lo que
+    propuso el motor, la justificación y `aprobado_por`. Se comprobó en
+    producción con un Responsable de Programa antes de existir este guard.
+    """
+
+    def setUp(self):
+        frappe.set_user("Administrator")
+        self.arbol = factories.crear_marco_prueba(n_estandares=1, n_criterios=1)
+        self.ae = factories.crear_autoevaluacion(self.arbol["marco"]).name
+        self.estandar = self.arbol["estandares"][0]
+
+    def test_editar_el_nivel_a_mano_se_rechaza(self):
+        confirmacion.confirmar_nivel(self.ae, self.estandar, "L")
+        name = frappe.db.get_value(
+            "Valoracion Estandar", {"autoevaluacion": self.ae, "elemento_marco": self.estandar}
+        )
+        otro = factories.nivel_escala_por_sigla("LP")
+
+        ve = frappe.get_doc("Valoracion Estandar", name)
+        ve.nivel = otro
+        with self.assertRaises(frappe.ValidationError) as ctx:
+            ve.save(ignore_permissions=True)
+
+        self.assertIn("nivel", str(ctx.exception).lower())
+        # y el oficial no se movió
+        self.assertEqual(
+            self._sigla(frappe.db.get_value("Valoracion Estandar", name, "nivel")), "L")
+
+    def test_nacer_ya_confirmada_tambien_se_rechaza(self):
+        """La misma puerta por el otro lado: insertar con el nivel puesto."""
+        ve = frappe.new_doc("Valoracion Estandar")
+        ve.autoevaluacion = self.ae
+        ve.elemento_marco = self.estandar
+        ve.nivel = factories.nivel_escala_por_sigla("LP")
+        ve.confirmado = 1
+        with self.assertRaises(frappe.ValidationError):
+            ve.insert(ignore_permissions=True)
+
+    def test_el_motor_puede_seguir_proponiendo(self):
+        """`nivel_propuesto` queda fuera del guard: proponer es del sistema."""
+        ve = frappe.new_doc("Valoracion Estandar")
+        ve.autoevaluacion = self.ae
+        ve.elemento_marco = self.estandar
+        ve.nivel_propuesto = "LP"
+        ve.insert(ignore_permissions=True)  # no debe lanzar
+
+        self.assertEqual(ve.nivel_propuesto, "LP")
+        self.assertFalse(ve.nivel)
+
+    def test_la_via_de_confirmacion_sigue_funcionando(self):
+        """El guard no puede romper el camino legítimo."""
+        res = confirmacion.confirmar_nivel(self.ae, self.estandar, "LP",
+                                           comentario="revisión de indicadores")
+        self.assertTrue(res["ok"])
+        name = frappe.db.get_value(
+            "Valoracion Estandar", {"autoevaluacion": self.ae, "elemento_marco": self.estandar}
+        )
+        self.assertEqual(self._sigla(frappe.db.get_value("Valoracion Estandar", name, "nivel")), "LP")
+        self.assertEqual(frappe.db.get_value("Valoracion Estandar", name, "confirmado"), 1)
+
+    @staticmethod
+    def _sigla(nivel_name):
+        return frappe.db.get_value("Nivel Escala", nivel_name, "sigla")
