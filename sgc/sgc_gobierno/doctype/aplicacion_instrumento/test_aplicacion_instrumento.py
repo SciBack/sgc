@@ -68,6 +68,31 @@ class IntegrationTestAplicacionInstrumento(IntegrationTestCase):
                 fecha_fin=add_days(nowdate(), -5),
             )
 
+    def test_fecha_fin_sobre_aplicacion_ya_guardada(self):
+        """Regresión: registrar la fecha de fin sobre una aplicación persistida.
+
+        Al releer de la BD, `fecha_inicio` vuelve como `datetime.date`; la
+        `fecha_fin` que se asigna acto seguido es un `str`. Compararlas crudas
+        lanzaba `TypeError` en vez de validar, y como sin fecha de fin la
+        aplicación no se puede cerrar, el campo quedaba imposible de rellenar.
+        """
+        apl = self._apl(fecha_inicio=add_days(nowdate(), -10))
+        guardada = frappe.get_doc("Aplicacion Instrumento", apl.name)
+        guardada.fecha_fin = nowdate()
+        guardada.flags.ignore_permissions = True
+        guardada.save(ignore_permissions=True)
+        self.assertEqual(str(guardada.fecha_fin), nowdate())
+
+    def test_fecha_fin_invalida_sobre_aplicacion_ya_guardada(self):
+        """Y la validación real sigue viva por ese mismo camino: el arreglo
+        normaliza los tipos, no afloja la regla."""
+        apl = self._apl(fecha_inicio=nowdate())
+        guardada = frappe.get_doc("Aplicacion Instrumento", apl.name)
+        guardada.fecha_fin = add_days(nowdate(), -5)
+        guardada.flags.ignore_permissions = True
+        with self.assertRaises(frappe.ValidationError):
+            guardada.save(ignore_permissions=True)
+
     # ======================================================================
     # Derivación de la tasa de respuesta
     # ======================================================================

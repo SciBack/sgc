@@ -171,7 +171,20 @@ def publicar_valores_indicador(aplicacion):
     escribe el back-link en TODAS las filas del grupo.
 
     Devuelve un dict con `publicados` (uno por indicador), `omitidas`
-    (nº de filas sin indicador declarado) y `dimensiones_omitidas`.
+    (nº de filas sin indicador declarado), `dimensiones_omitidas` y
+    `dimensiones_heredadas`.
+
+    Sobre la herencia, que es cómoda y silenciosa a la vez: si el `Instrumento`
+    declara indicador, TODAS sus dimensiones tributan a él, incluidas las que no
+    miden eso. Medido en producción (2026-08-20) sobre una encuesta docente que
+    llevaba una dimensión de infraestructura: el indicador CONEAU ID19 se
+    publicó como 71.21 en vez de 81.43 -- 10 puntos de diferencia en un dato que
+    va a SINEACE, sin ningún aviso. No se puede excluir una fila dejándole el
+    indicador vacío (eso es justo lo que dispara la herencia); la única vía hoy
+    es NO declarar indicador en el `Instrumento` y declararlo fila por fila.
+    Por eso el retorno nombra las dimensiones que entraron por herencia: que la
+    mezcla sea al menos VISIBLE. Si conviene poder marcar "esta dimensión no
+    tributa" es decisión de Calidad, no se asume aquí.
     """
     if not aplicacion:
         frappe.throw(_("Falta la aplicación de instrumento a publicar."))
@@ -205,6 +218,7 @@ def publicar_valores_indicador(aplicacion):
     omitidas = 0
     dimensiones_omitidas = []
     for f in filas:
+        heredado = not f.indicador and bool(indicador_plantilla)
         indicador = f.indicador or indicador_plantilla
         # Sin enlace explícito (ni heredado), o con un Link colgado: se omite.
         if not indicador or not frappe.db.exists("Indicador", indicador):
@@ -214,9 +228,16 @@ def publicar_valores_indicador(aplicacion):
         g = grupos.setdefault(
             indicador,
             {"filas": [], "valores": [], "n": 0, "suma_pond": 0.0,
-             "n_completo": True, "unidad": f.unidad},
+             "n_completo": True, "unidad": f.unidad, "heredadas": []},
         )
         g["filas"].append(f)
+        if heredado:
+            # Entró por herencia de plantilla, no porque la fila lo declarara.
+            # Se anota para poder DECIRLO (ver `dimensiones_heredadas` en el
+            # retorno): la herencia es cómoda pero silenciosa, y una dimensión
+            # que no mide lo que el indicador mide desplaza su promedio sin que
+            # nadie lo note.
+            g["heredadas"].append(f.dimension or "")
         # Solo las filas CON valor entran en la media: sumar el `n` de una fila
         # sin valor inflaría el denominador y hundiría el ponderado.
         #
@@ -283,6 +304,7 @@ def publicar_valores_indicador(aplicacion):
             "n": g["n"],
             "n_filas": len(g["filas"]),
             "unidad": g["unidad"] or "",
+            "dimensiones_heredadas": list(g["heredadas"]),
         })
 
     publicados.sort(key=lambda x: x["indicador"])
@@ -293,6 +315,9 @@ def publicar_valores_indicador(aplicacion):
         "n_publicados": len(publicados),
         "omitidas": omitidas,
         "dimensiones_omitidas": dimensiones_omitidas,
+        "dimensiones_heredadas": [
+            d for p in publicados for d in p["dimensiones_heredadas"]
+        ],
     }
 
 

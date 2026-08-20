@@ -19,6 +19,7 @@ se materializan como `Valor Indicador` (fuente "encuesta") para el motor A2.
 import frappe
 from frappe import _
 from frappe.model.document import Document
+from frappe.utils import getdate
 
 # Orden del ciclo de vida (coincide con el Workflow "Aplicacion Instrumento SGC").
 # Se usa para exigir de forma incremental lo que cada etapa requiere.
@@ -62,8 +63,18 @@ class AplicacionInstrumento(Document):
             )
 
     def _validar_fechas(self):
-        """La fecha de fin no puede ser anterior a la de inicio."""
-        if self.fecha_inicio and self.fecha_fin and self.fecha_fin < self.fecha_inicio:
+        """La fecha de fin no puede ser anterior a la de inicio.
+
+        Las dos se normalizan con `getdate()` antes de compararlas: un campo
+        Date leido de la BD llega como `datetime.date` y uno recien asignado
+        llega como `str`, asi que compararlos crudos revienta con
+        `TypeError: '<' not supported between 'str' and 'datetime.date'` en vez
+        de dar el mensaje de validacion. Pasaba de verdad: registrar la fecha de
+        fin sobre una aplicacion ya guardada con fecha de inicio (por script o
+        por API) tumbaba el save, y sin fecha de fin la aplicacion no se puede
+        cerrar -- el campo quedaba atascado.
+        """
+        if self.fecha_inicio and self.fecha_fin and getdate(self.fecha_fin) < getdate(self.fecha_inicio):
             frappe.throw(
                 _("La fecha de fin no puede ser anterior a la fecha de inicio.")
             )
@@ -133,4 +144,29 @@ class AplicacionInstrumento(Document):
             publicar_valores_indicador,
         )
 
-        return publicar_valores_indicador(self.name)
+        r = publicar_valores_indicador(self.name)
+        self._avisar_dimensiones_heredadas(r)
+        return r
+
+    def _avisar_dimensiones_heredadas(self, resultado):
+        """Dice en pantalla qué dimensiones tributaron al indicador POR HERENCIA.
+
+        Cuando el `Instrumento` declara indicador, toda dimensión de la encuesta
+        entra en ese indicador aunque no mida lo mismo, y el promedio se mueve
+        sin que nadie lo vea (ver el docstring de `publicar_valores_indicador`:
+        10 puntos de diferencia en un indicador CONEAU, medido en producción).
+        El cálculo no cambia -- lo que cambia es que ahora se DICE, en el
+        momento del cierre, que es cuando Calidad todavía puede corregir el
+        indicador de una fila y volver a publicar.
+        """
+        heredadas = [d for d in (resultado or {}).get("dimensiones_heredadas", []) if d]
+        if not heredadas:
+            return
+        frappe.msgprint(
+            _("Estas dimensiones tributaron al indicador del instrumento sin "
+              "declararlo ellas mismas: {0}. Si alguna no mide lo que ese "
+              "indicador mide, corrige su Indicador y vuelve a publicar.").format(
+                  ", ".join(heredadas)),
+            indicator="orange",
+            alert=True,
+        )

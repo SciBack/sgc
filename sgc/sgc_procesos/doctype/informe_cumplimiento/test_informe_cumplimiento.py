@@ -17,6 +17,7 @@ informe creado dentro de un mismo test usa un `anio` distinto para no colisionar
 """
 import frappe
 from frappe.tests import IntegrationTestCase
+from frappe.utils import add_days, nowdate
 
 from sgc.tests import factories
 from sgc.sgc_procesos.doctype.informe_cumplimiento import informe_cumplimiento as ic
@@ -190,6 +191,33 @@ class IntegrationTestInformeCumplimiento(IntegrationTestCase):
 			doc.save(ignore_permissions=True)
 		self.assertEqual(doc.estado, "Presentado a SUNEDU")
 		self.assertEqual(doc.semaforo, "Verde")
+
+	def test_presentar_sella_la_fecha_de_presentacion(self):
+		"""La fecha del hecho externo la estampa el sistema al presentar.
+
+		El campo sale impreso en el acta de diagnóstico y lo usa la
+		notificación F15, pero nadie lo escribía: quedaba vacío para siempre,
+		porque tras la presentación `_bloquear_si_presentado` cierra el
+		documento y ya no hay ningún save donde ponerlo.
+		"""
+		conds = [self._cond(e, factories.CUMPLE) for e in self.estandares]
+		doc = self._informe(2019, condiciones=conds)
+		self.assertFalse(doc.fecha_presentacion)
+		for estado in ("En revisión", "Aprobado", "Presentado a SUNEDU"):
+			doc.estado = estado
+			doc.save(ignore_permissions=True)
+		self.assertEqual(str(doc.fecha_presentacion), nowdate())
+
+	def test_fecha_de_presentacion_puesta_a_mano_manda(self):
+		"""Se presentó el viernes y se registra el lunes: gana la fecha real."""
+		real = add_days(nowdate(), -3)
+		conds = [self._cond(e, factories.CUMPLE) for e in self.estandares]
+		doc = self._informe(2020, condiciones=conds)
+		doc.fecha_presentacion = real
+		for estado in ("En revisión", "Aprobado", "Presentado a SUNEDU"):
+			doc.estado = estado
+			doc.save(ignore_permissions=True)
+		self.assertEqual(str(doc.fecha_presentacion), real)
 
 	def test_borrador_permite_cbc_sin_evaluar(self):
 		"""En Borrador sí se permite dejar CBC sin evaluar (solo bloquea al presentar)."""

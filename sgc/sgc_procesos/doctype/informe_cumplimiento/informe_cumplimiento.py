@@ -16,6 +16,7 @@ sus componentes (tipo Criterio) cuelgan de cada una en el árbol.
 import frappe
 from frappe import _
 from frappe.model.document import Document
+from frappe.utils import nowdate
 
 from sgc.sgc_nucleo.doctype.trazabilidad.trazabilidad import sincronizar_evidencia_enlace
 
@@ -27,6 +28,7 @@ CUMPLE = "Cumple"
 class InformeCumplimiento(Document):
 	def validate(self):
 		self._bloquear_si_presentado()
+		self._sellar_fecha_presentacion()
 		self._autopoblar_condiciones()
 		self._consolidar()
 		self._validar_sustento()
@@ -54,6 +56,26 @@ class InformeCumplimiento(Document):
 				  "mismo año referenciando este."),
 				title=_("Informe presentado"),
 			)
+
+	def _sellar_fecha_presentacion(self):
+		"""La fecha de presentacion la estampa el sistema, no la teclea nadie.
+
+		El campo existe desde el principio, sale impreso en el PDF del
+		diagnostico (`Diagnostico CBC SUNEDU`) y lo usa la notificacion F15,
+		pero NADIE lo escribia nunca: quedaba vacio y el acta oficial salia con
+		un guion donde debia ir la fecha de entrega al regulador.
+
+		Y no bastaba con pedirle a la DPGC que lo llenara despues, porque no
+		podia: `_bloquear_si_presentado` cierra el documento en cuanto la
+		presentacion se consuma, asi que el unico momento en que ese campo es
+		escribible es exactamente este save -- el de la propia transicion. Si no
+		se sella aqui, no se sella nunca.
+
+		Solo se estampa si viene vacio: una fecha puesta a mano (p.ej. se
+		presento el viernes y se registra el lunes) manda sobre la del sistema.
+		"""
+		if self.estado == "Presentado a SUNEDU" and not self.fecha_presentacion:
+			self.fecha_presentacion = nowdate()
 
 	# ------------------------------------------------------------ autopoblado
 

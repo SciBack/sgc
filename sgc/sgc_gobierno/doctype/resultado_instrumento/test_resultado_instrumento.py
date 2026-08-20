@@ -162,6 +162,43 @@ class IntegrationTestResultadoInstrumento(IntegrationTestCase):
         self.assertEqual(res["omitidas"], 0)
         self.assertEqual(res["publicados"][0]["indicador"], ind)
 
+    def test_publicar_nombra_las_dimensiones_que_heredaron(self):
+        """La herencia es cómoda y silenciosa: el retorno la hace visible.
+
+        Si el instrumento declara indicador, toda dimensión tributa a él aunque
+        no mida lo mismo, y el promedio se mueve sin que nadie lo vea. Medido en
+        producción: una dimensión de infraestructura dentro de una encuesta
+        docente movió el indicador CONEAU ID19 de 81.43 a 71.21. El cálculo no
+        cambia; lo que se exige aquí es que se DIGA quién entró por herencia.
+        """
+        ind = _crear_indicador()
+        instrumento = factories.crear_instrumento(prefijo=PREF, indicador=ind).name
+        apl = factories.crear_aplicacion_instrumento(instrumento=instrumento, prefijo=PREF)
+        factories.crear_resultado_instrumento(
+            apl, dimension="Dominio de la asignatura", indicador=ind,
+            valor=78.0, n=120, prefijo=PREF
+        )
+        factories.crear_resultado_instrumento(
+            apl, dimension="Infraestructura del aula", valor=61.0, n=168, prefijo=PREF
+        )
+        res = publicar_valores_indicador(apl.name)
+        self.assertEqual(res["dimensiones_heredadas"], ["Infraestructura del aula"])
+        self.assertEqual(
+            res["publicados"][0]["dimensiones_heredadas"], ["Infraestructura del aula"]
+        )
+
+    def test_publicar_sin_herencia_no_reporta_nada(self):
+        """Cada fila declara lo suyo: no hay nada que advertir."""
+        ind = _crear_indicador()
+        apl = factories.crear_aplicacion_instrumento(prefijo=PREF)
+        factories.crear_resultado_instrumento(
+            apl, dimension="Trato del personal", indicador=ind,
+            valor=90.0, n=40, prefijo=PREF
+        )
+        res = publicar_valores_indicador(apl.name)
+        self.assertEqual(res["dimensiones_heredadas"], [])
+
+
     def test_publicar_la_fila_gana_sobre_la_plantilla(self):
         ind_plantilla = _crear_indicador()
         ind_fila = _crear_indicador()
