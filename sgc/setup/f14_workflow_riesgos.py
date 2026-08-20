@@ -63,6 +63,11 @@ WF_TRATAMIENTO = {
         # verificar que el tratamiento fue efectivo: control -> self_approval=0
         # (default). Quien implementó no se autoverifica.
         ("Implementado", "Verificar", "Verificado", "DPGC"),
+        # la verificación también puede fallar: sin esta flecha, un tratamiento
+        # que la DPGC encontrara inefectivo quedaba "Implementado" para siempre
+        # o se verificaba en falso. Vuelve a ejecución para rehacerse — la misma
+        # doctrina que "Verificada no eficaz" en Accion Mejora, sus hermanas CAPA.
+        ("Implementado", "Verificar no eficaz", "En ejecucion", "DPGC"),
     ],
 }
 
@@ -82,4 +87,4 @@ def run():
           "[Identificado -> Evaluado -> En tratamiento -> Monitoreado -> "
           "Cerrado | Materializado -> Cerrado]")
     print("Workflow OK:", n_t,
-          "[Planificado -> En ejecucion -> Implementado -> Verificado]")
+          "[Planificado -> En ejecucion -> Implementado -> Verificado | no eficaz -> En ejecucion]")

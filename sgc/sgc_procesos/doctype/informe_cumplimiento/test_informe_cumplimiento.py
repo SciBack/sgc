@@ -303,3 +303,42 @@ class IntegrationTestInformeCumplimiento(IntegrationTestCase):
 		self.assertEqual(datos["n_cumple"], 7)
 		self.assertEqual(datos["semaforo"], "Rojo")
 		self.assertEqual(len(datos["condiciones"]), 8)
+
+	# ------------------------------------------------------------ inmutabilidad post-SUNEDU
+
+	def test_presentado_a_sunedu_no_se_puede_editar(self):
+		"""Un informe presentado al regulador es un hecho consumado.
+
+		Sin el guard, la DPGC podía seguir editando el diagnóstico después de
+		presentarlo, y lo archivado dejaba de coincidir con lo entregado a
+		SUNEDU. El workflow no lo impedía: su estado final lleva allow_edit
+		por rol, no un candado.
+		"""
+		conds = [self._cond(e, factories.CUMPLE) for e in self.estandares]
+		doc = self._informe(2030, condiciones=conds)
+		# la cadena real de transiciones la valida f11; aquí se llega al estado
+		# final por set_value para probar SOLO el guard del controlador
+		frappe.db.set_value("Informe Cumplimiento", doc.name, "estado",
+			"Presentado a SUNEDU", update_modified=False)
+
+		doc = frappe.get_doc("Informe Cumplimiento", doc.name)
+		doc.resumen = "edición posterior a la presentación"
+		with self.assertRaises(frappe.ValidationError) as ctx:
+			doc.save(ignore_permissions=True)
+		self.assertIn("presentado", str(ctx.exception).lower())
+
+	def test_el_save_de_la_propia_presentacion_si_pasa(self):
+		"""El guard bloquea DESPUÉS del hecho, no el hecho mismo.
+
+		La transición que lleva a 'Presentado a SUNEDU' es un save con estado
+		anterior 'Aprobado': ese debe pasar, o nadie podría presentar nunca.
+		"""
+		conds = [self._cond(e, factories.CUMPLE) for e in self.estandares]
+		doc = self._informe(2031, condiciones=conds)
+
+		doc.estado = "Presentado a SUNEDU"
+		doc.save(ignore_permissions=True)  # no debe lanzar
+
+		self.assertEqual(
+			frappe.db.get_value("Informe Cumplimiento", doc.name, "estado"),
+			"Presentado a SUNEDU")

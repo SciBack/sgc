@@ -32,9 +32,16 @@ WF_CUMPLIMIENTO = {
         ("Borrador", "Enviar a revision", "En revisión", "DPGC", 1),  # avance operativo
         # aprobar es el control interno -> self_approval=0 (default)
         ("En revisión", "Aprobar", "Aprobado", "DPGC"),
+        # la revisión también puede rechazar: sin esta flecha, un informe con
+        # observaciones quedaba atascado en "En revisión" para siempre (la única
+        # salida era aprobarlo). Era el único flujo con revisión sin devolución.
+        ("En revisión", "Observar", "Borrador", "DPGC", 1),  # devuelve, afloja
         ("Aprobado", "Observar", "Borrador", "DPGC", 1),  # devuelve, afloja
         # presentar a SUNEDU es el acto externo irreversible -> self_approval=0
         # (default), ejecutado por la Autoridad Aprobadora (no quien lo redactó).
+        # La inmutabilidad posterior la garantiza el guard del controlador
+        # (_bloquear_si_presentado), no este workflow: allow_edit por rol no
+        # protege un hecho externo ya consumado.
         ("Aprobado", "Presentar a SUNEDU", "Presentado a SUNEDU", "Autoridad Aprobadora"),
     ],
 }

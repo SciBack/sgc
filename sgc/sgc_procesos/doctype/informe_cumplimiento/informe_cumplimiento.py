@@ -26,11 +26,34 @@ CUMPLE = "Cumple"
 
 class InformeCumplimiento(Document):
 	def validate(self):
+		self._bloquear_si_presentado()
 		self._autopoblar_condiciones()
 		self._consolidar()
 		self._validar_sustento()
 		self._validar_presentacion()
 		self._sincronizar_trazabilidad()
+
+	def _bloquear_si_presentado(self):
+		"""Un informe ya presentado a SUNEDU no se edita: el hecho externo ya ocurrió.
+
+		El workflow no puede garantizarlo solo — el estado final lleva un
+		`allow_edit` por rol, así que la DPGC podía seguir editando el diagnóstico
+		DESPUÉS de presentarlo al regulador, y lo archivado en el sistema dejaba
+		de coincidir con lo entregado. Mismo patrón que el guard de las
+		valoraciones tras el cierre de la autoevaluación: el submit del hecho es
+		el punto de no retorno.
+
+		Se compara contra el estado ANTERIOR para dejar pasar exactamente un
+		save: el de la propia transición de presentación.
+		"""
+		anterior = self.get_doc_before_save()
+		if anterior and anterior.estado == "Presentado a SUNEDU":
+			frappe.throw(
+				_("Este informe ya fue presentado a SUNEDU y no puede modificarse. "
+				  "Si SUNEDU observó el informe, registre un informe nuevo del "
+				  "mismo año referenciando este."),
+				title=_("Informe presentado"),
+			)
 
 	# ------------------------------------------------------------ autopoblado
 
