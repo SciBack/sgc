@@ -38,6 +38,10 @@ def _cerrar_autoevaluacion(autoevaluacion):
 	recargado (docstatus=1).
 	"""
 	name = autoevaluacion.name if hasattr(autoevaluacion, "name") else autoevaluacion
+	# cerrar promueve la vigencia y esta exige todos los estandares confirmados
+	# (Tabla 9 del modelo CONEAU): sin ellos el cierre falla.
+	marco = frappe.db.get_value("Autoevaluacion", name, "marco_normativo")
+	factories.confirmar_todo_para_cierre(name, marco)
 	doc = frappe.get_doc("Autoevaluacion", name)
 	for accion in _CADENA_CIERRE:
 		doc = apply_workflow(doc, accion)

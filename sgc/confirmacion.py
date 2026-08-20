@@ -232,18 +232,49 @@ def finalizar_vigencia(autoevaluacion):
             "confirmados": confirmados,
         }
 
+    resultado = calcular_vigencia_oficial(autoevaluacion, confirmados=confirmados)
+    if not resultado.get("ok"):
+        return resultado
+
+    frappe.db.set_value(
+        "Autoevaluacion", autoevaluacion, "resultado_vigencia", resultado["vigencia"]
+    )
+
+    return resultado
+
+
+def calcular_vigencia_oficial(autoevaluacion, confirmados=None):
+    """Calcula la vigencia oficial SIN escribirla. Devuelve el mismo contrato.
+
+    Se separa de `finalizar_vigencia` porque el cierre la necesita en un momento
+    en el que NO puede escribir a la base: `Autoevaluacion.before_submit` corre
+    dentro del propio guardado, y un `frappe.db.set_value` sobre la fila que se
+    está guardando la toca por debajo — el submit se enredaba con su propio
+    documento. El cierre asigna el valor en memoria y deja que el submit lo
+    persista; `finalizar_vigencia` (llamada suelta, antes del cierre) sí escribe.
+    """
+    if confirmados is None:
+        confirmados = frappe.db.count(
+            "Valoracion Estandar",
+            {"autoevaluacion": autoevaluacion, "confirmado": 1, "nivel": ["is", "set"]},
+        )
+    total_estandares = len(scoring._estandares_de_autoevaluacion(autoevaluacion))
+    if confirmados < total_estandares:
+        return {"ok": False, "faltan": total_estandares - confirmados,
+                "confirmados": confirmados}
+
     # El motor recalcula la vigencia sobre los `nivel` ya confirmados (Tabla 9)
     # y persiste `vigencia_propuesta` (sin tilde).
     resultado = scoring.proponer_vigencia(autoevaluacion)
     propuesta = resultado.get("vigencia_propuesta")
 
     if not propuesta:
-        # No debería ocurrir con 10/10 confirmados, pero se protege el contrato.
+        # No debería ocurrir con todos confirmados, pero se protege el contrato.
         return {
             "ok": False,
             "faltan": 0,
             "confirmados": confirmados,
-            "error": _("El motor no pudo proponer vigencia pese a 10/10 confirmados."),
+            "error": _("El motor no pudo proponer vigencia pese a todos confirmados."),
         }
 
     oficial = _VIGENCIA_PROPUESTA_A_OFICIAL.get(propuesta)
@@ -251,9 +282,5 @@ def finalizar_vigencia(autoevaluacion):
         frappe.throw(
             _("Vigencia propuesta desconocida (sin mapeo oficial): {0}").format(propuesta)
         )
-
-    frappe.db.set_value(
-        "Autoevaluacion", autoevaluacion, "resultado_vigencia", oficial
-    )
 
     return {"ok": True, "vigencia": oficial, "vigencia_propuesta": propuesta}

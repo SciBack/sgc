@@ -42,9 +42,9 @@ class Autoevaluacion(Document):
         vigencia determinable, así que no hay cierre. Corre ANTES del submit,
         con el docstatus todavía en 0, de modo que la escritura es legítima.
         """
-        from sgc.confirmacion import finalizar_vigencia
+        from sgc.confirmacion import calcular_vigencia_oficial
 
-        resultado = finalizar_vigencia(self.name)
+        resultado = calcular_vigencia_oficial(self.name)
         if not resultado.get("ok"):
             frappe.throw(
                 frappe._(
@@ -55,9 +55,9 @@ class Autoevaluacion(Document):
                 ).format(resultado.get("faltan", "?")),
                 title=frappe._("Autoevaluación incompleta"),
             )
-        # `finalizar_vigencia` persistió por db.set_value sobre la fila; el doc en
-        # memoria es el que está a punto de guardarse, así que se alinea para que
-        # el submit no lo pise con el valor viejo.
+        # Se asigna en memoria a propósito: el submit persiste este mismo doc.
+        # Escribir aquí con db.set_value tocaría por debajo la fila que se está
+        # guardando y el submit se enreda con su propio documento.
         self.resultado_vigencia = resultado["vigencia"]
 
     @frappe.whitelist()
