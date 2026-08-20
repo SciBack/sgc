@@ -335,7 +335,13 @@ class IntegrationTestInformeCumplimiento(IntegrationTestCase):
 		"""
 		conds = [self._cond(e, factories.CUMPLE) for e in self.estandares]
 		doc = self._informe(2031, condiciones=conds)
+		# se siembra el estado previo por set_value: saltar de Borrador a
+		# Presentado con save() lo bloquea el propio motor de workflow (no hay
+		# esa transicion), y aqui se prueba el guard, no el motor
+		frappe.db.set_value("Informe Cumplimiento", doc.name, "estado", "Aprobado",
+			update_modified=False)
 
+		doc = frappe.get_doc("Informe Cumplimiento", doc.name)
 		doc.estado = "Presentado a SUNEDU"
 		doc.save(ignore_permissions=True)  # no debe lanzar
 
