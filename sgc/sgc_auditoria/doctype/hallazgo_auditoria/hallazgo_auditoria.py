@@ -51,7 +51,13 @@ class HallazgoAuditoria(Document):
         # ligada, el hallazgo está escalado.
         if self.no_conformidad:
             self.genera_nc = 1
-            if self.estado == "Abierto":
+            # El estado solo se sincroniza al ACTUALIZAR: con el workflow activo
+            # (f16), Frappe prohíbe que un documento nazca en un estado que no sea
+            # el inicial, así que un hallazgo creado ya ligado a una NC no puede
+            # insertarse directamente como "Escalado a NC". Nace "Abierto" y pasa
+            # a "Escalado a NC" en el primer guardado posterior — o, mejor, por
+            # `escalar_a_no_conformidad()`, que es la acción real.
+            if self.estado == "Abierto" and not self.is_new():
                 self.estado = "Escalado a NC"
 
         self._validar_escalamiento_real()

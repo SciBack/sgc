@@ -70,10 +70,29 @@ class IntegrationTestHallazgoAuditoriaWorkflow(IntegrationTestCase):
             self.assertFalse(t.allow_self_approval,
                              "quien levanta el hallazgo no puede cerrarlo")
 
-    def test_saltar_a_cerrado_con_un_save_ya_no_funciona(self):
-        """Con el workflow activo, el motor bloquea el atajo por save()."""
-        doc = self._hallazgo()
+    def test_el_auditor_no_puede_cerrar_por_el_motor(self):
+        """La transición de cierre no está disponible para el Auditor Interno.
 
-        doc.estado = "Cerrado"
-        with self.assertRaises(Exception):
-            doc.save(ignore_permissions=True)
+        Ojo con el alcance de lo que garantiza un workflow: Frappe NO impide
+        reasignar `estado` con un `save()` a secas —eso vale para los 15
+        workflows del sistema, no solo para este—; lo que impide es ejecutar la
+        transición sin el rol. La regla «no se edita el estado directamente para
+        saltar el workflow» está documentada en `docs-site/.../conceptos.md`
+        como regla de uso, y el control efectivo son los permisos de campo y las
+        transiciones.
+        """
+        from frappe.model.workflow import get_transitions
+
+        doc = self._hallazgo()
+        acciones_dpgc = {t["action"] for t in get_transitions(doc)}
+        self.assertIn("Cerrar", acciones_dpgc,
+                      "Administrator/DPGC sí ve la acción de cierre")
+
+        transiciones = frappe.get_all(
+            "Workflow Transition",
+            filters={"parent": "Hallazgo Auditoria SGC", "action": "Cerrar"},
+            fields=["allowed"],
+        )
+        self.assertTrue(transiciones)
+        self.assertNotIn("Auditor Interno", {t.allowed for t in transiciones},
+                         "el auditor que levanta el hallazgo no cierra")

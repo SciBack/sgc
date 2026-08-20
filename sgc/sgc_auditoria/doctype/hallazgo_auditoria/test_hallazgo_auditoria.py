@@ -118,7 +118,12 @@ class IntegrationTestHallazgoAuditoria(IntegrationTestCase):
         nc.flags.ignore_permissions = True
         nc.insert(ignore_permissions=True)
 
-        h = self._hallazgo(no_conformidad=nc.name)
+        # se liga TRAS crear: con el workflow de f16 activo, un documento no puede
+        # nacer en un estado distinto al inicial (nace "Abierto")
+        h = self._hallazgo()
+        h.no_conformidad = nc.name
+        h.save(ignore_permissions=True)
+
         self.assertEqual(h.genera_nc, 1)
         self.assertEqual(h.estado, "Escalado a NC")
 

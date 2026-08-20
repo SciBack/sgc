@@ -94,7 +94,11 @@ class IntegrationTestHomeDashboard(IntegrationTestCase):
         # criterios a partir de 'En ejecucion').
         aud = _insertar("Auditoria", {"titulo": f"Auditoria home {next(_seq)}"})
         _insertar("Hallazgo Auditoria", {"auditoria": aud.name, "tipo": "Observacion", "estado": "Abierto"})
-        _insertar("Hallazgo Auditoria", {"auditoria": aud.name, "tipo": "Fortaleza", "estado": "Cerrado"})
+        # con el workflow de f16 activo no se puede nacer en un estado no inicial:
+        # se crea Abierto y se lleva a Cerrado por BD, que es lo que el contador lee
+        _cerrado = _insertar("Hallazgo Auditoria", {"auditoria": aud.name, "tipo": "Fortaleza", "estado": "Abierto"})
+        frappe.db.set_value("Hallazgo Auditoria", _cerrado.name, "estado", "Cerrado",
+                            update_modified=False)
         self.assertEqual(_valor(resumen_inicio(), "hallazgos_abiertos"), base + 1)
 
     def test_autoevaluacion_en_la_lista_con_criterios(self):
