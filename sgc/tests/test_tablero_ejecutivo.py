@@ -75,12 +75,21 @@ def _auditoria(estado="Planificada", **extra):
 
 
 def _hallazgo(auditoria, tipo="Observacion", estado="Abierto", **extra):
-    return _insertar("Hallazgo Auditoria", {
+    """Mismo patrón que `_auditoria`: nace en el estado inicial y se mueve por BD.
+
+    Desde f16, `Hallazgo Auditoria` tiene workflow, y con workflow activo Frappe
+    prohíbe insertar en un estado que no sea el inicial. El contador lee la BD,
+    así que sembrarlo por `set_value` es equivalente y no arrastra el workflow.
+    """
+    doc = _insertar("Hallazgo Auditoria", {
         "auditoria": auditoria.name if hasattr(auditoria, "name") else auditoria,
         "tipo": tipo,
-        "estado": estado,
+        "estado": "Abierto",
         **extra,
     })
+    if estado != "Abierto":
+        frappe.db.set_value("Hallazgo Auditoria", doc.name, "estado", estado)
+    return doc
 
 
 def _revision(fecha="2099-01-01", estado="Planificada", **extra):
