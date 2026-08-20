@@ -296,7 +296,7 @@ def crear_valoracion_estandar(autoevaluacion, estandar, nivel_propuesto=None,
     return doc
 
 
-def confirmar_todo_para_cierre(autoevaluacion, marco, sigla="L", prefijo=PREFIJO):
+def confirmar_todo_para_cierre(autoevaluacion, marco=None, sigla="L", prefijo=PREFIJO):
     """Confirma todos los estándares del marco: requisito para poder cerrar.
 
     Desde que el cierre promueve la vigencia (`Autoevaluacion._promover_vigencia`),
@@ -306,6 +306,11 @@ def confirmar_todo_para_cierre(autoevaluacion, marco, sigla="L", prefijo=PREFIJO
     informe) usan esto para montar ese requisito en una línea.
     """
     ae = autoevaluacion.name if hasattr(autoevaluacion, "name") else autoevaluacion
+    # El marco se deriva de la propia autoevaluación si no se pasa: un test con
+    # varios marcos (uno del setUp y otro propio) confirmaba los estándares del
+    # equivocado y el cierre fallaba por "faltan estándares" sin motivo aparente.
+    if marco is None:
+        marco = frappe.db.get_value("Autoevaluacion", ae, "marco_normativo")
     estandares = frappe.get_all(
         "Elemento Marco",
         filters={"marco_normativo": marco, "tipo": "Estandar"},

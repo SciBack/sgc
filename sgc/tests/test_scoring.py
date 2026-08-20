@@ -266,7 +266,7 @@ class IntegrationTestScoring(IntegrationTestCase):
         """
         # cerrar promueve la vigencia y esta exige todos los estandares
         # confirmados (Tabla 9): se monta ese requisito antes de la cadena.
-        factories.confirmar_todo_para_cierre(ae_name, self.marco)
+        factories.confirmar_todo_para_cierre(ae_name)
         doc = frappe.get_doc("Autoevaluacion", ae_name)
         for accion in _CADENA_CIERRE:
             doc = apply_workflow(doc, accion)
