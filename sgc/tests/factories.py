@@ -296,6 +296,26 @@ def crear_valoracion_estandar(autoevaluacion, estandar, nivel_propuesto=None,
     return doc
 
 
+def confirmar_todo_para_cierre(autoevaluacion, marco, sigla="L", prefijo=PREFIJO):
+    """Confirma todos los estándares del marco: requisito para poder cerrar.
+
+    Desde que el cierre promueve la vigencia (`Autoevaluacion._promover_vigencia`),
+    cerrar exige que todos los estándares tengan nivel confirmado — sin ellos no
+    hay vigencia determinable (Tabla 9 del modelo CONEAU) y el cierre falla. Los
+    tests que solo querían llegar a "Cerrada" para probar otra cosa (snapshot,
+    informe) usan esto para montar ese requisito en una línea.
+    """
+    ae = autoevaluacion.name if hasattr(autoevaluacion, "name") else autoevaluacion
+    estandares = frappe.get_all(
+        "Elemento Marco",
+        filters={"marco_normativo": marco, "tipo": "Estandar"},
+        pluck="name",
+    )
+    for est in estandares:
+        confirmar_estandar(ae, est, sigla, prefijo=prefijo)
+    return len(estandares)
+
+
 def confirmar_estandar(autoevaluacion, estandar, sigla, prefijo=PREFIJO):
     """Fija el `nivel` oficial (NL/L/LP) y `confirmado=1` de un estándar.
 

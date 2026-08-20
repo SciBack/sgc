@@ -56,6 +56,10 @@ def _cerrar_autoevaluacion(ae_name):
     (docstatus 0->1) de Autoevaluacion (is_submittable=1). Requiere el
     workflow ACTIVO (no llamar `factories.desactivar_workflow` antes de esto).
     """
+    marco = frappe.db.get_value("Autoevaluacion", ae_name, "marco_normativo")
+    # cerrar promueve la vigencia, y sin estándares confirmados no hay vigencia
+    # determinable: el cierre falla. Se confirma lo que falte antes de la cadena.
+    factories.confirmar_todo_para_cierre(ae_name, marco)
     for accion in ("Iniciar evaluacion", "Enviar a revision", "Consolidar", "Cerrar"):
         doc = frappe.get_doc("Autoevaluacion", ae_name)
         apply_workflow(doc, accion)

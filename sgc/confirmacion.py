@@ -198,6 +198,22 @@ def finalizar_vigencia(autoevaluacion):
     if not autoevaluacion:
         frappe.throw(_("Se requiere `autoevaluacion`."))
 
+    # Un expediente cerrado no recibe escrituras. Esta función escribe con
+    # `frappe.db.set_value`, que no pasa por el `validate()` de ningún doc, así
+    # que el guard de `valoracion_estandar.py` no la alcanzaba: se comprobó en
+    # producción escribiendo la vigencia sobre una autoevaluación ya cerrada.
+    # El cierre la promueve por sí mismo (`Autoevaluacion._promover_vigencia`),
+    # de modo que llamarla después ya no hace falta para nada legítimo.
+    if frappe.db.get_value("Autoevaluacion", autoevaluacion, "docstatus") == 1:
+        frappe.throw(
+            _(
+                "La autoevaluación ya fue cerrada; su vigencia quedó registrada "
+                "en el cierre y no se recalcula. Para corregirla, cancele y "
+                "reabra la autoevaluación."
+            ),
+            title=_("Autoevaluación cerrada"),
+        )
+
     confirmados = frappe.db.count(
         "Valoracion Estandar",
         {"autoevaluacion": autoevaluacion, "confirmado": 1, "nivel": ["is", "set"]},
