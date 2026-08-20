@@ -30,6 +30,7 @@ Orden (por dependencia real, no alfabético):
   13. f13_workflow_evidencia    — workflow Evidencia (Fase 2)
   14. f14_workflow_riesgos      — workflows Riesgo + Tratamiento Riesgo (Fase 2)
   15. f15_notificaciones_workflow — Notification Value Change en transiciones
+  16. f16_workflow_hallazgo_auditoria — workflow Hallazgo Auditoria (M06)
                                reales del workflow de Informe Cumplimiento
 
 Ejecutar manualmente:
@@ -48,11 +49,22 @@ import frappe
 _ES_LOCK_DE_DOCUMENTO = re.compile(r"[0-9a-f]{16,}")
 
 from sgc.setup import (
-    f1_run_all, f2_run_all, f3b_rbac, f4_workflow_mejora,
-    f5_workflow_documental, f6_informe_cbc, f7_notificaciones,
-    f8_workflow_auditoria, f9_workflow_encuestas, f10_workflow_revision,
-    f11_workflow_cumplimiento, f12_workflow_hallazgo, f13_workflow_evidencia,
-    f14_workflow_riesgos, f15_notificaciones_workflow,
+    f1_run_all,
+    f2_run_all,
+    f3b_rbac,
+    f4_workflow_mejora,
+    f5_workflow_documental,
+    f6_informe_cbc,
+    f7_notificaciones,
+    f8_workflow_auditoria,
+    f9_workflow_encuestas,
+    f10_workflow_revision,
+    f11_workflow_cumplimiento,
+    f12_workflow_hallazgo,
+    f13_workflow_evidencia,
+    f14_workflow_riesgos,
+    f15_notificaciones_workflow,
+    f16_workflow_hallazgo_auditoria,
 )
 
 STEPS = [
@@ -71,6 +83,7 @@ STEPS = [
     ("f13_workflow_evidencia", f13_workflow_evidencia),
     ("f14_workflow_riesgos", f14_workflow_riesgos),
     ("f15_notificaciones_workflow", f15_notificaciones_workflow),
+    ("f16_workflow_hallazgo_auditoria", f16_workflow_hallazgo_auditoria),
 ]
 
 
