@@ -97,6 +97,34 @@ es `ID_CARGA_CURSO_DOCENTE`, nunca el par (carga, persona).
 | `ACAD_CURSO_ALUMNO.ID_HORARIO_PRACTICA` | **7,3%** | rara vez se sabe a qué grupo va el alumno |
 | Código de curso | **4%** | ver abajo |
 
+### El código universitario del estudiante: `MVW_ACAD_ALUMNO_CONTRATO`
+
+**`DAVID.MVW_ACAD_ALUMNO_CONTRATO.CODIGO`** es la fuente del código universitario vigente
+—el `202211635` que el estudiante escribe—, con cobertura del **99,7 %** del padrón activo.
+
+Dos tablas cercanas engañan y costaron una búsqueda entera:
+
+| Tabla | Qué guarda |
+|---|---|
+| `MOISES1.PERSONA.CODIGO` | **no** es el código universitario: cadenas internas de 14–20 caracteres |
+| `MOISES1.PERSONA_NATURAL_ALUMNO.CODIGO` | un código por persona, pero para muchos el **antiguo** (`M20180178`) — cubre solo el 63 % |
+| **`DAVID.MVW_ACAD_ALUMNO_CONTRATO.CODIGO`** | **el vigente** — 99,7 % |
+
+Un estudiante que cambia de programa cambia de código: conviene aceptar el vigente **y**
+los anteriores, para que se encuentre escriba el que escriba.
+
+El flujo institucional es **Oracle → MidPoint → LDAP**, así que LDAP no puede traer un
+código que Oracle no tenga. Si un identificador aparece en el directorio y no en la tabla
+que se está consultando, la tabla es la equivocada — no al revés.
+
+### Documentos de identidad: no todos son DNI
+
+`schacPersonalUniqueID` trae el tipo dentro del urn
+(`urn:schac:personalUniqueID:pe:PASSPORT:PE:FZ564018`). En el padrón 2026-2 conviven
+**DNI (4 285), pasaporte (38) y carné de extranjería (33)**. Los de extranjero llevan
+letras o guiones, así que cualquier validación de «solo dígitos» los descarta en silencio
+y deja a esos estudiantes sin forma de identificarse.
+
 ### El código de curso no es usable
 
 Existe en el catálogo — `ACAD_PLAN_CURSO.CODIGO` al 74%, `ACAD_CURSO_DETALLE.CODIGO` al
