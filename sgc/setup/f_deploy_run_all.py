@@ -31,6 +31,7 @@ Orden (por dependencia real, no alfabético):
   14. f14_workflow_riesgos      — workflows Riesgo + Tratamiento Riesgo (Fase 2)
   15. f15_notificaciones_workflow — Notification Value Change en transiciones
   16. f16_workflow_hallazgo_auditoria — workflow Hallazgo Auditoria (M06)
+  17. f17_alcance_marcos — clasifica cada marco (licenciamiento / acreditación)
                                reales del workflow de Informe Cumplimiento
 
 Ejecutar manualmente:
@@ -65,6 +66,7 @@ from sgc.setup import (
     f14_workflow_riesgos,
     f15_notificaciones_workflow,
     f16_workflow_hallazgo_auditoria,
+    f17_alcance_marcos,
 )
 
 STEPS = [
@@ -84,6 +86,7 @@ STEPS = [
     ("f14_workflow_riesgos", f14_workflow_riesgos),
     ("f15_notificaciones_workflow", f15_notificaciones_workflow),
     ("f16_workflow_hallazgo_auditoria", f16_workflow_hallazgo_auditoria),
+    ("f17_alcance_marcos", f17_alcance_marcos),
 ]
 
 

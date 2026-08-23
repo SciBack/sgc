@@ -27,6 +27,7 @@ CUMPLE = "Cumple"
 
 class InformeCumplimiento(Document):
 	def validate(self):
+		self._validar_marco_es_de_licenciamiento()
 		self._bloquear_si_presentado()
 		self._sellar_fecha_presentacion()
 		self._autopoblar_condiciones()
@@ -34,6 +35,33 @@ class InformeCumplimiento(Document):
 		self._validar_sustento()
 		self._validar_presentacion()
 		self._sincronizar_trazabilidad()
+
+	def _validar_marco_es_de_licenciamiento(self):
+		"""El espejo del guard de la autoevaluación: aquí solo entra licenciamiento.
+
+		Este informe diagnostica las condiciones básicas que Sunedu exige para
+		operar, y su lógica es de semáforo (cumple / cumple parcial / no
+		cumple). Un marco de acreditación trae otra cosa —estándares con
+		niveles NL/L/LP y vigencia en años— y meterlo aquí produciría un
+		«diagnóstico de condiciones básicas» sobre algo que no lo es, con el
+		autopoblado cargando estándares de acreditación como si fueran
+		condiciones. Sin este guard la puerta estaba abierta en los dos
+		sentidos.
+		"""
+		if not self.marco_normativo:
+			return
+		marco = frappe.db.get_value(
+			"Marco Normativo", self.marco_normativo, ["ente", "alcance"], as_dict=True
+		) or {}
+		alcance = marco.get("alcance") or ""
+		if alcance.startswith("Acreditación") or (not alcance and marco.get("ente") == "SINEACE"):
+			frappe.throw(
+				_("El marco «{0}» es de acreditación, no de licenciamiento. Las "
+				  "condiciones básicas de calidad son el permiso para operar; la "
+				  "acreditación se trabaja en una Autoevaluación.").format(
+					  self.marco_normativo),
+				title=_("Marco de acreditación"),
+			)
 
 	def _bloquear_si_presentado(self):
 		"""Un informe ya presentado a SUNEDU no se edita: el hecho externo ya ocurrió.

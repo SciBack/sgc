@@ -376,3 +376,37 @@ class IntegrationTestInformeCumplimiento(IntegrationTestCase):
 		self.assertEqual(
 			frappe.db.get_value("Informe Cumplimiento", doc.name, "estado"),
 			"Presentado a SUNEDU")
+
+
+class IntegrationTestMarcoDeLicenciamiento(IntegrationTestCase):
+	"""El espejo: aquí solo entra licenciamiento.
+
+	Este informe diagnostica las condiciones básicas que exige Sunedu para
+	operar, con lógica de semáforo. Un marco de acreditación trae estándares
+	con niveles y vigencia en años: si entrara, el autopoblado cargaría
+	estándares de acreditación como si fueran condiciones básicas.
+	"""
+
+	def test_un_marco_de_acreditacion_no_abre_informe(self):
+		base = factories.crear_marco_prueba(prefijo="TESTMLIC")
+		frappe.db.set_value("Marco Normativo", base["marco"],
+			{"alcance": "Acreditación de programa", "ente": "SINEACE"},
+			update_modified=False)
+		doc = frappe.new_doc("Informe Cumplimiento")
+		doc.anio = 2096
+		doc.marco_normativo = base["marco"]
+		doc.flags.ignore_permissions = True
+		with self.assertRaises(frappe.ValidationError):
+			doc.insert(ignore_permissions=True)
+
+	def test_marco_de_licenciamiento_si_pasa(self):
+		base = factories.crear_marco_prueba(prefijo="TESTMLIC2")
+		frappe.db.set_value("Marco Normativo", base["marco"],
+			{"alcance": "Licenciamiento", "ente": "SUNEDU"}, update_modified=False)
+		doc = frappe.new_doc("Informe Cumplimiento")
+		doc.anio = 2095
+		doc.marco_normativo = base["marco"]
+		doc.flags.ignore_permissions = True
+		doc.insert(ignore_permissions=True)
+		self.assertTrue(doc.name)
+

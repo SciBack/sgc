@@ -103,3 +103,55 @@ class IntegrationTestAutoevaluacion(IntegrationTestCase):
 		doc = frappe.get_doc("Autoevaluacion", self.ae)
 		self.assertEqual(doc.docstatus, 0)
 		self.assertFalse(doc.marco_snapshot)
+
+
+class IntegrationTestAlcanceDelMarco(IntegrationTestCase):
+	"""Licenciamiento y acreditación no se cruzan; programa e institucional tampoco.
+
+	La normativa peruana mantiene tres cosas distintas: el permiso para operar
+	que otorga Sunedu (condiciones básicas), y el sello voluntario de calidad
+	del Coneau, que además viene en dos modelos —uno por programa de estudios,
+	otro institucional—. El propio Modelo de Acreditación Institucional (2026,
+	§4.2) dice que sus estándares se definieron revisando las condiciones de
+	Sunedu «para diferenciar los niveles de exigencia».
+
+	Antes de estos guards la separación vivía solo en el nombre del marco. En
+	producción se comprobó que una autoevaluación abierta con el marco de
+	licenciamiento llegaba a emitir «Acreditado 6 años».
+	"""
+
+	def _marco(self, alcance, ente="SINEACE", sufijo=""):
+		base = factories.crear_marco_prueba(prefijo=f"TESTALC{sufijo}")
+		frappe.db.set_value("Marco Normativo", base["marco"],
+			{"alcance": alcance, "ente": ente}, update_modified=False)
+		return base["marco"]
+
+	def test_un_marco_de_licenciamiento_no_abre_autoevaluacion(self):
+		marco = self._marco("Licenciamiento", ente="SUNEDU", sufijo="L")
+		with self.assertRaises(frappe.ValidationError):
+			factories.crear_autoevaluacion(marco, prefijo="TESTALCL")
+
+	def test_marco_de_sunedu_sin_alcance_declarado_tambien_se_rechaza(self):
+		"""Si el alcance no se llenó, el ente basta: lo de Sunedu no acredita."""
+		marco = self._marco("", ente="SUNEDU", sufijo="S")
+		with self.assertRaises(frappe.ValidationError):
+			factories.crear_autoevaluacion(marco, prefijo="TESTALCS")
+
+	def test_acreditacion_de_programa_exige_programa(self):
+		marco = self._marco("Acreditación de programa", sufijo="P")
+		with self.assertRaises(frappe.ValidationError):
+			factories.crear_autoevaluacion(marco, prefijo="TESTALCP")
+
+	def test_acreditacion_institucional_no_admite_programa(self):
+		marco = self._marco("Acreditación institucional", sufijo="I")
+		ps = frappe.get_all("Programa Sede", pluck="name", limit=1)
+		if not ps:
+			self.skipTest("no hay Programa Sede en el sitio de pruebas")
+		with self.assertRaises(frappe.ValidationError):
+			factories.crear_autoevaluacion(marco, prefijo="TESTALCI", programa_sede=ps[0])
+
+	def test_institucional_sin_programa_si_pasa(self):
+		marco = self._marco("Acreditación institucional", sufijo="OK")
+		ae = factories.crear_autoevaluacion(marco, prefijo="TESTALCOK")
+		self.assertTrue(ae.name)
+		self.assertFalse(ae.programa_sede)

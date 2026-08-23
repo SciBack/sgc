@@ -106,6 +106,21 @@ def run():
         {"fieldname": "ente", "fieldtype": "Select", "label": "Ente",
          "options": "SINEACE\nSUNEDU\nISO\nINTERNACIONAL", "in_list_view": 1,
          "in_standard_filter": 1},
+        # Qué se evalúa con este marco. Distingue los tres mundos que la
+        # normativa mantiene SEPARADOS a propósito: el licenciamiento es el
+        # piso obligatorio para operar (Sunedu) y la acreditación es el
+        # reconocimiento voluntario de calidad (Sineace/Coneau), que además
+        # viene en dos modelos distintos -- uno por programa de estudios y otro
+        # institucional, con distinto número de estándares y distinto umbral de
+        # excelencia. El modelo Coneau 2026 lo dice literalmente: los
+        # estándares se definieron revisando las CBC de Sunedu «para
+        # diferenciar los niveles de exigencia». Sin este campo, esa diferencia
+        # solo vivía en el nombre del marco, y nada impedía cruzarlos.
+        {"fieldname": "alcance", "fieldtype": "Select", "label": "Alcance",
+         "options": "\nLicenciamiento\nAcreditación de programa\nAcreditación institucional\nGestión interna",
+         "in_list_view": 1, "in_standard_filter": 1,
+         "description": "Licenciamiento = permiso para operar (Sunedu). "
+                        "Acreditación = sello de calidad (Sineace/Coneau), por programa o institucional."},
         {"fieldname": "version", "fieldtype": "Data", "label": "Versión",
          "in_list_view": 1, "description": "2025, 2026 — permite convivencia de versiones"},
         {"fieldname": "vigente_desde", "fieldtype": "Date", "label": "Vigente desde"},

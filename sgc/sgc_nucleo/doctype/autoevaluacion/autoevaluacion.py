@@ -2,10 +2,76 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
 from frappe.model.document import Document
 
 
 class Autoevaluacion(Document):
+    def validate(self):
+        self._validar_marco_es_de_acreditacion()
+        self._validar_alcance_coherente()
+
+    def _validar_marco_es_de_acreditacion(self):
+        """Una autoevaluación acredita; no sirve para el permiso de operar.
+
+        Sin esto se podía abrir una autoevaluación con el marco de
+        LICENCIAMIENTO y el motor de acreditación la procesaba como si tal:
+        comprobado en producción el 2026-08-23, calificando sus condiciones se
+        obtenía «Acreditado 6 años» a partir de un marco que no acredita nada.
+        El agravante está en las siglas: en la escala de licenciamiento «LP»
+        significa literalmente *Cumple*, no *logrado plenamente*, y el motor
+        solo ve la sigla.
+
+        Son dos mundos que la norma mantiene separados a propósito. El propio
+        Modelo de Acreditación Institucional del Coneau (2026, §4.2) explica
+        que sus estándares se definieron revisando las condiciones básicas de
+        Sunedu «para diferenciar los niveles de exigencia»: el licenciamiento
+        es el piso obligatorio, la acreditación el reconocimiento voluntario.
+        Cruzarlos produce un resultado que ninguna entidad ha otorgado.
+
+        El licenciamiento tiene su propia puerta: `Informe Cumplimiento`.
+        """
+        if not self.marco_normativo:
+            return
+        marco = frappe.db.get_value(
+            "Marco Normativo", self.marco_normativo, ["ente", "alcance"], as_dict=True
+        ) or {}
+        if marco.get("alcance") == "Licenciamiento" or marco.get("ente") == "SUNEDU":
+            frappe.throw(
+                _("El marco «{0}» es de licenciamiento (permiso para operar), no de "
+                  "acreditación. El cumplimiento de las condiciones básicas se registra "
+                  "en un Informe de Cumplimiento, no en una autoevaluación.").format(
+                      self.marco_normativo),
+                title=_("Marco de licenciamiento"),
+            )
+
+    def _validar_alcance_coherente(self):
+        """Acreditar una carrera y acreditar la universidad no son lo mismo.
+
+        La norma son dos modelos distintos, con distinto número de estándares
+        (10 en programas, 9 institucional) y distinto umbral de excelencia (16
+        puntos frente a 20). Antes esa diferencia solo vivía en el nombre del
+        marco, así que cabía una autoevaluación de programa SIN programa —un
+        expediente de carrera sin decir de qué carrera— y una institucional CON
+        un programa colgado, que sobra y confunde a quien lea el informe.
+        """
+        if not self.marco_normativo:
+            return
+        alcance = frappe.db.get_value("Marco Normativo", self.marco_normativo, "alcance")
+        if alcance == "Acreditación de programa" and not self.programa_sede:
+            frappe.throw(
+                _("Este marco acredita un programa de estudios: indica a qué "
+                  "programa-sede corresponde la autoevaluación."),
+                title=_("Falta el programa"),
+            )
+        if alcance == "Acreditación institucional" and self.programa_sede:
+            frappe.throw(
+                _("La acreditación institucional evalúa a la universidad entera: "
+                  "no lleva un programa-sede asignado (indicado: {0}).").format(
+                      self.programa_sede),
+                title=_("Alcance institucional"),
+            )
+
     def before_submit(self):
         """Congela el árbol del marco normativo justo antes del submit (Cerrada).
 
