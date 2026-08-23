@@ -5,8 +5,17 @@ import frappe
 from frappe.model.document import Document
 from frappe.utils import add_days, getdate, nowdate
 
+from sgc.naming import codigo_anual
+
 
 class PlanMejora(Document):
+    def before_insert(self):
+        # autoname es `field:codigo`: si no se indicó, se compone PM-{{anio}}-NNNN.
+        # Hasta el 2026-08-23 no lo componía nadie salvo `capa.py` al crearlo, así
+        # que crear uno por cualquier otra vía fallaba con «Código is required».
+        if not self.codigo:
+            self.codigo = codigo_anual(self.doctype, "PM")
+
     def validate(self):
         # Recalcula en memoria; el save del propio plan persiste los campos.
         self.recalcular_avance(save=False)

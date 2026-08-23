@@ -281,3 +281,96 @@ class IntegrationTestCapa(IntegrationTestCase):
         # no colisiona con ningún código vivo
         self.assertNotIn(nuevo, {c1, c3})
         self.assertFalse(frappe.db.exists("Hallazgo", {"codigo": nuevo}))
+
+    # ======================================================================
+    # El código lo pone el DocType (recorrido 09, 2026-08-23)
+    # ======================================================================
+    # Hallazgo, Plan Mejora y Accion Mejora se autonombran por `field:codigo` y
+    # NADIE se lo componía salvo este módulo al crearlos. Crear uno por
+    # cualquier otra vía —la UI, un import, otro módulo— fallaba con «Código is
+    # required». Sus hermanos del módulo de auditoría llevaban `before_insert`
+    # desde siempre; estos tres se habían quedado fuera.
+
+    def test_un_hallazgo_sin_codigo_se_nombra_solo(self):
+        doc = frappe.get_doc({
+            "doctype": "Hallazgo",
+            "tipo": "Debilidad",
+            "origen": "Autoevaluacion",
+            "descripcion": "Creado sin código, como lo haría la UI.",
+        })
+        doc.insert(ignore_permissions=True)
+
+        self.assertRegex(doc.codigo, rf"^HALL-{self.year}-\d{{4}}$")
+        self.assertEqual(doc.name, doc.codigo)
+
+    def test_un_plan_de_mejora_sin_codigo_se_nombra_solo(self):
+        doc = frappe.get_doc({"doctype": "Plan Mejora", "titulo": "Plan sin código"})
+        doc.insert(ignore_permissions=True)
+
+        self.assertRegex(doc.codigo, rf"^PM-{self.year}-\d{{4}}$")
+
+    def test_una_accion_de_mejora_sin_codigo_se_nombra_sola(self):
+        doc = frappe.get_doc({"doctype": "Accion Mejora", "titulo": "Acción sin código"})
+        doc.insert(ignore_permissions=True)
+
+        self.assertRegex(doc.codigo, rf"^AM-{self.year}-\d{{4}}$")
+
+    def test_el_codigo_que_se_indica_manda(self):
+        """Quien ya sabe el código —una migración, un import— lo conserva."""
+        vivos = frappe.get_all(
+            "Hallazgo", filters={"codigo": ["like", f"HALL-{self.year}-%"]}, pluck="codigo"
+        )
+        base = max((int(c.split("-")[-1]) for c in vivos), default=0) + 500
+        codigo = f"HALL-{self.year}-{base:04d}"
+
+        doc = self._hallazgo_directo(codigo)
+
+        self.assertEqual(doc.codigo, codigo)
+
+    # ======================================================================
+    # Una fortaleza no es una no conformidad
+    # ======================================================================
+    def test_una_fortaleza_no_escala(self):
+        """El mapeo era «Oportunidad de mejora, y si no, no conformidad menor».
+
+        Así que escalar una fortaleza creaba una no conformidad menor: el sistema
+        convertía en defecto algo que él mismo había registrado como virtud.
+        Comprobado en producción el 2026-08-23 (NC-2026-00006 nació de una).
+        `HallazgoAuditoria` ya tenía este criterio; esta rama del CAPA no.
+        """
+        vivos = frappe.get_all(
+            "Hallazgo", filters={"codigo": ["like", f"HALL-{self.year}-%"]}, pluck="codigo"
+        )
+        base = max((int(c.split("-")[-1]) for c in vivos), default=0) + 700
+        doc = frappe.get_doc({
+            "doctype": "Hallazgo",
+            "codigo": f"HALL-{self.year}-{base:04d}",
+            "tipo": "Fortaleza",
+            "origen": "Autoevaluacion",
+            "descripcion": "El equipo documenta muy por encima del mínimo.",
+        })
+        doc.insert(ignore_permissions=True)
+
+        with self.assertRaises(frappe.ValidationError) as ctx:
+            capa.escalar_a_no_conformidad(doc.name)
+
+        self.assertIn("Fortaleza", str(ctx.exception))
+
+    def test_una_debilidad_escala_a_no_conformidad_menor(self):
+        doc = self._hallazgo_directo(capa._next_codigo("Hallazgo", "HALL"))
+        frappe.db.set_value("Hallazgo", doc.name, "tipo", "Debilidad",
+                            update_modified=False)
+
+        nc = capa.escalar_a_no_conformidad(doc.name)
+
+        self.assertEqual(nc.tipo, "No conformidad menor")
+
+    def test_una_oportunidad_de_mejora_escala_como_tal(self):
+        doc = self._hallazgo_directo(capa._next_codigo("Hallazgo", "HALL"))
+        frappe.db.set_value("Hallazgo", doc.name, "tipo", "Oportunidad de mejora",
+                            update_modified=False)
+
+        nc = capa.escalar_a_no_conformidad(doc.name)
+
+        self.assertEqual(nc.tipo, "Oportunidad de mejora")
+

@@ -396,19 +396,20 @@ class IntegrationTestBpmn(IntegrationTestCase):
         al escalarlo, un paso antes.
         """
         for salto in bpmn.SALTOS_ENTRE_PROCESOS:
-            spec = next(s for _m, s in self.specs
-                        if s["document_type"] == salto["document_type"])
-            acciones = {t[1] for t in spec["transitions"] if t[2] == salto["estado"]}
             raiz = ET.fromstring(self.diagramas[salto["document_type"]])
             proceso, colab = raiz.find(f"{M}process"), raiz.find(f"{M}collaboration")
             nombre_de = {e.get("id"): e.get("name") for e in proceso.iter(f"{M}userTask")}
+            emisores = [m.get("sourceRef") for m in colab.iter(f"{M}messageFlow")
+                        if m.get("name") == salto["etiqueta"]]
 
-            for m in colab.iter(f"{M}messageFlow"):
-                if m.get("name") != salto["etiqueta"]:
-                    continue
-                self.assertIn(nombre_de.get(m.get("sourceRef")), acciones,
-                              f"«{salto['etiqueta']}» sale de un nodo que no lleva "
-                              f"a «{salto['estado']}»")
+            self.assertEqual(len(emisores), 1,
+                             f"«{salto['etiqueta']}» debe salir de un solo sitio en "
+                             f"{salto['document_type']}")
+            if salto["accion"] is None:
+                # sin acción de workflow: lo manda el pool, no un nodo suyo
+                self.assertIsNone(nombre_de.get(emisores[0]))
+            else:
+                self.assertEqual(nombre_de.get(emisores[0]), salto["accion"])
 
     def test_cada_salto_declarado_existe_de_verdad_en_el_codigo(self):
         """Regla de admisión: no se dibuja un salto que nadie ejecuta."""

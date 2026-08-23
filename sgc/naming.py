@@ -32,7 +32,7 @@ import re
 
 import frappe
 from frappe.model.naming import getseries, parse_naming_series
-from frappe.utils import cint
+from frappe.utils import cint, nowdate
 
 _PARAMETRO = re.compile(r"\{[^}]*\}")
 _MARCA = "\x00"
@@ -126,3 +126,27 @@ def _sembrar_serie(doctype, prefijo, digitos):
 		frappe.db.sql(
 			"insert into `tabSeries` (name, current) values (%s, %s)", (prefijo, mayor)
 		)
+
+
+def codigo_anual(doctype: str, prefijo: str) -> str:
+	"""Código `PREFIJO-{año}-NNNN` para un DocType que se autonombra por su campo.
+
+	Envoltura sobre `siguiente_correlativo` para el caso más repetido: los
+	DocTypes con `autoname: field:codigo` que componen el código en
+	`before_insert`. Cada uno lo tenía escrito a mano, y **tres no lo tenían en
+	absoluto** —`Hallazgo`, `Plan Mejora` y `Accion Mejora`—: el código se lo
+	ponía `sgc/capa.py` al crearlos, así que el camino automático generaba
+	`HALL-2026-0001` y el camino manual (la UI, un import, otro módulo) fallaba
+	con «Código is required» o se inventaba un formato cualquiera. Comprobado en
+	el recorrido del 09 el 2026-08-23.
+
+	El código lo pone el DocType porque es suyo: quien lo crea no tiene por qué
+	saber la convención.
+	"""
+	anio = nowdate()[:4]
+	patron = f"{prefijo}-{anio}-"
+	existentes = frappe.get_all(
+		doctype, filters={"codigo": ["like", f"{patron}%"]}, pluck="codigo"
+	)
+	return f"{patron}{siguiente_correlativo(existentes):04d}"
+

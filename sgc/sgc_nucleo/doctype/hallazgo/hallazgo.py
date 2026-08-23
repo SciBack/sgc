@@ -18,9 +18,17 @@ import frappe
 from frappe.model.document import Document
 
 from sgc.capa import escalar_a_no_conformidad as _escalar
+from sgc.naming import codigo_anual
 
 
 class Hallazgo(Document):
+    def before_insert(self):
+        # autoname es `field:codigo`: si no se indicó, se compone HALL-{{anio}}-NNNN.
+        # Hasta el 2026-08-23 no lo componía nadie salvo `capa.py` al crearlo, así
+        # que crear uno por cualquier otra vía fallaba con «Código is required».
+        if not self.codigo:
+            self.codigo = codigo_anual(self.doctype, "HALL")
+
     @frappe.whitelist()
     def escalar_a_no_conformidad(self):
         """Wrapper whitelisted sobre `sgc.capa.escalar_a_no_conformidad` — expone

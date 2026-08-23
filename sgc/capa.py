@@ -27,26 +27,40 @@ Uso programatico:
 """
 import frappe
 
+from sgc.naming import codigo_anual
+
 # Valores de Valoracion Criterio.cumple que disparan un hallazgo (adaptados al Select real).
 CUMPLE_DISPARA_HALLAZGO = ("No cumple", "Cumple parcial")
 
+# Tipos de Hallazgo que constituyen una no conformidad escalable, con su `tipo`
+# equivalente en No Conformidad. Una **Fortaleza no está**, y esa ausencia es la
+# regla: hasta el 2026-08-23 el mapeo era «Oportunidad de mejora, y si no, no
+# conformidad menor», así que escalar una fortaleza creaba una no conformidad
+# menor — el sistema convertía en defecto algo que había registrado como
+# virtud. Comprobado en el recorrido del 09: NC-2026-00006 nació de una
+# fortaleza. `HallazgoAuditoria` ya tenía su propio TIPO_A_NC con este mismo
+# criterio; esta rama del CAPA se había quedado sin él.
+TIPO_A_NC = {
+    "Debilidad": "No conformidad menor",
+    "Oportunidad de mejora": "Oportunidad de mejora",
+}
+
 
 # ---------------------------------------------------------------------------
-# Helpers de naming (los DocTypes CAPA usan autoname field:codigo -> generamos codigo)
+# Helpers de naming
 # ---------------------------------------------------------------------------
 def _next_codigo(doctype, prefix):
-    """Genera un codigo secuencial simple prefix-YYYY-#### unico por DocType.
-    Idempotencia real la dan los buscadores de cada funcion; esto solo evita choques.
+    """Compatibilidad: el código lo compone ahora el propio DocType.
+
+    Los tres DocTypes del ciclo (Hallazgo, Plan Mejora, Accion Mejora) llevan
+    `before_insert` desde el 2026-08-23, así que este módulo ya no necesita
+    ponérselo — y de hecho no debía: mientras el código lo puso quien creaba el
+    documento, crearlo por cualquier otra vía fallaba con «Código is required».
+
+    Se conserva delegando en el helper compartido para no romper a quien lo
+    llame, incluidos los tests que fijan su semántica.
     """
-    year = frappe.utils.nowdate()[:4]
-    like = f"{prefix}-{year}-%"
-    n = frappe.db.count(doctype, {"codigo": ["like", like]})
-    # reintenta hasta encontrar hueco (por si hubo borrados)
-    while True:
-        n += 1
-        codigo = f"{prefix}-{year}-{n:04d}"
-        if not frappe.db.exists(doctype, {"codigo": codigo}):
-            return codigo
+    return codigo_anual(doctype, prefix)
 
 
 # ---------------------------------------------------------------------------
@@ -126,11 +140,12 @@ def escalar_a_no_conformidad(hallazgo_name):
         return frappe.get_doc("No Conformidad", hallazgo.no_conformidad)
 
     # tipo de NC segun el tipo de hallazgo
-    tipo_nc = (
-        "Oportunidad de mejora"
-        if hallazgo.tipo == "Oportunidad de mejora"
-        else "No conformidad menor"
-    )
+    tipo_nc = TIPO_A_NC.get(hallazgo.tipo)
+    if not tipo_nc:
+        frappe.throw(
+            frappe._("Un hallazgo de tipo «{0}» no constituye una no conformidad y "
+                     "no puede escalar.").format(hallazgo.tipo or frappe._("(sin tipo)"))
+        )
 
     titulo = f"NC desde hallazgo {hallazgo.codigo}"
     if hallazgo.criterio:

@@ -128,14 +128,26 @@ EFECTOS_AL_ENTRAR = [
 SALTOS_ENTRE_PROCESOS = [
     {
         "document_type": "Riesgo",
-        "estado": "Materializado",
+        "accion": "Materializar",
         "hacia": "No Conformidad",
         "etiqueta": "Escalar a no conformidad",
         "origen": "sgc.sgc_riesgos.doctype.riesgo.riesgo.Riesgo.escalar_a_no_conformidad",
     },
     {
+        # El único sin acción de workflow: escalar un hallazgo de autoevaluación
+        # NO cambia su estado —solo marca `escalado_a_nc` y el vínculo—, así que
+        # puede ocurrir desde cualquier punto del ciclo. Con `accion: None` el
+        # mensaje sale del pool entero, que es lo que BPMN reserva para «este
+        # proceso, en algún momento, manda esto».
+        "document_type": "Hallazgo",
+        "accion": None,
+        "hacia": "No Conformidad",
+        "etiqueta": "Escalar a no conformidad",
+        "origen": "sgc.capa.escalar_a_no_conformidad",
+    },
+    {
         "document_type": "Hallazgo Auditoria",
-        "estado": "Escalado a NC",
+        "accion": "Escalar a NC",
         "hacia": "No Conformidad",
         "etiqueta": "Escalar a no conformidad",
         "origen": "sgc.sgc_auditoria.doctype.hallazgo_auditoria.hallazgo_auditoria"
@@ -802,15 +814,22 @@ def construir(spec, layout_previo=None):
     # salida no se dibuja, y `entrada_a` devuelve entonces la tarea SIGUIENTE—,
     # así que el 08 decía «al cerrar un hallazgo ya escalado, avisa a No
     # Conformidad» cuando el aviso ocurre al escalarlo.
+    # El emisor es la ACCIÓN declarada, no el estado al que lleva: a un mismo
+    # estado se puede llegar por varias acciones y solo una manda el mensaje. Con
+    # `estado` en vez de `accion`, el 08 emitía dos —«Escalar a NC» y «Reabrir
+    # escalado», ambas llevan a «Escalado a NC»— y la segunda decía que reabrir
+    # un hallazgo crea otra no conformidad, que es falso.
     mensajes = []
     for salto in saltos_de(spec["document_type"]):
-        if salto["estado"] not in estados:
+        if salto["accion"] is None:
+            mensajes.append((_id("Msg", f"pool__{salto['hacia']}", usados),
+                             None, salto["hacia"], salto["etiqueta"]))
             continue
         for i, t in enumerate(transiciones):
-            if t[2] != salto["estado"]:
-                continue
-            mensajes.append((_id("Msg", f"{t[1]}__{salto['hacia']}", usados),
-                             id_tarea[i], salto["hacia"], salto["etiqueta"]))
+            if t[1] == salto["accion"]:
+                mensajes.append((_id("Msg", f"{t[1]}__{salto['hacia']}", usados),
+                                 id_tarea[i], salto["hacia"], salto["etiqueta"]))
+                break
 
     return _serializar(spec, carriles, nodos, flujos, layout_previo or {}, mensajes)
 
@@ -858,8 +877,12 @@ def _serializar(spec, carriles, nodos, flujos, layout_previo=None, mensajes=None
     for d in destinos:
         a(f'    <bpmn:participant id="{id_destino[d]}" name={quoteattr(d)} />')
     for mid, origen, hacia, etiqueta in mensajes:
+        # `origen=None` = lo manda el proceso entero, no un nodo suyo: el
+        # emisor es el propio pool. Es el caso del hallazgo de autoevaluación,
+        # que escala sin cambiar de estado y por tanto sin tarea que lo
+        # represente.
         a(f'    <bpmn:messageFlow id="{mid}" name={quoteattr(etiqueta)} '
-          f'sourceRef="{origen}" targetRef="{id_destino[hacia]}" />')
+          f'sourceRef="{origen or part_id}" targetRef="{id_destino[hacia]}" />')
     a("  </bpmn:collaboration>")
 
     a(f'  <bpmn:process id="{proc_id}" isExecutable="false">')
@@ -942,7 +965,11 @@ def _serializar(spec, carriles, nodos, flujos, layout_previo=None, mensajes=None
         a("      </bpmndi:BPMNShape>")
 
     for mid, origen, hacia, _etiqueta in mensajes:
-        ox, oy, ow, oh = geom(nodos[origen])
+        if origen is None:
+            # sale del pool: del borde inferior del pool principal, centrado
+            ox, oy, ow, oh = X_ORIGEN, Y_ORIGEN, ancho_pool, alto_pool
+        else:
+            ox, oy, ow, oh = geom(nodos[origen])
         cx, _cy = _centro(ox, oy, ow, oh)
         a(f'      <bpmndi:BPMNEdge id="Edge_{mid}" bpmnElement="{mid}">')
         a(f'        <di:waypoint x="{int(cx)}" y="{int(oy + oh)}" />')

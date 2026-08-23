@@ -4,7 +4,6 @@
     <bpmn:participant id="Participant_Hallazgo_Auditoria" name="Hallazgo Auditoria SGC" processRef="Process_Hallazgo_Auditoria" />
     <bpmn:participant id="Participant_No_Conformidad" name="No Conformidad" />
     <bpmn:messageFlow id="Msg_Escalar_a_NC__No_Conformidad" name="Escalar a no conformidad" sourceRef="Task_Abierto__Escalar_a_NC" targetRef="Participant_No_Conformidad" />
-    <bpmn:messageFlow id="Msg_Reabrir_escalado__No_Conformidad" name="Escalar a no conformidad" sourceRef="Task_Cerrado__Reabrir_escalado" targetRef="Participant_No_Conformidad" />
   </bpmn:collaboration>
   <bpmn:process id="Process_Hallazgo_Auditoria" isExecutable="false">
     <bpmn:documentation>Lo que la auditoría encuentra, clasificado por tipo: no conformidad mayor o menor, observación, oportunidad de mejora, conformidad o fortaleza. El hallazgo es la salida propia de la auditoría interna que rige ISO 19011. Cuando constituye una no conformidad, escala a un documento «No Conformidad», que es donde ISO 9001:2015 §10.2 sitúa la reacción y la acción correctiva. Quien levanta el hallazgo no lo cierra.</bpmn:documentation>
@@ -135,10 +134,6 @@
       <bpmndi:BPMNEdge id="Edge_Msg_Escalar_a_NC__No_Conformidad" bpmnElement="Msg_Escalar_a_NC__No_Conformidad">
         <di:waypoint x="690" y="200" />
         <di:waypoint x="690" y="460" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Edge_Msg_Reabrir_escalado__No_Conformidad" bpmnElement="Msg_Reabrir_escalado__No_Conformidad">
-        <di:waypoint x="1490" y="360" />
-        <di:waypoint x="1490" y="460" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
         <di:waypoint x="358" y="160" />

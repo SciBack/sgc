@@ -257,6 +257,31 @@ lo fija contra las transiciones del spec. Se detectó leyendo el diagrama para
 recorrerlo, no revisando el código — que es el mismo motivo por el que existe
 este documento.
 
+## Decisión abierta: qué pasa después de «no eficaz»
+
+No es una discordancia —diagrama y sistema dicen lo mismo— sino una pregunta de
+proceso que el recorrido del 09 dejó a la vista, y que Calidad tiene que
+responder porque hay dos lecturas defendibles.
+
+Tres documentos registran que un tratamiento **no funcionó**, y no se comportan
+igual:
+
+| Documento | Estado | ¿Y después? |
+|---|---|---|
+| Acción de Mejora | Verificada no eficaz | **Reabrir** → vuelve a «En ejecucion» |
+| Hallazgo | Cerrado no eficaz | nada: es final |
+| No Conformidad | Cerrada no eficaz | nada: es final |
+
+Las dos lecturas: (a) ISO 9001 §10.2.1 obliga a seguir reaccionando, así que un
+documento que dice «no funcionó» y no admite nada más deja el problema
+registrado como irresuelto y sin ruta; (b) «cerrado no eficaz» cierra *ese
+intento* y la continuación es un documento nuevo, lo que además conserva la
+traza de que hubo un intento fallido.
+
+Ninguna es obviamente correcta, así que no se ha tocado. Lo que sí conviene es
+que las tres se comporten igual: hoy la diferencia parece más un descuido que
+una decisión.
+
 ## Riesgo de deriva
 
 Nada compara automáticamente los `.bpmn` en disco contra lo que generaría el

@@ -4,6 +4,8 @@
 import frappe
 from frappe.model.document import Document
 
+from sgc.naming import codigo_anual
+
 # Avance implícito por estado: los estados terminales fijan el %. En "En ejecucion"
 # y "Verificada no eficaz" se respeta el % manual que registre el responsable.
 ESTADO_AVANCE = {
@@ -14,6 +16,13 @@ ESTADO_AVANCE = {
 
 
 class AccionMejora(Document):
+    def before_insert(self):
+        # autoname es `field:codigo`: si no se indicó, se compone AM-{anio}-NNNN.
+        # Hasta el 2026-08-23 no lo componía nadie salvo `capa.py` al crearla, así
+        # que crear una por cualquier otra vía fallaba con «Código is required».
+        if not self.codigo:
+            self.codigo = codigo_anual(self.doctype, "AM")
+
     def validate(self):
         if self.estado in ESTADO_AVANCE:
             self.avance_pct = ESTADO_AVANCE[self.estado]
