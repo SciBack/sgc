@@ -52,12 +52,20 @@ def es_de_licenciamiento(marco: str | None) -> bool:
 
 
 def es_de_acreditacion(marco: str | None) -> bool:
-	"""¿Este marco acredita (programa o institucional)?"""
+	"""¿Este marco acredita (programa o institucional)?
+
+	Aquí NO hay regla de respaldo por `ente`, a diferencia de
+	`es_de_licenciamiento`, y la asimetría es deliberada: solo se afirma cuando
+	el alcance está declarado.
+
+	El motivo es que los dos errores no cuestan lo mismo. Confundir
+	licenciamiento con acreditación **emite un sello que nadie otorgó**, así que
+	ahí se bloquea incluso ante la duda. Al revés solo se ensucia un
+	diagnóstico, mientras que bloquear de más impide trabajar con cualquier
+	marco todavía sin clasificar — que fue justo lo que ocurrió al primer
+	intento: dar por acreditación todo lo emitido por el Sineace dejó sin poder
+	crear informes a media suite.
+	"""
 	if not marco:
 		return False
-	alcance = alcance_de(marco)
-	if alcance in (ACRED_PROGRAMA, ACRED_INSTITUCIONAL):
-		return True
-	if alcance:
-		return False
-	return frappe.db.get_value("Marco Normativo", marco, "ente") == "SINEACE"
+	return alcance_de(marco) in (ACRED_PROGRAMA, ACRED_INSTITUCIONAL)
