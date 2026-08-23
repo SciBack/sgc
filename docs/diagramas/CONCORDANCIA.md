@@ -1,9 +1,16 @@
 # Concordancia entre los diagramas BPMN y el sistema real
 
-**Fecha:** 2026-08-23 · **Versión en producción:** `sgc-frappe:v95`
+**Fecha:** 2026-08-23 · **Versión en producción:** `sgc-frappe:v101`
 
 Contrastación de los 15 `.bpmn` contra el comportamiento comprobado en
-producción, recorriendo los 8 flujos punta a punta con usuarios reales por rol.
+producción, recorriendo los flujos punta a punta con usuarios reales por rol.
+
+> **Cómo se contrasta, tras haberlo hecho mal una vez:** hay que LEER el `.bpmn`.
+> El workflow de Frappe no es el diagrama: el generador añade además los pasos
+> que el sistema ejecuta solo (temporizadores y mensajes, en el carril «Sistema»),
+> que no son transiciones de workflow y no aparecen si uno solo mira
+> `Workflow.transitions`. Deducir el contenido del diagrama desde el workflow
+> produjo la discordancia falsa que abre la lista de abajo.
 
 ---
 
@@ -32,23 +39,38 @@ respeta lo dibujado:
 
 ## Lo que NO concuerda
 
-### 1. «Vencida» existe en el sistema y no está en el diagrama 🔴
+### 1. ~~«Vencida» no está en el diagrama~~ — ERA FALSO ✅ *(corregido)*
 
-`Evidencia` tiene **cinco** estados en su Select y el diagrama solo dibuja
-**cuatro**. Falta `Vencida`, y no es teórico: un job diario
-(`sgc.tasks.marcar_evidencias_vencidas`) mueve evidencias a ese estado, lo cual
-se verificó funcionando en producción.
+**Esta discordancia no existía; el error era del informe.** Se deja escrita en
+lugar de borrarla, porque el fallo de método es más instructivo que el hallazgo.
 
-Ocurre **fuera del motor de workflow** (`db.set_value` directo), así que no deja
-rastro en el historial del documento ni transición que dibujar. Es el único
-DocType de los 15 con esta discordancia — los otros 14 cuadran exactamente.
+Lo que se hizo mal: comparar los estados del `Select` con los del **workflow de
+Frappe**, ver que `Vencida` faltaba en el segundo, y concluir «no está en el
+diagrama» **sin abrir el diagrama**. Justo en el documento cuyo propósito es
+contrastar el diagrama con el sistema.
 
-**Qué significa para quien lea el diagrama:** creerá que una evidencia validada
-se queda validada para siempre.
+`02-evidencia.bpmn` sí dibuja `Vencida`, y con el elemento que le corresponde:
+**dos eventos de temporizador** (`intermediateCatchEvent` con `timerEventDefinition`),
+uno desde `Pendiente` y otro desde `Valida`, etiquetados «Vence la vigencia», que
+desembocan en un evento de fin `Vencida`. Todo dentro del carril **«Sistema
+(automático)»**. Está así desde el commit `c7c2454` (13-ago-2026), *«BPMN:
+dibujar también lo que el sistema hace solo»* — diez días antes de que se
+escribiera este informe. El generador lo declara en `bpmn.py`
+(`TRANSICIONES_AUTOMATICAS`) junto con el otro paso automático del sistema, la
+obsolescencia del documento reemplazado.
 
-**Cómo se arreglaría:** darle a `Vencida` un estado de workflow y una transición
-temporizada (evento de temporizador BPMN), o al menos declararlo en el diagrama
-como estado terminal alcanzado por el sistema.
+El informe llegaba incluso a proponer como arreglo «una transición temporizada
+(evento de temporizador BPMN)», que es literalmente lo que ya había.
+
+**Lo que sí es cierto, y no es un defecto:** `Vencida` no es un estado del
+workflow, así que desde ahí no hay ninguna acción disponible — verificado en
+producción. Pero el diagrama lo modela como **evento de fin**, de modo que
+sistema y diagrama dicen lo mismo: una evidencia vencida es un final del camino.
+
+**Lo único abierto es una decisión de negocio, no un fallo:** si Calidad quiere
+que una evidencia caducada pueda *renovarse* (nueva vigencia y vuelta a la cola
+de validación) en vez de reemplazarse por otra, eso cambia el proceso —y con él
+el diagrama—, no corrige nada roto.
 
 ### 2. 42 reglas gobiernan el flujo y ninguna aparece ⚠️
 
