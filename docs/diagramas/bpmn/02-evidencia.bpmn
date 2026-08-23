@@ -4,6 +4,7 @@
     <bpmn:participant id="Participant_Evidencia" name="Evidencia SGC" processRef="Process_Evidencia" />
   </bpmn:collaboration>
   <bpmn:process id="Process_Evidencia" isExecutable="false">
+    <bpmn:documentation>Base probatoria de todo lo demás: sin evidencia validada, una valoración o un diagnóstico no se sostiene ante nadie. Los modelos de acreditación del Coneau —el órgano que acredita, dentro del Sineace— enumeran la evidencia esperada criterio por criterio: 52 evidencias en el modelo de programas de estudios (Tabla 8) y 84 en el institucional. Para el licenciamiento, en cambio, qué medio de verificación admite la Sunedu por indicador NO está verificado contra fuente primaria y por tanto no se afirma aquí.</bpmn:documentation>
     <bpmn:laneSet id="LaneSet_1">
       <bpmn:lane id="Lane_Analista_de_Calidad__DPGC_" name="Analista de Calidad (DPGC)">
         <bpmn:flowNodeRef>Task_Pendiente__Validar</bpmn:flowNodeRef>

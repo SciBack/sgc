@@ -4,6 +4,7 @@
     <bpmn:participant id="Participant_Revision_Direccion" name="Revision Direccion SGC" processRef="Process_Revision_Direccion" />
   </bpmn:collaboration>
   <bpmn:process id="Process_Revision_Direccion" isExecutable="false">
+    <bpmn:documentation>La revisión por la dirección cierra el ciclo. ISO 9001:2015 §9.3 —recogida también en ISO 21001 §9.3— la asigna a la alta dirección «a intervalos planificados», enumera en §9.3.2 las entradas que debe considerar y en §9.3.3 las salidas que debe producir: decisiones sobre oportunidades de mejora, sobre los cambios necesarios en el sistema y sobre los recursos. Que el cierre lo ejecute la alta dirección y no la unidad de calidad no es un formalismo: es la alta dirección quien responde de la eficacia del sistema de gestión (§5.1.1), y esa responsabilidad no se delega en el área que lo administra.</bpmn:documentation>
     <bpmn:laneSet id="LaneSet_1">
       <bpmn:lane id="Lane_DPGC" name="DPGC">
         <bpmn:flowNodeRef>Task_Planificada__Realizar_revision</bpmn:flowNodeRef>

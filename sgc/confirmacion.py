@@ -2,14 +2,16 @@
 
 El motor (`scoring.py`) solo PROPONE (`Valoracion Estandar.nivel_propuesto`); NUNCA
 escribe el campo oficial `nivel` (Link→`Nivel Escala`, permlevel 1). Este módulo es la
-ACCIÓN HUMANA que confirma ese `nivel` y, una vez confirmados los 10 estándares, PROMUEVE
-la vigencia oficial (`Autoevaluacion.resultado_vigencia`).
+ACCIÓN HUMANA que confirma ese `nivel` y, una vez confirmados TODOS los estándares del
+marco, PROMUEVE la vigencia oficial (`Autoevaluacion.resultado_vigencia`) según la
+Tabla 9 del modelo de acreditación del Coneau (Consejo de Evaluación, Acreditación y
+Certificación de la Calidad de la Educación Universitaria, del Sineace).
 
 Separación de responsabilidades (respetada literalmente):
 
   motor  ->  nivel_propuesto        (scoring.proponer_nivel_estandar)
   humano ->  nivel + confirmado=1   (confirmar_nivel / confirmar_todos_propuestos)
-  humano ->  resultado_vigencia     (finalizar_vigencia, tras 10/10 confirmados)
+  humano ->  resultado_vigencia     (finalizar_vigencia, tras confirmar todos los estándares)
 
 Estas funciones ESCRIBEN el campo permlevel-1 `nivel` con `ignore_permissions=True`
 DENTRO de la función: la función misma ES la acción autorizada. En producción el acceso
@@ -31,6 +33,10 @@ propuesta (motor, SIN tilde) ↔ oficial (con tilde):
   "Acreditado 8 anios"  -> "Acreditado 8 años"
   (Las opciones oficiales viven en `Autoevaluacion.resultado_vigencia`; las del motor,
   sin tilde, en `vigencia_propuesta`.)
+
+  El mapeo cubre los 8 años porque el campo oficial ofrece esa opción, pero el motor
+  NUNCA la propone: ese tramo de la Tabla 9 exige además el puntaje de la Tabla 10
+  (criterios de excelencia), que hoy nadie calcula. Ver `scoring.proponer_vigencia`.
 """
 import frappe
 from frappe import _
@@ -38,6 +44,11 @@ from frappe import _
 from sgc import scoring
 
 NIVELES_VALIDOS = {"NL", "L", "LP"}
+# NO es un límite del sistema ni lo usa este módulo: `finalizar_vigencia` cuenta los
+# estándares REALES del marco de cada autoevaluación (ver la nota de Fase 3 más abajo).
+# Sobrevive solo como tamaño de árbol de prueba en `tests/test_confirmacion.py`. Atar el
+# motor a un número fijo sería un error: el modelo de acreditación de programas tiene 10
+# estándares, el institucional 9, y el licenciamiento 8 condiciones básicas de calidad.
 TOTAL_ESTANDARES = 10
 ROLES_CONFIRMACION = ("DPGC", "Responsable de Calidad de Programa", "System Manager")
 

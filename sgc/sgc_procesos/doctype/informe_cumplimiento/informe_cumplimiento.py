@@ -1,13 +1,32 @@
 # Copyright (c) 2026, SciBack and contributors
 # For license information, please see license.txt
 
-"""M01 — Diagnóstico de Condiciones Básicas de Calidad (CBC) / IAC.
+"""M01 — Informe Anual de Cumplimiento de las Condiciones Básicas de Calidad (CBC).
 
-El Informe de Cumplimiento es el diagnóstico anual del estado de las 8 CBC de
-SUNEDU (RF-A01). El controlador:
+Las CBC son las condiciones que la Sunedu (Superintendencia Nacional de Educación
+Superior Universitaria) exige para que una universidad pueda operar. Las que aplican
+aquí son las 8 del Modelo de Licenciamiento Institucional, aprobado por la
+RCD 006-2015-SUNEDU/CD y complementado por la RS 054-2017: el modelo vigente para
+una universidad ya licenciada. No son las 6 del modelo de universidades nuevas
+(RCD 043-2020) ni las 4 de la renovación de licencia (RCD 091-2021, derogada por la
+Ley 32105) — confundirlos es el error clásico al leer estos modelos.
+
+Por qué el informe es ANUAL, y no una práctica interna que nos inventamos: la
+Ley 32105 (05-ago-2024) hizo permanente la licencia «siempre y cuando las
+universidades demuestren el cumplimiento continuo de las condiciones básicas de
+calidad» (art. 13.4), y su art. 13.5 enumera las herramientas de la Sunedu para
+verificarlo — entre ellas, «la presentación de informes anuales de cumplimiento».
+Este módulo es esa presentación. Derogada la renovación periódica, lo que se
+demuestra ya no es un trámite cada N años sino cumplimiento continuo (RF-A01).
+
+El controlador:
 - auto-puebla las 8 CBC del marco al crear, para no llenarlas a mano (A2);
 - consolida el semáforo y los conteos de cumplimiento;
 - exige sustento a lo que no cumple y bloquea la presentación con vacíos (A4).
+
+Aquí se responde cumple / cumple parcial / no cumple, y nada más: los niveles
+NL/L/LP y la vigencia en años son de la acreditación voluntaria del Coneau y viven
+en `Autoevaluacion`. Lo hace cumplir `_validar_marco_es_de_licenciamiento`.
 
 Las 8 CBC son los `Elemento Marco` de tipo Estandar del marco CBC (CBC-I..VIII);
 sus componentes (tipo Criterio) cuelgan de cada una en el árbol.
@@ -105,7 +124,12 @@ class InformeCumplimiento(Document):
 	# ------------------------------------------------------------ autopoblado
 
 	def _autopoblar_condiciones(self):
-		"""Si no hay condiciones y hay marco, carga las 8 CBC (Estandar) del marco."""
+		"""Si no hay condiciones y hay marco, carga las CBC (Estandar) del marco.
+
+		Son 8 con el Modelo de Licenciamiento Institucional (RCD 006-2015-SUNEDU/CD),
+		pero el número sale del marco cargado, no está fijado aquí: otro modelo de
+		licenciamiento trae otra cantidad de condiciones.
+		"""
 		if self.condiciones or not self.marco_normativo:
 			return
 
@@ -206,8 +230,9 @@ class InformeCumplimiento(Document):
 	def datos_diagnostico(self):
 		"""Contrato tipado del informe de diagnóstico CBC (RF-A03).
 
-		Consolida la cabecera + las 8 CBC con su denominación real (del Elemento
-		Marco) para que el Print Format solo itere. Único punto de datos del PDF.
+		Consolida la cabecera + las condiciones evaluadas con su denominación real
+		(del Elemento Marco) para que el Print Format solo itere. Único punto de
+		datos del PDF.
 		"""
 		institucion = (
 			frappe.db.get_default("company")

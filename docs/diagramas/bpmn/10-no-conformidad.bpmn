@@ -4,6 +4,7 @@
     <bpmn:participant id="Participant_No_Conformidad" name="No Conformidad SGC" processRef="Process_No_Conformidad" />
   </bpmn:collaboration>
   <bpmn:process id="Process_No_Conformidad" isExecutable="false">
+    <bpmn:documentation>El incumplimiento confirmado, venga de una autoevaluación, de una auditoría o de un riesgo materializado. ISO 9001:2015 §10.2 marca el recorrido que este flujo reproduce: reaccionar ante la no conformidad, evaluar la necesidad de actuar sobre su causa, implementar la acción y revisar su eficacia. De ahí que el proceso distinga «Cerrada eficaz» de «Cerrada no eficaz» en lugar de un único cierre: cerrar sin resolver la causa es un desenlace real y la norma obliga a poder decirlo.</bpmn:documentation>
     <bpmn:laneSet id="LaneSet_1">
       <bpmn:lane id="Lane_Responsable_de_Calidad_de_Programa" name="Responsable de Calidad de Programa">
         <bpmn:flowNodeRef>Task_Abierta__Analizar_causa</bpmn:flowNodeRef>

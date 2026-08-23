@@ -9,7 +9,7 @@ DPGC y Autoridad Aprobadora.
 
 ## Precondiciones
 
-Obligación regulatoria y expediente de cumplimiento disponibles. Usa identificadores ficticios y cuentas separadas cuando intervengan aprobación o cierre.
+Obligación regulatoria y expediente de cumplimiento disponibles. El registro bajo prueba es el **informe anual de cumplimiento** del artículo 13.5 de la Ley Universitaria —párrafo incorporado por la Ley 32105—, y el sistema admite **uno por año**. Usa identificadores ficticios y cuentas separadas cuando intervengan aprobación o cierre.
 
 ## Pasos y resultados esperados
 
@@ -35,7 +35,7 @@ El actor necesita DocPerm sobre el DocType y el rol exacto de la transición. La
 
 ## Restricciones
 
-No modifiques el campo de estado directamente. No uses System Manager para simular una decisión funcional. Si el registro está fuera del ámbito de User Permission, debe permanecer invisible o ser rechazado por backend.
+«Presentado a SUNEDU» registra en el sistema que la presentación se hizo; no la realiza ante la entidad. No modifiques el campo de estado directamente. No uses System Manager para simular una decisión funcional. Si el registro está fuera del ámbito de User Permission, debe permanecer invisible o ser rechazado por backend.
 
 ## Casos negativos
 

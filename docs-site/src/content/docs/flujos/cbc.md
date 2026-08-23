@@ -9,7 +9,7 @@ DPGC/Analista y roles de consulta autorizados.
 
 ## Precondiciones
 
-Catálogo CBC y registros de cumplimiento cargados.
+Catálogo CBC y registros de cumplimiento cargados. El catálogo son las 8 condiciones del Modelo de Licenciamiento Institucional (Resolución del Consejo Directivo N.° 006-2015-SUNEDU/CD), que es un marco de **licenciamiento**, no de acreditación.
 
 ## Pasos y resultados esperados
 
@@ -28,7 +28,7 @@ Verifica permisos de lectura/escritura sobre cada DocType y la autorización del
 
 ## Restricciones
 
-No inferir cumplimiento por ausencia de datos; validar que totales y PDF coincidan.
+No inferir cumplimiento por ausencia de datos; validar que totales y PDF coincidan. No abrir una autoevaluación de acreditación con este marco: el sistema debe rechazarlo, porque una vigencia en años sobre condiciones de licenciamiento es un resultado que ninguna entidad otorga.
 
 ## Casos negativos
 

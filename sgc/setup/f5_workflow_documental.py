@@ -9,7 +9,9 @@ QUÉ debe cumplirse para moverlo (archivo adjunto, revisor, aprobador, descripci
 del cambio) las impone el controlador documento_controlado.py — que es la barrera
 real y no se puede saltar desde la API.
 
-Reparto de responsabilidades (procedimiento DTN-Pro-01 de SUNEDU):
+Reparto de responsabilidades. Su base es la segregación entre quien elabora, quien
+revisa y quien aprueba, que ISO 21001:2018 cl. 7.5 exige; el «procedimiento DTN-Pro-01
+de SUNEDU» que se citaba aquí como origen NO está verificado (ver `sgc/lista_maestra.py`):
 - Dueño del proceso elabora y envía a revisión.
 - DPGC revisa: aprueba u observa.
 - La autoridad competente publica (la firma que habilita a comunicar el documento).
@@ -43,7 +45,7 @@ WF_DOCUMENTO = {
     "transitions": [
         ("Borrador", "Enviar a revision", "En revision", "Dueño de Proceso", 1),  # avance operativo
         ("En revision", "Observar", "Observado", "DPGC", 1),  # devuelve, afloja
-        # aprobar y publicar son el control DTN-Pro-01 -> self_approval=0 (default):
+        # aprobar y publicar son el control de segregación -> self_approval=0 (default):
         # quien elaboró el documento no puede aprobarlo/publicarlo bajo su misma cuenta.
         ("En revision", "Aprobar", "Aprobado", "DPGC"),
         ("Observado", "Corregir", "Borrador", "Dueño de Proceso", 1),  # avance operativo

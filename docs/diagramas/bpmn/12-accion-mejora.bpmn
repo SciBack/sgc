@@ -4,6 +4,7 @@
     <bpmn:participant id="Participant_Accion_Mejora" name="Accion de Mejora SGC" processRef="Process_Accion_Mejora" />
   </bpmn:collaboration>
   <bpmn:process id="Process_Accion_Mejora" isExecutable="false">
+    <bpmn:documentation>Cada acción concreta de un plan de mejora. Los dos desenlaces verificados —eficaz y no eficaz— son lo que ISO 9001:2015 §10.2 llama revisar la eficacia de la acción correctiva: una acción que se ejecutó pero no eliminó la causa no cierra el ciclo, y el proceso tiene que poder registrarlo.</bpmn:documentation>
     <bpmn:laneSet id="LaneSet_1">
       <bpmn:lane id="Lane_Responsable_de_Calidad_de_Programa" name="Responsable de Calidad de Programa">
         <bpmn:flowNodeRef>Task_Planificada__Iniciar</bpmn:flowNodeRef>

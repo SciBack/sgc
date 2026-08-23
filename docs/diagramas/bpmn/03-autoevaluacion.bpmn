@@ -4,6 +4,7 @@
     <bpmn:participant id="Participant_Autoevaluacion" name="Autoevaluacion SGC" processRef="Process_Autoevaluacion" />
   </bpmn:collaboration>
   <bpmn:process id="Process_Autoevaluacion" isExecutable="false">
+    <bpmn:documentation>Autoevaluación con fines de acreditación, el sello voluntario de calidad que otorga el Coneau (el órgano que acredita, dentro del Sineace). Se califica contra uno de sus dos modelos: el de programas de estudios —10 estándares, 53 criterios, 29 indicadores, según la Tabla 8 del modelo— o el institucional —9 estándares, 68 criterios, 37 indicadores—, con la escala NL (no logrado) / L (logrado) / LP (logrado plenamente). El desenlace lo fija la Tabla 9 de ambos modelos: un solo estándar NL deja el programa «en proceso» de acreditación; todo L, o una combinación de L y LP, dan 3 años de vigencia; todo LP, 6 años; y todo LP más el umbral de la Tabla 10 (criterios de excelencia), 8 años —16 puntos en el modelo de programas, 20 en el institucional—. No sirve para el licenciamiento: son marcos que la norma mantiene separados, y el propio Modelo de Acreditación Institucional del Coneau (2026) lo dice en su §4.2.</bpmn:documentation>
     <bpmn:laneSet id="LaneSet_1">
       <bpmn:lane id="Lane_Responsable_de_Calidad_de_Programa" name="Responsable de Calidad de Programa">
         <bpmn:flowNodeRef>Task_Planificada__Iniciar_evaluacion</bpmn:flowNodeRef>

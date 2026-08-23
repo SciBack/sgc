@@ -16,11 +16,22 @@ confunden:
 | **Acreditación de programa** | Sineace · Coneau | Voluntario | Niveles NL/L/LP → vigencia en años |
 | **Acreditación institucional** | Sineace · Coneau | Voluntario | Ídem, pero otro modelo |
 
-No es una distinción académica. El **Modelo de Acreditación Institucional del
-Coneau (2026), §4.2** lo dice literalmente: sus estándares se definieron
-revisando las condiciones básicas de Sunedu *«para diferenciar los niveles de
-exigencia»*. Licenciamiento es el piso; acreditación, el reconocimiento por
-encima de ese piso.
+No es una distinción académica, y conviene citarla con precisión. El **Modelo de
+Licenciamiento Institucional (RCD 006-2015-SUNEDU/CD), §2.5** llama a ambos
+procesos *«distintos y complementarios»* y sitúa el licenciamiento como
+condición necesaria para iniciar el proceso conducente a la acreditación, que es
+voluntaria. Por su parte, el **Modelo de Acreditación Institucional del Coneau
+(2026), §4.2** cuenta que su propuesta de estándares consideró la revisión de las
+condiciones básicas *del modelo de licenciamiento para universidades nuevas*, y
+que *«esto ha permitido diferenciar los niveles de exigencia respecto a la
+calidad de la gestión institucional»*.
+
+> Nota: en una primera redacción esta cita se recortó a «para diferenciar los
+> niveles de exigencia», lo que sugería un propósito de diseño que la fuente no
+> afirma. El argumento de fondo —son escalones distintos— se sostiene mejor en el
+> §2.5 del modelo de 2015.
+
+Licenciamiento es el piso; acreditación, el reconocimiento por encima de ese piso.
 
 ---
 

@@ -4,6 +4,7 @@
     <bpmn:participant id="Participant_Hallazgo" name="Hallazgo SGC" processRef="Process_Hallazgo" />
   </bpmn:collaboration>
   <bpmn:process id="Process_Hallazgo" isExecutable="false">
+    <bpmn:documentation>Hallazgo de autoevaluación: lo que la valoración de un criterio deja por debajo de lo esperado. Es una de las entradas al ciclo de mejora que ISO 9001:2015 §10 gobierna como motor único —el mismo para lo que detecta una autoevaluación, una auditoría o un riesgo que se materializa—. Confirmado, escala a «No Conformidad» (§10.2). Quien trata el hallazgo no verifica su eficacia.</bpmn:documentation>
     <bpmn:laneSet id="LaneSet_1">
       <bpmn:lane id="Lane_Responsable_de_Calidad_de_Programa" name="Responsable de Calidad de Programa">
         <bpmn:flowNodeRef>Task_Abierto__Tratar</bpmn:flowNodeRef>

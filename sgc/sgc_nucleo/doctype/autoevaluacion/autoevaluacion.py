@@ -23,10 +23,11 @@ class Autoevaluacion(Document):
         solo ve la sigla.
 
         Son dos mundos que la norma mantiene separados a propósito. El propio
-        Modelo de Acreditación Institucional del Coneau (2026, §4.2) explica
-        que sus estándares se definieron revisando las condiciones básicas de
-        Sunedu «para diferenciar los niveles de exigencia»: el licenciamiento
-        es el piso obligatorio, la acreditación el reconocimiento voluntario.
+        Modelo de Licenciamiento Institucional (RCD 006-2015-SUNEDU/CD, §2.5)
+        los llama «distintos y complementarios» y pone el licenciamiento como
+        condición necesaria para iniciar el proceso conducente a la
+        acreditación: aquel es el piso obligatorio, esta el reconocimiento
+        voluntario que se construye encima.
         Cruzarlos produce un resultado que ninguna entidad ha otorgado.
 
         El licenciamiento tiene su propia puerta: `Informe Cumplimiento`.

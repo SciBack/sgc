@@ -5,9 +5,14 @@
 
 La "Lista Maestra" es el inventario de TODOS los `Documento Controlado` con su
 estado de control documental (versión vigente, estado del ciclo de vida, fecha
-de próxima revisión, dueño del proceso). La norma (ISO 21001 cl. 7.5, replicada
-en el procedimiento DTN-Pro-01 de SUNEDU) exige mantener ese inventario
-disponible; aquí se materializa como un .xlsx descargable.
+de próxima revisión, dueño del proceso). Quien exige mantener ese inventario es
+la ISO 21001:2018 cl. 7.5 (información documentada), norma de sistema de gestión
+de adopción voluntaria; aquí se materializa como un .xlsx descargable.
+
+El «procedimiento DTN-Pro-01 de SUNEDU» que se citaba aquí como origen del mismo
+requisito NO está verificado contra ninguna norma publicada de la Sunedu: no
+apoyar decisiones en él (aparece igual en `documento_controlado.py` y en
+`setup/f5_workflow_documental.py`).
 
 El .xlsx se arma con el helper nativo de Frappe `make_xlsx`, que recibe una
 lista de filas (`[encabezados, ...datos]`) y devuelve un BytesIO; la descarga

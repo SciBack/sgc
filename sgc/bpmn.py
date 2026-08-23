@@ -14,6 +14,7 @@ regenerándolo.
 
 Cómo se corresponden los dos modelos:
 
+    proceso               -> bpmn:documentation (de qué norma nace, si consta)
     estado                -> bpmn:userTask   (el documento espera a que alguien actúe)
     estado inicial        -> bpmn:startEvent + el userTask correspondiente
     estado sin salidas    -> el userTask + bpmn:endEvent
@@ -94,6 +95,174 @@ CARRIL_SISTEMA = "Sistema (automático)"
 def automaticas_de(document_type):
     """Transiciones automáticas declaradas para un DocType."""
     return [a for a in TRANSICIONES_AUTOMATICAS if a["document_type"] == document_type]
+
+
+# ===========================================================================
+# De qué norma nace cada proceso.
+#
+# Un diagrama dice quién hace qué y en qué orden, pero no por qué el proceso
+# existe. Sin eso, quien lo audita no puede contrastarlo contra nada y quien lo
+# quiere cambiar no sabe qué margen tiene: hay pasos que están ahí porque una
+# norma los exige y otros que son criterio de la casa, y a simple vista se ven
+# igual. BPMN 2.0 reserva `bpmn:documentation` justo para esto, así que el texto
+# viaja DENTRO del fichero y llega a cualquier modelador que lo abra.
+#
+# Regla de admisión, deliberadamente estrecha: solo entra aquí lo contrastado
+# contra fuente primaria (la norma en `sciback/biblioteca/`) o ya citado en el
+# código del proceso. **Un proceso sin fuente se queda sin documentación**, y eso
+# es información: dice que su base normativa está por verificar, no que no la
+# tenga. Rellenarlo "por completar la tabla" convertiría el diagrama en algo peor
+# que mudo, porque una cita falsa se cita.
+#
+# Se escribe en un solo párrafo por proceso: es como lo muestran los modeladores
+# (un cuadro de texto), y los saltos de línea dentro del XML se pierden o se
+# reindentan según la herramienta.
+# ===========================================================================
+DOCUMENTACION_NORMATIVA = {
+    "Documento Controlado": (
+        "Control de la información documentada. ISO 21001 cl. 7.5 fija el ciclo "
+        "elaboración → revisión → aprobación → publicación y, en 7.5.3.2.g, la "
+        "prevención del uso involuntario de documentos obsoletos: de ahí que "
+        "publicar un documento marque como obsoleto al que reemplaza, sin que "
+        "nadie lo haga a mano. El reparto entre quien elabora, quien revisa y la "
+        "autoridad que aprueba es la segregación de funciones que pide esa misma "
+        "cláusula: nadie aprueba su propio documento. Ninguna norma de la Sunedu "
+        "—el organismo que otorga el permiso para operar— se cita aquí, porque el "
+        "procedimiento interno que el código mencionaba no está verificado contra "
+        "fuente publicada."
+    ),
+    "Evidencia": (
+        "Base probatoria de todo lo demás: sin evidencia validada, una valoración "
+        "o un diagnóstico no se sostiene ante nadie. Los modelos de acreditación "
+        "del Coneau —el órgano que acredita, dentro del Sineace— enumeran la "
+        "evidencia esperada criterio por criterio: 52 evidencias en el modelo de "
+        "programas de estudios (Tabla 8) y 84 en el institucional. Para el "
+        "licenciamiento, en cambio, qué medio de verificación admite la Sunedu por "
+        "indicador NO está verificado contra fuente primaria y por tanto no se "
+        "afirma aquí."
+    ),
+    "Autoevaluacion": (
+        "Autoevaluación con fines de acreditación, el sello voluntario de calidad "
+        "que otorga el Coneau (el órgano que acredita, dentro del Sineace). Se "
+        "califica contra uno de sus dos modelos: el de programas de estudios —10 "
+        "estándares, 53 criterios, 29 indicadores, según la Tabla 8 del modelo— o "
+        "el institucional —9 estándares, 68 criterios, 37 indicadores—, con la "
+        "escala NL (no logrado) / L (logrado) / LP (logrado plenamente). El "
+        "desenlace lo fija la Tabla 9 de ambos modelos: un solo estándar NL deja el "
+        "programa «en proceso» de acreditación; todo L, o una combinación de L y "
+        "LP, dan 3 años de vigencia; todo LP, 6 años; y todo LP más el umbral de la "
+        "Tabla 10 (criterios de excelencia), 8 años —16 puntos en el modelo de "
+        "programas, 20 en el institucional—. No sirve para el licenciamiento: son "
+        "marcos que la norma mantiene separados, y el propio Modelo de Acreditación "
+        "Institucional del Coneau (2026) lo dice en su §4.2."
+    ),
+    "Informe Cumplimiento": (
+        "Diagnóstico anual de las 8 condiciones básicas de calidad del Modelo de "
+        "Licenciamiento Institucional de la Sunedu, aprobado por la RCD "
+        "006-2015-SUNEDU/CD y complementado por la RS 054-2017. Ese es el modelo "
+        "que aplica a una universidad ya licenciada: el de universidades nuevas "
+        "(RCD 043-2020, 6 condiciones) no le corresponde, y el de renovación de "
+        "licencia (RCD 091-2021, 4 condiciones) quedó derogado por la Ley 32105. La "
+        "base legal del informe está en el artículo 13 de la Ley 30220, Ley "
+        "Universitaria, en la redacción que le dio esa misma ley: el 13.4 hace la "
+        "licencia permanente «siempre y cuando las universidades demuestren el "
+        "cumplimiento continuo de las condiciones básicas de calidad», y el 13.5 "
+        "nombra «la presentación de informes anuales de cumplimiento» "
+        "entre las herramientas de la Sunedu. Con la renovación periódica derogada, "
+        "lo que se demuestra es cumplimiento continuo — por eso este informe es "
+        "anual y no un trámite que se abre cada varios años."
+    ),
+    "Programa Auditoria": (
+        "El programa de auditorías internas del periodo. ISO 9001:2015 §9.2 exige "
+        "planificar, establecer, implementar y mantener un programa de auditoría "
+        "interna; ISO 19011 (cl. 5) desarrolla cómo se gestiona ese programa, e ISO "
+        "21001 lo traslada al sector educativo. Que el programa lo apruebe un rol "
+        "distinto del auditor que lo redacta es lo que mantiene separada la "
+        "planificación de su propia ejecución."
+    ),
+    "Auditoria": (
+        "Ejecución de una auditoría interna dentro del programa del periodo. La "
+        "exige ISO 9001:2015 §9.2 («a intervalos planificados») y su conducción se "
+        "rige por ISO 19011, recogida para el sector educativo en ISO 21001 cl. "
+        "9.2.2 e). La independencia del equipo auditor —nadie audita su propio "
+        "trabajo— es la razón de que el inicio de la ejecución esté condicionado y "
+        "de que el cierre no lo firme quien auditó."
+    ),
+    "Hallazgo Auditoria": (
+        "Lo que la auditoría encuentra, clasificado por tipo: no conformidad mayor "
+        "o menor, observación, oportunidad de mejora, conformidad o fortaleza. El "
+        "hallazgo es la salida propia de la auditoría interna que rige ISO 19011. "
+        "Cuando constituye una no conformidad, escala a un documento «No "
+        "Conformidad», que es donde ISO 9001:2015 §10.2 sitúa la reacción y la "
+        "acción correctiva. Quien levanta el hallazgo no lo cierra."
+    ),
+    "Hallazgo": (
+        "Hallazgo de autoevaluación: lo que la valoración de un criterio deja por "
+        "debajo de lo esperado. Es una de las entradas al ciclo de mejora que ISO "
+        "9001:2015 §10 gobierna como motor único —el mismo para lo que detecta una "
+        "autoevaluación, una auditoría o un riesgo que se materializa—. Confirmado, "
+        "escala a «No Conformidad» (§10.2). Quien trata el hallazgo no verifica su "
+        "eficacia."
+    ),
+    "No Conformidad": (
+        "El incumplimiento confirmado, venga de una autoevaluación, de una "
+        "auditoría o de un riesgo materializado. ISO 9001:2015 §10.2 marca el "
+        "recorrido que este flujo reproduce: reaccionar ante la no conformidad, "
+        "evaluar la necesidad de actuar sobre su causa, implementar la acción y "
+        "revisar su eficacia. De ahí que el proceso distinga «Cerrada eficaz» de "
+        "«Cerrada no eficaz» en lugar de un único cierre: cerrar sin resolver la "
+        "causa es un desenlace real y la norma obliga a poder decirlo."
+    ),
+    "Plan Mejora": (
+        "La respuesta planificada a lo detectado. ISO 9001:2015 §10.2 exige "
+        "implementar la acción necesaria y revisar después su eficacia; el plan es "
+        "el contenedor de esas acciones y de sus compromisos de fecha. Aprobarlo y "
+        "cerrarlo corresponde a un rol distinto del que lo redacta."
+    ),
+    "Accion Mejora": (
+        "Cada acción concreta de un plan de mejora. Los dos desenlaces verificados "
+        "—eficaz y no eficaz— son lo que ISO 9001:2015 §10.2 llama revisar la "
+        "eficacia de la acción correctiva: una acción que se ejecutó pero no "
+        "eliminó la causa no cierra el ciclo, y el proceso tiene que poder "
+        "registrarlo."
+    ),
+    "Riesgo": (
+        "Inventario de riesgos. ISO 9001:2015 §6.1 obliga a determinar y abordar "
+        "los riesgos y oportunidades capaces de afectar al sistema de gestión; "
+        "identificarlos, analizarlos y valorarlos es el proceso de ISO 31000 "
+        "(§6.4.2 para la identificación). Un riesgo que se materializa no se "
+        "cierra: entra al ciclo de mejora como no conformidad (ISO 9001:2015 "
+        "§10.2), y por eso confirmar la materialización es un control y no un "
+        "avance más del propio dueño del riesgo."
+    ),
+    "Tratamiento Riesgo": (
+        "Lo que se hace con un riesgo ya valorado. En ISO 31000 el tratamiento es "
+        "lo que modifica el riesgo, y lo que queda después es el riesgo residual: "
+        "el nivel que este proceso registra y sobre el que se decide si el riesgo "
+        "puede darse por cerrado. Quien implementa el tratamiento no verifica su "
+        "resultado."
+    ),
+    "Revision Direccion": (
+        "La revisión por la dirección cierra el ciclo. ISO 9001:2015 §9.3 —recogida "
+        "también en ISO 21001 §9.3— la asigna a la alta dirección «a intervalos "
+        "planificados», enumera en §9.3.2 las entradas que debe considerar y en "
+        "§9.3.3 las salidas que debe producir: decisiones sobre oportunidades de "
+        "mejora, sobre los cambios necesarios en el sistema y sobre los recursos. "
+        "Que el cierre lo ejecute la alta dirección y no la unidad de calidad no es "
+        "un formalismo: es la alta dirección quien responde de la eficacia del "
+        "sistema de gestión (§5.1.1), y esa responsabilidad no se delega en el área "
+        "que lo administra."
+    ),
+}
+
+
+def documentacion_de(document_type):
+    """Texto normativo del proceso, o `None` si su base no está verificada.
+
+    Devolver `None` es una respuesta legítima, no un hueco por rellenar: ver la
+    regla de admisión de `DOCUMENTACION_NORMATIVA`.
+    """
+    return DOCUMENTACION_NORMATIVA.get(document_type)
 
 
 def specs_de_workflows():
@@ -554,6 +723,13 @@ def _serializar(spec, carriles, nodos, flujos, layout_previo=None):
     a("  </bpmn:collaboration>")
 
     a(f'  <bpmn:process id="{proc_id}" isExecutable="false">')
+    # De qué norma nace el proceso. Va lo PRIMERO dentro de `bpmn:process` porque
+    # el esquema de la OMG lo exige ahí: en `tBaseElement`, `documentation`
+    # precede a `extensionElements` y a todo lo demás. Puesto después, el fichero
+    # sigue pareciendo XML correcto y deja de validar contra el XSD.
+    normativa = documentacion_de(spec["document_type"])
+    if normativa:
+        a(f"    <bpmn:documentation>{escape(normativa)}</bpmn:documentation>")
     a('    <bpmn:laneSet id="LaneSet_1">')
     for rol in carriles:
         a(f'      <bpmn:lane id="{_id("Lane", rol)}" name={quoteattr(rol)}>')

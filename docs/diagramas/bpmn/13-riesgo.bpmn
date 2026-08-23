@@ -4,6 +4,7 @@
     <bpmn:participant id="Participant_Riesgo" name="Riesgo SGC" processRef="Process_Riesgo" />
   </bpmn:collaboration>
   <bpmn:process id="Process_Riesgo" isExecutable="false">
+    <bpmn:documentation>Inventario de riesgos. ISO 9001:2015 §6.1 obliga a determinar y abordar los riesgos y oportunidades capaces de afectar al sistema de gestión; identificarlos, analizarlos y valorarlos es el proceso de ISO 31000 (§6.4.2 para la identificación). Un riesgo que se materializa no se cierra: entra al ciclo de mejora como no conformidad (ISO 9001:2015 §10.2), y por eso confirmar la materialización es un control y no un avance más del propio dueño del riesgo.</bpmn:documentation>
     <bpmn:laneSet id="LaneSet_1">
       <bpmn:lane id="Lane_Dueno_de_Proceso" name="Dueño de Proceso">
         <bpmn:flowNodeRef>Task_Identificado__Evaluar</bpmn:flowNodeRef>

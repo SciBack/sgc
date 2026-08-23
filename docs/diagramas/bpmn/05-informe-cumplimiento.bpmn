@@ -4,6 +4,7 @@
     <bpmn:participant id="Participant_Informe_Cumplimiento" name="Informe Cumplimiento SGC" processRef="Process_Informe_Cumplimiento" />
   </bpmn:collaboration>
   <bpmn:process id="Process_Informe_Cumplimiento" isExecutable="false">
+    <bpmn:documentation>Diagnóstico anual de las 8 condiciones básicas de calidad del Modelo de Licenciamiento Institucional de la Sunedu, aprobado por la RCD 006-2015-SUNEDU/CD y complementado por la RS 054-2017. Ese es el modelo que aplica a una universidad ya licenciada: el de universidades nuevas (RCD 043-2020, 6 condiciones) no le corresponde, y el de renovación de licencia (RCD 091-2021, 4 condiciones) quedó derogado por la Ley 32105. La base legal del informe está en el artículo 13 de la Ley 30220, Ley Universitaria, en la redacción que le dio esa misma ley: el 13.4 hace la licencia permanente «siempre y cuando las universidades demuestren el cumplimiento continuo de las condiciones básicas de calidad», y el 13.5 nombra «la presentación de informes anuales de cumplimiento» entre las herramientas de la Sunedu. Con la renovación periódica derogada, lo que se demuestra es cumplimiento continuo — por eso este informe es anual y no un trámite que se abre cada varios años.</bpmn:documentation>
     <bpmn:laneSet id="LaneSet_1">
       <bpmn:lane id="Lane_DPGC" name="DPGC">
         <bpmn:flowNodeRef>Task_Borrador__Enviar_a_revision</bpmn:flowNodeRef>

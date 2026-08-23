@@ -1,8 +1,16 @@
 """F6 informe CBC — crea el Print Format "Diagnostico CBC SUNEDU" (idempotente).
 
-Genera el Informe Anual de Cumplimiento / diagnóstico de las 8 Condiciones
-Básicas de Calidad (RF-A03) como Print Format Jinja -> PDF con el motor Chrome
-de Frappe v16. Mismo patrón que f3_informe.py (informe de autoevaluación).
+Genera el Informe Anual de Cumplimiento (RF-A03) como Print Format Jinja -> PDF
+con el motor Chrome de Frappe v16. Mismo patrón que f3_informe.py (informe de
+autoevaluación).
+
+Qué es el documento que sale por aquí: el diagnóstico de las 8 condiciones
+básicas de calidad (CBC) del Modelo de Licenciamiento Institucional de la Sunedu
+(RCD 006-2015-SUNEDU/CD). El informe anual es una de las herramientas que la
+Ley 32105 pone en manos de la Sunedu para verificar el cumplimiento continuo de
+esas condiciones (art. 13.5); por eso este PDF es entregable al regulador y no
+un reporte de consumo interno. Contexto completo en el docstring de
+`sgc/sgc_procesos/doctype/informe_cumplimiento/informe_cumplimiento.py`.
 
 La plantilla NO consulta la BD: llama al método whitelisted
 `doc.datos_diagnostico()` (= consolidado en informe_cumplimiento.py). El Jinja

@@ -13,11 +13,11 @@ Cuenta distinta del autor/revisor; documento aprobado o informe aprobado. Inicia
 
 ## Acciones permitidas
 
-Publicar Documento Controlado aprobado y presentar Informe Cumplimiento a SUNEDU cuando el workflow lo permite.
+Publicar Documento Controlado aprobado y presentar Informe Cumplimiento a SUNEDU cuando el workflow lo permite. Ese informe es el **informe anual de cumplimiento** previsto en el artículo 13.5 de la Ley Universitaria (párrafo incorporado por la Ley 32105), de ahí que la decisión esté reservada a una autoridad.
 
 ## Restricciones que deben probarse
 
-No redacta ni revisa todo el expediente por defecto; actúa sobre registros listos y no debe autoaprobar etapas previas.
+No redacta ni revisa todo el expediente por defecto; actúa sobre registros listos y no debe autoaprobar etapas previas. Marcar «Presentado a SUNEDU» deja constancia de la presentación en el sistema; no la realiza ante la entidad.
 
 ## Recorrido de prueba
 

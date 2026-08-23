@@ -10,11 +10,30 @@ documental, las evidencias y la cadena CAPA de mejora continua.
 
 | DocType | Rol |
 |---|---|
-| **Autoevaluacion** | El proceso de autoevaluación de un programa contra un marco normativo. Campos clave: `marco_normativo`, `programa_sede`, `avance_pct` (read-only, % de criterios valorados), `vigencia_propuesta` (read-only, propuesta del motor), `resultado_vigencia` (oficial, lo fija [confirmacion.py](../../manual-uso/autoevaluacion/)). |
+| **Autoevaluacion** | El proceso de autoevaluación de un programa contra un marco normativo de acreditación (abrirla con un marco de licenciamiento se rechaza — ver `sgc/marcos.py`). Campos clave: `marco_normativo`, `programa_sede`, `avance_pct` (read-only, % de criterios valorados), `vigencia_propuesta` (read-only, propuesta del motor), `resultado_vigencia` (oficial, lo fija [confirmacion.py](../../manual-uso/autoevaluacion/)). |
 | **Valoracion Criterio** | El juicio del comité sobre un criterio normativo puntual: `cumple` (`Cumple` / `Cumple parcial` / `No cumple` / `No aplica`) + `observacion`. Dispara el recálculo del estándar padre (`on_update`). |
 | **Valoracion Estandar** | El nivel de un estándar (agregado de sus criterios) para una autoevaluación. `nivel_propuesto` lo escribe el motor (`scoring.py`); `nivel` (permlevel 1, oficial) solo lo escribe el humano vía `confirmacion.confirmar_nivel`. |
 
 Ver el flujo completo en [Manual de uso · Autoevaluación](../../manual-uso/autoevaluacion/).
+
+:::note[Vigencia: cuatro tramos en la norma, tres en el sistema]
+`resultado_vigencia` aplica la Tabla 9 de los modelos de acreditación del Coneau
+(Consejo de Evaluación, Acreditación y Certificación de la Calidad de la Educación
+Universitaria), idéntica en el modelo de programas y en el institucional salvo el
+último umbral:
+
+| Niveles confirmados | Vigencia |
+|---|---|
+| Uno o más estándares en NL | En proceso de acreditación |
+| Todos en L, o combinación L/LP | 3 años |
+| Todos en LP | 6 años |
+| Todos en LP **y** puntaje de la Tabla 10 | 8 años — 16 puntos en programas, 20 en institucional |
+
+El cuarto tramo **no está implementado**: la opción existe en el campo y hay un
+`puntaje_excelencia`, pero nadie lo calcula y los criterios de excelencia de la Tabla
+10 no están cargados como elementos del marco, así que el techo real del motor son 6
+años.
+:::
 
 ## Control documental (ISO 21001 §7.5)
 

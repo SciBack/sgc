@@ -4,6 +4,7 @@
     <bpmn:participant id="Participant_Programa_Auditoria" name="Programa Auditoria SGC" processRef="Process_Programa_Auditoria" />
   </bpmn:collaboration>
   <bpmn:process id="Process_Programa_Auditoria" isExecutable="false">
+    <bpmn:documentation>El programa de auditorías internas del periodo. ISO 9001:2015 §9.2 exige planificar, establecer, implementar y mantener un programa de auditoría interna; ISO 19011 (cl. 5) desarrolla cómo se gestiona ese programa, e ISO 21001 lo traslada al sector educativo. Que el programa lo apruebe un rol distinto del auditor que lo redacta es lo que mantiene separada la planificación de su propia ejecución.</bpmn:documentation>
     <bpmn:laneSet id="LaneSet_1">
       <bpmn:lane id="Lane_DPGC" name="DPGC">
         <bpmn:flowNodeRef>Task_Borrador__Aprobar_programa</bpmn:flowNodeRef>

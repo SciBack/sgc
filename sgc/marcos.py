@@ -6,9 +6,10 @@ ACREDITACIÓN del Sineace/Coneau (sello voluntario de calidad), que además vien
 en dos modelos distintos — por programa de estudios y institucional —, con
 distinto número de estándares y distinto umbral de excelencia.
 
-No es una distinción académica: el Modelo de Acreditación Institucional del
-Coneau (2026, §4.2) explica que sus estándares se definieron revisando las
-condiciones básicas de Sunedu «para diferenciar los niveles de exigencia».
+No es una distinción académica: el Modelo de Licenciamiento Institucional (RCD
+006-2015-SUNEDU/CD, §2.5) llama a ambos «distintos y complementarios» y pone el
+licenciamiento como condición necesaria para iniciar el proceso conducente a la
+acreditación, que es voluntaria.
 Cruzarlos produce resultados que ninguna entidad ha otorgado — comprobado en
 producción, donde una autoevaluación abierta con el marco de licenciamiento
 llegaba a emitir «Acreditado 6 años».

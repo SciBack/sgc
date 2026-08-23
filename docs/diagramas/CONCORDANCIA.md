@@ -99,6 +99,41 @@ un diagrama de colaboración de nivel superior que enlace los 15.
 
 ---
 
+## Lo que se cerró en esta tanda: la base normativa ya viaja dentro
+
+Hasta ahora los diagramas decían quién hace qué y en qué orden, pero no contra
+qué norma responde el proceso. Quien auditara uno no tenía con qué contrastarlo,
+y quien quisiera cambiarlo no sabía qué margen tenía: un paso exigido por norma y
+un paso que es criterio de la casa se veían exactamente igual.
+
+**14 de los 15 llevan ya su `<bpmn:documentation>`**, generado desde el mapa
+`DOCUMENTACION_NORMATIVA` de `sgc/bpmn.py` — no escrito a mano en el XML. Va lo
+primero dentro de `bpmn:process`, que es donde el esquema de la OMG lo exige, y
+cualquier modelador lo muestra al seleccionar el proceso. La tabla completa de
+qué norma respalda cada uno está en
+[`bpmn/README.md`](bpmn/README.md#de-qué-norma-nace-cada-proceso).
+
+Lo que esa documentación **no** hace, para que no se le pida de más:
+
+- **No es la regla ejecutable.** Sigue siendo texto para quien lee; las 42
+  validaciones del punto 2 continúan sin representarse. Que el 05 cite el
+  artículo 13.5 de la Ley Universitaria no le dice a nadie que «Presentar a SUNEDU» exige
+  antes todas las condiciones evaluadas y justificadas.
+- **No cubre los 15.** `Aplicación de Instrumento` se queda sin documentación a
+  propósito: ninguna norma verificada exige aplicar encuestas. Los indicadores
+  del modelo del Coneau sí están normados; que se midan por encuesta es decisión
+  de la casa. El hueco dice eso, y es preferible a rellenarlo con una cita que no
+  se sostenga.
+- **Queda un flanco por verificar en la evidencia (02).** El texto cita cuántas
+  evidencias enumeran los modelos del Coneau (52 en programas, 84 en
+  institucional), pero para el licenciamiento **qué medio de verificación admite
+  la Sunedu por indicador no está contrastado contra fuente primaria** — falta
+  conseguir la RS 054-2017 y las consideraciones sobre medios de verificación del
+  modelo de 2015. El diagrama lo dice explícitamente en vez de callarlo.
+
+Las tres discordancias de arriba siguen vigentes tal cual: la documentación
+normativa no toca ninguna de ellas.
+
 ## Riesgo de deriva
 
 Nada compara automáticamente los `.bpmn` en disco contra lo que generaría el

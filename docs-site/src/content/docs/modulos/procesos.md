@@ -1,10 +1,11 @@
 ---
 title: Módulo Procesos (sgc_procesos)
-description: El mapa de procesos institucional (ISO 21001) y el diagnóstico de Condiciones Básicas de Calidad (CBC).
+description: El mapa de procesos institucional (ISO 21001) y el diagnóstico de Condiciones Básicas de Calidad (CBC) del licenciamiento.
 ---
 
-El mapa de procesos institucional (ISO 21001) y el diagnóstico de Condiciones Básicas
-de Calidad (CBC) exigidas por SUNEDU.
+El mapa de procesos institucional (ISO 21001) y el diagnóstico de las Condiciones
+Básicas de Calidad (CBC) del licenciamiento institucional, que otorga la
+Superintendencia Nacional de Educación Superior Universitaria (SUNEDU).
 
 ## Mapa de procesos
 
@@ -23,6 +24,13 @@ de Calidad (CBC) exigidas por SUNEDU.
 | **Riesgo Proceso** | Vínculo entre un Proceso y un `Riesgo` (módulo Riesgos) que lo afecta. |
 
 ## Diagnóstico CBC (SUNEDU)
+
+Las 8 CBC son las del Modelo de Licenciamiento Institucional (Resolución del Consejo
+Directivo N.° 006-2015-SUNEDU/CD), no las de un modelo de acreditación: el
+licenciamiento es obligatorio y se cumple o no se cumple. Que el informe sea **anual**
+responde al artículo 13.5 de la Ley Universitaria —párrafo incorporado por la Ley
+32105—, que incluye el «informe anual de cumplimiento» entre las herramientas de la
+SUNEDU para verificar el cumplimiento continuo de las condiciones.
 
 | DocType | Rol |
 |---|---|

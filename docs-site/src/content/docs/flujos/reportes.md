@@ -28,7 +28,7 @@ Verifica permisos de lectura/escritura sobre cada DocType y la autorización del
 
 ## Restricciones
 
-No aceptar HTML de error como PDF; no incluir datos de otro ámbito ni secretos en metadatos.
+No aceptar HTML de error como PDF; no incluir datos de otro ámbito ni secretos en metadatos. No mezclar en un mismo reporte resultados de licenciamiento (cumplimiento de las condiciones básicas de calidad) y de acreditación (niveles NL/L/LP y vigencia en años): son marcos de entes distintos y su cruce produce un resultado inexistente en la norma.
 
 ## Casos negativos
 

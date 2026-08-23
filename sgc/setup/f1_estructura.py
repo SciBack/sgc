@@ -112,10 +112,12 @@ def run():
         # reconocimiento voluntario de calidad (Sineace/Coneau), que además
         # viene en dos modelos distintos -- uno por programa de estudios y otro
         # institucional, con distinto número de estándares y distinto umbral de
-        # excelencia. El modelo Coneau 2026 lo dice literalmente: los
-        # estándares se definieron revisando las CBC de Sunedu «para
-        # diferenciar los niveles de exigencia». Sin este campo, esa diferencia
-        # solo vivía en el nombre del marco, y nada impedía cruzarlos.
+        # excelencia. El Modelo de Licenciamiento Institucional (RCD
+        # 006-2015-SUNEDU/CD, §2.5) los llama «distintos y complementarios» y
+        # pone el licenciamiento como condición necesaria para iniciar el
+        # proceso conducente a la acreditación voluntaria. Sin este campo esa
+        # diferencia solo vivía en el nombre del marco, y nada impedía
+        # cruzarlos.
         {"fieldname": "alcance", "fieldtype": "Select", "label": "Alcance",
          "options": "\nLicenciamiento\nAcreditación de programa\nAcreditación institucional\nGestión interna",
          "in_list_view": 1, "in_standard_filter": 1,

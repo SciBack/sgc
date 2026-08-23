@@ -3,10 +3,14 @@
 
 """M03 — Control documental del SGC.
 
-Implementa el ciclo de vida que exige la norma (ISO 21001 cl. 7.5, replicado en el
-procedimiento DTN-Pro-01 de SUNEDU): elaboracion -> revision -> aprobacion ->
-publicacion -> obsolescencia, con control de versiones, descripcion obligatoria del
-cambio y prevencion del uso de documentos obsoletos.
+Implementa el ciclo de vida que exige ISO 21001:2018 cl. 7.5 (informacion
+documentada, norma de sistema de gestion de adopcion voluntaria): elaboracion ->
+revision -> aprobacion -> publicacion -> obsolescencia, con control de versiones,
+descripcion obligatoria del cambio y prevencion del uso de documentos obsoletos.
+
+El «procedimiento DTN-Pro-01 de SUNEDU» que se citaba aqui como fuente del mismo
+requisito NO esta verificado contra ninguna norma publicada de la Sunedu, asi que
+no se apoya nada en el. Mismo aviso en `sgc/lista_maestra.py`.
 
 Sustituye al puntero a Mayan EDMS: el archivo ahora es un adjunto de Frappe
 (campo `archivo`) y el historico vive en la tabla `historial_cambios`.

@@ -4,6 +4,7 @@
     <bpmn:participant id="Participant_Tratamiento_Riesgo" name="Tratamiento Riesgo SGC" processRef="Process_Tratamiento_Riesgo" />
   </bpmn:collaboration>
   <bpmn:process id="Process_Tratamiento_Riesgo" isExecutable="false">
+    <bpmn:documentation>Lo que se hace con un riesgo ya valorado. En ISO 31000 el tratamiento es lo que modifica el riesgo, y lo que queda después es el riesgo residual: el nivel que este proceso registra y sobre el que se decide si el riesgo puede darse por cerrado. Quien implementa el tratamiento no verifica su resultado.</bpmn:documentation>
     <bpmn:laneSet id="LaneSet_1">
       <bpmn:lane id="Lane_Dueno_de_Proceso" name="Dueño de Proceso">
         <bpmn:flowNodeRef>Task_Planificado__Iniciar</bpmn:flowNodeRef>

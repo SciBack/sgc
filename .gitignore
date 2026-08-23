@@ -10,3 +10,6 @@ site/
 .worktrees/
 docs-site/test-results/
 docs-site/playwright-report/
+
+# macOS
+.DS_Store

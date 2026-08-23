@@ -1,4 +1,10 @@
-"""Motor de scoring de la autoevaluación — F2-CONTRATO.md §2 (Sección IX del Modelo CONEAU).
+"""Motor de scoring de la autoevaluación — F2-CONTRATO.md §2 (Sección IX del modelo del Coneau).
+
+El Coneau (Consejo de Evaluación, Acreditación y Certificación de la Calidad de la
+Educación Universitaria, del Sineace) acredita programas e instituciones.
+Es un sello VOLUNTARIO y se razona en niveles NL/L/LP con vigencia en años — nada
+que ver con el licenciamiento obligatorio de la Sunedu, que solo responde cumple /
+no cumple y vive en `Informe Cumplimiento`. `sgc/marcos.py` impide cruzarlos.
 
 Reglas literales:
 
@@ -11,11 +17,14 @@ Reglas literales:
     todos "Cumple"                    -> "LP"   (PROPUESTO; el humano confirma revisando
                                                  evolución de indicadores ±3%, 4 semestres)
 
-  Vigencia (proponer_vigencia), sobre los `nivel` CONFIRMADOS de los 10 estándares (Tabla 9):
-    no están los 10 confirmados       -> None (incompleto)
+  Vigencia (proponer_vigencia), sobre los `nivel` CONFIRMADOS de TODOS los estándares
+  del marco — 10 en el modelo de programas, 9 en el institucional (Tabla 9):
+    falta confirmar algún estándar    -> None (incompleto)
     algún "NL"                        -> "En proceso"
-    todos "LP"                        -> "Acreditado 6 anios"   (8 años = Tabla 10, F6)
+    todos "LP"                        -> "Acreditado 6 anios"
     resto (todos L, o combo L/LP)     -> "Acreditado 3 anios"
+    El cuarto tramo de la Tabla 9 (8 años) NO está implementado; el porqué, en
+    el docstring de `proponer_vigencia`.
 
 El sistema PROPONE (`nivel_propuesto`); el humano CONFIRMA (`nivel`, permlevel 1).
 El motor NUNCA escribe `nivel`. LP no es mecánico.
@@ -398,10 +407,32 @@ def _upsert_valoracion_estandar(autoevaluacion, estandar_name, nivel_propuesto):
 # ===========================================================================
 
 def proponer_vigencia(autoevaluacion):
-    """Propone `vigencia_propuesta` (Tabla 9) y calcula `avance_pct`.
+    """Propone `vigencia_propuesta` (Tabla 9 del modelo del Coneau) y calcula `avance_pct`.
 
-    Vigencia se basa en los `nivel` CONFIRMADOS de los 10 estándares; avance en el
-    conteo de criterios valorados sobre el total de criterios del marco.
+    Tabla 9 — periodo de vigencia de la acreditación. Es idéntica en el modelo de
+    programas y en el institucional salvo el umbral del último tramo:
+
+        uno o más estándares en NL (no logrado)   -> "En proceso" de acreditación
+        todos en L (logrado), o combinación L/LP  -> 3 años
+        todos en LP (logrado plenamente)          -> 6 años
+        todos en LP Y >= N puntos de la Tabla 10  -> 8 años
+                                                     N = 16 en programas, 20 en institucional
+
+    El tramo de 8 años no está implementado, y no es un olvido: depende del
+    puntaje de la Tabla 10 (criterios de excelencia — porcentaje de docentes
+    doctores, docentes a tiempo completo, egresados titulados al primer año,
+    sistema de gestión de la calidad implementado (4 puntos) o certificado (8),
+    acreditación por una agencia extranjera (3), entre otros). Hoy nadie calcula
+    `Autoevaluacion.puntaje_excelencia` y los criterios de la Tabla 10 no están
+    cargados como elementos del marco, así que el techo real del motor es 6 años.
+
+    Relacionado: `Marco Normativo.reglas_vigencia` (JSON) existe y nadie lo lee.
+    La regla vive aquí, fija e igual para ambos modelos — precisamente lo que el
+    umbral N de la Tabla 10 desmiente. Al implementar los 8 años hay que leerla.
+
+    Vigencia se basa en los `nivel` CONFIRMADOS de TODOS los estándares del marco
+    (el conteo es dinámico: no hay número fijo en el código); avance, en el conteo
+    de criterios valorados sobre el total de criterios del marco.
     """
     estandares = _estandares_de_autoevaluacion(autoevaluacion)
 
@@ -427,7 +458,7 @@ def proponer_vigencia(autoevaluacion):
     elif any(n == "NL" for n in niveles):
         vigencia = "En proceso"
     elif all(n == "LP" for n in niveles):
-        vigencia = "Acreditado 6 anios"                       # 8 años = Tabla 10 (F6)
+        vigencia = "Acreditado 6 anios"                       # techo del motor: los 8 años piden Tabla 10
     else:
         vigencia = "Acreditado 3 anios"                       # todos L, o combo L/LP
 
@@ -483,7 +514,7 @@ def _calcular_avance_pct(autoevaluacion, estandares=None):
 # ===========================================================================
 
 def recalcular_autoevaluacion(autoevaluacion):
-    """Recorre los 10 estándares (proponer_nivel_estandar) + vigencia + avance."""
+    """Recorre todos los estándares del marco (proponer_nivel_estandar) + vigencia + avance."""
     estandares = _estandares_de_autoevaluacion(autoevaluacion)
     propuestos = {}
     for est in estandares:

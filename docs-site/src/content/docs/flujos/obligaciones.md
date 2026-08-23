@@ -28,7 +28,7 @@ Verifica permisos de lectura/escritura sobre cada DocType y la autorización del
 
 ## Restricciones
 
-No marcar presentado sin soporte operacional; las alertas no sustituyen la presentación externa.
+No marcar presentado sin soporte operacional; las alertas no sustituyen la presentación externa. Tampoco tratar una obligación frente a la SUNEDU como un trámite que se cierra y libera de seguimiento: desde la Ley 32105 la licencia es permanente pero condicionada al **cumplimiento continuo** de las condiciones básicas de calidad (art. 13.4 de la Ley Universitaria), y el modelo de renovación periódica quedó derogado.
 
 ## Casos negativos
 

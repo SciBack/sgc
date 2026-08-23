@@ -4,6 +4,7 @@
     <bpmn:participant id="Participant_Plan_Mejora" name="Plan de Mejora SGC" processRef="Process_Plan_Mejora" />
   </bpmn:collaboration>
   <bpmn:process id="Process_Plan_Mejora" isExecutable="false">
+    <bpmn:documentation>La respuesta planificada a lo detectado. ISO 9001:2015 §10.2 exige implementar la acción necesaria y revisar después su eficacia; el plan es el contenedor de esas acciones y de sus compromisos de fecha. Aprobarlo y cerrarlo corresponde a un rol distinto del que lo redacta.</bpmn:documentation>
     <bpmn:laneSet id="LaneSet_1">
       <bpmn:lane id="Lane_DPGC" name="DPGC">
         <bpmn:flowNodeRef>Task_Borrador__Aprobar_y_ejecutar</bpmn:flowNodeRef>

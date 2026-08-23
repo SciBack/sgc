@@ -4,6 +4,7 @@
     <bpmn:participant id="Participant_Documento_Controlado" name="Documento Controlado SGC" processRef="Process_Documento_Controlado" />
   </bpmn:collaboration>
   <bpmn:process id="Process_Documento_Controlado" isExecutable="false">
+    <bpmn:documentation>Control de la información documentada. ISO 21001 cl. 7.5 fija el ciclo elaboración → revisión → aprobación → publicación y, en 7.5.3.2.g, la prevención del uso involuntario de documentos obsoletos: de ahí que publicar un documento marque como obsoleto al que reemplaza, sin que nadie lo haga a mano. El reparto entre quien elabora, quien revisa y la autoridad que aprueba es la segregación de funciones que pide esa misma cláusula: nadie aprueba su propio documento. Ninguna norma de la Sunedu —el organismo que otorga el permiso para operar— se cita aquí, porque el procedimiento interno que el código mencionaba no está verificado contra fuente publicada.</bpmn:documentation>
     <bpmn:laneSet id="LaneSet_1">
       <bpmn:lane id="Lane_Dueno_de_Proceso" name="Dueño de Proceso">
         <bpmn:flowNodeRef>Task_Borrador__Enviar_a_revision</bpmn:flowNodeRef>

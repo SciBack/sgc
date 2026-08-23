@@ -42,6 +42,7 @@ Módulos Python en la raíz de `sgc/` que implementan la lógica que no pertenec
 
 | Módulo | Responsabilidad |
 |---|---|
+| `marcos.py` | Alcance de cada marco normativo (licenciamiento / acreditación de programa / institucional) y guards que impiden cruzarlos |
 | `scoring.py` | Motor de scoring de la autoevaluación (NL/L/LP) — **propone**, nunca confirma |
 | `confirmacion.py` | Acción humana que confirma el nivel oficial y promueve la vigencia |
 | `capa.py` | Cadena CAPA: genera Hallazgo → escala a No Conformidad → crea Plan de Mejora |

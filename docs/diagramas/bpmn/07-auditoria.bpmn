@@ -4,6 +4,7 @@
     <bpmn:participant id="Participant_Auditoria" name="Auditoria SGC" processRef="Process_Auditoria" />
   </bpmn:collaboration>
   <bpmn:process id="Process_Auditoria" isExecutable="false">
+    <bpmn:documentation>Ejecución de una auditoría interna dentro del programa del periodo. La exige ISO 9001:2015 §9.2 («a intervalos planificados») y su conducción se rige por ISO 19011, recogida para el sector educativo en ISO 21001 cl. 9.2.2 e). La independencia del equipo auditor —nadie audita su propio trabajo— es la razón de que el inicio de la ejecución esté condicionado y de que el cierre no lo firme quien auditó.</bpmn:documentation>
     <bpmn:laneSet id="LaneSet_1">
       <bpmn:lane id="Lane_Auditor_Interno" name="Auditor Interno">
         <bpmn:flowNodeRef>Task_Planificada__Iniciar_auditoria</bpmn:flowNodeRef>

@@ -111,9 +111,10 @@ class IntegrationTestAlcanceDelMarco(IntegrationTestCase):
 	La normativa peruana mantiene tres cosas distintas: el permiso para operar
 	que otorga Sunedu (condiciones básicas), y el sello voluntario de calidad
 	del Coneau, que además viene en dos modelos —uno por programa de estudios,
-	otro institucional—. El propio Modelo de Acreditación Institucional (2026,
-	§4.2) dice que sus estándares se definieron revisando las condiciones de
-	Sunedu «para diferenciar los niveles de exigencia».
+	otro institucional—. El Modelo de Licenciamiento Institucional (RCD
+	006-2015-SUNEDU/CD, §2.5) llama a licenciamiento y acreditación «distintos y
+	complementarios»: el primero es condición necesaria para iniciar el proceso
+	conducente al segundo, que es voluntario.
 
 	Antes de estos guards la separación vivía solo en el nombre del marco. En
 	producción se comprobó que una autoevaluación abierta con el marco de

@@ -58,18 +58,32 @@ propuesta pendiente.
 
 ## Paso 4 — Cerrar la autoevaluación: promover la vigencia oficial
 
-Una vez confirmados los **10 estándares**, `finalizar_vigencia(autoevaluacion)`:
+Una vez confirmados **todos los estándares del marco**, `finalizar_vigencia(autoevaluacion)`:
 
-1. Verifica que los 10 estén confirmados (si faltan, devuelve cuántos y no toca nada).
-2. Recalcula la vigencia sobre los niveles **confirmados** (no los propuestos):
+1. Verifica que estén todos confirmados (si faltan, devuelve cuántos y no toca nada).
+   El total sale del marco cargado, no de una constante: son 10 en el Modelo de
+   Acreditación para Programas de Estudios y 9 en el Institucional.
+2. Recalcula la vigencia sobre los niveles **confirmados** (no los propuestos), según la
+   Tabla 9 del modelo:
 
    | Condición | Vigencia |
    |---|---|
-   | Algún estándar en NL | En proceso |
-   | Todos los estándares en LP | Acreditado 6 años *(8 años requiere ≥16 puntos de excelencia — regla adicional)* |
+   | Algún estándar en NL | En proceso de acreditación |
    | Resto (todos L, o combinación L/LP) | Acreditado 3 años |
+   | Todos los estándares en LP | Acreditado 6 años |
+   | Todos en LP **y** puntaje suficiente de la Tabla 10 | Acreditado 8 años |
 
 3. Escribe el resultado oficial en `Autoevaluacion.resultado_vigencia`.
+
+:::caution[El tramo de 8 años no lo produce el sistema]
+La Tabla 9 pide, para 8 años, todos los estándares en LP **más** el puntaje de la
+Tabla 10 (criterios de excelencia): **16 puntos en el modelo de programas y 20 en el
+institucional**. Hoy nadie calcula `Autoevaluacion.puntaje_excelencia` y los criterios
+de la Tabla 10 no están cargados como elementos del marco, así que el techo real del
+motor son **6 años**. La opción existe en el campo oficial porque la norma la
+contempla, no porque el motor la proponga — ver
+[Módulo Núcleo](../../modulos/nucleo/).
+:::
 
 ## Paso 5 — Generar el informe
 
