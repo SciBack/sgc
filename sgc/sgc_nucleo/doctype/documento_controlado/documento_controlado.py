@@ -65,6 +65,7 @@ class DocumentoControlado(Document):
 
 	def validate(self):
 		self._validar_transicion()
+		self._sellar_aprobacion()
 		self._validar_requisitos_por_estado()
 		self._validar_descripcion_cambio()
 
@@ -123,6 +124,32 @@ class DocumentoControlado(Document):
 				),
 				title=_("Transicion no permitida"),
 			)
+
+	def _sellar_aprobacion(self):
+		"""Aprobar ES firmar: lo registra quien ejecuta la transición.
+
+		De las tres firmas que pide el ciclo documental de la ISO 21001 (cl.
+		7.5) —quien elabora, quien revisa, quien aprueba— la tercera no la
+		escribía NADIE. Y no era un hueco cosmético: publicar la exige, así que
+		el flujo moría en «Aprobado» sin salida posible. Comprobado en el
+		recorrido del 2026-08-23: la DPGC aprobaba, la Autoridad Aprobadora
+		intentaba publicar y recibía «No se puede publicar sin quien lo aprobo»,
+		un requisito que ninguna acción del sistema podía satisfacer. La única
+		escapatoria era que alguien tecleara el campo a mano — justo lo que
+		convierte una firma en un dato inventado.
+
+		Mismo patrón que `elaborado_por` (v88): la firma la pone el acto, no un
+		formulario. Se sella al ENTRAR en «Aprobado», comparando con el estado
+		anterior, para que una segunda aprobación tras una observación registre
+		a quien aprueba esta vez y no conserve al de la ronda anterior.
+
+		`revisado_por` se queda fuera a propósito: quien revisa puede no ser
+		quien pulsa «Aprobar», y el sistema no puede adivinarlo. Por eso hay una
+		validación que obliga a declararlo — esa sí funciona.
+		"""
+		anterior = self.get_doc_before_save()
+		if self.estado == "Aprobado" and (not anterior or anterior.estado != "Aprobado"):
+			self.aprobado_por = frappe.session.user
 
 	def _validar_requisitos_por_estado(self):
 		if self.estado == "En revision":

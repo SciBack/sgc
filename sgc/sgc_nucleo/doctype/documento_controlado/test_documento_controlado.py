@@ -236,3 +236,57 @@ class IntegrationTestDocumentoControlado(IntegrationTestCase):
         self.assertEqual(
             frappe.db.get_value("Documento Controlado", anterior.name, "estado"), "Obsoleto"
         )
+
+
+class IntegrationTestFirmaDeAprobacion(IntegrationTestCase):
+    """La tercera firma del ciclo documental, que no la ponía nadie.
+
+    ISO 21001 cl. 7.5 pide constancia de quién elabora, quién revisa y quién
+    aprueba. `elaborado_por` se sella al crear (v88) y `revisado_por` se exige
+    al aprobar, pero `aprobado_por` no lo escribía ninguna acción — y publicar
+    lo exige, así que el documento se quedaba atascado en «Aprobado» para
+    siempre. El flujo entero era inalcanzable de «Aprobado» en adelante.
+    """
+
+    def setUp(self):
+        factories.desactivar_workflow("Documento Controlado")
+
+    def test_aprobar_registra_a_quien_aprueba(self):
+        doc = factories.crear_documento_controlado(prefijo="TESTFIRMA")
+        self.assertFalse(doc.aprobado_por)
+        doc.archivo = "/files/x.pdf"
+        doc.revisado_por = "Administrator"
+        doc.estado = "En revision"
+        doc.save(ignore_permissions=True)
+        doc.estado = "Aprobado"
+        doc.save(ignore_permissions=True)
+        self.assertEqual(doc.aprobado_por, frappe.session.user)
+
+    def test_con_la_firma_puesta_ya_se_puede_publicar(self):
+        """El caso que estaba roto: publicar exigía una firma que nadie ponía."""
+        doc = factories.crear_documento_controlado(prefijo="TESTFIRMA2")
+        doc.archivo = "/files/x.pdf"
+        doc.revisado_por = "Administrator"
+        for estado in ("En revision", "Aprobado", "Publicado"):
+            doc.estado = estado
+            doc.save(ignore_permissions=True)
+        self.assertEqual(doc.estado, "Publicado")
+        self.assertTrue(doc.aprobado_por)
+        self.assertTrue(doc.fecha_publicacion)
+
+    def test_una_segunda_aprobacion_registra_al_nuevo_aprobador(self):
+        """Si vuelve por observación, manda quien aprueba esta vez."""
+        doc = factories.crear_documento_controlado(prefijo="TESTFIRMA3")
+        doc.archivo = "/files/x.pdf"
+        doc.revisado_por = "Administrator"
+        for estado in ("En revision", "Aprobado"):
+            doc.estado = estado
+            doc.save(ignore_permissions=True)
+        primera = doc.aprobado_por
+        frappe.db.set_value("Documento Controlado", doc.name, "aprobado_por", "Guest")
+        doc.reload()
+        for estado in ("Observado", "En revision", "Aprobado"):
+            doc.estado = estado
+            doc.save(ignore_permissions=True)
+        self.assertEqual(doc.aprobado_por, primera)
+
