@@ -12,12 +12,13 @@ Las validaciones son INCREMENTALES por etapa (mismo patrón que M05
 No Conformidad): cada estado exige, de forma acumulativa, lo que esa etapa
 requiere para no aprobar/ejecutar un programa incompleto.
 """
-import re
 
 import frappe
 from frappe import _
 from frappe.model.document import Document
 from frappe.utils import nowdate
+
+from sgc.naming import siguiente_correlativo
 
 # Orden del ciclo de vida (coincide con el Workflow "Programa Auditoria SGC").
 ORDEN = {
@@ -28,14 +29,6 @@ ORDEN = {
 }
 
 
-def _siguiente_correlativo(nombres) -> int:
-    """Máximo sufijo numérico de una lista de códigos + 1 (robusto a borrados)."""
-    maximo = 0
-    for n in nombres:
-        m = re.search(r"(\d+)$", n or "")
-        if m:
-            maximo = max(maximo, int(m.group(1)))
-    return maximo + 1
 
 
 class ProgramaAuditoria(Document):
@@ -58,7 +51,7 @@ class ProgramaAuditoria(Document):
             filters={"name": ["like", f"{prefijo}%"]},
             pluck="name",
         )
-        return f"{prefijo}{_siguiente_correlativo(existentes):04d}"
+        return f"{prefijo}{siguiente_correlativo(existentes):04d}"
 
     # ------------------------------------------------------------ validaciones
     def _validar_requisitos_por_estado(self):

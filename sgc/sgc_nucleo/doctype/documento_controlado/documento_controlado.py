@@ -16,22 +16,13 @@ Sustituye al puntero a Mayan EDMS: el archivo ahora es un adjunto de Frappe
 (campo `archivo`) y el historico vive en la tabla `historial_cambios`.
 """
 
-import re
 
 import frappe
 from frappe import _
 from frappe.model.document import Document
 from frappe.utils import add_years, nowdate
 
-
-def _siguiente_correlativo(nombres) -> int:
-	"""Máximo sufijo numérico de una lista de códigos + 1 (robusto a borrados)."""
-	maximo = 0
-	for n in nombres:
-		m = re.search(r"(\d+)$", n or "")
-		if m:
-			maximo = max(maximo, int(m.group(1)))
-	return maximo + 1
+from sgc.naming import siguiente_correlativo
 
 # Transiciones permitidas. Un estado con conjunto vacio es terminal.
 TRANSICIONES = {
@@ -114,7 +105,7 @@ class DocumentoControlado(Document):
 			filters={"name": ["like", f"{prefijo}-{sigla}-%"]},
 			pluck="name",
 		)
-		return f"{prefijo}-{sigla}-{_siguiente_correlativo(existentes):03d}"
+		return f"{prefijo}-{sigla}-{siguiente_correlativo(existentes):03d}"
 
 	# ------------------------------------------------------------ validaciones
 

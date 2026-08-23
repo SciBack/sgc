@@ -11,13 +11,13 @@ un documento `No Conformidad` transversal, reutilizando el motor CAPA
 (mismo enfoque que `sgc/capa.py`), con origen polimórfico Auditoria. Al escalar,
 el hallazgo queda marcado (`genera_nc=1`, `no_conformidad`, estado "Escalado a NC").
 """
-import re
 
 import frappe
 from frappe import _
 from frappe.model.document import Document
 from frappe.utils import nowdate
 
+from sgc.naming import siguiente_correlativo
 from sgc.sgc_nucleo.doctype.trazabilidad.trazabilidad import sincronizar_evidencia_enlace
 
 # Tipos de hallazgo que constituyen una no conformidad escalable a M05, con el
@@ -30,14 +30,6 @@ TIPO_A_NC = {
 }
 
 
-def _siguiente_correlativo(nombres) -> int:
-    """Máximo sufijo numérico de una lista de códigos + 1 (robusto a borrados)."""
-    maximo = 0
-    for n in nombres:
-        m = re.search(r"(\d+)$", n or "")
-        if m:
-            maximo = max(maximo, int(m.group(1)))
-    return maximo + 1
 
 
 class HallazgoAuditoria(Document):
@@ -105,7 +97,7 @@ class HallazgoAuditoria(Document):
             filters={"name": ["like", f"{prefijo}%"]},
             pluck="name",
         )
-        return f"{prefijo}{_siguiente_correlativo(existentes):04d}"
+        return f"{prefijo}{siguiente_correlativo(existentes):04d}"
 
     # ------------------------------------------------------------ escalamiento
     @frappe.whitelist()

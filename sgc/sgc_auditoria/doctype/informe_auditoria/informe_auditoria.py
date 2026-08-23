@@ -12,12 +12,13 @@ El código lo compone el controlador (autoname `field:codigo`) como IAU-{anio}-N
 `presentado_en` (Link a Revisión por la Dirección) cierra el ciclo con la rama 4
 (§9.3): es un insumo de la revisión por la dirección.
 """
-import re
 
 import frappe
 from frappe import _
 from frappe.model.document import Document
 from frappe.utils import nowdate
+
+from sgc.naming import siguiente_correlativo
 
 # Mapa tipo de hallazgo -> campo contador del informe.
 CONTADORES = {
@@ -28,14 +29,6 @@ CONTADORES = {
 }
 
 
-def _siguiente_correlativo(nombres) -> int:
-    """Máximo sufijo numérico de una lista de códigos + 1 (robusto a borrados)."""
-    maximo = 0
-    for n in nombres:
-        m = re.search(r"(\d+)$", n or "")
-        if m:
-            maximo = max(maximo, int(m.group(1)))
-    return maximo + 1
 
 
 class InformeAuditoria(Document):
@@ -73,7 +66,7 @@ class InformeAuditoria(Document):
             filters={"name": ["like", f"{prefijo}%"]},
             pluck="name",
         )
-        return f"{prefijo}{_siguiente_correlativo(existentes):04d}"
+        return f"{prefijo}{siguiente_correlativo(existentes):04d}"
 
     def _consolidar_hallazgos(self):
         """Recuenta los hallazgos de la auditoría por tipo y fija los contadores."""

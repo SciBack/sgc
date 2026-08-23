@@ -71,6 +71,35 @@ def correlativo_por_prefijo(doc, method=None):
 	doc.name = prefijo + getseries(prefijo, digitos) + sufijo
 
 
+def siguiente_correlativo(nombres) -> int:
+	"""Máximo sufijo numérico de una lista de códigos + 1.
+
+	La usan los DocTypes que se autonombran por `field:codigo` y componen ese
+	código a mano (documento controlado, programa/informe/hallazgo de
+	auditoría). Vivía copiada literalmente en los cuatro controladores.
+
+	**Semántica distinta a la de `correlativo_por_prefijo`, y a propósito.**
+	Aquí el número sale de mirar los códigos que existen AHORA, así que es
+	robusto a borrados: si se elimina el último documento, su número se vuelve a
+	usar. Eso es lo que quiere un código que la gente teclea y busca — no deja
+	huecos —, y hay un test que lo fija (`test_correlativo_robusto_a_borrados`).
+	El contador de `tabSeries`, en cambio, nunca reutiliza: para un identificador
+	de sistema es lo correcto, porque un número que reaparece tras un borrado
+	puede colisionar con referencias externas ya emitidas.
+
+	Su límite es el reverso de esa virtud: dos inserciones simultáneas leen el
+	mismo máximo y proponen el mismo número. Con documentos que se crean a mano
+	es teórico, y el `unique` del campo lo convertiría en un error visible, no
+	en un duplicado silencioso.
+	"""
+	maximo = 0
+	for n in nombres:
+		m = re.search(r"(\d+)$", n or "")
+		if m:
+			maximo = max(maximo, int(m.group(1)))
+	return maximo + 1
+
+
 def _sembrar_serie(doctype, prefijo, digitos):
 	"""Arranca la serie por encima de lo que ya exista con ese prefijo.
 
