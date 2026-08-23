@@ -85,7 +85,7 @@ Ejemplos comprobados en vivo, todos invisibles en el diagrama:
 
 | Proceso | La flecha está dibujada… | …pero antes exige |
 |---|---|---|
-| Informe de Cumplimiento | Presentar a SUNEDU | ninguna CBC sin evaluar, y justificación en cada una que no cumpla |
+| Informe de Cumplimiento | Presentar a SUNEDU | ninguna CBC sin evaluar (y antes, ya al **guardar**, justificación en cada CBC que no cumpla plenamente) |
 | Revisión por la Dirección | Cerrar revisión | las 3 salidas §9.3.3 con responsable **y** el acta en PDF |
 | Aplicación de Instrumento | Cerrar aplicación | fecha de fin de campo registrada |
 | Auditoría | Iniciar ejecución | equipo auditor con al menos un miembro independiente |
