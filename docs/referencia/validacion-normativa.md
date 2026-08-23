@@ -82,32 +82,64 @@ igual a programas y a institucional — hoy funciona porque sus tramos 1-3
 coinciden, pero **sus umbrales de excelencia no** (16 frente a 20). Cuando se
 implemente el tramo de 8 años, hacerlo por marco, no en el código.
 
-### 3. Las condiciones básicas cargadas son las de la ley, no las del modelo vigente 🔴
+### 3. Las condiciones básicas cargadas SÍ son las del modelo vigente ✅ *(corregido)*
 
-Es el hallazgo de fondo. El marco `CBC-SUNEDU-2026` del sistema tiene **8
-condiciones** con el texto del **artículo 28 de la Ley 30220** (2014). Pero
-Sunedu opera con *modelos* que desarrollan esas condiciones en componentes e
-indicadores, y hay más de uno:
+**Esta sección afirmaba lo contrario y estaba equivocada.** Se corrige tras incorporar la
+normativa de licenciamiento a la biblioteca (`sciback/biblioteca/sunedu/` y
+`congreso/ley-32105-…`).
 
-| Instrumento | Estructura |
-|---|---|
-| Ley 30220, art. 28 | 8 condiciones básicas — **lo que tiene el sistema** |
-| Modelo de licenciamiento para universidades nuevas (**RCD 043-2020-SUNEDU/CD**) | **6 CBC** con componentes e indicadores |
-| Renovación de licencia (**RCD 091-2021-SUNEDU/CD**) | **4 CBC** |
+El marco `CBC-SUNEDU-2026` del sistema tiene las **8 condiciones** del **Modelo de
+Licenciamiento Institucional (RCD 006-2015-SUNEDU/CD)**, con los textos del art. 28 de la
+Ley 30220. La sospecha era que estuviera superado, porque los modelos Coneau 2026 mapean
+sus estándares contra una matriz de **6 CBC**. No lo está: esa matriz de 6 pertenece al
+modelo para **universidades nuevas** (RCD 043-2020), que a UPeU no le aplica.
 
-Los modelos Coneau 2026 mapean sus estándares contra el de **6 CBC** (Sunedu,
-2020), no contra las 8 de la ley. Además, la **Ley 32105 (agosto 2024)** eliminó
-la renovación periódica: la licencia pasa a ser permanente *condicionada al
-cumplimiento continuo*, verificado por supervisión e informes.
+Lo zanja la **Guía de orientación para la aplicación de la Ley 32105** (SUNEDU, Dirección
+Técnico Normativa, 2024), que enumera los modelos uno por uno:
 
-**Qué decidir:** con qué modelo debe diagnosticar UPeU su cumplimiento. Es una
-decisión de Calidad, no técnica — y hasta tomarla, el diagnóstico se hace contra
-las 8 condiciones de la ley, que siguen siendo la base legal pero no la matriz
-operativa con la que supervisa Sunedu hoy.
+| Modelo | Norma | Estado | ¿Aplica a UPeU? |
+|---|---|---|---|
+| **Licenciamiento Institucional** | RCD 006-2015 (+ RS 054-2017) | **Vigente** | **Sí — es el suyo** |
+| Licenciamiento de universidades nuevas | RCD 043-2020 (+ RS 055-2021, 065-2022) | Vigente | No — UPeU no es nueva |
+| Semipresencialidad y a distancia | RCD 105-2020 | Vigente | Solo esos programas |
+| Renovación de licencia | RCD 091-2021 | **Derogado** | No |
+| Pregrado de Medicina | RCD 097-2019 | **Derogado** | No |
 
-**Brecha de biblioteca:** no tenemos ninguna resolución de licenciamiento entre
-las fuentes primarias (`sciback/biblioteca/sunedu/` solo tiene grados, títulos y
-Renati). Conviene incorporar la RCD 043-2020 y la RCD 091-2021.
+### Y el sistema encaja mejor de lo que parecía
+
+La **Ley 32105** (El Peruano, 05-ago-2024) reescribió el artículo 13 de la Ley
+Universitaria. Dice literalmente:
+
+> **13.4.** «La autorización otorgada mediante el licenciamiento por la SUNEDU es de
+> carácter permanente, **siempre y cuando las universidades demuestren el cumplimiento
+> continuo de las condiciones básicas de calidad**. No obstante, las universidades estarán
+> sujetas a evaluaciones periódicas inopinadas […]».
+
+Y su **13.5** enumera las herramientas de la SUNEDU: plataforma de monitoreo y evaluación
+continua, auditorías internas y externas, inspecciones periódicas, sistema de alerta
+temprana, **la presentación de informes anuales de cumplimiento**, y sanciones.
+
+**Esa última frase es la base legal del módulo M01.** El Informe de Cumplimiento —un
+diagnóstico anual y recurrente del estado de las 8 condiciones— no es una práctica interna
+que nos inventamos: es una herramienta que la ley nombra. Con la renovación periódica ya
+derogada, demostrar cumplimiento **continuo** es precisamente lo que se supervisa, y es
+para lo que sirve ese módulo.
+
+### ¿Y las modificaciones posteriores de la Ley Universitaria?
+
+Se revisaron **una por una** las catorce modificaciones de la Ley 30220 (todas en
+`sciback/biblioteca/congreso/`, junto al texto consolidado al 13-ago-2025), para comprobar
+si alguna altera lo anterior. **Ninguna lo hace.** La única posterior que toca
+licenciamiento es la **Ley 31520** (2022), que suprimió la licencia renovable — y por eso
+decae el modelo de Medicina. Las dos más recientes van por otro lado: la **32141** modifica
+autonomía y centros de producción; la **32418** (ago-2025, la última) modifica atribuciones
+de vicerrectores e incorpora el orden de sucesión rectoral — gobierno universitario, no
+licenciamiento.
+
+**Lo que sí falta incorporar** es la **RS 054-2017**, que aprueba las *consideraciones para
+la presentación de los medios de verificación* del modelo de 2015 — es decir, qué evidencia
+acepta SUNEDU para cada indicador. No está en la biblioteca y es directamente aplicable al
+módulo de Evidencia.
 
 ---
 
@@ -134,5 +166,11 @@ con él tres guards:
   Ambos en `~/proyectos/sciback/biblioteca/sineace/`.
 - [Sunedu — Licenciamiento institucional para universidades nuevas](https://www.sunedu.gob.pe/licenciamiento-institucional-universidades-nuevas/) (RCD 043-2020-SUNEDU/CD).
 - [Sunedu — Renovación de licencia institucional](https://www.sunedu.gob.pe/renovacion-licencia-institucional/) (RCD 091-2021-SUNEDU/CD).
-- Ley 30220, Ley Universitaria, art. 28 — en `sciback/biblioteca/congreso/`.
-- Ley 32105 (05-ago-2024) — licencia permanente condicionada al cumplimiento continuo.
+- **Ley 30220, Ley Universitaria — texto consolidado** (82 pp., al 13-ago-2025) y las
+  catorce modificaciones, en `sciback/biblioteca/congreso/`.
+- **Ley 32105** (El Peruano, 05-ago-2024) — art. 13.4 (licencia permanente condicionada al
+  cumplimiento continuo) y 13.5 (herramientas de SUNEDU, incluidos los **informes anuales
+  de cumplimiento**).
+- **Guía de orientación para la aplicación de la Ley 32105** (SUNEDU, Dirección Técnico
+  Normativa, 2024) y los modelos de licenciamiento **RCD 006-2015**, **RCD 043-2020** (con
+  su matriz de CBC) y **RCD 091-2021** (derogado), todos en `sciback/biblioteca/sunedu/`.
