@@ -2,7 +2,7 @@
  "actions": [],
  "allow_bulk_edit": 1,
  "allow_rename": 1,
- "autoname": "format:IAC-{anio}",
+ "autoname": "format:IAC-{anio}-{###}",
  "creation": "2026-07-04 17:31:19.438326",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -13,6 +13,7 @@
   "autoevaluacion",
   "obligacion_ente",
   "estado",
+  "informe_anterior",
   "sec_diagnostico",
   "semaforo",
   "n_cumple",
@@ -31,11 +32,11 @@
    "fieldtype": "Int",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "A\u00f1o",
+   "label": "Año",
    "reqd": 1
   },
   {
-   "description": "Fija CBC-SUNEDU (reutiliza el \u00e1rbol de 8 CBC)",
+   "description": "Fija CBC-SUNEDU (reutiliza el árbol de 8 CBC)",
    "fieldname": "marco_normativo",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -45,21 +46,21 @@
   {
    "fieldname": "unidad_organica",
    "fieldtype": "Link",
-   "label": "Unidad org\u00e1nica (institucional)",
+   "label": "Unidad orgánica (institucional)",
    "options": "Unidad Organica"
   },
   {
-   "description": "El IAC puede apoyarse en una Autoevaluaci\u00f3n contra el marco CBC (A2)",
+   "description": "El IAC puede apoyarse en una Autoevaluación contra el marco CBC (A2)",
    "fieldname": "autoevaluacion",
    "fieldtype": "Link",
-   "label": "Autoevaluaci\u00f3n de apoyo",
+   "label": "Autoevaluación de apoyo",
    "options": "Autoevaluacion"
   },
   {
-   "description": "La obligaci\u00f3n 'IAC' que este informe cumple (B2)",
+   "description": "La obligación 'IAC' que este informe cumple (B2)",
    "fieldname": "obligacion_ente",
    "fieldtype": "Link",
-   "label": "Obligaci\u00f3n al ente",
+   "label": "Obligación al ente",
    "options": "Obligacion Ente"
   },
   {
@@ -68,7 +69,14 @@
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Estado",
-   "options": "Borrador\nEn revisi\u00f3n\nAprobado\nPresentado a SUNEDU"
+   "options": "Borrador\nEn revisión\nAprobado\nPresentado a SUNEDU"
+  },
+  {
+   "fieldname": "informe_anterior",
+   "fieldtype": "Link",
+   "label": "Reemplaza al informe",
+   "options": "Informe Cumplimiento",
+   "description": "Si SUNEDU observó un informe ya presentado, el informe corregido apunta aquí al que reemplaza."
   },
   {
    "fieldname": "sec_diagnostico",
@@ -122,12 +130,12 @@
   {
    "fieldname": "resumen",
    "fieldtype": "Text Editor",
-   "label": "Resumen / declaraci\u00f3n jurada"
+   "label": "Resumen / declaración jurada"
   },
   {
    "fieldname": "fecha_presentacion",
    "fieldtype": "Date",
-   "label": "Fecha de presentaci\u00f3n"
+   "label": "Fecha de presentación"
   },
   {
    "fieldname": "pdf",

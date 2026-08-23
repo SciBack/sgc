@@ -12,7 +12,7 @@ Cubre el controlador `informe_cumplimiento.py`:
 - helper whitelisted `cbc_no_cumplidas`.
 
 Cada test corre en su propia transacción con rollback automático, así que las
-factories no limpian. El DocType se autonombra `IAC-{anio}`; por eso cada
+factories no limpian. El DocType se autonombra `IAC-{anio}-{###}`; por eso cada
 informe creado dentro de un mismo test usa un `anio` distinto para no colisionar.
 """
 import frappe
@@ -409,4 +409,84 @@ class IntegrationTestMarcoDeLicenciamiento(IntegrationTestCase):
 		doc.flags.ignore_permissions = True
 		doc.insert(ignore_permissions=True)
 		self.assertTrue(doc.name)
+
+
+class IntegrationTestInformeQueReemplazaAOtro(IntegrationTestCase):
+	"""Un informe presentado es inmutable; corregirlo es emitir otro que lo reemplaza.
+
+	El sistema prometía esa salida en un mensaje de error —«registre un informe
+	nuevo del mismo año referenciando este»— y a la vez la impedía: el autoname
+	era `IAC-{anio}`, así que el segundo informe chocaba con la clave primaria, y
+	no existía campo donde referenciar al primero. Ahora el nombre lleva
+	correlativo y el enlace existe.
+	"""
+
+	def setUp(self):
+		# Árbol con 8 Estandar (= las 8 CBC del modelo RCD 006-2015), sin criterios.
+		arbol = factories.crear_marco_prueba(n_estandares=8, n_criterios=0, prefijo="TESTREEMP")
+		self.marco = arbol["marco"]
+		frappe.db.set_value("Marco Normativo", self.marco,
+			{"alcance": "Licenciamiento", "ente": "SUNEDU"}, update_modified=False)
+
+	def _presentado(self, anio):
+		"""Recorre la cadena real hasta dejar el informe presentado a SUNEDU."""
+		doc = frappe.new_doc("Informe Cumplimiento")
+		doc.anio = anio
+		doc.marco_normativo = self.marco
+		doc.flags.ignore_permissions = True
+		doc.insert(ignore_permissions=True)
+		for c in doc.condiciones:
+			c.cumple = factories.CUMPLE
+		doc.save(ignore_permissions=True)
+		for estado in ("En revisión", "Aprobado", "Presentado a SUNEDU"):
+			doc.estado = estado
+			doc.save(ignore_permissions=True)
+		return doc
+
+	def test_dos_informes_del_mismo_anio_conviven(self):
+		primero = self._presentado(2088)
+		segundo = frappe.new_doc("Informe Cumplimiento")
+		segundo.anio = 2088
+		segundo.marco_normativo = self.marco
+		segundo.informe_anterior = primero.name
+		segundo.flags.ignore_permissions = True
+		segundo.insert(ignore_permissions=True)
+		self.assertNotEqual(segundo.name, primero.name)
+		self.assertEqual(segundo.informe_anterior, primero.name)
+
+	def test_no_puede_reemplazar_un_informe_de_otro_anio(self):
+		otro = self._presentado(2087)
+		doc = frappe.new_doc("Informe Cumplimiento")
+		doc.anio = 2086
+		doc.marco_normativo = self.marco
+		doc.informe_anterior = otro.name
+		doc.flags.ignore_permissions = True
+		with self.assertRaises(frappe.ValidationError):
+			doc.insert(ignore_permissions=True)
+
+	def test_no_puede_reemplazar_uno_que_nunca_se_presento(self):
+		"""Enlazar un borrador abandonado no es una corrección."""
+		borrador = frappe.new_doc("Informe Cumplimiento")
+		borrador.anio = 2085
+		borrador.marco_normativo = self.marco
+		borrador.flags.ignore_permissions = True
+		borrador.insert(ignore_permissions=True)
+		doc = frappe.new_doc("Informe Cumplimiento")
+		doc.anio = 2085
+		doc.marco_normativo = self.marco
+		doc.informe_anterior = borrador.name
+		doc.flags.ignore_permissions = True
+		with self.assertRaises(frappe.ValidationError):
+			doc.insert(ignore_permissions=True)
+
+	def test_el_mensaje_de_bloqueo_nombra_el_informe_a_enlazar(self):
+		"""El error tiene que decir QUÉ enlazar, no una instrucción imposible."""
+		doc = self._presentado(2084)
+		doc.resumen = "intento de editar lo ya presentado"
+		try:
+			doc.save(ignore_permissions=True)
+			self.fail("debería haber bloqueado la edición")
+		except frappe.ValidationError as e:
+			self.assertIn(doc.name, str(e))
+			self.assertIn("Reemplaza al informe", str(e))
 

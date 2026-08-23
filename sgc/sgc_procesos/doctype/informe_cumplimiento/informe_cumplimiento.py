@@ -47,6 +47,7 @@ CUMPLE = "Cumple"
 class InformeCumplimiento(Document):
 	def validate(self):
 		self._validar_marco_es_de_licenciamiento()
+		self._validar_informe_anterior()
 		self._bloquear_si_presentado()
 		self._sellar_fecha_presentacion()
 		self._autopoblar_condiciones()
@@ -79,6 +80,43 @@ class InformeCumplimiento(Document):
 			title=_("Marco de acreditación"),
 		)
 
+	def _validar_informe_anterior(self):
+		"""El informe corregido apunta al que reemplaza, y solo a uno legítimo.
+
+		Existe porque un informe presentado es inmutable: el hecho externo ya
+		ocurrió. La única salida ante una observación de la Sunedu es emitir
+		OTRO informe del mismo año, y este enlace es lo que conserva la
+		trazabilidad entre ambos — sin él quedarían dos informes sueltos y nadie
+		sabría cuál manda.
+
+		Se exige que el reemplazado sea del MISMO año (un informe no corrige el
+		de otro ejercicio) y que estuviera realmente presentado: enlazar un
+		borrador abandonado no es una corrección, es ruido.
+		"""
+		if not self.informe_anterior:
+			return
+		if self.informe_anterior == self.name:
+			frappe.throw(_("Un informe no puede reemplazarse a sí mismo."))
+		anterior = frappe.db.get_value(
+			"Informe Cumplimiento", self.informe_anterior, ["anio", "estado"], as_dict=True
+		)
+		if not anterior:
+			return
+		if str(anterior.anio) != str(self.anio):
+			frappe.throw(
+				_("El informe que se reemplaza ({0}) es del año {1}, no del {2}. "
+				  "Un informe corrige al de su mismo ejercicio.").format(
+					self.informe_anterior, anterior.anio, self.anio),
+				title=_("Años distintos"),
+			)
+		if anterior.estado != "Presentado a SUNEDU":
+			frappe.throw(
+				_("El informe {0} no llegó a presentarse (estado: {1}); no hay nada "
+				  "que reemplazar. Si aún está en curso, continúe con ese.").format(
+					self.informe_anterior, anterior.estado or _("sin estado")),
+				title=_("No fue presentado"),
+			)
+
 	def _bloquear_si_presentado(self):
 		"""Un informe ya presentado a SUNEDU no se edita: el hecho externo ya ocurrió.
 
@@ -96,8 +134,8 @@ class InformeCumplimiento(Document):
 		if anterior and anterior.estado == "Presentado a SUNEDU":
 			frappe.throw(
 				_("Este informe ya fue presentado a SUNEDU y no puede modificarse. "
-				  "Si SUNEDU observó el informe, registre un informe nuevo del "
-				  "mismo año referenciando este."),
+				  "Si SUNEDU lo observó, registre un informe nuevo del mismo año y "
+				  "enlácelo en «Reemplaza al informe» ({0}).").format(self.name),
 				title=_("Informe presentado"),
 			)
 

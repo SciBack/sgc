@@ -218,8 +218,15 @@ def run():
          "label": "Riesgos institucionales detectados", "options": "Riesgo Enlace"},
         {"fieldname": "resumen", "fieldtype": "Text Editor", "label": "Resumen / declaración jurada"},
         {"fieldname": "fecha_presentacion", "fieldtype": "Date", "label": "Fecha de presentación"},
+        # Un informe presentado es inmutable (el hecho externo ya ocurrió), así
+        # que corregirlo es emitir OTRO que lo reemplaza. Por eso el correlativo
+        # en el autoname y este enlace: sin ellos, el sistema pedía «registre un
+        # informe nuevo del mismo año» y la propia clave primaria lo impedía.
+        {"fieldname": "informe_anterior", "fieldtype": "Link", "label": "Reemplaza al informe",
+         "options": "Informe Cumplimiento",
+         "description": "Si SUNEDU observó un informe ya presentado, el corregido apunta aquí al que reemplaza."},
         {"fieldname": "pdf", "fieldtype": "Attach", "label": "Informe (PDF)"},
-    ], autoname="format:IAC-{anio}", title_field="anio")
+    ], autoname="format:IAC-{anio}-{###}", title_field="anio")
 
     frappe.db.commit()
     print("f1_procesos OK")

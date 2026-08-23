@@ -75,20 +75,24 @@ class IntegrationTestNotificacionesWorkflow(IntegrationTestCase):
         Borrador -- listo para recorrer la cadena real del workflow.
 
         `setUp()` llama `f15.run()`, que comitea (necesario en producción)
-        -- eso rompe el rollback automático de este test y deja el
-        `IAC-{anio}` (autoname) permanentemente en BD. Sin este guard, una
-        segunda corrida separada de `bench run-tests` choca con
-        `DuplicateEntryError` al reinsertar el mismo nombre.
+        -- eso rompe el rollback automático de este test y deja el informe
+        permanentemente en BD. Sin este guard, una corrida posterior acumula
+        residuo del año que este test usa.
+
+        Se busca POR AÑO y no por un nombre construido a mano: el autoname
+        lleva correlativo (`IAC-{anio}-{###}`) desde que un informe observado
+        por la Sunedu puede reemplazarse por otro del mismo año, así que
+        `IAC-2026` ya no es un nombre válido que adivinar.
         """
-        nombre = f"IAC-{anio}"
-        if frappe.db.exists("Informe Cumplimiento", nombre):
+        previos = frappe.get_all("Informe Cumplimiento", filters={"anio": anio}, pluck="name")
+        for nombre in previos:
             frappe.delete_doc("Informe Cumplimiento", nombre, force=True, ignore_permissions=True)
-        # Notification Log no se borra en cascada con el documento -- residuo
-        # de una corrida anterior con el MISMO nombre inflaría el conteo de
-        # `_logs()` (mismo document_name) aunque el Informe ya no exista.
-        frappe.db.delete("Notification Log", {
-            "document_type": "Informe Cumplimiento", "document_name": nombre,
-        })
+            # Notification Log no se borra en cascada con el documento -- residuo
+            # de una corrida anterior inflaría el conteo de `_logs()` aunque el
+            # Informe ya no exista.
+            frappe.db.delete("Notification Log", {
+                "document_type": "Informe Cumplimiento", "document_name": nombre,
+            })
 
         doc = frappe.new_doc("Informe Cumplimiento")
         doc.anio = anio
