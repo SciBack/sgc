@@ -7,6 +7,8 @@ import AreaScroll from '@/components/ui/AreaScroll.vue'
 import Cargando from '@/components/ui/Cargando.vue'
 import Alerta from '@/components/ui/Alerta.vue'
 import { DocText, List, Plus } from 'reicon-vue'
+import { computed } from 'vue'
+import { puede } from '@/composables/usePermisos'
 
 const router = useRouter()
 
@@ -14,6 +16,9 @@ const router = useRouter()
 // nombre. Columnas mínimas (name + modified); el detalle/edición real ya
 // vive en DocForm.vue (F2, dirigido por metadata) — cada fila navega ahí.
 const props = defineProps({ doctype: { type: String, required: true } })
+
+// Lo que esta persona puede hacer aquí (boot -> sgc/permisos_ui.py).
+const puedeCrear = computed(() => puede(props.doctype, 'create'))
 
 const list = useCall({
   // v2 (no v1): useCall espera el envelope {"data": [...]} de la API v2.
@@ -65,7 +70,14 @@ function formatModified(value) {
             <p class="mt-1 text-sm text-tinta-tenue">Registros disponibles, ordenados por su última actualización.</p>
           </div>
         </div>
-        <Boton variante="primario" class="shrink-0" :route="{ name: 'DocNew', params: { doctype } }">
+        <!-- Sin permiso de creación no se ofrece el botón: antes lo veía
+             cualquiera y el rechazo llegaba al final del formulario. -->
+        <Boton
+          v-if="puedeCrear"
+          variante="primario"
+          class="shrink-0"
+          :route="{ name: 'DocNew', params: { doctype } }"
+        >
           <Plus :size="16" aria-hidden="true" />
           Nuevo
         </Boton>

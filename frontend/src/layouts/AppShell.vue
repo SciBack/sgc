@@ -24,6 +24,7 @@ import EnlaceLateral from '@/components/ui/EnlaceLateral.vue'
 import MenuDesplegable from '@/components/ui/MenuDesplegable.vue'
 import Migas from '@/components/ui/Migas.vue'
 import { AREAS } from '@/data/areas'
+import { puede } from '@/composables/usePermisos'
 import { useSessionStore } from '@/stores/session'
 
 const route = useRoute()
@@ -45,6 +46,18 @@ const themeActionLabel = computed(() =>
 // tarjeta blanca solo para contenerlo, porque ese rectángulo ajeno fragmenta el
 // cromo. La fuente autoritativa vive en ~/proyectos/upeu/branding/.
 const upeuLogo = '/assets/sgc/media/login/upeu-logo-2026-white.svg'
+
+// El menú solo ofrece lo que esta persona puede abrir. Antes se pintaban las
+// 43 entradas para todo el mundo -- la misma lista para la DPGC que para un rol
+// de solo lectura --, así que nadie deducía su ámbito mirando la pantalla. Un
+// área cuyos items desaparecen entera se oculta también: una cabecera de
+// sección sin nada debajo es ruido.
+const areasVisibles = computed(() =>
+  AREAS.map((area) => ({
+    ...area,
+    items: area.items.filter((i) => puede(i.doctype, 'read')),
+  })).filter((area) => area.items.length > 0),
+)
 
 function areaFor(doctype) {
   const area = AREAS.find((a) => a.items.some((i) => i.doctype === doctype))
@@ -134,7 +147,7 @@ const userMenu = [{ label: 'Cerrar sesión', icon: Exit, onClick: () => session.
           </EnlaceLateral>
         </nav>
 
-        <div v-for="area in AREAS" :key="area.label" class="mt-5">
+        <div v-for="area in areasVisibles" :key="area.label" class="mt-5">
           <!-- Etiqueta de sección: pequeña, no un enlace ni un titular (§3.1). -->
           <h3
             class="flex h-7 items-center px-2 text-[0.68rem] font-bold uppercase tracking-[0.08em] text-white/50"

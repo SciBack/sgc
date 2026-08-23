@@ -4,15 +4,29 @@ import { useCall } from 'frappe-ui'
 import { useRouter } from 'vue-router'
 import AreaScroll from '@/components/ui/AreaScroll.vue'
 import { AngleDown, Check, ClipboardCheck, Compass, Flag, Link2, Paperclip, ShieldCheck } from 'reicon-vue'
-import { GUIAS_ROL } from '@/data/guias-rol'
+import { GUIAS_ROL, indiceGuiaParaRoles } from '@/data/guias-rol'
+import { rolesUsuario } from '@/composables/usePermisos'
 
 const router = useRouter()
 
 // Guía rápida por rol (mini-manual en contexto). Permanece disponible sin
 // desplazar los datos operativos que la persona consulta a diario.
 const guiaAbierta = ref(false)
-const guiaSel = ref(0)
+
+// Abre la guía que le toca a quien entra. Antes empezaba siempre en la primera
+// (la del Responsable de Programa), así que la «guía según tu rol» le contaba a
+// la DPGC el trabajo de otro. Si la persona tiene varios roles gana el primero
+// que aparezca en la lista, que va de lo operativo a lo transversal.
+const misRoles = rolesUsuario()
+const indicePropio = computed(() => indiceGuiaParaRoles(misRoles))
+const guiaSel = ref(indicePropio.value >= 0 ? indicePropio.value : 0)
 const guia = computed(() => GUIAS_ROL[guiaSel.value])
+
+// No todos los roles tienen guía propia (Rectorado/VR, Autoridad Aprobadora,
+// Data Steward...). En ese caso se muestran igual, pero DICIÉNDOLO: hacerle
+// creer a alguien que está leyendo su guía cuando es la de otro es peor que
+// admitir que aún no existe.
+const sinGuiaPropia = computed(() => indicePropio.value < 0)
 const MANUAL_URL = 'https://sciback.github.io/sgc/manual-uso/primeros-pasos/'
 
 // Payload operativo del backend (sgc.home_dashboard.resumen_inicio): pendientes
@@ -119,9 +133,14 @@ function abrirAcceso(a) {
               :class="i === guiaSel ? 'border-marca-primaria-700 bg-marca-primaria-700 text-white' : 'border-borde-fuerte text-tinta-suave hover:border-marca-primaria-300'"
               @click="guiaSel = i"
             >
-              {{ g.corto }}
+              {{ g.corto }}{{ i === indicePropio ? ' · tu rol' : '' }}
             </button>
           </div>
+
+          <p v-if="sinGuiaPropia" class="mb-3 text-sm text-tinta-tenue">
+            Tu rol todavía no tiene una guía propia. Estas son las de los demás
+            roles, por si te sirven de referencia.
+          </p>
 
           <p class="mb-3 text-sm text-tinta-suave">
             <b class="text-tinta">{{ guia.rol }}.</b> {{ guia.resumen }}

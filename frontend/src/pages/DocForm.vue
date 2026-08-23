@@ -8,6 +8,7 @@ import Alerta from '@/components/ui/Alerta.vue'
 import Cargando from '@/components/ui/Cargando.vue'
 import AreaScroll from '@/components/ui/AreaScroll.vue'
 import { useDoctypeMeta } from '@/composables/useDoctypeMeta'
+import { puede } from '@/composables/usePermisos'
 import FieldInput from '@/components/form/FieldInput.vue'
 import DocConnections from '@/components/form/DocConnections.vue'
 
@@ -18,6 +19,14 @@ const props = defineProps({
 
 const router = useRouter()
 const isNew = computed(() => props.name === 'new')
+
+// Qué puede hacer esta persona con este DocType (boot -> sgc/permisos_ui.py).
+// `puedeGuardar` gobierna el botón; `sinPermiso` avisa ANTES de que rellene
+// nada, en vez de dejar que llegue al final y reciba un rechazo del servidor.
+const puedeGuardar = computed(() =>
+  isNew.value ? puede(props.doctype, 'create') : puede(props.doctype, 'write'),
+)
+const sinPermiso = computed(() => !puedeGuardar.value)
 
 const { meta, loading: metaLoading, error: metaError } = useDoctypeMeta(props.doctype)
 
@@ -112,6 +121,16 @@ function deskUrl() {
 // HTML o viene envuelto). Evita el "Cannot read properties of null" cuando el
 // guardado falla y `submit` no rejecta sino que deja el error en el recurso.
 function errorMessage(err, fallback) {
+  // Un rechazo por permisos llega como 403 y a menudo SIN mensaje aprovechable
+  // (`exc_type: PermissionError` y poco más), así que caía al texto genérico
+  // «No se pudo crear el registro.» y la persona no sabía si era un campo mal
+  // puesto, un fallo de red o que ese documento no le corresponde. Se detecta
+  // y se dice.
+  const tipo = err?.exc_type || err?.exception || ''
+  const status = err?.status || err?.statusCode || err?.response?.status
+  if (/PermissionError/i.test(String(tipo)) || status === 403) {
+    return 'No tienes permiso para guardar este documento. Corresponde a otro rol; si crees que deberías poder, pídelo a la DPGC.'
+  }
   const raw =
     err?.messages?.[0] ||
     err?.message ||
@@ -219,6 +238,17 @@ async function save() {
       <Cargando v-if="metaLoading || (!isNew && doc.loading && !doc.doc)" />
       <Alerta v-else-if="metaError" :message="metaError.message" />
       <Alerta v-else-if="!isNew && doc.error" :message="doc.error.message" />
+
+      <!-- Aviso por delante: si no le corresponde, que lo sepa ANTES de
+           rellenar el formulario entero, no al pulsar el botón. -->
+      <Alerta
+        v-else-if="sinPermiso"
+        :message="
+          isNew
+            ? 'No tienes permiso para crear registros de este tipo. Puedes consultarlos, pero crearlos corresponde a otro rol.'
+            : 'No tienes permiso para editar este documento. Puedes consultarlo; los cambios corresponden a otro rol.'
+        "
+      />
 
       <form v-else class="sb-form-card space-y-5" @submit.prevent="save">
         <div v-for="f in visibleFields" :key="f.fieldname">
