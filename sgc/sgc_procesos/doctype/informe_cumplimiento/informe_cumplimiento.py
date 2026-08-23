@@ -48,20 +48,17 @@ class InformeCumplimiento(Document):
 		condiciones. Sin este guard la puerta estaba abierta en los dos
 		sentidos.
 		"""
-		if not self.marco_normativo:
+		from sgc import marcos
+
+		if not marcos.es_de_acreditacion(self.marco_normativo):
 			return
-		marco = frappe.db.get_value(
-			"Marco Normativo", self.marco_normativo, ["ente", "alcance"], as_dict=True
-		) or {}
-		alcance = marco.get("alcance") or ""
-		if alcance.startswith("Acreditación") or (not alcance and marco.get("ente") == "SINEACE"):
-			frappe.throw(
-				_("El marco «{0}» es de acreditación, no de licenciamiento. Las "
-				  "condiciones básicas de calidad son el permiso para operar; la "
-				  "acreditación se trabaja en una Autoevaluación.").format(
-					  self.marco_normativo),
-				title=_("Marco de acreditación"),
-			)
+		frappe.throw(
+			_("El marco «{0}» es de acreditación, no de licenciamiento. Las "
+			  "condiciones básicas de calidad son el permiso para operar; la "
+			  "acreditación se trabaja en una Autoevaluación.").format(
+				self.marco_normativo),
+			title=_("Marco de acreditación"),
+		)
 
 	def _bloquear_si_presentado(self):
 		"""Un informe ya presentado a SUNEDU no se edita: el hecho externo ya ocurrió.

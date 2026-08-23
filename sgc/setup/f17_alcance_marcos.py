@@ -28,6 +28,22 @@ Ejecutar (idempotente):
 """
 import frappe
 
+# Definición del campo. Se asegura AQUÍ y no solo en `f1_estructura`, porque
+# aquel solo crea el DocType cuando aún no existe: en un sitio ya instalado, un
+# campo nuevo en esa lista no llega nunca a la base. Mismo patrón que
+# `f2_fields.py`.
+CAMPO_ALCANCE = {
+    "fieldname": "alcance",
+    "fieldtype": "Select",
+    "label": "Alcance",
+    "options": "\nLicenciamiento\nAcreditación de programa\nAcreditación institucional\nGestión interna",
+    "in_list_view": 1,
+    "in_standard_filter": 1,
+    "insert_after": "ente",
+    "description": "Licenciamiento = permiso para operar (Sunedu). "
+                   "Acreditación = sello de calidad (Sineace/Coneau), por programa o institucional.",
+}
+
 LICENCIAMIENTO = "Licenciamiento"
 ACRED_PROGRAMA = "Acreditación de programa"
 ACRED_INSTITUCIONAL = "Acreditación institucional"
@@ -42,8 +58,24 @@ ALCANCE_POR_MARCO = {
 }
 
 
+def _asegurar_campo():
+    """Añade `alcance` al DocType si falta. Idempotente."""
+    doc = frappe.get_doc("DocType", "Marco Normativo")
+    if any(f.fieldname == "alcance" for f in doc.fields):
+        return False
+    doc.append("fields", CAMPO_ALCANCE)
+    doc.save(ignore_permissions=True)
+    frappe.db.commit()
+    return True
+
+
 def run():
     frappe.flags.in_patch = True
+    frappe.flags.in_fixtures = True
+
+    if _asegurar_campo():
+        print("F17: campo `alcance` añadido a Marco Normativo")
+
     clasificados, pendientes = [], []
 
     for marco in frappe.get_all("Marco Normativo", fields=["name", "ente", "alcance"]):

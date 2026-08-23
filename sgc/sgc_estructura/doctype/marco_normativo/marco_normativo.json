@@ -10,6 +10,7 @@
   "codigo",
   "nombre",
   "ente",
+  "alcance",
   "version",
   "vigente_desde",
   "vigente_hasta",
@@ -21,11 +22,11 @@
  ],
  "fields": [
   {
-   "description": "CONEAU-PROG-2025, CBC-SUNEDU-2026, ISO-21001\u2026",
+   "description": "CONEAU-PROG-2025, CBC-SUNEDU-2026, ISO-21001…",
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "C\u00f3digo",
+   "label": "Código",
    "reqd": 1,
    "unique": 1
   },
@@ -45,11 +46,20 @@
    "options": "SINEACE\nSUNEDU\nISO\nINTERNACIONAL"
   },
   {
-   "description": "2025, 2026 \u2014 permite convivencia de versiones",
+   "fieldname": "alcance",
+   "fieldtype": "Select",
+   "label": "Alcance",
+   "options": "\nLicenciamiento\nAcreditación de programa\nAcreditación institucional\nGestión interna",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "description": "Licenciamiento = permiso para operar (Sunedu). Acreditación = sello de calidad (Sineace/Coneau), por programa o institucional."
+  },
+  {
+   "description": "2025, 2026 — permite convivencia de versiones",
    "fieldname": "version",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Versi\u00f3n"
+   "label": "Versión"
   },
   {
    "fieldname": "vigente_desde",
@@ -72,7 +82,7 @@
   {
    "fieldname": "escala_valoracion",
    "fieldtype": "Link",
-   "label": "Escala de valoraci\u00f3n",
+   "label": "Escala de valoración",
    "options": "Escala Valoracion"
   },
   {

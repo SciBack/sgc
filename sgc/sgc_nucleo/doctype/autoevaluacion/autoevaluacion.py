@@ -31,19 +31,17 @@ class Autoevaluacion(Document):
 
         El licenciamiento tiene su propia puerta: `Informe Cumplimiento`.
         """
-        if not self.marco_normativo:
+        from sgc import marcos
+
+        if not marcos.es_de_licenciamiento(self.marco_normativo):
             return
-        marco = frappe.db.get_value(
-            "Marco Normativo", self.marco_normativo, ["ente", "alcance"], as_dict=True
-        ) or {}
-        if marco.get("alcance") == "Licenciamiento" or marco.get("ente") == "SUNEDU":
-            frappe.throw(
-                _("El marco «{0}» es de licenciamiento (permiso para operar), no de "
-                  "acreditación. El cumplimiento de las condiciones básicas se registra "
-                  "en un Informe de Cumplimiento, no en una autoevaluación.").format(
-                      self.marco_normativo),
-                title=_("Marco de licenciamiento"),
-            )
+        frappe.throw(
+            _("El marco «{0}» es de licenciamiento (permiso para operar), no de "
+              "acreditación. El cumplimiento de las condiciones básicas se registra "
+              "en un Informe de Cumplimiento, no en una autoevaluación.").format(
+                  self.marco_normativo),
+            title=_("Marco de licenciamiento"),
+        )
 
     def _validar_alcance_coherente(self):
         """Acreditar una carrera y acreditar la universidad no son lo mismo.
@@ -55,16 +53,16 @@ class Autoevaluacion(Document):
         expediente de carrera sin decir de qué carrera— y una institucional CON
         un programa colgado, que sobra y confunde a quien lea el informe.
         """
-        if not self.marco_normativo:
-            return
-        alcance = frappe.db.get_value("Marco Normativo", self.marco_normativo, "alcance")
-        if alcance == "Acreditación de programa" and not self.programa_sede:
+        from sgc import marcos
+
+        alcance = marcos.alcance_de(self.marco_normativo)
+        if alcance == marcos.ACRED_PROGRAMA and not self.programa_sede:
             frappe.throw(
                 _("Este marco acredita un programa de estudios: indica a qué "
                   "programa-sede corresponde la autoevaluación."),
                 title=_("Falta el programa"),
             )
-        if alcance == "Acreditación institucional" and self.programa_sede:
+        if alcance == marcos.ACRED_INSTITUCIONAL and self.programa_sede:
             frappe.throw(
                 _("La acreditación institucional evalúa a la universidad entera: "
                   "no lleva un programa-sede asignado (indicado: {0}).").format(
