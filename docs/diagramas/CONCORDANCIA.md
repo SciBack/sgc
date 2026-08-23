@@ -1,6 +1,6 @@
 # Concordancia entre los diagramas BPMN y el sistema real
 
-**Fecha:** 2026-08-23 · **Versión en producción:** `sgc-frappe:v101`
+**Fecha:** 2026-08-23 · **Versión en producción:** `sgc-frappe:v102`
 
 Contrastación de los 15 `.bpmn` contra el comportamiento comprobado en
 producción, recorriendo los flujos punta a punta con usuarios reales por rol.
