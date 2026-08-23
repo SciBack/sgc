@@ -213,6 +213,36 @@ Lo que esa documentación **no** hace, para que no se le pida de más:
 Las tres discordancias de arriba siguen vigentes tal cual: la documentación
 normativa no toca ninguna de ellas.
 
+## Cuando el diagrama tenía razón y el código no: la independencia del auditor
+
+El `<bpmn:documentation>` del 07 dice, desde que se generó, que «la independencia
+del equipo auditor —nadie audita su propio trabajo— es la razón de que el inicio
+de la ejecución esté condicionado». Recorriendo el flujo el 2026-08-23 resultó
+que la condición existía pero no comprobaba eso: exigía que **algún miembro
+tuviera marcada la casilla** `independiente_del_area`. Una casilla que marca el
+propio interesado.
+
+Lo comprobado en producción: el responsable de un proceso creó la auditoría a
+ESE proceso, se puso a sí mismo de auditor líder, marcó su propia casilla, y el
+sistema le dejó iniciar la ejecución. Exactamente lo que ISO 9001 §9.2.2 c) y
+ISO 19011 cl. 5.5.2 prohíben.
+
+Es la discordancia al revés de las tres de arriba: no era el diagrama el que se
+quedaba corto, era el código el que no cumplía lo que el diagrama prometía. Y
+solo se ve recorriendo, porque leyendo el controlador la validación *parece* la
+correcta — se llama «evidencia de independencia» y cita la cláusula.
+
+**Arreglado** (`Auditoria._validar_independencia_real`): quien figura como
+`responsable` del proceso auditado no puede estar en el equipo que lo audita. No
+cubre todo —el sistema no sabe a qué área pertenece cada persona, y `Unidad
+Organica` no tiene responsable— pero convierte en comprobable el único caso que
+tiene dato. Lo que no se puede comprobar sigue declarándose con la casilla; la
+diferencia es que ahora la casilla no es lo *único*.
+
+**Ojo al leerlo hoy:** `Proceso.responsable` está vacío en producción, así que la
+regla todavía no bloquea a nadie. Empezará a morder cuando se pueble — que es
+justamente cuando importa.
+
 ## Riesgo de deriva
 
 Nada compara automáticamente los `.bpmn` en disco contra lo que generaría el

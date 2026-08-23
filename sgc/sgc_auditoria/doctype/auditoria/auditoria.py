@@ -17,6 +17,11 @@ Validaciones INCREMENTALES por etapa (mismo patrón que M05 No Conformidad):
   Informe emitido -> exige el Informe Auditoria vinculado y que ese informe
                      pertenezca a esta auditoría.
   Cerrada       -> no se cierra una auditoría sin informe emitido.
+
+Y una que no depende del estado: el responsable del proceso auditado no puede
+estar en el equipo auditor (`_validar_independencia_real`). El Check
+`independiente_del_area` lo marca el propio interesado, así que por sí solo no
+prueba nada.
 """
 import frappe
 from frappe import _
@@ -36,6 +41,7 @@ ORDEN = {
 class Auditoria(Document):
     def validate(self):
         self._validar_requisitos_por_estado()
+        self._validar_independencia_real()
 
     # ------------------------------------------------------------ validaciones
     def _validar_requisitos_por_estado(self):
@@ -83,3 +89,36 @@ class Auditoria(Document):
         # "Cerrada": no se cierra una auditoría sin informe emitido.
         if nivel >= 4 and not self.informe:
             frappe.throw(_("No se puede cerrar una auditoría sin informe emitido."))
+
+    def _validar_independencia_real(self):
+        """Nadie audita su propio trabajo (ISO 9001 §9.2.2 c, ISO 19011 cl. 5.5.2).
+
+        Hasta ahora la independencia era un Check que marcaba el propio
+        interesado. Comprobado en el recorrido del 2026-08-23: el responsable
+        de un proceso creó la auditoría a ESE proceso, se puso a sí mismo como
+        auditor líder, marcó su propia casilla de «independiente del área» y el
+        sistema le dejó iniciar la ejecución. La casilla es una declaración, no
+        una comprobación.
+
+        Aquí no se puede comprobar todo —el sistema no sabe a qué área pertenece
+        cada persona—, pero sí el caso más claro y el único que tiene dato:
+        quien figura como `responsable` del proceso auditado no puede estar en
+        el equipo que lo audita. Lo que no se puede comprobar sigue siendo
+        declarado; lo que sí, deja de serlo.
+
+        Se comprueba en cada guardado, no solo al iniciar: si no, bastaría con
+        añadirse al equipo después de arrancar.
+        """
+        if not self.proceso or not self.equipo:
+            return
+
+        responsable = frappe.db.get_value("Proceso", self.proceso, "responsable")
+        if not responsable:
+            return
+
+        if any(m.usuario == responsable for m in self.equipo):
+            frappe.throw(
+                _("{0} es responsable del proceso auditado ({1}): no puede formar "
+                  "parte del equipo que lo audita.").format(responsable, self.proceso),
+                title=_("El equipo no es independiente"),
+            )

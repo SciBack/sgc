@@ -180,3 +180,68 @@ class IntegrationTestAuditoria(IntegrationTestCase):
         aud.estado = "Cerrada"
         aud.save(ignore_permissions=True)
         self.assertEqual(aud.estado, "Cerrada")
+
+    # ======================================================================
+    # Independencia real: nadie audita su propio trabajo
+    # ======================================================================
+    # El Check `independiente_del_area` lo marca el propio interesado, así que
+    # por sí solo no prueba nada. Comprobado en el recorrido del 2026-08-23: el
+    # responsable de un proceso creó la auditoría a ESE proceso, se puso de
+    # auditor líder, marcó su casilla y el sistema le dejó iniciar.
+
+    def _proceso_de(self, responsable):
+        return factories.crear_proceso(responsable=responsable).name
+
+    def test_el_responsable_del_proceso_no_puede_auditarlo(self):
+        proceso = self._proceso_de(ADMIN)
+
+        with self.assertRaises(frappe.ValidationError) as ctx:
+            self._auditoria(estado="En ejecucion", proceso=proceso,
+                            equipo=self._equipo(), criterios=self._criterios())
+
+        self.assertIn(proceso, str(ctx.exception))
+
+    def test_marcarse_independiente_no_basta(self):
+        """Es el caso exacto del recorrido: el check dice una cosa y el dato otra."""
+        proceso = self._proceso_de(ADMIN)
+
+        with self.assertRaises(frappe.ValidationError):
+            self._auditoria(estado="Planificada", proceso=proceso,
+                            equipo=self._equipo(independiente=True),
+                            criterios=self._criterios())
+
+    def test_no_se_puede_entrar_en_el_equipo_despues_de_arrancar(self):
+        """Se comprueba en cada guardado: si no, basta con añadirse luego."""
+        proceso = self._proceso_de("Guest")
+        doc = self._auditoria(estado="En ejecucion", proceso=proceso,
+                              equipo=self._equipo(), criterios=self._criterios())
+
+        doc.append("equipo", {"usuario": "Guest", "rol": "Auditor"})
+        with self.assertRaises(frappe.ValidationError):
+            doc.save(ignore_permissions=True)
+
+    def test_un_proceso_sin_responsable_no_estorba(self):
+        """Hoy `responsable` está vacío en producción: la regla no puede bloquear."""
+        proceso = factories.crear_proceso().name
+
+        doc = self._auditoria(estado="En ejecucion", proceso=proceso,
+                              equipo=self._equipo(), criterios=self._criterios())
+
+        self.assertEqual(doc.estado, "En ejecucion")
+
+    def test_una_auditoria_sin_proceso_no_estorba(self):
+        """El proceso auditado es opcional; sin él no hay nada que contrastar."""
+        doc = self._auditoria(estado="En ejecucion", equipo=self._equipo(),
+                              criterios=self._criterios())
+
+        self.assertEqual(doc.estado, "En ejecucion")
+
+    def test_auditar_un_proceso_ajeno_sigue_siendo_posible(self):
+        """El camino normal tiene que llegar: si no, el guard es un muro."""
+        proceso = self._proceso_de("Guest")
+
+        doc = self._auditoria(estado="En ejecucion", proceso=proceso,
+                              equipo=self._equipo(), criterios=self._criterios())
+
+        self.assertEqual(doc.estado, "En ejecucion")
+
