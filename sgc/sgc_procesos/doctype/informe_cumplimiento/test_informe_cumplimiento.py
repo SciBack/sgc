@@ -443,6 +443,23 @@ class IntegrationTestInformeQueReemplazaAOtro(IntegrationTestCase):
 			doc.save(ignore_permissions=True)
 		return doc
 
+	def test_el_correlativo_cuenta_informes_del_anio_no_documentos_del_sitio(self):
+		"""El número del código tiene que significar algo.
+
+		El `{###}` de Frappe se resuelve con un contador GLOBAL compartido por
+		todos los DocTypes, así que el primer informe de un año podía nacer como
+		`IAC-2077-041`. Con `autoname()` propio, el primero de su año es el 1.
+		"""
+		primero = self._presentado(2083)
+		self.assertEqual(primero.name, "IAC-2083-1")
+		segundo = frappe.new_doc("Informe Cumplimiento")
+		segundo.anio = 2083
+		segundo.marco_normativo = self.marco
+		segundo.informe_anterior = primero.name
+		segundo.flags.ignore_permissions = True
+		segundo.insert(ignore_permissions=True)
+		self.assertEqual(segundo.name, "IAC-2083-2")
+
 	def test_dos_informes_del_mismo_anio_conviven(self):
 		primero = self._presentado(2088)
 		segundo = frappe.new_doc("Informe Cumplimiento")

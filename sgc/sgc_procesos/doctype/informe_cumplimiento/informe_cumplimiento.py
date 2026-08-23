@@ -45,6 +45,30 @@ CUMPLE = "Cumple"
 
 
 class InformeCumplimiento(Document):
+	def autoname(self):
+		"""`IAC-2026-1`, `IAC-2026-2`… — correlativo REAL dentro del año.
+
+		El `format:IAC-{anio}-{###}` del DocType no sirve para esto: el `{###}`
+		de Frappe se resuelve con `getseries("")`, un contador GLOBAL del sitio
+		que comparten todos los DocTypes con ese patrón. Se ve en la tabla
+		`tabSeries`, que tiene una sola fila con el nombre vacío, y en los
+		propios códigos ya emitidos, consecutivos entre tipos distintos:
+		`APL-2026-00030`, `RES-2026-00031`, `RSK-2026-00034`, `NC-2026-00035`.
+		Con él, el primer informe de un año podía nacer como `IAC-2077-041` y
+		hacer creer que hay cuarenta informes detrás.
+
+		Aquí el número significa lo que aparenta: cuántos informes van de ese
+		ejercicio. Casi siempre será 1; pasa a 2 cuando la Sunedu observa uno ya
+		presentado y hay que emitir el que lo reemplaza.
+
+		(El resto de DocTypes arrastra el mismo contador global; es un asunto
+		transversal, no se arregla desde aquí.)
+		"""
+		if not self.anio:
+			return
+		hermanos = frappe.db.count("Informe Cumplimiento", {"anio": self.anio})
+		self.name = "IAC-{0}-{1}".format(self.anio, hermanos + 1)
+
 	def validate(self):
 		self._validar_marco_es_de_licenciamiento()
 		self._validar_informe_anterior()
