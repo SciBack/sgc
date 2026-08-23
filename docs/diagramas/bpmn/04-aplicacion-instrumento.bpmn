@@ -4,6 +4,9 @@
     <bpmn:participant id="Participant_Aplicacion_Instrumento" name="Aplicacion Instrumento SGC" processRef="Process_Aplicacion_Instrumento" />
   </bpmn:collaboration>
   <bpmn:process id="Process_Aplicacion_Instrumento" isExecutable="false">
+    <bpmn:documentation>Aplicación de un instrumento de medición —una encuesta, casi siempre— a un grupo de interés en un periodo y un ámbito concretos. Existe porque hay indicadores que no se pueden medir de otro modo: los modelos del Coneau incluyen varios que se evalúan «en opinión de los estudiantes» (el ID19 del modelo de programas mide el porcentaje de docentes con desempeño satisfactorio según ellos), y esa opinión solo se obtiene preguntando. Para los programas en modalidad a distancia hay además una exigencia legal explícita: el artículo 47.4.2, literal d), de la Ley 30220 —en la redacción que le dio la Ley 32105— pide «encuestas periódicas a estudiantes y docentes para evaluar la satisfacción y efectividad» de esa modalidad, «con mecanismos para implementar mejoras basadas en los resultados»; nótese que ese mandato es solo para esa modalidad, no para toda la oferta.
+
+Por eso el ciclo de campo se gobierna y no se deja al criterio de cada quien: cerrar la aplicación FIJA los resultados, y al hacerlo el sistema los publica como valores de indicador que alimentan la acreditación. Ese paso lo ejecuta el sistema solo, al cerrar, y este diagrama todavía no lo dibuja: vive en `resultado_instrumento.publicar_valores_indicador`. Quien cierra no es quien hizo el campo, precisamente porque a partir de ahí el dato deja de ser de la encuesta y pasa a ser del expediente de acreditación.</bpmn:documentation>
     <bpmn:laneSet id="LaneSet_1">
       <bpmn:lane id="Lane_Responsable_de_Calidad_de_Programa" name="Responsable de Calidad de Programa">
         <bpmn:flowNodeRef>Task_Planificada__Iniciar_campo</bpmn:flowNodeRef>
