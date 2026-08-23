@@ -165,15 +165,34 @@ class IntegrationTestDocumentoControlado(IntegrationTestCase):
             d.save(ignore_permissions=True)
 
     def test_publicar_exige_aprobado_por(self):
-        """No se puede publicar sin quien lo aprobo (aun teniendo archivo)."""
+        """No se puede publicar sin quien lo aprobo (aun teniendo archivo).
+
+        Este test recorria el camino NORMAL y daba por bueno que terminara en
+        error: como `aprobado_por` no lo escribia nadie, "publicar exige la
+        firma" y "publicar es imposible" eran la misma frase, y el test fijaba
+        el callejon sin salida como si fuera la conducta deseada.
+
+        Desde que aprobar sella la firma, para probar la validacion hay que
+        quitarla a proposito — que es el unico modo de que falte.
+        """
         d = self._crear(archivo=ARCHIVO, revisado_por=USER)
         d.estado = "En revision"
         d.save(ignore_permissions=True)
         d.estado = "Aprobado"
         d.save(ignore_permissions=True)
-        d.estado = "Publicado"  # sin aprobado_por
+        d.aprobado_por = None
+        d.estado = "Publicado"
         with self.assertRaises(frappe.ValidationError):
             d.save(ignore_permissions=True)
+
+    def test_el_camino_normal_llega_a_publicado(self):
+        """Y el recorrido de siempre ya no muere en «Aprobado»."""
+        d = self._crear(archivo=ARCHIVO, revisado_por=USER)
+        for estado in ("En revision", "Aprobado", "Publicado"):
+            d.estado = estado
+            d.save(ignore_permissions=True)
+        self.assertEqual(d.estado, "Publicado")
+        self.assertTrue(d.aprobado_por)
 
     # ----------------------------------------------------- descripcion de cambio
     def test_versionar_sin_descripcion_falla(self):
