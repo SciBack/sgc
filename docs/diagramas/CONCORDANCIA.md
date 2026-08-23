@@ -135,6 +135,47 @@ vigencia oficial no se dibujan porque no son ni un efecto puntual al entrar en u
 estado ni un mensaje a otro proceso: son sincronizaciones de datos. Meterlas con
 la notación equivocada diría algo falso; queda pendiente decidir cuál les toca.
 
+### 4. 18 estados existen en el sistema y no están dibujados ⚠️
+
+El generador dibuja un `exclusiveGateway` con el nombre del estado **solo cuando
+ese estado tiene más de una salida** — es donde se decide algo. Un estado con una
+sola salida no se dibuja: la tarea anterior encadena directamente con la
+siguiente. Está documentado en `bpmn.py` y es defendible en BPMN: un punto por el
+que solo se puede seguir de una manera no es una decisión, y un gateway de una
+sola salida es ruido.
+
+El coste es que **18 estados no aparecen en ningún sitio**, y no son estados de
+paso: son donde el documento se queda esperando, a veces meses.
+
+| Proceso | Estados que no se ven |
+|---|---|
+| Documento Controlado | Observado ⚠ · Publicado ⚠ |
+| Autoevaluación | En curso ⚠ · Consolidada |
+| Auditoría | En ejecucion |
+| Programa de Auditoría | En ejecucion ⚠ |
+| Hallazgo de Auditoría | Escalado a NC ⚠ · Cerrado |
+| Hallazgo | En tratamiento ⚠ |
+| No Conformidad | En analisis · En tratamiento ⚠ |
+| Plan/Acción de Mejora | En ejecucion ⚠ · Verificada no eficaz |
+| Riesgo | Evaluado · En tratamiento · Materializado |
+| Tratamiento de Riesgo | En ejecucion ⚠ |
+| Revisión por la Dirección | Cerrada ⚠ |
+
+⚠ = **al cruzar ese estado cambia el carril**: entra un rol y sale otro. Son 10
+de los 18, y ahí es donde más duele, porque el diagrama muestra una flecha de un
+carril a otro sin nada en medio — como si el traspaso fuera instantáneo. En el
+06, «Iniciar ejecución» la hace el Auditor y «Cerrar programa» la DPGC: entre las
+dos está «En ejecucion», que es donde ocurren TODAS las auditorías del año.
+
+**Qué significa:** quien mire el diagrama para saber dónde está parado su
+documento no encontrará el estado. La lista de estados vive en el `Select` y en
+el workflow, no en el dibujo.
+
+**Cómo se arreglaría:** no con un gateway —seguiría siendo falso, no hay
+decisión— sino dibujando el estado como lo que es: un `intermediateThrowEvent`
+o, mejor, una anotación de texto sobre el flujo. Cambia el generador, no el
+proceso.
+
 ---
 
 ## Lo que se cerró en esta tanda: la base normativa ya viaja dentro
