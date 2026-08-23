@@ -177,13 +177,33 @@ has_permission = {
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+# Correlativos que cuentan lo que dicen contar.
+#
+# Estos DocTypes se autonombran con `format:XXX-{YYYY}-{#####}`, y ahí Frappe
+# tiene una trampa: resuelve cada `{parámetro}` por separado, así que el bloque
+# de almohadillas acaba pidiendo `getseries("")` — un contador GLOBAL del sitio
+# que comparten TODOS. Por eso los códigos salían consecutivos entre tipos
+# distintos (`RSK-2026-00034`, `NC-2026-00035`, `TRR-2026-00036`) y el número
+# no significaba lo que aparentaba.
+#
+# `set_new_name` ejecuta `doc.run_method("autoname")` antes de mirar el patrón
+# del DocType y respeta el nombre que se haya puesto ahí, así que basta este
+# gancho: el patrón sigue mandando en la FORMA del código, y solo cambia de
+# dónde sale el número. Ver `sgc/naming.py`.
+doc_events = {
+	"Acuerdo": {"autoname": "sgc.naming.correlativo_por_prefijo"},
+	"Aplicacion Instrumento": {"autoname": "sgc.naming.correlativo_por_prefijo"},
+	"Auditoria": {"autoname": "sgc.naming.correlativo_por_prefijo"},
+	"Entrega Obligacion": {"autoname": "sgc.naming.correlativo_por_prefijo"},
+	"Evaluacion Riesgo": {"autoname": "sgc.naming.correlativo_por_prefijo"},
+	"Informe Cumplimiento": {"autoname": "sgc.naming.correlativo_por_prefijo"},
+	"No Conformidad": {"autoname": "sgc.naming.correlativo_por_prefijo"},
+	"Resultado Instrumento": {"autoname": "sgc.naming.correlativo_por_prefijo"},
+	"Reunion": {"autoname": "sgc.naming.correlativo_por_prefijo"},
+	"Revision Direccion": {"autoname": "sgc.naming.correlativo_por_prefijo"},
+	"Riesgo": {"autoname": "sgc.naming.correlativo_por_prefijo"},
+	"Tratamiento Riesgo": {"autoname": "sgc.naming.correlativo_por_prefijo"},
+}
 
 # Scheduled Tasks
 # ---------------
