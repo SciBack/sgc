@@ -343,3 +343,75 @@ class IntegrationTestBpmn(IntegrationTestCase):
     def test_frappe_esta_disponible(self):
         """Guarda de contexto: estos tests corren dentro del sitio, no sueltos."""
         self.assertTrue(frappe.db)
+
+    # ------------------------------------------------------------------
+    # Lo que el sistema hace solo, y lo que le manda a otros procesos
+    # ------------------------------------------------------------------
+    def test_el_efecto_al_entrar_se_interpone_antes_del_estado(self):
+        """El efecto ocurre AL llegar, así que va entre la acción y el estado.
+
+        Sin él, el diagrama del 04 terminaba en «Cerrada» sin contar lo más
+        importante que pasa ahí: que los resultados de la encuesta se publican
+        como valores de indicador.
+        """
+        for efecto in bpmn.EFECTOS_AL_ENTRAR:
+            xml = self.diagramas[efecto["document_type"]]
+            _nodos, flujos, carril_de = _grafo(xml)
+            proceso = ET.fromstring(xml).find(f"{M}process")
+            ids = [e.get("id") for e in proceso.iter(f"{M}serviceTask")
+                   if e.get("name") == efecto["etiqueta"]]
+            self.assertEqual(len(ids), 1, f"{efecto['etiqueta']}: se esperaba una sola tarea")
+            nid = ids[0]
+            self.assertEqual(carril_de.get(nid), bpmn.CARRIL_SISTEMA,
+                             "el efecto no lo ejecuta nadie: va en el carril del sistema")
+            entran = [f for f in flujos if f[2] == nid]
+            salen = [f for f in flujos if f[1] == nid]
+            self.assertTrue(entran, "nadie llega al efecto: no está interpuesto")
+            self.assertEqual(len(salen), 1, "el efecto debe continuar hacia el estado")
+
+    def test_los_saltos_a_otro_proceso_van_a_un_pool_caja_negra(self):
+        """Un mensaje necesita destinatario, y el destinatario es otro proceso.
+
+        Se dibuja como participante sin `processRef` —la caja negra de BPMN—
+        porque este diagrama no describe el interior del otro.
+        """
+        for salto in bpmn.SALTOS_ENTRE_PROCESOS:
+            raiz = ET.fromstring(self.diagramas[salto["document_type"]])
+            colab = raiz.find(f"{M}collaboration")
+            cajas = {p.get("name"): p.get("id") for p in colab.iter(f"{M}participant")
+                     if not p.get("processRef")}
+            self.assertIn(salto["hacia"], cajas,
+                          f"falta el pool de {salto['hacia']}")
+            destinos = [m.get("targetRef") for m in colab.iter(f"{M}messageFlow")
+                        if m.get("name") == salto["etiqueta"]]
+            self.assertIn(cajas[salto["hacia"]], destinos,
+                          "el mensaje no apunta al pool del proceso destino")
+
+    def test_cada_salto_declarado_existe_de_verdad_en_el_codigo(self):
+        """Regla de admisión: no se dibuja un salto que nadie ejecuta."""
+        import importlib
+        for salto in bpmn.SALTOS_ENTRE_PROCESOS:
+            partes = salto["origen"].split(".")
+            for corte in range(len(partes) - 1, 0, -1):
+                try:
+                    objeto = importlib.import_module(".".join(partes[:corte]))
+                except ImportError:
+                    continue
+                for atributo in partes[corte:]:
+                    objeto = getattr(objeto, atributo, None)
+                    self.assertIsNotNone(objeto, f"«{salto['origen']}» ya no existe")
+                break
+            else:
+                self.fail(f"no se pudo importar nada de «{salto['origen']}»")
+
+    def test_un_diagrama_sin_saltos_no_gana_pools_de_mas(self):
+        """Solo llevan caja negra los que de verdad mandan algo."""
+        con_saltos = {s["document_type"] for s in bpmn.SALTOS_ENTRE_PROCESOS}
+        for dt, xml in self.diagramas.items():
+            if dt in con_saltos:
+                continue
+            colab = ET.fromstring(xml).find(f"{M}collaboration")
+            sueltos = [p.get("name") for p in colab.iter(f"{M}participant")
+                       if not p.get("processRef")]
+            self.assertEqual(sueltos, [], f"{dt} tiene pools que no le corresponden")
+

@@ -2,6 +2,8 @@
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:sgc="https://sciback.com/schema/sgc/1.0" id="Definitions_1" targetNamespace="https://sciback.com/schema/sgc/1.0" exporter="SGC" exporterVersion="1.0">
   <bpmn:collaboration id="Collaboration_1">
     <bpmn:participant id="Participant_Hallazgo_Auditoria" name="Hallazgo Auditoria SGC" processRef="Process_Hallazgo_Auditoria" />
+    <bpmn:participant id="Participant_No_Conformidad" name="No Conformidad" />
+    <bpmn:messageFlow id="Msg_Escalado_a_NC__No_Conformidad" name="Escalar a no conformidad" sourceRef="Task_Escalado_a_NC__Cerrar" targetRef="Participant_No_Conformidad" />
   </bpmn:collaboration>
   <bpmn:process id="Process_Hallazgo_Auditoria" isExecutable="false">
     <bpmn:documentation>Lo que la auditoría encuentra, clasificado por tipo: no conformidad mayor o menor, observación, oportunidad de mejora, conformidad o fortaleza. El hallazgo es la salida propia de la auditoría interna que rige ISO 19011. Cuando constituye una no conformidad, escala a un documento «No Conformidad», que es donde ISO 9001:2015 §10.2 sitúa la reacción y la acción correctiva. Quien levanta el hallazgo no lo cierra.</bpmn:documentation>
@@ -99,6 +101,13 @@
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
         <dc:Bounds x="322" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Participant_No_Conformidad" bpmnElement="Participant_No_Conformidad" isHorizontal="true">
+        <dc:Bounds x="200" y="460" width="1030" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_Msg_Escalado_a_NC__No_Conformidad" bpmnElement="Msg_Escalado_a_NC__No_Conformidad">
+        <di:waypoint x="890" y="360" />
+        <di:waypoint x="890" y="460" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
         <di:waypoint x="358" y="160" />
         <di:waypoint x="430" y="160" />

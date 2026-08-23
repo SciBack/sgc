@@ -99,25 +99,41 @@ que esté dicha.
 del gateway, o anotaciones de texto. El generador tendría que leerlas del
 controlador, que hoy no hace.
 
-### 3. Los 15 diagramas están aislados; el sistema los encadena ⚠️
+### 3. Los diagramas estaban aislados; el sistema los encadena ⚠️ *(3 de 5 cerradas)*
 
-Cada `.bpmn` es un proceso cerrado en su propio pool. Pero el sistema **salta de
-un proceso a otro**, y esos saltos no se dibujan:
+Cada `.bpmn` era un proceso cerrado en su propio pool. Pero el sistema **salta de
+un proceso a otro**, y esos saltos no se dibujaban. El generador ya dibuja tres:
 
 | Cuando… | el sistema… | y el diagrama |
 |---|---|---|
-| un riesgo se materializa | crea una **No Conformidad** | no lo muestra |
-| se escala un hallazgo de auditoría | crea una **No Conformidad** | no lo muestra |
-| se cierra una aplicación de instrumento | publica **Valor Indicador** | no lo muestra |
-| se valida una evidencia | sincroniza **Trazabilidad** | no lo muestra |
-| se cierra una autoevaluación | promueve la **vigencia oficial** | no lo muestra |
+| un riesgo se materializa | crea una **No Conformidad** | ✅ *message flow* al pool caja negra (13) |
+| se escala un hallazgo de auditoría | crea una **No Conformidad** | ✅ *message flow* al pool caja negra (08) |
+| se cierra una aplicación de instrumento | publica **Valor Indicador** | ✅ `serviceTask` en el carril Sistema (04) |
+| se valida una evidencia | sincroniza **Trazabilidad** | ⚠️ no lo muestra |
+| se cierra una autoevaluación | promueve la **vigencia oficial** | ⚠️ no lo muestra |
 
-**Qué significa:** el orden `01…15` de los ficheros expresa una secuencia que
-los diagramas, por sí solos, no cuentan. Quien vea uno aislado no sabrá de dónde
-le llega el trabajo ni a dónde va.
+**Cómo se dibujan ahora, y por qué de dos maneras distintas.** No son la misma
+cosa y BPMN las distingue:
 
-**Cómo se arreglaría:** BPMN lo resuelve con *message flows* entre pools, o con
-un diagrama de colaboración de nivel superior que enlace los 15.
+- **Un efecto que se queda dentro** (publicar los valores de indicador al cerrar
+  la aplicación) es trabajo del propio proceso, así que va como `serviceTask` en
+  el carril «Sistema (automático)», **interpuesto entre la acción y el estado** —
+  que es cuando ocurre de verdad. Se declara en `EFECTOS_AL_ENTRAR`.
+- **Un salto que cruza a otro proceso** (escalar a no conformidad) es un mensaje
+  a alguien más, así que va como `messageFlow` hacia un **participante sin
+  `processRef`** — la caja negra de BPMN: se nombra el destinatario sin abrirlo,
+  porque su interior está dibujado en su propio fichero. Se declara en
+  `SALTOS_ENTRE_PROCESOS`.
+
+**Regla de admisión, para que esto no se llene de flechas decorativas:** solo se
+dibuja lo que existe en el código. Cada entrada declara su `origen` (ruta al
+método real) y un test lo importa: si alguien renombra o borra el método, el test
+cae. Es el mismo candado que ya tenía `TRANSICIONES_AUTOMATICAS`.
+
+**Lo que sigue abierto:** las dos filas de arriba con ⚠️. La trazabilidad y la
+vigencia oficial no se dibujan porque no son ni un efecto puntual al entrar en un
+estado ni un mensaje a otro proceso: son sincronizaciones de datos. Meterlas con
+la notación equivocada diría algo falso; queda pendiente decidir cuál les toca.
 
 ---
 

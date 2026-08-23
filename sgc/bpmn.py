@@ -52,6 +52,7 @@ LADO_EVENTO, LADO_GATEWAY = 36, 50
 PASO_X = 200          # separación entre columnas
 ALTO_CARRIL = 160
 X_ORIGEN, Y_ORIGEN = 200, 80
+ALTO_DESTINO = 60      # pool caja negra: banda estrecha, sin interior
 ANCHO_ETIQUETA = 30   # margen izquierdo del pool para el nombre vertical
 
 
@@ -89,12 +90,75 @@ TRANSICIONES_AUTOMATICAS = [
     },
 ]
 
+# Lo que el sistema hace al ENTRAR en un estado, sin cambiar de estado.
+#
+# `TRANSICIONES_AUTOMATICAS` no sirve para esto: aquella va de un estado a otro,
+# y aquí el documento se queda donde está — lo que cambia es OTRA cosa (se crean
+# documentos, se publican valores). Sin dibujarlo, el diagrama del 04 terminaba
+# en «Cerrada» y no contaba lo más importante que pasa ahí: que al cerrar, los
+# resultados de la encuesta se convierten en valores de indicador que alimentan
+# la acreditación. Quien lea el proceso tiene que ver ese salto.
+#
+# Se dibuja como `serviceTask` INTERPUESTA entre la acción y el estado: el
+# efecto ocurre al cerrar, antes de que el proceso termine, y así se lee.
+EFECTOS_AL_ENTRAR = [
+    {
+        "document_type": "Aplicacion Instrumento",
+        "estado": "Cerrada",
+        "etiqueta": "Publicar valores de indicador",
+        "origen": "sgc.sgc_gobierno.doctype.resultado_instrumento.resultado_instrumento"
+                  ".publicar_valores_indicador",
+    },
+]
+
+# Lo que un proceso le manda a OTRO proceso.
+#
+# Cada fichero dibuja un proceso aislado, y eso deja fuera lo que más cuesta
+# reconstruir a quien audita: que un riesgo materializado se convierte en una no
+# conformidad, o que un hallazgo de auditoría escala a esa misma cadena. Verlo
+# exigía leer el código, porque ningún diagrama lo decía.
+#
+# BPMN lo resuelve con un participante «caja negra» —un pool sin proceso dentro,
+# que representa al otro sin pretender describirlo— y un `messageFlow` hacia él.
+# Es la construcción estándar para esto y cualquier modelador la abre.
+#
+# Regla de admisión, como con la documentación normativa: solo entra lo que
+# ocurre DE VERDAD en el código, con la función que lo hace anotada al lado. Un
+# salto que solo está en la cabeza de alguien no se dibuja.
+SALTOS_ENTRE_PROCESOS = [
+    {
+        "document_type": "Riesgo",
+        "desde": "Materializado",
+        "hacia": "No Conformidad",
+        "etiqueta": "Escalar a no conformidad",
+        "origen": "sgc.sgc_riesgos.doctype.riesgo.riesgo.Riesgo.escalar_a_no_conformidad",
+    },
+    {
+        "document_type": "Hallazgo Auditoria",
+        "desde": "Escalado a NC",
+        "hacia": "No Conformidad",
+        "etiqueta": "Escalar a no conformidad",
+        "origen": "sgc.sgc_auditoria.doctype.hallazgo_auditoria.hallazgo_auditoria"
+                  ".HallazgoAuditoria.escalar_a_no_conformidad",
+    },
+]
+
 CARRIL_SISTEMA = "Sistema (automático)"
 
 
 def automaticas_de(document_type):
     """Transiciones automáticas declaradas para un DocType."""
     return [a for a in TRANSICIONES_AUTOMATICAS if a["document_type"] == document_type]
+
+
+def efectos_de(document_type):
+    """Efectos automáticos al entrar en un estado, declarados para un DocType."""
+    return [e for e in EFECTOS_AL_ENTRAR if e["document_type"] == document_type]
+
+
+def saltos_de(document_type):
+    """Mensajes declarados de este proceso hacia otros."""
+    return [x for x in SALTOS_ENTRE_PROCESOS if x["document_type"] == document_type]
 
 
 # ===========================================================================
@@ -599,7 +663,8 @@ def construir(spec, layout_previo=None):
     if not carriles:
         carriles = ["Sistema"]
     automaticas = automaticas_de(spec["document_type"])
-    if automaticas and CARRIL_SISTEMA not in carriles:
+    efectos = efectos_de(spec["document_type"])
+    if (automaticas or efectos) and CARRIL_SISTEMA not in carriles:
         carriles.append(CARRIL_SISTEMA)   # abajo del todo: no lo ejecuta nadie
     fila_de = {rol: i for i, rol in enumerate(carriles)}
     # (el carril del sistema ya está incluido si hay transiciones automáticas)
@@ -698,6 +763,27 @@ def construir(spec, layout_previo=None):
             {"rol": t[3], "autoaprobacion": t[4] if len(t) > 4 else 0},
         ))
 
+    # --- lo que el sistema hace AL LLEGAR, sin mover el estado ---
+    # Se interpone: los flujos que ya apuntaban al estado pasan a apuntar al
+    # serviceTask, y este al destino de siempre. Hacerlo aquí, con los flujos de
+    # transición ya creados, evita tener que saber de antemano quién llega.
+    for efecto in efectos:
+        estado = efecto["estado"]
+        if estado not in estados:
+            continue              # el estado ya no existe: se omite, no se inventa
+        destino = entrada_a(estado)
+        nid = _id("Efecto", f"{estado}__{efecto['etiqueta']}", usados)
+        entrantes = [k for k, f in enumerate(flujos)
+                     if f[2] == destino and f[1] != nid]
+        if not entrantes:
+            continue              # nadie llega a ese estado: nada que interponer
+        nodos[nid] = _Nodo(nid, "serviceTask", efecto["etiqueta"], CARRIL_SISTEMA, 0,
+                           fila_de[CARRIL_SISTEMA])
+        for k in entrantes:
+            fid, origen, _dest, etiqueta, ext = flujos[k]
+            flujos[k] = (fid, origen, nid, etiqueta, ext)
+        flujos.append((_id("Flow", f"efecto_{estado}", usados), nid, destino, "", None))
+
     # --- posiciones: columna por alcance, fila por carril, sin solapes ---
     col = _columnas_por_alcance(list(nodos), flujos, nid_inicio)
     ocupadas = set()
@@ -709,11 +795,23 @@ def construir(spec, layout_previo=None):
         ocupadas.add((c, n.fila))
         n.col = c
 
-    return _serializar(spec, carriles, nodos, flujos, layout_previo or {})
+    # --- lo que este proceso le manda a otro ---
+    # El origen es el nodo que representa «el documento está en ese estado»: la
+    # misma resolución que usan las flechas internas, para que el mensaje salga
+    # de donde el lector ya está mirando.
+    mensajes = []
+    for salto in saltos_de(spec["document_type"]):
+        if salto["desde"] not in estados:
+            continue
+        mensajes.append((_id("Msg", f"{salto['desde']}__{salto['hacia']}", usados),
+                         entrada_a(salto["desde"]), salto["hacia"], salto["etiqueta"]))
+
+    return _serializar(spec, carriles, nodos, flujos, layout_previo or {}, mensajes)
 
 
-def _serializar(spec, carriles, nodos, flujos, layout_previo=None):
+def _serializar(spec, carriles, nodos, flujos, layout_previo=None, mensajes=None):
     layout_previo = layout_previo or {}
+    mensajes = mensajes or []
 
     def geom(nodo):
         """Posición del nodo: la ajustada a mano si existe, si no la calculada."""
@@ -741,8 +839,21 @@ def _serializar(spec, carriles, nodos, flujos, layout_previo=None):
       + f' targetNamespace={quoteattr(NS["sgc"])}'
       + ' exporter="SGC" exporterVersion="1.0">')
 
+    # Un participante «caja negra» por cada proceso destino: pool sin processRef,
+    # que es como BPMN representa a un tercero del que no se describe el interior.
+    destinos = []
+    for _mid, _origen, hacia, _etiqueta in mensajes:
+        if hacia not in destinos:
+            destinos.append(hacia)
+    id_destino = {d: _id("Participant", d) for d in destinos}
+
     a(f'  <bpmn:collaboration id="{collab_id}">')
     a(f'    <bpmn:participant id="{part_id}" name={quoteattr(spec["name"])} processRef="{proc_id}" />')
+    for d in destinos:
+        a(f'    <bpmn:participant id="{id_destino[d]}" name={quoteattr(d)} />')
+    for mid, origen, hacia, etiqueta in mensajes:
+        a(f'    <bpmn:messageFlow id="{mid}" name={quoteattr(etiqueta)} '
+          f'sourceRef="{origen}" targetRef="{id_destino[hacia]}" />')
     a("  </bpmn:collaboration>")
 
     a(f'  <bpmn:process id="{proc_id}" isExecutable="false">')
@@ -812,6 +923,26 @@ def _serializar(spec, carriles, nodos, flujos, layout_previo=None):
         a(f'        <dc:Bounds x="{int(gx)}" y="{int(gy)}" '
           f'width="{int(gw)}" height="{int(gh)}" />')
         a("      </bpmndi:BPMNShape>")
+    # Los pools destino van debajo del principal, uno por fila. Un pool caja
+    # negra se dibuja como una banda estrecha: no tiene interior que mostrar.
+    y_destino = {}
+    for i, d in enumerate(destinos):
+        y = Y_ORIGEN + alto_pool + 60 + i * (ALTO_DESTINO + 20)
+        y_destino[d] = y
+        a(f'      <bpmndi:BPMNShape id="Shape_{id_destino[d]}" '
+          f'bpmnElement="{id_destino[d]}" isHorizontal="true">')
+        a(f'        <dc:Bounds x="{X_ORIGEN}" y="{int(y)}" '
+          f'width="{ancho_pool}" height="{ALTO_DESTINO}" />')
+        a("      </bpmndi:BPMNShape>")
+
+    for mid, origen, hacia, _etiqueta in mensajes:
+        ox, oy, ow, oh = geom(nodos[origen])
+        cx, _cy = _centro(ox, oy, ow, oh)
+        a(f'      <bpmndi:BPMNEdge id="Edge_{mid}" bpmnElement="{mid}">')
+        a(f'        <di:waypoint x="{int(cx)}" y="{int(oy + oh)}" />')
+        a(f'        <di:waypoint x="{int(cx)}" y="{int(y_destino[hacia])}" />')
+        a("      </bpmndi:BPMNEdge>")
+
     for fid, src, tgt, _nombre, _ext in flujos:
         ns, nt = nodos[src], nodos[tgt]
         sx, sy, sw, sh = geom(ns)

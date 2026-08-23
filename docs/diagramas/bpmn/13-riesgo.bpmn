@@ -2,6 +2,8 @@
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:sgc="https://sciback.com/schema/sgc/1.0" id="Definitions_1" targetNamespace="https://sciback.com/schema/sgc/1.0" exporter="SGC" exporterVersion="1.0">
   <bpmn:collaboration id="Collaboration_1">
     <bpmn:participant id="Participant_Riesgo" name="Riesgo SGC" processRef="Process_Riesgo" />
+    <bpmn:participant id="Participant_No_Conformidad" name="No Conformidad" />
+    <bpmn:messageFlow id="Msg_Materializado__No_Conformidad" name="Escalar a no conformidad" sourceRef="Task_Materializado__Cerrar" targetRef="Participant_No_Conformidad" />
   </bpmn:collaboration>
   <bpmn:process id="Process_Riesgo" isExecutable="false">
     <bpmn:documentation>Inventario de riesgos. ISO 9001:2015 §6.1 obliga a determinar y abordar los riesgos y oportunidades capaces de afectar al sistema de gestión; identificarlos, analizarlos y valorarlos es el proceso de ISO 31000 (§6.4.2 para la identificación). Un riesgo que se materializa no se cierra: entra al ciclo de mejora como no conformidad (ISO 9001:2015 §10.2), y por eso confirmar la materialización es un control y no un avance más del propio dueño del riesgo.</bpmn:documentation>
@@ -131,6 +133,13 @@
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
         <dc:Bounds x="312" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Participant_No_Conformidad" bpmnElement="Participant_No_Conformidad" isHorizontal="true">
+        <dc:Bounds x="200" y="460" width="1586" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_Msg_Materializado__No_Conformidad" bpmnElement="Msg_Materializado__No_Conformidad">
+        <di:waypoint x="1530" y="410" />
+        <di:waypoint x="1530" y="460" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
         <di:waypoint x="348" y="160" />
         <di:waypoint x="430" y="160" />
