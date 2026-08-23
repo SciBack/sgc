@@ -102,10 +102,10 @@
         <dc:Bounds x="1230" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
-        <dc:Bounds x="230" y="142" width="36" height="36" />
+        <dc:Bounds x="302" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
-        <di:waypoint x="266" y="160" />
+        <di:waypoint x="338" y="160" />
         <di:waypoint x="430" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Borrador_Aprobar_programa_hacia_Aprobado" bpmnElement="Flow_Borrador_Aprobar_programa_hacia_Aprobado">

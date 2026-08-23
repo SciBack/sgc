@@ -115,10 +115,10 @@
         <dc:Bounds x="1630" y="302" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
-        <dc:Bounds x="230" y="142" width="36" height="36" />
+        <dc:Bounds x="312" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
-        <di:waypoint x="266" y="160" />
+        <di:waypoint x="348" y="160" />
         <di:waypoint x="430" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Planificada_Iniciar_evaluacion_hacia_En_curso" bpmnElement="Flow_Planificada_Iniciar_evaluacion_hacia_En_curso">

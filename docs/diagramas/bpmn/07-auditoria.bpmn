@@ -115,80 +115,80 @@
         <dc:Bounds x="230" y="240" width="1716" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Planificada__Iniciar_auditoria" bpmnElement="Task_Planificada__Iniciar_auditoria">
-        <dc:Bounds x="430" y="120" width="120" height="80" />
+        <dc:Bounds x="430" y="190" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_En_ejecucion__Marcar_ejecutada" bpmnElement="Task_En_ejecucion__Marcar_ejecutada">
-        <dc:Bounds x="630" y="120" width="120" height="80" />
+        <dc:Bounds x="630" y="190" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Ejecutada__Emitir_informe" bpmnElement="Task_Ejecutada__Emitir_informe">
-        <dc:Bounds x="1030" y="120" width="120" height="80" />
+        <dc:Bounds x="1030" y="190" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Ejecutada__Devolver_a_ejecucion" bpmnElement="Task_Ejecutada__Devolver_a_ejecucion">
-        <dc:Bounds x="1230" y="120" width="120" height="80" />
+        <dc:Bounds x="1230" y="190" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Informe_emitido__Cerrar_auditoria" bpmnElement="Task_Informe_emitido__Cerrar_auditoria">
-        <dc:Bounds x="1430" y="280" width="120" height="80" />
+        <dc:Bounds x="1430" y="395" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Informe_emitido__Reabrir" bpmnElement="Task_Informe_emitido__Reabrir">
-        <dc:Bounds x="1630" y="280" width="120" height="80" />
+        <dc:Bounds x="1630" y="395" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Gateway_Ejecutada" bpmnElement="Gateway_Ejecutada">
-        <dc:Bounds x="830" y="135" width="50" height="50" />
+        <dc:Bounds x="830" y="205" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Gateway_Informe_emitido" bpmnElement="Gateway_Informe_emitido">
-        <dc:Bounds x="1230" y="295" width="50" height="50" />
+        <dc:Bounds x="1230" y="410" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_End_Cerrada" bpmnElement="End_Cerrada">
-        <dc:Bounds x="1830" y="302" width="36" height="36" />
+        <dc:Bounds x="1830" y="417" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
-        <dc:Bounds x="230" y="142" width="36" height="36" />
+        <dc:Bounds x="312" y="212" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
-        <di:waypoint x="266" y="160" />
-        <di:waypoint x="430" y="160" />
+        <di:waypoint x="348" y="230" />
+        <di:waypoint x="430" y="230" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Planificada_Iniciar_auditoria_hacia_En_ejecucion" bpmnElement="Flow_Planificada_Iniciar_auditoria_hacia_En_ejecucion">
-        <di:waypoint x="550" y="160" />
-        <di:waypoint x="630" y="160" />
+        <di:waypoint x="550" y="230" />
+        <di:waypoint x="630" y="230" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_En_ejecucion_Marcar_ejecutada_hacia_Ejecutada" bpmnElement="Flow_En_ejecucion_Marcar_ejecutada_hacia_Ejecutada">
-        <di:waypoint x="750" y="160" />
-        <di:waypoint x="830" y="160" />
+        <di:waypoint x="750" y="230" />
+        <di:waypoint x="830" y="230" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Ejecutada_Emitir_informe" bpmnElement="Flow_gw_Ejecutada_Emitir_informe">
-        <di:waypoint x="880" y="160" />
-        <di:waypoint x="1030" y="160" />
+        <di:waypoint x="880" y="230" />
+        <di:waypoint x="1030" y="230" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Ejecutada_Emitir_informe_hacia_Informe_emitido" bpmnElement="Flow_Ejecutada_Emitir_informe_hacia_Informe_emitido">
-        <di:waypoint x="1090" y="200" />
-        <di:waypoint x="1090" y="320" />
-        <di:waypoint x="1230" y="320" />
+        <di:waypoint x="1090" y="270" />
+        <di:waypoint x="1090" y="435" />
+        <di:waypoint x="1230" y="435" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Ejecutada_Devolver_a_ejecucion" bpmnElement="Flow_gw_Ejecutada_Devolver_a_ejecucion">
-        <di:waypoint x="880" y="160" />
-        <di:waypoint x="1230" y="160" />
+        <di:waypoint x="880" y="230" />
+        <di:waypoint x="1230" y="230" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Ejecutada_Devolver_a_ejecucion_hacia_En_ejecucion" bpmnElement="Flow_Ejecutada_Devolver_a_ejecucion_hacia_En_ejecucion">
-        <di:waypoint x="1230" y="160" />
-        <di:waypoint x="750" y="160" />
+        <di:waypoint x="1230" y="230" />
+        <di:waypoint x="750" y="230" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Informe_emitido_Cerrar_auditoria" bpmnElement="Flow_gw_Informe_emitido_Cerrar_auditoria">
-        <di:waypoint x="1280" y="320" />
-        <di:waypoint x="1430" y="320" />
+        <di:waypoint x="1280" y="435" />
+        <di:waypoint x="1430" y="435" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Informe_emitido_Cerrar_auditoria_hacia_Cerrada" bpmnElement="Flow_Informe_emitido_Cerrar_auditoria_hacia_Cerrada">
-        <di:waypoint x="1550" y="320" />
-        <di:waypoint x="1830" y="320" />
+        <di:waypoint x="1550" y="435" />
+        <di:waypoint x="1830" y="435" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Informe_emitido_Reabrir" bpmnElement="Flow_gw_Informe_emitido_Reabrir">
-        <di:waypoint x="1280" y="320" />
-        <di:waypoint x="1630" y="320" />
+        <di:waypoint x="1280" y="435" />
+        <di:waypoint x="1630" y="435" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Informe_emitido_Reabrir_hacia_Ejecutada" bpmnElement="Flow_Informe_emitido_Reabrir_hacia_Ejecutada">
-        <di:waypoint x="1690" y="280" />
-        <di:waypoint x="1690" y="160" />
-        <di:waypoint x="880" y="160" />
+        <di:waypoint x="1690" y="395" />
+        <di:waypoint x="1690" y="230" />
+        <di:waypoint x="880" y="230" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

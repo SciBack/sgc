@@ -96,10 +96,10 @@
         <dc:Bounds x="430" y="135" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
-        <dc:Bounds x="230" y="142" width="36" height="36" />
+        <dc:Bounds x="322" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
-        <di:waypoint x="266" y="160" />
+        <di:waypoint x="358" y="160" />
         <di:waypoint x="430" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Abierto_Escalar_a_NC" bpmnElement="Flow_gw_Abierto_Escalar_a_NC">

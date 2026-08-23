@@ -96,16 +96,16 @@
         <dc:Bounds x="1230" y="280" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Gateway_Implementado" bpmnElement="Gateway_Implementado">
-        <dc:Bounds x="830" y="295" width="50" height="50" />
+        <dc:Bounds x="665" y="295" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_End_Verificado" bpmnElement="End_Verificado">
         <dc:Bounds x="1030" y="302" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
-        <dc:Bounds x="230" y="142" width="36" height="36" />
+        <dc:Bounds x="312" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
-        <di:waypoint x="266" y="160" />
+        <di:waypoint x="348" y="160" />
         <di:waypoint x="430" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Planificado_Iniciar_hacia_En_ejecucion" bpmnElement="Flow_Planificado_Iniciar_hacia_En_ejecucion">
@@ -115,10 +115,10 @@
       <bpmndi:BPMNEdge id="Edge_Flow_En_ejecucion_Marcar_implementado_hacia_Implementado" bpmnElement="Flow_En_ejecucion_Marcar_implementado_hacia_Implementado">
         <di:waypoint x="690" y="200" />
         <di:waypoint x="690" y="320" />
-        <di:waypoint x="830" y="320" />
+        <di:waypoint x="665" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Implementado_Verificar" bpmnElement="Flow_gw_Implementado_Verificar">
-        <di:waypoint x="880" y="320" />
+        <di:waypoint x="715" y="320" />
         <di:waypoint x="830" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Implementado_Verificar_hacia_Verificado" bpmnElement="Flow_Implementado_Verificar_hacia_Verificado">
@@ -126,7 +126,7 @@
         <di:waypoint x="1030" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Implementado_Verificar_no_eficaz" bpmnElement="Flow_gw_Implementado_Verificar_no_eficaz">
-        <di:waypoint x="880" y="320" />
+        <di:waypoint x="715" y="320" />
         <di:waypoint x="1230" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Implementado_Verificar_no_eficaz_hacia_En_ejecucion" bpmnElement="Flow_Implementado_Verificar_no_eficaz_hacia_En_ejecucion">

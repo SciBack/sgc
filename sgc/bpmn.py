@@ -112,30 +112,123 @@ def specs_de_workflows():
     aqui = pathlib.Path(__file__).parent / "setup"
     vistos, encontradas = set(), []
     for archivo in sorted(aqui.glob("f*workflow*.py")):
+        specs = None
         try:
             mod = importlib.import_module(f"sgc.setup.{archivo.stem}")
+            specs = [
+                getattr(mod, n) for n in dir(mod)
+                if _es_spec(getattr(mod, n))
+            ]
         except Exception:
-            # Un módulo que no importa no debe tumbar la exportación del resto,
-            # pero tampoco desaparecer sin dejar rastro.
-            print(f"  [SKIP] no se pudo importar {archivo.name}")
-            continue
-        for nombre in dir(mod):
-            valor = getattr(mod, nombre)
-            if (isinstance(valor, dict) and "document_type" in valor
-                    and "states" in valor and "transitions" in valor):
-                if valor["document_type"] in vistos:
-                    continue
-                vistos.add(valor["document_type"])
-                encontradas.append((archivo.stem, valor))
+            # Los módulos de setup importan `frappe`, así que fuera de un bench
+            # no se pueden importar. Antes eso bastaba para que la exportación
+            # devolviera CERO diagramas -- el generador solo funcionaba dentro
+            # del servidor, y por eso era tan fácil olvidarse de regenerar (ya
+            # pasó: se creó el workflow f16 y su .bpmn no existió hasta que
+            # alguien preguntó por él). Los specs son diccionarios literales, así
+            # que se pueden leer del código fuente sin ejecutarlo.
+            specs = _specs_por_ast(archivo)
+            if specs is None:
+                print(f"  [SKIP] no se pudo leer {archivo.name}")
+                continue
+        for valor in specs:
+            if valor["document_type"] in vistos:
+                continue
+            vistos.add(valor["document_type"])
+            encontradas.append((archivo.stem, valor))
     return encontradas
 
 
+def _es_spec(valor):
+    return (isinstance(valor, dict) and "document_type" in valor
+            and "states" in valor and "transitions" in valor)
+
+
+def _specs_por_ast(archivo):
+    """Lee los specs de un módulo de setup SIN ejecutarlo.
+
+    Solo acepta literales (`ast.literal_eval`): si alguien construyera un spec
+    con código —una comprensión, una llamada— aquí se vería como `None` y el
+    módulo se reportaría como no leído, que es preferible a exportar un diagrama
+    incompleto sin avisar.
+    """
+    import ast
+
+    try:
+        arbol = ast.parse(archivo.read_text(encoding="utf-8"))
+    except SyntaxError:
+        return None
+    hallados = []
+    for nodo in arbol.body:
+        if not isinstance(nodo, ast.Assign):
+            continue
+        try:
+            valor = ast.literal_eval(nodo.value)
+        except (ValueError, SyntaxError):
+            continue
+        if _es_spec(valor):
+            hallados.append(valor)
+    return hallados
+
+
+# Orden en que se recorre el sistema. No es alfabético ni caprichoso: sigue las
+# DEPENDENCIAS REALES entre flujos, de modo que al validarlos en secuencia cada
+# uno encuentre hecho lo que necesita.
+#
+#   01-02  la base documental: sin documento controlado ni evidencia no hay nada
+#          que sustente una valoración (Evidencia enlaza a Documento Controlado).
+#   03-05  acreditación, el núcleo: la autoevaluación consume esa evidencia, las
+#          encuestas publican los indicadores que ella usa, y el diagnóstico CBC
+#          es el otro entregable regulatorio.
+#   06-08  verificación independiente: el programa anual gobierna las auditorías
+#          y estas producen hallazgos.
+#   09-12  la cadena CAPA, donde desembocan los hallazgos de todo lo anterior.
+#   13-14  riesgos: gestión preventiva que, al materializarse, también entra a CAPA.
+#   15     la revisión por la dirección cierra el ciclo (ISO 9001 §9.3): consume
+#          las salidas de todos los demás.
+ORDEN_RECORRIDO = (
+    "Documento Controlado",
+    "Evidencia",
+    "Autoevaluacion",
+    "Aplicacion Instrumento",
+    "Informe Cumplimiento",
+    "Programa Auditoria",
+    "Auditoria",
+    "Hallazgo Auditoria",
+    "Hallazgo",
+    "No Conformidad",
+    "Plan Mejora",
+    "Accion Mejora",
+    "Riesgo",
+    "Tratamiento Riesgo",
+    "Revision Direccion",
+)
+
+
+def orden_de(document_type):
+    """Posición en el recorrido. Un workflow no listado va al final (99).
+
+    Se elige 99 y no un error para que un workflow nuevo NUNCA desaparezca por
+    olvidarse de ordenarlo: aparece el último y el prefijo repetido canta que
+    falta colocarlo.
+    """
+    try:
+        return ORDEN_RECORRIDO.index(document_type) + 1
+    except ValueError:
+        return 99
+
+
 def nombre_archivo(document_type):
-    """`No Conformidad` -> `no-conformidad.bpmn`."""
+    """`No Conformidad` -> `10-no-conformidad.bpmn`.
+
+    El prefijo numérico ordena los ficheros por el recorrido del sistema (ver
+    `ORDEN_RECORRIDO`), no por alfabeto: quien abre la carpeta ve por dónde
+    empezar y en qué secuencia seguir, sin tener que conocer el SGC de antemano.
+    """
     limpio = "".join(c.lower() if c.isalnum() else "-" for c in document_type)
     while "--" in limpio:
         limpio = limpio.replace("--", "-")
-    return limpio.strip("-") + ".bpmn"
+    return "{0:02d}-{1}.bpmn".format(orden_de(document_type), limpio.strip("-"))
 
 
 def layout_de(xml):
