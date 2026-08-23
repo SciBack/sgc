@@ -1,6 +1,6 @@
 # Concordancia entre los diagramas BPMN y el sistema real
 
-**Fecha:** 2026-08-23 · **Versión en producción:** `sgc-frappe:v102`
+**Fecha:** 2026-08-23 · **Versión en producción:** `sgc-frappe:v103`
 
 Contrastación de los 15 `.bpmn` contra el comportamiento comprobado en
 producción, recorriendo los flujos punta a punta con usuarios reales por rol.
@@ -242,6 +242,20 @@ diferencia es que ahora la casilla no es lo *único*.
 **Ojo al leerlo hoy:** `Proceso.responsable` está vacío en producción, así que la
 regla todavía no bloquea a nadie. Empezará a morder cuando se pueble — que es
 justamente cuando importa.
+
+## El generador también se equivoca: de dónde sale un mensaje
+
+Al añadir los `messageFlow` (commit `0198f98`) el origen se resolvía con
+`entrada_a`, la misma función que usan las flechas internas. Parecía coherente y
+era sutilmente falso: cuando el estado tiene **una sola salida no se dibuja**
+(discordancia 4), y entonces `entrada_a` devuelve la tarea **siguiente**. El 08
+acabó diciendo «al cerrar un hallazgo ya escalado, avisa a No Conformidad»
+cuando el aviso ocurre un paso antes, al escalarlo.
+
+Corregido: el mensaje sale de la **acción que lleva al estado**, con un test que
+lo fija contra las transiciones del spec. Se detectó leyendo el diagrama para
+recorrerlo, no revisando el código — que es el mismo motivo por el que existe
+este documento.
 
 ## Riesgo de deriva
 
