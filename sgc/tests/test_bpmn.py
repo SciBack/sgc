@@ -387,6 +387,29 @@ class IntegrationTestBpmn(IntegrationTestCase):
             self.assertIn(cajas[salto["hacia"]], destinos,
                           "el mensaje no apunta al pool del proceso destino")
 
+    def test_el_mensaje_sale_de_la_accion_que_escala(self):
+        """No del estado: es al EJECUTAR la acción cuando el otro proceso recibe.
+
+        Se resolvía con `entrada_a`, que para un estado de una sola salida
+        devuelve la tarea SIGUIENTE. El 08 acababa diciendo «al cerrar un
+        hallazgo ya escalado, avisa a No Conformidad» — cuando el aviso ocurre
+        al escalarlo, un paso antes.
+        """
+        for salto in bpmn.SALTOS_ENTRE_PROCESOS:
+            spec = next(s for _m, s in self.specs
+                        if s["document_type"] == salto["document_type"])
+            acciones = {t[1] for t in spec["transitions"] if t[2] == salto["estado"]}
+            raiz = ET.fromstring(self.diagramas[salto["document_type"]])
+            proceso, colab = raiz.find(f"{M}process"), raiz.find(f"{M}collaboration")
+            nombre_de = {e.get("id"): e.get("name") for e in proceso.iter(f"{M}userTask")}
+
+            for m in colab.iter(f"{M}messageFlow"):
+                if m.get("name") != salto["etiqueta"]:
+                    continue
+                self.assertIn(nombre_de.get(m.get("sourceRef")), acciones,
+                              f"«{salto['etiqueta']}» sale de un nodo que no lleva "
+                              f"a «{salto['estado']}»")
+
     def test_cada_salto_declarado_existe_de_verdad_en_el_codigo(self):
         """Regla de admisión: no se dibuja un salto que nadie ejecuta."""
         import importlib

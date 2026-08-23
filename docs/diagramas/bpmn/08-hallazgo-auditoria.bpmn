@@ -3,7 +3,8 @@
   <bpmn:collaboration id="Collaboration_1">
     <bpmn:participant id="Participant_Hallazgo_Auditoria" name="Hallazgo Auditoria SGC" processRef="Process_Hallazgo_Auditoria" />
     <bpmn:participant id="Participant_No_Conformidad" name="No Conformidad" />
-    <bpmn:messageFlow id="Msg_Escalado_a_NC__No_Conformidad" name="Escalar a no conformidad" sourceRef="Task_Escalado_a_NC__Cerrar" targetRef="Participant_No_Conformidad" />
+    <bpmn:messageFlow id="Msg_Escalar_a_NC__No_Conformidad" name="Escalar a no conformidad" sourceRef="Task_Abierto__Escalar_a_NC" targetRef="Participant_No_Conformidad" />
+    <bpmn:messageFlow id="Msg_Reabrir_escalado__No_Conformidad" name="Escalar a no conformidad" sourceRef="Task_Cerrado__Reabrir_escalado" targetRef="Participant_No_Conformidad" />
   </bpmn:collaboration>
   <bpmn:process id="Process_Hallazgo_Auditoria" isExecutable="false">
     <bpmn:documentation>Lo que la auditoría encuentra, clasificado por tipo: no conformidad mayor o menor, observación, oportunidad de mejora, conformidad o fortaleza. El hallazgo es la salida propia de la auditoría interna que rige ISO 19011. Cuando constituye una no conformidad, escala a un documento «No Conformidad», que es donde ISO 9001:2015 §10.2 sitúa la reacción y la acción correctiva. Quien levanta el hallazgo no lo cierra.</bpmn:documentation>
@@ -17,6 +18,8 @@
         <bpmn:flowNodeRef>Task_Abierto__Cerrar</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Task_Escalado_a_NC__Cerrar</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Task_Cerrado__Reabrir</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Cerrado__Reabrir_escalado</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Cerrado</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:userTask id="Task_Abierto__Escalar_a_NC" name="Escalar a NC">
@@ -29,18 +32,28 @@
     </bpmn:userTask>
     <bpmn:userTask id="Task_Escalado_a_NC__Cerrar" name="Cerrar">
       <bpmn:incoming>Flow_Abierto_Escalar_a_NC_hacia_Escalado_a_NC</bpmn:incoming>
+      <bpmn:incoming>Flow_Cerrado_Reabrir_escalado_hacia_Escalado_a_NC</bpmn:incoming>
       <bpmn:outgoing>Flow_Escalado_a_NC_Cerrar_hacia_Cerrado</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:userTask id="Task_Cerrado__Reabrir" name="Reabrir">
-      <bpmn:incoming>Flow_Abierto_Cerrar_hacia_Cerrado</bpmn:incoming>
-      <bpmn:incoming>Flow_Escalado_a_NC_Cerrar_hacia_Cerrado</bpmn:incoming>
+      <bpmn:incoming>Flow_gw_Cerrado_Reabrir</bpmn:incoming>
       <bpmn:outgoing>Flow_Cerrado_Reabrir_hacia_Abierto</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Cerrado__Reabrir_escalado" name="Reabrir escalado">
+      <bpmn:incoming>Flow_gw_Cerrado_Reabrir_escalado</bpmn:incoming>
+      <bpmn:outgoing>Flow_Cerrado_Reabrir_escalado_hacia_Escalado_a_NC</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:exclusiveGateway id="Gateway_Abierto" name="Abierto">
       <bpmn:incoming>Flow_inicio</bpmn:incoming>
       <bpmn:incoming>Flow_Cerrado_Reabrir_hacia_Abierto</bpmn:incoming>
       <bpmn:outgoing>Flow_gw_Abierto_Escalar_a_NC</bpmn:outgoing>
       <bpmn:outgoing>Flow_gw_Abierto_Cerrar</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Gateway_Cerrado" name="Cerrado">
+      <bpmn:incoming>Flow_Abierto_Cerrar_hacia_Cerrado</bpmn:incoming>
+      <bpmn:incoming>Flow_Escalado_a_NC_Cerrar_hacia_Cerrado</bpmn:incoming>
+      <bpmn:outgoing>Flow_gw_Cerrado_Reabrir</bpmn:outgoing>
+      <bpmn:outgoing>Flow_gw_Cerrado_Reabrir_escalado</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:startEvent id="StartEvent_1" name="Inicio">
       <bpmn:outgoing>Flow_inicio</bpmn:outgoing>
@@ -56,17 +69,26 @@
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_gw_Abierto_Cerrar" sourceRef="Gateway_Abierto" targetRef="Task_Abierto__Cerrar">
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_Abierto_Cerrar_hacia_Cerrado" sourceRef="Task_Abierto__Cerrar" targetRef="Task_Cerrado__Reabrir">
+    <bpmn:sequenceFlow id="Flow_Abierto_Cerrar_hacia_Cerrado" sourceRef="Task_Abierto__Cerrar" targetRef="Gateway_Cerrado">
       <bpmn:extensionElements>
         <sgc:transicion rol="DPGC" autoaprobacion="0" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_Escalado_a_NC_Cerrar_hacia_Cerrado" sourceRef="Task_Escalado_a_NC__Cerrar" targetRef="Task_Cerrado__Reabrir">
+    <bpmn:sequenceFlow id="Flow_Escalado_a_NC_Cerrar_hacia_Cerrado" sourceRef="Task_Escalado_a_NC__Cerrar" targetRef="Gateway_Cerrado">
       <bpmn:extensionElements>
         <sgc:transicion rol="DPGC" autoaprobacion="0" />
       </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_Cerrado_Reabrir" sourceRef="Gateway_Cerrado" targetRef="Task_Cerrado__Reabrir">
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_Cerrado_Reabrir_hacia_Abierto" sourceRef="Task_Cerrado__Reabrir" targetRef="Gateway_Abierto">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_Cerrado_Reabrir_escalado" sourceRef="Gateway_Cerrado" targetRef="Task_Cerrado__Reabrir_escalado">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Cerrado_Reabrir_escalado_hacia_Escalado_a_NC" sourceRef="Task_Cerrado__Reabrir_escalado" targetRef="Task_Escalado_a_NC__Cerrar">
       <bpmn:extensionElements>
         <sgc:transicion rol="DPGC" autoaprobacion="1" />
       </bpmn:extensionElements>
@@ -75,13 +97,13 @@
   <bpmndi:BPMNDiagram id="Diagram_1">
     <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
       <bpmndi:BPMNShape id="Shape_Participant_Hallazgo_Auditoria" bpmnElement="Participant_Hallazgo_Auditoria" isHorizontal="true">
-        <dc:Bounds x="200" y="80" width="1030" height="320" />
+        <dc:Bounds x="200" y="80" width="1430" height="320" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_Auditor_Interno" bpmnElement="Lane_Auditor_Interno" isHorizontal="true">
-        <dc:Bounds x="230" y="80" width="1000" height="160" />
+        <dc:Bounds x="230" y="80" width="1400" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
-        <dc:Bounds x="230" y="240" width="1000" height="160" />
+        <dc:Bounds x="230" y="240" width="1400" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Abierto__Escalar_a_NC" bpmnElement="Task_Abierto__Escalar_a_NC">
         <dc:Bounds x="630" y="120" width="120" height="80" />
@@ -95,18 +117,28 @@
       <bpmndi:BPMNShape id="Shape_Task_Cerrado__Reabrir" bpmnElement="Task_Cerrado__Reabrir">
         <dc:Bounds x="1030" y="280" width="120" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Cerrado__Reabrir_escalado" bpmnElement="Task_Cerrado__Reabrir_escalado">
+        <dc:Bounds x="1430" y="280" width="120" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Gateway_Abierto" bpmnElement="Gateway_Abierto">
         <dc:Bounds x="430" y="135" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Gateway_Cerrado" bpmnElement="Gateway_Cerrado">
+        <dc:Bounds x="1030" y="295" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
         <dc:Bounds x="322" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Participant_No_Conformidad" bpmnElement="Participant_No_Conformidad" isHorizontal="true">
-        <dc:Bounds x="200" y="460" width="1030" height="60" />
+        <dc:Bounds x="200" y="460" width="1430" height="60" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Edge_Msg_Escalado_a_NC__No_Conformidad" bpmnElement="Msg_Escalado_a_NC__No_Conformidad">
-        <di:waypoint x="890" y="360" />
-        <di:waypoint x="890" y="460" />
+      <bpmndi:BPMNEdge id="Edge_Msg_Escalar_a_NC__No_Conformidad" bpmnElement="Msg_Escalar_a_NC__No_Conformidad">
+        <di:waypoint x="690" y="200" />
+        <di:waypoint x="690" y="460" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Msg_Reabrir_escalado__No_Conformidad" bpmnElement="Msg_Reabrir_escalado__No_Conformidad">
+        <di:waypoint x="1490" y="360" />
+        <di:waypoint x="1490" y="460" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
         <di:waypoint x="358" y="160" />
@@ -134,10 +166,22 @@
         <di:waypoint x="950" y="320" />
         <di:waypoint x="1030" y="320" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_Cerrado_Reabrir" bpmnElement="Flow_gw_Cerrado_Reabrir">
+        <di:waypoint x="1080" y="320" />
+        <di:waypoint x="1030" y="320" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Cerrado_Reabrir_hacia_Abierto" bpmnElement="Flow_Cerrado_Reabrir_hacia_Abierto">
         <di:waypoint x="1090" y="280" />
         <di:waypoint x="1090" y="160" />
         <di:waypoint x="480" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_Cerrado_Reabrir_escalado" bpmnElement="Flow_gw_Cerrado_Reabrir_escalado">
+        <di:waypoint x="1080" y="320" />
+        <di:waypoint x="1430" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Cerrado_Reabrir_escalado_hacia_Escalado_a_NC" bpmnElement="Flow_Cerrado_Reabrir_escalado_hacia_Escalado_a_NC">
+        <di:waypoint x="1430" y="320" />
+        <di:waypoint x="950" y="320" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

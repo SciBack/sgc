@@ -10,6 +10,12 @@ Puente a M05 (§2): un hallazgo que constituye una no conformidad puede escalar 
 un documento `No Conformidad` transversal, reutilizando el motor CAPA
 (mismo enfoque que `sgc/capa.py`), con origen polimórfico Auditoria. Al escalar,
 el hallazgo queda marcado (`genera_nc=1`, `no_conformidad`, estado "Escalado a NC").
+
+Dos reglas de cierre y reapertura, ambas del recorrido del 2026-08-23:
+  - Un hallazgo tipo no conformidad (mayor o menor) NO se cierra sin escalar: es
+    en la `No Conformidad` donde ISO 9001 §10.2.1 sitúa la reacción.
+  - Un hallazgo escalado se reabre con «Reabrir escalado» (vuelve a «Escalado a
+    NC»), no con «Reabrir» (que es para los que nunca escalaron).
 """
 
 import frappe
@@ -50,9 +56,24 @@ class HallazgoAuditoria(Document):
             # a "Escalado a NC" en el primer guardado posterior — o, mejor, por
             # `escalar_a_no_conformidad()`, que es la acción real.
             if self.estado == "Abierto" and not self.is_new():
+                anterior = self.get_doc_before_save()
+                if anterior and anterior.estado == "Cerrado":
+                    # Reabrir un hallazgo escalado con la acción de los NO
+                    # escalados: sincronizar en silencio dejaría al workflow
+                    # rechazando una transición que el usuario no pidió
+                    # («Cerrado -> Escalado a NC»), con un mensaje que no dice
+                    # nada. Mejor explicar cuál es la acción suya.
+                    frappe.throw(
+                        _("Este hallazgo escaló a la no conformidad {0}: para "
+                          "reabrirlo use «Reabrir escalado», que lo devuelve a "
+                          "«Escalado a NC». Volver a «Abierto» diría que nunca "
+                          "escaló.").format(self.no_conformidad),
+                        title=_("Reapertura equivocada"),
+                    )
                 self.estado = "Escalado a NC"
 
         self._validar_escalamiento_real()
+        self._validar_cierre_de_no_conformidad()
         self._sincronizar_trazabilidad()
 
     def _validar_escalamiento_real(self):
@@ -73,6 +94,36 @@ class HallazgoAuditoria(Document):
                   "la No Conformidad. Use la acción de escalamiento, que la crea "
                   "y deja el vínculo."),
                 title=_("Escalamiento sin no conformidad"),
+            )
+
+    def _validar_cierre_de_no_conformidad(self):
+        """Una no conformidad no se cierra sin haber escalado (ISO 9001 §10.2.1).
+
+        La norma pide, ante una no conformidad, reaccionar y evaluar la necesidad
+        de acción correctiva; el sistema encauza eso creando un documento
+        `No Conformidad`, que es donde vive el análisis de causa y el plan.
+        Comprobado en el recorrido del 2026-08-23: un hallazgo tipo «No
+        conformidad mayor» se cerraba con `genera_nc=0` y sin NC — el sistema
+        quedaba afirmando que hubo una no conformidad mayor y que no se hizo
+        nada con ella.
+
+        Solo aplica a los dos tipos que SON no conformidad. Una observación o
+        una oportunidad de mejora pueden escalar, pero cerrarlas sin hacerlo es
+        una decisión legítima; una conformidad o una fortaleza no escalan
+        siquiera.
+
+        Si el hallazgo se levantó por error, la salida es corregir el `tipo`, no
+        cerrar una no conformidad en falso.
+        """
+        if self.estado != "Cerrado" or self.no_conformidad:
+            return
+
+        if self.tipo in ("No conformidad mayor", "No conformidad menor"):
+            frappe.throw(
+                _("Un hallazgo de tipo «{0}» no puede cerrarse sin escalar a una "
+                  "no conformidad: es donde se registra la reacción y la acción "
+                  "correctiva. Si se levantó por error, corrija el tipo.").format(self.tipo),
+                title=_("Cierre sin acción correctiva"),
             )
 
     # ---------------------------------------------------------------- helpers

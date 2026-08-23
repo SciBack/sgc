@@ -30,6 +30,19 @@ class IntegrationTestHallazgoAuditoriaWorkflow(IntegrationTestCase):
         doc.insert(ignore_permissions=True)
         return doc
 
+    def _hallazgo_de_otro(self, **kw):
+        """Igual, pero levantado por OTRA persona.
+
+        «Cerrar» tiene `allow_self_approval=0` a propósito —quien levanta el
+        hallazgo no lo cierra—, así que un hallazgo cuyo autor es quien corre el
+        test no se puede cerrar por el motor, y el guard que se quiere probar ni
+        siquiera llega a ejecutarse.
+        """
+        doc = self._hallazgo(**kw)
+        frappe.db.set_value("Hallazgo Auditoria", doc.name, "owner", "Guest",
+                            update_modified=False)
+        return frappe.get_doc("Hallazgo Auditoria", doc.name)
+
     def test_escalado_a_nc_exige_la_no_conformidad(self):
         """Declarar el escalamiento sin la NC deja el enlace M05↔M06 en falso."""
         doc = self._hallazgo()
@@ -96,3 +109,82 @@ class IntegrationTestHallazgoAuditoriaWorkflow(IntegrationTestCase):
         self.assertTrue(transiciones)
         self.assertNotIn("Auditor Interno", {t.allowed for t in transiciones},
                          "el auditor que levanta el hallazgo no cierra")
+
+    # ------------------------------------------------------------------
+    # Cierre y reapertura (recorrido 08, 2026-08-23)
+    # ------------------------------------------------------------------
+    def test_una_no_conformidad_no_se_cierra_sin_escalar(self):
+        """ISO 9001 §10.2.1: la reacción vive en la No Conformidad, no en el aire.
+
+        Se cerraba con `genera_nc=0` y sin NC vinculada: el sistema quedaba
+        afirmando que hubo una no conformidad mayor y que no se hizo nada.
+        """
+        for tipo in ("No conformidad mayor", "No conformidad menor"):
+            doc = self._hallazgo_de_otro(tipo=tipo)
+
+            with self.assertRaises(frappe.ValidationError, msg=tipo) as ctx:
+                apply_workflow(doc, "Cerrar")
+
+            self.assertIn("acción correctiva", str(ctx.exception))
+
+    def test_una_observacion_si_se_cierra_sin_escalar(self):
+        """Escalar una observación es opción, no obligación."""
+        for tipo in ("Observacion", "Oportunidad de mejora", "Conformidad", "Fortaleza"):
+            doc = self._hallazgo_de_otro(tipo=tipo)
+
+            apply_workflow(doc, "Cerrar")
+
+            self.assertEqual(doc.estado, "Cerrado", tipo)
+
+    def test_una_no_conformidad_escalada_si_se_cierra(self):
+        """El camino normal tiene que llegar: escala, y entonces cierra."""
+        doc = self._hallazgo_de_otro(tipo="No conformidad mayor")
+        doc.escalar_a_no_conformidad()
+
+        doc = frappe.get_doc("Hallazgo Auditoria", doc.name)
+        apply_workflow(doc, "Cerrar")
+
+        self.assertEqual(doc.estado, "Cerrado")
+
+    def test_un_hallazgo_escalado_se_reabre_a_escalado(self):
+        """Volver a «Abierto» diría que nunca escaló, con la NC ahí delante.
+
+        El caso que el propio comentario del workflow describe —«el cierre fue
+        prematuro, la NC sigue abierta»— era justo el que NO funcionaba: el
+        controlador fuerza «Escalado a NC» mientras haya NC ligada, así que
+        «Reabrir» chocaba contra el motor con un mensaje que no decía nada.
+        """
+        doc = self._hallazgo_de_otro(tipo="No conformidad mayor")
+        nc = doc.escalar_a_no_conformidad()
+        doc = frappe.get_doc("Hallazgo Auditoria", doc.name)
+        apply_workflow(doc, "Cerrar")
+
+        doc = frappe.get_doc("Hallazgo Auditoria", doc.name)
+        apply_workflow(doc, "Reabrir escalado")
+
+        self.assertEqual(doc.estado, "Escalado a NC")
+        self.assertEqual(doc.no_conformidad, nc)
+
+    def test_reabrir_un_escalado_por_la_puerta_equivocada_lo_explica(self):
+        """El mensaje tiene que decir cuál es la acción suya."""
+        doc = self._hallazgo_de_otro(tipo="No conformidad mayor")
+        doc.escalar_a_no_conformidad()
+        doc = frappe.get_doc("Hallazgo Auditoria", doc.name)
+        apply_workflow(doc, "Cerrar")
+
+        doc = frappe.get_doc("Hallazgo Auditoria", doc.name)
+        with self.assertRaises(frappe.ValidationError) as ctx:
+            apply_workflow(doc, "Reabrir")
+
+        self.assertIn("Reabrir escalado", str(ctx.exception))
+
+    def test_un_hallazgo_sin_escalar_se_reabre_a_abierto(self):
+        """El que nunca escaló sí vuelve a «Abierto»: es donde estaba."""
+        doc = self._hallazgo_de_otro(tipo="Observacion")
+        apply_workflow(doc, "Cerrar")
+
+        doc = frappe.get_doc("Hallazgo Auditoria", doc.name)
+        apply_workflow(doc, "Reabrir")
+
+        self.assertEqual(doc.estado, "Abierto")
+

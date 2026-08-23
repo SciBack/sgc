@@ -52,7 +52,16 @@ WF_HALLAZGO_AUDITORIA = {
         ("Escalado a NC", "Cerrar", "Cerrado", "DPGC"),
         # y puede devolverse si el cierre fue prematuro (la NC sigue abierta, el
         # área no implementó): mismo criterio que "Reabrir" en f8/f12.
+        #
+        # Son DOS acciones porque un hallazgo cerrado vuelve a donde estaba, y eso
+        # depende de si llegó a escalar. Con una sola, el caso que el comentario
+        # de arriba describe —"la NC sigue abierta"— era justamente el que NO
+        # funcionaba: el controlador fuerza "Escalado a NC" mientras haya NC
+        # ligada, así que reabrir a "Abierto" chocaba con el propio workflow.
+        # Devolver un hallazgo escalado a "Abierto" además mentiría: diría que no
+        # escaló, con la No Conformidad ahí delante.
         ("Cerrado", "Reabrir", "Abierto", "DPGC", 1),
+        ("Cerrado", "Reabrir escalado", "Escalado a NC", "DPGC", 1),
     ],
 }
 

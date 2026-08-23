@@ -128,14 +128,14 @@ EFECTOS_AL_ENTRAR = [
 SALTOS_ENTRE_PROCESOS = [
     {
         "document_type": "Riesgo",
-        "desde": "Materializado",
+        "estado": "Materializado",
         "hacia": "No Conformidad",
         "etiqueta": "Escalar a no conformidad",
         "origen": "sgc.sgc_riesgos.doctype.riesgo.riesgo.Riesgo.escalar_a_no_conformidad",
     },
     {
         "document_type": "Hallazgo Auditoria",
-        "desde": "Escalado a NC",
+        "estado": "Escalado a NC",
         "hacia": "No Conformidad",
         "etiqueta": "Escalar a no conformidad",
         "origen": "sgc.sgc_auditoria.doctype.hallazgo_auditoria.hallazgo_auditoria"
@@ -796,15 +796,21 @@ def construir(spec, layout_previo=None):
         n.col = c
 
     # --- lo que este proceso le manda a otro ---
-    # El origen es el nodo que representa «el documento está en ese estado»: la
-    # misma resolución que usan las flechas internas, para que el mensaje salga
-    # de donde el lector ya está mirando.
+    # El mensaje sale de la ACCIÓN que lleva al estado, no del estado: es al
+    # ejecutarla cuando el otro proceso recibe el documento. Usar `entrada_a`
+    # aquí daba un resultado sutilmente falso —cuando el estado tiene una sola
+    # salida no se dibuja, y `entrada_a` devuelve entonces la tarea SIGUIENTE—,
+    # así que el 08 decía «al cerrar un hallazgo ya escalado, avisa a No
+    # Conformidad» cuando el aviso ocurre al escalarlo.
     mensajes = []
     for salto in saltos_de(spec["document_type"]):
-        if salto["desde"] not in estados:
+        if salto["estado"] not in estados:
             continue
-        mensajes.append((_id("Msg", f"{salto['desde']}__{salto['hacia']}", usados),
-                         entrada_a(salto["desde"]), salto["hacia"], salto["etiqueta"]))
+        for i, t in enumerate(transiciones):
+            if t[2] != salto["estado"]:
+                continue
+            mensajes.append((_id("Msg", f"{t[1]}__{salto['hacia']}", usados),
+                             id_tarea[i], salto["hacia"], salto["etiqueta"]))
 
     return _serializar(spec, carriles, nodos, flujos, layout_previo or {}, mensajes)
 
