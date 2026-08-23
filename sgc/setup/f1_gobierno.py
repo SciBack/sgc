@@ -9,26 +9,13 @@ Unidad Organica, Periodo Academico) y A2 (Valor Indicador, Documento Controlado)
 """
 import frappe
 
+from sgc.setup.doctypes import crear_doctype
+
 MODULE = "SGC Gobierno"
 
-def _dt(name, fields, istable=0, is_tree=0, autoname=None, title_field=None,
-        search_fields=None, track_changes=1):
-    if frappe.db.exists("DocType", name):
-        return
-    doc = {
-        "doctype": "DocType", "name": name, "module": MODULE, "custom": 0,
-        "istable": istable, "is_tree": is_tree,
-        "editable_grid": 1 if istable else 0,
-        "track_changes": 0 if istable else track_changes,
-        "fields": fields,
-        "permissions": [] if istable else [
-            {"role": "System Manager", "read": 1, "write": 1, "create": 1, "delete": 1}
-        ],
-    }
-    if autoname: doc["autoname"] = autoname
-    if title_field: doc["title_field"] = title_field
-    if search_fields: doc["search_fields"] = search_fields
-    frappe.get_doc(doc).insert(ignore_permissions=True)
+def _dt(name, fields, **kw):
+    """Envoltura del helper compartido: fija el módulo de este script."""
+    return crear_doctype(name, MODULE, fields, **kw)
 
 
 def run():

@@ -4,9 +4,14 @@ Activa frappe.flags.in_patch para permitir Links hacia adelante/circulares
 Ejecutar:  echo 'from sgc.setup import f1_run_all; f1_run_all.run()' | bench --site sgc.localhost console
 """
 import frappe
+
 from sgc.setup import (
-    f1_estructura, f1_nucleo, f1_auditoria,
-    f1_riesgos, f1_gobierno, f1_procesos,
+    f1_auditoria,
+    f1_estructura,
+    f1_gobierno,
+    f1_nucleo,
+    f1_procesos,
+    f1_riesgos,
 )
 
 ORDER = [f1_estructura, f1_nucleo, f1_auditoria, f1_riesgos, f1_gobierno, f1_procesos]
