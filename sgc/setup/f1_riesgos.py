@@ -65,13 +65,21 @@ def run():
         {"fieldname": "cb_valores", "fieldtype": "Column Break"},
         {"fieldname": "probabilidad", "fieldtype": "Int", "label": "Probabilidad", "description": "valor en la escala de Matriz Riesgo"},
         {"fieldname": "impacto", "fieldtype": "Int", "label": "Impacto"},
-        {"fieldname": "sb_calc", "fieldtype": "Section Break", "label": "Resultado (calculado en F4)"},
+        {"fieldname": "sb_calc", "fieldtype": "Section Break", "label": "Resultado"},
+        # La opción vacía delante es deliberada: sin `Matriz Riesgo` no hay
+        # criterios contra los que valorar (ISO 31000 §6.4.4) y el nivel queda en
+        # blanco. Sin ella, Frappe rellenaba el Select con su primera opción y
+        # TODA evaluación nacía «Bajo» — ver EvaluacionRiesgo._calcular.
         {"fieldname": "nivel", "fieldtype": "Select", "label": "Nivel",
-         "options": "Bajo\nModerado\nAlto\nExtremo",
-         "description": "derivado leyendo Matriz Riesgo.umbrales (Server Script en F4)", "read_only": 1, "in_list_view": 1},
-        {"fieldname": "score", "fieldtype": "Int", "label": "Score", "description": "prob×impacto (calculado en F4)", "read_only": 1},
+         "options": "\nBajo\nModerado\nAlto\nExtremo",
+         "description": "derivado de Matriz Riesgo.umbrales; en blanco si el riesgo no declara matriz",
+         "read_only": 1, "in_list_view": 1},
+        {"fieldname": "score", "fieldtype": "Int", "label": "Score", "description": "prob×impacto (lo calcula el controlador)", "read_only": 1},
         {"fieldname": "cb_calc", "fieldtype": "Column Break"},
-        {"fieldname": "evaluado_por", "fieldtype": "Link", "label": "Evaluado por", "options": "User"},
+        # `read_only`: la firma de quien evalúa la sella el servidor, no se teclea
+        # (EvaluacionRiesgo._sellar_evaluador).
+        {"fieldname": "evaluado_por", "fieldtype": "Link", "label": "Evaluado por", "options": "User",
+         "description": "lo sella el sistema al guardar la evaluación", "read_only": 1},
     ], autoname="format:EVR-{YYYY}-{#####}")
 
     # 3.4 Tratamiento Riesgo — §6.5 opciones de tratamiento
@@ -84,6 +92,22 @@ def run():
         {"fieldname": "fecha_compromiso", "fieldtype": "Date", "label": "Fecha compromiso"},
         {"fieldname": "estado", "fieldtype": "Select", "label": "Estado",
          "options": "Planificado\nEn ejecucion\nImplementado\nVerificado", "default": "Planificado", "in_list_view": 1},
+        # Sellos de los dos actos del ciclo (2026-08-23): los escribe el
+        # controlador con `frappe.session.user` al entrar en el estado, por eso
+        # van read_only. Un "Verificado por" tecleable no separa a nadie.
+        {"fieldname": "sb_ejecucion", "fieldtype": "Section Break", "label": "Implementación y verificación de eficacia"},
+        {"fieldname": "implementado_por", "fieldtype": "Link", "label": "Implementado por", "options": "User",
+         "description": "lo sella el sistema al marcar implementado", "read_only": 1},
+        {"fieldname": "fecha_implementacion", "fieldtype": "Date", "label": "Fecha de implementación", "read_only": 1},
+        {"fieldname": "cb_ejecucion", "fieldtype": "Column Break"},
+        {"fieldname": "verificado_por", "fieldtype": "Link", "label": "Verificado por", "options": "User",
+         "description": "lo sella el sistema al verificar; no lo teclea nadie", "read_only": 1},
+        {"fieldname": "fecha_verificacion", "fieldtype": "Date", "label": "Fecha de verificación", "read_only": 1},
+        {"fieldname": "resultado_verificacion", "fieldtype": "Text", "label": "Resultado de la verificación",
+         "description": "qué se comprobó y con qué (ISO 9001:2015 §6.1.2: evaluar la eficacia de estas acciones)"},
+        {"fieldname": "nivel_residual", "fieldtype": "Select", "label": "Nivel residual",
+         "options": "\nBajo\nModerado\nAlto\nExtremo",
+         "description": "nivel del riesgo que queda DESPUÉS del tratamiento (ISO 31000 §6.5.2)"},
         {"fieldname": "sb_costura", "fieldtype": "Section Break", "label": "Costura con mejora / evidencia"},
         {"fieldname": "accion_mejora", "fieldtype": "Link", "label": "Acción de mejora", "options": "Accion Mejora",
          "description": "reutiliza el CAPA si el tratamiento es una acción concreta ejecutable"},

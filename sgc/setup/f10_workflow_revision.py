@@ -40,6 +40,12 @@ WF_REVISION = {
     "is_active": 1,
     "send_email_alert": 0,  # revertido 2026-07-19: dispara attach_print (PDF) por email en CUALQUIER save con transicion pendiente, no solo en transiciones reales -- rompio 70 tests y arriesga flood de correos en prod. Necesita diseno propio (Fase 2, item aparte), no un toggle de 1 linea.
     # state, doc_status, allow_edit (rol que puede editar el doc en ese estado)
+    # OJO con `allow_edit`: no es un candado. Comprobado en el recorrido del
+    # 2026-08-23 sobre este mismo workflow, Frappe solo lo mira cuando NO hay
+    # transicion, y ni aun asi bloqueo el save -- el Rectorado (que no es DPGC)
+    # edito el documento en "Realizada" sin problema, y la DPGC siguio editando
+    # "Cerrada" despues del cierre. Lo que de verdad congela la revision cerrada
+    # es `RevisionDireccion._bloquear_si_cerrada`, en el controlador.
     "states": [
         ("Planificada", "0", "DPGC"),
         ("Realizada", "0", "DPGC"),

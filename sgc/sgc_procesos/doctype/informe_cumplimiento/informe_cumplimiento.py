@@ -310,9 +310,23 @@ class InformeCumplimiento(Document):
 	@frappe.whitelist()
 	def generar_pdf(self, adjuntar=False):
 		"""Genera el PDF del diagnóstico CBC (motor Chrome v16). Ver el patrón de
-		`sgc.informe.generar_pdf`. Con `adjuntar` truthy lo guarda como File."""
+		`sgc.informe.generar_pdf`. Con `adjuntar` truthy lo guarda como File.
+
+		`adjuntar` ESCRIBE en el documento —crea un File y fija `pdf`—, así que
+		exige permiso de escritura. Un método `@frappe.whitelist()` solo pide
+		LECTURA para poder invocarse, de modo que sin esta comprobación cualquiera
+		que pudiera abrir el informe podía colgarle un adjunto y, peor, hacerlo
+		sobre uno ya presentado a la Sunedu, que se supone inmutable. Es el mismo
+		agujero que apareció el 2026-08-23 en `Revision Direccion.consolidar_salidas`,
+		donde un Auditor Interno de solo lectura llegó a redactar las salidas de la
+		revisión; conviene mirarlo en cada whitelisted que escriba.
+
+		Generar el PDF para verlo (sin adjuntar) sigue bastando con leer.
+		"""
 		frappe.local.lang = "es"
 		adjuntar = frappe.utils.cint(adjuntar)
+		if adjuntar:
+			self.check_permission("write")
 
 		pdf_bytes = frappe.get_print(
 			"Informe Cumplimiento",

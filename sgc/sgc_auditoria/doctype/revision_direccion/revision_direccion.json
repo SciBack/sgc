@@ -17,7 +17,9 @@
   "entradas",
   "salidas",
   "estado",
-  "pdf"
+  "pdf",
+  "cerrada_por",
+  "fecha_cierre"
  ],
  "fields": [
   {
@@ -95,6 +97,20 @@
    "fieldname": "pdf",
    "fieldtype": "Attach",
    "label": "PDF (acta/informe)"
+  },
+  {
+   "description": "Lo sella el sistema al cerrar: qui\u00e9n de la alta direcci\u00f3n ejerci\u00f3 el cierre (\u00a79.3.3)",
+   "fieldname": "cerrada_por",
+   "fieldtype": "Link",
+   "label": "Cerrada por",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "fecha_cierre",
+   "fieldtype": "Date",
+   "label": "Fecha de cierre",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,

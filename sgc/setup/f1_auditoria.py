@@ -225,6 +225,13 @@ def run():
          "options":"Planificada\nRealizada\nCerrada","default":"Planificada",
          "in_list_view":1,"in_standard_filter":1},
         {"fieldname":"pdf","fieldtype":"Attach","label":"PDF (acta/informe)"},
+        # Firma del cierre: la sella el controlador al ENTRAR en «Cerrada» con
+        # quien ejecuta la transición (el Rectorado). read_only -> no se teclea.
+        {"fieldname":"cerrada_por","fieldtype":"Link","label":"Cerrada por","options":"User",
+         "read_only":1,
+         "description":"Lo sella el sistema al cerrar: quién de la alta dirección "
+                       "ejerció el cierre (§9.3.3)"},
+        {"fieldname":"fecha_cierre","fieldtype":"Date","label":"Fecha de cierre","read_only":1},
     ], autoname="format:RPD-{YYYY}-{##}", title_field="titulo")
 
     frappe.db.commit()

@@ -233,6 +233,8 @@ def run():
         {"fieldname":"estado","fieldtype":"Select","label":"Estado",
          "options":"Planificada\nEn ejecucion\nEjecutada\nVerificada eficaz\nVerificada no eficaz","default":"Planificada","in_list_view":1,"in_standard_filter":1},
         {"fieldname":"evidencia_cierre","fieldtype":"Link","label":"Evidencia de cierre","options":"Evidencia"},
+        # read_only: lo sella el controlador al entrar en una verificacion (ver accion_mejora.py)
+        {"fieldname":"verificada_por","fieldtype":"Link","label":"Verificada por","options":"User","read_only":1},
     ], autoname="field:codigo", title_field="codigo")
 
     # child de enlace para Table MultiSelect de Evidencia (Frappe exige child con Link)

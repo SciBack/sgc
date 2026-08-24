@@ -62,6 +62,12 @@ WF_TRATAMIENTO = {
         ("En ejecucion", "Marcar implementado", "Implementado", "Dueño de Proceso", 1),
         # verificar que el tratamiento fue efectivo: control -> self_approval=0
         # (default). Quien implementó no se autoverifica.
+        # OJO (recorrido del 2026-08-23): esto NO basta. `has_approval_access`
+        # de Frappe compara al usuario con `doc.owner` —quien CREÓ la ficha—,
+        # no con quien la implementó. Un implementador con rol DPGC que no era
+        # el owner verificó su propio tratamiento y el motor lo dejó pasar. La
+        # independencia real la impone
+        # `TratamientoRiesgo._validar_verificador_independiente`.
         ("Implementado", "Verificar", "Verificado", "DPGC"),
         # la verificación también puede fallar: sin esta flecha, un tratamiento
         # que la DPGC encontrara inefectivo quedaba "Implementado" para siempre

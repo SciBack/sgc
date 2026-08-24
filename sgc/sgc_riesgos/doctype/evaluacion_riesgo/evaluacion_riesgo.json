@@ -62,19 +62,19 @@
   {
    "fieldname": "sb_calc",
    "fieldtype": "Section Break",
-   "label": "Resultado (calculado en F4)"
+   "label": "Resultado"
   },
   {
-   "description": "derivado leyendo Matriz Riesgo.umbrales (Server Script en F4)",
+   "description": "derivado de Matriz Riesgo.umbrales; en blanco si el riesgo no declara matriz",
    "fieldname": "nivel",
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Nivel",
-   "options": "Bajo\nModerado\nAlto\nExtremo",
+   "options": "\nBajo\nModerado\nAlto\nExtremo",
    "read_only": 1
   },
   {
-   "description": "prob\u00d7impacto (calculado en F4)",
+   "description": "prob\u00d7impacto (lo calcula el controlador)",
    "fieldname": "score",
    "fieldtype": "Int",
    "label": "Score",
@@ -85,10 +85,12 @@
    "fieldtype": "Column Break"
   },
   {
+   "description": "lo sella el sistema al guardar la evaluaci\u00f3n",
    "fieldname": "evaluado_por",
    "fieldtype": "Link",
    "label": "Evaluado por",
-   "options": "User"
+   "options": "User",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,

@@ -19,7 +19,8 @@
   "fecha_compromiso",
   "avance_pct",
   "estado",
-  "evidencia_cierre"
+  "evidencia_cierre",
+  "verificada_por"
  ],
  "fields": [
   {
@@ -104,6 +105,13 @@
    "fieldtype": "Link",
    "label": "Evidencia de cierre",
    "options": "Evidencia"
+  },
+  {
+   "fieldname": "verificada_por",
+   "fieldtype": "Link",
+   "label": "Verificada por",
+   "options": "User",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,

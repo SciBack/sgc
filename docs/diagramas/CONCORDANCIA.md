@@ -286,6 +286,173 @@ Comprobado en producción el 2026-08-23: «Cerrada no eficaz» de la NC no admit
 ninguna acción —ni reabrir ni volver a analizar—, tal como el diagrama la dibuja
 (evento de fin). Sistema y diagrama concuerdan; la pregunta es de proceso.
 
+## Los cinco últimos recorridos (11 a 15), hechos en paralelo el 2026-08-23
+
+Los quince quedan recorridos. **Estructuralmente los cinco concuerdan**: estados,
+transiciones, carriles y metadatos de autoaprobación coinciden con los workflows
+vivos, y ninguna transición dibujada resultó imposible. Lo que apareció fueron
+**huecos del controlador**: el diagrama prometía y el código no cumplía.
+
+### 11 · Plan de Mejora
+
+`Cerrado` es terminal, tal como se dibuja. La separación redactor/aprobador la
+impone el **RBAC** (la DPGC no tiene permiso de creación), no el
+`allow_self_approval`, que al comparar `owner` nunca llega a morder.
+
+Tres huecos: (a) aprobar y cerrar no dejaban firma — añadidos `aprobado_por`,
+`fecha_aprobacion`, `cerrado_por`, `fecha_cierre`, sellados por el sistema (ISO
+9001 §10.2.2); (b) se ponía «En ejecucion» un plan **sin acciones y sin
+responsable**, que quedaba en avance 0 % y semáforo Verde (§10.2.1 b); (c) el
+cierre no miraba el contenido — se cerró un plan con las acciones sin empezar, y
+otro cuya **única acción estaba «Verificada no eficaz»** salió al **100 % y en
+Verde**: el sistema daba por buena justo la acción que acababan de declarar
+inútil. El cierre exige ahora que todas estén verificadas eficaces, porque
+§10.2.1 d) pide revisar la eficacia, no solo ejecutar.
+
+### 12 · Acción de Mejora
+
+**Su reapertura sí funciona de verdad** —`Verificada no eficaz → Reabrir → En
+ejecucion`, recorrida entera—, a diferencia de la del 08.
+
+Cuatro huecos: (a) no existía registro de quién verifica la eficacia — añadido
+`verificada_por`, sellado al entrar en cualquiera de las dos verificaciones y
+**borrado al reabrir**, para que nadie lea «verificada por X» en una acción sin
+verificar (§10.2.1 e); (b) se cerraba como eficaz **sin evidencia** (§10.2.2);
+(c) se recorría el flujo entero sin responsable ni plazo, y eso tiene efecto
+comprobable: el semáforo del plan solo mira acciones con fecha, así que una
+acción sin plazo **nunca** pone el plan en rojo, y el aviso de vencimiento se
+dirige al responsable, así que sin él no se avisa a nadie; (d) el avance quedaba
+en 100 tras «no eficaz» y tras reabrir, de modo que el plan anunciaba 100 %
+mientras su acción se rehacía por haber fallado.
+
+### 13 · Riesgo — el peor de los cinco
+
+**El `messageFlow` «Escalar a no conformidad» era falso.**
+`Riesgo.escalar_a_no_conformidad` existía y no lo invocaba **nada**: ni el
+workflow, ni un hook, ni el frontend. Materializar un riesgo no creaba ninguna No
+Conformidad y la cadena §6.1 → §10.2 estaba muerta. Se corrigió **el código, no
+el diagrama** —dos sitios ya declaraban que el salto ocurría al materializar—:
+entrar en «Materializado» crea ahora la NC.
+
+**Y el cálculo de nivel de riesgo nunca existió.** `score` y `nivel` se
+declaraban «calculado en F4 (Server Script)» y ese script no existe; ambos son
+`read_only`, así que nadie podía ni corregirlos a mano. Con probabilidad 1 e
+impacto 1 salía **score 0, nivel «Bajo»**; con 5×5, exactamente igual. **Un
+inventario de riesgos donde todo sale «Bajo»** afirma lo contrario de lo que ISO
+9001 §6.1 obliga a determinar. Ahora `score = probabilidad × impacto` y el nivel
+sale de los umbrales de la matriz; **si el riesgo no declara matriz, el nivel
+queda en blanco**, porque sin criterios no hay valoración (ISO 31000 §6.4.4) y es
+preferible no saberlo a mentir.
+
+Además: el ciclo entero se recorría sin una sola evaluación ni tratamiento
+detrás; se cerraba un riesgo con su tratamiento a medias; se cerraba un riesgo
+materializado sin NC; y `evaluado_por` era tecleable — el Dueño de Proceso
+atribuyó a la DPGC una evaluación suya.
+
+### 14 · Tratamiento de Riesgo
+
+La vuelta «Verificar no eficaz» **está viva** (comprobada de punta a punta).
+
+Dos cosas que el diagrama afirmaba y el sistema no hacía: (a) «quien implementa
+el tratamiento no verifica su resultado» era **falso** (ver la sección sobre
+`allow_self_approval`); (b) «el riesgo residual: el nivel que este proceso
+registra» era falso — **no existía el campo**. Ahora `nivel_residual` es
+obligatorio para verificar. Añadidos los sellos de implementación y verificación,
+las validaciones del plan de tratamiento (ISO 31000 §6.5.3) y el guard que impide
+colgar tratamientos nuevos de un riesgo ya cerrado.
+
+**El `.bpmn` no necesitó cambios: se corrigió el sistema para que el diagrama
+dijera la verdad.**
+
+### 15 · Revisión por la Dirección
+
+Solo el Rectorado cierra —a la DPGC ni le aparece la acción— y el Rectorado no
+puede crear revisiones. Cuatro huecos: (a) **§9.3.2 no se exigía**: bastaba una
+entrada, incluso una fila vacía, para dar la revisión por realizada; ahora se
+exigen los seis incisos a)–f) y cada fila debe llevar resumen o fuente; (b) la
+escalada de privilegios descrita más abajo; (c) una revisión ya **cerrada seguía
+siendo editable** sin reabrirla — se sustituyó el acta y se reescribió una
+decisión del §9.3.3 en silencio; (d) el cierre no dejaba firma.
+
+**Pendiente de decisión:** §9.3.2 c) tiene siete sub-incisos en la norma
+(satisfacción, objetivos, desempeño de procesos, no conformidades, seguimiento,
+auditorías, proveedores) y el modelo lo colapsa en **una** fila. Un resumen
+genérico puede ocultar que nadie miró las auditorías o los proveedores.
+
+### Decisiones abiertas que dejan estos cinco
+
+- **No existe la vuelta «Monitoreado → En tratamiento»** en el riesgo, que ISO
+  31000 §6.5.2 supone (el tratamiento es iterativo). Hoy un riesgo mal tratado
+  solo puede cerrarse en falso o esperar a materializarse.
+- **Ni `Tratamiento Riesgo` ni `Auditoria` tienen estado «Cancelado»**, así que
+  uno abandonado bloquea el cierre de su padre para siempre y hay que borrarlo.
+- **La NC que nace de un riesgo es siempre «mayor» y «crítica»**, sin mirar el
+  nivel evaluado. §10.2.1 pide acciones «apropiadas a los efectos»; ahora que el
+  nivel por fin se calcula, se puede mapear bien.
+- **Un documento cerrado sigue siendo editable desde el servidor** en todo el
+  SGC: el `allow_edit` del workflow solo protege la interfaz. En el 15 se cerró
+  con un guard propio; el patrón es general.
+
+## Lo que `allow_self_approval=0` protege, y lo que no
+
+Es la regla en la que se apoya toda la segregación de funciones del SGC, y
+conviene saber exactamente qué compara: **`frappe.session.user` contra
+`doc.owner`**. Es decir, contra **quien creó la ficha**, no contra quien hizo el
+trabajo que se está aprobando.
+
+Para el caso normal basta y sobra, y así se comprobó en los recorridos 01, 05,
+06 y 10: quien redacta un documento no lo aprueba, quien redacta un informe no lo
+presenta, quien levanta un hallazgo no lo cierra. En todos ellos el autor del
+trabajo *es* el creador de la ficha.
+
+**Deja de bastar en cuanto el ejecutor y el creador son personas distintas**, que
+es justo lo que pasa cuando una ficha se abre en nombre de otro:
+
+- En el **14** el Dueño de Proceso creó el tratamiento y puso de `responsable` a
+  otra persona con rol DPGC; esa persona implementó y **verificó su propio
+  trabajo**, porque el `owner` era el primero. El diagrama decía «quien
+  implementa el tratamiento no verifica su resultado» y era falso. Se arregló
+  comparando contra `responsable` y contra el sello `implementado_por` — el
+  primero solo no valía, porque es tecleable hasta el último segundo y bastaba
+  cambiarlo para esquivar la regla.
+- En el **11** y el **12** ocurre lo contrario y por eso no muerde: la DPGC no
+  tiene permiso de creación sobre esos DocTypes, así que nunca es `owner` y la
+  comparación jamás se activa. Ahí la separación real la impone el RBAC, no el
+  workflow.
+
+**Regla para el futuro:** cuando el proceso diga «quien hace X no aprueba X», y
+X lo ejecute alguien que puede no ser el creador, `allow_self_approval=0` no lo
+garantiza. Hay que compararlo contra el campo que identifica al ejecutor, y
+preferiblemente contra un sello puesto por el sistema, no contra un Link que el
+interesado puede reescribir.
+
+## Un método whitelisted solo exige LEER para poder invocarse
+
+`@frappe.whitelist()` hace un método llamable por HTTP, y `run_doc_method`
+comprueba **permiso de lectura** sobre el documento. Si dentro el método escribe
+con `ignore_permissions=True`, cualquiera que pueda *abrir* el documento puede
+*modificarlo* por esa vía.
+
+Comprobado en el 15: `Revision Direccion.consolidar_salidas` guardaba así, y un
+**Auditor Interno de solo lectura redactó las tres salidas del §9.3.3** de la
+revisión — el auditado escribiendo las conclusiones sobre sí mismo — quedando
+además como `modified_by`.
+
+Barrido del repo tras el hallazgo: seis whitelisted escriben con
+`ignore_permissions`. Dos son lecturas legítimas (portada pública sin PII,
+catálogo de escala). Los dos escalados a No Conformidad (`Riesgo`,
+`Hallazgo Auditoria`) están cubiertos **indirectamente** porque pasan por el
+motor de workflow, que rechaza la transición al rol equivocado — comprobado en
+producción, y comprobado también que al fallar a medias el rollback no deja
+No Conformidades huérfanas. El que sí estaba abierto era
+`Informe Cumplimiento.generar_pdf(adjuntar=True)`: escribía un adjunto en el
+documento, incluido uno **ya presentado a la Sunedu**, que se supone inmutable.
+Cerrado con `check_permission("write")`.
+
+**Regla:** todo whitelisted que escriba comprueba permisos explícitamente. Que el
+DocType tenga bien puestos los suyos no basta, porque `ignore_permissions` los
+salta por definición.
+
 ## Riesgo de deriva
 
 Nada compara automáticamente los `.bpmn` en disco contra lo que generaría el
