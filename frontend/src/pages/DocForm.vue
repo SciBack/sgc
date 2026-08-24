@@ -10,6 +10,7 @@ import AreaScroll from '@/components/ui/AreaScroll.vue'
 import { useDoctypeMeta } from '@/composables/useDoctypeMeta'
 import { puede, tieneFlujo as doctypeTieneFlujo } from '@/composables/usePermisos'
 import { avisar } from '@/composables/useAvisos'
+import { mensajeDeError } from '@/lib/mensajesFrappe'
 import FieldInput from '@/components/form/FieldInput.vue'
 import DocConnections from '@/components/form/DocConnections.vue'
 import WorkflowActions from '@/components/workflow/WorkflowActions.vue'
@@ -91,11 +92,27 @@ function passesDependsOn(expr, doc) {
 // ruido cuando no tienen valor; los de solo-lectura CON valor (código, fechas,
 // semáforo) sí se ven — y (b) los que su `depends_on` excluye.
 const visibleFields = computed(() =>
-  formFields.value.filter((f) => {
-    if (f.read_only && !hasContent(values[f.fieldname])) return false
-    if (!passesDependsOn(f.depends_on, values)) return false
-    return true
-  }),
+  formFields.value
+    .filter((f) => {
+      if (f.read_only && !hasContent(values[f.fieldname])) return false
+      if (!passesDependsOn(f.depends_on, values)) return false
+      return true
+    })
+    // Frappe declara también obligatoriedad y solo-lectura CONDICIONALES. Se
+    // resuelven con el mismo evaluador que `depends_on` y se entregan ya
+    // resueltas al campo, para que la interfaz no tenga que saber nada de
+    // expresiones. Si no se leen, un campo obligatorio solo en cierto estado se
+    // pinta siempre igual y la regla vive únicamente en el servidor: la persona
+    // se entera al recibir el rechazo.
+    .map((f) => ({
+      ...f,
+      reqd: f.reqd || (f.mandatory_depends_on
+        ? passesDependsOn(f.mandatory_depends_on, values)
+        : false),
+      read_only: f.read_only || (f.read_only_depends_on
+        ? passesDependsOn(f.read_only_depends_on, values)
+        : false),
+    })),
 )
 
 function seedValuesFromDoc(source) {
@@ -133,23 +150,13 @@ function deskUrl() {
 // Extrae un mensaje legible del error de frappe-ui/Frappe (que a veces trae
 // HTML o viene envuelto). Evita el "Cannot read properties of null" cuando el
 // guardado falla y `submit` no rejecta sino que deja el error en el recurso.
+// El mensaje lo escribe Frappe (`_server_messages`), aquí solo se lee: ver
+// `lib/mensajesFrappe`. Un texto propio dice menos —«No se pudo crear el
+// registro» frente a «falta el valor para Documento Controlado: Tipo de
+// documento»— y encima se desincroniza: cada validación nueva del servidor
+// nacería muda en la interfaz.
 function errorMessage(err, fallback) {
-  // Un rechazo por permisos llega como 403 y a menudo SIN mensaje aprovechable
-  // (`exc_type: PermissionError` y poco más), así que caía al texto genérico
-  // «No se pudo crear el registro.» y la persona no sabía si era un campo mal
-  // puesto, un fallo de red o que ese documento no le corresponde. Se detecta
-  // y se dice.
-  const tipo = err?.exc_type || err?.exception || ''
-  const status = err?.status || err?.statusCode || err?.response?.status
-  if (/PermissionError/i.test(String(tipo)) || status === 403) {
-    return 'No tienes permiso para guardar este documento. Corresponde a otro rol; si crees que deberías poder, pídelo a la DPGC.'
-  }
-  const raw =
-    err?.messages?.[0] ||
-    err?.message ||
-    (typeof err === 'string' ? err : '') ||
-    fallback
-  return String(raw).replace(/<[^>]+>/g, '').trim() || fallback
+  return mensajeDeError(err, fallback)
 }
 
 // Valor de una fila hija normalizado a array (el modelo puede venir null).

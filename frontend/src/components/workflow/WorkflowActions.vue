@@ -4,6 +4,7 @@ import { useCall } from 'frappe-ui'
 import Boton from '@/components/ui/Boton.vue'
 import Alerta from '@/components/ui/Alerta.vue'
 import { avisar } from '@/composables/useAvisos'
+import { mensajeDeError } from '@/lib/mensajesFrappe'
 
 const props = defineProps({
   document: { type: Object, required: true },
@@ -40,28 +41,10 @@ const esFinal = computed(() => Boolean(siguiente.data?.final))
 const activeAction = ref('')
 const currentState = computed(() => props.document?.[props.stateField] || 'Sin estado')
 const actions = computed(() => transitions.data || [])
-/**
- * Una petición CANCELADA no es un error: es lo que pasa cuando se lanza otra
- * antes de que termine la anterior, y `useCall` (VueUse) devuelve entonces
- * «signal is aborted without reason». Ese texto llegó a la pantalla el
- * 2026-08-24 y quien lo vio, con razón, no supo qué significaba: está en
- * inglés, no lo causó y no puede hacer nada al respecto.
- *
- * Se filtran también los errores sin mensaje: un recuadro rojo vacío asusta y
- * no informa.
- */
-function esCancelacion(err) {
-  const texto = String(err?.message || err?.name || '')
-  return /abort/i.test(texto)
-}
-
-function mensajeUtil(err) {
-  if (!err || esCancelacion(err)) return ''
-  return err.message || ''
-}
-
+// El texto lo pone Frappe; una cancelación no se enseña. Ver
+// `lib/mensajesFrappe`.
 const errorMessage = computed(
-  () => mensajeUtil(apply.error) || mensajeUtil(transitions.error) || '',
+  () => mensajeDeError(apply.error, '') || mensajeDeError(transitions.error, '') || '',
 )
 
 const ACTION_LABELS = {

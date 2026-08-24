@@ -45,6 +45,7 @@ function rowsFor(fieldtype) {
 </script>
 
 <template>
+  <div class="space-y-1.5">
   <div v-if="field.fieldtype === 'Link'" class="space-y-1.5">
     <label v-if="!hideLabel" class="sb-field-label block">
       {{ label }}<span v-if="esObligatorio" class="text-peligro" aria-hidden="true"> *</span>
@@ -134,4 +135,12 @@ function rowsFor(fieldtype) {
   />
 
   <Campo v-else type="text" v-model="value" :label="hideLabel ? undefined : label" :disabled="readOnly" :required="esObligatorio" />
+
+    <!-- La ayuda que el propio DocType declara (`description` en el meta). El
+         canon pide «ayuda antes del error», y aquí ya estaba escrita: siete
+         campos de Documento Controlado la tienen y no se pintaba ninguna. -->
+    <p v-if="field.description && !hideLabel" class="text-xs text-tinta-tenue">
+      {{ field.description }}
+    </p>
+  </div>
 </template>
