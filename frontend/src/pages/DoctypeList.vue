@@ -1,4 +1,5 @@
 <script setup>
+import { computed, reactive, ref } from 'vue'
 import { useCall } from 'frappe-ui'
 import { useRouter } from 'vue-router'
 import Boton from '@/components/ui/Boton.vue'
@@ -6,39 +7,64 @@ import TituloPagina from '@/components/ui/TituloPagina.vue'
 import AreaScroll from '@/components/ui/AreaScroll.vue'
 import Cargando from '@/components/ui/Cargando.vue'
 import Alerta from '@/components/ui/Alerta.vue'
-import { DocText, List, Plus } from 'reicon-vue'
-import { computed } from 'vue'
+import TablaDatos from '@/components/ui/TablaDatos.vue'
+import LinkField from '@/components/form/LinkField.vue'
+import { List, Plus } from 'reicon-vue'
 import { puede } from '@/composables/usePermisos'
+import { useDoctypeMeta } from '@/composables/useDoctypeMeta'
+import { camposAConsultar, columnasDeMeta, filtrosDeMeta } from '@/composables/useListaDeMeta'
 
 const router = useRouter()
 
-// Vista de lista GENÉRICA — funciona para cualquier DocType con solo su
-// nombre. Columnas mínimas (name + modified); el detalle/edición real ya
-// vive en DocForm.vue (F2, dirigido por metadata) — cada fila navega ahí.
+// Lista GENÉRICA dirigida por el meta del DocType. Antes pedía dos campos fijos
+// —`name` y `modified`— para los 39 DocTypes, así que en «Proceso» se veía «S04»
+// y una fecha cuando el sistema ya tenía escrito que se muestren código, nombre
+// y nivel, y que se filtre por nivel y estado. Nada de eso se configura aquí:
+// sale de `in_list_view` e `in_standard_filter`.
 const props = defineProps({ doctype: { type: String, required: true } })
 
-// Lo que esta persona puede hacer aquí (boot -> sgc/permisos_ui.py).
 const puedeCrear = computed(() => puede(props.doctype, 'create'))
+
+const { meta, loading: metaLoading } = useDoctypeMeta(() => props.doctype)
+const columnas = computed(() => columnasDeMeta(meta.value))
+const filtrosDisponibles = computed(() => filtrosDeMeta(meta.value))
+
+// Orden y filtros se resuelven EN EL SERVIDOR (canon del design system).
+// Ordenar en cliente sobre una página de 50 ordenaría lo que se trajo, no lo que
+// hay: un orden falso, y en un sistema de calidad eso no es un detalle.
+const orden = reactive({ campo: 'modified', desc: true })
+const filtros = reactive({})
+
+const filtrosActivos = computed(() =>
+  Object.fromEntries(Object.entries(filtros).filter(([, v]) => v !== null && v !== '')),
+)
 
 const list = useCall({
   // v2 (no v1): useCall espera el envelope {"data": [...]} de la API v2.
   url: '/api/v2/method/frappe.client.get_list',
   params: () => ({
     doctype: props.doctype,
-    fields: JSON.stringify(['name', 'modified']),
-    order_by: 'modified desc',
+    fields: JSON.stringify(camposAConsultar(columnas.value)),
+    filters: JSON.stringify(filtrosActivos.value),
+    order_by: `${orden.campo} ${orden.desc ? 'desc' : 'asc'}`,
     limit_page_length: 50,
   }),
   refetch: true,
-  cacheKey: ['list', props.doctype],
 })
 
-function deskUrl(name) {
-  return `/app/${encodeURIComponent(props.doctype.toLowerCase().replace(/ /g, '-'))}/${encodeURIComponent(name)}`
+function ordenarPor({ campo, desc }) {
+  orden.campo = campo
+  orden.desc = desc
 }
 
+function limpiarFiltros() {
+  for (const k of Object.keys(filtros)) delete filtros[k]
+}
+
+const hayFiltros = computed(() => Object.keys(filtrosActivos.value).length > 0)
+
 // La Autoevaluación tiene pantalla propia (flujo de valoración NL/L/LP); el
-// resto de los DocTypes usa el formulario genérico dirigido por metadata.
+// resto usa el formulario genérico dirigido por metadata.
 function openRow(name) {
   if (props.doctype === 'Autoevaluacion') {
     router.push({ name: 'AutoevaluacionDetalle', params: { name } })
@@ -51,12 +77,20 @@ function formatModified(value) {
   if (!value) return 'Sin fecha'
   const date = new Date(String(value).replace(' ', 'T'))
   if (Number.isNaN(date.getTime())) return value
-  return new Intl.DateTimeFormat('es-PE', {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  }).format(date)
+  return new Intl.DateTimeFormat('es-PE', { dateStyle: 'medium', timeStyle: 'short' }).format(date)
 }
+
+// Columnas con su formato: las fechas se leen, no se muestran en crudo.
+const columnasConFormato = computed(() =>
+  columnas.value.map((c) => ({
+    ...c,
+    formato: ['Date', 'Datetime'].includes(c.fieldtype)
+      ? (v) => (v ? formatModified(v) : '—')
+      : undefined,
+  })),
+)
 </script>
+
 
 <template>
   <AreaScroll class="min-h-0 flex-1">
@@ -67,7 +101,9 @@ function formatModified(value) {
           <div>
             <div class="sb-section-label">Gestión de registros</div>
             <TituloPagina :title="doctype" class="mt-1" />
-            <p class="mt-1 text-sm text-tinta-tenue">Registros disponibles, ordenados por su última actualización.</p>
+            <p class="mt-1 text-sm text-tinta-tenue">
+              Registros disponibles. Pulsa una cabecera para ordenar.
+            </p>
           </div>
         </div>
         <!-- Sin permiso de creación no se ofrece el botón: antes lo veía
@@ -83,51 +119,63 @@ function formatModified(value) {
         </Boton>
       </div>
 
-      <Cargando v-if="list.loading && !list.data" />
+      <!-- Los filtros los declara el DocType (`in_standard_filter`): no se
+           configuran por pantalla. Un Select ofrece sus opciones; un Link, su
+           buscador. -->
+      <div
+        v-if="filtrosDisponibles.length"
+        class="mb-5 flex flex-wrap items-end gap-3 rounded-xl border border-borde bg-superficie-tenue p-4"
+      >
+        <div v-for="f in filtrosDisponibles" :key="f.key" class="min-w-[12rem] flex-1">
+          <label class="sb-field-label mb-1 block">{{ f.label }}</label>
+          <select
+            v-if="f.opciones"
+            v-model="filtros[f.key]"
+            class="border-input h-10 w-full rounded-xl border bg-transparent px-3 text-sm"
+          >
+            <option :value="undefined">Todos</option>
+            <option v-for="o in f.opciones" :key="o" :value="o">{{ o }}</option>
+          </select>
+          <LinkField
+            v-else-if="f.doctype"
+            v-model="filtros[f.key]"
+            :doctype="f.doctype"
+            :placeholder="`Cualquier ${f.label.toLowerCase()}`"
+          />
+          <input
+            v-else
+            v-model="filtros[f.key]"
+            type="text"
+            class="border-input h-10 w-full rounded-xl border bg-transparent px-3 text-sm"
+            :placeholder="`Filtrar por ${f.label.toLowerCase()}`"
+          />
+        </div>
+        <button
+          v-if="hayFiltros"
+          type="button"
+          class="h-10 rounded-xl px-3 text-sm font-semibold text-tinta-tenue transition-colors hover:text-tinta"
+          @click="limpiarFiltros"
+        >
+          Quitar filtros
+        </button>
+      </div>
+
+      <Cargando v-if="(list.loading && !list.data) || metaLoading" />
       <Alerta v-else-if="list.error" :message="list.error.message" />
       <p v-else-if="!list.data?.length" class="sb-empty-state text-sm">
-        Sin registros todavía.
+        {{ hayFiltros ? 'Ningún registro coincide con el filtro.' : 'Sin registros todavía.' }}
       </p>
-      <div v-else class="sb-card w-full overflow-hidden">
-        <div class="grid grid-cols-[minmax(0,1fr)_auto] gap-4 border-b border-borde bg-superficie-2 px-5 py-3 sm:grid-cols-[minmax(0,1fr)_11rem_4rem]">
-          <span class="sb-section-label">Registro</span>
-          <span class="sb-section-label hidden sm:block">Actualizado</span>
-          <span class="hidden sm:block" aria-hidden="true" />
-        </div>
-        <div class="divide-y divide-borde">
-          <div
-            v-for="item in list.data"
-            :key="item.name"
-            class="group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 py-3.5 transition-colors duration-150 hover:bg-superficie-2 sm:grid-cols-[minmax(0,1fr)_11rem_4rem]"
-          >
-            <button
-              type="button"
-              class="btn-press flex min-w-0 items-center gap-3 text-left"
-              @click="openRow(item.name)"
-            >
-              <span class="flex size-9 shrink-0 items-center justify-center rounded-xl superficie-marca">
-                <DocText :size="16" aria-hidden="true" />
-              </span>
-              <span class="min-w-0">
-                <span class="block truncate text-sm font-semibold text-tinta">{{ item.name }}</span>
-                <span class="mt-0.5 block text-xs text-tinta-tenue sm:hidden">{{ formatModified(item.modified) }}</span>
-              </span>
-            </button>
-            <time class="hidden text-right text-xs text-tinta-tenue sm:block">{{ formatModified(item.modified) }}</time>
-            <a
-              :href="deskUrl(item.name)"
-              target="_blank"
-              class="justify-self-end rounded-lg px-2 py-1 text-xs font-semibold text-tinta-tenue transition-colors hover:superficie-marca"
-              @click.stop
-            >
-              Desk
-            </a>
-          </div>
-        </div>
-      </div>
+      <TablaDatos
+        v-else
+        :columnas="columnasConFormato"
+        :filas="list.data"
+        :orden="orden"
+        @ordenar="ordenarPor"
+        @abrir="openRow"
+      />
+
       <p class="mt-4 text-xs text-tinta-tenue">
-        Vista genérica dirigida por metadata (F2). El enlace "Desk" es un acceso directo de respaldo
-        para administración.
+        Columnas y filtros los declara el propio DocType; el orden se resuelve en el servidor.
       </p>
     </div>
   </AreaScroll>
