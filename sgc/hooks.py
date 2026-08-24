@@ -190,6 +190,53 @@ has_permission = {
 # del DocType y respeta el nombre que se haya puesto ahí, así que basta este
 # gancho: el patrón sigue mandando en la FORMA del código, y solo cambia de
 # dónde sale el número. Ver `sgc/naming.py`.
+# Buscar enlaces sin pelearse con las tildes. En castellano casi todo lleva, y
+# la búsqueda de Frappe compara el texto tal cual: «gestion» no encuentra
+# «Gestión». Es el mecanismo estándar de Frappe para esto (`standard_queries`),
+# con su misma firma y respetando permisos por fila. Ver `sgc/buscar.py`.
+#
+# Se registra para los DocTypes cuyo título dice algo distinto del código, que
+# son justo aquellos en los que alguien escribe palabras para buscar.
+standard_queries = {
+	"Acuerdo": "sgc.buscar.enlaces",
+	"Aplicacion Instrumento": "sgc.buscar.enlaces",
+	"Auditoria": "sgc.buscar.enlaces",
+	"Autoevaluacion": "sgc.buscar.enlaces",
+	"Comite": "sgc.buscar.enlaces",
+	"Documento Controlado": "sgc.buscar.enlaces",
+	"Elemento Marco": "sgc.buscar.enlaces",
+	"Ente Externo": "sgc.buscar.enlaces",
+	"Escala Valoracion": "sgc.buscar.enlaces",
+	"Evidencia": "sgc.buscar.enlaces",
+	"Ficha Caracterizacion Proceso": "sgc.buscar.enlaces",
+	"Ficha Indicador": "sgc.buscar.enlaces",
+	"Grupo Interes": "sgc.buscar.enlaces",
+	"Indicador": "sgc.buscar.enlaces",
+	"Informe Cumplimiento": "sgc.buscar.enlaces",
+	"Instrumento": "sgc.buscar.enlaces",
+	"Interaccion Proceso": "sgc.buscar.enlaces",
+	"Marco Normativo": "sgc.buscar.enlaces",
+	"Matriz Riesgo": "sgc.buscar.enlaces",
+	"No Conformidad": "sgc.buscar.enlaces",
+	"Objetivo Calidad": "sgc.buscar.enlaces",
+	"Obligacion Ente": "sgc.buscar.enlaces",
+	"Plan Mejora": "sgc.buscar.enlaces",
+	"Politica Calidad": "sgc.buscar.enlaces",
+	"Procedimiento": "sgc.buscar.enlaces",
+	"Proceso": "sgc.buscar.enlaces",
+	"Programa": "sgc.buscar.enlaces",
+	"Programa Auditoria": "sgc.buscar.enlaces",
+	"Resultado Instrumento": "sgc.buscar.enlaces",
+	"Reunion": "sgc.buscar.enlaces",
+	"Revision Direccion": "sgc.buscar.enlaces",
+	"Riesgo": "sgc.buscar.enlaces",
+	"Trazabilidad": "sgc.buscar.enlaces",
+	"Unidad Organica": "sgc.buscar.enlaces",
+	"Valor Indicador": "sgc.buscar.enlaces",
+	"Valoracion Criterio": "sgc.buscar.enlaces",
+	"Valoracion Estandar": "sgc.buscar.enlaces",
+}
+
 doc_events = {
 	"Acuerdo": {"autoname": "sgc.naming.correlativo_por_prefijo"},
 	"Aplicacion Instrumento": {"autoname": "sgc.naming.correlativo_por_prefijo"},
