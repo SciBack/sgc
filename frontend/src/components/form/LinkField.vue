@@ -20,7 +20,9 @@ const { search, query } = useLinkSearch(props.doctype)
 // Cuando ganaba el catálogo, el valor guardado no estaba entre las opciones y el
 // campo mostraba el código pelado: «S04» en vez de «Gestión tecnológica». Un
 // código no le dice nada a quien abre el documento para revisarlo.
-onMounted(() => query(props.modelValue || ''))
+// El catálogo inicial, para que el desplegable tenga qué mostrar al abrirse.
+// La etiqueta del valor guardado NO depende de esto: tiene su propia llamada.
+onMounted(() => query(''))
 
 const options = computed(() =>
   (search.data || []).map((r) => ({
@@ -30,29 +32,42 @@ const options = computed(() =>
   })),
 )
 
-// La etiqueta del valor elegido, recordada. Sin esto, en cuanto se escribe otra
-// búsqueda el valor guardado desaparece de las opciones y el campo vuelve a
-// enseñar el código.
+// La etiqueta del valor elegido se resuelve con su PROPIA llamada y se recuerda.
+//
+// Depender de la lista de búsqueda no funciona: esa lista cambia con cada tecla,
+// y en cuanto se escribe otra cosa el valor elegido desaparece de ella. El campo
+// volvía entonces a enseñar el código —«S04» en vez de «Gestión tecnológica»—,
+// que no le dice nada a quien abre el documento para revisarlo.
 const etiquetaGuardada = ref(null)
 
-watch(
-  [options, () => props.modelValue],
-  ([lista, valor]) => {
-    if (!valor) {
-      etiquetaGuardada.value = null
-      return
+async function resolverEtiqueta(valor) {
+  if (!valor) {
+    etiquetaGuardada.value = null
+    return
+  }
+  if (etiquetaGuardada.value?.value === valor && etiquetaGuardada.value.label !== valor) return
+
+  // Mientras se resuelve se enseña el código: peor sería dejarlo en blanco.
+  etiquetaGuardada.value = { label: valor, value: valor }
+  try {
+    const res = await fetch('/api/v2/method/frappe.desk.search.search_link', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json', 'X-Frappe-CSRF-Token': window.csrf_token },
+      body: JSON.stringify({ doctype: props.doctype, txt: valor }),
+    })
+    if (!res.ok) return
+    const cuerpo = await res.json()
+    const fila = (cuerpo.data || cuerpo.message || []).find((r) => r.value === valor)
+    if (fila?.label && fila.label !== valor) {
+      etiquetaGuardada.value = { label: fila.label, value: valor, description: fila.description }
     }
-    const encontrada = lista.find((o) => o.value === valor)
-    if (encontrada) etiquetaGuardada.value = encontrada
-    else if (etiquetaGuardada.value?.value !== valor) {
-      // Aún no se conoce su nombre: se pide, y mientras tanto se enseña el
-      // código, que es mejor que dejar el campo en blanco.
-      etiquetaGuardada.value = { label: valor, value: valor }
-      query(valor)
-    }
-  },
-  { immediate: true },
-)
+  } catch {
+    /* se queda el código */
+  }
+}
+
+watch(() => props.modelValue, resolverEtiqueta, { immediate: true })
 
 const optionsWithCurrent = computed(() => {
   const g = etiquetaGuardada.value
