@@ -128,7 +128,8 @@ def run():
     _dt("Documento Controlado", [
         {"fieldname":"codigo","fieldtype":"Data","label":"Código","reqd":1,"unique":1,"in_list_view":1},
         {"fieldname":"titulo","fieldtype":"Data","label":"Título","reqd":1,"in_list_view":1},
-        {"fieldname":"version","fieldtype":"Data","label":"Versión","in_list_view":1},
+        {"fieldname":"version","fieldtype":"Int","label":"Versión","in_list_view":1,"default":"1","non_negative":1,
+         "description":"Número entero. Sube de uno en uno con cada aprobación: una versión solo existe cuando se aprueba, así que no hay medias versiones."},
         {"fieldname":"almacenamiento_uri","fieldtype":"Data","label":"URI de almacenamiento"},
         {"fieldname":"mayan_document_id","fieldtype":"Data","label":"ID documento en Mayan"},
         {"fieldname":"proceso","fieldtype":"Link","label":"Proceso","options":"Proceso","in_standard_filter":1},

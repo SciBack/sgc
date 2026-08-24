@@ -54,7 +54,11 @@ class DocumentoControlado(Document):
 		if not self.codigo:
 			self.codigo = self._generar_codigo()
 		if not self.version:
-			self.version = "1.0"
+			# Entero, no "1.0": UPeU decidió el 2026-08-24 que una versión solo
+			# existe cuando se aprueba, así que no hay medias versiones. Es
+			# además lo habitual en gestión documental ISO — ninguna norma
+			# prescribe el formato, es convención de la casa.
+			self.version = 1
 		# Quien crea el documento es quien lo elabora, salvo que se diga otra cosa.
 		# Sin esto el campo se quedaba vacio para siempre: ninguna validacion lo
 		# pedia y nadie lo rellena a mano, asi que un documento podia publicarse

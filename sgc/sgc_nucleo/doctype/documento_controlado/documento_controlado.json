@@ -43,10 +43,13 @@
    "reqd": 1
   },
   {
+   "default": "1",
+   "description": "N\u00famero entero. Sube de uno en uno con cada aprobaci\u00f3n: una versi\u00f3n solo existe cuando se aprueba, as\u00ed que no hay medias versiones.",
    "fieldname": "version",
-   "fieldtype": "Data",
+   "fieldtype": "Int",
    "in_list_view": 1,
-   "label": "Versi\u00f3n"
+   "label": "Versi\u00f3n",
+   "non_negative": 1
   },
   {
    "description": "Tipo documental. Determina el prefijo del código SGC.",

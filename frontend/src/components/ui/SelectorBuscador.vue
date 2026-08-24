@@ -22,7 +22,7 @@
  * no sabe de dónde salen las opciones y sirve igual para una lista fija que para
  * un Link a un DocType.
  */
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import {
   ComboboxRoot, ComboboxAnchor, ComboboxInput, ComboboxTrigger,
   ComboboxContent, ComboboxViewport, ComboboxItem, ComboboxItemIndicator, ComboboxEmpty,
@@ -39,6 +39,10 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:modelValue', 'update:query'])
 
+// Apertura controlada: hace falta para poder abrir al enfocar y al pulsar, no
+// solo al teclear.
+const abierto = ref(false)
+
 const normalizadas = computed(() =>
   props.options.map((o) => (typeof o === 'object' ? o : { label: String(o), value: o })),
 )
@@ -49,6 +53,7 @@ const etiquetaActual = computed(
 
 <template>
   <ComboboxRoot
+    v-model:open="abierto"
     :model-value="modelValue"
     :disabled="disabled"
     class="relative"
@@ -59,10 +64,18 @@ const etiquetaActual = computed(
          'transition-[color,box-shadow] focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-3',
          disabled && 'opacity-60')"
     >
+      <!-- Abre al PULSAR, no solo al escribir. Comprobado el 2026-08-24 con
+           alguien usándolo: pulsó, no pasó nada, y concluyó —con razón— que la
+           búsqueda no funcionaba. Un campo con una flecha ⌄ al lado promete que
+           al pulsarlo se despliega; si no lo hace, la promesa es falsa y no hay
+           forma de saber que hay que escribir a ciegas. -->
       <ComboboxInput
+        v-model:open="abierto"
         class="flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
         :placeholder="placeholder"
         :display-value="() => etiquetaActual"
+        @focus="abierto = true"
+        @click="abierto = true"
         @input="emit('update:query', $event.target.value)"
       />
       <Loader v-if="loading" :size="16" class="animate-spin text-tinta-tenue" aria-hidden="true" />

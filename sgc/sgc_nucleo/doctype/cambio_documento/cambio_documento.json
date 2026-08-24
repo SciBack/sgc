@@ -17,7 +17,7 @@
   {
    "columns": 1,
    "fieldname": "version",
-   "fieldtype": "Data",
+   "fieldtype": "Int",
    "in_list_view": 1,
    "label": "Versión",
    "read_only": 1,

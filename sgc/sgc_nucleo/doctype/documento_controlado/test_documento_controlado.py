@@ -85,9 +85,14 @@ class IntegrationTestDocumentoControlado(IntegrationTestCase):
         self.assertIn("-MN-", d.name)
 
     def test_version_por_defecto_1_0(self):
-        """Si no se indica version, before_insert la fija en 1.0."""
+        """Si no se indica version, before_insert la fija en 1.
+
+        Entero, no «1.0»: UPeU decidió el 2026-08-24 que una versión solo existe
+        cuando se aprueba, así que no hay medias versiones. Ninguna norma ISO
+        prescribe el formato — es convención de la casa, y esta es la suya.
+        """
         d = self._crear()
-        self.assertEqual(d.version, "1.0")
+        self.assertEqual(d.version, 1)
 
     # -------------------------------------------------------------- transiciones
     def test_flujo_completo_borrador_a_publicado(self):
@@ -198,14 +203,14 @@ class IntegrationTestDocumentoControlado(IntegrationTestCase):
     def test_versionar_sin_descripcion_falla(self):
         """Cambiar de version sin describir el cambio esta prohibido."""
         d = self._crear()
-        d.version = "2.0"  # sin descripcion_cambio
+        d.version = 2  # sin descripcion_cambio
         with self.assertRaises(frappe.ValidationError):
             d.save(ignore_permissions=True)
 
     def test_versionar_con_descripcion_ok(self):
         """Con descripcion del cambio, el versionado se guarda sin error."""
         d = self._crear()
-        d.version = "2.0"
+        d.version = 2
         d.descripcion_cambio = "Se actualizo el alcance del procedimiento."
         d.save(ignore_permissions=True)
         self.assertEqual(frappe.db.get_value("Documento Controlado", d.name, "version"), "2.0")
@@ -214,7 +219,7 @@ class IntegrationTestDocumentoControlado(IntegrationTestCase):
     def test_al_publicar_archiva_el_cambio_en_historial(self):
         """Al publicar, la descripcion del cambio pasa al historial y se limpia."""
         d = self._crear(archivo=ARCHIVO, aprobado_por=USER, revisado_por=USER)
-        d.version = "2.0"
+        d.version = 2
         d.descripcion_cambio = "Version publicada tras revision anual."
         d.save(ignore_permissions=True)  # versionado valido
 
