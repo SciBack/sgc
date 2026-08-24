@@ -50,6 +50,21 @@ export function doctypesDeTrabajo() {
   return window.doctypes_trabajo || []
 }
 
+/**
+ * ¿Este DocType se mueve por un ciclo de vida (Workflow activo)?
+ *
+ * Se deduciría de que el campo `estado` fuese de solo lectura, pero en este
+ * sitio ninguno lo es —comprobado contra los 15 workflows—, así que el backend
+ * manda la lista explícita en el boot.
+ *
+ * Sin lista (dev, sin boot) devuelve false: mejor no pintar acciones que
+ * pintarlas donde no las hay.
+ */
+export function tieneFlujo(doctype) {
+  if (typeof window === 'undefined' || !doctype) return false
+  return (window.doctypes_con_flujo || []).includes(doctype)
+}
+
 /** Roles del usuario (los inyecta el boot). */
 export function rolesUsuario() {
   return (typeof window !== 'undefined' && window.user_roles) || []

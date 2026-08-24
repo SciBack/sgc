@@ -7,7 +7,7 @@ el cliente; este handler solo inyecta el boot context (csrf_token, usuario).
 import frappe
 from frappe.sessions import get_csrf_token
 
-from sgc.permisos_ui import doctypes_de_trabajo, permisos_de_ui
+from sgc.permisos_ui import doctypes_con_flujo, doctypes_de_trabajo, permisos_de_ui
 
 
 def get_context(context):
@@ -32,5 +32,9 @@ def get_context(context):
 		# el menú abre con su trabajo y deja el resto del sistema debajo. Sale de
 		# los workflows vivos. Ver `doctypes_de_trabajo`.
 		"doctypes_trabajo": doctypes_de_trabajo(),
+		# Qué documentos se mueven por un ciclo de vida: la SPA pinta sus
+		# acciones («Enviar a revisión», «Aprobar»...). Sin esto el formulario
+		# solo sabía guardar, y un documento nacía y moría en su estado inicial.
+		"doctypes_con_flujo": doctypes_con_flujo(),
 	}
 	return context

@@ -1,11 +1,12 @@
 // @vitest-environment jsdom
 
 import { afterEach, describe, expect, it } from 'vitest'
-import { doctypesDeTrabajo, puede, rolesUsuario, tieneRol } from './usePermisos'
+import { doctypesDeTrabajo, puede, rolesUsuario, tieneFlujo, tieneRol } from './usePermisos'
 
 afterEach(() => {
   delete window.permisos_ui
   delete window.doctypes_trabajo
+  delete window.doctypes_con_flujo
   delete window.user_roles
 })
 
@@ -69,5 +70,19 @@ describe('lo que cada persona trabaja', () => {
 
     expect(puede('Marco Normativo', 'read')).toBe(true)
     expect(doctypesDeTrabajo()).not.toContain('Marco Normativo')
+  })
+})
+
+describe('documentos con ciclo de vida', () => {
+  it('reconoce los que llevan workflow', () => {
+    window.doctypes_con_flujo = ['Documento Controlado', 'Evidencia']
+    expect(tieneFlujo('Documento Controlado')).toBe(true)
+    expect(tieneFlujo('Marco Normativo')).toBe(false)
+  })
+
+  it('sin boot no pinta acciones', () => {
+    // Al revés que `puede`: aquí ante la duda se OCULTA. Pintar «Aprobar» donde
+    // no hay flujo ofrece algo que va a fallar; no pintarlo solo omite.
+    expect(tieneFlujo('Documento Controlado')).toBe(false)
   })
 })

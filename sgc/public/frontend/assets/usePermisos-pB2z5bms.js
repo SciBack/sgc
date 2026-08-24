@@ -1,0 +1,2 @@
+function u(){return typeof window<"u"&&window.permisos_ui||null}function t(n,r="read"){const e=u();if(!e||!n)return!0;const o=e[n];return o?!!o[r]:!0}function i(){return typeof window>"u"?[]:window.doctypes_trabajo||[]}function d(n){return typeof window>"u"||!n?!1:(window.doctypes_con_flujo||[]).includes(n)}function f(){return typeof window<"u"&&window.user_roles||[]}export{i as d,t as p,f as r,d as t};
+//# sourceMappingURL=usePermisos-pB2z5bms.js.map

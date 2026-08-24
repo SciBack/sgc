@@ -20,7 +20,7 @@ alguien no encuentra su trabajo.
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from sgc.permisos_ui import doctypes_de_trabajo, permisos_de_ui
+from sgc.permisos_ui import doctypes_con_flujo, doctypes_de_trabajo, permisos_de_ui
 
 
 class IntegrationTestPermisosUi(IntegrationTestCase):
@@ -101,3 +101,42 @@ class IntegrationTestPermisosUi(IntegrationTestCase):
         trabajo = doctypes_de_trabajo(usuario)
 
         self.assertEqual(trabajo, sorted(trabajo))
+
+    # ------------------------------------------------------------------
+    # Qué documentos se mueven por un ciclo de vida
+    # ------------------------------------------------------------------
+    def test_lista_los_doctypes_con_workflow_activo(self):
+        """La SPA pinta sus acciones a partir de esto.
+
+        Sin la lista, el formulario solo sabía guardar y catorce de los quince
+        flujos no se podían recorrer desde la aplicación: el documento nacía y
+        moría en su estado inicial. Se descubrió usando el sistema, no
+        validándolo por API.
+        """
+        con_flujo = doctypes_con_flujo()
+
+        self.assertIn("Documento Controlado", con_flujo)
+        self.assertIn("Riesgo", con_flujo)
+
+    def test_no_lista_los_doctypes_sin_workflow(self):
+        """Un catálogo no tiene ciclo de vida: pintarle acciones sería mentir."""
+        con_flujo = doctypes_con_flujo()
+
+        self.assertNotIn("Marco Normativo", con_flujo)
+        self.assertNotIn("Proceso", con_flujo)
+
+    def test_lo_que_alguien_trabaja_siempre_tiene_flujo(self):
+        """Coherencia entre las dos listas del boot: si trabajas algo, se mueve.
+
+        `doctypes_de_trabajo` sale de las transiciones y `doctypes_con_flujo` de
+        los workflows, así que la primera no puede contener nada ausente de la
+        segunda. Si esto falla, una de las dos consultas dejó de mirar el mismo
+        sitio.
+        """
+        usuario = self._con_rol("DPGC")
+
+        trabajo = set(doctypes_de_trabajo(usuario))
+        con_flujo = set(doctypes_con_flujo())
+
+        self.assertTrue(trabajo)
+        self.assertTrue(trabajo.issubset(con_flujo), trabajo - con_flujo)

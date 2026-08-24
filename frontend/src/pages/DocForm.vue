@@ -8,9 +8,10 @@ import Alerta from '@/components/ui/Alerta.vue'
 import Cargando from '@/components/ui/Cargando.vue'
 import AreaScroll from '@/components/ui/AreaScroll.vue'
 import { useDoctypeMeta } from '@/composables/useDoctypeMeta'
-import { puede } from '@/composables/usePermisos'
+import { puede, tieneFlujo as doctypeTieneFlujo } from '@/composables/usePermisos'
 import FieldInput from '@/components/form/FieldInput.vue'
 import DocConnections from '@/components/form/DocConnections.vue'
+import WorkflowActions from '@/components/workflow/WorkflowActions.vue'
 
 const props = defineProps({
   doctype: { type: String, required: true },
@@ -36,6 +37,17 @@ const doc = useDoc({
 })
 
 const docType = useDoctype(props.doctype)
+
+// ¿Este documento se mueve por un ciclo de vida? La lista de DocTypes con
+// workflow activo llega en el boot (ver `doctypes_con_flujo`).
+//
+// `WorkflowActions` existía desde hacía tiempo y estaba conectado ÚNICAMENTE en
+// la pantalla de Autoevaluación, así que catorce de los quince flujos no se
+// podían recorrer desde la aplicación: se creaba el documento y se quedaba en su
+// estado inicial para siempre, porque el formulario solo sabía guardar. No salió
+// validando por API —ahí se llama a `apply_workflow` directamente— sino la
+// primera vez que alguien se sentó a usar el sistema (2026-08-24).
+const tieneFlujo = computed(() => !isNew.value && doctypeTieneFlujo(props.doctype))
 
 // Copia local editable — el doc de useDoc es de solo lectura (viene del
 // store compartido); acá vive el borrador que edita el usuario.
@@ -250,25 +262,36 @@ async function save() {
         "
       />
 
-      <form v-else class="sb-form-card space-y-5" @submit.prevent="save">
-        <div v-for="f in visibleFields" :key="f.fieldname">
-          <FieldInput
-            v-model="values[f.fieldname]"
-            :field="f"
-            :read-only="Boolean(f.read_only)"
-            :doctype="doctype"
-            :docname="name"
-          />
-        </div>
+      <template v-else>
+        <!-- Las acciones del flujo van ANTES del formulario: es lo que la
+             persona viene a hacer cuando abre un documento que ya existe. -->
+        <WorkflowActions
+          v-if="tieneFlujo && doc.doc"
+          class="mb-6"
+          :document="doc.doc"
+          @completed="doc.reload()"
+        />
 
-        <div class="flex items-center gap-3 border-t border-borde pt-5">
-          <Boton variante="primario" type="submit" :cargando="saving">
-            {{ isNew ? 'Crear' : 'Guardar' }}
-          </Boton>
-          <span v-if="saved" class="text-sm text-exito">Guardado.</span>
-          <Alerta v-if="saveError" :message="saveError.message" />
-        </div>
-      </form>
+        <form class="sb-form-card space-y-5" @submit.prevent="save">
+          <div v-for="f in visibleFields" :key="f.fieldname">
+            <FieldInput
+              v-model="values[f.fieldname]"
+              :field="f"
+              :read-only="Boolean(f.read_only)"
+              :doctype="doctype"
+              :docname="name"
+            />
+          </div>
+
+          <div class="flex items-center gap-3 border-t border-borde pt-5">
+            <Boton variante="primario" type="submit" :cargando="saving">
+              {{ isNew ? 'Crear' : 'Guardar' }}
+            </Boton>
+            <span v-if="saved" class="text-sm text-exito">Guardado.</span>
+            <Alerta v-if="saveError" :message="saveError.message" />
+          </div>
+        </form>
+      </template>
 
       <!-- Conexiones (Document Links del meta): p.ej. Evidencia -> Trazabilidad -->
       <div v-if="!metaLoading && (meta?.links || []).length" class="sb-form-card mt-8 space-y-6">

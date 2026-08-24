@@ -90,6 +90,21 @@ def doctypes_de_trabajo(user: str | None = None) -> list[str]:
 	return sorted(f.document_type for f in filas)
 
 
+def doctypes_con_flujo() -> list[str]:
+	"""DocTypes gobernados por un Workflow activo.
+
+	La SPA lo necesita para saber si un documento se mueve por un ciclo de vida
+	y pintar sus acciones. Se deduciría de que el campo `estado` fuese de solo
+	lectura —lo gobierna el motor, no el formulario—, pero en este sitio NINGUNO
+	lo es: comprobado el 2026-08-24 contra los 15 workflows activos. Así que se
+	pregunta por los workflows, que es la fuente de verdad, en vez de inferirlo
+	de una convención que aquí no se cumple.
+	"""
+	return sorted(
+		frappe.get_all("Workflow", filters={"is_active": 1}, pluck="document_type")
+	)
+
+
 @frappe.whitelist()
 def mis_permisos() -> dict[str, dict[str, bool]]:
 	"""Mismo mapa, pedido a demanda. Existe para el modo dev de la SPA (que
