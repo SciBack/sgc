@@ -153,3 +153,78 @@ correctiva).
 3. **Tratar** sin análisis redactado → rechazo.
 4. **Enviar a verificación** sin plazo → rechazo; sin plan ni corrección → rechazo.
 5. `prueba-dpgc` **Cierra eficaz** con evidencia de cierre. Mira **Verificada por**: dice `prueba-dpgc` y es de solo lectura.
+
+## 11 · Plan de Mejora
+
+**Quién:** RCP redacta · DPGC aprueba y cierra. (La DPGC **no puede crear** planes: la separación aquí la impone el permiso, no el workflow.)
+
+1. `prueba-rcp` crea el plan y le cuelga acciones de mejora.
+2. `prueba-dpgc` intenta **Aprobar y ejecutar** sin acciones o sin responsable → rechazo.
+3. Aprueba. Mira **Aprobado por**: lo puso el sistema.
+4. Intenta **Cerrar el plan** con alguna acción sin verificar → rechazo. Solo cierra con **todas** en *Verificada eficaz*.
+
+## 12 · Acción de Mejora
+
+**Quién:** RCP ejecuta · DPGC verifica.
+
+1. `prueba-rcp` crea la acción y la **Inicia**: sin responsable o sin fecha de compromiso → rechazo. (No es burocracia: sin fecha, la acción nunca pone el plan en rojo, y sin responsable el aviso de vencimiento no llega a nadie.)
+2. **Marcar ejecutada** → el avance sube a 100.
+3. `prueba-dpgc` intenta **Verificar eficaz** sin evidencia de cierre → rechazo.
+4. Verifica. Mira **Verificada por**.
+5. Prueba **Verificar no eficaz** → el avance vuelve a 0 → **Reabrir** → vuelve a ejecución.
+
+## 13 · Riesgo
+
+**Quién:** Dueño de Proceso avanza · DPGC cierra y materializa.
+
+1. `prueba-dueno` crea el riesgo **y le asigna la matriz `MR-5x5`** (sin matriz, el nivel no se puede calcular y queda en blanco a propósito).
+2. Crea una **Evaluación de Riesgo** con probabilidad e impacto → comprueba que el **score y el nivel se calculan** (1×1 → Bajo, 5×5 → Extremo). Sin probabilidad o impacto → rechazo.
+3. **Evaluar** sin ninguna evaluación registrada → rechazo. **Iniciar tratamiento** sin ningún tratamiento → rechazo.
+4. **Monitorear** → `prueba-dpgc` **Materializa** → **se crea sola una No Conformidad** (flujo 10). Compruébalo.
+5. Intenta **Cerrar** el riesgo materializado con esa NC abierta → rechazo.
+
+**Prueba el candado de independencia:** pon de `propietario` del riesgo a la misma persona que va a cerrarlo → rechazo.
+
+## 14 · Tratamiento de Riesgo
+
+**Quién:** Dueño de Proceso implementa · DPGC verifica.
+
+1. `prueba-dueno` crea el tratamiento e intenta **Iniciar** sin estrategia, sin descripción, sin responsable o sin plazo → rechazo en cada caso.
+2. **Marcar implementado** sin evidencia vinculada → rechazo. Crea una `Evidencia` y vincúlala.
+3. **Verificar** sin resultado o sin **nivel residual** → rechazo.
+4. **Lo importante:** intenta verificar siendo el **responsable** del tratamiento → rechazo. *Quien implementa no verifica.*
+5. Prueba **Verificar no eficaz** → vuelve a ejecución y **se borra el sello de implementación**, para que la siguiente vuelta firme de nuevo.
+
+## 15 · Revisión por la Dirección
+
+**Quién:** DPGC prepara y realiza · **Rectorado cierra** (`prueba-rector@sgc.local`).
+
+1. `prueba-dpgc` crea la revisión y registra entradas. Intenta **Realizar** con menos de las **seis** entradas del §9.3.2 → rechazo, con la lista de las que faltan. Una fila vacía no cuenta.
+2. Registra las tres salidas del §9.3.3 con responsable y adjunta el acta.
+3. `prueba-dpgc` intenta **Cerrar** → no le aparece la acción: es del Rectorado.
+4. `prueba-rector` **Cierra**. Mira **Cerrada por**.
+5. Intenta editar la revisión **ya cerrada** → rechazo. La única vía es **Reabrir revisión**.
+
+---
+
+## Datos maestros que ya están sembrados
+
+Para que ningún flujo se quede a medias por falta de catálogo:
+
+| Qué | Para qué |
+|---|---|
+| `MR-5x5` (Matriz de Riesgo) | Sin ella el nivel de riesgo **no se calcula** y queda en blanco (deliberado: sin criterios no hay valoración) |
+| `INS-SAT-EST` (Instrumento) | El flujo 04 no se puede crear sin un instrumento |
+| `GI-EST` (Grupo de Interés) | Lo pide el instrumento |
+
+Ya existían: 3 marcos normativos con 185 elementos, 22 procesos, 32 programas-sede, 93 indicadores y el periodo 2026-I.
+
+**Producción está a cero de documentos operativos**: todo lo que crees será tuyo, y lo que veas en un tablero será consecuencia de lo que hayas hecho.
+
+---
+
+## Al terminar: cerrar la ventana de acceso por contraseña
+
+Mientras siga abierta, el SSO no es el único camino de entrada. El comando lo tienes tú (es el inverso del que usaste para abrirla); en cuanto lo corras, estos usuarios de prueba dejan de poder entrar por contraseña.
+
+Los usuarios `prueba-*@sgc.local` pueden quedarse deshabilitados en vez de borrarse: conservan la trazabilidad de lo que hicieron durante las pruebas, que es justo lo que un auditor querría poder mirar.
