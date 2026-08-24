@@ -37,6 +37,10 @@ export function useDoctypeMeta(doctype) {
       const value = {
         doctype: dt,
         fields,
+        // Se conserva: dice si el `name` del documento ES uno de sus campos
+        // (`field:codigo`). Sin esto, la lista pintaba «Registro» y «Código»
+        // como dos columnas con el mismo valor — se vio en Proceso, S04 y S04.
+        autoname: doc.autoname || '',
         titleField: doc.title_field || null,
         searchFields: (doc.search_fields || '').split(',').map((s) => s.trim()).filter(Boolean),
         // Document Links: otros DocTypes que apuntan a este (sección Connections).
