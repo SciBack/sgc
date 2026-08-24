@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import SelectorBuscador from '@/components/ui/SelectorBuscador.vue'
 import { useLinkSearch } from '@/composables/useLinkSearch'
 
@@ -13,13 +13,14 @@ const emit = defineEmits(['update:modelValue'])
 
 const { search, query } = useLinkSearch(props.doctype)
 
-// Primera carga: trae un listado inicial y, si ya hay un valor guardado, una
-// búsqueda dirigida a ese valor para que se muestre con su etiqueta real (no
-// solo el código interno) sin esperar a que el usuario escriba.
-onMounted(() => {
-  query('')
-  if (props.modelValue) query(props.modelValue)
-})
+// Al montar se busca UNA cosa: si ya hay valor, ese valor —para saber cómo se
+// llama—; si no, el catálogo inicial.
+//
+// Antes se lanzaban las dos a la vez y ganaba la que respondiera la última.
+// Cuando ganaba el catálogo, el valor guardado no estaba entre las opciones y el
+// campo mostraba el código pelado: «S04» en vez de «Gestión tecnológica». Un
+// código no le dice nada a quien abre el documento para revisarlo.
+onMounted(() => query(props.modelValue || ''))
 
 const options = computed(() =>
   (search.data || []).map((r) => ({
@@ -29,14 +30,34 @@ const options = computed(() =>
   })),
 )
 
-// Si el valor ya viene seteado pero aún no aparece en las opciones (p.ej. al
-// entrar directo al formulario), lo agregamos igual para que el selector
-// muestre algo con sentido en vez de dejarlo en blanco.
+// La etiqueta del valor elegido, recordada. Sin esto, en cuanto se escribe otra
+// búsqueda el valor guardado desaparece de las opciones y el campo vuelve a
+// enseñar el código.
+const etiquetaGuardada = ref(null)
+
+watch(
+  [options, () => props.modelValue],
+  ([lista, valor]) => {
+    if (!valor) {
+      etiquetaGuardada.value = null
+      return
+    }
+    const encontrada = lista.find((o) => o.value === valor)
+    if (encontrada) etiquetaGuardada.value = encontrada
+    else if (etiquetaGuardada.value?.value !== valor) {
+      // Aún no se conoce su nombre: se pide, y mientras tanto se enseña el
+      // código, que es mejor que dejar el campo en blanco.
+      etiquetaGuardada.value = { label: valor, value: valor }
+      query(valor)
+    }
+  },
+  { immediate: true },
+)
+
 const optionsWithCurrent = computed(() => {
-  if (!props.modelValue || options.value.some((o) => o.value === props.modelValue)) {
-    return options.value
-  }
-  return [{ label: props.modelValue, value: props.modelValue }, ...options.value]
+  const g = etiquetaGuardada.value
+  if (!g || options.value.some((o) => o.value === g.value)) return options.value
+  return [g, ...options.value]
 })
 
 function onQuery(txt) {

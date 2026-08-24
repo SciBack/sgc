@@ -144,6 +144,7 @@
    "read_only": 1
   },
   {
+   "description": "Se fija sola al publicar. Solo se rellena a mano si el documento se publicó en una fecha distinta de hoy.",
    "fieldname": "fecha_publicacion",
    "fieldtype": "Date",
    "label": "Fecha de publicaci\u00f3n"

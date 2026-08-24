@@ -138,7 +138,8 @@ def run():
         {"fieldname":"elaborado_por","fieldtype":"Link","label":"Elaborado por","options":"User"},
         {"fieldname":"revisado_por","fieldtype":"Link","label":"Revisado por","options":"User"},
         {"fieldname":"aprobado_por","fieldtype":"Link","label":"Aprobado por","options":"User","read_only":1},
-        {"fieldname":"fecha_publicacion","fieldtype":"Date","label":"Fecha de publicación"},
+        {"fieldname":"fecha_publicacion","fieldtype":"Date","label":"Fecha de publicación",
+         "description":"Se fija sola al publicar. Solo se rellena a mano si el documento se publicó en una fecha distinta de hoy."},
         {"fieldname":"reemplaza_a","fieldtype":"Link","label":"Reemplaza a","options":"Documento Controlado"},
     ], autoname="field:codigo", title_field="titulo",
        search_fields="titulo,codigo")
