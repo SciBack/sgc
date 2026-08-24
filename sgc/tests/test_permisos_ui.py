@@ -27,12 +27,12 @@ class IntegrationTestPermisosUi(IntegrationTestCase):
     def setUp(self):
         frappe.set_user("Administrator")
 
-    def _con_rol(self, rol):
-        """Usuario efímero con un solo rol del SGC."""
+    def _con_rol(self, rol=None):
+        """Usuario efímero con un solo rol del SGC (o sin ninguno)."""
         correo = f"perm-ui-{frappe.generate_hash(length=8)}@ejemplo.test"
         doc = frappe.get_doc({
             "doctype": "User", "email": correo, "first_name": "Prueba Permisos",
-            "send_welcome_email": 0, "roles": [{"role": rol}],
+            "send_welcome_email": 0, "roles": [{"role": rol}] if rol else [],
         }).insert(ignore_permissions=True)
         return doc.name
 
@@ -76,8 +76,13 @@ class IntegrationTestPermisosUi(IntegrationTestCase):
         self.assertEqual(doctypes_de_trabajo(usuario), ["Revision Direccion"])
 
     def test_un_usuario_sin_roles_del_sgc_no_trabaja_nada(self):
-        """Y la SPA trata la lista vacía como «no sé», no como «no puedes»."""
-        usuario = self._con_rol("Blogger")
+        """Y la SPA trata la lista vacía como «no sé», no como «no puedes».
+
+        Sin rol ninguno: Frappe le da igualmente «All» y «Guest», que no
+        aparecen en ninguna transición. Se evita nombrar un rol concreto que
+        podría no existir en el sitio donde corra la suite.
+        """
+        usuario = self._con_rol()
 
         self.assertEqual(doctypes_de_trabajo(usuario), [])
 
