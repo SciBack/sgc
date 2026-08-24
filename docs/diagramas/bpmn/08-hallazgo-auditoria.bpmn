@@ -114,7 +114,7 @@
         <dc:Bounds x="830" y="280" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Cerrado__Reabrir" bpmnElement="Task_Cerrado__Reabrir">
-        <dc:Bounds x="1030" y="280" width="120" height="80" />
+        <dc:Bounds x="1230" y="280" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Cerrado__Reabrir_escalado" bpmnElement="Task_Cerrado__Reabrir_escalado">
         <dc:Bounds x="1430" y="280" width="120" height="80" />
@@ -126,7 +126,7 @@
         <dc:Bounds x="1030" y="295" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
-        <dc:Bounds x="322" y="142" width="36" height="36" />
+        <dc:Bounds x="230" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Participant_No_Conformidad" bpmnElement="Participant_No_Conformidad" isHorizontal="true">
         <dc:Bounds x="200" y="460" width="1430" height="60" />
@@ -136,7 +136,7 @@
         <di:waypoint x="690" y="460" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
-        <di:waypoint x="358" y="160" />
+        <di:waypoint x="266" y="160" />
         <di:waypoint x="430" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Abierto_Escalar_a_NC" bpmnElement="Flow_gw_Abierto_Escalar_a_NC">
@@ -163,11 +163,11 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Cerrado_Reabrir" bpmnElement="Flow_gw_Cerrado_Reabrir">
         <di:waypoint x="1080" y="320" />
-        <di:waypoint x="1030" y="320" />
+        <di:waypoint x="1230" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Cerrado_Reabrir_hacia_Abierto" bpmnElement="Flow_Cerrado_Reabrir_hacia_Abierto">
-        <di:waypoint x="1090" y="280" />
-        <di:waypoint x="1090" y="160" />
+        <di:waypoint x="1290" y="280" />
+        <di:waypoint x="1290" y="160" />
         <di:waypoint x="480" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Cerrado_Reabrir_escalado" bpmnElement="Flow_gw_Cerrado_Reabrir_escalado">

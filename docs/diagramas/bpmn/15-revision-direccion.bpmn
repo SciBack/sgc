@@ -88,7 +88,7 @@
         <dc:Bounds x="830" y="120" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Realizada__Cerrar_revision" bpmnElement="Task_Realizada__Cerrar_revision">
-        <dc:Bounds x="830" y="360" width="120" height="80" />
+        <dc:Bounds x="830" y="280" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Cerrada__Reabrir_revision" bpmnElement="Task_Cerrada__Reabrir_revision">
         <dc:Bounds x="1030" y="120" width="120" height="80" />
@@ -117,11 +117,11 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Realizada_Cerrar_revision" bpmnElement="Flow_gw_Realizada_Cerrar_revision">
         <di:waypoint x="655" y="185" />
-        <di:waypoint x="655" y="400" />
-        <di:waypoint x="830" y="400" />
+        <di:waypoint x="655" y="320" />
+        <di:waypoint x="830" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Realizada_Cerrar_revision_hacia_Cerrada" bpmnElement="Flow_Realizada_Cerrar_revision_hacia_Cerrada">
-        <di:waypoint x="890" y="360" />
+        <di:waypoint x="890" y="280" />
         <di:waypoint x="890" y="160" />
         <di:waypoint x="1030" y="160" />
       </bpmndi:BPMNEdge>

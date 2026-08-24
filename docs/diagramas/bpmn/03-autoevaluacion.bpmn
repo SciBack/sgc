@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:sgc="https://sciback.com/schema/sgc/1.0" id="Definitions_1" targetNamespace="https://sciback.com/schema/sgc/1.0" exporter="Camunda Modeler" exporterVersion="5.49.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:sgc="https://sciback.com/schema/sgc/1.0" id="Definitions_1" targetNamespace="https://sciback.com/schema/sgc/1.0" exporter="SGC" exporterVersion="1.0">
   <bpmn:collaboration id="Collaboration_1">
     <bpmn:participant id="Participant_Autoevaluacion" name="Autoevaluacion SGC" processRef="Process_Autoevaluacion" />
   </bpmn:collaboration>
@@ -51,7 +51,8 @@
     <bpmn:startEvent id="StartEvent_1" name="Inicio">
       <bpmn:outgoing>Flow_inicio</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Task_Planificada__Iniciar_evaluacion" />
+    <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Task_Planificada__Iniciar_evaluacion">
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_Planificada_Iniciar_evaluacion_hacia_En_curso" sourceRef="Task_Planificada__Iniciar_evaluacion" targetRef="Task_En_curso__Enviar_a_revision">
       <bpmn:extensionElements>
         <sgc:transicion rol="Responsable de Calidad de Programa" autoaprobacion="1" />
@@ -62,13 +63,15 @@
         <sgc:transicion rol="Responsable de Calidad de Programa" autoaprobacion="1" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_gw_En_revision_Devolver_a_evaluacion" sourceRef="Gateway_En_revision" targetRef="Task_En_revision__Devolver_a_evaluacion" />
+    <bpmn:sequenceFlow id="Flow_gw_En_revision_Devolver_a_evaluacion" sourceRef="Gateway_En_revision" targetRef="Task_En_revision__Devolver_a_evaluacion">
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_En_revision_Devolver_a_evaluacion_hacia_En_curso" sourceRef="Task_En_revision__Devolver_a_evaluacion" targetRef="Task_En_curso__Enviar_a_revision">
       <bpmn:extensionElements>
         <sgc:transicion rol="DPGC" autoaprobacion="1" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_gw_En_revision_Consolidar" sourceRef="Gateway_En_revision" targetRef="Task_En_revision__Consolidar" />
+    <bpmn:sequenceFlow id="Flow_gw_En_revision_Consolidar" sourceRef="Gateway_En_revision" targetRef="Task_En_revision__Consolidar">
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_En_revision_Consolidar_hacia_Consolidada" sourceRef="Task_En_revision__Consolidar" targetRef="Task_Consolidada__Cerrar">
       <bpmn:extensionElements>
         <sgc:transicion rol="DPGC" autoaprobacion="0" />
@@ -85,11 +88,11 @@
       <bpmndi:BPMNShape id="Shape_Participant_Autoevaluacion" bpmnElement="Participant_Autoevaluacion" isHorizontal="true">
         <dc:Bounds x="200" y="80" width="1546" height="320" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
-        <dc:Bounds x="230" y="240" width="1516" height="160" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_Responsable_de_Calidad_de_Programa" bpmnElement="Lane_Responsable_de_Calidad_de_Programa" isHorizontal="true">
         <dc:Bounds x="230" y="80" width="1516" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
+        <dc:Bounds x="230" y="240" width="1516" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Planificada__Iniciar_evaluacion" bpmnElement="Task_Planificada__Iniciar_evaluacion">
         <dc:Bounds x="430" y="120" width="120" height="80" />
@@ -106,11 +109,8 @@
       <bpmndi:BPMNShape id="Shape_Task_Consolidada__Cerrar" bpmnElement="Task_Consolidada__Cerrar">
         <dc:Bounds x="1430" y="280" width="120" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Gateway_En_revision" bpmnElement="Gateway_En_revision" isMarkerVisible="true">
+      <bpmndi:BPMNShape id="Shape_Gateway_En_revision" bpmnElement="Gateway_En_revision">
         <dc:Bounds x="830" y="295" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="827" y="271" width="55" height="14" />
-        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_End_Cerrada" bpmnElement="End_Cerrada">
         <dc:Bounds x="1630" y="302" width="36" height="36" />
@@ -141,10 +141,8 @@
         <di:waypoint x="750" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_En_revision_Consolidar" bpmnElement="Flow_gw_En_revision_Consolidar">
-        <di:waypoint x="855" y="345" />
-        <di:waypoint x="855" y="380" />
-        <di:waypoint x="1290" y="380" />
-        <di:waypoint x="1290" y="360" />
+        <di:waypoint x="880" y="320" />
+        <di:waypoint x="1230" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_En_revision_Consolidar_hacia_Consolidada" bpmnElement="Flow_En_revision_Consolidar_hacia_Consolidada">
         <di:waypoint x="1350" y="320" />

@@ -28,6 +28,8 @@ from frappe.tests import IntegrationTestCase
 from sgc import bpmn
 
 M = "{http://www.omg.org/spec/BPMN/20100524/MODEL}"
+DI = "{http://www.omg.org/spec/BPMN/20100524/DI}"
+DC = "{http://www.omg.org/spec/DD/20100524/DC}"
 TIPOS_NODO = ("userTask", "serviceTask", "sendTask", "startEvent", "endEvent",
               "exclusiveGateway", "parallelGateway",
               # los eventos intermedios llevan las transiciones automáticas: sin
@@ -438,4 +440,57 @@ class IntegrationTestBpmn(IntegrationTestCase):
             sueltos = [p.get("name") for p in colab.iter(f"{M}participant")
                        if not p.get("processRef")]
             self.assertEqual(sueltos, [], f"{dt} tiene pools que no le corresponden")
+
+    # ------------------------------------------------------------------
+    # El dibujo también dice cosas: dónde está un nodo significa quién lo hace
+    # ------------------------------------------------------------------
+    def _cajas(self, xml):
+        """Bounds por id y el carril al que pertenece cada nodo."""
+        raiz = ET.fromstring(xml)
+        proceso = raiz.find(f"{M}process")
+        plano = raiz.find(f".//{DI}BPMNPlane")
+        carril_de = {}
+        for lane in proceso.iter(f"{M}lane"):
+            for ref in lane.iter(f"{M}flowNodeRef"):
+                carril_de[ref.text] = lane.get("id")
+        cajas = {}
+        for shape in plano.iter(f"{DI}BPMNShape"):
+            b = shape.find(f"{DC}Bounds")
+            if b is not None:
+                cajas[shape.get("bpmnElement")] = tuple(
+                    float(b.get(k)) for k in ("x", "y", "width", "height"))
+        return cajas, carril_de
+
+    def test_cada_nodo_se_dibuja_dentro_de_su_carril(self):
+        """Un nodo en el carril del vecino dice quién lo ejecuta, y lo dice mal.
+
+        Nueve de los quince diagramas tenían nodos fuera de su banda el
+        2026-08-23: el generador conservaba el layout guardado nodo a nodo, y
+        esas posiciones dejan de valer en cuanto cambia el reparto de carriles.
+        """
+        for dt, xml in self.diagramas.items():
+            cajas, carril_de = self._cajas(xml)
+            for nid, lane_id in carril_de.items():
+                if nid not in cajas or lane_id not in cajas:
+                    continue
+                _x, y, _w, alto = cajas[nid]
+                _lx, ly, _lw, lalto = cajas[lane_id]
+                self.assertGreaterEqual(y, ly, f"{dt}: «{nid}» se sale por arriba")
+                self.assertLessEqual(y + alto, ly + lalto,
+                                     f"{dt}: «{nid}» se sale por abajo")
+
+    def test_no_hay_dos_nodos_dibujados_uno_encima_de_otro(self):
+        """Dos tareas en la misma caja son una tarea invisible."""
+        for dt, xml in self.diagramas.items():
+            cajas, _carril = self._cajas(xml)
+            nodos = {k: v for k, v in cajas.items()
+                     if not k.startswith(("Participant_", "Lane_"))}
+            ids = sorted(nodos)
+            for i, a in enumerate(ids):
+                ax, ay, aw, ah = nodos[a]
+                for b in ids[i + 1:]:
+                    bx, by, bw, bh = nodos[b]
+                    se_pisan = (ax < bx + bw and bx < ax + aw
+                                and ay < by + bh and by < ay + ah)
+                    self.assertFalse(se_pisan, f"{dt}: «{a}» y «{b}» se solapan")
 

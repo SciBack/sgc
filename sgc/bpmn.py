@@ -838,10 +838,53 @@ def _serializar(spec, carriles, nodos, flujos, layout_previo=None, mensajes=None
     layout_previo = layout_previo or {}
     mensajes = mensajes or []
 
+    def _cabe_en_su_carril(nodo, caja):
+        _x, y, _w, alto = caja
+        base = Y_ORIGEN + nodo.fila * ALTO_CARRIL
+        return base <= y and y + alto <= base + ALTO_CARRIL
+
+    def _se_pisan(a, b):
+        ax, ay, aw, ah = a
+        bx, by, bw, bh = b
+        return ax < bx + bw and bx < ax + aw and ay < by + bh and by < ay + ah
+
+    # Todo o nada: el layout guardado se acepta entero o se descarta entero. Un
+    # diagrama mitad conservado mitad recalculado se solapa —las posiciones
+    # nuevas no saben qué celdas ocupan las viejas—, y eso salió en tres de los
+    # quince al intentar salvar nodo a nodo.
+    #
+    # Y se comprueban DOS cosas, porque la primera sola no basta: que cada nodo
+    # caiga en la banda de su carril, y que no haya dos pisándose. Un fichero
+    # puede traer posiciones perfectamente dentro de sus carriles y aun así con
+    # dos tareas dibujadas una encima de otra —pasó, y se conservaban tan
+    # contentas porque cada una estaba «en su sitio»—.
+    guardadas = [(n, layout_previo[n.id]) for n in nodos.values() if n.id in layout_previo]
+    layout_valido = bool(guardadas) and all(
+        _cabe_en_su_carril(n, caja) for n, caja in guardadas
+    ) and not any(
+        _se_pisan(guardadas[i][1], guardadas[j][1])
+        for i in range(len(guardadas)) for j in range(i + 1, len(guardadas))
+    )
+
     def geom(nodo):
-        """Posición del nodo: la ajustada a mano si existe, si no la calculada."""
-        if nodo.id in layout_previo:
-            return layout_previo[nodo.id]
+        """Posición del nodo: la ajustada a mano si el layout guardado sigue valiendo.
+
+        «Válida» significa que el nodo cae DENTRO de la banda de su carril. La
+        posición guardada se conserva porque puede venir de un ajuste manual que
+        vale la pena, pero deja de valer en cuanto cambia el reparto de carriles
+        —se añade un rol, cambia el orden, aparece el carril «Sistema»—: la `y`
+        vieja apunta entonces a la banda de otro, y el nodo se dibuja pisando el
+        carril del vecino o directamente fuera del pool.
+
+        Pasó de verdad: el 2026-08-23 nueve de los quince diagramas tenían nodos
+        fuera de su carril, todos por este motivo. Un diagrama que coloca una
+        tarea en el carril equivocado dice quién la ejecuta, y lo dice mal, así
+        que aquí la posición calculada gana sin contemplaciones.
+        """
+        if layout_valido:
+            previo = layout_previo.get(nodo.id)
+            if previo:
+                return previo
         return (nodo.x, nodo.y, nodo.ancho, nodo.alto)
     proc_id = _id("Process", spec["document_type"])
     part_id = _id("Participant", spec["document_type"])
