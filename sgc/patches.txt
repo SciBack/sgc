@@ -1,6 +1,9 @@
 [pre_model_sync]
 # Patches added in this section will be executed before doctypes are migrated
 # Read docs to understand patches: https://frappeframework.com/docs/v14/user/en/database-migrations
+# La versión documental pasa a entero. Va ANTES del sync porque PostgreSQL no
+# convierte varchar->integer solo, y sin esto Frappe deja el DocType como estaba.
+sgc.patches.version_documental_a_entero
 
 [post_model_sync]
 # Patches added in this section will be executed after doctypes are migrated
