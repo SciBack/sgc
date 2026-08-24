@@ -304,6 +304,17 @@ async function save() {
               {{ isNew ? 'Crear' : 'Guardar' }}
             </Boton>
             <span v-if="saved" class="text-sm text-exito">Guardado.</span>
+
+            <!-- La acción del flujo, también aquí. Arriba está el estado; esto
+                 es lo que se hace DESPUÉS de guardar, y quien acaba de rellenar
+                 el formulario está mirando este borde, no la cabecera. -->
+            <WorkflowActions
+              v-if="tieneFlujo && doc.doc"
+              compacto
+              class="ml-auto"
+              :document="doc.doc"
+              @completed="doc.reload()"
+            />
             <Alerta v-if="saveError" :message="saveError.message" />
           </div>
         </form>

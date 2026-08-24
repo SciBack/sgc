@@ -9,6 +9,12 @@ import { mensajeDeError } from '@/lib/mensajesFrappe'
 const props = defineProps({
   document: { type: Object, required: true },
   stateField: { type: String, default: 'estado' },
+  // `compacto` omite el rótulo del estado y deja solo los botones. Se usa al
+  // PIE del formulario: el canon pide las acciones al final de la tarea, y en
+  // un formulario de trece campos quien acaba de rellenarlo y pulsa «Guardar»
+  // abajo no ve la siguiente acción, que estaba solo arriba. Repetir también el
+  // estado ahí sería decir dos veces lo mismo en la misma pantalla.
+  compacto: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['completed'])
@@ -104,7 +110,7 @@ watch(
 
 <template>
   <section class="workflow-actions" aria-label="Acciones de flujo">
-    <div class="workflow-state">
+    <div v-if="!compacto" class="workflow-state">
       <span class="workflow-state__label">Estado actual</span>
       <strong class="workflow-state__value">{{ currentState }}</strong>
     </div>
