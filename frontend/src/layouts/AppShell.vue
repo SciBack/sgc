@@ -20,6 +20,7 @@ import { useTheme } from 'frappe-ui'
 import { Chart, Exit, Gauge, Layout, Moon, Search, Sun } from 'reicon-vue'
 import AreaScroll from '@/components/ui/AreaScroll.vue'
 import Avatar from '@/components/ui/Avatar.vue'
+import Avisos from '@/components/ui/Avisos.vue'
 import EnlaceLateral from '@/components/ui/EnlaceLateral.vue'
 import MenuDesplegable from '@/components/ui/MenuDesplegable.vue'
 import Migas from '@/components/ui/Migas.vue'
@@ -286,6 +287,9 @@ const userMenu = [{ label: 'Cerrar sesión', icon: Exit, onClick: () => session.
       </main>
     </div>
   </div>
+
+  <!-- Pila de avisos efímeros: se monta una sola vez, aquí. -->
+  <Avisos />
 </template>
 
 <style scoped>

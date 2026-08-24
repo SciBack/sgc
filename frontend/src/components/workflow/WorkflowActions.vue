@@ -3,6 +3,7 @@ import { computed, ref, watch } from 'vue'
 import { useCall } from 'frappe-ui'
 import Boton from '@/components/ui/Boton.vue'
 import Alerta from '@/components/ui/Alerta.vue'
+import { avisar } from '@/composables/useAvisos'
 
 const props = defineProps({
   document: { type: Object, required: true },
@@ -22,6 +23,19 @@ const apply = useCall({
   method: 'POST',
   immediate: false,
 })
+
+// De quién es el turno. `get_transitions` solo devuelve MIS acciones, así que
+// cuando el documento espera a otro rol la pantalla se quedaba muda: «no hay
+// acciones disponibles» es cierto e inútil. En un flujo con segregación de
+// funciones eso pasa en la mitad de los pasos, por diseño.
+const siguiente = useCall({
+  url: '/api/v2/method/sgc.siguiente_paso.de',
+  method: 'POST',
+  immediate: false,
+})
+
+const esperandoA = computed(() => siguiente.data?.de_otros || [])
+const esFinal = computed(() => Boolean(siguiente.data?.final))
 
 const activeAction = ref('')
 const currentState = computed(() => props.document?.[props.stateField] || 'Sin estado')
@@ -53,6 +67,7 @@ function serialized(document = props.document) {
 
 async function loadTransitions(document = props.document) {
   if (!document?.doctype || !document?.name) return null
+  siguiente.submit({ doctype: document.doctype, name: document.name })
   return transitions.submit({ doc: serialized(document) })
 }
 
@@ -65,6 +80,9 @@ async function applyAction(action) {
       action,
     })
     if (!updated || apply.error) return
+    avisar(`${actionLabel(action)}: hecho`, 'exito', {
+      detalle: `El documento pasa a «${updated[props.stateField]}».`,
+    })
     emit('completed', updated)
     await loadTransitions(updated)
   } finally {
@@ -102,6 +120,16 @@ watch(
           {{ actionLabel(transition.action) }}
         </Boton>
       </template>
+      <p v-else-if="esFinal" class="text-sm text-tinta-tenue">
+        Este documento terminó su recorrido: no hay más acciones.
+      </p>
+      <p v-else-if="esperandoA.length" class="text-sm text-tinta-tenue">
+        Ahora le toca a
+        <template v-for="(t, i) in esperandoA" :key="t.accion">
+          <strong>{{ t.rol }}</strong> ({{ actionLabel(t.accion) }}){{
+            i < esperandoA.length - 1 ? ' o a ' : ''
+          }}</template>. Tú no tienes nada pendiente aquí.
+      </p>
       <p v-else class="text-sm text-tinta-tenue">
         No hay acciones disponibles para tu rol en este estado.
       </p>

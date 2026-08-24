@@ -9,6 +9,7 @@ import Cargando from '@/components/ui/Cargando.vue'
 import AreaScroll from '@/components/ui/AreaScroll.vue'
 import { useDoctypeMeta } from '@/composables/useDoctypeMeta'
 import { puede, tieneFlujo as doctypeTieneFlujo } from '@/composables/usePermisos'
+import { avisar } from '@/composables/useAvisos'
 import FieldInput from '@/components/form/FieldInput.vue'
 import DocConnections from '@/components/form/DocConnections.vue'
 import WorkflowActions from '@/components/workflow/WorkflowActions.vue'
@@ -177,6 +178,10 @@ async function save() {
         throw new Error(errorMessage(docType.insert.error, 'No se pudo crear el registro.'))
       }
       saving.value = false
+      // El aviso va ANTES de navegar: el mensaje inline del formulario se
+      // perdía en el salto a la ficha nueva, así que crear algo no confirmaba
+      // nada. La pila de avisos vive en el shell y sobrevive al cambio de ruta.
+      avisar(`${props.doctype} creado`, 'exito', { detalle: created.name })
       router.replace({ name: 'DocForm', params: { doctype: props.doctype, name: created.name } })
       return
     }
@@ -220,9 +225,13 @@ async function save() {
       }
     }
     saved.value = true
+    avisar('Cambios guardados', 'exito')
     setTimeout(() => (saved.value = false), 2500)
   } catch (e) {
     saveError.value = { message: errorMessage(e, 'No se pudo guardar.') }
+    // También como aviso: el mensaje inline queda al pie del formulario y en un
+    // documento largo se pulsa «Guardar» sin verlo.
+    avisar('No se pudo guardar', 'error', { detalle: saveError.value.message })
   } finally {
     saving.value = false
   }
