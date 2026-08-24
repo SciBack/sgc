@@ -177,10 +177,10 @@
         <dc:Bounds x="830" y="120" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Observada__Subsanar" bpmnElement="Task_Observada__Subsanar">
-        <dc:Bounds x="1030" y="280" width="120" height="80" />
+        <dc:Bounds x="1090" y="280" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Observada__Subsanar_2" bpmnElement="Task_Observada__Subsanar_2">
-        <dc:Bounds x="1030" y="440" width="120" height="80" />
+        <dc:Bounds x="1090" y="440" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Subsanada__Validar" bpmnElement="Task_Subsanada__Validar">
         <dc:Bounds x="1630" y="120" width="120" height="80" />
@@ -192,7 +192,7 @@
         <dc:Bounds x="430" y="135" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Gateway_Observada" bpmnElement="Gateway_Observada">
-        <dc:Bounds x="830" y="295" width="50" height="50" />
+        <dc:Bounds x="865" y="295" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Gateway_Subsanada" bpmnElement="Gateway_Subsanada">
         <dc:Bounds x="1430" y="135" width="50" height="50" />
@@ -204,7 +204,7 @@
         <dc:Bounds x="1030" y="135" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
-        <dc:Bounds x="230" y="142" width="36" height="36" />
+        <dc:Bounds x="322" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Auto_Pendiente__Vencida" bpmnElement="Auto_Pendiente__Vencida">
         <dc:Bounds x="630" y="622" width="36" height="36" />
@@ -213,14 +213,14 @@
         <dc:Bounds x="830" y="622" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Auto_Valida__Vencida" bpmnElement="Auto_Valida__Vencida">
-        <dc:Bounds x="1030" y="622" width="36" height="36" />
+        <dc:Bounds x="1037" y="622" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Edge_Flow_Valida_sigue" bpmnElement="Flow_Valida_sigue">
         <di:waypoint x="1080" y="160" />
         <di:waypoint x="1230" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
-        <di:waypoint x="266" y="160" />
+        <di:waypoint x="358" y="160" />
         <di:waypoint x="430" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_auto_in_Pendiente_Vencida" bpmnElement="Flow_auto_in_Pendiente_Vencida">
@@ -235,10 +235,10 @@
       <bpmndi:BPMNEdge id="Edge_Flow_auto_in_Valida_Vencida" bpmnElement="Flow_auto_in_Valida_Vencida">
         <di:waypoint x="1055" y="185" />
         <di:waypoint x="1055" y="640" />
-        <di:waypoint x="1066" y="640" />
+        <di:waypoint x="1037" y="640" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_auto_out_Valida_Vencida" bpmnElement="Flow_auto_out_Valida_Vencida">
-        <di:waypoint x="1030" y="640" />
+        <di:waypoint x="1037" y="640" />
         <di:waypoint x="866" y="640" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Pendiente_Validar" bpmnElement="Flow_gw_Pendiente_Validar">
@@ -256,25 +256,25 @@
       <bpmndi:BPMNEdge id="Edge_Flow_Pendiente_Observar_hacia_Observada" bpmnElement="Flow_Pendiente_Observar_hacia_Observada">
         <di:waypoint x="890" y="200" />
         <di:waypoint x="890" y="320" />
-        <di:waypoint x="880" y="320" />
+        <di:waypoint x="865" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Observada_Subsanar" bpmnElement="Flow_gw_Observada_Subsanar">
-        <di:waypoint x="880" y="320" />
-        <di:waypoint x="1030" y="320" />
+        <di:waypoint x="915" y="320" />
+        <di:waypoint x="1090" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Observada_Subsanar_hacia_Subsanada" bpmnElement="Flow_Observada_Subsanar_hacia_Subsanada">
-        <di:waypoint x="1090" y="280" />
-        <di:waypoint x="1090" y="160" />
+        <di:waypoint x="1150" y="280" />
+        <di:waypoint x="1150" y="160" />
         <di:waypoint x="1430" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Observada_Subsanar_2" bpmnElement="Flow_gw_Observada_Subsanar_2">
-        <di:waypoint x="855" y="345" />
-        <di:waypoint x="855" y="480" />
-        <di:waypoint x="1030" y="480" />
+        <di:waypoint x="890" y="345" />
+        <di:waypoint x="890" y="480" />
+        <di:waypoint x="1090" y="480" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Observada_Subsanar_hacia_Subsanada_2" bpmnElement="Flow_Observada_Subsanar_hacia_Subsanada_2">
-        <di:waypoint x="1090" y="440" />
-        <di:waypoint x="1090" y="160" />
+        <di:waypoint x="1150" y="440" />
+        <di:waypoint x="1150" y="160" />
         <di:waypoint x="1430" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Subsanada_Validar" bpmnElement="Flow_gw_Subsanada_Validar">
@@ -292,7 +292,7 @@
       <bpmndi:BPMNEdge id="Edge_Flow_Subsanada_Observar_hacia_Observada" bpmnElement="Flow_Subsanada_Observar_hacia_Observada">
         <di:waypoint x="1890" y="200" />
         <di:waypoint x="1890" y="320" />
-        <di:waypoint x="880" y="320" />
+        <di:waypoint x="915" y="320" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

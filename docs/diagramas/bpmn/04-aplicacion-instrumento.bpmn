@@ -107,7 +107,7 @@ Por eso el ciclo de campo se gobierna y no se deja al criterio de cada quien: ce
         <dc:Bounds x="302" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Efecto_Cerrada__Publicar_valores_de_indicador" bpmnElement="Efecto_Cerrada__Publicar_valores_de_indicador">
-        <dc:Bounds x="1030" y="462" width="36" height="36" />
+        <dc:Bounds x="1072" y="462" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
         <di:waypoint x="338" y="160" />
@@ -134,11 +134,11 @@ Por eso el ciclo de campo se gobierna y no se deja al criterio de cada quien: ce
       <bpmndi:BPMNEdge id="Edge_Flow_En_campo_Cerrar_aplicacion_hacia_Cerrada" bpmnElement="Flow_En_campo_Cerrar_aplicacion_hacia_Cerrada">
         <di:waypoint x="1090" y="360" />
         <di:waypoint x="1090" y="480" />
-        <di:waypoint x="1066" y="480" />
+        <di:waypoint x="1072" y="480" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_efecto_Cerrada" bpmnElement="Flow_efecto_Cerrada">
-        <di:waypoint x="1048" y="462" />
-        <di:waypoint x="1048" y="320" />
+        <di:waypoint x="1090" y="462" />
+        <di:waypoint x="1090" y="320" />
         <di:waypoint x="1230" y="320" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

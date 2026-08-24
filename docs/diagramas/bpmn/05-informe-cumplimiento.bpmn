@@ -118,7 +118,7 @@
         <dc:Bounds x="1430" y="120" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Aprobado__Presentar_a_SUNEDU" bpmnElement="Task_Aprobado__Presentar_a_SUNEDU">
-        <dc:Bounds x="1230" y="280" width="120" height="80" />
+        <dc:Bounds x="1195" y="280" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Gateway_En_revision" bpmnElement="Gateway_En_revision">
         <dc:Bounds x="630" y="135" width="50" height="50" />
@@ -167,10 +167,10 @@
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Aprobado_Presentar_a_SUNEDU" bpmnElement="Flow_gw_Aprobado_Presentar_a_SUNEDU">
         <di:waypoint x="1255" y="185" />
         <di:waypoint x="1255" y="320" />
-        <di:waypoint x="1230" y="320" />
+        <di:waypoint x="1195" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Aprobado_Presentar_a_SUNEDU_hacia_Presentado_a_SUNEDU" bpmnElement="Flow_Aprobado_Presentar_a_SUNEDU_hacia_Presentado_a_SUNEDU">
-        <di:waypoint x="1350" y="320" />
+        <di:waypoint x="1315" y="320" />
         <di:waypoint x="1430" y="320" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

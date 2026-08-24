@@ -147,103 +147,103 @@
         <dc:Bounds x="230" y="560" width="1716" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Borrador__Enviar_a_revision" bpmnElement="Task_Borrador__Enviar_a_revision">
-        <dc:Bounds x="430" y="160" width="120" height="80" />
+        <dc:Bounds x="430" y="127" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_En_revision__Observar" bpmnElement="Task_En_revision__Observar">
-        <dc:Bounds x="830" y="320" width="120" height="80" />
+        <dc:Bounds x="830" y="287" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_En_revision__Aprobar" bpmnElement="Task_En_revision__Aprobar">
-        <dc:Bounds x="1030" y="320" width="120" height="80" />
+        <dc:Bounds x="1030" y="287" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Observado__Corregir" bpmnElement="Task_Observado__Corregir">
-        <dc:Bounds x="1030" y="160" width="120" height="80" />
+        <dc:Bounds x="1030" y="127" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Aprobado__Observar" bpmnElement="Task_Aprobado__Observar">
-        <dc:Bounds x="1430" y="320" width="120" height="80" />
+        <dc:Bounds x="1430" y="287" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Aprobado__Publicar" bpmnElement="Task_Aprobado__Publicar">
-        <dc:Bounds x="1230" y="440" width="120" height="80" />
+        <dc:Bounds x="1300" y="440" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Publicado__Derogar" bpmnElement="Task_Publicado__Derogar">
-        <dc:Bounds x="1630" y="320" width="120" height="80" />
+        <dc:Bounds x="1630" y="287" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Gateway_En_revision" bpmnElement="Gateway_En_revision">
-        <dc:Bounds x="630" y="335" width="50" height="50" />
+        <dc:Bounds x="630" y="302" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Gateway_Aprobado" bpmnElement="Gateway_Aprobado">
-        <dc:Bounds x="1230" y="335" width="50" height="50" />
+        <dc:Bounds x="1230" y="302" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_End_Obsoleto" bpmnElement="End_Obsoleto">
-        <dc:Bounds x="1830" y="342" width="36" height="36" />
+        <dc:Bounds x="1830" y="309" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
-        <dc:Bounds x="302" y="182" width="36" height="36" />
+        <dc:Bounds x="302" y="149" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Auto_Publicado__Obsoleto" bpmnElement="Auto_Publicado__Obsoleto">
-        <dc:Bounds x="1630" y="622" width="36" height="36" />
+        <dc:Bounds x="1702" y="622" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
-        <di:waypoint x="338" y="200" />
-        <di:waypoint x="430" y="200" />
+        <di:waypoint x="338" y="167" />
+        <di:waypoint x="430" y="167" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_auto_in_Publicado_Obsoleto" bpmnElement="Flow_auto_in_Publicado_Obsoleto">
-        <di:waypoint x="1690" y="400" />
+        <di:waypoint x="1690" y="367" />
         <di:waypoint x="1690" y="640" />
-        <di:waypoint x="1666" y="640" />
+        <di:waypoint x="1702" y="640" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_auto_out_Publicado_Obsoleto" bpmnElement="Flow_auto_out_Publicado_Obsoleto">
-        <di:waypoint x="1648" y="622" />
-        <di:waypoint x="1648" y="360" />
-        <di:waypoint x="1830" y="360" />
+        <di:waypoint x="1720" y="622" />
+        <di:waypoint x="1720" y="327" />
+        <di:waypoint x="1830" y="327" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Borrador_Enviar_a_revision_hacia_En_revision" bpmnElement="Flow_Borrador_Enviar_a_revision_hacia_En_revision">
-        <di:waypoint x="490" y="240" />
-        <di:waypoint x="490" y="360" />
-        <di:waypoint x="630" y="360" />
+        <di:waypoint x="490" y="207" />
+        <di:waypoint x="490" y="327" />
+        <di:waypoint x="630" y="327" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_En_revision_Observar" bpmnElement="Flow_gw_En_revision_Observar">
-        <di:waypoint x="680" y="360" />
-        <di:waypoint x="830" y="360" />
+        <di:waypoint x="680" y="327" />
+        <di:waypoint x="830" y="327" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_En_revision_Observar_hacia_Observado" bpmnElement="Flow_En_revision_Observar_hacia_Observado">
-        <di:waypoint x="890" y="320" />
-        <di:waypoint x="890" y="200" />
-        <di:waypoint x="1030" y="200" />
+        <di:waypoint x="890" y="287" />
+        <di:waypoint x="890" y="167" />
+        <di:waypoint x="1030" y="167" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_En_revision_Aprobar" bpmnElement="Flow_gw_En_revision_Aprobar">
-        <di:waypoint x="680" y="360" />
-        <di:waypoint x="1030" y="360" />
+        <di:waypoint x="680" y="327" />
+        <di:waypoint x="1030" y="327" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_En_revision_Aprobar_hacia_Aprobado" bpmnElement="Flow_En_revision_Aprobar_hacia_Aprobado">
-        <di:waypoint x="1150" y="360" />
-        <di:waypoint x="1230" y="360" />
+        <di:waypoint x="1150" y="327" />
+        <di:waypoint x="1230" y="327" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Observado_Corregir_hacia_Borrador" bpmnElement="Flow_Observado_Corregir_hacia_Borrador">
-        <di:waypoint x="1030" y="200" />
-        <di:waypoint x="550" y="200" />
+        <di:waypoint x="1030" y="167" />
+        <di:waypoint x="550" y="167" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Aprobado_Observar" bpmnElement="Flow_gw_Aprobado_Observar">
-        <di:waypoint x="1280" y="360" />
-        <di:waypoint x="1430" y="360" />
+        <di:waypoint x="1280" y="327" />
+        <di:waypoint x="1430" y="327" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Aprobado_Observar_hacia_Observado" bpmnElement="Flow_Aprobado_Observar_hacia_Observado">
-        <di:waypoint x="1490" y="320" />
-        <di:waypoint x="1490" y="200" />
-        <di:waypoint x="1150" y="200" />
+        <di:waypoint x="1490" y="287" />
+        <di:waypoint x="1490" y="167" />
+        <di:waypoint x="1150" y="167" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Aprobado_Publicar" bpmnElement="Flow_gw_Aprobado_Publicar">
-        <di:waypoint x="1255" y="385" />
+        <di:waypoint x="1255" y="352" />
         <di:waypoint x="1255" y="480" />
-        <di:waypoint x="1230" y="480" />
+        <di:waypoint x="1300" y="480" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Aprobado_Publicar_hacia_Publicado" bpmnElement="Flow_Aprobado_Publicar_hacia_Publicado">
-        <di:waypoint x="1290" y="440" />
-        <di:waypoint x="1290" y="360" />
-        <di:waypoint x="1630" y="360" />
+        <di:waypoint x="1360" y="440" />
+        <di:waypoint x="1360" y="327" />
+        <di:waypoint x="1630" y="327" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Publicado_Derogar_hacia_Obsoleto" bpmnElement="Flow_Publicado_Derogar_hacia_Obsoleto">
-        <di:waypoint x="1750" y="360" />
-        <di:waypoint x="1830" y="360" />
+        <di:waypoint x="1750" y="327" />
+        <di:waypoint x="1830" y="327" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
