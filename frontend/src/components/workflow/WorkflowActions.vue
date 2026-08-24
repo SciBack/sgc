@@ -40,7 +40,29 @@ const esFinal = computed(() => Boolean(siguiente.data?.final))
 const activeAction = ref('')
 const currentState = computed(() => props.document?.[props.stateField] || 'Sin estado')
 const actions = computed(() => transitions.data || [])
-const errorMessage = computed(() => apply.error?.message || transitions.error?.message || '')
+/**
+ * Una petición CANCELADA no es un error: es lo que pasa cuando se lanza otra
+ * antes de que termine la anterior, y `useCall` (VueUse) devuelve entonces
+ * «signal is aborted without reason». Ese texto llegó a la pantalla el
+ * 2026-08-24 y quien lo vio, con razón, no supo qué significaba: está en
+ * inglés, no lo causó y no puede hacer nada al respecto.
+ *
+ * Se filtran también los errores sin mensaje: un recuadro rojo vacío asusta y
+ * no informa.
+ */
+function esCancelacion(err) {
+  const texto = String(err?.message || err?.name || '')
+  return /abort/i.test(texto)
+}
+
+function mensajeUtil(err) {
+  if (!err || esCancelacion(err)) return ''
+  return err.message || ''
+}
+
+const errorMessage = computed(
+  () => mensajeUtil(apply.error) || mensajeUtil(transitions.error) || '',
+)
 
 const ACTION_LABELS = {
   'Iniciar evaluacion': 'Iniciar evaluación',

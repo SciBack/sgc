@@ -102,5 +102,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "nombre",
+ "show_title_field_in_link": 1,
  "track_changes": 1
 }

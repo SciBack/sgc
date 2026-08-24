@@ -112,5 +112,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "elemento_marco",
+ "show_title_field_in_link": 1,
  "track_changes": 1
 }

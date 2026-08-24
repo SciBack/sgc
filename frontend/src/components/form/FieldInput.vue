@@ -22,6 +22,15 @@ const NUMBER_TYPES = new Set(['Int', 'Float', 'Currency', 'Percent'])
 
 const label = computed(() => props.field.label || props.field.fieldname)
 
+// El sistema SABE qué campos son obligatorios (`reqd` en el meta) y el
+// formulario no lo decía: te enterabas al pulsar «Crear» y recibir un rechazo.
+// `Campo` ya pinta el asterisco desde siempre; nadie le pasaba el dato.
+//
+// Un campo de solo lectura nunca se marca obligatorio aunque lo sea: pedirle a
+// alguien que rellene algo que no puede tocar es peor que no avisar. Los que
+// sella el sistema (`aprobado_por`, la firma de quien aprueba) caen aquí.
+const esObligatorio = computed(() => Boolean(props.field.reqd) && !props.readOnly)
+
 const selectOptions = computed(() => {
   const raw = (props.field.options || '').split('\n').map((s) => s.trim())
   return raw.map((v) => ({ label: v || '—', value: v }))
@@ -37,7 +46,9 @@ function rowsFor(fieldtype) {
 
 <template>
   <div v-if="field.fieldtype === 'Link'" class="space-y-1.5">
-    <label v-if="!hideLabel" class="sb-field-label block">{{ label }}</label>
+    <label v-if="!hideLabel" class="sb-field-label block">
+      {{ label }}<span v-if="esObligatorio" class="text-peligro" aria-hidden="true"> *</span>
+    </label>
     <LinkField
       v-model="value"
       :doctype="field.options"
@@ -56,7 +67,7 @@ function rowsFor(fieldtype) {
   />
 
   <div v-else-if="field.fieldtype === 'Dynamic Link'" class="space-y-1.5">
-    <Campo v-model="value" type="text" :label="hideLabel ? undefined : label" :disabled="readOnly" />
+    <Campo v-model="value" type="text" :label="hideLabel ? undefined : label" :disabled="readOnly" :required="esObligatorio" />
     <p v-if="!hideLabel" class="text-xs text-tinta-tenue">
       Enlace dinámico — el tipo de documento lo define otro campo. Si no es evidente, editar desde el Desk.
     </p>
@@ -68,7 +79,7 @@ function rowsFor(fieldtype) {
     v-model="value"
     :label="hideLabel ? undefined : label"
     :options="selectOptions"
-    :disabled="readOnly"
+    :disabled="readOnly" :required="esObligatorio"
   />
 
   <Campo
@@ -77,7 +88,7 @@ function rowsFor(fieldtype) {
     :label="hideLabel ? undefined : label"
     :model-value="Boolean(Number(value))"
     :disabled="readOnly"
-    @update:model-value="value = $event ? 1 : 0"
+    @update:model-value="value = $event ? 1 : 0" :required="esObligatorio"
   />
 
   <Campo
@@ -85,7 +96,7 @@ function rowsFor(fieldtype) {
     type="date"
     v-model="value"
     :label="hideLabel ? undefined : label"
-    :disabled="readOnly"
+    :disabled="readOnly" :required="esObligatorio"
   />
 
   <Campo
@@ -93,7 +104,7 @@ function rowsFor(fieldtype) {
     type="datetime"
     v-model="value"
     :label="hideLabel ? undefined : label"
-    :disabled="readOnly"
+    :disabled="readOnly" :required="esObligatorio"
   />
 
   <Campo
@@ -101,7 +112,7 @@ function rowsFor(fieldtype) {
     type="number"
     v-model="value"
     :label="hideLabel ? undefined : label"
-    :disabled="readOnly"
+    :disabled="readOnly" :required="esObligatorio"
   />
 
   <ChildTableField
@@ -119,8 +130,8 @@ function rowsFor(fieldtype) {
     v-model="value"
     :label="hideLabel ? undefined : label"
     :rows="rowsFor(field.fieldtype)"
-    :disabled="readOnly"
+    :disabled="readOnly" :required="esObligatorio"
   />
 
-  <Campo v-else type="text" v-model="value" :label="hideLabel ? undefined : label" :disabled="readOnly" />
+  <Campo v-else type="text" v-model="value" :label="hideLabel ? undefined : label" :disabled="readOnly" :required="esObligatorio" />
 </template>
