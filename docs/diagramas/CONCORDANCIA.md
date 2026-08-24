@@ -478,6 +478,50 @@ que desde que entra a revisión no lo toque nadie. Hoy el sistema es más estric
 de lo que la norma pide, y pasarse de estricto también cuesta: la lista se llena
 de basura que solo un administrador puede limpiar.
 
+## Decisión abierta: el sistema acepta datos que sabe que están mal
+
+Probado en producción el 2026-08-24 creando documentos controlados a propósito
+mal. Lo único que impide es el **duplicado exacto**, y lo impide por el índice
+único de PostgreSQL, no por una regla del proceso — así que el mensaje que ve la
+persona es literalmente:
+
+> `duplicate key value violates unique constraint "tabDocumento Controlado_pkey"`
+
+Todo lo demás pasa sin una queja:
+
+| Lo que se intentó | Hoy |
+|---|---|
+| Código duplicado | **impide** (con ese mensaje ilegible) |
+| Código `xxx`, sin formato ninguno | pasa |
+| Código `PRO-S04-999` con el proceso `S01` — incoherente | pasa |
+| Versión `pepito` | pasa |
+| Título de una sola letra | pasa |
+| Dos documentos con el mismo título | pasa |
+
+**Por qué importa aquí más que en otro sistema.** El código de un documento
+controlado no es un identificador cualquiera: es como se le cita en auditorías,
+en registros y en otros documentos. Uno mal formado o incoherente con su proceso
+se arrastra durante años, y corregirlo después obliga a tocar todo lo que lo
+menciona.
+
+Qué convendría comprobar, de más a menos claro:
+
+1. **El duplicado, con un mensaje humano**: «Ya existe un documento con el código
+   X». Esto es un arreglo, no una decisión.
+2. **Formato del código** según la convención de la casa, que hoy no está escrita
+   en ningún sitio: es el primer paso, decidirla.
+3. **Coherencia entre el código y el proceso** cuando el código lleva el proceso
+   dentro (`PRO-**S04**-001` colgando de `S01`).
+4. **Formato de versión** (`1.0`, `2.1`), que además gobierna el control de
+   cambios.
+5. **Título con un mínimo** — de una letra no identifica nada.
+6. **Título repetido**: avisar, no bloquear. Dos documentos pueden llamarse
+   parecido legítimamente.
+
+Los puntos 2 y 3 dependen de una decisión previa de UPeU: **cuál es la
+convención de codificación documental**. Sin eso escrito, cualquier validación
+que se ponga sería una invención.
+
 ## Riesgo de deriva
 
 Nada compara automáticamente los `.bpmn` en disco contra lo que generaría el
