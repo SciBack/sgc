@@ -22,7 +22,7 @@
  * no sabe de dónde salen las opciones y sirve igual para una lista fija que para
  * un Link a un DocType.
  */
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import {
   ComboboxRoot, ComboboxAnchor, ComboboxInput, ComboboxTrigger,
   ComboboxContent, ComboboxViewport, ComboboxItem, ComboboxItemIndicator, ComboboxEmpty,
@@ -39,10 +39,6 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:modelValue', 'update:query'])
 
-// Apertura controlada: hace falta para poder abrir al enfocar y al pulsar, no
-// solo al teclear.
-const abierto = ref(false)
-
 const normalizadas = computed(() =>
   props.options.map((o) => (typeof o === 'object' ? o : { label: String(o), value: o })),
 )
@@ -52,10 +48,19 @@ const etiquetaActual = computed(
 </script>
 
 <template>
+  <!-- `open-on-focus` y `open-on-click` son props del propio componente: abre
+       al enfocar y al pulsar sin que nadie gestione el estado por fuera. Se
+       intentó primero a mano —forzando el estado desde @focus y @click— y salió
+       mal de dos maneras: el desplegable competía con la lógica interna, y el
+       texto tecleado se congelaba porque cada tecla forzaba un redibujado.
+       `ignore-filter` porque las opciones llegan YA filtradas por el servidor;
+       volver a cribarlas en cliente escondería resultados válidos. -->
   <ComboboxRoot
-    v-model:open="abierto"
     :model-value="modelValue"
     :disabled="disabled"
+    open-on-focus
+    open-on-click
+    ignore-filter
     class="relative"
     @update:model-value="emit('update:modelValue', $event)"
   >
@@ -69,18 +74,10 @@ const etiquetaActual = computed(
            búsqueda no funcionaba. Un campo con una flecha ⌄ al lado promete que
            al pulsarlo se despliega; si no lo hace, la promesa es falsa y no hay
            forma de saber que hay que escribir a ciegas. -->
-      <!-- `v-model:open` va SOLO en la raíz. Ponerlo también aquí hacía que
-           cada tecla forzara un redibujado del input y el texto se quedara
-           congelado: se escribía «gesti» y el retroceso no borraba nada.
-           Comprobado con teclado real el 2026-08-24.
-           `display-value` solo se aplica cuando hay algo elegido; mientras se
-           escribe, manda lo tecleado. -->
       <ComboboxInput
         class="flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
         :placeholder="placeholder"
-        :display-value="() => (modelValue ? etiquetaActual : undefined)"
-        @focus="abierto = true"
-        @click="abierto = true"
+        :display-value="() => etiquetaActual"
         @input="emit('update:query', $event.target.value)"
       />
       <Loader v-if="loading" :size="16" class="animate-spin text-tinta-tenue" aria-hidden="true" />
