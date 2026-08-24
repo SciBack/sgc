@@ -28,8 +28,18 @@ const props = defineProps({
   filas: { type: Array, default: () => [] },
   // { campo, desc } — el orden vigente, resuelto en servidor.
   orden: { type: Object, default: () => ({ campo: 'modified', desc: true }) },
+  // Filtros declarados por el DocType, indexados por campo. Se pintan DEBAJO de
+  // la cabecera de su columna, no en una caja aparte: así se ve de un vistazo
+  // qué columna está filtrada y por qué valor, en vez de tener que cruzar dos
+  // sitios de la pantalla.
+  filtros: { type: Object, default: () => ({}) },
+  valores: { type: Object, default: () => ({}) },
 })
-const emit = defineEmits(['ordenar', 'abrir'])
+const emit = defineEmits(['ordenar', 'abrir', 'filtrar'])
+
+const hayFiltros = computed(() =>
+  props.columnas.some((c) => props.filtros[c.key]),
+)
 
 const columnDefs = computed(() =>
   props.columnas.map((c) => ({
@@ -85,6 +95,31 @@ function alternarOrden(campo) {
                 aria-hidden="true"
               />
             </button>
+          </th>
+        </tr>
+        <!-- Fila de filtros, alineada con su columna. Solo aparece si alguna
+             columna declara filtro; una fila vacía sería ruido. -->
+        <tr v-if="hayFiltros" class="border-b border-borde bg-superficie-tenue">
+          <th v-for="col in columnas" :key="`f-${col.key}`" class="px-3 py-2 text-left font-normal">
+            <select
+              v-if="filtros[col.key]?.opciones"
+              class="border-input h-8 w-full rounded-lg border bg-transparent px-2 text-xs"
+              :value="valores[col.key] ?? ''"
+              :aria-label="`Filtrar por ${col.label}`"
+              @change="emit('filtrar', { campo: col.key, valor: $event.target.value || null })"
+            >
+              <option value="">Todos</option>
+              <option v-for="o in filtros[col.key].opciones" :key="o" :value="o">{{ o }}</option>
+            </select>
+            <input
+              v-else-if="filtros[col.key]"
+              type="text"
+              class="border-input h-8 w-full rounded-lg border bg-transparent px-2 text-xs"
+              :value="valores[col.key] ?? ''"
+              :placeholder="`Filtrar…`"
+              :aria-label="`Filtrar por ${col.label}`"
+              @change="emit('filtrar', { campo: col.key, valor: $event.target.value || null })"
+            />
           </th>
         </tr>
       </thead>

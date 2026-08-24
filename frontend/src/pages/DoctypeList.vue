@@ -1,5 +1,5 @@
 <script setup>
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive } from 'vue'
 import { useCall } from 'frappe-ui'
 import { useRouter } from 'vue-router'
 import Boton from '@/components/ui/Boton.vue'
@@ -8,7 +8,6 @@ import AreaScroll from '@/components/ui/AreaScroll.vue'
 import Cargando from '@/components/ui/Cargando.vue'
 import Alerta from '@/components/ui/Alerta.vue'
 import TablaDatos from '@/components/ui/TablaDatos.vue'
-import LinkField from '@/components/form/LinkField.vue'
 import { List, Plus } from 'reicon-vue'
 import { puede } from '@/composables/usePermisos'
 import { useDoctypeMeta } from '@/composables/useDoctypeMeta'
@@ -51,6 +50,16 @@ const list = useCall({
   }),
   refetch: true,
 })
+
+// Los filtros, indexados por campo: la tabla los pinta bajo su columna.
+const filtrosPorCampo = computed(() =>
+  Object.fromEntries(filtrosDisponibles.value.map((f) => [f.key, f])),
+)
+
+function aplicarFiltro({ campo, valor }) {
+  if (valor === null || valor === '') delete filtros[campo]
+  else filtros[campo] = valor
+}
 
 function ordenarPor({ campo, desc }) {
   orden.campo = campo
@@ -119,47 +128,6 @@ const columnasConFormato = computed(() =>
         </Boton>
       </div>
 
-      <!-- Los filtros los declara el DocType (`in_standard_filter`): no se
-           configuran por pantalla. Un Select ofrece sus opciones; un Link, su
-           buscador. -->
-      <div
-        v-if="filtrosDisponibles.length"
-        class="mb-5 flex flex-wrap items-end gap-3 rounded-xl border border-borde bg-superficie-tenue p-4"
-      >
-        <div v-for="f in filtrosDisponibles" :key="f.key" class="min-w-[12rem] flex-1">
-          <label class="sb-field-label mb-1 block">{{ f.label }}</label>
-          <select
-            v-if="f.opciones"
-            v-model="filtros[f.key]"
-            class="border-input h-10 w-full rounded-xl border bg-transparent px-3 text-sm"
-          >
-            <option :value="undefined">Todos</option>
-            <option v-for="o in f.opciones" :key="o" :value="o">{{ o }}</option>
-          </select>
-          <LinkField
-            v-else-if="f.doctype"
-            v-model="filtros[f.key]"
-            :doctype="f.doctype"
-            :placeholder="`Cualquier ${f.label.toLowerCase()}`"
-          />
-          <input
-            v-else
-            v-model="filtros[f.key]"
-            type="text"
-            class="border-input h-10 w-full rounded-xl border bg-transparent px-3 text-sm"
-            :placeholder="`Filtrar por ${f.label.toLowerCase()}`"
-          />
-        </div>
-        <button
-          v-if="hayFiltros"
-          type="button"
-          class="h-10 rounded-xl px-3 text-sm font-semibold text-tinta-tenue transition-colors hover:text-tinta"
-          @click="limpiarFiltros"
-        >
-          Quitar filtros
-        </button>
-      </div>
-
       <Cargando v-if="(list.loading && !list.data) || metaLoading" />
       <Alerta v-else-if="list.error" :message="list.error.message" />
       <p v-else-if="!list.data?.length" class="sb-empty-state text-sm">
@@ -170,9 +138,16 @@ const columnasConFormato = computed(() =>
         :columnas="columnasConFormato"
         :filas="list.data"
         :orden="orden"
+        :filtros="filtrosPorCampo"
+        :valores="filtros"
         @ordenar="ordenarPor"
+        @filtrar="aplicarFiltro"
         @abrir="openRow"
       />
+
+      <p v-if="hayFiltros" class="mt-3 text-xs text-tinta-tenue">
+        Filtrando. <button type="button" class="font-semibold underline" @click="limpiarFiltros">Quitar filtros</button>
+      </p>
 
       <p class="mt-4 text-xs text-tinta-tenue">
         Columnas y filtros los declara el propio DocType; el orden se resuelve en el servidor.

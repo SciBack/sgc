@@ -53,6 +53,8 @@
   },
   {
    "fieldname": "propietario_unidad",
+   "in_standard_filter": 1,
+   "in_list_view": 1,
    "fieldtype": "Link",
    "label": "Propietario (\u00e1rea)",
    "options": "Unidad Organica"
@@ -66,6 +68,7 @@
   {
    "default": "Borrador",
    "fieldname": "estado",
+   "in_list_view": 1,
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Estado",
