@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:sgc="https://sciback.com/schema/sgc/1.0" id="Definitions_1" targetNamespace="https://sciback.com/schema/sgc/1.0" exporter="SGC" exporterVersion="1.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:sgc="https://sciback.com/schema/sgc/1.0" id="Definitions_1" targetNamespace="https://sciback.com/schema/sgc/1.0" exporter="Camunda Modeler" exporterVersion="5.49.0">
   <bpmn:collaboration id="Collaboration_1">
     <bpmn:participant id="Participant_Aplicacion_Instrumento" name="Aplicacion Instrumento SGC" processRef="Process_Aplicacion_Instrumento" />
   </bpmn:collaboration>
@@ -50,43 +50,39 @@ Por eso el ciclo de campo se gobierna y no se deja al criterio de cada quien: ce
       <bpmn:incoming>Flow_En_campo_Cerrar_aplicacion_hacia_Cerrada</bpmn:incoming>
       <bpmn:outgoing>Flow_efecto_Cerrada</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Task_Planificada__Iniciar_campo">
-    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Task_Planificada__Iniciar_campo" />
     <bpmn:sequenceFlow id="Flow_Planificada_Iniciar_campo_hacia_En_campo" sourceRef="Task_Planificada__Iniciar_campo" targetRef="Gateway_En_campo">
       <bpmn:extensionElements>
         <sgc:transicion rol="Responsable de Calidad de Programa" autoaprobacion="1" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_gw_En_campo_Devolver_a_planificada" sourceRef="Gateway_En_campo" targetRef="Task_En_campo__Devolver_a_planificada">
-    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_En_campo_Devolver_a_planificada" sourceRef="Gateway_En_campo" targetRef="Task_En_campo__Devolver_a_planificada" />
     <bpmn:sequenceFlow id="Flow_En_campo_Devolver_a_planificada_hacia_Planificada" sourceRef="Task_En_campo__Devolver_a_planificada" targetRef="Task_Planificada__Iniciar_campo">
       <bpmn:extensionElements>
         <sgc:transicion rol="DPGC" autoaprobacion="1" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_gw_En_campo_Cerrar_aplicacion" sourceRef="Gateway_En_campo" targetRef="Task_En_campo__Cerrar_aplicacion">
-    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_En_campo_Cerrar_aplicacion" sourceRef="Gateway_En_campo" targetRef="Task_En_campo__Cerrar_aplicacion" />
     <bpmn:sequenceFlow id="Flow_En_campo_Cerrar_aplicacion_hacia_Cerrada" sourceRef="Task_En_campo__Cerrar_aplicacion" targetRef="Efecto_Cerrada__Publicar_valores_de_indicador">
       <bpmn:extensionElements>
         <sgc:transicion rol="DPGC" autoaprobacion="0" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_efecto_Cerrada" sourceRef="Efecto_Cerrada__Publicar_valores_de_indicador" targetRef="End_Cerrada">
-    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_efecto_Cerrada" sourceRef="Efecto_Cerrada__Publicar_valores_de_indicador" targetRef="End_Cerrada" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="Diagram_1">
     <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
       <bpmndi:BPMNShape id="Shape_Participant_Aplicacion_Instrumento" bpmnElement="Participant_Aplicacion_Instrumento" isHorizontal="true">
         <dc:Bounds x="200" y="80" width="1146" height="480" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Lane_Responsable_de_Calidad_de_Programa" bpmnElement="Lane_Responsable_de_Calidad_de_Programa" isHorizontal="true">
-        <dc:Bounds x="230" y="80" width="1116" height="160" />
+      <bpmndi:BPMNShape id="Shape_Lane_Sistema__automatico_" bpmnElement="Lane_Sistema__automatico_" isHorizontal="true">
+        <dc:Bounds x="230" y="400" width="1116" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
         <dc:Bounds x="230" y="240" width="1116" height="160" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Lane_Sistema__automatico_" bpmnElement="Lane_Sistema__automatico_" isHorizontal="true">
-        <dc:Bounds x="230" y="400" width="1116" height="160" />
+      <bpmndi:BPMNShape id="Shape_Lane_Responsable_de_Calidad_de_Programa" bpmnElement="Lane_Responsable_de_Calidad_de_Programa" isHorizontal="true">
+        <dc:Bounds x="230" y="80" width="1116" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Planificada__Iniciar_campo" bpmnElement="Task_Planificada__Iniciar_campo">
         <dc:Bounds x="430" y="120" width="120" height="80" />
@@ -97,11 +93,14 @@ Por eso el ciclo de campo se gobierna y no se deja al criterio de cada quien: ce
       <bpmndi:BPMNShape id="Shape_Task_En_campo__Cerrar_aplicacion" bpmnElement="Task_En_campo__Cerrar_aplicacion">
         <dc:Bounds x="1030" y="280" width="120" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Gateway_En_campo" bpmnElement="Gateway_En_campo">
+      <bpmndi:BPMNShape id="Shape_Gateway_En_campo" bpmnElement="Gateway_En_campo" isMarkerVisible="true">
         <dc:Bounds x="630" y="295" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_End_Cerrada" bpmnElement="End_Cerrada">
         <dc:Bounds x="1230" y="302" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1228" y="278" width="40" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
         <dc:Bounds x="302" y="142" width="36" height="36" />
@@ -128,8 +127,10 @@ Por eso el ciclo de campo se gobierna y no se deja al criterio de cada quien: ce
         <di:waypoint x="550" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_En_campo_Cerrar_aplicacion" bpmnElement="Flow_gw_En_campo_Cerrar_aplicacion">
-        <di:waypoint x="680" y="320" />
-        <di:waypoint x="1030" y="320" />
+        <di:waypoint x="655" y="295" />
+        <di:waypoint x="655" y="260" />
+        <di:waypoint x="1090" y="260" />
+        <di:waypoint x="1090" y="280" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_En_campo_Cerrar_aplicacion_hacia_Cerrada" bpmnElement="Flow_En_campo_Cerrar_aplicacion_hacia_Cerrada">
         <di:waypoint x="1090" y="360" />
@@ -137,9 +138,10 @@ Por eso el ciclo de campo se gobierna y no se deja al criterio de cada quien: ce
         <di:waypoint x="1066" y="480" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_efecto_Cerrada" bpmnElement="Flow_efecto_Cerrada">
-        <di:waypoint x="1048" y="462" />
-        <di:waypoint x="1048" y="320" />
-        <di:waypoint x="1230" y="320" />
+        <di:waypoint x="1048" y="498" />
+        <di:waypoint x="1048" y="530" />
+        <di:waypoint x="1248" y="530" />
+        <di:waypoint x="1248" y="338" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

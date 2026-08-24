@@ -1,6 +1,6 @@
 # Concordancia entre los diagramas BPMN y el sistema real
 
-**Fecha:** 2026-08-23 · **Versión en producción:** `sgc-frappe:v104`
+**Fecha:** 2026-08-23 · **Versión en producción:** `sgc-frappe:v105`
 
 Contrastación de los 15 `.bpmn` contra el comportamiento comprobado en
 producción, recorriendo los flujos punta a punta con usuarios reales por rol.
@@ -281,6 +281,10 @@ traza de que hubo un intento fallido.
 Ninguna es obviamente correcta, así que no se ha tocado. Lo que sí conviene es
 que las tres se comporten igual: hoy la diferencia parece más un descuido que
 una decisión.
+
+Comprobado en producción el 2026-08-23: «Cerrada no eficaz» de la NC no admite
+ninguna acción —ni reabrir ni volver a analizar—, tal como el diagrama la dibuja
+(evento de fin). Sistema y diagrama concuerdan; la pregunta es de proceso.
 
 ## Riesgo de deriva
 
