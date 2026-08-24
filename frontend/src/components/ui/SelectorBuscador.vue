@@ -86,6 +86,12 @@ const etiquetaActual = computed(
 
     <ComboboxContent
       :class="[
+        // Posicionado contra `ComboboxRoot`, que es `relative`. Sin el modo
+        // popper de reka: con él, el contenido se monta en un envoltorio propio
+        // de ancho 0, este w-full medía 0, y el desplegable se dibujaba como una
+        // LINEA VERTICAL de 2px con las opciones dentro, invisibles. Comprobado
+        // en produccion el 2026-08-24. Su variable de ancho tampoco sirve aqui:
+        // mide el disparador (la flecha, 26px), no el campo.
         'absolute z-50 mt-1 w-full overflow-hidden rounded-xl border bg-popover text-popover-foreground shadow-md',
         // Entra con ease-out y desde scale(0.97), nunca desde 0: nada aparece de
         // la nada. Y desde su disparador, no desde el centro (estilo §6).
@@ -93,7 +99,6 @@ const etiquetaActual = computed(
         'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
         'duration-150 ease-out motion-reduce:animate-none',
       ]"
-      position="popper"
     >
       <ComboboxViewport class="max-h-60 overflow-y-auto p-1">
         <ComboboxEmpty class="px-3 py-2 text-sm text-muted-foreground">Sin resultados</ComboboxEmpty>
