@@ -22,12 +22,13 @@
  * no sabe de dónde salen las opciones y sirve igual para una lista fija que para
  * un Link a un DocType.
  */
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import {
   ComboboxRoot, ComboboxAnchor, ComboboxInput, ComboboxTrigger,
   ComboboxContent, ComboboxViewport, ComboboxItem, ComboboxItemIndicator, ComboboxEmpty,
+  ComboboxCancel,
 } from 'reka-ui'
-import { AngleDown, Check, Loader } from 'reicon-vue'
+import { AngleDown, Check, Loader, Xmark } from 'reicon-vue'
 import { cn } from '@/lib/utils'
 
 const props = defineProps({
@@ -38,6 +39,19 @@ const props = defineProps({
   placeholder: { type: String, default: 'Seleccionar…' },
 })
 const emit = defineEmits(['update:modelValue', 'update:query'])
+
+// Mientras se compone un acento no se busca: ver el comentario del input.
+const componiendo = ref(false)
+
+function alEscribir(evento) {
+  if (componiendo.value) return
+  emit('update:query', evento.target.value)
+}
+
+function terminarComposicion(evento) {
+  componiendo.value = false
+  emit('update:query', evento.target.value)
+}
 
 const normalizadas = computed(() =>
   props.options.map((o) => (typeof o === 'object' ? o : { label: String(o), value: o })),
@@ -74,12 +88,34 @@ const etiquetaActual = computed(
            búsqueda no funcionaba. Un campo con una flecha ⌄ al lado promete que
            al pulsarlo se despliega; si no lo hace, la promesa es falsa y no hay
            forma de saber que hay que escribir a ciegas. -->
+      <!-- No se busca a mitad de un acento. En castellano la tilde se teclea
+           en dos pasos (tecla muerta + vocal) y el navegador lo señala con
+           `compositionstart`/`compositionend`. Buscar en medio disparaba una
+           consulta, cambiaba las opciones, redibujaba el campo y el
+           `compositionend` se perdía por el camino: el componente se quedaba
+           creyendo que aún se compone e ignoraba TODO lo que se tecleara
+           después. Es el «se me bloquea al poner la tilde» que se reportó el
+           2026-08-24. Al terminar el acento se busca con la palabra completa,
+           que además es una consulta menos. -->
       <ComboboxInput
         class="flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
         :placeholder="placeholder"
         :display-value="() => etiquetaActual"
-        @input="emit('update:query', $event.target.value)"
+        @compositionstart="componiendo = true"
+        @compositionend="terminarComposicion"
+        @input="alEscribir"
       />
+      <!-- Salida de emergencia: si el campo se queda en un estado raro, se
+           limpia y se empieza otra vez. Un buscador con texto dentro y sin
+           forma de vaciarlo deja atrapado a quien se equivocó al teclear. -->
+      <ComboboxCancel
+        v-if="modelValue"
+        class="rounded p-0.5 text-tinta-tenue transition-colors hover:text-tinta"
+        aria-label="Limpiar selección"
+        @click="emit('update:modelValue', null)"
+      >
+        <Xmark :size="14" aria-hidden="true" />
+      </ComboboxCancel>
       <Loader v-if="loading" :size="16" class="animate-spin text-tinta-tenue" aria-hidden="true" />
       <ComboboxTrigger v-else aria-label="Abrir opciones">
         <AngleDown :size="16" class="text-tinta-tenue" aria-hidden="true" />
