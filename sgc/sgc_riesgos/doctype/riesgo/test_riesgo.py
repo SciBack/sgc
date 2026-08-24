@@ -20,8 +20,11 @@ CONTROLADOR, que es lo que se está probando.
 """
 import frappe
 from frappe.tests import IntegrationTestCase
+from frappe.utils import add_days, nowdate
 
 from sgc.tests import factories
+
+ADMIN = "Administrator"
 
 EXTRA_TEST_RECORD_DEPENDENCIES = []
 IGNORE_TEST_RECORD_DEPENDENCIES = []
@@ -61,16 +64,50 @@ class IntegrationTestRiesgo(IntegrationTestCase):
         return doc
 
     def _tratamiento(self, riesgo, estado="Planificado"):
-        doc = frappe.get_doc({
+        """Tratamiento en el estado pedido, cumpliendo lo que ese estado exige.
+
+        `Tratamiento Riesgo` valida de forma incremental (plan completo para
+        ejecutar, evidencia para implementar, resultado y nivel residual para
+        verificar), así que un tratamiento de prueba no puede nacer en
+        «Verificado» con dos campos: lo rechaza su propio controlador. Aquí
+        interesa el riesgo, no el tratamiento, de modo que se rellena lo que
+        cada etapa pide y se acabó.
+        """
+        vals = {
             "doctype": "Tratamiento Riesgo",
             "riesgo": riesgo.name,
             "estrategia": "Reducir",
             "descripcion": "control de prueba",
             "estado": estado,
-        })
+        }
+        if estado != "Planificado":
+            vals.update({
+                "responsable": ADMIN,
+                "fecha_compromiso": add_days(nowdate(), 30),
+            })
+        if estado in ("Implementado", "Verificado"):
+            vals["evidencia"] = self._evidencia()
+        if estado == "Verificado":
+            vals.update({
+                "resultado_verificacion": "Control operando; se revisaron los registros.",
+                "nivel_residual": "Bajo",
+            })
+        doc = frappe.get_doc(vals)
         doc.flags.ignore_permissions = True
         doc.insert(ignore_permissions=True)
         return doc
+
+    def _evidencia(self):
+        """Evidencia mínima que sirva de prueba de implementación."""
+        doc = frappe.get_doc({
+            "doctype": "Evidencia",
+            "titulo": "Prueba de implementación del control",
+            "tipo": "Enlace",
+            "enlace_url": "https://ejemplo.edu.pe/evidencia",
+        })
+        doc.flags.ignore_permissions = True
+        doc.insert(ignore_permissions=True)
+        return doc.name
 
     def _mover(self, riesgo, estado):
         riesgo.estado = estado

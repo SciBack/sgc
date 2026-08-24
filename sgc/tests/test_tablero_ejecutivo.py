@@ -47,13 +47,27 @@ def _riesgo(titulo=None, estado="Identificado", **extra):
 
 
 def _evaluacion(riesgo, momento="Residual", nivel="Alto", fecha="2026-01-01", **extra):
-    return _insertar("Evaluacion Riesgo", {
+    """Evaluación con el `nivel` que el tablero necesita, sin pelearse con el cálculo.
+
+    Desde el recorrido 13 `Evaluacion Riesgo` exige probabilidad e impacto (ISO
+    31000 §6.4.3) y **calcula** `nivel` a partir de la matriz del riesgo; el
+    campo es `read_only`, así que pasarlo al insertar ya no manda. Estos tests
+    prueban el TABLERO, no el cálculo: se inserta con valores válidos y el nivel
+    se fija por debajo del controlador, que es el dato de entrada que el tablero
+    va a leer.
+    """
+    doc = _insertar("Evaluacion Riesgo", {
         "riesgo": riesgo.name if hasattr(riesgo, "name") else riesgo,
         "momento": momento,
-        "nivel": nivel,
+        "probabilidad": 3,
+        "impacto": 3,
         "fecha": fecha,
         **extra,
     })
+    frappe.db.set_value("Evaluacion Riesgo", doc.name, "nivel", nivel,
+                        update_modified=False)
+    doc.reload()
+    return doc
 
 
 def _periodo(codigo=None):

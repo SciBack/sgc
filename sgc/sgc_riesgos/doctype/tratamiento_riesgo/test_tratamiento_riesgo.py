@@ -38,13 +38,26 @@ class IntegrationTestTratamientoRiesgo(IntegrationTestCase):
 
     # -- helpers ------------------------------------------------------------
     def _riesgo(self, estado="En tratamiento"):
+        """Riesgo en el estado pedido, saltándose SUS guards a propósito.
+
+        `Riesgo` exige desde el recorrido 13 que cada estado tenga detrás el
+        registro que lo sostiene: «En tratamiento» pide que ya exista un
+        `Tratamiento Riesgo`. Aquí eso sería circular —el tratamiento es
+        justamente lo que se está probando—, y además lo que se prueba es el
+        tratamiento, no el riesgo. Así que nace en «Identificado», que no exige
+        nada, y el estado se fija por debajo del controlador.
+        """
         doc = frappe.get_doc({
             "doctype": "Riesgo",
             "titulo": "Riesgo de prueba M14",
             "categoria": "Operacional",
-            "estado": estado,
+            "estado": "Identificado",
         })
         doc.insert(ignore_permissions=True)
+        if estado != "Identificado":
+            frappe.db.set_value("Riesgo", doc.name, "estado", estado,
+                                update_modified=False)
+            doc.reload()
         return doc
 
     def _tratamiento(self, riesgo=None, plan=True, **overrides):

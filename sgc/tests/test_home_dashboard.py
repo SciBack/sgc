@@ -82,9 +82,15 @@ class IntegrationTestHomeDashboard(IntegrationTestCase):
         self.assertEqual(_valor(resumen_inicio(), "riesgos_criticos"), base)
 
         critico = _insertar("Riesgo", {"titulo": f"Riesgo critico {next(_seq)}"})
-        _insertar("Evaluacion Riesgo", {
-            "riesgo": critico.name, "momento": "Residual", "nivel": "Extremo", "fecha": "2026-01-01",
+        # `nivel` es calculado y read_only desde el recorrido 13, y la evaluación
+        # exige probabilidad e impacto: se inserta válida y el nivel se fija por
+        # debajo, que es el dato que el panel lee.
+        evaluacion = _insertar("Evaluacion Riesgo", {
+            "riesgo": critico.name, "momento": "Residual",
+            "probabilidad": 5, "impacto": 5, "fecha": "2026-01-01",
         })
+        frappe.db.set_value("Evaluacion Riesgo", evaluacion.name, "nivel", "Extremo",
+                            update_modified=False)
         self.assertEqual(_valor(resumen_inicio(), "riesgos_criticos"), base + 1)
 
     def test_hallazgo_abierto_se_cuenta(self):

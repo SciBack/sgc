@@ -250,17 +250,47 @@ class IntegrationTestBpmn(IntegrationTestCase):
         Se preservan las posiciones de los NODOS (tareas, rombos, eventos). El
         contenedor y los carriles se recalculan a propósito: su tamaño depende de
         dónde acaben los nodos, así que fijarlos dejaría cajas fuera del marco.
+
+        El desplazamiento de la prueba es horizontal y grande a propósito:
+        horizontal para que la caja siga en su carril, y grande para que no
+        aterrice encima de otra — las dos condiciones que se comprueban antes de
+        aceptar el layout guardado.
         """
         _modulo, spec = self.specs[0]
         posiciones = bpmn.layout_de(bpmn.construir(spec))
         tarea = next(k for k in posiciones if k.startswith("Task_"))
         x, y, w, h = posiciones[tarea]
         movido = dict(posiciones)
-        movido[tarea] = (x + 500, y + 40, w, h)
+        movido[tarea] = (x + 5000, y, w, h)
 
         regenerado = bpmn.layout_de(bpmn.construir(spec, layout_previo=movido))
 
-        self.assertEqual(regenerado[tarea], (x + 500, y + 40, w, h))
+        self.assertEqual(regenerado[tarea], (x + 5000, y, w, h))
+
+    def test_un_ajuste_que_saca_la_caja_de_su_carril_se_descarta(self):
+        """Y se descarta el layout ENTERO, no solo esa caja.
+
+        En un diagrama de carriles la posición dice quién ejecuta la tarea, así
+        que una caja en la banda del vecino afirma algo falso y la posición
+        calculada tiene que ganar. Se descarta todo porque un diagrama mitad
+        conservado mitad recalculado acaba con cajas superpuestas: las
+        posiciones nuevas no saben qué celdas ocupan las viejas.
+        """
+        _modulo, spec = self.specs[0]
+        posiciones = bpmn.layout_de(bpmn.construir(spec))
+        tarea = next(k for k in posiciones if k.startswith("Task_"))
+        x, y, w, h = posiciones[tarea]
+        otra = next(k for k in posiciones if k.startswith("Task_") and k != tarea)
+        ox, oy, ow, oh = posiciones[otra]
+        fuera = dict(posiciones)
+        fuera[tarea] = (x, y + 400, w, h)          # a la banda de otro carril
+        fuera[otra] = (ox + 5000, oy, ow, oh)      # este sí sería válido
+
+        regenerado = bpmn.layout_de(bpmn.construir(spec, layout_previo=fuera))
+
+        self.assertEqual(regenerado[tarea], (x, y, w, h))
+        self.assertEqual(regenerado[otra], (ox, oy, ow, oh),
+                         "el ajuste válido del vecino también se descarta: es todo o nada")
 
     # ======================================================================
     # Transiciones automáticas: lo que el sistema hace sin que nadie actúe
