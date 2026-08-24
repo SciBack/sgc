@@ -69,11 +69,16 @@ const etiquetaActual = computed(
            búsqueda no funcionaba. Un campo con una flecha ⌄ al lado promete que
            al pulsarlo se despliega; si no lo hace, la promesa es falsa y no hay
            forma de saber que hay que escribir a ciegas. -->
+      <!-- `v-model:open` va SOLO en la raíz. Ponerlo también aquí hacía que
+           cada tecla forzara un redibujado del input y el texto se quedara
+           congelado: se escribía «gesti» y el retroceso no borraba nada.
+           Comprobado con teclado real el 2026-08-24.
+           `display-value` solo se aplica cuando hay algo elegido; mientras se
+           escribe, manda lo tecleado. -->
       <ComboboxInput
-        v-model:open="abierto"
         class="flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
         :placeholder="placeholder"
-        :display-value="() => etiquetaActual"
+        :display-value="() => (modelValue ? etiquetaActual : undefined)"
         @focus="abierto = true"
         @click="abierto = true"
         @input="emit('update:query', $event.target.value)"
