@@ -18,7 +18,11 @@
   "responsable",
   "avance_pct",
   "semaforo",
-  "fecha_compromiso"
+  "fecha_compromiso",
+  "aprobado_por",
+  "fecha_aprobacion",
+  "cerrado_por",
+  "fecha_cierre"
  ],
  "fields": [
   {
@@ -94,15 +98,41 @@
    "fieldname": "semaforo",
    "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "Semáforo",
+   "label": "Sem\u00e1foro",
    "options": "Verde\nAmbar\nRojo",
    "read_only": 1
   },
   {
-   "description": "Fecha de compromiso más tardía entre las acciones (calculado).",
+   "description": "Fecha de compromiso m\u00e1s tard\u00eda entre las acciones (calculado).",
    "fieldname": "fecha_compromiso",
    "fieldtype": "Date",
    "label": "Fecha compromiso",
+   "read_only": 1
+  },
+  {
+   "fieldname": "aprobado_por",
+   "fieldtype": "Link",
+   "label": "Aprobado por",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "fecha_aprobacion",
+   "fieldtype": "Date",
+   "label": "Fecha de aprobaci\u00f3n",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cerrado_por",
+   "fieldtype": "Link",
+   "label": "Cerrado por",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "fecha_cierre",
+   "fieldtype": "Date",
+   "label": "Fecha de cierre",
    "read_only": 1
   }
  ],

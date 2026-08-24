@@ -208,6 +208,12 @@ def run():
         {"fieldname":"estado","fieldtype":"Select","label":"Estado",
          "options":"Borrador\nEn ejecucion\nCerrado","default":"Borrador","in_list_view":1,"in_standard_filter":1},
         {"fieldname":"responsable","fieldtype":"Link","label":"Responsable","options":"User"},
+        # Firmas del plan: las sella el controlador con quien ejecuta la transición
+        # (read_only para que nadie las teclee). Ver PlanMejora._sellar_firmas.
+        {"fieldname":"aprobado_por","fieldtype":"Link","label":"Aprobado por","options":"User","read_only":1},
+        {"fieldname":"fecha_aprobacion","fieldtype":"Date","label":"Fecha de aprobación","read_only":1},
+        {"fieldname":"cerrado_por","fieldtype":"Link","label":"Cerrado por","options":"User","read_only":1},
+        {"fieldname":"fecha_cierre","fieldtype":"Date","label":"Fecha de cierre","read_only":1},
     ], autoname="field:codigo", title_field="titulo")
 
     # ===== 2.8(B)/2.4(E) Accion Mejora — CAPA: hallazgo + no_conformidad (ambos opcionales) =====

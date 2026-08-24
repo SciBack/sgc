@@ -210,3 +210,108 @@ class IntegrationTestPlanMejora(IntegrationTestCase):
         self._accion(plan, estado="En ejecucion",
                      fecha_compromiso=add_days(nowdate(), -10))
         self.assertEqual(self._plan_val(plan, "semaforo"), "Verde")
+
+    # ------------------------------------------------------------------
+    # Firmas de aprobación y cierre (recorrido BPMN 11 · 2026-08-23)
+    # ------------------------------------------------------------------
+    def _pasar_a(self, plan, estado):
+        """Cambia el estado del plan por save (dispara validate, como el workflow)."""
+        plan.estado = estado
+        plan.flags.ignore_permissions = True
+        plan.save(ignore_permissions=True)
+        return plan
+
+    def test_aprobar_sella_quien_aprueba(self):
+        """Entrar en «En ejecucion» registra a quien ejecuta la transición, no a quien se teclee."""
+        plan = self._plan(estado="Borrador", responsable="Administrator")
+        self._accion(plan, estado="Planificada")
+        # Aunque se intente teclear a un tercero, el sellado lo pisa.
+        plan.aprobado_por = "Guest"
+        self._pasar_a(plan, "En ejecucion")
+        self.assertEqual(plan.aprobado_por, frappe.session.user)
+        self.assertEqual(str(plan.fecha_aprobacion), nowdate())
+
+    def test_cerrar_sella_quien_cierra(self):
+        """Entrar en «Cerrado» registra a quien cierra, aparte de quien aprobó."""
+        plan = self._plan(estado="Borrador", responsable="Administrator")
+        self._accion(plan, estado="Verificada eficaz")
+        self._pasar_a(plan, "En ejecucion")
+        self._pasar_a(plan, "Cerrado")
+        self.assertEqual(plan.cerrado_por, frappe.session.user)
+        self.assertEqual(str(plan.fecha_cierre), nowdate())
+
+    def test_reaprobacion_resella_la_firma(self):
+        """Devolver a borrador y reaprobar vuelve a sellar: no queda la firma vieja."""
+        plan = self._plan(estado="Borrador", responsable="Administrator")
+        self._accion(plan, estado="Planificada")
+        self._pasar_a(plan, "En ejecucion")
+        self._pasar_a(plan, "Borrador")
+        # Simula que la firma anterior era de otra persona.
+        frappe.db.set_value("Plan Mejora", plan.name, "aprobado_por", "Guest")
+        plan.reload()
+        self._pasar_a(plan, "En ejecucion")
+        self.assertEqual(plan.aprobado_por, frappe.session.user)
+
+    def test_editar_plan_ya_en_ejecucion_no_resella(self):
+        """Un save cualquiera sobre un plan ya en ejecución no re-firma ni bloquea."""
+        plan = self._plan(estado="Borrador", responsable="Administrator")
+        self._accion(plan, estado="Planificada")
+        self._pasar_a(plan, "En ejecucion")
+        frappe.db.set_value("Plan Mejora", plan.name, "aprobado_por", "Guest")
+        plan.reload()
+        plan.titulo = "Otro título"
+        plan.flags.ignore_permissions = True
+        plan.save(ignore_permissions=True)
+        self.assertEqual(plan.aprobado_por, "Guest")
+
+    # ------------------------------------------------------------------
+    # Guards de puesta en ejecución (ISO 9001 §10.2.1 b)
+    # ------------------------------------------------------------------
+    def test_no_se_pone_en_ejecucion_sin_responsable(self):
+        plan = self._plan(estado="Borrador")
+        self._accion(plan, estado="Planificada")
+        with self.assertRaises(frappe.ValidationError):
+            self._pasar_a(plan, "En ejecucion")
+
+    def test_no_se_pone_en_ejecucion_sin_acciones(self):
+        """Comprobado en producción el 2026-08-23: un plan vacío quedaba en ejecución y en Verde."""
+        plan = self._plan(estado="Borrador", responsable="Administrator")
+        with self.assertRaises(frappe.ValidationError):
+            self._pasar_a(plan, "En ejecucion")
+
+    # ------------------------------------------------------------------
+    # Guards de cierre (ISO 9001 §10.2.1 d — revisar la eficacia)
+    # ------------------------------------------------------------------
+    def test_no_se_cierra_sin_acciones(self):
+        plan = self._plan(estado="En ejecucion", responsable="Administrator")
+        with self.assertRaises(frappe.ValidationError):
+            self._pasar_a(plan, "Cerrado")
+
+    def test_no_se_cierra_con_accion_sin_empezar(self):
+        """PM-2026-0001 se cerró con sus dos acciones en «Planificada» y avance 0 %."""
+        plan = self._plan(estado="En ejecucion", responsable="Administrator")
+        self._accion(plan, estado="Planificada")
+        with self.assertRaises(frappe.ValidationError):
+            self._pasar_a(plan, "Cerrado")
+
+    def test_no_se_cierra_con_accion_ejecutada_sin_verificar(self):
+        """Ejecutada no es eficaz: §10.2.1 d) pide revisar la eficacia de lo ejecutado."""
+        plan = self._plan(estado="En ejecucion", responsable="Administrator")
+        self._accion(plan, estado="Ejecutada")
+        with self.assertRaises(frappe.ValidationError):
+            self._pasar_a(plan, "Cerrado")
+
+    def test_no_se_cierra_con_accion_verificada_no_eficaz(self):
+        """PM-2026-0004 se cerró con su única acción declarada ineficaz, y salió al 100 % y en Verde."""
+        plan = self._plan(estado="En ejecucion", responsable="Administrator")
+        self._accion(plan, estado="Verificada no eficaz", avance_pct=100)
+        with self.assertRaises(frappe.ValidationError):
+            self._pasar_a(plan, "Cerrado")
+
+    def test_se_cierra_con_todas_las_acciones_verificadas_eficaces(self):
+        plan = self._plan(estado="En ejecucion", responsable="Administrator")
+        self._accion(plan, estado="Verificada eficaz")
+        self._accion(plan, estado="Verificada eficaz")
+        self._pasar_a(plan, "Cerrado")
+        self.assertEqual(self._plan_val(plan, "estado"), "Cerrado")
+        self.assertEqual(self._plan_val(plan, "avance_pct"), 100)

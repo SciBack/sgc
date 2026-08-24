@@ -14,9 +14,24 @@ código con `ast`. Antes fallaba en silencio y devolvía cero diagramas — por 
 fue tan fácil olvidarse de regenerar cuando nació el workflow del hallazgo de
 auditoría.
 
-**El layout SÍ se respeta.** Si recolocas las cajas en Camunda, la siguiente
-regeneración conserva tus posiciones y solo actualiza la semántica. Lo que no
-sobrevive es mover *flechas*: esas salen del código.
+**El layout se respeta mientras siga siendo válido.** Si recolocas las cajas en
+Camunda, la siguiente regeneración conserva tus posiciones y solo actualiza la
+semántica. Lo que no sobrevive es mover *flechas*: esas salen del código.
+
+Y hay dos condiciones para que el layout guardado se conserve, **que se aplican
+al diagrama entero, no caja a caja**: que cada nodo caiga dentro de la banda de
+su carril y que no haya dos nodos pisándose. Si una falla, se descarta el layout
+completo y se recalcula todo — un diagrama mitad conservado mitad recalculado
+acaba con cajas superpuestas, porque las posiciones nuevas no saben qué celdas
+ocupan las viejas.
+
+Esto no es una precaución teórica: el 2026-08-23, **nueve de los quince**
+diagramas tenían nodos fuera de su carril, todos por conservar posiciones de
+cuando el reparto de carriles era otro. En un diagrama de carriles la posición
+no es cosmética —dice quién ejecuta la tarea—, así que una caja en la banda del
+vecino afirma algo falso. Dos tests lo vigilan
+(`test_cada_nodo_se_dibuja_dentro_de_su_carril`,
+`test_no_hay_dos_nodos_dibujados_uno_encima_de_otro`).
 
 ## El orden de los ficheros es el recorrido del sistema
 
