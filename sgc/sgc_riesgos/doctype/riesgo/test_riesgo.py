@@ -24,7 +24,6 @@ from frappe.utils import add_days, nowdate
 
 from sgc.tests import factories
 
-ADMIN = "Administrator"
 
 EXTRA_TEST_RECORD_DEPENDENCIES = []
 IGNORE_TEST_RECORD_DEPENDENCIES = []
@@ -82,7 +81,11 @@ class IntegrationTestRiesgo(IntegrationTestCase):
         }
         if estado != "Planificado":
             vals.update({
-                "responsable": ADMIN,
+                # El responsable NO puede ser quien corre el test: desde el
+                # recorrido 14, quien implementa un tratamiento no puede
+                # verificarlo, y estos tests insertan directamente en
+                # «Verificado» actuando como Administrator.
+                "responsable": "Guest",
                 "fecha_compromiso": add_days(nowdate(), 30),
             })
         if estado in ("Implementado", "Verificado"):
