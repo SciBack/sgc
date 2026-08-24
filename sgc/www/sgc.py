@@ -7,7 +7,7 @@ el cliente; este handler solo inyecta el boot context (csrf_token, usuario).
 import frappe
 from frappe.sessions import get_csrf_token
 
-from sgc.permisos_ui import permisos_de_ui
+from sgc.permisos_ui import doctypes_de_trabajo, permisos_de_ui
 
 
 def get_context(context):
@@ -28,5 +28,9 @@ def get_context(context):
 		# vez de ofrecerle a todo el mundo el sistema entero. Va en el boot para
 		# que no cueste una llamada extra. Ver sgc/permisos_ui.py.
 		"permisos_ui": permisos_de_ui(),
+		# Lo que esta persona EJECUTA, que no es lo mismo que lo que puede leer:
+		# el menú abre con su trabajo y deja el resto del sistema debajo. Sale de
+		# los workflows vivos. Ver `doctypes_de_trabajo`.
+		"doctypes_trabajo": doctypes_de_trabajo(),
 	}
 	return context

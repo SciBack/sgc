@@ -30,6 +30,26 @@ export function puede(doctype, accion = 'read') {
   return Boolean(p[accion])
 }
 
+/**
+ * DocTypes sobre los que esta persona EJECUTA acciones de flujo.
+ *
+ * No es lo mismo que lo que puede leer, y confundirlo es lo que dejaba el menú
+ * sin personalizar: medido en producción el 2026-08-24, un Dueño de Proceso
+ * trabajaba 4 DocTypes y veía 36. Filtrar por lectura casi no filtra, porque en
+ * un sistema de calidad casi todos pueden leer casi todo — y deben: un auditor
+ * no puede auditar lo que no ve.
+ *
+ * Lo calcula el backend desde los workflows vivos (ver `doctypes_de_trabajo`),
+ * así que si una transición cambia de rol, el menú cambia con ella.
+ *
+ * Lista vacía = «no sé»: en dev no hay boot, y un usuario sin transiciones
+ * asignadas no debe quedarse sin menú. El llamador decide qué hacer con eso.
+ */
+export function doctypesDeTrabajo() {
+  if (typeof window === 'undefined') return []
+  return window.doctypes_trabajo || []
+}
+
 /** Roles del usuario (los inyecta el boot). */
 export function rolesUsuario() {
   return (typeof window !== 'undefined' && window.user_roles) || []

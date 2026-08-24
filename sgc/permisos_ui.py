@@ -55,6 +55,41 @@ def permisos_de_ui(user: str | None = None) -> dict[str, dict[str, bool]]:
 	return permisos
 
 
+def doctypes_de_trabajo(user: str | None = None) -> list[str]:
+	"""DocTypes sobre los que este usuario puede EJECUTAR alguna acción de flujo.
+
+	No es lo mismo que «lo que puede leer», y esa confusión es justo lo que
+	hacía inútil el filtro del menú. Medido el 2026-08-24 en producción: un
+	Dueño de Proceso **trabaja 4** DocTypes y **veía 36**; un Auditor Interno
+	trabaja 3 y veía 39; el Rectorado trabaja 1 y veía 39. Filtrar por lectura
+	casi no filtra, porque en un sistema de calidad casi todo el mundo puede
+	leer casi todo —y debe: un auditor no puede auditar lo que no ve—.
+
+	Sale de los **workflows vivos**, no de una lista escrita a mano: si mañana
+	una transición cambia de rol, el menú cambia con ella. Una lista paralela se
+	desincroniza el primer día y nadie se entera hasta que alguien no encuentra
+	su trabajo.
+
+	Devuelve los DocTypes en orden alfabético; el orden de presentación lo
+	decide la SPA.
+	"""
+	roles = frappe.get_roles(user)
+	if not roles:
+		return []
+
+	filas = frappe.db.sql(
+		"""
+		select distinct w.document_type
+		from `tabWorkflow Transition` t
+		join `tabWorkflow` w on w.name = t.parent
+		where w.is_active = 1 and t.allowed in %(roles)s
+		""",
+		{"roles": tuple(roles)},
+		as_dict=True,
+	)
+	return sorted(f.document_type for f in filas)
+
+
 @frappe.whitelist()
 def mis_permisos() -> dict[str, dict[str, bool]]:
 	"""Mismo mapa, pedido a demanda. Existe para el modo dev de la SPA (que

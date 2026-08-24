@@ -1,10 +1,11 @@
 // @vitest-environment jsdom
 
 import { afterEach, describe, expect, it } from 'vitest'
-import { puede, rolesUsuario, tieneRol } from './usePermisos'
+import { doctypesDeTrabajo, puede, rolesUsuario, tieneRol } from './usePermisos'
 
 afterEach(() => {
   delete window.permisos_ui
+  delete window.doctypes_trabajo
   delete window.user_roles
 })
 
@@ -41,5 +42,32 @@ describe('roles', () => {
 
   it('sin boot devuelve lista vacía', () => {
     expect(rolesUsuario()).toEqual([])
+  })
+})
+
+describe('lo que cada persona trabaja', () => {
+  it('lee del boot los doctypes que ejecuta', () => {
+    window.doctypes_trabajo = ['Documento Controlado', 'Evidencia', 'Riesgo']
+    expect(doctypesDeTrabajo()).toHaveLength(3)
+    expect(doctypesDeTrabajo()).toContain('Documento Controlado')
+  })
+
+  it('sin boot devuelve lista vacía, y eso significa «no sé»', () => {
+    // En dev no hay boot. Una lista vacía NO puede interpretarse como «esta
+    // persona no trabaja nada», o el menú se quedaría en blanco.
+    expect(doctypesDeTrabajo()).toEqual([])
+  })
+
+  it('trabajar no es lo mismo que poder leer', () => {
+    // El caso medido en producción: el Dueño de Proceso LEE casi todo y solo
+    // EJECUTA cuatro cosas. Son dos preguntas distintas y el menú usa las dos.
+    window.permisos_ui = {
+      'Documento Controlado': { read: true, write: true },
+      'Marco Normativo': { read: true, write: false },
+    }
+    window.doctypes_trabajo = ['Documento Controlado']
+
+    expect(puede('Marco Normativo', 'read')).toBe(true)
+    expect(doctypesDeTrabajo()).not.toContain('Marco Normativo')
   })
 })

@@ -14,7 +14,7 @@
  * Patrón del estilo §3.1: lateral de 14rem con cromo de marca fijo y contenido
  * desplazable aparte; la marca arriba, el usuario y la sesión abajo.
  */
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useTheme } from 'frappe-ui'
 import { Chart, Exit, Gauge, Layout, Moon, Search, Sun } from 'reicon-vue'
@@ -24,7 +24,7 @@ import EnlaceLateral from '@/components/ui/EnlaceLateral.vue'
 import MenuDesplegable from '@/components/ui/MenuDesplegable.vue'
 import Migas from '@/components/ui/Migas.vue'
 import { AREAS } from '@/data/areas'
-import { puede } from '@/composables/usePermisos'
+import { doctypesDeTrabajo, puede } from '@/composables/usePermisos'
 import { useSessionStore } from '@/stores/session'
 
 const route = useRoute()
@@ -58,6 +58,34 @@ const areasVisibles = computed(() =>
     items: area.items.filter((i) => puede(i.doctype, 'read')),
   })).filter((area) => area.items.length > 0),
 )
+
+// Lo que esta persona EJECUTA, arriba del todo. Filtrar por lectura no bastaba:
+// medido en producción el 2026-08-24, un Dueño de Proceso trabajaba 4 DocTypes y
+// veía 36, un Auditor trabajaba 3 y veía 39. Y no es que sobren permisos —un
+// auditor tiene que poder leerlo todo—: es que el menú respondía a «qué puedo
+// ver» cuando la pregunta al entrar es «qué me toca hacer».
+const misTareas = computed(() => {
+  const trabajo = doctypesDeTrabajo()
+  if (!trabajo.length) return []
+  const items = []
+  for (const area of AREAS) {
+    for (const item of area.items) {
+      if (trabajo.includes(item.doctype) && puede(item.doctype, 'read')) {
+        items.push({ ...item, icon: item.icon || area.icon })
+      }
+    }
+  }
+  return items
+})
+
+// El resto del sistema sigue estando, pero pliega. Quien necesita explorarlo
+// entero —el auditor, la DPGC— lo abre; quien viene a hacer una cosa ya no tiene
+// que leer diez cabeceras para encontrarla. Abierto por defecto si esta persona
+// no ejecuta nada: sin bloque de trabajo, plegar el resto la dejaría en blanco.
+const restoAbierto = ref(false)
+onMounted(() => {
+  restoAbierto.value = misTareas.value.length === 0
+})
 
 function areaFor(doctype) {
   const area = AREAS.find((a) => a.items.some((i) => i.doctype === doctype))
@@ -147,7 +175,45 @@ const userMenu = [{ label: 'Cerrar sesión', icon: Exit, onClick: () => session.
           </EnlaceLateral>
         </nav>
 
-        <div v-for="area in areasVisibles" :key="area.label" class="mt-5">
+        <!-- Lo que esta persona ejecuta. Va primero porque es a lo que viene. -->
+        <div v-if="misTareas.length" class="mt-5">
+          <h3
+            class="flex h-7 items-center px-2 text-[0.68rem] font-bold uppercase tracking-[0.08em] text-white/50"
+          >
+            Tu trabajo
+          </h3>
+          <nav class="mt-0.5 space-y-0.5" aria-label="Tu trabajo">
+            <EnlaceLateral
+              v-for="item in misTareas"
+              :key="`trabajo-${item.doctype}`"
+              :to="{ name: 'DoctypeList', params: { doctype: item.doctype } }"
+            >
+              <template #icono>
+                <component :is="item.icon" :size="16" aria-hidden="true" />
+              </template>
+              {{ item.label }}
+            </EnlaceLateral>
+          </nav>
+        </div>
+
+        <!-- Y el sistema entero, plegado: está, pero no estorba. -->
+        <button
+          v-if="misTareas.length"
+          type="button"
+          class="mt-5 flex h-7 w-full items-center justify-between px-2 text-[0.68rem] font-bold uppercase tracking-[0.08em] text-white/50 transition-colors hover:text-white/80"
+          :aria-expanded="restoAbierto"
+          @click="restoAbierto = !restoAbierto"
+        >
+          <span>Todo el sistema</span>
+          <span aria-hidden="true">{{ restoAbierto ? '−' : '+' }}</span>
+        </button>
+
+        <div
+          v-for="area in areasVisibles"
+          v-show="restoAbierto || !misTareas.length"
+          :key="area.label"
+          class="mt-5"
+        >
           <!-- Etiqueta de sección: pequeña, no un enlace ni un titular (§3.1). -->
           <h3
             class="flex h-7 items-center px-2 text-[0.68rem] font-bold uppercase tracking-[0.08em] text-white/50"
