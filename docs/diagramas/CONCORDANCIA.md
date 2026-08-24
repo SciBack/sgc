@@ -454,6 +454,30 @@ Cerrado con `check_permission("write")`.
 DocType tenga bien puestos los suyos no basta, porque `ignore_permissions` los
 salta por definición.
 
+## Decisión abierta: un borrador equivocado no se puede quitar de en medio
+
+Comprobado el 2026-08-24: **ningún rol del SGC puede borrar un Documento
+Controlado**. Ni el Dueño de Proceso que lo creó, ni la DPGC, ni la Autoridad
+Aprobadora, ni el Rectorado. La interfaz tampoco ofrece el botón. Solo
+`Administrator`.
+
+**Para un documento que ha vivido, eso es exactamente lo correcto.** ISO 21001
+cl. 7.5.3 pide proteger la información documentada contra pérdida de integridad,
+y el 7.5.3.2.g habla de **prevenir el uso** de documentos obsoletos, no de
+eliminarlos: la versión vieja se conserva marcada para poder demostrar qué regía
+en cada momento. La vía es «Derogar» → Obsoleto, y al publicar un reemplazo el
+sistema lo hace solo.
+
+**Lo que queda cojo es el borrador creado por error** —código equivocado, un
+duplicado—. Nadie puede quitarlo, ni su autor, y se queda en la lista para
+siempre. Un documento que nunca salió de «Borrador» todavía no es información
+documentada controlada: nadie lo revisó, nadie lo aprobó, nada depende de él.
+
+Sería razonable que su autor pudiera borrarlo **mientras siga en Borrador**, y
+que desde que entra a revisión no lo toque nadie. Hoy el sistema es más estricto
+de lo que la norma pide, y pasarse de estricto también cuesta: la lista se llena
+de basura que solo un administrador puede limpiar.
+
 ## Riesgo de deriva
 
 Nada compara automáticamente los `.bpmn` en disco contra lo que generaría el
