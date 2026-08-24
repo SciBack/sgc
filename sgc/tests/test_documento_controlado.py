@@ -50,7 +50,10 @@ class IntegrationTestDocumentoControlado(IntegrationTestCase):
         with self.assertRaises(frappe.ValidationError) as ctx:
             doc.save(ignore_permissions=True)
 
-        self.assertIn("elaboro", str(ctx.exception))
+        # «elabor» y no «elaboró»: la aserción no debe romperse porque el
+        # mensaje gane o pierda una tilde. Lo que se comprueba es QUÉ falta,
+        # no cómo está redactado.
+        self.assertIn("elabor", str(ctx.exception))
 
     def test_no_se_publica_sin_elaborador(self):
         """Y tampoco se llega a publicar con la firma en blanco.
@@ -75,4 +78,7 @@ class IntegrationTestDocumentoControlado(IntegrationTestCase):
         with self.assertRaises(frappe.ValidationError) as ctx:
             doc.save(ignore_permissions=True)
 
-        self.assertIn("elaboro", str(ctx.exception))
+        # «elabor» y no «elaboró»: la aserción no debe romperse porque el
+        # mensaje gane o pierda una tilde. Lo que se comprueba es QUÉ falta,
+        # no cómo está redactado.
+        self.assertIn("elabor", str(ctx.exception))
