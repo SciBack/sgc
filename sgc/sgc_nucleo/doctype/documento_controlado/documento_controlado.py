@@ -123,10 +123,10 @@ class DocumentoControlado(Document):
 		if self.estado not in permitidos:
 			destino = ", ".join(sorted(permitidos)) if permitidos else _("ninguno")
 			frappe.throw(
-				_("No se puede pasar de «{0}» a «{1}». Destinos validos: {2}.").format(
+				_("No se puede pasar de «{0}» a «{1}». Destinos válidos: {2}.").format(
 					anterior, self.estado, destino
 				),
-				title=_("Transicion no permitida"),
+				title=_("Transición no permitida"),
 			)
 
 	def _sellar_aprobacion(self):
@@ -158,12 +158,12 @@ class DocumentoControlado(Document):
 	def _validar_requisitos_por_estado(self):
 		if self.estado == "En revision":
 			if not self.archivo:
-				frappe.throw(_("Adjunte el archivo del documento antes de enviarlo a revision."))
+				frappe.throw(_("Adjunte el archivo del documento antes de enviarlo a revisión."))
 			if not self.elaborado_por:
-				frappe.throw(_("Indique quien elaboro el documento antes de enviarlo a revision."))
+				frappe.throw(_("Indique quién elaboró el documento antes de enviarlo a revisión."))
 
 		if self.estado == "Aprobado" and not self.revisado_por:
-			frappe.throw(_("Indique quien reviso el documento antes de aprobarlo."))
+			frappe.throw(_("Indique quién revisó el documento antes de aprobarlo."))
 
 		if self.estado == "Publicado":
 			# Sin las firmas, la norma prohibe comunicar e implementar el documento.
@@ -171,13 +171,13 @@ class DocumentoControlado(Document):
 			if not self.archivo:
 				faltan.append(_("el archivo"))
 			if not self.elaborado_por:
-				faltan.append(_("quien lo elaboro"))
+				faltan.append(_("quién lo elaboró"))
 			if not self.aprobado_por:
-				faltan.append(_("quien lo aprobo"))
+				faltan.append(_("quién lo aprobó"))
 			if faltan:
 				frappe.throw(
 					_("No se puede publicar sin {0}.").format(" y ".join(faltan)),
-					title=_("Publicacion incompleta"),
+					title=_("Publicación incompleta"),
 				)
 
 	def _validar_descripcion_cambio(self):
@@ -188,10 +188,10 @@ class DocumentoControlado(Document):
 		anterior = self.get_doc_before_save()
 		if anterior and anterior.version != self.version and not self.descripcion_cambio:
 			frappe.throw(
-				_("Al cambiar de version ({0} -> {1}) debe describir el cambio.").format(
+				_("Al cambiar de versión ({0} → {1}) debe describir el cambio.").format(
 					anterior.version, self.version
 				),
-				title=_("Descripcion del cambio obligatoria"),
+				title=_("Descripción del cambio obligatoria"),
 			)
 
 	# -------------------------------------------------------------- publicacion

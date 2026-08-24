@@ -41,12 +41,25 @@ export function mensajesDelServidor(err) {
     .filter(Boolean)
 }
 
-/** Frappe manda HTML en sus mensajes (negritas, saltos); aquí se lee en texto. */
+/**
+ * Frappe manda HTML en sus mensajes (negritas, saltos); aquí se lee en texto.
+ *
+ * Y se quita el nombre de la excepción cuando viene pegado delante:
+ * «ValidationError: Adjunte el archivo…» llegó a verse en pantalla el
+ * 2026-08-24. Ese prefijo es jerga interna — quien lee no sabe qué es una
+ * ValidationError, no puede hacer nada con esa palabra, y lo único que
+ * consigue es que el mensaje útil empiece más tarde.
+ *
+ * Se exige al menos un par de letras delante de «Error» para no tocar el
+ * «Error: falta el valor para…» que Frappe SÍ escribe a propósito: esa palabra
+ * es parte de su mensaje traducido, no el nombre de una clase.
+ */
 function limpiar(texto) {
   if (!texto) return ''
   return String(texto)
     .replace(/<br\s*\/?>/gi, ' ')
     .replace(/<[^>]+>/g, '')
+    .replace(/^\s*(?:frappe\.exceptions\.)?[A-Za-z]{2,}(?:Error|Exception)\s*:\s*/, '')
     .replace(/\s+/g, ' ')
     .trim()
 }

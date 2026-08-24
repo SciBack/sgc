@@ -45,6 +45,25 @@ describe('el mensaje lo escribe Frappe', () => {
     expect(mensajeDeError(abortado, 'respaldo')).toBe('')
   })
 
+  it('quita el nombre de la excepción, que es jerga interna', () => {
+    // Se vio en pantalla: «ValidationError: Adjunte el archivo del documento…».
+    // Quien lo lee no sabe qué es una ValidationError ni puede hacer nada con
+    // esa palabra; solo retrasa el mensaje que sí importa.
+    const err = { message: 'ValidationError: Adjunte el archivo del documento.' }
+    expect(mensajeDeError(err)).toBe('Adjunte el archivo del documento.')
+  })
+
+  it('también con el prefijo completo del módulo', () => {
+    const err = { message: 'frappe.exceptions.MandatoryError: Falta el tipo.' }
+    expect(mensajeDeError(err)).toBe('Falta el tipo.')
+  })
+
+  it('no recorta un mensaje que solo MENCIONA un error', () => {
+    // El prefijo se quita al principio, no en medio de una frase.
+    const err = { message: 'Se registró un Error: revise el expediente.' }
+    expect(mensajeDeError(err)).toContain('Se registró')
+  })
+
   it('sin error no hay mensaje', () => {
     expect(mensajeDeError(null, 'respaldo')).toBe('')
   })
