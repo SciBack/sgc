@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:sgc="https://sciback.com/schema/sgc/1.0" id="Definitions_1" targetNamespace="https://sciback.com/schema/sgc/1.0" exporter="SGC" exporterVersion="1.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:sgc="https://sciback.com/schema/sgc/1.0" id="Definitions_1" targetNamespace="https://sciback.com/schema/sgc/1.0" exporter="Camunda Modeler" exporterVersion="5.49.0">
   <bpmn:collaboration id="Collaboration_1">
     <bpmn:participant id="Participant_Documento_Controlado" name="Documento Controlado SGC" processRef="Process_Documento_Controlado" />
   </bpmn:collaboration>
@@ -79,26 +79,21 @@
       <bpmn:incoming>Flow_auto_in_Publicado_Obsoleto</bpmn:incoming>
       <bpmn:outgoing>Flow_auto_out_Publicado_Obsoleto</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Task_Borrador__Enviar_a_revision">
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_auto_in_Publicado_Obsoleto" sourceRef="Task_Publicado__Derogar" targetRef="Auto_Publicado__Obsoleto">
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_auto_out_Publicado_Obsoleto" sourceRef="Auto_Publicado__Obsoleto" targetRef="End_Obsoleto">
-    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Task_Borrador__Enviar_a_revision" />
+    <bpmn:sequenceFlow id="Flow_auto_in_Publicado_Obsoleto" sourceRef="Task_Publicado__Derogar" targetRef="Auto_Publicado__Obsoleto" />
+    <bpmn:sequenceFlow id="Flow_auto_out_Publicado_Obsoleto" sourceRef="Auto_Publicado__Obsoleto" targetRef="End_Obsoleto" />
     <bpmn:sequenceFlow id="Flow_Borrador_Enviar_a_revision_hacia_En_revision" sourceRef="Task_Borrador__Enviar_a_revision" targetRef="Gateway_En_revision">
       <bpmn:extensionElements>
         <sgc:transicion rol="Dueño de Proceso" autoaprobacion="1" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_gw_En_revision_Observar" sourceRef="Gateway_En_revision" targetRef="Task_En_revision__Observar">
-    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_En_revision_Observar" sourceRef="Gateway_En_revision" targetRef="Task_En_revision__Observar" />
     <bpmn:sequenceFlow id="Flow_En_revision_Observar_hacia_Observado" sourceRef="Task_En_revision__Observar" targetRef="Task_Observado__Corregir">
       <bpmn:extensionElements>
         <sgc:transicion rol="DPGC" autoaprobacion="1" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_gw_En_revision_Aprobar" sourceRef="Gateway_En_revision" targetRef="Task_En_revision__Aprobar">
-    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_En_revision_Aprobar" sourceRef="Gateway_En_revision" targetRef="Task_En_revision__Aprobar" />
     <bpmn:sequenceFlow id="Flow_En_revision_Aprobar_hacia_Aprobado" sourceRef="Task_En_revision__Aprobar" targetRef="Gateway_Aprobado">
       <bpmn:extensionElements>
         <sgc:transicion rol="DPGC" autoaprobacion="0" />
@@ -109,15 +104,13 @@
         <sgc:transicion rol="Dueño de Proceso" autoaprobacion="1" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_gw_Aprobado_Observar" sourceRef="Gateway_Aprobado" targetRef="Task_Aprobado__Observar">
-    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_Aprobado_Observar" sourceRef="Gateway_Aprobado" targetRef="Task_Aprobado__Observar" />
     <bpmn:sequenceFlow id="Flow_Aprobado_Observar_hacia_Observado" sourceRef="Task_Aprobado__Observar" targetRef="Task_Observado__Corregir">
       <bpmn:extensionElements>
         <sgc:transicion rol="DPGC" autoaprobacion="1" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_gw_Aprobado_Publicar" sourceRef="Gateway_Aprobado" targetRef="Task_Aprobado__Publicar">
-    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_Aprobado_Publicar" sourceRef="Gateway_Aprobado" targetRef="Task_Aprobado__Publicar" />
     <bpmn:sequenceFlow id="Flow_Aprobado_Publicar_hacia_Publicado" sourceRef="Task_Aprobado__Publicar" targetRef="Task_Publicado__Derogar">
       <bpmn:extensionElements>
         <sgc:transicion rol="Autoridad Aprobadora" autoaprobacion="0" />
@@ -134,17 +127,17 @@
       <bpmndi:BPMNShape id="Shape_Participant_Documento_Controlado" bpmnElement="Participant_Documento_Controlado" isHorizontal="true">
         <dc:Bounds x="200" y="80" width="1746" height="640" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Lane_Dueno_de_Proceso" bpmnElement="Lane_Dueno_de_Proceso" isHorizontal="true">
-        <dc:Bounds x="230" y="80" width="1716" height="160" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
-        <dc:Bounds x="230" y="240" width="1716" height="160" />
+      <bpmndi:BPMNShape id="Shape_Lane_Sistema__automatico_" bpmnElement="Lane_Sistema__automatico_" isHorizontal="true">
+        <dc:Bounds x="230" y="560" width="1716" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_Autoridad_Aprobadora" bpmnElement="Lane_Autoridad_Aprobadora" isHorizontal="true">
         <dc:Bounds x="230" y="400" width="1716" height="160" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Lane_Sistema__automatico_" bpmnElement="Lane_Sistema__automatico_" isHorizontal="true">
-        <dc:Bounds x="230" y="560" width="1716" height="160" />
+      <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
+        <dc:Bounds x="230" y="240" width="1716" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Dueno_de_Proceso" bpmnElement="Lane_Dueno_de_Proceso" isHorizontal="true">
+        <dc:Bounds x="230" y="80" width="1716" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Borrador__Enviar_a_revision" bpmnElement="Task_Borrador__Enviar_a_revision">
         <dc:Bounds x="430" y="160" width="120" height="80" />
@@ -167,14 +160,20 @@
       <bpmndi:BPMNShape id="Shape_Task_Publicado__Derogar" bpmnElement="Task_Publicado__Derogar">
         <dc:Bounds x="1630" y="320" width="120" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Gateway_En_revision" bpmnElement="Gateway_En_revision">
+      <bpmndi:BPMNShape id="Shape_Gateway_En_revision" bpmnElement="Gateway_En_revision" isMarkerVisible="true">
         <dc:Bounds x="630" y="335" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Gateway_Aprobado" bpmnElement="Gateway_Aprobado">
+      <bpmndi:BPMNShape id="Shape_Gateway_Aprobado" bpmnElement="Gateway_Aprobado" isMarkerVisible="true">
         <dc:Bounds x="1230" y="335" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1231" y="311" width="48" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_End_Obsoleto" bpmnElement="End_Obsoleto">
         <dc:Bounds x="1830" y="342" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1825" y="318" width="45" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
         <dc:Bounds x="302" y="182" width="36" height="36" />
@@ -188,13 +187,12 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_auto_in_Publicado_Obsoleto" bpmnElement="Flow_auto_in_Publicado_Obsoleto">
         <di:waypoint x="1690" y="400" />
-        <di:waypoint x="1690" y="710" />
-        <di:waypoint x="1672" y="710" />
+        <di:waypoint x="1690" y="692" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_auto_out_Publicado_Obsoleto" bpmnElement="Flow_auto_out_Publicado_Obsoleto">
-        <di:waypoint x="1690" y="692" />
-        <di:waypoint x="1690" y="360" />
-        <di:waypoint x="1830" y="360" />
+        <di:waypoint x="1708" y="710" />
+        <di:waypoint x="1848" y="710" />
+        <di:waypoint x="1848" y="378" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Borrador_Enviar_a_revision_hacia_En_revision" bpmnElement="Flow_Borrador_Enviar_a_revision_hacia_En_revision">
         <di:waypoint x="490" y="240" />
@@ -211,8 +209,10 @@
         <di:waypoint x="1030" y="200" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_En_revision_Aprobar" bpmnElement="Flow_gw_En_revision_Aprobar">
-        <di:waypoint x="680" y="360" />
-        <di:waypoint x="1030" y="360" />
+        <di:waypoint x="655" y="335" />
+        <di:waypoint x="655" y="270" />
+        <di:waypoint x="1090" y="270" />
+        <di:waypoint x="1090" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_En_revision_Aprobar_hacia_Aprobado" bpmnElement="Flow_En_revision_Aprobar_hacia_Aprobado">
         <di:waypoint x="1150" y="360" />
@@ -233,13 +233,13 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Aprobado_Publicar" bpmnElement="Flow_gw_Aprobado_Publicar">
         <di:waypoint x="1255" y="385" />
-        <di:waypoint x="1255" y="550" />
-        <di:waypoint x="1195" y="550" />
+        <di:waypoint x="1255" y="510" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Aprobado_Publicar_hacia_Publicado" bpmnElement="Flow_Aprobado_Publicar_hacia_Publicado">
-        <di:waypoint x="1255" y="510" />
-        <di:waypoint x="1255" y="360" />
-        <di:waypoint x="1630" y="360" />
+        <di:waypoint x="1290" y="510" />
+        <di:waypoint x="1290" y="470" />
+        <di:waypoint x="1660" y="470" />
+        <di:waypoint x="1660" y="400" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Publicado_Derogar_hacia_Obsoleto" bpmnElement="Flow_Publicado_Derogar_hacia_Obsoleto">
         <di:waypoint x="1750" y="360" />

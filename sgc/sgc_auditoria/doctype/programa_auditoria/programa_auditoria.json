@@ -71,12 +71,14 @@
    "fieldname": "aprobado_por",
    "fieldtype": "Link",
    "label": "Aprobado por",
-   "options": "User"
+   "options": "User",
+   "read_only": 1
   },
   {
    "fieldname": "fecha_aprobacion",
    "fieldtype": "Date",
-   "label": "Fecha de aprobaci\u00f3n"
+   "label": "Fecha de aprobaci\u00f3n",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,

@@ -45,9 +45,37 @@ class NoConformidad(Document):
             if not self.plan_mejora and not (self.correccion_inmediata or "").strip():
                 frappe.throw(_("Vincula un plan de mejora o registra una corrección antes de verificar."))
 
-        # Al cerrar: evidencia de cierre + quién verificó.
-        if self.estado in ("Cerrada eficaz", "Cerrada no eficaz"):
-            if not self.evidencia_cierre:
-                frappe.throw(_("Adjunta la evidencia de cierre para cerrar la NC."))
-            if not self.verificada_por:
-                frappe.throw(_("Registra quién verificó el cierre de la NC."))
+        self._sellar_verificacion()
+
+        # Al cerrar: evidencia de cierre. Quién verificó lo pone el propio acto,
+        # ver `_sellar_verificacion`.
+        if self.estado in ("Cerrada eficaz", "Cerrada no eficaz") and not self.evidencia_cierre:
+            frappe.throw(_("Adjunta la evidencia de cierre para cerrar la NC."))
+
+    def _sellar_verificacion(self):
+        """Verificar la eficacia ES el acto: lo registra quien lo ejecuta.
+
+        ISO 9001 §10.2.1 e) pide revisar la eficacia de la acción correctiva, y
+        `verificada_por` es el registro de esa revisión. Era un Link que
+        rellenaba a mano cualquiera con permiso de edición — empezando por el
+        responsable que trató la NC, o sea el auditado. Comprobado en el
+        recorrido del 2026-08-23: el responsable escribió ahí a un tercero, la
+        DPGC cerró de verdad, y la NC quedó registrando como verificador a
+        alguien que no la miró.
+
+        Que el workflow impida la autoverificación (`allow_self_approval=0` en
+        ambos cierres) no sirve de nada si el REGISTRO de esa firma es tecleable:
+        un auditor externo mira este campo, no el log de transiciones.
+
+        Se sella al ENTRAR en cualquiera de los dos cierres —comparando con el
+        estado anterior— para que, si la NC se reabre y se vuelve a cerrar, quede
+        quien verifica esta vez. Mismo patrón que `Documento Controlado` y
+        `Programa Auditoria`.
+        """
+        cierres = ("Cerrada eficaz", "Cerrada no eficaz")
+        if self.estado not in cierres:
+            return
+
+        anterior = self.get_doc_before_save()
+        if not anterior or anterior.estado not in cierres:
+            self.verificada_por = frappe.session.user

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:sgc="https://sciback.com/schema/sgc/1.0" id="Definitions_1" targetNamespace="https://sciback.com/schema/sgc/1.0" exporter="SGC" exporterVersion="1.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:sgc="https://sciback.com/schema/sgc/1.0" id="Definitions_1" targetNamespace="https://sciback.com/schema/sgc/1.0" exporter="Camunda Modeler" exporterVersion="5.49.0">
   <bpmn:collaboration id="Collaboration_1">
     <bpmn:participant id="Participant_Evidencia" name="Evidencia SGC" processRef="Process_Evidencia" />
   </bpmn:collaboration>
@@ -98,55 +98,43 @@
       <bpmn:outgoing>Flow_auto_out_Valida_Vencida</bpmn:outgoing>
       <bpmn:timerEventDefinition id="Timer_Auto_Valida__Vencida" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:sequenceFlow id="Flow_Valida_sigue" sourceRef="Gateway_Valida_espera" targetRef="End_Valida" name="Sigue vigente">
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Gateway_Pendiente">
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_auto_in_Pendiente_Vencida" sourceRef="Gateway_Pendiente" targetRef="Auto_Pendiente__Vencida">
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_auto_out_Pendiente_Vencida" sourceRef="Auto_Pendiente__Vencida" targetRef="End_Vencida">
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_auto_in_Valida_Vencida" sourceRef="Gateway_Valida_espera" targetRef="Auto_Valida__Vencida">
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_auto_out_Valida_Vencida" sourceRef="Auto_Valida__Vencida" targetRef="End_Vencida">
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_gw_Pendiente_Validar" sourceRef="Gateway_Pendiente" targetRef="Task_Pendiente__Validar">
-    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Valida_sigue" name="Sigue vigente" sourceRef="Gateway_Valida_espera" targetRef="End_Valida" />
+    <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Gateway_Pendiente" />
+    <bpmn:sequenceFlow id="Flow_auto_in_Pendiente_Vencida" sourceRef="Gateway_Pendiente" targetRef="Auto_Pendiente__Vencida" />
+    <bpmn:sequenceFlow id="Flow_auto_out_Pendiente_Vencida" sourceRef="Auto_Pendiente__Vencida" targetRef="End_Vencida" />
+    <bpmn:sequenceFlow id="Flow_auto_in_Valida_Vencida" sourceRef="Gateway_Valida_espera" targetRef="Auto_Valida__Vencida" />
+    <bpmn:sequenceFlow id="Flow_auto_out_Valida_Vencida" sourceRef="Auto_Valida__Vencida" targetRef="End_Vencida" />
+    <bpmn:sequenceFlow id="Flow_gw_Pendiente_Validar" sourceRef="Gateway_Pendiente" targetRef="Task_Pendiente__Validar" />
     <bpmn:sequenceFlow id="Flow_Pendiente_Validar_hacia_Valida" sourceRef="Task_Pendiente__Validar" targetRef="Gateway_Valida_espera">
       <bpmn:extensionElements>
         <sgc:transicion rol="Analista de Calidad (DPGC)" autoaprobacion="0" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_gw_Pendiente_Observar" sourceRef="Gateway_Pendiente" targetRef="Task_Pendiente__Observar">
-    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_Pendiente_Observar" sourceRef="Gateway_Pendiente" targetRef="Task_Pendiente__Observar" />
     <bpmn:sequenceFlow id="Flow_Pendiente_Observar_hacia_Observada" sourceRef="Task_Pendiente__Observar" targetRef="Gateway_Observada">
       <bpmn:extensionElements>
         <sgc:transicion rol="Analista de Calidad (DPGC)" autoaprobacion="1" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_gw_Observada_Subsanar" sourceRef="Gateway_Observada" targetRef="Task_Observada__Subsanar">
-    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_Observada_Subsanar" sourceRef="Gateway_Observada" targetRef="Task_Observada__Subsanar" />
     <bpmn:sequenceFlow id="Flow_Observada_Subsanar_hacia_Subsanada" sourceRef="Task_Observada__Subsanar" targetRef="Gateway_Subsanada">
       <bpmn:extensionElements>
         <sgc:transicion rol="Responsable de Calidad de Programa" autoaprobacion="1" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_gw_Observada_Subsanar_2" sourceRef="Gateway_Observada" targetRef="Task_Observada__Subsanar_2">
-    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_Observada_Subsanar_2" sourceRef="Gateway_Observada" targetRef="Task_Observada__Subsanar_2" />
     <bpmn:sequenceFlow id="Flow_Observada_Subsanar_hacia_Subsanada_2" sourceRef="Task_Observada__Subsanar_2" targetRef="Gateway_Subsanada">
       <bpmn:extensionElements>
         <sgc:transicion rol="Dueño de Proceso" autoaprobacion="1" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_gw_Subsanada_Validar" sourceRef="Gateway_Subsanada" targetRef="Task_Subsanada__Validar">
-    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_Subsanada_Validar" sourceRef="Gateway_Subsanada" targetRef="Task_Subsanada__Validar" />
     <bpmn:sequenceFlow id="Flow_Subsanada_Validar_hacia_Valida" sourceRef="Task_Subsanada__Validar" targetRef="Gateway_Valida_espera">
       <bpmn:extensionElements>
         <sgc:transicion rol="Analista de Calidad (DPGC)" autoaprobacion="0" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_gw_Subsanada_Observar" sourceRef="Gateway_Subsanada" targetRef="Task_Subsanada__Observar">
-    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_Subsanada_Observar" sourceRef="Gateway_Subsanada" targetRef="Task_Subsanada__Observar" />
     <bpmn:sequenceFlow id="Flow_Subsanada_Observar_hacia_Observada" sourceRef="Task_Subsanada__Observar" targetRef="Gateway_Observada">
       <bpmn:extensionElements>
         <sgc:transicion rol="Analista de Calidad (DPGC)" autoaprobacion="1" />
@@ -158,17 +146,17 @@
       <bpmndi:BPMNShape id="Shape_Participant_Evidencia" bpmnElement="Participant_Evidencia" isHorizontal="true">
         <dc:Bounds x="200" y="80" width="1840" height="640" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Lane_Analista_de_Calidad__DPGC_" bpmnElement="Lane_Analista_de_Calidad__DPGC_" isHorizontal="true">
-        <dc:Bounds x="230" y="80" width="1810" height="160" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Lane_Responsable_de_Calidad_de_Programa" bpmnElement="Lane_Responsable_de_Calidad_de_Programa" isHorizontal="true">
-        <dc:Bounds x="230" y="240" width="1810" height="160" />
+      <bpmndi:BPMNShape id="Shape_Lane_Sistema__automatico_" bpmnElement="Lane_Sistema__automatico_" isHorizontal="true">
+        <dc:Bounds x="230" y="560" width="1810" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Lane_Dueno_de_Proceso" bpmnElement="Lane_Dueno_de_Proceso" isHorizontal="true">
         <dc:Bounds x="230" y="400" width="1810" height="160" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Lane_Sistema__automatico_" bpmnElement="Lane_Sistema__automatico_" isHorizontal="true">
-        <dc:Bounds x="230" y="560" width="1810" height="160" />
+      <bpmndi:BPMNShape id="Shape_Lane_Responsable_de_Calidad_de_Programa" bpmnElement="Lane_Responsable_de_Calidad_de_Programa" isHorizontal="true">
+        <dc:Bounds x="230" y="240" width="1810" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Analista_de_Calidad__DPGC_" bpmnElement="Lane_Analista_de_Calidad__DPGC_" isHorizontal="true">
+        <dc:Bounds x="230" y="80" width="1810" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Task_Pendiente__Validar" bpmnElement="Task_Pendiente__Validar">
         <dc:Bounds x="630" y="190" width="120" height="80" />
@@ -188,20 +176,26 @@
       <bpmndi:BPMNShape id="Shape_Task_Subsanada__Observar" bpmnElement="Task_Subsanada__Observar">
         <dc:Bounds x="1840" y="190" width="120" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Gateway_Pendiente" bpmnElement="Gateway_Pendiente">
+      <bpmndi:BPMNShape id="Shape_Gateway_Pendiente" bpmnElement="Gateway_Pendiente" isMarkerVisible="true">
         <dc:Bounds x="430" y="205" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Gateway_Observada" bpmnElement="Gateway_Observada">
+      <bpmndi:BPMNShape id="Shape_Gateway_Observada" bpmnElement="Gateway_Observada" isMarkerVisible="true">
         <dc:Bounds x="865" y="405" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="801" y="403" width="54" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Gateway_Subsanada" bpmnElement="Gateway_Subsanada">
+      <bpmndi:BPMNShape id="Shape_Gateway_Subsanada" bpmnElement="Gateway_Subsanada" isMarkerVisible="true">
         <dc:Bounds x="1485" y="205" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_End_Valida" bpmnElement="End_Valida">
         <dc:Bounds x="1232" y="212" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Shape_Gateway_Valida_espera" bpmnElement="Gateway_Valida_espera">
+      <bpmndi:BPMNShape id="Shape_Gateway_Valida_espera" bpmnElement="Gateway_Valida_espera" isMarkerVisible="true">
         <dc:Bounds x="1075" y="205" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1035" y="223" width="30" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
         <dc:Bounds x="302" y="212" width="36" height="36" />
@@ -246,17 +240,21 @@
         <di:waypoint x="630" y="230" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Pendiente_Validar_hacia_Valida" bpmnElement="Flow_Pendiente_Validar_hacia_Valida">
-        <di:waypoint x="750" y="230" />
+        <di:waypoint x="690" y="190" />
+        <di:waypoint x="690" y="110" />
+        <di:waypoint x="1010" y="110" />
+        <di:waypoint x="1010" y="230" />
         <di:waypoint x="1075" y="230" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Pendiente_Observar" bpmnElement="Flow_gw_Pendiente_Observar">
-        <di:waypoint x="480" y="230" />
-        <di:waypoint x="830" y="230" />
+        <di:waypoint x="455" y="205" />
+        <di:waypoint x="455" y="150" />
+        <di:waypoint x="890" y="150" />
+        <di:waypoint x="890" y="190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Pendiente_Observar_hacia_Observada" bpmnElement="Flow_Pendiente_Observar_hacia_Observada">
         <di:waypoint x="890" y="270" />
-        <di:waypoint x="890" y="430" />
-        <di:waypoint x="865" y="430" />
+        <di:waypoint x="890" y="405" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Observada_Subsanar" bpmnElement="Flow_gw_Observada_Subsanar">
         <di:waypoint x="915" y="430" />
@@ -268,31 +266,36 @@
         <di:waypoint x="1485" y="230" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Observada_Subsanar_2" bpmnElement="Flow_gw_Observada_Subsanar_2">
-        <di:waypoint x="890" y="455" />
-        <di:waypoint x="890" y="590" />
+        <di:waypoint x="865" y="430" />
+        <di:waypoint x="820" y="430" />
+        <di:waypoint x="820" y="590" />
         <di:waypoint x="1450" y="590" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Observada_Subsanar_hacia_Subsanada_2" bpmnElement="Flow_Observada_Subsanar_hacia_Subsanada_2">
         <di:waypoint x="1510" y="550" />
-        <di:waypoint x="1510" y="230" />
-        <di:waypoint x="1485" y="230" />
+        <di:waypoint x="1510" y="255" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Subsanada_Validar" bpmnElement="Flow_gw_Subsanada_Validar">
         <di:waypoint x="1535" y="230" />
         <di:waypoint x="1640" y="230" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Subsanada_Validar_hacia_Valida" bpmnElement="Flow_Subsanada_Validar_hacia_Valida">
-        <di:waypoint x="1640" y="230" />
-        <di:waypoint x="1125" y="230" />
+        <di:waypoint x="1700" y="190" />
+        <di:waypoint x="1700" y="110" />
+        <di:waypoint x="1100" y="110" />
+        <di:waypoint x="1100" y="205" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Subsanada_Observar" bpmnElement="Flow_gw_Subsanada_Observar">
-        <di:waypoint x="1535" y="230" />
-        <di:waypoint x="1840" y="230" />
+        <di:waypoint x="1510" y="205" />
+        <di:waypoint x="1510" y="150" />
+        <di:waypoint x="1900" y="150" />
+        <di:waypoint x="1900" y="190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Subsanada_Observar_hacia_Observada" bpmnElement="Flow_Subsanada_Observar_hacia_Observada">
         <di:waypoint x="1900" y="270" />
-        <di:waypoint x="1900" y="430" />
-        <di:waypoint x="915" y="430" />
+        <di:waypoint x="1900" y="500" />
+        <di:waypoint x="890" y="500" />
+        <di:waypoint x="890" y="455" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

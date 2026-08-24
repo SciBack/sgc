@@ -75,8 +75,8 @@ def run():
         {"fieldname":"estado","fieldtype":"Select","label":"Estado",
          "options":"Borrador\nAprobado\nEn ejecucion\nCerrado","default":"Borrador",
          "in_list_view":1,"in_standard_filter":1},
-        {"fieldname":"aprobado_por","fieldtype":"Link","label":"Aprobado por","options":"User"},
-        {"fieldname":"fecha_aprobacion","fieldtype":"Date","label":"Fecha de aprobación"},
+        {"fieldname":"aprobado_por","fieldtype":"Link","label":"Aprobado por","options":"User","read_only":1},
+        {"fieldname":"fecha_aprobacion","fieldtype":"Date","label":"Fecha de aprobación","read_only":1},
     ], autoname="field:codigo", title_field="titulo")
 
     # 1.2 Auditoria — plan + ejecución de una auditoría concreta (§9.2.2 c/d)

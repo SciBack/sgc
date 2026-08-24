@@ -137,7 +137,8 @@
    "fieldname": "aprobado_por",
    "fieldtype": "Link",
    "label": "Aprobado por",
-   "options": "User"
+   "options": "User",
+   "read_only": 1
   },
   {
    "fieldname": "fecha_publicacion",

@@ -164,7 +164,8 @@
    "fieldname": "verificada_por",
    "fieldtype": "Link",
    "label": "Verificada por",
-   "options": "User"
+   "options": "User",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,

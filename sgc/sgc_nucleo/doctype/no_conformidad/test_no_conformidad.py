@@ -183,15 +183,75 @@ class IntegrationTestNoConformidad(IntegrationTestCase):
                 verificada_por=ADMIN,
             )
 
-    def test_cierre_sin_verificador_falla(self):
-        with self.assertRaises(frappe.ValidationError):
-            self._nc(
-                estado="Cerrada eficaz",
-                responsable=ADMIN,
-                fecha_compromiso=add_days(nowdate(), 30),
-                correccion_inmediata="Correccion aplicada.",
-                evidencia_cierre=self.evidencia,
-            )
+    def test_cerrar_registra_a_quien_verifica(self):
+        """Ya no se exige teclearlo: lo pone el acto de cerrar.
+
+        `verificada_por` es el registro de la revisión de eficacia que pide ISO
+        9001 §10.2.1 e), y era un Link que rellenaba cualquiera con permiso de
+        edición — empezando por el responsable que trató la NC, o sea el
+        auditado. Comprobado en el recorrido del 2026-08-23.
+        """
+        nc = self._nc(
+            estado="Cerrada eficaz",
+            responsable=ADMIN,
+            fecha_compromiso=add_days(nowdate(), 30),
+            correccion_inmediata="Correccion aplicada.",
+            evidencia_cierre=self.evidencia,
+        )
+
+        self.assertEqual(nc.verificada_por, frappe.session.user)
+
+    def test_lo_que_alguien_escribio_a_mano_no_prevalece(self):
+        """El caso del recorrido: el responsable teclea ahí a un tercero."""
+        nc = self._nc(
+            estado="Cerrada eficaz",
+            responsable=ADMIN,
+            fecha_compromiso=add_days(nowdate(), 30),
+            correccion_inmediata="Correccion aplicada.",
+            evidencia_cierre=self.evidencia,
+            verificada_por="Guest",
+        )
+
+        self.assertEqual(nc.verificada_por, frappe.session.user)
+
+    def test_cerrar_no_eficaz_tambien_registra_a_quien_verifica(self):
+        """Los dos cierres son revisiones de eficacia; el negativo también."""
+        nc = self._nc(
+            estado="Cerrada no eficaz",
+            responsable=ADMIN,
+            fecha_compromiso=add_days(nowdate(), 30),
+            correccion_inmediata="Correccion aplicada.",
+            evidencia_cierre=self.evidencia,
+            verificada_por="Guest",
+        )
+
+        self.assertEqual(nc.verificada_por, frappe.session.user)
+
+    def test_quedarse_cerrada_no_reescribe_la_firma(self):
+        """Se sella al ENTRAR: un guardado posterior no cambia al verificador."""
+        nc = self._nc(
+            estado="Cerrada eficaz",
+            responsable=ADMIN,
+            fecha_compromiso=add_days(nowdate(), 30),
+            correccion_inmediata="Correccion aplicada.",
+            evidencia_cierre=self.evidencia,
+        )
+        frappe.db.set_value("No Conformidad", nc.name, "verificada_por", "Guest",
+                            update_modified=False)
+
+        nc = frappe.get_doc("No Conformidad", nc.name)
+        nc.descripcion = "Descripción corregida."
+        nc.save(ignore_permissions=True)
+
+        self.assertEqual(nc.verificada_por, "Guest")
+
+    def test_una_nc_sin_cerrar_no_tiene_verificador(self):
+        """El sello es del cierre: antes, el campo se queda como esté."""
+        nc = self._nc(estado="En verificacion", responsable=ADMIN,
+                      fecha_compromiso=add_days(nowdate(), 30),
+                      correccion_inmediata="Correccion aplicada.")
+
+        self.assertFalse(nc.verificada_por)
 
     def test_cierre_eficaz_completo_ok(self):
         # Camino feliz de extremo a extremo: se cumplen TODAS las exigencias

@@ -136,7 +136,7 @@ def run():
          "options":"Borrador\nEn revision\nAprobado\nPublicado\nObsoleto\nObservado","default":"Borrador","in_list_view":1,"in_standard_filter":1},
         {"fieldname":"elaborado_por","fieldtype":"Link","label":"Elaborado por","options":"User"},
         {"fieldname":"revisado_por","fieldtype":"Link","label":"Revisado por","options":"User"},
-        {"fieldname":"aprobado_por","fieldtype":"Link","label":"Aprobado por","options":"User"},
+        {"fieldname":"aprobado_por","fieldtype":"Link","label":"Aprobado por","options":"User","read_only":1},
         {"fieldname":"fecha_publicacion","fieldtype":"Date","label":"Fecha de publicación"},
         {"fieldname":"reemplaza_a","fieldtype":"Link","label":"Reemplaza a","options":"Documento Controlado"},
     ], autoname="field:codigo", title_field="titulo",
@@ -169,7 +169,7 @@ def run():
         {"fieldname":"fecha_deteccion","fieldtype":"Date","label":"Fecha de detección"},
         {"fieldname":"fecha_compromiso","fieldtype":"Date","label":"Fecha de compromiso (ETA)"},
         {"fieldname":"evidencia_cierre","fieldtype":"Link","label":"Evidencia de cierre","options":"Evidencia"},
-        {"fieldname":"verificada_por","fieldtype":"Link","label":"Verificada por","options":"User"},
+        {"fieldname":"verificada_por","fieldtype":"Link","label":"Verificada por","options":"User","read_only":1},
     ], autoname="format:NC-{YYYY}-{#####}", title_field="titulo",
        search_fields="titulo,origen_tipo")
 
