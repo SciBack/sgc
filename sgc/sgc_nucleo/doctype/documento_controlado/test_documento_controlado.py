@@ -213,7 +213,7 @@ class IntegrationTestDocumentoControlado(IntegrationTestCase):
         d.version = 2
         d.descripcion_cambio = "Se actualizo el alcance del procedimiento."
         d.save(ignore_permissions=True)
-        self.assertEqual(frappe.db.get_value("Documento Controlado", d.name, "version"), "2.0")
+        self.assertEqual(frappe.db.get_value("Documento Controlado", d.name, "version"), 2)
 
     # ------------------------------------------------ publicacion: efectos cruzados
     def test_al_publicar_archiva_el_cambio_en_historial(self):
@@ -234,7 +234,7 @@ class IntegrationTestDocumentoControlado(IntegrationTestCase):
         # La descripcion se congela en el historial y el campo suelto queda vacio.
         self.assertFalse(d.descripcion_cambio)
         versiones = [fila.version for fila in d.historial_cambios]
-        self.assertIn("2.0", versiones)
+        self.assertIn(2, versiones)
 
     def test_al_publicar_obsoleta_el_reemplazado(self):
         """Publicar un documento que reemplaza a otro deja al anterior en Obsoleto."""
