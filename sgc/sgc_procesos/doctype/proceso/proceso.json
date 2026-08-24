@@ -61,6 +61,8 @@
   },
   {
    "fieldname": "responsable",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "fieldtype": "Link",
    "label": "Responsable (due\u00f1o de proceso)",
    "options": "User"

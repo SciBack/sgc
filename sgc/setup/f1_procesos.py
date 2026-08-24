@@ -113,7 +113,7 @@ def run():
         {"fieldname": "propietario_unidad", "fieldtype": "Link", "label": "Propietario (área)",
          "options": "Unidad Organica", "in_list_view": 1, "in_standard_filter": 1},
         {"fieldname": "responsable", "fieldtype": "Link", "label": "Responsable (dueño de proceso)",
-         "options": "User"},
+         "options": "User", "in_list_view": 1, "in_standard_filter": 1},
         {"fieldname": "estado", "fieldtype": "Select", "label": "Estado",
          "options": "Borrador\nVigente\nObsoleto", "default": "Borrador",
          "in_standard_filter": 1, "in_list_view": 1},
