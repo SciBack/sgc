@@ -24,7 +24,6 @@ from frappe.utils import add_days, nowdate
 
 from sgc.tests import factories
 
-
 EXTRA_TEST_RECORD_DEPENDENCIES = []
 IGNORE_TEST_RECORD_DEPENDENCIES = []
 
