@@ -17,7 +17,7 @@ add_to_apps_screen = [
 		"title": "SGC UPeU",
 		# La experiencia canónica es la SPA SGC, no el Desk de Frappe.
 		# Frappe usa esta ruta como destino por defecto tras el callback OIDC.
-		"route": "/app",  # [de-fábrica] la app abre el Desk, no la SPA
+		"route": "/desk",  # [de-fábrica] el login lleva directo al Desk (en Frappe v16 el Desk vive en /desk, no /app)
 	}
 ]
 
