@@ -17,7 +17,7 @@ add_to_apps_screen = [
 		"title": "SGC UPeU",
 		# La experiencia canónica es la SPA SGC, no el Desk de Frappe.
 		# Frappe usa esta ruta como destino por defecto tras el callback OIDC.
-		"route": "/sgc/",
+		"route": "/app",  # [de-fábrica] la app abre el Desk, no la SPA
 	}
 ]
 
@@ -25,16 +25,18 @@ add_to_apps_screen = [
 # ------------------
 
 # include js, css files in header of desk.html
-app_include_css = "/assets/sgc/css/sgc_desk.css"
+# [de-fábrica] tema del Desk desactivado — Desk Frappe estándar
+# app_include_css = "/assets/sgc/css/sgc_desk.css"
 # app_include_js = "/assets/sgc/js/sgc.js"
 
 # include js, css files in header of web template
-web_include_css = [
-	"/assets/sgc/css/sciback_core.css",
-	"/assets/sgc/css/themes/upeu.css",
-	"/assets/sgc/css/sgc_web.css",
-]
-web_include_js = "/assets/sgc/js/sgc_web.js"
+# [de-fábrica] assets web del SPA desactivados
+# web_include_css = [
+# 	"/assets/sgc/css/sciback_core.css",
+# 	"/assets/sgc/css/themes/upeu.css",
+# 	"/assets/sgc/css/sgc_web.css",
+# ]
+# web_include_js = "/assets/sgc/js/sgc_web.js"
 
 # include custom scss in every website theme (without file extension ".scss")
 # website_theme_scss = "sgc/public/scss/website"
@@ -61,7 +63,8 @@ web_include_js = "/assets/sgc/js/sgc_web.js"
 # ----------
 
 # application home page (will override Website Settings)
-home_page = "sgc"
+# [de-fábrica] no forzar la SPA como home; el Desk es el destino estándar
+# home_page = "sgc"
 
 # website user home page (by Role)
 # role_home_page = {
@@ -72,9 +75,10 @@ home_page = "sgc"
 # --------------------
 # Catch-all: cualquier ruta bajo /sgc/* sirve la misma SPA (www/sgc.html);
 # el enrutado real lo hace vue-router en el cliente.
-website_route_rules = [
-	{"from_route": "/sgc/<path:app_path>", "to_route": "sgc"},
-]
+# [de-fábrica] enrutado de la SPA desactivado
+# website_route_rules = [
+# 	{"from_route": "/sgc/<path:app_path>", "to_route": "sgc"},
+# ]
 
 # Generators
 # ----------
