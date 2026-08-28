@@ -18,6 +18,7 @@
   "programa_sede",
   "periodo_academico",
   "unidad_organica",
+  "tema",
   "col_clasificacion",
   "estado",
   "vigencia_desde",
@@ -107,6 +108,15 @@
    "fieldtype": "Link",
    "label": "Unidad org\u00e1nica",
    "options": "Unidad Organica"
+  },
+  {
+   "fieldname": "tema",
+   "fieldtype": "Link",
+   "label": "Tema",
+   "options": "Termino Tesauro",
+   "link_filters": "[[\"Termino Tesauro\",\"esquema\",\"=\",\"Temas\"]]",
+   "description": "Tema del tesauro institucional que clasifica la evidencia (lenguaje controlado, VocBench).",
+   "in_standard_filter": 1
   },
   {
    "fieldname": "col_clasificacion",

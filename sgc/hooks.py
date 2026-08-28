@@ -86,6 +86,16 @@ add_to_apps_screen = [
 # 	"filters": "sgc.utils.jinja_filters"
 # }
 
+# Fixtures
+# ------------------
+# Termino Tesauro: catálogo de lenguaje controlado sincronizado desde el Tesauro
+# Institucional UPeU (VocBench/SKOS). Frappe lo importa en cada `bench migrate`.
+# La fuente de verdad es VocBench (LAN, requiere VPN); este fixture es una copia
+# versionada. Para re-sincronizar: deploy/sync_tesauro_vocbench.py
+fixtures = [
+	{"dt": "Termino Tesauro", "order_by": "codigo asc"},
+]
+
 # Installation
 # ------------
 

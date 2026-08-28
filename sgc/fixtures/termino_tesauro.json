@@ -1,0 +1,1928 @@
+[
+ {
+  "codigo": "isced-0411",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-0411",
+  "nombre": "Accounting and taxation",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/0411"
+ },
+ {
+  "codigo": "isced-73",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-73",
+  "nombre": "Architecture and construction",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/73"
+ },
+ {
+  "codigo": "isced-0731",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-0731",
+  "nombre": "Architecture and town planning",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/0731"
+ },
+ {
+  "codigo": "isced-21",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-21",
+  "nombre": "Arts",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/21"
+ },
+ {
+  "codigo": "isced-02",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-02",
+  "nombre": "Arts and humanities",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/02"
+ },
+ {
+  "codigo": "isced-0612",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-0612",
+  "nombre": "Bases de datos y redes",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/0612"
+ },
+ {
+  "codigo": "isced-0732",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-0732",
+  "nombre": "Building and civil engineering",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/0732"
+ },
+ {
+  "codigo": "isced-41",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-41",
+  "nombre": "Business and administration",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/41"
+ },
+ {
+  "codigo": "isced-04",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-04",
+  "nombre": "Business, administration and law",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/04"
+ },
+ {
+  "codigo": "isced-0111",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-0111",
+  "nombre": "Ciencias de la educacion",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/0111"
+ },
+ {
+  "codigo": "isced-31",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-31",
+  "nombre": "Ciencias sociales y del comportamiento",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/31"
+ },
+ {
+  "codigo": "isced-03",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-03",
+  "nombre": "Ciencias sociales, periodismo e informaci\u00f3n",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/03"
+ },
+ {
+  "codigo": "isced-42",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-42",
+  "nombre": "Derecho",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/42"
+ },
+ {
+  "codigo": "isced-0421",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-0421",
+  "nombre": "Derecho",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/0421"
+ },
+ {
+  "codigo": "isced-0613",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-0613",
+  "nombre": "Desarrollo de software",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/0613"
+ },
+ {
+  "codigo": "isced-01",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-01",
+  "nombre": "Educaci\u00f3n",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/01"
+ },
+ {
+  "codigo": "isced-11",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-11",
+  "nombre": "Education",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/11"
+ },
+ {
+  "codigo": "isced-0714",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-0714",
+  "nombre": "Electr\u00f3nica y automatizaci\u00f3n",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/0714"
+ },
+ {
+  "codigo": "isced-52",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-52",
+  "nombre": "Environment",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/52"
+ },
+ {
+  "codigo": "isced-0521",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-0521",
+  "nombre": "Environmental sciences",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/0521"
+ },
+ {
+  "codigo": "isced-0112",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-0112",
+  "nombre": "Formaci\u00f3n docente inicial",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/0112"
+ },
+ {
+  "codigo": "isced-0413",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-0413",
+  "nombre": "Gesti\u00f3n y administraci\u00f3n",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/0413"
+ },
+ {
+  "codigo": "isced-91",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-91",
+  "nombre": "Health",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/91"
+ },
+ {
+  "codigo": "isced-09",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-09",
+  "nombre": "Health and welfare",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/09"
+ },
+ {
+  "codigo": "isced-22",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-22",
+  "nombre": "Humanidades",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/22"
+ },
+ {
+  "codigo": "isced-72",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-72",
+  "nombre": "Industria y produccion",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/72"
+ },
+ {
+  "codigo": "isced-61",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-61",
+  "nombre": "Information and Communication Technologies",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/61"
+ },
+ {
+  "codigo": "isced-06",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-06",
+  "nombre": "Information and Communication Technologies",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/06"
+ },
+ {
+  "codigo": "isced-71",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-71",
+  "nombre": "Ingenier\u00eda y oficios afines",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/71"
+ },
+ {
+  "codigo": "isced-07",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-07",
+  "nombre": "Ingenier\u00eda, industria y construcci\u00f3n",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/07"
+ },
+ {
+  "codigo": "isced-0414",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-0414",
+  "nombre": "Marketing y publicidad",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/0414"
+ },
+ {
+  "codigo": "isced-0912",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-0912",
+  "nombre": "Medicina",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/0912"
+ },
+ {
+  "codigo": "isced-05",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-05",
+  "nombre": "Natural sciences, mathematics and statistics",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/05"
+ },
+ {
+  "codigo": "isced-0913",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-0913",
+  "nombre": "Nursing and midwifery",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/0913"
+ },
+ {
+  "codigo": "isced-0321",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-0321",
+  "nombre": "Periodismo",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/0321"
+ },
+ {
+  "codigo": "isced-32",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-32",
+  "nombre": "Periodismo e informaci\u00f3n",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/32"
+ },
+ {
+  "codigo": "isced-0721",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-0721",
+  "nombre": "Procesamiento de alimentos",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/0721"
+ },
+ {
+  "codigo": "isced-0313",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-0313",
+  "nombre": "Psicolog\u00eda",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/0313"
+ },
+ {
+  "codigo": "isced-0221",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-0221",
+  "nombre": "Religion and theology",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/0221"
+ },
+ {
+  "codigo": "isced-0919",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-0919",
+  "nombre": "Salud, no especificado",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/0919"
+ },
+ {
+  "codigo": "isced-0114",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-0114",
+  "nombre": "Teacher training with subject specialization",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/0114"
+ },
+ {
+  "codigo": "isced-0915",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-0915",
+  "nombre": "Terapia y rehabilitaci\u00f3n",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/0915"
+ },
+ {
+  "codigo": "isced-92",
+  "doctype": "Termino Tesauro",
+  "esquema": "ISCED-F 2013",
+  "name": "isced-92",
+  "nombre": "Welfare",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/isced/92"
+ },
+ {
+  "codigo": "linea-00322",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00322",
+  "nombre": "Atenci\u00f3n en Enfermer\u00eda",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00322"
+ },
+ {
+  "codigo": "linea-00114",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00114",
+  "nombre": "Auditor\u00eda",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00114"
+ },
+ {
+  "codigo": "linea-00324",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00324",
+  "nombre": "Biodiversidad en Salud",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00324"
+ },
+ {
+  "codigo": "linea-00408",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00408",
+  "nombre": "Biodiversidad y calidad ambiental",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00408"
+ },
+ {
+  "codigo": "linea-00311",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00311",
+  "nombre": "Bioqu\u00edmica y nutrici\u00f3n",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00311"
+ },
+ {
+  "codigo": "linea-00407",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00407",
+  "nombre": "Cambio clim\u00e1tico y desastres",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00407"
+ },
+ {
+  "codigo": "centro-CIIA",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "centro-CIIA",
+  "nombre": "Centro de Investigaci\u00f3n e Innovaci\u00f3n Adventista",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/centro/CIIA"
+ },
+ {
+  "codigo": "centro-CIIT",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "centro-CIIT",
+  "nombre": "Centro de Investigaci\u00f3n e Innovaci\u00f3n de Teolog\u00eda",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/centro/CIIT"
+ },
+ {
+  "codigo": "centro-CIIDE",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "centro-CIIDE",
+  "nombre": "Centro de Investigaci\u00f3n e Innovaci\u00f3n en Desarrollo Empresarial",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/centro/CIIDE"
+ },
+ {
+  "codigo": "centro-CIIEC",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "centro-CIIEC",
+  "nombre": "Centro de Investigaci\u00f3n e Innovaci\u00f3n en Educaci\u00f3n y Comunicaciones",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/centro/CIIEC"
+ },
+ {
+  "codigo": "centro-CIIG",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "centro-CIIG",
+  "nombre": "Centro de Investigaci\u00f3n e Innovaci\u00f3n en Geociencia",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/centro/CIIG"
+ },
+ {
+  "codigo": "centro-CIISA",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "centro-CIISA",
+  "nombre": "Centro de Investigaci\u00f3n e Innovaci\u00f3n en Salud y Alimentaci\u00f3n",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/centro/CIISA"
+ },
+ {
+  "codigo": "centro-CIITI",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "centro-CIITI",
+  "nombre": "Centro de Investigaci\u00f3n e Innovaci\u00f3n en Tecnolog\u00eda e Ingenier\u00eda",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/centro/CIITI"
+ },
+ {
+  "codigo": "linea-00310",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00310",
+  "nombre": "Ciencia de los alimentos",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00310"
+ },
+ {
+  "codigo": "linea-00111",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00111",
+  "nombre": "Comportamiento organizacional",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00111"
+ },
+ {
+  "codigo": "linea-00201",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00201",
+  "nombre": "Comunicaci\u00f3n, publicidad y relaciones p\u00fablicas",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00201"
+ },
+ {
+  "codigo": "linea-00112",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00112",
+  "nombre": "Contabilidad Financiera",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00112"
+ },
+ {
+  "codigo": "linea-00105",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00105",
+  "nombre": "Contabilidad general",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00105"
+ },
+ {
+  "codigo": "linea-00107",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00107",
+  "nombre": "Costos",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00107"
+ },
+ {
+  "codigo": "linea-00702",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00702",
+  "nombre": "Cronoestratigraf\u00eda",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00702"
+ },
+ {
+  "codigo": "linea-00206",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00206",
+  "nombre": "Desarrollo e innovaci\u00f3n de procedimientos de investigaci\u00f3n cuantitativa y cualitativa",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00206"
+ },
+ {
+  "codigo": "linea-00601",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00601",
+  "nombre": "El don prof\u00e9tico de Ellen G. White",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00601"
+ },
+ {
+  "codigo": "linea-00313",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00313",
+  "nombre": "Enfermedades infecciosas",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00313"
+ },
+ {
+  "codigo": "linea-00312",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00312",
+  "nombre": "Enfermedades no infecciosas",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00312"
+ },
+ {
+  "codigo": "linea-00321",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00321",
+  "nombre": "Enfermer\u00eda en Administraci\u00f3n y Gesti\u00f3n",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00321"
+ },
+ {
+  "codigo": "linea-00213",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00213",
+  "nombre": "Estilo de vida saludable en el entorno escolar",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00213"
+ },
+ {
+  "codigo": "linea-00207",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00207",
+  "nombre": "Estudios sobre el curr\u00edculo",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00207"
+ },
+ {
+  "codigo": "linea-00703",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00703",
+  "nombre": "Geoqu\u00edmica",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00703"
+ },
+ {
+  "codigo": "linea-00110",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00110",
+  "nombre": "Gerencia de Operaciones",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00110"
+ },
+ {
+  "codigo": "linea-00317",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00317",
+  "nombre": "Gerencia y gesti\u00f3n del cuidado en enfermer\u00eda",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00317"
+ },
+ {
+  "codigo": "linea-00316",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00316",
+  "nombre": "Gesti\u00f3n (administraci\u00f3n) en Salud",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00316"
+ },
+ {
+  "codigo": "linea-00109",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00109",
+  "nombre": "Gesti\u00f3n de las Organizaciones",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00109"
+ },
+ {
+  "codigo": "linea-00320",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00320",
+  "nombre": "Gesti\u00f3n de los sistemas y servicios hospitalarios",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00320"
+ },
+ {
+  "codigo": "linea-00413",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00413",
+  "nombre": "Gesti\u00f3n de TI",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00413"
+ },
+ {
+  "codigo": "linea-00113",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00113",
+  "nombre": "Gesti\u00f3n del potencial humano por indicadores",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00113"
+ },
+ {
+  "codigo": "linea-00108",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00108",
+  "nombre": "Gesti\u00f3n Empresarial",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00108"
+ },
+ {
+  "codigo": "linea-00101",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00101",
+  "nombre": "Gesti\u00f3n estrat\u00e9gica",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00101"
+ },
+ {
+  "codigo": "linea-00406",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00406",
+  "nombre": "Gesti\u00f3n urbana, Urbanismo, dise\u00f1o y arquitectura",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00406"
+ },
+ {
+  "codigo": "linea-00404",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00404",
+  "nombre": "Hidr\u00e1ulica y hidrolog\u00eda",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00404"
+ },
+ {
+  "codigo": "linea-00212",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00212",
+  "nombre": "Historia de la educaci\u00f3n adventista",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00212"
+ },
+ {
+  "codigo": "linea-00411",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00411",
+  "nombre": "Ingenier\u00eda de software",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00411"
+ },
+ {
+  "codigo": "linea-00401",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00401",
+  "nombre": "Ingenier\u00eda estructural",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00401"
+ },
+ {
+  "codigo": "linea-00209",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00209",
+  "nombre": "Ingenier\u00eda inversa de los principios de la educaci\u00f3n adventista",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00209"
+ },
+ {
+  "codigo": "linea-00503",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00503",
+  "nombre": "Investigaci\u00f3n b\u00edblica-hist\u00f3rica",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00503"
+ },
+ {
+  "codigo": "linea-00504",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00504",
+  "nombre": "Investigaci\u00f3n b\u00edblico-aplicada",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00504"
+ },
+ {
+  "codigo": "linea-00502",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00502",
+  "nombre": "Investigaci\u00f3n b\u00edblico-sistem\u00e1tica",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00502"
+ },
+ {
+  "codigo": "linea-00501",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00501",
+  "nombre": "Investigaci\u00f3n b\u00edblico-teol\u00f3gica",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00501"
+ },
+ {
+  "codigo": "linea-00203",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00203",
+  "nombre": "Investigaci\u00f3n ling\u00fc\u00edstica",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00203"
+ },
+ {
+  "codigo": "linea-00204",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00204",
+  "nombre": "Investigaci\u00f3n literaria",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00204"
+ },
+ {
+  "codigo": "linea-00208",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00208",
+  "nombre": "Investigaci\u00f3n sobre factores psicol\u00f3gicos en el entorno educativo",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00208"
+ },
+ {
+  "codigo": "linea-00602",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00602",
+  "nombre": "La Historia de la Iglesia Adventista del S\u00e9ptimo D\u00eda",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00602"
+ },
+ {
+  "codigo": "linea-00205",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00205",
+  "nombre": "Liderazgo y gesti\u00f3n educativos",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00205"
+ },
+ {
+  "codigo": "linea-00704",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00704",
+  "nombre": "Mapeo y cartograf\u00eda",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00704"
+ },
+ {
+  "codigo": "linea-00102",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00102",
+  "nombre": "Marketing",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00102"
+ },
+ {
+  "codigo": "linea-00403",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00403",
+  "nombre": "Materiales y procesos constructivos",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00403"
+ },
+ {
+  "codigo": "linea-00323",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00323",
+  "nombre": "Microbiolog\u00eda y Biolog\u00eda Molecular",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00323"
+ },
+ {
+  "codigo": "linea-00104",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00104",
+  "nombre": "Negocios Internacionales",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00104"
+ },
+ {
+  "codigo": "linea-00307",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00307",
+  "nombre": "Nutrici\u00f3n cl\u00ednica",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00307"
+ },
+ {
+  "codigo": "linea-00308",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00308",
+  "nombre": "Nutrici\u00f3n vegetariana y promoci\u00f3n de la salud",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00308"
+ },
+ {
+  "codigo": "linea-00309",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00309",
+  "nombre": "Nutrici\u00f3n y Gesti\u00f3n",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00309"
+ },
+ {
+  "codigo": "linea-00115",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00115",
+  "nombre": "Pol\u00edtica y Estrategia organizacional",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00115"
+ },
+ {
+  "codigo": "linea-00405",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00405",
+  "nombre": "Procesamiento, seguridad y gesti\u00f3n en la industria alimentaria",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00405"
+ },
+ {
+  "codigo": "linea-00210",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00210",
+  "nombre": "Procesos de innovaci\u00f3n educativa",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00210"
+ },
+ {
+  "codigo": "linea-00303",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00303",
+  "nombre": "Psicolog\u00eda cl\u00ednica y de la Salud",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00303"
+ },
+ {
+  "codigo": "linea-00304",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00304",
+  "nombre": "Psicolog\u00eda educativa",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00304"
+ },
+ {
+  "codigo": "linea-00306",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00306",
+  "nombre": "Psicolog\u00eda organizacional",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00306"
+ },
+ {
+  "codigo": "linea-00302",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00302",
+  "nombre": "Psicolog\u00eda positiva",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00302"
+ },
+ {
+  "codigo": "linea-00305",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00305",
+  "nombre": "Psicolog\u00eda social y comunitaria",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00305"
+ },
+ {
+  "codigo": "linea-00301",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00301",
+  "nombre": "Salud comunitaria, cl\u00ednica y gesti\u00f3n para el cuidado de la salud",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00301"
+ },
+ {
+  "codigo": "linea-00319",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00319",
+  "nombre": "Salud del Adulto",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00319"
+ },
+ {
+  "codigo": "linea-00318",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00318",
+  "nombre": "Salud familiar y colectiva",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00318"
+ },
+ {
+  "codigo": "linea-00315",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00315",
+  "nombre": "Salud p\u00fablica",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00315"
+ },
+ {
+  "codigo": "linea-00701",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00701",
+  "nombre": "Tafonom\u00eda y estratigraf\u00eda secuencial",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00701"
+ },
+ {
+  "codigo": "linea-00103",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00103",
+  "nombre": "Talento Humano",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00103"
+ },
+ {
+  "codigo": "linea-00412",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00412",
+  "nombre": "Tecnolog\u00eda de informaci\u00f3n e innovaci\u00f3n tecnol\u00f3gica",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00412"
+ },
+ {
+  "codigo": "linea-00211",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00211",
+  "nombre": "Tecnolog\u00edas de la informaci\u00f3n y comunicaci\u00f3n en los \u00e1mbitos educativos",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00211"
+ },
+ {
+  "codigo": "linea-00214",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00214",
+  "nombre": "Tecnolog\u00edas para la innovaci\u00f3n comunicativa en organizaciones",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00214"
+ },
+ {
+  "codigo": "linea-00202",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00202",
+  "nombre": "Teor\u00edas, m\u00e9todos, organizaci\u00f3n y planificaci\u00f3n de la educaci\u00f3n",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00202"
+ },
+ {
+  "codigo": "linea-00106",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00106",
+  "nombre": "Tributos",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00106"
+ },
+ {
+  "codigo": "linea-00402",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00402",
+  "nombre": "V\u00edas y geotecnia",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00402"
+ },
+ {
+  "codigo": "linea-00314",
+  "doctype": "Termino Tesauro",
+  "esquema": "L\u00edneas de Investigaci\u00f3n",
+  "name": "linea-00314",
+  "nombre": "\u00c9tica y Gesti\u00f3n en salud",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/linea/00314"
+ },
+ {
+  "codigo": "tema-administracion-publica",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-administracion-publica",
+  "nombre": "Administraci\u00f3n p\u00fablica",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/administracion-publica"
+ },
+ {
+  "codigo": "tema-administracion-gestion-empresarial",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-administracion-gestion-empresarial",
+  "nombre": "Administraci\u00f3n y gesti\u00f3n empresarial",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/administracion-gestion-empresarial"
+ },
+ {
+  "codigo": "tema-alimentacion-comunitaria",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-alimentacion-comunitaria",
+  "nombre": "Alimentaci\u00f3n y salud comunitaria",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/alimentacion-comunitaria"
+ },
+ {
+  "codigo": "tema-arquitectura-urbanismo",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-arquitectura-urbanismo",
+  "nombre": "Arquitectura y urbanismo",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/arquitectura-urbanismo"
+ },
+ {
+  "codigo": "tema-auditoria-control",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-auditoria-control",
+  "nombre": "Auditor\u00eda y control interno",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/auditoria-control"
+ },
+ {
+  "codigo": "tema-bases-datos-redes",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-bases-datos-redes",
+  "nombre": "Bases de datos y redes",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/bases-datos-redes"
+ },
+ {
+  "codigo": "tema-bim-tecnologia-constructiva",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-bim-tecnologia-constructiva",
+  "nombre": "BIM y tecnolog\u00eda constructiva",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/bim-tecnologia-constructiva"
+ },
+ {
+  "codigo": "tema-biotecnologia-alimentos",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-biotecnologia-alimentos",
+  "nombre": "Biotecnolog\u00eda de alimentos",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/biotecnologia-alimentos"
+ },
+ {
+  "codigo": "tema-branding-comunicacion",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-branding-comunicacion",
+  "nombre": "Branding y comunicaci\u00f3n de marca",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/branding-comunicacion"
+ },
+ {
+  "codigo": "tema-bromatologia",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-bromatologia",
+  "nombre": "Bromatolog\u00eda y an\u00e1lisis de alimentos",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/bromatologia"
+ },
+ {
+  "codigo": "tema-calidad-agua-aire",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-calidad-agua-aire",
+  "nombre": "Calidad del agua y del aire",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/calidad-agua-aire"
+ },
+ {
+  "codigo": "tema-ciberseguridad",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-ciberseguridad",
+  "nombre": "Ciberseguridad e infraestructura",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/ciberseguridad"
+ },
+ {
+  "codigo": "tema-ciencias-comunicacion-medios",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-ciencias-comunicacion-medios",
+  "nombre": "Ciencias de la comunicaci\u00f3n y medios",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/ciencias-comunicacion-medios"
+ },
+ {
+  "codigo": "tema-ciencias-salud-clinica",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-ciencias-salud-clinica",
+  "nombre": "Ciencias de la salud cl\u00ednica",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/ciencias-salud-clinica"
+ },
+ {
+  "codigo": "tema-cirugia-procedimientos",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-cirugia-procedimientos",
+  "nombre": "Cirug\u00eda y procedimientos cl\u00ednicos",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/cirugia-procedimientos"
+ },
+ {
+  "codigo": "tema-comercio-exterior",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-comercio-exterior",
+  "nombre": "Comercio exterior y exportaciones",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/comercio-exterior"
+ },
+ {
+  "codigo": "tema-competencias-digitales",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-competencias-digitales",
+  "nombre": "Competencias digitales",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/competencias-digitales"
+ },
+ {
+  "codigo": "tema-comunicacion-institucional",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-comunicacion-institucional",
+  "nombre": "Comunicaci\u00f3n institucional y relaciones p\u00fablicas",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/comunicacion-institucional"
+ },
+ {
+  "codigo": "tema-construccion-sostenible",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-construccion-sostenible",
+  "nombre": "Construcci\u00f3n sostenible",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/construccion-sostenible"
+ },
+ {
+  "codigo": "tema-contabilidad-financiera",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-contabilidad-financiera",
+  "nombre": "Contabilidad financiera y NIIF",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/contabilidad-financiera"
+ },
+ {
+  "codigo": "tema-contabilidad-finanzas",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-contabilidad-finanzas",
+  "nombre": "Contabilidad y finanzas",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/contabilidad-finanzas"
+ },
+ {
+  "codigo": "tema-costos-presupuestos",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-costos-presupuestos",
+  "nombre": "Costos y presupuestos",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/costos-presupuestos"
+ },
+ {
+  "codigo": "tema-derecho-civil-familia",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-derecho-civil-familia",
+  "nombre": "Derecho civil y familia",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/derecho-civil-familia"
+ },
+ {
+  "codigo": "tema-derecho-empresarial-laboral",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-derecho-empresarial-laboral",
+  "nombre": "Derecho empresarial y laboral",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/derecho-empresarial-laboral"
+ },
+ {
+  "codigo": "tema-derecho-penal-proceso",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-derecho-penal-proceso",
+  "nombre": "Derecho penal y proceso",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/derecho-penal-proceso"
+ },
+ {
+  "codigo": "tema-derecho-ciencias-juridicas",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-derecho-ciencias-juridicas",
+  "nombre": "Derecho y ciencias jur\u00eddicas",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/derecho-ciencias-juridicas"
+ },
+ {
+  "codigo": "tema-desarrollo-software",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-desarrollo-software",
+  "nombre": "Desarrollo de software",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/desarrollo-software"
+ },
+ {
+  "codigo": "tema-didactica-curriculum",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-didactica-curriculum",
+  "nombre": "Did\u00e1ctica y curr\u00edculo",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/didactica-curriculum"
+ },
+ {
+  "codigo": "tema-dise\u00f1o-arquitectonico",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-dise\u00f1o-arquitectonico",
+  "nombre": "Dise\u00f1o arquitect\u00f3nico",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/dise\u00f1o-arquitectonico"
+ },
+ {
+  "codigo": "tema-divulgacion-acceso-abierto",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-divulgacion-acceso-abierto",
+  "nombre": "Divulgaci\u00f3n y acceso abierto",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/divulgacion-acceso-abierto"
+ },
+ {
+  "codigo": "tema-educacion-inclusiva",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-educacion-inclusiva",
+  "nombre": "Educaci\u00f3n inclusiva y diversidad",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/educacion-inclusiva"
+ },
+ {
+  "codigo": "tema-educacion-pedagogia",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-educacion-pedagogia",
+  "nombre": "Educaci\u00f3n y pedagog\u00eda",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/educacion-pedagogia"
+ },
+ {
+  "codigo": "tema-emprendimiento-innovacion",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-emprendimiento-innovacion",
+  "nombre": "Emprendimiento e innovaci\u00f3n",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/emprendimiento-innovacion"
+ },
+ {
+  "codigo": "tema-energia-renovable",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-energia-renovable",
+  "nombre": "Energ\u00edas renovables",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/energia-renovable"
+ },
+ {
+  "codigo": "tema-estadistica-aplicada",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-estadistica-aplicada",
+  "nombre": "Estad\u00edstica aplicada a la investigaci\u00f3n",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/estadistica-aplicada"
+ },
+ {
+  "codigo": "tema-estructuras-geotecnia",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-estructuras-geotecnia",
+  "nombre": "Estructuras y geotecnia",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/estructuras-geotecnia"
+ },
+ {
+  "codigo": "tema-evaluacion-impacto-ambiental",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-evaluacion-impacto-ambiental",
+  "nombre": "Evaluaci\u00f3n de impacto ambiental",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/evaluacion-impacto-ambiental"
+ },
+ {
+  "codigo": "tema-evaluacion-educativa",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-evaluacion-educativa",
+  "nombre": "Evaluaci\u00f3n educativa",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/evaluacion-educativa"
+ },
+ {
+  "codigo": "tema-farmacologia-terapeutica",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-farmacologia-terapeutica",
+  "nombre": "Farmacolog\u00eda y terap\u00e9utica",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/farmacologia-terapeutica"
+ },
+ {
+  "codigo": "tema-finanzas-corporativas",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-finanzas-corporativas",
+  "nombre": "Finanzas corporativas",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/finanzas-corporativas"
+ },
+ {
+  "codigo": "tema-gestion-calidad",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-gestion-calidad",
+  "nombre": "Gesti\u00f3n de la calidad",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/gestion-calidad"
+ },
+ {
+  "codigo": "tema-gestion-proyectos",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-gestion-proyectos",
+  "nombre": "Gesti\u00f3n de proyectos",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/gestion-proyectos"
+ },
+ {
+  "codigo": "tema-gestion-proyectos-civiles",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-gestion-proyectos-civiles",
+  "nombre": "Gesti\u00f3n de proyectos de construcci\u00f3n",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/gestion-proyectos-civiles"
+ },
+ {
+  "codigo": "tema-gestion-residuos",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-gestion-residuos",
+  "nombre": "Gesti\u00f3n de residuos s\u00f3lidos",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/gestion-residuos"
+ },
+ {
+  "codigo": "tema-historia-adventismo",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-historia-adventismo",
+  "nombre": "Historia del adventismo",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/historia-adventismo"
+ },
+ {
+  "codigo": "tema-infraestructura-vial",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-infraestructura-vial",
+  "nombre": "Infraestructura vial y transporte",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/infraestructura-vial"
+ },
+ {
+  "codigo": "tema-ingenieria-ambiental-sostenibilidad",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-ingenieria-ambiental-sostenibilidad",
+  "nombre": "Ingenier\u00eda ambiental y sostenibilidad",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/ingenieria-ambiental-sostenibilidad"
+ },
+ {
+  "codigo": "tema-ingenieria-civil-construccion",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-ingenieria-civil-construccion",
+  "nombre": "Ingenier\u00eda civil y construcci\u00f3n",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/ingenieria-civil-construccion"
+ },
+ {
+  "codigo": "tema-ingenieria-industrias-alimentarias",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-ingenieria-industrias-alimentarias",
+  "nombre": "Ingenier\u00eda de industrias alimentarias",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/ingenieria-industrias-alimentarias"
+ },
+ {
+  "codigo": "tema-ingenieria-sistemas-software",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-ingenieria-sistemas-software",
+  "nombre": "Ingenier\u00eda de sistemas y software",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/ingenieria-sistemas-software"
+ },
+ {
+  "codigo": "tema-inocuidad-alimentaria",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-inocuidad-alimentaria",
+  "nombre": "Inocuidad y seguridad alimentaria",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/inocuidad-alimentaria"
+ },
+ {
+  "codigo": "tema-inteligencia-artificial",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-inteligencia-artificial",
+  "nombre": "Inteligencia artificial y machine learning",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/inteligencia-artificial"
+ },
+ {
+  "codigo": "tema-investigacion-cientifica-formativa",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-investigacion-cientifica-formativa",
+  "nombre": "Investigaci\u00f3n cient\u00edfica formativa",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/investigacion-cientifica-formativa"
+ },
+ {
+  "codigo": "tema-investigacion-mercados",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-investigacion-mercados",
+  "nombre": "Investigaci\u00f3n de mercados",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/investigacion-mercados"
+ },
+ {
+  "codigo": "tema-liderazgo-organizacional",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-liderazgo-organizacional",
+  "nombre": "Liderazgo y comportamiento organizacional",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/liderazgo-organizacional"
+ },
+ {
+  "codigo": "tema-marketing-digital",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-marketing-digital",
+  "nombre": "Marketing digital y redes sociales",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/marketing-digital"
+ },
+ {
+  "codigo": "tema-marketing-negocios-internacionales",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-marketing-negocios-internacionales",
+  "nombre": "Marketing y negocios internacionales",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/marketing-negocios-internacionales"
+ },
+ {
+  "codigo": "tema-medicina-interna",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-medicina-interna",
+  "nombre": "Medicina interna y especialidades",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/medicina-interna"
+ },
+ {
+  "codigo": "tema-metodologia-investigacion",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-metodologia-investigacion",
+  "nombre": "Metodolog\u00eda de la investigaci\u00f3n",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/metodologia-investigacion"
+ },
+ {
+  "codigo": "tema-misiologia",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-misiologia",
+  "nombre": "Misiolog\u00eda",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/misiologia"
+ },
+ {
+  "codigo": "tema-neuropsicologia",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-neuropsicologia",
+  "nombre": "Neuropsicolog\u00eda",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/neuropsicologia"
+ },
+ {
+  "codigo": "tema-nutricion-clinica",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-nutricion-clinica",
+  "nombre": "Nutrici\u00f3n cl\u00ednica",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/nutricion-clinica"
+ },
+ {
+  "codigo": "tema-nutricion-deportiva",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-nutricion-deportiva",
+  "nombre": "Nutrici\u00f3n deportiva",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/nutricion-deportiva"
+ },
+ {
+  "codigo": "tema-nutricion-dietetica",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-nutricion-dietetica",
+  "nombre": "Nutrici\u00f3n y diet\u00e9tica",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/nutricion-dietetica"
+ },
+ {
+  "codigo": "tema-paisajismo-espacios-publicos",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-paisajismo-espacios-publicos",
+  "nombre": "Paisajismo y espacios p\u00fablicos",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/paisajismo-espacios-publicos"
+ },
+ {
+  "codigo": "tema-patrimonio-arquitectonico",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-patrimonio-arquitectonico",
+  "nombre": "Patrimonio arquitect\u00f3nico",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/patrimonio-arquitectonico"
+ },
+ {
+  "codigo": "tema-periodismo-digital",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-periodismo-digital",
+  "nombre": "Periodismo digital",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/periodismo-digital"
+ },
+ {
+  "codigo": "tema-procesos-industriales-alimentos",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-procesos-industriales-alimentos",
+  "nombre": "Procesos industriales de alimentos",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/procesos-industriales-alimentos"
+ },
+ {
+  "codigo": "tema-produccion-audiovisual",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-produccion-audiovisual",
+  "nombre": "Producci\u00f3n audiovisual",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/produccion-audiovisual"
+ },
+ {
+  "codigo": "tema-propiedad-intelectual",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-propiedad-intelectual",
+  "nombre": "Propiedad intelectual y derechos de autor",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/propiedad-intelectual"
+ },
+ {
+  "codigo": "tema-psicologia-clinica",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-psicologia-clinica",
+  "nombre": "Psicolog\u00eda cl\u00ednica",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/psicologia-clinica"
+ },
+ {
+  "codigo": "tema-psicologia-educativa",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-psicologia-educativa",
+  "nombre": "Psicolog\u00eda educativa",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/psicologia-educativa"
+ },
+ {
+  "codigo": "tema-psicologia-salud-mental",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-psicologia-salud-mental",
+  "nombre": "Psicolog\u00eda y salud mental",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/psicologia-salud-mental"
+ },
+ {
+  "codigo": "tema-publicacion-divulgacion-cientifica",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-publicacion-divulgacion-cientifica",
+  "nombre": "Publicaci\u00f3n y divulgaci\u00f3n cient\u00edfica",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/publicacion-divulgacion-cientifica"
+ },
+ {
+  "codigo": "tema-revision-sistematica",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-revision-sistematica",
+  "nombre": "Revisi\u00f3n sistem\u00e1tica y meta-an\u00e1lisis",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/revision-sistematica"
+ },
+ {
+  "codigo": "tema-revistas-indexadas",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-revistas-indexadas",
+  "nombre": "Revistas indexadas y factor de impacto",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/revistas-indexadas"
+ },
+ {
+  "codigo": "tema-salud-mental-comunitaria",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-salud-mental-comunitaria",
+  "nombre": "Salud mental comunitaria",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/salud-mental-comunitaria"
+ },
+ {
+  "codigo": "tema-salud-publica-epidemiologia",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-salud-publica-epidemiologia",
+  "nombre": "Salud p\u00fablica y epidemiolog\u00eda",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/salud-publica-epidemiologia"
+ },
+ {
+  "codigo": "tema-seguridad-informatica",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-seguridad-informatica",
+  "nombre": "Seguridad inform\u00e1tica",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/seguridad-informatica"
+ },
+ {
+  "codigo": "tema-sistemas-informacion",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-sistemas-informacion",
+  "nombre": "Sistemas de informaci\u00f3n institucional",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/sistemas-informacion"
+ },
+ {
+  "codigo": "tema-tecnologia-educativa",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-tecnologia-educativa",
+  "nombre": "Tecnolog\u00eda educativa",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/tecnologia-educativa"
+ },
+ {
+  "codigo": "tema-tecnologias-informacion-comunicacion",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-tecnologias-informacion-comunicacion",
+  "nombre": "Tecnolog\u00edas de la informaci\u00f3n y comunicaci\u00f3n",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/tecnologias-informacion-comunicacion"
+ },
+ {
+  "codigo": "tema-teologia-biblica",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-teologia-biblica",
+  "nombre": "Teolog\u00eda b\u00edblica",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/teologia-biblica"
+ },
+ {
+  "codigo": "tema-teologia-estudios-religiosos",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-teologia-estudios-religiosos",
+  "nombre": "Teolog\u00eda y estudios religiosos",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/teologia-estudios-religiosos"
+ },
+ {
+  "codigo": "tema-tesis-proyecto-grado",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-tesis-proyecto-grado",
+  "nombre": "Tesis y proyectos de grado",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/tesis-proyecto-grado"
+ },
+ {
+  "codigo": "tema-transformacion-digital",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-transformacion-digital",
+  "nombre": "Transformaci\u00f3n digital",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/transformacion-digital"
+ },
+ {
+  "codigo": "tema-tributacion-aduanas",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-tributacion-aduanas",
+  "nombre": "Tributaci\u00f3n y aduanas",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/tributacion-aduanas"
+ },
+ {
+  "codigo": "tema-urbanismo-planificacion",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-urbanismo-planificacion",
+  "nombre": "Urbanismo y planificaci\u00f3n territorial",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/urbanismo-planificacion"
+ },
+ {
+  "codigo": "tema-etica-cristiana",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-etica-cristiana",
+  "nombre": "\u00c9tica cristiana",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/etica-cristiana"
+ },
+ {
+  "codigo": "tema-etica-investigacion",
+  "doctype": "Termino Tesauro",
+  "esquema": "Temas",
+  "name": "tema-etica-investigacion",
+  "nombre": "\u00c9tica en la investigaci\u00f3n",
+  "sincronizado_de": "VocBench \u2014 Tesauro_Institucional_UPeU",
+  "uri": "http://upeu.edu.pe/sys/programas/tema/etica-investigacion"
+ }
+]
