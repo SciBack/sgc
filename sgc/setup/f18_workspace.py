@@ -91,4 +91,24 @@ def run():
 
     ws.insert(ignore_permissions=True)
     frappe.db.commit()
+
+    # Frappe 16 dejó de armar el MENÚ lateral del Desk desde el Workspace: usa un
+    # doctype nuevo, "Workspace Sidebar". El Workspace de arriba solo alimenta la
+    # RUTA directa /app/<name>; sin el Workspace Sidebar, la home del Desk sale en
+    # blanco para quien no sea Workspace Manager. Se genera con la propia función
+    # de Frappe (idempotente; solo crea los que falten). try/except para no romper
+    # en versiones anteriores a la introducción del doctype.
+    try:
+        if frappe.db.exists("DocType", "Workspace Sidebar") and not frappe.db.exists(
+            "Workspace Sidebar", WS
+        ):
+            from frappe.desk.doctype.workspace_sidebar.workspace_sidebar import (
+                create_workspace_sidebar_for_workspaces,
+            )
+
+            create_workspace_sidebar_for_workspaces()
+            frappe.db.commit()
+    except Exception as e:  # noqa: BLE001 — el menú es cosmético; no debe tumbar el deploy
+        frappe.logger().warning(f"f18: no se pudo crear el Workspace Sidebar: {e}")
+
     print(f"Workspace '{WS}' creado — {len(SHORTCUTS)} accesos, {len(CARDS)} tarjetas")
