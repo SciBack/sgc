@@ -1,7 +1,7 @@
 name: Tests SGC
 
 # Ejecuta la suite de integración Frappe de la app `sgc` sobre PostgreSQL,
-# replicando el entorno real (Frappe version-16 + Python 3.14 + Node 24 + PG 16).
+# replicando el entorno real (Frappe v16.32.0 + Python 3.14 + Node 24 + PG 16).
 # Ningún test invoca Chrome/PDF, así que no se instala navegador.
 
 on:
@@ -104,10 +104,10 @@ jobs:
       - name: Instalar frappe-bench
         run: pip install frappe-bench
 
-      - name: Init bench (Frappe version-16, sin assets)
+      - name: Init bench (Frappe v16.32.0 — versión fijada, sin assets)
         run: |
           bench init \
-            --frappe-branch version-16 \
+            --frappe-branch v16.32.0 \
             --skip-redis-config-generation \
             --skip-assets \
             --python "$(which python)" \
