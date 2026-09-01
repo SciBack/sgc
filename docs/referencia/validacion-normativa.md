@@ -168,6 +168,67 @@ con él tres guards:
 3. **Coherencia de alcance**: la acreditación de programa exige programa-sede;
    la institucional no lo admite.
 
+## El SGC no solo prepara la acreditación: es evidencia de ella
+
+*(Añadido el 2026-09-01, tras revisar los 198 elementos cargados.)*
+
+Tres estándares de los modelos Coneau describen exactamente lo que un SGC hace. Un
+sistema que los implementa **se evalúa a sí mismo**: es a la vez la herramienta con la
+que se prepara el expediente y la evidencia de esos estándares.
+
+**No es una declaración de cumplimiento.** El sistema aporta el soporte; la evidencia la
+produce la institución al usarlo. Sin datos reales cargados, ninguno de estos criterios
+se cumple por el mero hecho de que el software exista.
+
+### Programas, estándar 8 — GESTIÓN DE LA INFORMACIÓN (6 criterios)
+
+*«Se recoge y analiza información de la gestión y resultados del programa.»*
+
+| Criterio | Qué exige | Qué lo soporta |
+|---|---|---|
+| 8.1 | Mecanismos que garanticen **disponibilidad, integridad y confidencialidad** | Permisos por rol y ámbito, respaldo con restauración probada, registro de cambios |
+| 8.2 | Información de empleadores, egresados, docentes y estudiantes | `Grupo Interes`, `Instrumento`, `Aplicacion Instrumento`, `Resultado Instrumento` |
+| 8.3 | Indicadores de desempeño docente (ID2, ID19) | `Indicador` + `Ficha Indicador` + `Valor Indicador` |
+| 8.4 | Indicadores de evaluación del aprendizaje (ID4, ID10) | ídem, alimentado por conector |
+| 8.5 | Indicadores de graduación y titulación (ID25, ID28, ID29) | ídem |
+| 8.6 | Información **accesible al personal directivo** para decidir | Tablero y listas filtradas por rol |
+
+Los criterios 8.3 a 8.5 **nombran indicadores concretos del propio modelo**, así que la
+trazabilidad indicador → criterio no es interpretación: está en la norma.
+
+### Programas, estándar 10 — GESTIÓN DE LA CALIDAD (4 criterios)
+
+| Criterio | Qué exige | Qué lo soporta |
+|---|---|---|
+| 10.1 | Diseño del SGC: política de calidad e instancias de decisión | `Politica Calidad`, `Comite`, `Reunion`, `Acuerdo` |
+| 10.2 | Procesos mínimos del SGC | `Proceso` + `Ficha Caracterizacion Proceso` |
+| 10.3 | **Registro histórico** de los cambios del SGC | Versionado de `Documento Controlado` y `track_changes` |
+| 10.4 | Evaluación periódica y acciones de mejora | `Revision Direccion`, `Plan Mejora`, `Accion Mejora` |
+
+### Institucional, estándar 9 — GESTIÓN DE LA CALIDAD (5 criterios)
+
+| Criterio | Qué exige | Qué lo soporta |
+|---|---|---|
+| 9.1 | Política institucional de calidad y documentos del SGC | `Politica Calidad`, `Objetivo Calidad`, `Documento Controlado` |
+| 9.2 | Alcance del SGC a **todos** los procesos | Árbol de procesos completo del mapa institucional |
+| 9.3 | Custodia y gestión documental bajo unidad responsable | `Documento Controlado` con flujo de aprobación y propietario |
+| 9.4 | Revisión periódica del SGC con base en evidencias | `Revision Direccion` |
+| 9.5 | Evaluación de resultados e implementación de mejoras | Indicadores de proceso + `Plan Mejora` |
+
+### Dos consecuencias prácticas
+
+1. **En licenciamiento este argumento no aplica.** Ninguna de las condiciones básicas de
+   Sunedu menciona gestión de la información ni sistemas: se comprobó por búsqueda sobre
+   el texto oficial de sus criterios cargados. El argumento vale solo para acreditación.
+2. **La Tabla 10 lo refuerza.** Su criterio 7 otorga puntos de excelencia por tener un
+   SGC: cuatro puntos implementado, ocho certificado. Un mismo sistema suma por tres vías
+   distintas — soporta el estándar 8, evidencia los estándares de gestión de la calidad, y
+   puntúa para la vigencia extendida.
+
+Relacionado: el estándar 9 de programas (*Supervisión y revisión del programa de
+estudios*) pide en su criterio 9.2 el registro histórico de cambios curriculares, con el
+mismo mecanismo documental.
+
 ## Fuentes
 
 - Modelo de Acreditación para Programas de Estudios de Educación Superior
