@@ -14,15 +14,15 @@ técnico pueda automatizarlo?
 ## Decisión
 
 1. **Generar** el `.bpmn` desde las definiciones de workflow: **Python y XML, sin dependencias.**
-2. **Visualizar y editar en línea**: **bpmn-js** (variante Modeler), dentro de la SPA del
-   sistema, que ya usa Vue 3, `frappe-ui` y Tailwind.
+2. **Visualizar y editar BPMN**: mediante una herramienta externa compatible (por ejemplo,
+   camunda-modeler o Bizagi). No se integra un editor BPMN ni una SPA dentro de SGC.
 3. **Validar**: contra el XSD oficial de la OMG, en el pipeline.
 4. **Editar los workflows reales** (los que gobiernan el motor): **el Workflow Builder
    nativo del framework**, que ya viene instalado. No se construye nada para eso.
 
 El punto 4 es el que ahorra más trabajo: la edición visual que cambia el sistema **ya
-existe**. Lo que no existe es BPMN, y BPMN no sirve para gobernar el motor: sirve para
-hablar con el área de calidad y con sus herramientas.
+existe en Frappe**. Lo que no existe es BPMN, y BPMN no sirve para gobernar el motor:
+sirve para hablar con el área de calidad y con sus herramientas.
 
 ## Lo evaluado
 

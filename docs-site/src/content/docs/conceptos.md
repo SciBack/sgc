@@ -17,7 +17,8 @@ description: Vocabulario, permisos, estados y restricciones que gobiernan SGC.
 ## Reglas verificables
 
 1. Un rol necesita simultáneamente permiso del DocType y transición de workflow.
-2. Ocultar un control en la SPA no autoriza ni deniega por sí solo; el backend decide.
+2. Ocultar un módulo o acción en el Desk/Workspace no autoriza ni deniega por sí solo; Frappe
+   decide con DocPerm, User Permissions y Workflow.
 3. No se debe editar el estado directamente para saltar el workflow.
 4. Los cierres y verificaciones deben quedar en historial con el actor real.
 5. Un cálculo automático no debe sobrescribir silenciosamente una confirmación humana.

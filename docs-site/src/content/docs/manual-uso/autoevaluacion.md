@@ -93,9 +93,9 @@ acreditación con el Print Format oficial, usando el motor Chrome de Frappe.
 
 ## Ver evidencias mientras se valora
 
-Al abrir el detalle de un criterio en la SPA, el comité ve las evidencias ya
-vinculadas a ese criterio (consulta inversa sobre `Trazabilidad`) sin salir de la
-pantalla de valoración — ver [Evidencias y trazabilidad](../evidencias-trazabilidad/).
+Al abrir el documento de valoración de un criterio en el Desk, el comité consulta las evidencias
+vinculadas mediante `Trazabilidad` y los enlaces del documento — ver [Evidencias y
+trazabilidad](../evidencias-trazabilidad/).
 
 ## Si un criterio no cumple: generar un hallazgo
 

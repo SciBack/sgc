@@ -24,7 +24,7 @@ description: Cobertura completa antes de aprobar una versión de SGC.
 - [ ] PDF/Excel abre y coincide con datos fuente.
 - [ ] Historial conserva actor, fecha y estado.
 - [ ] Cuentas de lectura no escriben.
-- [ ] 404 y errores no caen en una pantalla engañosa de la SPA.
+- [ ] 404 y errores muestran la respuesta o página nativa de Frappe sin una ruta engañosa.
 
 ## Interfaz
 

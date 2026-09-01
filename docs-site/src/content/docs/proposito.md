@@ -3,9 +3,9 @@ title: Propósito y mapa del sistema
 description: Qué resuelve SGC y cómo se conectan sus módulos.
 ---
 
-SGC es una aplicación Frappe con una SPA Vue para gestionar calidad universitaria: estructura,
-marcos normativos, autoevaluación, evidencia, procesos, documentos, indicadores, auditoría,
-riesgos, cumplimiento y mejora continua.
+SGC es una aplicación Frappe que usa exclusivamente el Desk y los Workspaces nativos para
+gestionar calidad universitaria: estructura, marcos normativos, autoevaluación, evidencia,
+procesos, documentos, indicadores, auditoría, riesgos, cumplimiento y mejora continua.
 
 ## Mapa funcional
 

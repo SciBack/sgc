@@ -1,156 +1,79 @@
 ---
 title: Instalación
-description: Cómo instalar la app SGC en un bench Frappe.
+description: Cómo instalar y operar la app SGC sobre el framework fijado.
 ---
 
 ## Requisitos
 
-- Un [bench](https://github.com/frappe/bench) Frappe funcionando, con Frappe **v16**
-  (branch `version-16`).
-- PostgreSQL como base de datos del site (la app usa tipos/consultas compatibles con
-  Postgres; no se ha validado sobre MariaDB).
-- Node **24.15** y npm **11.12** para compilar la SPA (`frontend/`) y la
-  documentación (`docs-site/`). Python ≥3.14 para la app.
+- Bench funcional con **Frappe v16.32.0**. La fuente de verdad del tag es
+  deploy/frappe.version; no usar la rama móvil version-16.
+- PostgreSQL para el site. SGC se valida sobre PostgreSQL, no sobre MariaDB.
+- Python 3.14 o posterior y Node 24 para assets y documentación.
 
 ## Instalar la app
 
-```bash
-cd $PATH_TO_YOUR_BENCH
-bench get-app https://github.com/SciBack/sgc --branch version-16
-bench --site <tu-site> install-app sgc
-```
+~~~bash
+cd RUTA_DEL_BENCH
+bench get-app https://github.com/SciBack/sgc --branch main
+bench --site TU_SITE install-app sgc
+bench --site TU_SITE migrate
+~~~
 
-Tras instalar, correr las migraciones si vienes de una versión anterior:
+El hook de migración aplica de forma idempotente los DocTypes, workflows, RBAC,
+notificaciones y Workspace SGC.
 
-```bash
-bench --site <tu-site> migrate
-```
+## Assets y documentación
 
-## Compilar la SPA
+SGC usa el **Desk nativo de Frappe v16** y el Workspace SGC. Desde la raíz de la app:
 
-La SPA (`frontend/`) se compila con Vite y sus assets se sirven desde
-`sgc/public/frontend/`. En un bench estándar, `bench build --app sgc` la incluye en el
-pipeline normal de build de Frappe.
-
-Antes de publicar, verificar desde la raíz de la app:
-
-```bash
-python -m unittest sgc.tests.test_login_assets
+~~~bash
 python -m compileall -q sgc
-(cd frontend && npm ci --ignore-scripts && npm run test:login-dom && npm run verify:login-design && npm run build)
-```
+bench build --app sgc
+cd docs-site && npm ci && npm run build
+~~~
 
-El build de documentación se comprueba por separado:
+## Validar antes de producción
 
-```bash
-(cd docs-site && npm ci && npm run build)
-```
+Usa siempre un site aislado y desechable. La suite de integración modifica datos durante
+la prueba aunque termine con rollback. No se ejecuta contra el site productivo.
 
-## Portada de inicio de sesión
+~~~bash
+bench --site SITE_DESCARTABLE run-tests --app sgc
+~~~
 
-- Acceso normal: `/login?redirect-to=/sgc`.
-- Acceso local de emergencia (*break-glass*): `/login?login_local=1`. Esta ruta
-  conserva el formulario nativo de Frappe y omite la portada institucional.
-- Métricas públicas: `/api/method/sgc.login_portada.metricas_portada`.
-- El video `oficinas-dti.mp4` y su póster se reutilizan provisionalmente desde
-  Pulso DTI; junto con el logo y las fuentes se sirven desde
-  `sgc/public/media/login/` y `sgc/public/fonts/`. En despliegues Frappe quedan
-  expuestos bajo `/assets/sgc/media/login/` y `/assets/sgc/fonts/`.
+La versión de Frappe, el CI y la biblioteca de referencia se consultan en
+[Biblioteca Frappe v16](../referencias/frappe/).
 
-La validación completa del backend requiere un bench real. Antes de desplegar se
-deben ejecutar en un site aislado y desechable, con su propia base de datos y
-servicios Redis. **Nunca ejecutar estas pruebas sobre el site productivo**: la
-preparación de los casos modifica temporalmente tablas completas y depende del
-rollback transaccional de Frappe. No se deben marcar como aprobadas solo con la
-verificación local:
+## Construir el overlay Docker
 
-```bash
-bench --site <site-descartable> run-tests --app sgc --module sgc.tests.test_login_portada
-bench --site <site-descartable> run-tests --app sgc
-```
+El Dockerfile overlay añade SGC sobre la imagen Frappe base y ejecuta el build de assets.
+Antes de cambiar cualquier servicio, identifica la imagen activa y valida el Compose:
 
-## Construir y desplegar el overlay Docker
-
-`deploy/Dockerfile.overlay` añade el checkout de SGC sobre la imagen backend que
-ya está activa y ejecuta `bench build --app sgc`. La imagen base se obtiene de la
-configuración efectiva del servicio backend; no se supone ni se fija un tag:
-
-```bash
+~~~bash
 docker compose config --images
-docker inspect --format '{{.Config.Image}}' <contenedor-backend-activo>
-docker build --build-arg BASE_IMAGE=<imagen-backend-activa> -f deploy/Dockerfile.overlay -t <imagen-overlay-nueva> .
-```
+docker inspect --format '{{.Config.Image}}' CONTENEDOR_BACKEND
+docker build --build-arg BASE_IMAGE=IMAGEN_ACTIVA -f deploy/Dockerfile.overlay -t IMAGEN_NUEVA .
+docker compose config
+~~~
 
-### Los assets se verifican durante el build
+El overlay aborta si el manifiesto de assets queda vacío. Conserva el tag anterior y pide
+aprobación antes de recrear servicios críticos.
 
-`bench build` puede **terminar en éxito y aun así dejar `sites/assets/assets.json`
-vacío** (`{}`) si a la imagen base le falta Node: no se genera ningún bundle, el HTML
-pide los ficheros sin hash, devuelven 404 y **el login queda inutilizable**. Las
-comprobaciones habituales —contenedor arriba, `/login` con 200, migración completa—
-salen en verde igual, así que no detectan este fallo.
+Después del despliegue, comprobar:
 
-Por eso el propio `Dockerfile.overlay` valida el resultado y **aborta el build** si
-`assets.json` no tiene un número razonable de entradas. Una imagen con los assets
-rotos no llega a construirse. Si el build falla ahí, el mensaje lo indica: revisar que
-la imagen base traiga Node y reconstruir; no forzar el despliegue.
-
-Para inspeccionarlo a mano en una imagen ya construida:
-
-```bash
-docker run --rm <imagen-overlay> python3 -c "import json;d=json.load(open('/home/frappe/frappe-bench/sites/assets/assets.json'));print(len(d),'entradas')"
-```
-
-Actualizar el tag del backend en el archivo Compose del entorno, validar primero
-con `docker compose config` y conservar tanto el tag anterior como una copia del
-Compose efectivo. **No reiniciar ni recrear servicios o contenedores críticos sin
-aprobación previa.**
-
-Para rollback, restaurar juntos el tag/Compose anterior y los assets compatibles
-de `sgc/public/css/`, `sgc/public/js/` y `sgc/public/media/`; después validar el
-Compose antes de solicitar la recreación del backend. No mezclar CSS o JS nuevos
-con media o imagen backend antiguas.
-
-Tras el despliegue, comprobar:
-
-```bash
+~~~bash
 docker compose ps
-curl -fsS 'https://<dominio>/api/method/sgc.login_portada.metricas_portada'
-curl -fsSI 'https://<dominio>/login?redirect-to=/sgc'
-curl -fsSI 'https://<dominio>/assets/sgc/media/login/oficinas-dti-poster.jpg'
-```
-
-Completar la verificación en navegador en escritorio, tableta, móvil,
-`prefers-reduced-motion: reduce`, fallo de la API y modo `login_local=1`; confirmar
-que no haya overflow horizontal, que el enlace SSO conserve sus parámetros y que
-el formulario nativo siga disponible en *break-glass*.
-
-## Datos de arranque
-
-El módulo `sgc/setup/` contiene los scripts `fN_*.py` que siembran el modelo de datos
-base (estructura organizacional, marco normativo, workflows, RBAC, notificaciones). Se
-ejecutan una vez por site, en orden, vía `bench execute`:
-
-```bash
-bench --site <tu-site> execute sgc.setup.f1_run_all.run
-bench --site <tu-site> execute sgc.setup.f2_run_all.run
-# ... ver sgc/setup/ para el resto (f3b_rbac, f4_workflow_mejora, f5_workflow_documental,
-# f6_informe_cbc, f7_notificaciones)
-```
-
-Cada script es **idempotente**: puede reejecutarse sin duplicar datos.
+curl -fsSI https://DOMINIO/desk
+curl -fsSI https://DOMINIO/api/method/ping
+~~~
 
 ## Contribuir
 
-La app usa `pre-commit` para formateo y linting (`ruff`, `eslint`, `prettier`,
-`pyupgrade`):
+La app usa pre-commit con Ruff, ESLint, Prettier y pyupgrade:
 
-```bash
+~~~bash
 cd apps/sgc
 pre-commit install
-```
+~~~
 
-Ver [Tests](../desarrollo/tests/) para correr la suite antes de enviar un cambio.
-
-## Licencia
-
-MIT.
+Ver [Tests](../desarrollo/tests/) antes de enviar un cambio.

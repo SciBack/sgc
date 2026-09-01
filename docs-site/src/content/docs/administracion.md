@@ -16,8 +16,8 @@ obligaciones. Asigna Programa Sede a cuentas acotadas y limpia caché de permiso
 
 ## Servicios operativos
 
-Supervisa frontend/backend, Redis, workers, scheduler, almacenamiento, correo, PDF, Mayan y SSO.
-Un servicio caído debe registrarse como bloqueo operacional, con canario, no corregirse cambiando
+Supervisa Frappe/Desk, Redis, workers, scheduler, almacenamiento, correo, PDF, Mayan y SSO. Un
+servicio caído debe registrarse como bloqueo operacional, con canario, no corregirse cambiando
 reglas funcionales.
 
 ## Restricciones

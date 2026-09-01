@@ -40,8 +40,12 @@ export default defineConfig({
           { label: 'Arquitectura', link: '/arquitectura/' },
           { label: 'Instalación', link: '/instalacion/' },
           { label: 'Estado del producto', link: '/roadmap/' },
+          { label: 'Biblioteca Frappe v16', link: '/referencias/frappe/' },
           { label: 'Módulos', items: [{ autogenerate: { directory: 'modulos' } }] },
-          { label: 'Desarrollo', items: [{ autogenerate: { directory: 'desarrollo' } }] },
+          { label: 'Desarrollo', items: [
+            { label: 'RBAC', link: '/desarrollo/rbac/' },
+            { label: 'Pruebas', link: '/desarrollo/tests/' },
+          ] },
         ] },
       ],
     }),

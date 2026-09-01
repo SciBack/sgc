@@ -14,8 +14,8 @@ Cuenta activa en Frappe/Keycloak.
 ## Pasos y resultados esperados
 
 1. Abre una ruta protegida sin sesión. Resultado: el sistema redirige al login.
-2. Autentícate con una cuenta de un solo rol. Resultado: carga la SPA y se obtiene la sesión.
-3. Recorre los módulos visibles. Resultado: solo se muestran entradas compatibles con roles.
+2. Autentícate con una cuenta de un solo rol. Resultado: carga el Desk de Frappe y se obtiene la sesión.
+3. Recorre los Workspaces y módulos visibles. Resultado: solo se muestran entradas compatibles con roles.
 4. Abre manualmente una ruta no autorizada. Resultado: backend rechaza los datos aunque la URL exista.
 5. Cierra sesión. Resultado: las rutas protegidas vuelven a pedir autenticación.
 
@@ -44,7 +44,7 @@ Estado o valores antes/después, identificador ficticio, rol, URL/método, respu
 
 ## Relación con otros módulos
 
-Todos los módulos, router y store de sesión.
+Todos los módulos, Workspaces, DocTypes y sesión de Frappe.
 
 ## Acciones operativas o configuración adicional
 
@@ -52,5 +52,5 @@ Keycloak/SSO requiere proveedor disponible; el login local debe conservarse.
 
 ## Fuente en código
 
-frontend/src/router.js y frontend/src/stores/session.js. El comportamiento descrito debe revisarse de nuevo si estas fuentes cambian.
-
+La configuración de autenticación del site, los roles y permisos de Frappe. No hay una capa
+propia de navegación ni un store de sesión adicional que mantener.

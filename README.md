@@ -4,10 +4,9 @@ Sistema de Gestion de la Calidad - UPeU (SciBack)
 
 ### Diseño
 
-La SPA de SGC adopta **SciBack Design System 2.0.0**: núcleo visual canónico
-en `frontend/src/styles/sciback-core.css` y capa de marca UPeU en
-`frontend/src/styles/themes/upeu.css`. Los activos institucionales se toman de
-la fuente autorizada `~/proyectos/upeu/branding/`.
+SGC usa exclusivamente el **Desk y los Workspaces nativos de Frappe**. Los DocTypes,
+Workflows, permisos, Print Formats y scripts de Frappe constituyen la interfaz y la lógica
+operativa; no hay una SPA propia que compilar o desplegar.
 
 ### Documentación
 
@@ -28,8 +27,9 @@ You can install this app using the [bench](https://github.com/frappe/bench) CLI:
 
 ```bash
 cd $PATH_TO_YOUR_BENCH
-bench get-app $URL_OF_THIS_REPO --branch version-16
-bench install-app sgc
+bench get-app $URL_OF_THIS_REPO --branch main
+bench --site $SITE_NAME install-app sgc
+bench --site $SITE_NAME migrate
 ```
 
 ### Contributing
