@@ -12,8 +12,8 @@ from frappe.utils.nestedset import NestedSet
 # `nivel_bpm` se DERIVA del árbol y no se edita a mano (read_only). Regla:
 #   - profundidad 0 (raíz)  + is_group  -> Macroproceso  (p. ej. S04)
 #   - profundidad 0 (raíz)  sin is_group -> Proceso       (los 22: E01..S05)
-#   - profundidad 1                      -> Proceso       (p. ej. S04.01..05)
-#   - profundidad >= 2                   -> Subproceso
+#   - profundidad 1                      -> Proceso       (p. ej. S04.01, S04.02)
+#   - profundidad >= 2                   -> Subproceso    (p. ej. S04.04 bajo S04.01)
 # La profundidad se cuenta caminando `parent_proceso` hacia arriba (no lft/rgt),
 # porque en `validate` de un doc nuevo el NestedSet aún no ha calculado lft/rgt
 # (frappe/utils/nestedset.py: se fijan en after_insert/on_update).
