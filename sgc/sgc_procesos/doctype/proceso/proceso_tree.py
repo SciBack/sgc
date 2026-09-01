@@ -5,7 +5,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import xml.etree.ElementTree as ET
 from collections.abc import Iterable
 from typing import Any
@@ -244,13 +243,21 @@ def _leer_tareas_file(frappe, file_row) -> list[dict[str, str]]:
 
 
 def _log_bpmn_invalido(frappe, file_row, exc: Exception) -> None:
-	huella = hashlib.sha256(
-		f"{file_row.name}:{file_row.modified}".encode()
-	).hexdigest()
-	cache_key = f"sgc:proceso-tree:bpmn-invalido:{huella}"
-	if frappe.cache.get_value(cache_key):
+	cache_key = (
+		f"sgc:proceso-tree:bpmn-invalido:{file_row.name}:{file_row.modified}"
+	)
+	try:
+		primero = frappe.cache.set(
+			name=frappe.cache.make_key(cache_key),
+			value=b"1",
+			nx=True,
+		)
+	except Exception:
+		# Si Redis no está disponible se omite el Error Log: fallar cerrado evita
+		# que un BPMN defectuoso convierta una caída de cache en una tormenta.
 		return
-	frappe.cache.set_value(cache_key, 1, expires_in_sec=30 * 24 * 60 * 60)
+	if not primero:
+		return
 	frappe.log_error(
 		message=f"No se proyectaron tareas del File {file_row.name}: {exc}",
 		title="BPMN inválido en mapa de procesos",

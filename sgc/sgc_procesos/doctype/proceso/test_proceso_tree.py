@@ -2,6 +2,9 @@
 # See license.txt
 
 import unittest
+from concurrent.futures import ThreadPoolExecutor
+from threading import Lock
+from types import SimpleNamespace
 from typing import ClassVar
 
 from sgc.sgc_procesos.doctype.proceso import proceso_tree
@@ -22,6 +25,61 @@ except ModuleNotFoundError:  # permite ejecutar localmente las pruebas puras del
 class TestContratoPublicoTree(unittest.TestCase):
 	def test_expone_el_proveedor_de_hijos(self):
 		self.assertTrue(callable(getattr(proceso_tree, "get_children", None)))
+
+	def test_log_bpmn_invalido_es_atomico_persistente_ante_concurrencia(self):
+		class CacheFalso:
+			def __init__(self):
+				self.lock = Lock()
+				self.values = {}
+				self.logical_keys = []
+				self.set_calls = []
+
+			def make_key(self, key):
+				self.logical_keys.append(key)
+				return f"test-db|{key}".encode()
+
+			def set(self, *, name, value, **kwargs):
+				with self.lock:
+					self.set_calls.append((name, value, kwargs))
+					if kwargs.get("nx") and name in self.values:
+						return None
+					self.values[name] = value
+					return True
+
+		cache = CacheFalso()
+		logs = []
+		frappe_falso = SimpleNamespace(
+			cache=cache,
+			log_error=lambda **kwargs: logs.append(kwargs),
+		)
+		file_row = SimpleNamespace(
+			name="FILE-BPMN-001",
+			modified="2026-09-01 15:00:00.000000",
+		)
+
+		with ThreadPoolExecutor(max_workers=8) as executor:
+			list(
+				executor.map(
+					lambda _: proceso_tree._log_bpmn_invalido(
+						frappe_falso, file_row, BpmnInvalido("XML inválido")
+					),
+					range(32),
+				)
+			)
+
+		self.assertEqual(len(logs), 1)
+		self.assertEqual(len(cache.values), 1)
+		self.assertEqual(len(cache.set_calls), 32)
+		self.assertTrue(
+			all(call[2] == {"nx": True} for call in cache.set_calls),
+			"SET NX no debe incluir expiración",
+		)
+		self.assertTrue(
+			all(
+				key.endswith("FILE-BPMN-001:2026-09-01 15:00:00.000000")
+				for key in cache.logical_keys
+			)
+		)
 
 
 @unittest.skipIf(frappe is None, "requiere un sitio Frappe de pruebas")
