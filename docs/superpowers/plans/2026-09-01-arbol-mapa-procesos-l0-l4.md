@@ -162,7 +162,7 @@ renombra, borra ni reinicia contenedores.
 - [ ] **Step 4: escribir RED del verificador productivo**
 
 `verificar-arbol.test.sh` exige que `verificar-arbol.py` importe el endpoint canónico, compruebe
-los 22 códigos, invariantes NestedSet, seis descendientes reales bajo S04, cinco códigos de
+los 22 códigos, invariantes NestedSet, siete descendientes reales bajo S04 (`S04.01`-`S04.07`), cinco códigos de
 procedimientos DTI y tres umbrales separados: raíz/expansión ordinaria p95 `<500 ms` y primera
 lectura BPMN `<1 s`. Debe fallar si falta cualquiera de estos contratos.
 
@@ -356,7 +356,7 @@ El script `verificar-arbol.py`, ejecutado en un único `bench console`, debe com
 
 - exactamente 22 raíces N0 oficiales y ninguna con `parent_proceso`;
 - invariantes NestedSet `lft < rgt`, rangos no duplicados y cada hijo contenido en su padre;
-- S04 conserva sus seis procesos/subprocesos reales ya registrados;
+- S04 conserva sus siete procesos/subprocesos reales ya registrados (`S04.01`-`S04.07`);
 - aparecen los cinco procedimientos DTI reales y cada tarea N4 coincide con el XML BPMN;
 - 30 llamadas calientes a la raíz y 30 expansiones ordinarias, descartando las primeras 5 de
   cada grupo, con p95 menor de 500 ms; primera lectura de cada BPMN menor de 1 s.
