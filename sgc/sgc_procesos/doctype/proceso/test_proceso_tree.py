@@ -1,8 +1,10 @@
 # Copyright (c) 2026, SciBack and Contributors
 # See license.txt
 
+import json
 import unittest
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 from threading import Lock
 from types import SimpleNamespace
 from typing import ClassVar
@@ -20,6 +22,47 @@ try:
 except ModuleNotFoundError:  # permite ejecutar localmente las pruebas puras del parser
 	frappe = None
 	IntegrationTestCase = unittest.TestCase
+
+
+DIRECTORIO_PROCESO = Path(__file__).resolve().parent
+
+
+class TestConfiguracionTree(unittest.TestCase):
+	def setUp(self):
+		self.meta = json.loads((DIRECTORIO_PROCESO / "proceso.json").read_text())
+		self.javascript = (DIRECTORIO_PROCESO / "proceso_tree.js").read_text()
+
+	def test_tree_es_predeterminado_sin_forzar_la_salida_de_lista(self):
+		self.assertEqual(self.meta.get("default_view"), "Tree")
+		self.assertEqual(self.meta.get("force_re_route_to_default_view"), 0)
+
+	def test_usa_endpoint_compuesto_y_deshabilita_altas_desde_el_arbol(self):
+		self.assertIn(
+			'get_tree_nodes: "sgc.sgc_procesos.doctype.proceso.proceso_tree.get_children"',
+			self.javascript,
+		)
+		self.assertIn("disable_add_node: true", self.javascript)
+
+	def test_toolbar_reemplazado_solo_abre_documentos_reales(self):
+		self.assertIn("toolbar: [", self.javascript)
+		self.assertIn('label: __("Abrir")', self.javascript)
+		self.assertIn("node.data.doctype", self.javascript)
+		self.assertIn("node.data.docname", self.javascript)
+		self.assertIn('frappe.set_route("Form", doctype, docname)', self.javascript)
+		for accion_nativa in ("Add Child", "Rename", "Delete"):
+			self.assertNotIn(accion_nativa, self.javascript)
+
+	def test_etiqueta_escapa_datos_dinamicos_y_muestra_niveles_n0_n4(self):
+		self.assertIn("get_label(node)", self.javascript)
+		self.assertIn("frappe.utils.escape_html", self.javascript)
+		for dato in ("node.title", "data.docname", "data.bpmn_id"):
+			self.assertIn(f"escape({dato})", self.javascript)
+		for nivel in ("N0", "N1", "N2", "N3", "N4"):
+			self.assertIn(f'"{nivel}"', self.javascript)
+
+	def test_no_agrega_animaciones_a_la_interaccion_frecuente(self):
+		for patron in ("transition", "animation", "animate(", "@keyframes"):
+			self.assertNotIn(patron, self.javascript)
 
 
 class TestContratoPublicoTree(unittest.TestCase):
