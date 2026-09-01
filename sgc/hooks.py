@@ -10,12 +10,24 @@ app_license = "mit"
 
 # required_apps = []
 
-# Each item in the list will be shown as an app in the apps page
+# Logo del app (apps screen del Desk + sidebar). Se deja el de Frappe porque el
+# canónico es agnóstico y ese asset siempre existe; el branding institucional se
+# aplica en la capa instituciones/, no aquí.
+app_logo_url = "/assets/frappe/images/frappe-framework-logo.svg"
+
+# Each item in the list will be shown as an app in the apps page.
+# OJO v16: la clave "logo" es OBLIGATORIA. frappe/desk/doctype/desktop_icon/
+# desktop_icon.py::create_desktop_icons_from_installed_apps hace app_details[0]["logo"]
+# con acceso DURO; si falta, lanza KeyError y aborta la creación del Desktop Icon del
+# app. Sin ese icono, /desk pelado (apps screen) queda EN BLANCO para usuarios que no
+# son System Manager (solo ven el workspace SGC y ningún icono estándar sobrevive el
+# filtro de permisos de get_desktop_icons). "route" apunta directo al workspace SGC.
 add_to_apps_screen = [
 	{
 		"name": "sgc",
 		"title": "SGC UPeU",
-		"route": "/app",
+		"route": "/desk/sgc",
+		"logo": app_logo_url,
 	}
 ]
 

@@ -111,4 +111,46 @@ def run():
     except Exception as e:  # noqa: BLE001 — el menú es cosmético; no debe tumbar el deploy
         frappe.logger().warning(f"f18: no se pudo crear el Workspace Sidebar: {e}")
 
+    _desktop_icon()
+
     print(f"Workspace '{WS}' creado — {len(SHORTCUTS)} accesos, {len(CARDS)} tarjetas")
+
+
+def _desktop_icon():
+    """Crea el Desktop Icon (tipo App) del SGC para el *apps screen* del Desk.
+
+    Por qué existe: en Frappe 16 la home del Desk sin workspace en la URL (`/desk`
+    pelado, a donde apunta el ítem «Escritorio» del menú de usuario) renderiza el
+    `home_page` del boot. Como `desktop:home_page` = "sgc" NO es una Page, cae al
+    fallback "desktop" — el *apps screen*, que pinta `boot.desktop_icons`. Ese set
+    lo filtra por permisos `get_desktop_icons`: para un usuario que solo ve el
+    workspace SGC (p. ej. «Dueño de Proceso»), el icono App «Framework» de Frappe no
+    pasa `check_app_permission` y sus hijos no están permitidos → 0 iconos → PANTALLA
+    EN BLANCO. SGC nunca tuvo su propio Desktop Icon porque el `after_app_install` de
+    Frappe abortaba con KeyError('logo') (ver hooks.py::add_to_apps_screen).
+
+    Con el `logo` ya presente en el hook, aquí se crea el icono de forma idempotente
+    para que los despliegues EXISTENTES lo obtengan en el `bench migrate` (este módulo
+    corre desde el pipeline `after_migrate`), sin depender del install fresco.
+
+    Es un icono estándar=0 propiedad de Administrator: `get_desktop_icons` lo muestra
+    a TODOS los usuarios. Al no tener iconos hijos, un clic navega directo a su `link`
+    (`/desk/sgc`), es decir, al workspace SGC.
+    """
+    try:
+        app = (frappe.get_hooks("add_to_apps_screen", app_name="sgc") or [{}])[0]
+        label = app.get("title") or "SGC UPeU"
+        if frappe.db.exists("Desktop Icon", label):
+            return
+        icon = frappe.new_doc("Desktop Icon")
+        icon.label = label
+        icon.link_type = "External"
+        icon.icon_type = "App"
+        icon.app = "sgc"
+        icon.link = app.get("route") or "/desk/sgc"
+        icon.logo_url = app.get("logo") or frappe.get_hooks("app_logo_url", app_name="sgc")
+        icon.idx = 1
+        icon.insert(ignore_permissions=True)
+        frappe.db.commit()
+    except Exception as e:  # el icono es cosmético; no debe tumbar el deploy
+        frappe.logger().warning(f"f18: no se pudo crear el Desktop Icon del SGC: {e}")
