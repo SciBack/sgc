@@ -35,6 +35,11 @@ corrección consiste en marcarlos como nodos agrupadores (`is_group = 1`), sin c
 códigos ni crear descendientes. Así `nivel_bpm`, que es derivado, queda en `Macroproceso`.
 Esta corrección pertenece a la capa UPeU porque el Mapa v8 es documentación del cliente.
 
+Los únicos niveles inferiores que forman parte de la propuesta actual son los procesos y
+subprocesos de DTI bajo `S04 Gestión tecnológica`; fueron trabajados con sus dueños de proceso y
+ya existen en producción. Para los otros 21 macroprocesos no se crean, completan ni infieren
+descendientes: hasta que cada dueño los valide, el árbol muestra únicamente su N0 oficial.
+
 ## Alternativas evaluadas
 
 ### A. Árbol nativo compuesto en `Proceso` (seleccionada)

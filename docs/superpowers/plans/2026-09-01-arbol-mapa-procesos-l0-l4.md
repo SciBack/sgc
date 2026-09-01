@@ -4,6 +4,10 @@
 
 **Goal:** Hacer que `Proceso` abra como árbol nativo y proyecte macroprocesos, procesos, subprocesos, procedimientos y tareas BPMN reales, registrando correctamente los 22 macroprocesos N0 del Mapa UPeU v8.
 
+**Límite institucional:** Solo los descendientes existentes de DTI bajo `S04` son una propuesta
+validada por dueños de proceso. Para los otros 21 macroprocesos se registra exclusivamente el N0
+oficial; ningún script ni prueba debe crear o inferir procesos hijos.
+
 **Architecture:** `Proceso` conserva su NestedSet para N0-N2. Un proveedor Tree de solo lectura compone procedimientos y tareas extraídas del único `.bpmn` adjunto; los nodos virtuales nunca se persisten. La lista oficial UPeU permanece en `upeu-ops` y llama una operación canónica validada para clasificar raíces existentes.
 
 **Tech Stack:** Frappe Framework 16.32.0, Python 3.14, PostgreSQL, Frappe Tree View, XML `ElementTree`, JavaScript Desk, Docker Compose.
