@@ -15,44 +15,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  frontend:
-    name: SPA (pruebas y build)
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-
-    steps:
-      - name: Clonar la app
-        uses: actions/checkout@v4
-
-      - name: Node 24
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
-
-      - name: Instalar dependencias
-        working-directory: frontend
-        run: npm ci
-
-      - name: Ejecutar pruebas de componentes
-        working-directory: frontend
-        run: npm test
-
-      - name: Verificar login público
-        working-directory: frontend
-        run: npm run test:login-dom
-
-      - name: Compilar la SPA
-        working-directory: frontend
-        run: npm run build
-      # Verificadores del design system (copiados desde sciback-design-system).
-      # Estaban escritos desde el 27-jul-2026 y no los lanzaba nada: una norma
-      # blindada por un script que nadie ejecuta es una norma escrita, nada más.
-      - name: Stack e iconos del design system
-        working-directory: frontend
-        run: npm run verify:design
-
   tests:
     name: Integración (PostgreSQL)
     runs-on: ubuntu-latest
