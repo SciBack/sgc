@@ -25,6 +25,7 @@ from sgc.setup import f17_alcance_marcos as f17
 CBC = "CBC-SUNEDU-2026"
 PROGRAMAS = "CONEAU-Programas-2025"
 INSTITUCIONAL = "CONEAU-Institucional-2026"
+AAA = "AAA-2019"
 
 
 class IntegrationTestMarcosMetadatos(IntegrationTestCase):
@@ -94,6 +95,27 @@ class IntegrationTestMarcosMetadatos(IntegrationTestCase):
         """Se cumple o no se cumple: la Ley 32105 art. 13.4 hizo la licencia permanente."""
         self.assertIsNone(f17.MARCOS[CBC]["reglas_vigencia"])
         self.assertIsNone(f17._reglas_a_fijar("", f17.MARCOS[CBC]["reglas_vigencia"]))
+
+    def test_la_aaa_tampoco_declara_anos_de_vigencia(self):
+        """El dictamen lo vota la comisión visitante entre 8 opciones (II-8/II-9), no sale de una tabla."""
+        self.assertIsNone(f17.MARCOS[AAA]["reglas_vigencia"])
+        self.assertIsNone(f17._reglas_a_fijar("", f17.MARCOS[AAA]["reglas_vigencia"]))
+
+    def test_la_aaa_es_acreditacion_institucional_y_no_se_confunde_con_el_coneau(self):
+        """Acredita la identidad adventista; es independiente del Sineace y de la Sunedu."""
+        self.assertEqual(f17.MARCOS[AAA]["alcance"], f17.ACRED_INSTITUCIONAL)
+        nota = self._campos(AAA)["nota_normativa"]["valor"].lower()
+        self.assertIn("independiente", nota)
+        self.assertIn("12 estándares", nota)
+
+    def test_los_marcos_de_referencia_no_se_cuelan_en_el_catalogo_evaluador(self):
+        """ITIL, COBIT o una ley de datos orientan; no emiten un resultado de acreditación.
+
+        Si alguno entrase en MARCOS heredaría un alcance evaluador y el sistema
+        acabaría diciendo que algo está «acreditado» por ITIL.
+        """
+        for codigo in f17.MARCOS_DE_REFERENCIA:
+            self.assertNotIn(codigo, f17.MARCOS, codigo)
 
     def test_umbrales_de_excelencia_distintos_por_modelo(self):
         def umbral(codigo):

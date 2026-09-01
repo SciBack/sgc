@@ -71,6 +71,16 @@ CAMPO_ALCANCE = {
 LICENCIAMIENTO = "Licenciamiento"
 ACRED_PROGRAMA = "Acreditación de programa"
 ACRED_INSTITUCIONAL = "Acreditación institucional"
+GESTION_INTERNA = "Gestión interna"
+
+# Marcos de BUENAS PRÁCTICAS: orientan cómo se gestiona, pero no evalúan ni
+# emiten un resultado (no hay «acreditado 6 años» de ITIL). Por eso NO entran en
+# MARCOS —cuyo contrato es un alcance de evaluación externa— y sus metadatos no
+# se tocan: los redacta quien los usa. Sí se les fija el `alcance`, para que un
+# cambio accidental no los convierta en normas evaluadoras.
+MARCOS_DE_REFERENCIA = frozenset({
+    "ITIL-4", "COBIT-2019", "ISO-20000-1", "ISO-27001", "LEY-29733",
+})
 
 
 # ===========================================================================
@@ -191,6 +201,33 @@ NOTA_CONEAU_INSTITUCIONAL = (
 # Los marcos conocidos, listados por código (= `name`) en vez de deducidos del
 # nombre: un marco nuevo debe clasificarse a conciencia, no por coincidencia de
 # texto. Un marco que no esté aquí NO se toca — se reporta al final.
+NOTA_AAA = (
+    "Manual de Acreditación 2019 de la Adventist Accrediting Association (AAA), agencia "
+    "acreditadora de las instituciones de educación superior de la Iglesia Adventista del "
+    "Séptimo Día (General Conference). Es INDEPENDIENTE del Sineace y de la Sunedu: acredita la "
+    "identidad y misión institucional adventista, no sustituye ni al licenciamiento ni a la "
+    "acreditación nacional.\n\n"
+    "Formulario A («institución de excelencia»): 12 estándares, uno por área — filosofía y "
+    "misión; desarrollo espiritual; gobierno y administración; finanzas; programas de estudio; "
+    "personal docente y no docente; biblioteca y recursos de información; reglamentos y registros "
+    "académicos; servicios al estudiante; planta física; relaciones públicas; y educación pastoral "
+    "y teológica (secciones III-2 y III-3 del manual). Cada estándar despliega sus Criterios de "
+    "Revisión (CDR) con sus evidencias.\n\n"
+    "OJO — la AAA no prescribe una escala de valoración por criterio: la autoevaluación «debería "
+    "demostrar el cumplimiento de cada estándar y criterio» (III-4) y el manual solo habla de "
+    "recomendaciones «cumplidas parcialmente o no cumplidas» (II-12). De ahí la escala propia "
+    "NC / CP / C, que es una convención de este sistema y no una cita del manual.\n\n"
+    "Y sobre todo: el resultado NO se calcula desde puntajes. La comisión visitante recomienda por "
+    "mayoría de votos entre 8 opciones de dictamen (II-8 y II-9): cinco años sin visita intermedia; "
+    "cinco con revisión administrativa; cinco con visita intermedia; tres o cuatro años; "
+    "aplazamiento; candidatura; demostración de causales; y suspensión. Por eso este marco declara "
+    "`reglas_vigencia` en nulo, igual que el licenciamiento: ninguna tabla convierte una "
+    "autoevaluación en años de acreditación.\n\n"
+    "UPeU está acreditada por la AAA desde noviembre de 2024, en el máximo periodo (cinco años, "
+    "hasta ~2029) y para sus tres campus."
+)
+
+
 MARCOS = {
     "CBC-SUNEDU-2026": {
         "alcance": LICENCIAMIENTO,
@@ -221,6 +258,21 @@ MARCOS = {
         },
         "reglas_vigencia": _tabla9(16, "Tabla 9 del Modelo de Acreditación para Programas de "
                                        "Estudios del Coneau"),
+    },
+    "AAA-2019": {
+        "alcance": ACRED_INSTITUCIONAL,
+        "campos": {
+            "nombre": _campo(
+                "Adventist Accrediting Association (AAA) — Manual de Acreditación 2019, "
+                "Formulario A",
+                "adventist",
+            ),
+            "version": _campo("2019", "2019"),
+            "nota_normativa": _campo(NOTA_AAA, "12 estandares", "adventist"),
+        },
+        # Sin reglas de vigencia a propósito: el dictamen lo vota la comisión
+        # visitante entre 8 opciones (II-8/II-9), no sale de una tabla.
+        "reglas_vigencia": None,
     },
     "CONEAU-Institucional-2026": {
         "alcance": ACRED_INSTITUCIONAL,
@@ -341,6 +393,9 @@ def run():
             reglas = _reglas_a_fijar(marco.get("reglas_vigencia"), conocido.get("reglas_vigencia"))
             if reglas:
                 cambios["reglas_vigencia"] = reglas
+        elif marco.name in MARCOS_DE_REFERENCIA:
+            # Se les fija el alcance, pero NO se les tocan los metadatos.
+            alcance = GESTION_INTERNA
         elif marco.ente == "SUNEDU":
             # Regla de respaldo SOLO hacia el lado prudente: lo de Sunedu es
             # licenciamiento. Nunca se asume acreditación por descarte, porque
@@ -368,6 +423,7 @@ def run():
         print("      fijado:    %s" % (", ".join(cambios) or "— (ya estaba)"))
         print("      respetado: %s" % (", ".join(respetados) or "—"))
     if pendientes:
-        print("   ⚠ SIN CLASIFICAR (añádelos a MARCOS):", ", ".join(pendientes))
+        print("   ⚠ SIN CLASIFICAR (si evalúan y emiten un resultado, añádelos a MARCOS; si son "
+              "de referencia, a MARCOS_DE_REFERENCIA):", ", ".join(pendientes))
 
     return {"revisados": revisados, "pendientes": pendientes}
