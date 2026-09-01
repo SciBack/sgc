@@ -71,6 +71,24 @@ class IntegrationTestProceso(IntegrationTestCase):
 
 		self.assertFalse(resultado["changed"])
 
+	def test_clasificacion_repara_nivel_derivado_inconsistente(self):
+		proceso = self._crear_proceso(
+			"TEST-MP-NIVEL",
+			proceso="Macro inconsistente",
+			is_group=1,
+		)
+		frappe.db.set_value("Proceso", proceso.name, "nivel_bpm", "Proceso")
+
+		resultado = asegurar_macroproceso_raiz(
+			proceso.name,
+			"Macro inconsistente",
+			"Soporte",
+		)
+
+		proceso.reload()
+		self.assertTrue(resultado["changed"])
+		self.assertEqual((proceso.is_group, proceso.nivel_bpm), (1, "Macroproceso"))
+
 	def test_rechaza_denominacion_distinta_sin_alterar(self):
 		proceso = self._crear_proceso("TEST-MP-DEN", proceso="Denominación registrada")
 		antes = self._valores_protegidos(proceso.name)
@@ -148,6 +166,21 @@ class IntegrationTestProceso(IntegrationTestCase):
 		)
 
 		self.assertFalse(resultado["changed"])
+
+	def test_restauracion_repara_nivel_derivado_inconsistente(self):
+		proceso = self._crear_proceso("TEST-MP-REST-NIVEL", proceso="Raíz inconsistente")
+		frappe.db.set_value("Proceso", proceso.name, "nivel_bpm", "Macroproceso")
+
+		resultado = restaurar_clasificacion_raiz(
+			proceso.name,
+			"Raíz inconsistente",
+			"Soporte",
+			0,
+		)
+
+		proceso.reload()
+		self.assertTrue(resultado["changed"])
+		self.assertEqual((proceso.is_group, proceso.nivel_bpm), (0, "Proceso"))
 
 	def test_restauracion_aplica_las_mismas_precondiciones(self):
 		proceso = self._crear_proceso("TEST-MP-REST-VAL", proceso="Raíz protegida")

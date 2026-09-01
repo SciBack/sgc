@@ -67,7 +67,8 @@ def _guardar_clasificacion_raiz(name, denominacion, categoria, is_group):
     if doc.nivel != categoria:
         frappe.throw(f"La categoría registrada de {name} no coincide")
 
-    changed = int(doc.is_group or 0) != is_group
+    nivel_esperado = "Macroproceso" if is_group else "Proceso"
+    changed = int(doc.is_group or 0) != is_group or doc.nivel_bpm != nivel_esperado
     if changed:
         doc.is_group = is_group
         doc.save(ignore_permissions=True)
