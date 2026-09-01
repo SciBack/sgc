@@ -135,6 +135,7 @@ def _procesos_visibles(frappe, filters: dict[str, Any]) -> list[Any]:
 		filters=filters,
 		fields=["*"],
 		order_by="orden asc, name asc",
+		limit_page_length=0,
 	)
 	return _filtrar_permiso_documental(frappe, "Proceso", rows)
 
@@ -149,6 +150,7 @@ def _procedimientos_visibles(frappe, filters: dict[str, Any]) -> list[Any]:
 		filters=filters,
 		fields=["*"],
 		order_by="name asc",
+		limit_page_length=0,
 	)
 	return _filtrar_permiso_documental(frappe, "Procedimiento", rows)
 
@@ -203,6 +205,7 @@ def _tareas_por_procedimiento(frappe, procedimientos: Iterable[Any]) -> dict[str
 			"attached_to_doctype",
 			"attached_to_name",
 		],
+		limit_page_length=0,
 		ignore_permissions=True,
 	)
 	por_vinculo: dict[tuple[str, str], list[Any]] = {}
@@ -237,7 +240,13 @@ def _leer_tareas_file(frappe, file_row) -> list[dict[str, str]]:
 			{**tarea, "file_name": file_row.name}
 			for tarea in extraer_tareas_bpmn(file_doc.get_content())
 		]
-	except (BpmnInvalido, OSError, UnicodeError) as exc:
+	except (
+		BpmnInvalido,
+		OSError,
+		UnicodeError,
+		frappe.DoesNotExistError,
+		frappe.ValidationError,
+	) as exc:
 		_log_bpmn_invalido(frappe, file_row, exc)
 		return []
 

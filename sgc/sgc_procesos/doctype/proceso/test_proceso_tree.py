@@ -81,6 +81,41 @@ class TestContratoPublicoTree(unittest.TestCase):
 			)
 		)
 
+	def test_file_desaparecido_o_invalido_no_propaga_y_genera_un_log(self):
+		class DoesNotExistError(Exception):
+			pass
+
+		class ValidationError(Exception):
+			pass
+
+		class CacheFalso:
+			def make_key(self, key):
+				return key
+
+			def set(self, **kwargs):
+				return True
+
+		file_row = SimpleNamespace(
+			name="FILE-AUSENTE",
+			file_size=10,
+			modified="2026-09-01 16:00:00.000000",
+		)
+		for error in (DoesNotExistError("no existe"), ValidationError("inválido")):
+			logs = []
+			frappe_falso = SimpleNamespace(
+				DoesNotExistError=DoesNotExistError,
+				ValidationError=ValidationError,
+				cache=CacheFalso(),
+				get_doc=lambda *args, _error=error: (_ for _ in ()).throw(_error),
+				log_error=lambda **kwargs: logs.append(kwargs),
+			)
+
+			with self.subTest(error=type(error).__name__):
+				self.assertEqual(
+					proceso_tree._leer_tareas_file(frappe_falso, file_row), []
+				)
+				self.assertEqual(len(logs), 1)
+
 
 @unittest.skipIf(frappe is None, "requiere un sitio Frappe de pruebas")
 class IntegrationTestProcesoTree(IntegrationTestCase):
@@ -212,6 +247,11 @@ class IntegrationTestProcesoTree(IntegrationTestCase):
 		return visitados
 
 	def test_raiz_acepta_parent_omitido_y_vacio_con_payload_exacto(self):
+		raices_adicionales = {
+			self._crear_proceso(f"{self.prefijo}-EXTRA-{indice:02d}", None, 1)
+			for indice in range(21)
+		}
+		raices_fixture = raices_adicionales | {self.raiz}
 		# Calentar metadatos/roles para que el conteo mida las consultas del
 		# proveedor, no la inicialización perezosa de Frappe.
 		proceso_tree.get_children("Proceso")
@@ -220,6 +260,9 @@ class IntegrationTestProcesoTree(IntegrationTestCase):
 		con_parent_vacio = proceso_tree.get_children("Proceso", parent="")
 
 		self.assertEqual(sin_parent, con_parent_vacio)
+		self.assertTrue(
+			raices_fixture.issubset({nodo["docname"] for nodo in sin_parent})
+		)
 		nodo = self._nodo(sin_parent, self.raiz)
 		self.assertEqual(set(nodo), self.CAMPOS_NODO)
 		self.assertEqual(nodo["value"], f"proceso:{self.raiz}")
