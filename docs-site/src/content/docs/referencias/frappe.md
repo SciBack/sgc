@@ -14,10 +14,10 @@ version-16.
 - [Documentación oficial completa](https://docs.frappe.io/)
 - [Repositorio de Frappe](https://github.com/frappe/frappe)
 
-La biblioteca local versionada se encuentra en
-[docs/referencia/frappe](https://github.com/SciBack/sgc/tree/main/docs/referencia/frappe).
-Contiene el catálogo de enlaces oficiales recuperado el 2026-09-01 y el criterio para
-consultarlos sin mezclar versiones.
+La biblioteca central versionada se encuentra en
+[sciback/biblioteca/frappe](https://github.com/SciBack/biblioteca/tree/main/frappe).
+Contiene una ficha curada, manifiesto de colección, espejo offline greppable de la documentación
+oficial y el índice de navegación completo. SGC la consume por enlace: no mantiene una copia.
 
 ## Rutas prioritarias para SGC
 
