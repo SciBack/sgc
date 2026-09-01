@@ -1,8 +1,9 @@
 # Herramientas para BPMN: qué se evaluó y qué se decidió
 
-Evaluación hecha el **2026-08-09**. Todos los datos de estrellas, licencias y fechas de
-actividad se verificaron ese día contra las fuentes; conviene revalidarlos antes de
-tomar la decisión otra vez.
+Evaluación hecha el **2026-08-09** y actualizada el **2026-09-01** para reflejar la
+implementación vigente en Desk. Todos los datos de estrellas, licencias y fechas de actividad
+se verificaron ese día contra las fuentes; conviene revalidarlos antes de tomar la decisión otra
+vez.
 
 ## La pregunta
 
@@ -14,15 +15,16 @@ técnico pueda automatizarlo?
 ## Decisión
 
 1. **Generar** el `.bpmn` desde las definiciones de workflow: **Python y XML, sin dependencias.**
-2. **Visualizar y editar BPMN**: mediante una herramienta externa compatible (por ejemplo,
-   camunda-modeler o Bizagi). No se integra un editor BPMN ni una SPA dentro de SGC.
+2. **Visualizar y editar BPMN**: con `bpmn-js` autocontenido dentro de la Page
+   `bpmn-editor` del **Desk de Frappe**. Carga y guarda el XML como adjunto del documento;
+   no hay una SPA independiente.
 3. **Validar**: contra el XSD oficial de la OMG, en el pipeline.
 4. **Editar los workflows reales** (los que gobiernan el motor): **el Workflow Builder
    nativo del framework**, que ya viene instalado. No se construye nada para eso.
 
 El punto 4 es el que ahorra más trabajo: la edición visual que cambia el sistema **ya
-existe en Frappe**. Lo que no existe es BPMN, y BPMN no sirve para gobernar el motor:
-sirve para hablar con el área de calidad y con sus herramientas.
+existe en Frappe**. La Page BPMN sirve para representar los flujos y colaborar con el área de
+calidad; el motor sigue gobernado por los Workflows nativos.
 
 ## Lo evaluado
 
@@ -69,7 +71,8 @@ análisis que no toca hacer por una herramienta que no necesitamos.
   En sus comentarios, un contribuidor de SpiffWorkflow se ofreció a resolverlo con BPMN y
   swimlanes; no prosperó.
 
-Conclusión: si se quiere BPMN, se construye. No va a llegar de fábrica.
+Conclusión: Frappe no trae BPMN de fábrica. SGC lo resuelve dentro de una Page nativa de Desk,
+sin añadir otra interfaz de aplicación.
 
 ## Riesgo abierto, pendiente de medir
 
