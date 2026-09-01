@@ -33,6 +33,8 @@ Orden (por dependencia real, no alfabético):
   16. f16_workflow_hallazgo_auditoria — workflow Hallazgo Auditoria (M06)
   17. f17_alcance_marcos — clasifica cada marco (licenciamiento / acreditación)
                                reales del workflow de Informe Cumplimiento
+  18. f18_workspace — workspace nativo del Desk
+  19. f19_nivel_bpm — puebla `nivel_bpm` (N0/N1/N2) en los Proceso existentes
 
 Ejecutar manualmente:
     bench --site <site> execute sgc.setup.f_deploy_run_all.run
@@ -68,6 +70,7 @@ from sgc.setup import (
     f16_workflow_hallazgo_auditoria,
     f17_alcance_marcos,
     f18_workspace,
+    f19_nivel_bpm,
 )
 
 STEPS = [
@@ -89,6 +92,7 @@ STEPS = [
     ("f16_workflow_hallazgo_auditoria", f16_workflow_hallazgo_auditoria),
     ("f17_alcance_marcos", f17_alcance_marcos),
     ("f18_workspace", f18_workspace),
+    ("f19_nivel_bpm", f19_nivel_bpm),
 ]
 
 
