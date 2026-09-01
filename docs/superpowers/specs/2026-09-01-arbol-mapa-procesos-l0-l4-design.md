@@ -59,40 +59,68 @@ en datos operativos paralelos que podrían quedar desactualizados.
 | --- | --- | --- | --- |
 | N0-N2 | DocType `Proceso` (`parent_proceso`) | `proceso:<name>` | Abrir `Proceso` |
 | N3 | DocType `Procedimiento` (`proceso`) | `procedimiento:<name>` | Abrir `Procedimiento` |
-| N4 | elementos Task del BPMN adjunto | `tarea:<procedimiento>:<bpmn-id>` | Abrir el procedimiento/BPMN origen |
+| N4 | elementos Task del único `.bpmn` en `Procedimiento.diagrama_flujo` | `tarea:<File.name>:<bpmn-id>` | Abrir el procedimiento/BPMN origen |
 
 Una tarea no se persiste como nuevo documento. Se lee del BPMN real asociado al procedimiento,
 por lo que el árbol nunca se convierte en una segunda fuente de verdad.
+
+`Procedimiento.diagrama_flujo` es la fuente canónica única mientras apunte a un archivo con
+extensión `.bpmn`. Si el campo está vacío o contiene PDF/imagen, el procedimiento no expone N4.
+No se buscan adjuntos adicionales. El identificador incluye `File.name`, por lo que un reemplazo
+del archivo no colisiona con tareas de una versión anterior.
 
 ## Backend
 
 Se añadirá un módulo acotado de jerarquía con:
 
-1. un método `@frappe.whitelist()` compatible con `get_tree_nodes`;
+1. un método `@frappe.whitelist()` con firma
+   `(doctype, parent=None, is_root=False, **filters)` que exige `doctype == "Proceso"`;
 2. nodos raíz: procesos sin `parent_proceso`;
 3. expansión de proceso: procesos hijos y procedimientos enlazados directamente;
 4. expansión de procedimiento: tareas nombradas encontradas en el XML BPMN;
 5. tareas como hojas.
+
+Cada nodo devuelve exactamente `value`, `title`, `expandable`, `node_type`, `doctype`,
+`docname`, `file_name` y `bpmn_id`; los campos no aplicables son nulos. `value` es único y las
+acciones usan `node.data.docname`, nunca el ID virtual como nombre de `Proceso`.
 
 El parser reconoce los tipos BPMN de tarea (`task`, `userTask`, `serviceTask`, `manualTask`,
 `scriptTask`, `sendTask`, `receiveTask`, `businessRuleTask`) por nombre local XML. Excluye
 eventos, gateways, carriles y flujos. Conserva el orden documental del BPMN y usa el `id` real
 como respaldo cuando una caja no tiene nombre.
 
-Las consultas respetan permisos de lectura de `Proceso` y `Procedimiento`. Los archivos privados
-se resuelven mediante el DocType `File`; no se exponen rutas físicas ni contenido XML al cliente.
-Un adjunto ausente o XML inválido deja al procedimiento sin tareas expandibles y registra el
-problema para diagnóstico, sin fabricar nodos.
+El endpoint no admite Guest. Exige lectura general de `Proceso` al entrar, usa consultas con
+permisos y comprueba `has_permission("read")` por documento antes de devolver cada Proceso o
+Procedimiento. Rechaza prefijos/IDs de padre desconocidos. `expandable` se calcula solo después
+de filtrar hijos visibles, para no filtrar existencia de documentos no autorizados.
+
+Los archivos privados se resuelven mediante el DocType `File` y `File.get_content()`; no se
+exponen rutas físicas ni contenido XML al cliente. El `File` debe coincidir exactamente con el
+`file_url` del campo y declarar `attached_to_doctype == "Procedimiento"` y
+`attached_to_name == procedimiento.name`; cualquier desacuerdo se rechaza. Solo se aceptan
+`.bpmn` de hasta 5 MiB. El
+parser no resuelve entidades externas. Un adjunto ausente, demasiado grande o XML inválido deja
+al procedimiento sin tareas y produce como máximo un log agregado por archivo/modificación,
+sin fabricar nodos ni generar una tormenta de Error Log.
+
+Los IDs BPMN deben existir y ser únicos dentro del archivo. Un duplicado invalida todo N4 del
+procedimiento para evitar colisiones en el mapa interno de nodos de Frappe.
 
 ## Interfaz nativa
 
-`Proceso` configurará `default_view = "Tree"` y `force_re_route_to_default_view = 1`.
+`Proceso` configurará `default_view = "Tree"` y `force_re_route_to_default_view = 0`, de modo
+que la entrada normal abra el árbol pero la vista Lista siga siendo elegible.
 La vista conservará expandir/contraer y refrescar de Frappe, pero deshabilitará crear, renombrar
-y borrar desde el árbol compuesto para impedir operaciones sobre nodos virtuales.
+y borrar desde el árbol compuesto para impedir operaciones sobre nodos virtuales. Se configura
+`disable_add_node: true` y se reemplaza por completo el `toolbar` nativo.
 
 Cada fila mostrará código, denominación y una etiqueta breve `N0`-`N4`. Los colores se limitan
 a las etiquetas; no se añaden animaciones porque expandir el árbol es una interacción frecuente
 y debe sentirse inmediata. La barra contextual ofrecerá solo acciones válidas:
+
+El `get_label` escapa con `frappe.utils.escape_html` todo contenido procedente de datos: código,
+denominación, título de procedimiento, nombre de tarea e ID BPMN. Solo la etiqueta N0-N4 y su
+estructura HTML son constantes de la aplicación.
 
 - abrir proceso;
 - abrir procedimiento;
@@ -119,15 +147,31 @@ reales, no obliga a completar cinco escalones.
    subprocesos, cinco procedimientos DTI y tareas extraídas de sus BPMN privados.
 7. Revisión visual en escritorio: jerarquía legible, etiquetas correctas, acciones coherentes y
    ausencia de datos inventados.
+8. Contrato Tree v16.32: dos llamadas raíz, payload exacto, IDs virtuales y Expand All.
+9. Seguridad: Guest, padre forjado, usuario sin Procedimiento, archivo privado, XML con namespace
+   prefijado/default, vínculo `File` ajeno, HTML malicioso, tarea sin nombre, XML malicioso y
+   límite de 5 MiB. Un BPMN con IDs duplicados es inválido y no expone ninguna tarea N4.
+10. E2E: `/desk/proceso` abre Tree y `View List` abre List sin redirección de vuelta.
+11. Migración: comparar los 22 códigos, denominaciones y categorías oficiales, ejecutar dos veces
+   sin cambios en la segunda y verificar NestedSet.
+12. Rendimiento objetivo en producción: raíz y expansión ordinaria p95 < 500 ms; la primera
+   lectura de un BPMN p95 < 1 s.
 
 ## Despliegue y reversión
 
 El flujo será código local, commit, push, `git pull` en EC2, nueva imagen inmutable, migración y
 verificación. Antes de recrear/reiniciar contenedores de producción se pedirá aprobación.
 
-La corrección de los 22 macroprocesos es idempotente. La reversión de interfaz consiste en volver
-a la imagen anterior; no se eliminan registros. Los procesos N1/N2 de DTI mantienen sus relaciones
-actuales bajo `S04`.
+La corrección de los 22 macroprocesos vive en la capa UPeU con una allowlist versionada de
+`código → denominación → categoría`. Para cada entrada exige que el registro exista, que la
+denominación/categoría coincidan y que `parent_proceso` esté vacío; luego usa `doc.save()` para
+activar `is_group` y recalcular `nivel_bpm`. No crea, renombra ni cambia estados. Valida el
+NestedSet antes y después y es idempotente.
+
+La reversión de interfaz consiste en volver a la imagen anterior. La reversión de datos usa la
+foto pre-migración versionada por el script para devolver solo los campos `is_group` y
+`nivel_bpm`; no elimina registros ni relaciones. Los procesos N1/N2 de DTI mantienen sus
+relaciones actuales bajo `S04`.
 
 ## Criterios de aceptación
 
