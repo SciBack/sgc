@@ -13,6 +13,7 @@
   "version",
   "archivo",
   "proceso",
+  "tema",
   "estado",
   "elaborado_por",
   "revisado_por",
@@ -52,13 +53,13 @@
    "non_negative": 1
   },
   {
-   "description": "Tipo documental. Determina el prefijo del código SGC.",
+   "description": "Tipo documental. Determina el prefijo del c\u00f3digo SGC.",
    "fieldname": "tipo_documento",
    "fieldtype": "Select",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Tipo de documento",
-   "options": "\nManual\nPolítica\nProcedimiento\nInstructivo\nGuía\nFormato\nPlan\nInforme",
+   "options": "\nManual\nPol\u00edtica\nProcedimiento\nInstructivo\nGu\u00eda\nFormato\nPlan\nInforme",
    "reqd": 1
   },
   {
@@ -68,18 +69,18 @@
    "label": "Archivo"
   },
   {
-   "description": "Se recalcula al publicar: la norma exige revisión al menos anual.",
+   "description": "Se recalcula al publicar: la norma exige revisi\u00f3n al menos anual.",
    "fieldname": "fecha_proxima_revision",
    "fieldtype": "Date",
-   "label": "Próxima revisión",
+   "label": "Pr\u00f3xima revisi\u00f3n",
    "read_only": 1
   },
   {
    "depends_on": "eval:doc.__islocal != 1",
-   "description": "Obligatorio al cambiar de versión. Se archiva en el historial al publicar.",
+   "description": "Obligatorio al cambiar de versi\u00f3n. Se archiva en el historial al publicar.",
    "fieldname": "descripcion_cambio",
    "fieldtype": "Small Text",
-   "label": "Descripción del cambio (versión actual)"
+   "label": "Descripci\u00f3n del cambio (versi\u00f3n actual)"
   },
   {
    "fieldname": "historial_cambios",
@@ -92,7 +93,7 @@
    "collapsible": 1,
    "fieldname": "seccion_legado",
    "fieldtype": "Section Break",
-   "label": "Legado (Mayan) — solo lectura"
+   "label": "Legado (Mayan) \u2014 solo lectura"
   },
   {
    "description": "Campo legado. El archivo ahora vive en el campo Archivo.",
@@ -102,7 +103,7 @@
    "read_only": 1
   },
   {
-   "description": "Campo legado del tiempo en que los documentos vivían en Mayan EDMS.",
+   "description": "Campo legado del tiempo en que los documentos viv\u00edan en Mayan EDMS.",
    "fieldname": "mayan_document_id",
    "fieldtype": "Data",
    "label": "ID documento en Mayan",
@@ -114,6 +115,15 @@
    "in_standard_filter": 1,
    "label": "Proceso",
    "options": "Proceso"
+  },
+  {
+   "fieldname": "tema",
+   "fieldtype": "Link",
+   "label": "Tema",
+   "options": "Termino Tesauro",
+   "link_filters": "[[\"Termino Tesauro\",\"esquema\",\"=\",\"Temas\"]]",
+   "description": "Tema del tesauro institucional que clasifica el documento (lenguaje controlado, VocBench).",
+   "in_standard_filter": 1
   },
   {
    "default": "Borrador",
@@ -144,7 +154,7 @@
    "read_only": 1
   },
   {
-   "description": "Se fija sola al publicar. Solo se rellena a mano si el documento se publicó en una fecha distinta de hoy.",
+   "description": "Se fija sola al publicar. Solo se rellena a mano si el documento se public\u00f3 en una fecha distinta de hoy.",
    "fieldname": "fecha_publicacion",
    "fieldtype": "Date",
    "label": "Fecha de publicaci\u00f3n"

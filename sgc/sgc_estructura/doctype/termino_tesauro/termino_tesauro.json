@@ -1,0 +1,113 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "field:codigo",
+ "creation": "2026-08-28 00:00:00.000000",
+ "description": "Catálogo de lenguaje controlado sincronizado desde el Tesauro Institucional UPeU (VocBench/SKOS). No se edita a mano: la fuente de verdad es VocBench; este catálogo es una copia versionada (fixture). Ver deploy/sync_tesauro_vocbench.py.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "nombre",
+  "esquema",
+  "codigo",
+  "uri",
+  "sincronizado_de"
+ ],
+ "fields": [
+  {
+   "fieldname": "nombre",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Término",
+   "reqd": 1
+  },
+  {
+   "fieldname": "esquema",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Esquema",
+   "options": "Temas\nISCED-F 2013\nLíneas de Investigación",
+   "reqd": 1
+  },
+  {
+   "description": "Código global estable derivado de la URI de VocBench ({tipo}-{localname}). Es el identificador del registro.",
+   "fieldname": "codigo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Código",
+   "read_only": 1,
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "description": "URI SKOS del concepto en VocBench (trazabilidad de la fuente).",
+   "fieldname": "uri",
+   "fieldtype": "Data",
+   "label": "URI VocBench",
+   "read_only": 1
+  },
+  {
+   "default": "VocBench — Tesauro_Institucional_UPeU",
+   "fieldname": "sincronizado_de",
+   "fieldtype": "Data",
+   "label": "Sincronizado de",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-08-28 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Estructura",
+ "name": "Termino Tesauro",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "DPGC"
+  },
+  {
+   "read": 1,
+   "role": "Analista de Calidad (DPGC)"
+  },
+  {
+   "read": 1,
+   "role": "Auditor Interno"
+  },
+  {
+   "read": 1,
+   "role": "Responsable de Calidad de Programa"
+  },
+  {
+   "read": 1,
+   "role": "Coordinador de Calidad de Facultad"
+  },
+  {
+   "read": 1,
+   "role": "Miembro de Comité de Calidad"
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "show_title_field_in_link": 1,
+ "sort_field": "esquema",
+ "sort_order": "ASC",
+ "states": [],
+ "title_field": "nombre",
+ "track_changes": 0
+}

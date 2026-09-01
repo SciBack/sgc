@@ -67,6 +67,7 @@ from sgc.setup import (
     f15_notificaciones_workflow,
     f16_workflow_hallazgo_auditoria,
     f17_alcance_marcos,
+    f18_workspace,
 )
 
 STEPS = [
@@ -87,6 +88,7 @@ STEPS = [
     ("f15_notificaciones_workflow", f15_notificaciones_workflow),
     ("f16_workflow_hallazgo_auditoria", f16_workflow_hallazgo_auditoria),
     ("f17_alcance_marcos", f17_alcance_marcos),
+    ("f18_workspace", f18_workspace),
 ]
 
 

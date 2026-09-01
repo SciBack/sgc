@@ -12,6 +12,7 @@
   "facultad",
   "escuela",
   "nivel",
+  "isced",
   "estado"
  ],
  "fields": [
@@ -48,6 +49,15 @@
    "in_standard_filter": 1,
    "label": "Nivel",
    "options": "pregrado\nposgrado"
+  },
+  {
+   "fieldname": "isced",
+   "fieldtype": "Link",
+   "label": "Campo ISCED-F 2013",
+   "options": "Termino Tesauro",
+   "link_filters": "[[\"Termino Tesauro\",\"esquema\",\"=\",\"ISCED-F 2013\"]]",
+   "description": "Campo de educaci\u00f3n ISCED-F 2013 (UNESCO) del programa, del tesauro institucional.",
+   "in_standard_filter": 1
   },
   {
    "default": "activo",
