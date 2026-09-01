@@ -22,15 +22,23 @@ npm run dev
 
 Abre `http://localhost:4321/sgc`.
 
-### Installation
+### Entorno de desarrollo
 
-You can install this app using the [bench](https://github.com/frappe/bench) CLI:
+Para levantar el SGC completo en tu máquina (Frappe 16 + PostgreSQL + Redis,
+en Docker) sigue la guía paso a paso:
+**[`docs/desarrollo/entorno-local.md`](docs/desarrollo/entorno-local.md)**.
+Cubre x86_64 y ARM64, y termina con el flujo de contribución.
+
+Si ya tienes un bench funcionando, basta con instalar la app en él:
 
 ```bash
 cd $PATH_TO_YOUR_BENCH
-bench get-app $URL_OF_THIS_REPO --branch version-16
+bench get-app https://github.com/SciBack/sgc --branch main
 bench install-app sgc
 ```
+
+La rama de la app es `main`. `version-16` es la rama del *framework* Frappe, no
+la de esta app.
 
 ### Contributing
 
