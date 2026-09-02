@@ -91,6 +91,17 @@ el dueño la respalda, escala a solicitud de cambio por la vía 2.
 - **`Procedimiento`** lleva el BPMN en `diagrama_flujo`; sus tareas viven en ese diagrama / su
   documento controlado.
 
+## Estado institucional UPeU (2026-09-01)
+
+- El Mapa de Procesos UPeU v8.0 reconoce **22 macroprocesos N0**: `E01`–`E04`,
+  `C01`–`C13` y `S01`–`S05`.
+- Para los otros 21 macroprocesos se registra únicamente el N0 oficial. No se crean ni infieren
+  procesos hijos hasta que sus respectivos dueños los caractericen y validen.
+- Los únicos niveles inferiores trabajados en esta etapa son los de DTI bajo
+  **`S04 Gestión tecnológica`** (`S04.01`–`S04.07`), como propuesta de sus dueños de proceso.
+- La vista Tree de Frappe proyecta N0–N2 desde `Proceso`, N3 desde `Procedimiento` y N4 desde las
+  tareas de los BPMN reales; N3/N4 no se duplican como nuevos registros `Proceso`.
+
 ## Checklist antes de dar por bueno un proceso modelado
 
 - [ ] ¿El código y el nombre salen del mapa oficial del cliente (no inventados)?
