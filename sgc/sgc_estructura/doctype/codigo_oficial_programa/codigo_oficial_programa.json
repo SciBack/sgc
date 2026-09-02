@@ -1,0 +1,72 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-09-01 21:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "codigo",
+  "modalidad",
+  "column_break_med",
+  "denominacion_oficial",
+  "codigo_clasificador",
+  "vigente"
+ ],
+ "fields": [
+  {
+   "fieldname": "codigo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Código oficial",
+   "reqd": 1,
+   "columns": 2,
+   "description": "Código con el que el ente rector identifica esta oferta."
+  },
+  {
+   "fieldname": "modalidad",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Modalidad",
+   "columns": 2,
+   "description": "Modalidad de la oferta a la que corresponde el código (presencial, semipresencial, a distancia u otra que defina el ente rector)."
+  },
+  {
+   "fieldname": "column_break_med",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "denominacion_oficial",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Denominación oficial",
+   "columns": 4,
+   "description": "Denominación exacta declarada al ente rector. Puede diferir del nombre de uso interno."
+  },
+  {
+   "fieldname": "codigo_clasificador",
+   "fieldtype": "Data",
+   "label": "Código del clasificador nacional",
+   "description": "Código del clasificador estadístico nacional, cuando el programa figure en él. Se deja vacío si no tiene código propio."
+  },
+  {
+   "default": "1",
+   "fieldname": "vigente",
+   "fieldtype": "Check",
+   "label": "Vigente"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-09-01 21:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Estructura",
+ "name": "Codigo Oficial Programa",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
