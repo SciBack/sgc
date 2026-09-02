@@ -11,7 +11,7 @@ from frappe.utils.nestedset import NestedSet
 #
 # `nivel_bpm` se DERIVA del árbol y no se edita a mano (read_only). Regla:
 #   - profundidad 0 (raíz)  + is_group  -> Macroproceso  (p. ej. S04)
-#   - profundidad 0 (raíz)  sin is_group -> Proceso       (los 22: E01..S05)
+#   - profundidad 0 (raíz)  sin is_group -> Proceso       (raíz canónica genérica)
 #   - profundidad 1                      -> Proceso       (p. ej. S04.01, S04.02)
 #   - profundidad >= 2                   -> Subproceso    (p. ej. S04.04 bajo S04.01)
 # La profundidad se cuenta caminando `parent_proceso` hacia arriba (no lft/rgt),
@@ -39,6 +39,46 @@ def derivar_nivel_bpm(parent_proceso, is_group):
     if profundidad == 1:
         return "Proceso"
     return "Subproceso"
+
+
+def asegurar_macroproceso_raiz(name, denominacion, categoria):
+    """Clasifica una raíz existente como macroproceso si coincide exactamente."""
+    return _guardar_clasificacion_raiz(name, denominacion, categoria, is_group=1)
+
+
+def restaurar_clasificacion_raiz(name, denominacion, categoria, is_group):
+    """Restaura ``is_group`` de una raíz existente validada contra el snapshot."""
+    try:
+        is_group = int(is_group)
+    except (TypeError, ValueError):
+        frappe.throw("La clasificación a restaurar debe ser 0 o 1")
+    if is_group not in (0, 1):
+        frappe.throw("La clasificación a restaurar debe ser 0 o 1")
+
+    return _guardar_clasificacion_raiz(name, denominacion, categoria, is_group)
+
+
+def _guardar_clasificacion_raiz(name, denominacion, categoria, is_group):
+    doc = frappe.get_doc("Proceso", name)
+    if doc.parent_proceso:
+        frappe.throw(f"El proceso {name} no es una raíz")
+    if doc.proceso != denominacion:
+        frappe.throw(f"La denominación registrada de {name} no coincide")
+    if doc.nivel != categoria:
+        frappe.throw(f"La categoría registrada de {name} no coincide")
+
+    nivel_esperado = "Macroproceso" if is_group else "Proceso"
+    changed = int(doc.is_group or 0) != is_group or doc.nivel_bpm != nivel_esperado
+    if changed:
+        doc.is_group = is_group
+        doc.save(ignore_permissions=True)
+
+    return {
+        "name": doc.name,
+        "changed": changed,
+        "is_group": int(doc.is_group or 0),
+        "nivel_bpm": doc.nivel_bpm,
+    }
 
 
 class Proceso(NestedSet):
