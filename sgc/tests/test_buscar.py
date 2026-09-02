@@ -26,10 +26,11 @@ def _buscar(txt, doctype="Proceso"):
 class IntegrationTestBuscar(IntegrationTestCase):
     def setUp(self):
         frappe.set_user("Administrator")
+        self.sufijo = frappe.generate_hash(length=8)
         self.proceso = frappe.get_doc({
             "doctype": "Proceso",
             "codigo": f"BUS-{frappe.generate_hash(length=5)}",
-            "proceso": "Gestión tecnológica de prueba",
+            "proceso": f"Gestión{self.sufijo} TecnolóG{self.sufijo} de prueba",
         }).insert(ignore_permissions=True)
 
     def _codigos(self, filas):
@@ -38,18 +39,18 @@ class IntegrationTestBuscar(IntegrationTestCase):
     # ------------------------------------------------------------------
     def test_encuentra_sin_tilde(self):
         """El caso que motivó todo esto."""
-        self.assertIn(self.proceso.name, self._codigos(_buscar("gestion")))
+        self.assertIn(self.proceso.name, self._codigos(_buscar(f"gestion{self.sufijo}")))
 
     def test_encuentra_con_tilde(self):
         """Y quien la escribe bien no queda peor que quien no."""
-        self.assertIn(self.proceso.name, self._codigos(_buscar("gestión")))
+        self.assertIn(self.proceso.name, self._codigos(_buscar(f"gestión{self.sufijo}")))
 
     def test_encuentra_a_mitad_de_palabra(self):
         """«tecnolog» corta «tecnológica» justo en la tilde."""
-        self.assertIn(self.proceso.name, self._codigos(_buscar("tecnolog")))
+        self.assertIn(self.proceso.name, self._codigos(_buscar(f"tecnolog{self.sufijo}")))
 
     def test_ignora_mayusculas(self):
-        self.assertIn(self.proceso.name, self._codigos(_buscar("GESTION")))
+        self.assertIn(self.proceso.name, self._codigos(_buscar(f"GESTION{self.sufijo.upper()}")))
 
     def test_busca_tambien_por_codigo(self):
         """Quien se sabe el código lo escribe y va más rápido."""
