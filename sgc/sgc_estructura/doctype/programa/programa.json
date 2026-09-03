@@ -9,18 +9,21 @@
  "field_order": [
   "codigo",
   "nombre",
+  "codigo_oficial",
   "facultad",
   "escuela",
   "nivel",
   "isced",
-  "estado"
+  "estado",
+  "sec_codigos",
+  "codigos_oficiales"
  ],
  "fields": [
   {
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "C\u00f3digo",
+   "label": "Código",
    "reqd": 1,
    "unique": 1
   },
@@ -30,6 +33,14 @@
    "in_list_view": 1,
    "label": "Nombre",
    "reqd": 1
+  },
+  {
+   "fieldname": "codigo_oficial",
+   "fieldtype": "Data",
+   "label": "Código oficial",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "description": "Código con el que el ente rector identifica al programa. Cuando el programa se oferta en varias modalidades, aquí va el de la oferta principal; el detalle completo va en la tabla de códigos."
   },
   {
    "fieldname": "facultad",
@@ -56,7 +67,7 @@
    "label": "Campo ISCED-F 2013",
    "options": "Termino Tesauro",
    "link_filters": "[[\"Termino Tesauro\",\"esquema\",\"=\",\"ISCED-F 2013\"]]",
-   "description": "Campo de educaci\u00f3n ISCED-F 2013 (UNESCO) del programa, del tesauro institucional.",
+   "description": "Campo de educación ISCED-F 2013 (UNESCO) del programa, del tesauro institucional.",
    "in_standard_filter": 1
   },
   {
@@ -65,12 +76,25 @@
    "fieldtype": "Select",
    "label": "Estado",
    "options": "activo\ninactivo"
+  },
+  {
+   "fieldname": "sec_codigos",
+   "fieldtype": "Section Break",
+   "label": "Códigos oficiales",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "codigos_oficiales",
+   "fieldtype": "Table",
+   "label": "Códigos por modalidad",
+   "options": "Codigo Oficial Programa",
+   "description": "Un programa puede tener un código distinto por cada modalidad en que se oferta. Todos identifican al mismo programa."
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-04 17:29:31.762416",
+ "modified": "2026-09-01 21:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Estructura",
  "name": "Programa",
