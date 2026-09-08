@@ -13,6 +13,10 @@ Dos cosas que se vieron usándolo en producción:
    abrirlo en Bizagi, pero no devolverlo: había que pasar por el panel de adjuntos, que
    nadie encuentra. Ahora se importa desde el propio editor.
 
+3. **No había forma de arrepentirse.** Con el diagrama a medio cambiar, la única salida
+   era abandonar la página y confiar en que nada se hubiera escrito. Ahora hay «Descartar
+   cambios», que vuelve al último guardado previa confirmación.
+
 Importar NO guarda: carga el diagrama en pantalla y avisa de que hay que pulsar «Guardar».
 Que un fichero de fuera se persista sin un acto explícito sería justo lo que un SGC no
 puede permitirse.
@@ -54,6 +58,25 @@ class TestEditorBPMN(FrappeTestCase):
         self.assertNotIn("guardar_bpmn", bloque, "importar nunca debe persistir por su cuenta")
         self.assertNotIn("this.save()", bloque, "importar nunca debe llamar a guardar")
         self.assertIn("Guardar", bloque, "debe avisar de que hay que guardar")
+
+    def test_se_pueden_descartar_los_cambios(self):
+        self.assertIn("descartar()", self.fuente, "falta la acción de descartar")
+        self.assertIn("bpmn-descartar", self.fuente, "descartar debe tener su botón visible")
+
+    def test_descartar_pide_confirmacion_y_recarga_lo_guardado(self):
+        bloque = self.fuente[self.fuente.index("\tdescartar()") : self.fuente.index("\tmarcar_sucio(")]
+        self.assertIn("frappe.confirm", bloque, "descartar no puede ser irreversible sin preguntar")
+        self.assertIn("this.open(this.current.file_url)", bloque, "descartar recarga el adjunto guardado")
+        self.assertNotIn("guardar_bpmn", bloque, "descartar nunca escribe")
+
+    def test_el_editor_sabe_si_hay_cambios_sin_guardar(self):
+        self.assertIn("commandStack.changed", self.fuente, "hay que escuchar los cambios del lienzo")
+        self.assertIn("marcar_sucio(false)", self.fuente, "el flag se limpia al abrir y al guardar")
+        self.assertEqual(
+            self.fuente.count("this.marcar_sucio(false)"),
+            2,
+            "el flag se limpia exactamente en dos sitios: al cargar y al guardar",
+        )
 
     def test_descargar_sigue_disponible_para_el_viaje_de_ida(self):
         self.assertIn("Descargar .bpmn", self.fuente)

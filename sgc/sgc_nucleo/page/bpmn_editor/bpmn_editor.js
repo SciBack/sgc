@@ -19,6 +19,7 @@ class BpmnEditorPage {
 		this.modeler = null;
 		this.filemap = {};
 		this.current = null;
+		this.sucio = false;
 		this.render_shell();
 		this.load_assets();
 	}
@@ -29,6 +30,7 @@ class BpmnEditorPage {
 				<span class="bpmn-doc text-muted" style="font-size:12px;"></span>
 				<select class="form-control bpmn-file-select" style="max-width:360px;height:28px;"></select>
 				<button class="btn btn-default btn-xs bpmn-importar">${__('Importar .bpmn')}</button>
+				<button class="btn btn-default btn-xs bpmn-descartar">${__('Descartar cambios')}</button>
 				<span class="bpmn-status" style="margin-left:auto;font-size:12px;"></span>
 			</div>
 			<div class="bpmn-stage" style="display:flex;align-items:stretch;gap:8px;height:74vh;">
@@ -81,6 +83,9 @@ class BpmnEditorPage {
 
 		this.$body.find('.bpmn-file-select').on('change', (e) => this.open($(e.target).val()));
 		this.$body.find('.bpmn-importar').on('click', () => this.importar());
+		this.$body.find('.bpmn-descartar').on('click', () => this.descartar());
+		// Todo cambio en el lienzo pasa por el commandStack, incluido deshacer y rehacer.
+		this.modeler.on('commandStack.changed', () => this.marcar_sucio(true));
 		this.load_list();
 	}
 
@@ -112,6 +117,8 @@ class BpmnEditorPage {
 			.then((xml) => this.modeler.importXML(xml))
 			.then(() => {
 				this.fit();
+				// La importación mueve el commandStack: el flag se limpia después, no antes.
+				this.marcar_sucio(false);
 				this.status(`${__('Cargado')}: ${this.current.file_name}`, 'var(--green-600)');
 			})
 			.catch((e) => this.status(`${__('Error al cargar')}: ${e.message}`, 'var(--red-600)'));
@@ -151,6 +158,32 @@ class BpmnEditorPage {
 		input.click();
 	}
 
+	descartar() {
+		// Volver al último guardado. El editor no tiene «deshacer todo» a la vista, y sin
+		// esto la única forma de arrepentirse era abandonar la página y confiar en que
+		// nada se hubiera escrito.
+		if (!this.current) {
+			frappe.msgprint(__('No hay diagrama abierto.'));
+			return;
+		}
+		if (!this.sucio) {
+			this.status(__('No hay cambios que descartar.'));
+			return;
+		}
+		frappe.confirm(
+			__('Se perderán los cambios que no haya guardado. ¿Volver al último diagrama guardado?'),
+			() => this.open(this.current.file_url)
+		);
+	}
+
+	marcar_sucio(sucio) {
+		this.sucio = sucio;
+		this.$body.find('.bpmn-descartar').toggleClass('btn-warning', sucio);
+		if (sucio) {
+			this.status(__('Cambios sin guardar'), 'var(--orange-600)');
+		}
+	}
+
 	fit() {
 		try {
 			this.modeler.get('canvas').zoom('fit-viewport');
@@ -178,6 +211,7 @@ class BpmnEditorPage {
 				if (r.message && r.message.ok) {
 					this.current.file_url = r.message.file_url;
 					frappe.show_alert({ message: __('BPMN guardado'), indicator: 'green' });
+					this.marcar_sucio(false);
 					this.status(`${__('Guardado')}: ${this.current.file_name}`, 'var(--green-600)');
 				}
 			})
