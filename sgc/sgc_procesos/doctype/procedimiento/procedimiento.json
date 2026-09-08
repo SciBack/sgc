@@ -12,6 +12,7 @@
   "proceso",
   "documento_controlado",
   "diagrama_flujo",
+  "visor_bpmn",
   "estado"
  ],
  "fields": [
@@ -19,7 +20,7 @@
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "C\u00f3digo",
+   "label": "Código",
    "reqd": 1,
    "unique": 1
   },
@@ -27,7 +28,7 @@
    "fieldname": "titulo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "T\u00edtulo"
+   "label": "Título"
   },
   {
    "fieldname": "proceso",
@@ -44,10 +45,17 @@
    "options": "Documento Controlado"
   },
   {
-   "description": "Diagrama de flujo formato UPeU (NO BPMN) \u2014 adjunto/PDF del editor",
+   "description": "Diagrama de flujo formato UPeU (NO BPMN) — adjunto/PDF del editor",
    "fieldname": "diagrama_flujo",
    "fieldtype": "Attach",
    "label": "Diagrama de flujo"
+  },
+  {
+   "fieldname": "visor_bpmn",
+   "fieldtype": "HTML",
+   "label": "Diagrama del procedimiento",
+   "description": "Se dibuja el BPMN adjunto. Solo lectura: para modificarlo, «Editar BPMN».",
+   "read_only": 1
   },
   {
    "default": "Borrador",
@@ -55,13 +63,13 @@
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Estado",
-   "options": "Borrador\nEn revisi\u00f3n\nAprobado\nPublicado\nObsoleto"
+   "options": "Borrador\nEn revisión\nAprobado\nPublicado\nObsoleto"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-04 17:31:19.233298",
+ "modified": "2026-09-08 12:18:09.840778",
  "modified_by": "Administrator",
  "module": "SGC Procesos",
  "name": "Procedimiento",

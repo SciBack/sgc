@@ -20,6 +20,8 @@
   "entradas",
   "actividades",
   "salidas",
+  "sec_diagrama",
+  "visor_bpmn",
   "sec_verificar",
   "indicadores",
   "registros",
@@ -46,12 +48,12 @@
    "fieldname": "version",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Versi\u00f3n"
+   "label": "Versión"
   },
   {
    "fieldname": "fecha_emision",
    "fieldtype": "Date",
-   "label": "Fecha de emisi\u00f3n"
+   "label": "Fecha de emisión"
   },
   {
    "default": "Borrador",
@@ -59,7 +61,7 @@
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Estado",
-   "options": "Borrador\nEn revisi\u00f3n\nAprobado\nPublicado\nObsoleto"
+   "options": "Borrador\nEn revisión\nAprobado\nPublicado\nObsoleto"
   },
   {
    "fieldname": "sec_plan",
@@ -110,6 +112,18 @@
    "options": "Salida Proceso"
   },
   {
+   "fieldname": "sec_diagrama",
+   "fieldtype": "Section Break",
+   "label": "Diagrama BPMN"
+  },
+  {
+   "fieldname": "visor_bpmn",
+   "fieldtype": "HTML",
+   "label": "Diagrama del proceso",
+   "description": "Se dibujan los BPMN adjuntos. Solo lectura: para modificarlos, «Editar BPMN».",
+   "read_only": 1
+  },
+  {
    "fieldname": "sec_verificar",
    "fieldtype": "Section Break",
    "label": "Verificar / Actuar (V/A)"
@@ -141,7 +155,7 @@
   {
    "fieldname": "sec_control",
    "fieldtype": "Section Break",
-   "label": "Control de emisi\u00f3n y cambios"
+   "label": "Control de emisión y cambios"
   },
   {
    "fieldname": "elaborado_por",
@@ -164,7 +178,7 @@
   {
    "fieldname": "resolucion_aprobacion",
    "fieldtype": "Data",
-   "label": "Resoluci\u00f3n N\u00b0"
+   "label": "Resolución N°"
   },
   {
    "fieldname": "control_cambios",
@@ -176,7 +190,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-04 17:31:19.283293",
+ "modified": "2026-09-08 12:18:09.840778",
  "modified_by": "Administrator",
  "module": "SGC Procesos",
  "name": "Ficha Caracterizacion Proceso",
