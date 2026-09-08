@@ -1,0 +1,66 @@
+# Copyright (c) 2026, SciBack and contributors
+# For license information, please see license.txt
+"""El editor no puede estorbar a lo que se edita, y debe dejar entrar y salir el diagrama.
+
+Dos cosas que se vieron usándolo en producción:
+
+1. **La paleta tapaba el dibujo.** bpmn-js la monta flotando dentro del contenedor del
+   canvas —`_getParentContainer()` devuelve el del canvas y no admite configuración— y no
+   se puede arrastrar. Cae justo sobre la esquina superior izquierda, que es donde suele
+   arrancar el flujo, y esa parte quedaba intocable. Se mueve el nodo a su propia columna.
+
+2. **No había vuelta desde un editor de escritorio.** Se podía descargar el `.bpmn` para
+   abrirlo en Bizagi, pero no devolverlo: había que pasar por el panel de adjuntos, que
+   nadie encuentra. Ahora se importa desde el propio editor.
+
+Importar NO guarda: carga el diagrama en pantalla y avisa de que hay que pulsar «Guardar».
+Que un fichero de fuera se persista sin un acto explícito sería justo lo que un SGC no
+puede permitirse.
+"""
+import pathlib
+
+import frappe
+from frappe.tests.utils import FrappeTestCase
+
+RAIZ = pathlib.Path(frappe.get_app_path("sgc"))
+EDITOR = RAIZ / "sgc_nucleo" / "page" / "bpmn_editor" / "bpmn_editor.js"
+
+
+class TestEditorBPMN(FrappeTestCase):
+    def setUp(self):
+        self.fuente = EDITOR.read_text(encoding="utf-8")
+
+    def test_la_paleta_sale_del_lienzo(self):
+        self.assertIn("desacoplar_paleta()", self.fuente, "la paleta debe desacoplarse del canvas")
+        self.assertIn("bpmn-palette-host", self.fuente, "falta la columna propia de la paleta")
+        self.assertIn(
+            ".bpmn-palette-host .djs-palette",
+            self.fuente,
+            "hay que neutralizar el posicionamiento flotante de la paleta",
+        )
+
+    def test_la_paleta_se_desacopla_despues_de_crear_el_modeler(self):
+        creacion = self.fuente.index("new BpmnJS(")
+        desacople = self.fuente.index("this.desacoplar_paleta()")
+        self.assertLess(creacion, desacople, "la paleta no existe hasta que el modeler se crea")
+
+    def test_se_puede_importar_un_bpmn_editado_fuera(self):
+        self.assertIn("importar()", self.fuente, "falta la importación")
+        self.assertIn("bpmn-importar", self.fuente, "la importación debe tener su botón visible")
+        self.assertIn("importXML", self.fuente)
+
+    def test_importar_no_guarda_por_su_cuenta(self):
+        bloque = self.fuente[self.fuente.index("\timportar()") : self.fuente.index("\tfit()")]
+        self.assertNotIn("guardar_bpmn", bloque, "importar nunca debe persistir por su cuenta")
+        self.assertNotIn("this.save()", bloque, "importar nunca debe llamar a guardar")
+        self.assertIn("Guardar", bloque, "debe avisar de que hay que guardar")
+
+    def test_descargar_sigue_disponible_para_el_viaje_de_ida(self):
+        self.assertIn("Descargar .bpmn", self.fuente)
+        self.assertIn("saveXML", self.fuente)
+
+    def test_el_boton_del_formulario_no_cambia_de_nombre(self):
+        proc = (RAIZ / "sgc_procesos" / "doctype" / "procedimiento" / "procedimiento.js").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('__("Editar BPMN")', proc, "el botón que abre el editor es «Editar BPMN»")
