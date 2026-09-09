@@ -7,7 +7,10 @@ Dos cosas que se vieron usándolo en producción:
 1. **La paleta tapaba el dibujo.** bpmn-js la monta flotando dentro del contenedor del
    canvas —`_getParentContainer()` devuelve el del canvas y no admite configuración— y no
    se puede arrastrar. Cae justo sobre la esquina superior izquierda, que es donde suele
-   arrancar el flujo, y esa parte quedaba intocable. Se mueve el nodo a su propia columna.
+   arrancar el flujo, y esa parte quedaba intocable. Sacar el nodo a una columna propia lo
+   resolvía en apariencia y dejaba la paleta incómoda de usar: bpmn-js liga su interacción
+   al contenedor del lienzo. Se deja donde bpmn-js la pone y se corre el diagrama al
+   ajustar, que es como se comporta bpmn.io.
 
 2. **No había vuelta desde un editor de escritorio.** Se podía descargar el `.bpmn` para
    abrirlo en Bizagi, pero no devolverlo: había que pasar por el panel de adjuntos, que
@@ -34,19 +37,14 @@ class TestEditorBPMN(FrappeTestCase):
     def setUp(self):
         self.fuente = EDITOR.read_text(encoding="utf-8")
 
-    def test_la_paleta_sale_del_lienzo(self):
-        self.assertIn("desacoplar_paleta()", self.fuente, "la paleta debe desacoplarse del canvas")
-        self.assertIn("bpmn-palette-host", self.fuente, "falta la columna propia de la paleta")
-        self.assertIn(
-            ".bpmn-palette-host .djs-palette",
-            self.fuente,
-            "hay que neutralizar el posicionamiento flotante de la paleta",
-        )
+    def test_la_paleta_se_queda_donde_bpmn_js_la_pone(self):
+        self.assertNotIn("desacoplar_paleta", self.fuente, "mover el nodo de la paleta la vuelve incomoda")
+        self.assertNotIn("bpmn-palette-host", self.fuente, "la paleta no vive en una columna aparte")
 
-    def test_la_paleta_se_desacopla_despues_de_crear_el_modeler(self):
-        creacion = self.fuente.index("new BpmnJS(")
-        desacople = self.fuente.index("this.desacoplar_paleta()")
-        self.assertLess(creacion, desacople, "la paleta no existe hasta que el modeler se crea")
+    def test_el_ajuste_deja_libre_la_franja_que_ocupa_la_paleta(self):
+        bloque = self.fuente[self.fuente.index("\tfit()") : self.fuente.index("\tsave()")]
+        self.assertIn("MARGEN_PALETA", bloque, "el ajuste reserva el ancho de la paleta")
+        self.assertIn("canvas.viewbox(", bloque, "se corre el diagrama, no se toca el DOM")
 
     def test_se_puede_importar_un_bpmn_editado_fuera(self):
         self.assertIn("importar()", self.fuente, "falta la importación")
