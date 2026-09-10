@@ -168,7 +168,9 @@ def run():
         {"fieldname": "categoria", "fieldtype": "Select", "label": "Categoría",
          "options": "Acreditacion\nGestion\nProceso\nSatisfaccion\nOtra",
          "in_standard_filter": 1,
-         "description": "Polimórfico: incluye Proceso (indicador de proceso E/C/S)"},
+         "description": "NATURALEZA del dato (de proceso, de satisfacción, de gestión). "
+                        "La finalidad normativa NO se declara aquí: la da `marco_normativo`. "
+                        "Nada es «de acreditación» por categoría — acredita porque su marco acredita."},
         # Link opcional a Proceso (target en B4/SGC Procesos). Se declara igual;
         # existirá al integrar. Sin este link no se crea un 'Indicador Proceso' aparte.
         {"fieldname": "proceso", "fieldtype": "Link", "label": "Proceso",

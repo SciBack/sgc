@@ -301,9 +301,17 @@ def _frecuencia_from(periodicidad_txt):
 
 
 def _categoria_from(indicador):
-    """
+    """Naturaleza del dato: de satisfacción si lo es, de proceso en los demás casos.
+
     Todos los ID vienen con category=process en el YAML. Afinamos según naturaleza
     del indicador (el DocType tiene: Acreditacion/Gestion/Proceso/Satisfaccion/Otra).
+
+    **Que no devuelva nunca `Acreditacion` es deliberado, no un olvido.** Estos
+    indicadores son del modelo Coneau, así que acreditan — pero eso lo declara su
+    `marco_normativo`, que es el campo que consulta `sgc.marcos`. La categoría dice
+    de qué naturaleza es el dato. Marcarlos aquí como `Acreditacion` perdería esa
+    distinción y además ocultaría el Link a `proceso`, que depende de esta misma
+    categoría. Ver `f20_categoria_indicador`.
     """
     nombre = (indicador.get("name") or "").lower()
     if "satisf" in nombre:
