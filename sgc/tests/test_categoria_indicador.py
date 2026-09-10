@@ -12,6 +12,8 @@ lo declara `marco_normativo`.** Un indicador que dice `Acreditacion` sin un marc
 acreditación detrás se recoloca en `Gestion`. Si el marco sí acredita, se respeta —
 el paso corrige lo que no se sostiene, no impone una etiqueta.
 """
+from unittest.mock import patch
+
 import frappe
 from frappe.tests import IntegrationTestCase
 
@@ -20,35 +22,61 @@ from sgc.tests import factories
 
 
 class IntegrationTestCategoriaIndicador(IntegrationTestCase):
+    """⚠️ `f20.run()` hace `frappe.db.commit()`, así que lo que estos tests toquen
+    SOBREVIVE al rollback de la clase y queda en la base para el resto de la suite.
+
+    De ahí las dos precauciones de abajo, que no son manía:
+
+    - **No se toca ningún objeto compartido.** La primera versión le ponía `alcance`
+      al marco de `crear_marco_prueba`, que es idempotente y lo reutiliza media
+      suite: el commit lo dejaba declarado como acreditación de programa y, a
+      partir de ahí, cualquier test que abriera una autoevaluación sin
+      programa-sede reventaba con «Este marco acredita un programa de estudios».
+      Se comprobó en CI, no en local, porque corriendo el módulo suelto no se ve.
+      Para el caso del marco que sí acredita se sustituye `es_de_acreditacion`, que
+      es justo lo que F20 consulta.
+    - **Se borra lo creado.** El rollback no alcanza a lo comiteado, así que la
+      limpieza es explícita.
+    """
+
     def setUp(self):
         frappe.set_user("Administrator")
+        self.creados = []
+
+    def tearDown(self):
+        for nombre in self.creados:
+            if frappe.db.exists("Indicador", nombre):
+                frappe.delete_doc("Indicador", nombre, force=1, ignore_permissions=True)
+        frappe.db.commit()
+
+    def _indicador(self, **kwargs):
+        ind = factories.crear_indicador(**kwargs).name
+        self.creados.append(ind)
+        return ind
 
     def _categoria(self, nombre):
         return frappe.db.get_value("Indicador", nombre, "categoria")
 
     def test_sin_marco_no_puede_decir_que_acredita(self):
-        ind = factories.crear_indicador(categoria="Acreditacion").name
+        ind = self._indicador(categoria="Acreditacion")
         f20.run()
         self.assertEqual(self._categoria(ind), "Gestion", "un conteo sin marco no acredita nada")
 
     def test_con_marco_de_acreditacion_se_respeta(self):
-        marco = factories.crear_marco_prueba(n_estandares=1, n_criterios=1)["marco"]
-        if not frappe.get_meta("Marco Normativo").has_field("alcance"):
-            self.skipTest("el campo `alcance` aún no existe en este sitio")
-        frappe.db.set_value("Marco Normativo", marco, "alcance", "Acreditación de programa")
-        ind = factories.crear_indicador(categoria="Acreditacion", marco_normativo=marco).name
-        f20.run()
+        ind = self._indicador(categoria="Acreditacion")
+        with patch.object(f20.marcos, "es_de_acreditacion", return_value=True):
+            f20.run()
         self.assertEqual(self._categoria(ind), "Acreditacion", "su marco lo respalda: no se toca")
 
     def test_no_toca_las_demas_categorias(self):
-        proceso = factories.crear_indicador(categoria="Proceso").name
-        satisf = factories.crear_indicador(categoria="Satisfaccion").name
+        proceso = self._indicador(categoria="Proceso")
+        satisf = self._indicador(categoria="Satisfaccion")
         f20.run()
         self.assertEqual(self._categoria(proceso), "Proceso")
         self.assertEqual(self._categoria(satisf), "Satisfaccion")
 
     def test_es_idempotente(self):
-        factories.crear_indicador(categoria="Acreditacion")
+        self._indicador(categoria="Acreditacion")
         f20.run()
         segunda = f20.run()
         self.assertEqual(segunda["cambios"], [], "un sitio ya corregido no se vuelve a escribir")
