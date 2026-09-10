@@ -68,16 +68,23 @@ sgc.bpmn.montar = function (frm, fieldname) {
 					)}</span>
 				</div>
 				<div class="sgc-bpmn-lienzo" style="height:460px;border:1px solid var(--border-color);border-radius:6px;background:#fff;"></div>
+				<div class="sgc-bpmn-tareas" style="margin-top:12px;"></div>
 			`);
 			const $sel = $wrapper.find(".sgc-bpmn-sel");
 			sgc.bpmn._versiones = {};
 			archivos.forEach((a) => {
 				sgc.bpmn._versiones[a.file_url] = a.version;
-				$sel.append(`<option value="${a.file_url}">${a.file_name}</option>`);
+				$sel.append(
+					`<option value="${a.file_url}">${frappe.utils.escape_html(a.file_name)}</option>`
+				);
 			});
 			frappe.require("/assets/sgc/bpmn/bpmn-modeler.js", () => {
-				sgc.bpmn._render($wrapper, $sel.val());
-				$sel.on("change", () => sgc.bpmn._render($wrapper, $sel.val()));
+				const pintar = (url) => {
+					sgc.bpmn._render($wrapper, url);
+					sgc.bpmn._tareas($wrapper, frm, url);
+				};
+				pintar($sel.val());
+				$sel.on("change", () => pintar($sel.val()));
 			});
 		});
 };
@@ -148,5 +155,55 @@ sgc.bpmn._render = function ($wrapper, file_url) {
 					"No se pudo dibujar el diagrama; el archivo adjunto sigue disponible."
 				)}</div>`
 			);
+		});
+};
+
+// La secuencia por escrito, debajo del dibujo. El procedimiento se exporta como
+// documento y un documento necesita el paso a paso legible: número, actividad y
+// responsable. Sale del mismo BPMN que el diagrama, así que no puede contradecirlo.
+sgc.bpmn._tareas = function ($wrapper, frm, file_url) {
+	const $caja = $wrapper.find(".sgc-bpmn-tareas").empty();
+	if (!file_url) return;
+
+	frappe
+		.call({
+			method: "sgc.bpmn_editor.tareas_del_diagrama",
+			args: { doctype: frm.doc.doctype, docname: frm.doc.name, file_url },
+		})
+		.then((r) => {
+			const tareas = (r && r.message) || [];
+			if (!tareas.length) return; // sin tareas legibles, no se ocupa espacio
+
+			const filas = tareas
+				.map(
+					(t) => `<tr>
+						<td style="width:3rem;text-align:right;padding-right:12px;color:var(--text-muted);">${t.n}</td>
+						<td>${frappe.utils.escape_html(t.actividad || "")}</td>
+						<td style="width:34%;">${
+							t.responsable
+								? frappe.utils.escape_html(t.responsable)
+								: `<span class="text-muted">${__("Sin responsable en el diagrama")}</span>`
+						}</td>
+					</tr>`
+				)
+				.join("");
+
+			$caja.append(`
+				<div class="text-muted" style="font-size:11px;margin-bottom:6px;">${__(
+					"Secuencia del procedimiento, leída del diagrama"
+				)}</div>
+				<div style="overflow-x:auto;">
+					<table class="table table-bordered" style="margin:0;font-size:12px;">
+						<thead>
+							<tr>
+								<th style="text-align:right;">Nº</th>
+								<th>${__("Actividad")}</th>
+								<th>${__("Responsable")}</th>
+							</tr>
+						</thead>
+						<tbody>${filas}</tbody>
+					</table>
+				</div>
+			`);
 		});
 };
