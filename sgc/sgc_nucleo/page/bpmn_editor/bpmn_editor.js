@@ -3,6 +3,9 @@
 // editar (mover cajas y flechas) y guarda el XML de vuelta como adjunto.
 // Ver docs/decisiones/bpmn-herramientas.md (punto 2) y sgc/bpmn_editor.py.
 
+// Ancho que ocupa la paleta flotante de bpmn-js (94 px en dos columnas) más margen.
+const MARGEN_PALETA = 110;
+
 frappe.pages['bpmn-editor'].on_page_load = function (wrapper) {
 	const page = frappe.ui.make_app_page({
 		parent: wrapper,
@@ -33,23 +36,7 @@ class BpmnEditorPage {
 				<button class="btn btn-default btn-xs bpmn-descartar">${__('Descartar cambios')}</button>
 				<span class="bpmn-status" style="margin-left:auto;font-size:12px;"></span>
 			</div>
-			<div class="bpmn-stage" style="display:flex;align-items:stretch;gap:8px;height:74vh;">
-				<div class="bpmn-palette-host" style="flex:0 0 auto;display:flex;align-items:flex-start;padding:6px;border:1px solid var(--border-color);border-radius:6px;background:var(--fg-color);overflow:auto;"></div>
-				<div class="bpmn-canvas" style="flex:1 1 auto;min-width:0;border:1px solid var(--border-color);border-radius:6px;background:#fff;"></div>
-			</div>
-		`);
-		// La paleta de bpmn-js se dibuja flotando DENTRO del lienzo y no se puede mover:
-		// tapa la esquina superior izquierda del diagrama, que es justo donde suele
-		// empezar el flujo. Al sacarla a su propia columna deja de estorbar.
-		this.$body.append(`
-			<style>
-				.bpmn-palette-host .djs-palette {
-					position: static;
-					border: none;
-					background: transparent;
-					box-shadow: none;
-				}
-			</style>
+			<div class="bpmn-canvas" style="height:74vh;border:1px solid var(--border-color);border-radius:6px;background:#fff;"></div>
 		`);
 	}
 
@@ -75,7 +62,6 @@ class BpmnEditorPage {
 		}
 		this.$body.find('.bpmn-doc').text(`${this.doctype}: ${this.docname}`);
 		this.modeler = new BpmnJS({ container: this.$body.find('.bpmn-canvas')[0] });
-		this.desacoplar_paleta();
 
 		this.page.set_primary_action(__('Guardar'), () => this.save(), 'octicon octicon-check');
 		this.page.set_secondary_action(__('Descargar .bpmn'), () => this.download());
@@ -122,15 +108,6 @@ class BpmnEditorPage {
 				this.status(`${__('Cargado')}: ${this.current.file_name}`, 'var(--green-600)');
 			})
 			.catch((e) => this.status(`${__('Error al cargar')}: ${e.message}`, 'var(--red-600)'));
-	}
-
-	desacoplar_paleta() {
-		// bpmn-js monta la paleta en el contenedor del canvas (`_getParentContainer()`
-		// devuelve el del canvas y no admite configuración), así que se mueve el nodo
-		// una vez creada. Los manejadores viven en el propio elemento y se conservan.
-		const paleta = this.$body.find('.bpmn-canvas .djs-palette')[0];
-		if (!paleta) return;
-		this.$body.find('.bpmn-palette-host')[0].appendChild(paleta);
 	}
 
 	importar() {
@@ -186,7 +163,15 @@ class BpmnEditorPage {
 
 	fit() {
 		try {
-			this.modeler.get('canvas').zoom('fit-viewport');
+			const canvas = this.modeler.get('canvas');
+			canvas.zoom('fit-viewport');
+			// La paleta flota sobre la esquina superior izquierda del lienzo, que es justo
+			// donde arranca el flujo. En vez de sacarla de ahí —bpmn-js liga su interacción
+			// al contenedor del lienzo— se ensancha el viewbox por la izquierda: el diagrama
+			// se corre y ningún elemento queda debajo de la paleta.
+			const vb = canvas.viewbox();
+			const margen = MARGEN_PALETA / vb.scale;
+			canvas.viewbox({ x: vb.x - margen, y: vb.y, width: vb.width + margen, height: vb.height });
 		} catch (e) {
 			/* noop */
 		}
