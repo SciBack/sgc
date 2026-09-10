@@ -70,7 +70,11 @@ sgc.bpmn.montar = function (frm, fieldname) {
 				<div class="sgc-bpmn-lienzo" style="height:460px;border:1px solid var(--border-color);border-radius:6px;background:#fff;"></div>
 			`);
 			const $sel = $wrapper.find(".sgc-bpmn-sel");
-			archivos.forEach((a) => $sel.append(`<option value="${a.file_url}">${a.file_name}</option>`));
+			sgc.bpmn._versiones = {};
+			archivos.forEach((a) => {
+				sgc.bpmn._versiones[a.file_url] = a.version;
+				$sel.append(`<option value="${a.file_url}">${a.file_name}</option>`);
+			});
 			frappe.require("/assets/sgc/bpmn/bpmn-modeler.js", () => {
 				sgc.bpmn._render($wrapper, $sel.val());
 				$sel.on("change", () => sgc.bpmn._render($wrapper, $sel.val()));
@@ -85,6 +89,15 @@ sgc.bpmn.montar = function (frm, fieldname) {
 // Ojo: no basta con exigir un tamaño mayor que cero. Un contenedor a medio dibujar mide
 // unos pocos píxeles de ancho —se midieron 2— y con eso el fit falla igual. Se espera a
 // que el lienzo tenga un tamaño realmente utilizable, y se reintenta mientras tanto.
+// El adjunto conserva su nombre entre guardados, así que su URL no cambia nunca y
+// el navegador reutiliza la copia vieja: la vista previa dibujaba el diagrama
+// anterior aunque el guardado hubiese ido bien. `?v=<version>` cambia solo cuando
+// cambia el diagrama, así que sigue habiendo caché entre ediciones.
+sgc.bpmn.url_versionada = function (file_url, version) {
+	if (!file_url || !version) return file_url;
+	return `${file_url}${file_url.includes("?") ? "&" : "?"}v=${encodeURIComponent(version)}`;
+};
+
 sgc.bpmn.MIN_LIENZO = 50;
 
 sgc.bpmn._ajustar = function ($lienzo, visor, restantes = 12) {
@@ -118,7 +131,7 @@ sgc.bpmn._render = function ($wrapper, file_url) {
 	sgc.bpmn.EVENTOS_EDICION.forEach((evento) => eventBus.on(evento, 100000, () => false));
 	$lienzo.find(".djs-palette").hide();
 
-	fetch(file_url)
+	fetch(sgc.bpmn.url_versionada(file_url, (sgc.bpmn._versiones || {})[file_url]))
 		.then((res) => {
 			if (!res.ok) throw new Error(res.status);
 			return res.text();

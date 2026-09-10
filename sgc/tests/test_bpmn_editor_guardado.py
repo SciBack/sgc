@@ -20,6 +20,7 @@ sobrevive al rollback. De ahí el `tearDown` explícito.
 """
 import frappe
 from frappe.tests import IntegrationTestCase
+from frappe.utils import add_to_date, now_datetime
 
 from sgc import bpmn_editor as be
 from sgc.tests import factories
@@ -61,6 +62,27 @@ class IntegrationTestGuardadoBPMN(IntegrationTestCase):
         r = be.guardar_bpmn("Proceso", p, NOMBRE, XML_B)
         doc = frappe.get_doc("File", frappe.get_all("File", filters={"file_name": r["file_name"]}, pluck="name")[0])
         self.assertIn('id="B"', doc.get_content(), "conservar el nombre no puede significar conservar el contenido")
+
+    def test_la_version_de_cache_cambia_al_guardar(self):
+        """Conservar el nombre dejó la URL fija, y con ella la copia del navegador:
+        la vista previa seguía dibujando el diagrama anterior. `version` es lo que
+        permite invalidarla, así que TIENE que moverse cuando el diagrama cambia."""
+        p = self._proceso()
+        be.guardar_bpmn("Proceso", p, NOMBRE, XML_A)
+        antes = be.listar_bpmn("Proceso", p)[0]
+        self.assertIn("version", antes, "el visor no puede invalidar lo que no recibe")
+
+        # El `modified` tiene resolución de segundo: sin este empujón, dos guardados
+        # seguidos en el mismo segundo darían la misma versión y el test no probaría nada.
+        nombre = frappe.get_all("File", filters={"file_name": antes["file_name"]}, pluck="name")[0]
+        frappe.db.set_value("File", nombre, "modified", add_to_date(now_datetime(), seconds=5))
+        frappe.db.commit()
+
+        despues = be.listar_bpmn("Proceso", p)[0]
+        self.assertEqual(antes["file_url"], despues["file_url"], "la URL sigue siendo la misma")
+        self.assertNotEqual(
+            antes["version"], despues["version"], "sin cambio de versión, el navegador sirve el dibujo viejo"
+        )
 
     def test_no_deja_adjuntos_duplicados(self):
         p = self._proceso()
