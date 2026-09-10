@@ -84,3 +84,27 @@ class IntegrationTestGuardadoBPMN(IntegrationTestCase):
         self.assertTrue(be._mismo_diagrama("18-procesoa1b2c3.bpmn", "18-procesoa1b2c3d4e5f6.bpmn"))
         self.assertFalse(be._mismo_diagrama("18-proceso.bpmn", "19-otro-proceso.bpmn"))
         self.assertFalse(be._mismo_diagrama("", "18-proceso.bpmn"))
+
+    def test_el_mismo_contenido_en_dos_documentos_se_escribe_en_los_dos(self):
+        """El caso de sincronizar un diagrama entre el procedimiento y la ficha.
+
+        `File.save_file` deduplica por `content_hash`: si ya existe otro File con ese
+        contenido, da el fichero por escrito y no escribe. El registro se quedaba
+        diciendo que tenía la versión nueva mientras el disco conservaba la vieja.
+        """
+        from frappe.core.doctype.file.utils import get_content_hash
+
+        a, b = self._proceso(), self._proceso()
+        be.guardar_bpmn("Proceso", a, NOMBRE, XML_A)   # A tiene el contenido nuevo
+        be.guardar_bpmn("Proceso", b, NOMBRE, XML_B)   # B parte de otro distinto
+        r = be.guardar_bpmn("Proceso", b, NOMBRE, XML_A)   # ahora B se sincroniza con A
+
+        doc = frappe.get_doc("File", frappe.get_all("File", filters={"file_name": r["file_name"]}, pluck="name")[0])
+        contenido = doc.get_content()
+        self.assertIn('id="A"', contenido, "el fichero de B debe tener de verdad el contenido de A")
+        self.assertEqual(
+            doc.content_hash,
+            get_content_hash(contenido.encode()),
+            "el hash del registro tiene que describir el fichero que hay en disco",
+        )
+        self.assertEqual(doc.file_size, len(contenido.encode()), "el tamaño del registro también")

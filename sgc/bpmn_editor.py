@@ -106,7 +106,15 @@ def guardar_bpmn(doctype, docname, file_name, xml):
 		f = frappe.get_doc("File", existentes[0])
 		for sobrante in existentes[1:]:
 			frappe.delete_doc("File", sobrante, ignore_permissions=True, force=True)
-		f.save_file(content=contenido, overwrite=True)
+		# `ignore_existing_file_check=True` es imprescindible, no una precaución.
+		# Sin él, `File.save_file` deduplica por `content_hash`: si YA existe otro File
+		# con ese mismo contenido —el caso normal al sincronizar el mismo diagrama entre
+		# el procedimiento y la ficha del proceso— da el fichero por escrito y **no
+		# escribe nada**, mientras el `save()` de abajo sí persiste el hash y el tamaño
+		# nuevos. El registro queda diciendo que tiene la versión nueva y el disco
+		# conservando la vieja. Comprobado en producción: `content_hash` 76b2648f con un
+		# fichero cuyo hash real era 49312bc0.
+		f.save_file(content=contenido, overwrite=True, ignore_existing_file_check=True)
 		f.flags.ignore_permissions = True
 		f.save()
 		frappe.db.commit()
