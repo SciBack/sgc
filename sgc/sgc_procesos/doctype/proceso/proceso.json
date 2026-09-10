@@ -146,6 +146,11 @@
    "link_fieldname": "proceso"
   },
   {
+   "group": "Documentación",
+   "link_doctype": "Documento Controlado",
+   "link_fieldname": "proceso"
+  },
+  {
    "group": "Medición",
    "link_doctype": "Indicador",
    "link_fieldname": "proceso"

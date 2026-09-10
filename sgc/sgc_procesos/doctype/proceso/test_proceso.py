@@ -218,6 +218,7 @@ class IntegrationTestProceso(IntegrationTestCase):
 		esperado = {
 			"Ficha Caracterizacion Proceso": "Caracterización",
 			"Procedimiento": "Caracterización",
+			"Documento Controlado": "Documentación",
 			"Indicador": "Medición",
 		}
 		enlaces = {fila.link_doctype: fila for fila in frappe.get_meta("Proceso").links}
