@@ -209,3 +209,24 @@ class IntegrationTestProceso(IntegrationTestCase):
 			)
 
 		self.assertEqual(self._valores_protegidos(proceso.name), antes)
+
+	def test_el_proceso_ensena_lo_que_cuelga_de_el(self):
+		"""El mapa y las fichas estaban unidos en los datos pero no en la pantalla:
+		abrías un proceso y no había forma de llegar a su caracterización sin salir
+		a buscarla por otro menú. Estas conexiones son las que lo hacen navegable —
+		y las que dejan ver de un vistazo qué proceso todavía no tiene ficha."""
+		esperado = {
+			"Ficha Caracterizacion Proceso": "Caracterización",
+			"Procedimiento": "Caracterización",
+			"Indicador": "Medición",
+		}
+		enlaces = {fila.link_doctype: fila for fila in frappe.get_meta("Proceso").links}
+
+		for doctype, grupo in esperado.items():
+			self.assertIn(doctype, enlaces, f"el proceso no enseña sus {doctype}")
+			self.assertEqual(
+				enlaces[doctype].link_fieldname,
+				"proceso",
+				"la conexión tiene que colgar del campo que apunta al proceso",
+			)
+			self.assertEqual(enlaces[doctype].group, grupo)
