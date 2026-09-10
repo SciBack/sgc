@@ -145,3 +145,46 @@ def guardar_bpmn(doctype, docname, file_name, xml):
 	f = save_file(file_name, contenido, doctype, docname, is_private=1)
 	frappe.db.commit()
 	return {"ok": True, "file_url": f.file_url, "file_name": f.file_name}
+
+
+@frappe.whitelist()
+def tareas_del_diagrama(doctype, docname, file_url=None):
+	"""Las tareas del diagrama, en orden documental y con su responsable.
+
+	Existe porque el procedimiento se exporta como documento y un documento de
+	procedimiento necesita la secuencia por escrito, no solo el dibujo: número,
+	actividad y quién la ejecuta. El dato no se teclea en ninguna parte — se lee
+	del propio BPMN, así que no puede contradecir al diagrama.
+
+	El responsable sale del CARRIL. Una tarea fuera de todo carril se devuelve con
+	el responsable vacío en vez de omitirse: que falte se tiene que ver.
+	"""
+	from sgc.sgc_procesos.doctype.proceso.proceso_tree import (
+		BpmnInvalido,
+		carriles_por_tarea,
+		extraer_tareas_bpmn,
+	)
+
+	_check(doctype, docname, "read")
+	adjuntos = listar_bpmn(doctype, docname)
+	if not adjuntos:
+		return []
+	elegido = next((a for a in adjuntos if a["file_url"] == file_url), adjuntos[0])
+
+	try:
+		contenido = frappe.get_doc("File", elegido["name"]).get_content()
+		tareas = extraer_tareas_bpmn(contenido)
+		carriles = carriles_por_tarea(contenido)
+	except (BpmnInvalido, OSError, UnicodeError):
+		# Un diagrama ilegible no puede tumbar la ficha: el visor ya avisa aparte.
+		return []
+
+	return [
+		{
+			"n": posicion,
+			"id": tarea["id"],
+			"actividad": tarea["name"],
+			"responsable": carriles.get(tarea["id"], ""),
+		}
+		for posicion, tarea in enumerate(tareas, start=1)
+	]

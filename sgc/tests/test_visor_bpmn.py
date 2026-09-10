@@ -86,3 +86,19 @@ class TestVisorBPMN(FrappeTestCase):
             js = (RAIZ / "sgc_procesos" / "doctype" / carpeta / f"{carpeta}.js").read_text(encoding="utf-8")
             self.assertIn('sgc.bpmn.montar(frm, "visor_bpmn")', js, f"{doctype} no monta el visor")
             self.assertIn("bpmn-editor", js, f"{doctype} perdió el acceso al editor")
+
+    def test_la_secuencia_del_procedimiento_se_pinta_bajo_el_diagrama(self):
+        """El procedimiento se exporta como documento, y un documento necesita el
+        paso a paso por escrito: número, actividad y responsable. Sale del mismo
+        BPMN que el dibujo, así que no puede contradecirlo."""
+        fuente = VISOR.read_text(encoding="utf-8")
+        self.assertIn("sgc-bpmn-tareas", fuente)
+        self.assertIn("sgc.bpmn_editor.tareas_del_diagrama", fuente)
+        self.assertIn("Responsable", fuente)
+        # una tabla ancha no puede empujar el formulario a lo ancho
+        self.assertIn("overflow-x:auto", fuente)
+
+    def test_el_nombre_del_adjunto_se_escapa(self):
+        """Lo elige quien sube el fichero, así que entra escapado en el selector."""
+        fuente = VISOR.read_text(encoding="utf-8")
+        self.assertNotRegex(fuente, r"<option value=\"\$\{a\.file_url\}\">\$\{a\.file_name\}")
