@@ -35,6 +35,7 @@ Orden (por dependencia real, no alfabético):
                                reales del workflow de Informe Cumplimiento
   18. f18_workspace — workspace nativo del Desk
   19. f19_nivel_bpm — puebla `nivel_bpm` (N0/N1/N2) en los Proceso existentes
+  20. f20_categoria_indicador — recoloca los Indicador que dicen acreditar sin marco que lo respalde
 
 Ejecutar manualmente:
     bench --site <site> execute sgc.setup.f_deploy_run_all.run
@@ -71,6 +72,7 @@ from sgc.setup import (
     f17_alcance_marcos,
     f18_workspace,
     f19_nivel_bpm,
+    f20_categoria_indicador,
 )
 
 STEPS = [
@@ -93,6 +95,7 @@ STEPS = [
     ("f17_alcance_marcos", f17_alcance_marcos),
     ("f18_workspace", f18_workspace),
     ("f19_nivel_bpm", f19_nivel_bpm),
+    ("f20_categoria_indicador", f20_categoria_indicador),
 ]
 
 
