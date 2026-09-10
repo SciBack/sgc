@@ -20,8 +20,10 @@ import frappe
 
 WS = "SGC"
 
-# Accesos rápidos (lo que se usa a diario). (etiqueta, doctype)
+# Accesos rápidos (lo que se usa a diario). (etiqueta, destino) donde el destino es
+# un doctype, o la tupla ("Report", "<nombre>") para un informe.
 SHORTCUTS = [
+    ("Indicadores", ("Report", "Indicadores de Acreditacion")),
     ("Documentos", "Documento Controlado"),
     ("Evidencias", "Evidencia"),
     ("Autoevaluación", "Autoevaluacion"),
@@ -30,7 +32,8 @@ SHORTCUTS = [
     ("Auditorías", "Auditoria"),
 ]
 
-# Tarjetas por área. (título de la tarjeta, [doctypes])
+# Tarjetas por área. (título de la tarjeta, [items]); un item es un doctype o la
+# tupla ("Report", "<nombre>").
 CARDS = [
     ("Gestión documental", ["Documento Controlado", "Evidencia", "Trazabilidad"]),
     ("Autoevaluación", ["Autoevaluacion", "Valoracion Criterio", "Valoracion Estandar", "Valor Indicador"]),
@@ -39,7 +42,8 @@ CARDS = [
     ("Riesgos y obligaciones", ["Riesgo", "Tratamiento Riesgo", "Matriz Riesgo", "Evaluacion Riesgo", "Obligacion Ente", "Entrega Obligacion"]),
     ("Procesos", ["Proceso", "Procedimiento", "Ficha Caracterizacion Proceso", "Informe Cumplimiento"]),
     ("Gobierno de la calidad", ["Politica Calidad", "Objetivo Calidad", "Comite", "Reunion", "Acuerdo", "Instrumento", "Aplicacion Instrumento"]),
-    ("Marcos e indicadores", ["Marco Normativo", "Elemento Marco", "Indicador", "Ficha Indicador", "Escala Valoracion"]),
+    ("Marcos e indicadores", ["Marco Normativo", "Elemento Marco", "Indicador", "Ficha Indicador",
+                              "Escala Valoracion", ("Report", "Indicadores de Acreditacion")]),
     ("Estructura", ["Unidad Organica", "Programa", "Programa Sede", "Periodo Academico"]),
 ]
 
@@ -61,6 +65,24 @@ def _contenido():
     return json.dumps(b, ensure_ascii=False)
 
 
+def _destino(item):
+    """Un item es un doctype (str) o la tupla ("Report", "<nombre>")."""
+    if isinstance(item, tuple):
+        return item
+    return "DocType", item
+
+
+def _disponible(tipo, nombre, doctypes):
+    """Defensivo: nunca enlazar algo que todavía no existe, o el panel sale roto.
+
+    Los Report estándar los crea `migrate` al importar su .json, antes de que corran
+    los pasos de despliegue; pero si el informe se retira, el panel debe seguir vivo.
+    """
+    if tipo == "DocType":
+        return nombre in doctypes
+    return bool(frappe.db.exists(tipo, nombre))
+
+
 def run():
     # Solo doctypes que existen (defensivo: si un módulo aún no se cargó, no rompe).
     existe = set(frappe.get_all("DocType", pluck="name"))
@@ -78,16 +100,18 @@ def run():
     ws.sequence_id = 1
     ws.content = _contenido()
 
-    for label, dt in SHORTCUTS:
-        if dt in existe:
-            ws.append("shortcuts", {"type": "DocType", "link_to": dt, "label": label})
+    for label, destino in SHORTCUTS:
+        tipo, nombre = _destino(destino)
+        if _disponible(tipo, nombre, existe):
+            ws.append("shortcuts", {"type": tipo, "link_to": nombre, "label": label})
 
     for card, items in CARDS:
         ws.append("links", {"type": "Card Break", "label": card})
-        for dt in items:
-            if dt in existe:
-                ws.append("links", {"type": "Link", "link_type": "DocType",
-                                    "link_to": dt, "label": dt})
+        for item in items:
+            tipo, nombre = _destino(item)
+            if _disponible(tipo, nombre, existe):
+                ws.append("links", {"type": "Link", "link_type": tipo,
+                                    "link_to": nombre, "label": nombre})
 
     ws.insert(ignore_permissions=True)
     frappe.db.commit()
@@ -108,7 +132,7 @@ def run():
 
             create_workspace_sidebar_for_workspaces()
             frappe.db.commit()
-    except Exception as e:  # noqa: BLE001 — el menú es cosmético; no debe tumbar el deploy
+    except Exception as e:  # el menú es cosmético; no debe tumbar el deploy
         frappe.logger().warning(f"f18: no se pudo crear el Workspace Sidebar: {e}")
 
     _desktop_icon()
