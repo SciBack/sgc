@@ -75,7 +75,11 @@ class IntegrationTestGuardadoBPMN(IntegrationTestCase):
         # El `modified` tiene resolución de segundo: sin este empujón, dos guardados
         # seguidos en el mismo segundo darían la misma versión y el test no probaría nada.
         nombre = frappe.get_all("File", filters={"file_name": antes["file_name"]}, pluck="name")[0]
-        frappe.db.set_value("File", nombre, "modified", add_to_date(now_datetime(), seconds=5))
+        # `update_modified=False` es imprescindible: sin él, set_value pisa el valor
+        # que le acabamos de dar con la hora actual, y la versión no se mueve.
+        frappe.db.set_value(
+            "File", nombre, "modified", add_to_date(now_datetime(), seconds=5), update_modified=False
+        )
         frappe.db.commit()
 
         despues = be.listar_bpmn("Proceso", p)[0]
