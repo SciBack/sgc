@@ -255,8 +255,10 @@ rama → commits → push → Pull Request → CI verde → revisión → merge 
    empujar directamente, ni forzar, ni borrar.
 3. **El CI se ejecuta solo.** El check `Integración (PostgreSQL)` levanta un
    Frappe completo con PostgreSQL y corre la suite. Tiene que quedar en verde.
-4. **Hace falta una aprobación** antes de poder mergear. Si empujas más commits
-   después de aprobado, la aprobación caduca y hay que revisar de nuevo.
+4. **El cambio se revisa antes de entrar.** GitHub no exige hoy una aprobación
+   formal para mergear, pero ningún PR se acepta sin que alguien lo mire: abre
+   el PR y espera revisión, no lo mergees tú. Si hay aprobación y luego empujas
+   más commits, la aprobación caduca.
 5. **Las conversaciones del PR deben quedar resueltas** para poder mergear.
 
 ### Qué NO puede entrar en este repositorio
