@@ -11,6 +11,18 @@ from typing import Any
 
 MAX_BPMN_BYTES = 5 * 1024 * 1024
 
+# Las tres familias del mapa de procesos, EN EL ORDEN EN QUE SE LEE UN MAPA:
+# estratégicos arriba, clave en el centro, soporte abajo. Ese orden es parte del
+# lenguaje del documento, no una preferencia — ordenar por código (C, E, S) deja
+# el mapa alfabético y sin significado.
+# (slug del nodo, valor del campo `nivel`, etiqueta que se muestra)
+FAMILIAS = (
+	("estrategicos", "Estratégico", "Estratégicos"),
+	("clave", "Clave", "Clave"),
+	("soporte", "Soporte", "Soporte"),
+)
+VALORES_FAMILIA = frozenset(valor for _, valor, _ in FAMILIAS)
+
 TIPOS_TAREA_BPMN = frozenset(
 	{
 		"task",
@@ -53,6 +65,8 @@ def get_children(
 	prefijo, separador, identificador = str(parent).partition(":")
 	if not separador or not identificador:
 		_rechazar_padre(frappe)
+	if prefijo == "familia":
+		return _hijos_de_familia(frappe, identificador)
 	if prefijo == "proceso":
 		return _hijos_de_proceso(frappe, identificador)
 	if prefijo == "procedimiento":
@@ -64,9 +78,41 @@ def get_children(
 
 
 def _nodos_raiz(frappe) -> list[dict[str, Any]]:
+	"""La raíz son las TRES FAMILIAS, no los 22 macroprocesos.
+
+	Agrupar aquí hace tres cosas de una vez: el mapa entero cabe en una pantalla,
+	la familia deja de deducirse de la letra del código, y el orden pasa a ser el
+	del mapa (E → C → S) en vez del alfabético que salía al ordenar por código.
+	"""
 	raices = _procesos_visibles(frappe, {"parent_proceso": ["is", "not set"]})
-	expandibles = _procesos_con_hijos_visibles(frappe, [row.name for row in raices])
-	return [_nodo_proceso(row, row.name in expandibles) for row in raices]
+	por_familia: dict[str, list[Any]] = {}
+	for row in raices:
+		por_familia.setdefault(row.nivel, []).append(row)
+
+	nodos = [
+		_nodo_familia(slug, etiqueta, len(por_familia[valor]))
+		for slug, valor, etiqueta in FAMILIAS
+		if por_familia.get(valor)
+	]
+
+	# Un macroproceso sin familia declarada no puede desaparecer del mapa por no
+	# encajar en la agrupación: se muestra en la raíz, como antes.
+	sueltos = [row for row in raices if row.nivel not in VALORES_FAMILIA]
+	if sueltos:
+		expandibles = _procesos_con_hijos_visibles(frappe, [row.name for row in sueltos])
+		nodos.extend(_nodo_proceso(row, row.name in expandibles) for row in sueltos)
+	return nodos
+
+
+def _hijos_de_familia(frappe, slug: str) -> list[dict[str, Any]]:
+	valor = next((v for s, v, _ in FAMILIAS if s == slug), None)
+	if valor is None:
+		_rechazar_padre(frappe)
+	filas = _procesos_visibles(
+		frappe, {"parent_proceso": ["is", "not set"], "nivel": valor}
+	)
+	expandibles = _procesos_con_hijos_visibles(frappe, [row.name for row in filas])
+	return [_nodo_proceso(row, row.name in expandibles) for row in filas]
 
 
 def _hijos_de_proceso(frappe, name: str) -> list[dict[str, Any]]:
@@ -273,6 +319,19 @@ def _log_bpmn_invalido(frappe, file_row, exc: Exception) -> None:
 	)
 
 
+def _nodo_familia(slug: str, etiqueta: str, total: int) -> dict[str, Any]:
+	"""Nodo de agrupación: no es un documento, así que no se puede abrir."""
+	return _payload_nodo(
+		value=f"familia:{slug}",
+		title=etiqueta,
+		expandable=True,
+		node_type="FAM",
+		doctype="",
+		docname="",
+		total=total,
+	)
+
+
 def _nodo_proceso(row, expandable: bool) -> dict[str, Any]:
 	niveles = {"Macroproceso": "N0", "Proceso": "N1", "Subproceso": "N2"}
 	return _payload_nodo(
@@ -320,6 +379,7 @@ def _payload_nodo(
 	docname: str,
 	file_name: str | None = None,
 	bpmn_id: str | None = None,
+	total: int | None = None,
 ) -> dict[str, Any]:
 	return {
 		"value": value,
@@ -330,6 +390,7 @@ def _payload_nodo(
 		"docname": docname,
 		"file_name": file_name,
 		"bpmn_id": bpmn_id,
+		"total": total,
 	}
 
 

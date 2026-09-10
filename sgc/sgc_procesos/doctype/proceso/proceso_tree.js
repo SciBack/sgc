@@ -45,6 +45,17 @@
 			if (node.is_root) return escape(__("Mapa de procesos"));
 
 			const data = node.data || {};
+
+			// Familia (Estratégicos / Clave / Soporte): es agrupación, no documento.
+			// No lleva píldora de nivel —dentro de ella todos son N0, así que decirlo
+			// en cada fila es ruido— sino el nombre y cuántos macroprocesos agrupa.
+			if (data.node_type === "FAM") {
+				const total = Number.isFinite(data.total) ? data.total : null;
+				const cuenta =
+					total === null ? "" : ` <span class="text-muted">${total}</span>`;
+				return `<span class="font-weight-bold">${escape(node.title)}</span>${cuenta}`;
+			}
+
 			const nivel = NIVELES_PROCESO[data.node_type];
 			const identificador =
 				data.node_type === "N4" ? escape(data.bpmn_id) : escape(data.docname);
