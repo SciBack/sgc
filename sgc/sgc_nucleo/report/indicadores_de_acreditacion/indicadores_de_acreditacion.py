@@ -96,7 +96,7 @@ def execute(filters=None):
 def _columnas():
 	return [
 		{"label": _("Indicador"), "fieldname": "indicador", "fieldtype": "Link", "options": "Indicador", "width": 120},
-		{"label": _("Nombre"), "fieldname": "nombre", "fieldtype": "Data", "width": 300},
+		{"label": _("Nombre"), "fieldname": "nombre", "fieldtype": "Data", "width": 320},
 		{
 			"label": _("Programa / Sede"),
 			"fieldname": "programa_sede",
@@ -113,9 +113,11 @@ def _columnas():
 		},
 		{"label": _("Valor"), "fieldname": "valor", "fieldtype": "Float", "precision": 2, "width": 90},
 		{"label": _("Meta"), "fieldname": "meta", "fieldtype": "Data", "width": 110},
-		{"label": _("¿Cumple?"), "fieldname": "cumple", "fieldtype": "Data", "width": 90},
+		{"label": _("¿Cumple?"), "fieldname": "cumple", "fieldtype": "Data", "width": 100},
 		# El tamaño de la muestra: 25 % de 12 no dice lo mismo que 25 % de 400.
-		{"label": _("Muestra (n)"), "fieldname": "muestra", "fieldtype": "Float", "precision": 0, "width": 100},
+		# Int y no Float: es un conteo, y un Float lo pinta como "5,382.000" —Frappe
+		# ignora `precision: 0` y aplica la del sistema—, que para personas es absurdo.
+		{"label": _("Muestra (n)"), "fieldname": "muestra", "fieldtype": "Int", "width": 100},
 		{"label": _("Marco"), "fieldname": "marco", "fieldtype": "Data", "width": 170},
 		{"label": _("Provisional"), "fieldname": "provisional", "fieldtype": "Check", "width": 90},
 		{"label": _("Fuente"), "fieldname": "fuente", "fieldtype": "Data", "width": 80},
