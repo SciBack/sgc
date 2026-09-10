@@ -455,6 +455,38 @@ def extraer_tareas_bpmn(content: str | bytes) -> list[dict[str, str]]:
 	return tareas
 
 
+def carriles_por_tarea(content: str | bytes) -> dict[str, str]:
+	"""Mapa {id de tarea: nombre de su carril}.
+
+	El carril es QUIÉN ejecuta la tarea. Un procedimiento sin responsables no es un
+	procedimiento, así que la tabla de tareas del documento lo necesita; el diagrama
+	ya lo dice visualmente y aquí solo se lee.
+
+	Espera contenido ya validado por `extraer_tareas_bpmn` (que rechaza DTD y
+	entidades): esta función no vuelve a comprobarlo.
+	"""
+	texto = _normalizar_contenido(content)
+	try:
+		raiz = ET.fromstring(texto)
+	except ET.ParseError as exc:
+		raise BpmnInvalido("El contenido no es XML BPMN válido") from exc
+
+	carriles: dict[str, str] = {}
+	for elemento in raiz.iter():
+		if _nombre_local(elemento.tag) != "lane":
+			continue
+		nombre = (elemento.get("name") or "").strip()
+		if not nombre:
+			continue
+		for hijo in elemento:
+			if _nombre_local(hijo.tag) != "flowNodeRef":
+				continue
+			referencia = (hijo.text or "").strip()
+			if referencia:
+				carriles[referencia] = nombre
+	return carriles
+
+
 def _normalizar_contenido(content: str | bytes) -> str:
 	if isinstance(content, bytes):
 		contenido_bytes = content
