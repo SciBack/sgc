@@ -48,6 +48,15 @@ CARDS = [
 ]
 
 
+# Etiqueta con la que se muestra cada enlace en el workspace. Sin entrada aquí se
+# usa el nombre del doctype, que es lenguaje de desarrollador («Proceso», «Ficha
+# Caracterizacion Proceso»): quien trabaja en Calidad no busca «un proceso», busca
+# el mapa. La clave es el nombre EXACTO del doctype.
+ETIQUETAS = {
+    "Proceso": "Mapa de procesos",
+    "Ficha Caracterizacion Proceso": "Ficha de caracterización",
+}
+
 def _contenido():
     """El layout del área central: cabecera + accesos + cabecera + tarjetas.
 
@@ -111,7 +120,8 @@ def run():
             tipo, nombre = _destino(item)
             if _disponible(tipo, nombre, existe):
                 ws.append("links", {"type": "Link", "link_type": tipo,
-                                    "link_to": nombre, "label": nombre})
+                                    "link_to": nombre,
+                                    "label": ETIQUETAS.get(nombre, nombre)})
 
     ws.insert(ignore_permissions=True)
     frappe.db.commit()
