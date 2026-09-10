@@ -146,6 +146,8 @@ def run():
         frappe.logger().warning(f"f18: no se pudo crear el Workspace Sidebar: {e}")
 
     _desktop_icon()
+    _iconos_de_miga()
+    _sidebars_por_modulo()
 
     print(f"Workspace '{WS}' creado — {len(SHORTCUTS)} accesos, {len(CARDS)} tarjetas")
 
@@ -188,3 +190,93 @@ def _desktop_icon():
         frappe.db.commit()
     except Exception as e:  # el icono es cosmético; no debe tumbar el deploy
         frappe.logger().warning(f"f18: no se pudo crear el Desktop Icon del SGC: {e}")
+
+
+# Un Desktop Icon por cada barra lateral del SGC. Sin esto la MIGA DE PAN se queda
+# en blanco al navegar: Frappe la dibuja buscando un icono cuyo `label` coincida
+# EXACTAMENTE con el título de la barra lateral activa (`breadcrumbs.js`, en
+# `set_workspace_breadcrumb`), y el app declara siete módulos —siete barras— contra
+# un único icono, «SGC UPeU». Van ocultos: existen para resolver la miga, no para
+# aparecer como aplicaciones en el conmutador del Desk.
+ICONOS_DE_MIGA = [
+    "SGC",
+    "SGC Nucleo",
+    "SGC Estructura",
+    "SGC Procesos",
+    "SGC Gobierno",
+    "SGC Auditoria",
+    "SGC Riesgos",
+]
+
+# Barras laterales con nombres de persona. Frappe autogenera una por módulo cuando no
+# existe el registro, pero la arma con los TRES primeros doctypes del módulo por fecha
+# de creación y usa el nombre del doctype como rótulo: salía «Ficha Caracterizacion
+# Pr…» y faltaba todo lo demás. Declararlas aquí sustituye a la autogenerada.
+SIDEBARS = {
+    "SGC Procesos": [
+        ("Mapa de procesos", "DocType", "Proceso"),
+        ("Procedimiento", "DocType", "Procedimiento"),
+        ("Ficha de caracterización", "DocType", "Ficha Caracterizacion Proceso"),
+        ("Informe de cumplimiento", "DocType", "Informe Cumplimiento"),
+        ("Volver al SGC", "Workspace", WS),
+    ],
+    "SGC Estructura": [
+        ("Marcos normativos", "DocType", "Marco Normativo"),
+        ("Estándares y criterios", "DocType", "Elemento Marco"),
+        ("Escalas de valoración", "DocType", "Escala Valoracion"),
+        ("Indicadores", "DocType", "Indicador"),
+        ("Fichas de indicador", "DocType", "Ficha Indicador"),
+        ("Informe de indicadores", "Report", "Indicadores de Acreditacion"),
+        ("Unidades orgánicas", "DocType", "Unidad Organica"),
+        ("Programas", "DocType", "Programa"),
+        ("Programas por sede", "DocType", "Programa Sede"),
+        ("Periodos académicos", "DocType", "Periodo Academico"),
+        ("Volver al SGC", "Workspace", WS),
+    ],
+}
+
+
+def _iconos_de_miga():
+    """Crea los iconos que la miga de pan necesita. Idempotente."""
+    for label in ICONOS_DE_MIGA:
+        try:
+            if frappe.db.exists("Desktop Icon", {"label": label}):
+                continue
+            icon = frappe.new_doc("Desktop Icon")
+            icon.label = label
+            icon.link_type = "External"
+            icon.link = "/desk/sgc"
+            icon.app = "sgc"
+            icon.standard = 0
+            icon.hidden = 1
+            icon.insert(ignore_permissions=True)
+        except Exception as e:  # la miga es cosmética; no debe tumbar el deploy
+            frappe.logger().warning(f"f18: no se pudo crear el icono {label}: {e}")
+    frappe.db.commit()
+
+
+def _sidebars_por_modulo():
+    """Declara las barras laterales de módulo, en vez de dejar la autogenerada."""
+    if not frappe.db.exists("DocType", "Workspace Sidebar"):
+        return
+    for titulo, items in SIDEBARS.items():
+        try:
+            if frappe.db.exists("Workspace Sidebar", titulo):
+                continue
+            barra = frappe.new_doc("Workspace Sidebar")
+            barra.title = titulo
+            barra.module = titulo
+            barra.header_icon = "tool"
+            for etiqueta, tipo, destino in items:
+                if tipo == "DocType" and not frappe.db.exists("DocType", destino):
+                    continue
+                if tipo == "Report" and not frappe.db.exists("Report", destino):
+                    continue
+                barra.append("items", {
+                    "label": etiqueta, "link_type": tipo,
+                    "type": "Link", "link_to": destino, "collapsible": 1,
+                })
+            barra.insert(ignore_permissions=True)
+        except Exception as e:  # el menú es cosmético; no debe tumbar el deploy
+            frappe.logger().warning(f"f18: no se pudo crear la barra {titulo}: {e}")
+    frappe.db.commit()
