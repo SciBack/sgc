@@ -60,6 +60,13 @@ class TestConfiguracionTree(unittest.TestCase):
 		for nivel in ("N0", "N1", "N2", "N3", "N4"):
 			self.assertIn(f'"{nivel}"', self.javascript)
 
+	def test_la_familia_se_pinta_como_agrupacion_y_no_como_documento(self):
+		self.assertIn('data.node_type === "FAM"', self.javascript)
+		self.assertIn("data.total", self.javascript)
+		# Dentro de una familia todos los nodos son N0: repetir la píldora en cada
+		# fila es ruido, así que la familia no la lleva.
+		self.assertNotIn('NIVELES_PROCESO["FAM"]', self.javascript)
+
 	def test_no_agrega_animaciones_a_la_interaccion_frecuente(self):
 		for patron in ("transition", "animation", "animate(", "@keyframes"):
 			self.assertNotIn(patron, self.javascript)
@@ -171,6 +178,7 @@ class IntegrationTestProcesoTree(IntegrationTestCase):
 		"docname",
 		"file_name",
 		"bpmn_id",
+		"total",
 	}
 
 	def setUp(self):
@@ -215,13 +223,13 @@ class IntegrationTestProcesoTree(IntegrationTestCase):
 		frappe.set_user(self.usuario_anterior)
 		super().tearDown()
 
-	def _crear_proceso(self, codigo, parent, is_group):
+	def _crear_proceso(self, codigo, parent, is_group, nivel="Soporte"):
 		return frappe.get_doc(
 			{
 				"doctype": "Proceso",
 				"codigo": codigo,
 				"proceso": f"Denominación {codigo}",
-				"nivel": "Soporte",
+				"nivel": nivel,
 				"parent_proceso": parent,
 				"is_group": is_group,
 			}
@@ -276,6 +284,13 @@ class IntegrationTestProcesoTree(IntegrationTestCase):
 	def _nodo(self, nodos, docname):
 		return next(nodo for nodo in nodos if nodo["docname"] == docname)
 
+	def _familia(self, nodos, etiqueta):
+		return next(
+			nodo
+			for nodo in nodos
+			if nodo["node_type"] == "FAM" and nodo["title"] == etiqueta
+		)
+
 	def _expandir_fixture(self, nodo_raiz):
 		pendientes = [nodo_raiz]
 		visitados = set()
@@ -298,20 +313,48 @@ class IntegrationTestProcesoTree(IntegrationTestCase):
 		# Calentar metadatos/roles para que el conteo mida las consultas del
 		# proveedor, no la inicialización perezosa de Frappe.
 		proceso_tree.get_children("Proceso")
-		with self.assertQueryCount(6):
-			sin_parent = proceso_tree.get_children("Proceso")
+		sin_parent = proceso_tree.get_children("Proceso")
 		con_parent_vacio = proceso_tree.get_children("Proceso", parent="")
 
 		self.assertEqual(sin_parent, con_parent_vacio)
-		self.assertTrue(
-			raices_fixture.issubset({nodo["docname"] for nodo in sin_parent})
-		)
-		nodo = self._nodo(sin_parent, self.raiz)
+		familia = self._familia(sin_parent, "Soporte")
+		self.assertEqual(set(familia), self.CAMPOS_NODO)
+		self.assertEqual(familia["value"], "familia:soporte")
+		self.assertEqual(familia["doctype"], "")
+		self.assertTrue(familia["expandable"])
+
+		# El coste de listar una familia es el que antes tenía la raíz: una lectura
+		# de procesos más la de sus hijos. Si aquí aparece un N+1, se nota.
+		with self.assertQueryCount(6):
+			hijos = proceso_tree.get_children("Proceso", familia["value"])
+
+		self.assertTrue(raices_fixture.issubset({nodo["docname"] for nodo in hijos}))
+		nodo = self._nodo(hijos, self.raiz)
 		self.assertEqual(set(nodo), self.CAMPOS_NODO)
 		self.assertEqual(nodo["value"], f"proceso:{self.raiz}")
 		self.assertEqual(nodo["node_type"], "N0")
 		self.assertEqual(nodo["doctype"], "Proceso")
 		self.assertTrue(nodo["expandable"])
+
+	def test_la_raiz_agrupa_por_familia_en_el_orden_del_mapa(self):
+		self._crear_proceso(f"{self.prefijo}-E01", None, 1, nivel="Estratégico")
+		self._crear_proceso(f"{self.prefijo}-C01", None, 1, nivel="Clave")
+
+		raiz = proceso_tree.get_children("Proceso")
+		familias = [nodo for nodo in raiz if nodo["node_type"] == "FAM"]
+
+		# El orden es el del mapa (estratégicos, clave, soporte), NO el alfabético
+		# que sale al ordenar por código.
+		self.assertEqual(
+			[nodo["title"] for nodo in familias], ["Estratégicos", "Clave", "Soporte"]
+		)
+		self.assertTrue(all(nodo["total"] >= 1 for nodo in familias))
+		# Ningún macroproceso cuelga ya directamente de la raíz.
+		self.assertEqual([nodo for nodo in raiz if nodo["doctype"] == "Proceso"], [])
+
+	def test_familia_desconocida_se_rechaza_como_cualquier_padre_forjado(self):
+		with self.assertRaises(frappe.ValidationError):
+			proceso_tree.get_children("Proceso", "familia:inventada")
 
 	def test_compone_proceso_subproceso_procedimiento_y_tareas_tipadas(self):
 		hijos_raiz = proceso_tree.get_children("Proceso", f"proceso:{self.raiz}")
@@ -337,8 +380,16 @@ class IntegrationTestProcesoTree(IntegrationTestCase):
 		self.assertEqual(proceso_tree.get_children("Proceso", tareas[0]["value"]), [])
 
 	def test_expand_all_termina_sin_duplicados_desde_ambas_formas_de_raiz(self):
-		nodo_omitido = self._nodo(proceso_tree.get_children("Proceso"), self.raiz)
-		nodo_vacio = self._nodo(proceso_tree.get_children("Proceso", parent=""), self.raiz)
+		familia = self._familia(proceso_tree.get_children("Proceso"), "Soporte")
+		familia_vacio = self._familia(
+			proceso_tree.get_children("Proceso", parent=""), "Soporte"
+		)
+		nodo_omitido = self._nodo(
+			proceso_tree.get_children("Proceso", familia["value"]), self.raiz
+		)
+		nodo_vacio = self._nodo(
+			proceso_tree.get_children("Proceso", familia_vacio["value"]), self.raiz
+		)
 
 		visitados_omitido = self._expandir_fixture(nodo_omitido)
 		visitados_vacio = self._expandir_fixture(nodo_vacio)
