@@ -20,6 +20,7 @@ import re
 
 import frappe
 from frappe import _
+from frappe.utils import get_datetime
 
 # Frappe puede añadir `content_hash[-6:]` al nombre de un adjunto al escribirlo
 # (`file_manager.get_file_name`). Para volver a encontrar ESE adjunto en el
@@ -37,15 +38,34 @@ def _check(doctype, docname, ptype="read"):
 
 @frappe.whitelist()
 def listar_bpmn(doctype, docname):
-	"""Devuelve los adjuntos .bpmn del documento: [{file_name, file_url, name}]."""
+	"""Devuelve los adjuntos .bpmn del documento: [{file_name, file_url, name, version}].
+
+	`version` existe para invalidar la caché del navegador. El adjunto conserva su
+	nombre entre guardados —así no se duplica—, con lo que su `file_url` no cambia
+	nunca; sin `Cache-Control` en `/files`, el navegador reutiliza la copia vieja y
+	el visor dibuja el diagrama anterior aunque el guardado haya ido bien. Antes
+	esto no se notaba porque el renombrado en cada guardado invalidaba la caché sin
+	querer. Quien descarga el fichero le añade `?v=<version>`: cambia solo cuando
+	cambia el diagrama, así que se sigue cacheando entre ediciones.
+	"""
 	_check(doctype, docname, "read")
 	filas = frappe.get_all(
 		"File",
 		filters={"attached_to_doctype": doctype, "attached_to_name": docname},
-		fields=["name", "file_name", "file_url"],
+		fields=["name", "file_name", "file_url", "modified"],
 		order_by="file_name asc",
 	)
-	return [f for f in filas if (f.get("file_name") or "").lower().endswith(".bpmn")]
+	adjuntos = [f for f in filas if (f.get("file_name") or "").lower().endswith(".bpmn")]
+	for f in adjuntos:
+		f["version"] = _version_de_cache(f.pop("modified", None))
+	return adjuntos
+
+
+def _version_de_cache(modified) -> str:
+	"""Marca de versión segura para una URL, derivada del `modified` del File."""
+	if not modified:
+		return "0"
+	return str(int(get_datetime(modified).timestamp()))
 
 
 def _base_del_nombre(nombre):

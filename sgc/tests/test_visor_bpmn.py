@@ -61,6 +61,22 @@ class TestVisorBPMN(FrappeTestCase):
         for url in re.findall(r"[\"']((?:https?:)?//[^\"']+)[\"']", fuente):
             self.fail(f"el visor carga un recurso externo: {url}")
 
+    def test_el_diagrama_se_pide_versionado_para_no_servir_el_dibujo_viejo(self):
+        """El adjunto conserva su nombre entre guardados —así no se duplica—, con lo
+        que su URL no cambia nunca. Sin versión en la petición, el navegador
+        reutiliza la copia cacheada y el visor dibuja el diagrama anterior aunque el
+        guardado haya ido bien."""
+        fuente = VISOR.read_text(encoding="utf-8")
+        self.assertIn("sgc.bpmn.url_versionada", fuente)
+        self.assertRegex(fuente, r"fetch\(\s*sgc\.bpmn\.url_versionada\(")
+        self.assertNotRegex(fuente, r"fetch\(\s*file_url\s*\)")
+
+        editor = (RAIZ / "sgc_nucleo" / "page" / "bpmn_editor" / "bpmn_editor.js").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("versionmap", editor)
+        self.assertNotRegex(editor, r"fetch\(\s*file_url\s*,")
+
     def test_los_formularios_montan_el_visor_y_conservan_el_boton(self):
         pares = {
             "procedimiento": "Procedimiento",

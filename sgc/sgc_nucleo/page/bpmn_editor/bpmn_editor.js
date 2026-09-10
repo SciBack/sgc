@@ -87,8 +87,10 @@ class BpmnEditorPage {
 					this.status(__('Adjunta un archivo .bpmn a la ficha para poder editarlo.'), 'var(--orange-600)');
 					return;
 				}
+				this.versionmap = {};
 				files.forEach((f) => {
 					this.filemap[f.file_url] = f.file_name;
+					this.versionmap[f.file_url] = f.version;
 					$sel.append(`<option value="${f.file_url}">${frappe.utils.escape_html(f.file_name)}</option>`);
 				});
 				this.open(files[0].file_url);
@@ -98,7 +100,11 @@ class BpmnEditorPage {
 	open(file_url) {
 		if (!file_url || !this.filemap[file_url]) return;
 		this.current = { file_url, file_name: this.filemap[file_url] };
-		fetch(file_url, { credentials: 'same-origin' })
+		const version = (this.versionmap || {})[file_url];
+		const url = version
+			? `${file_url}${file_url.includes('?') ? '&' : '?'}v=${encodeURIComponent(version)}`
+			: file_url;
+		fetch(url, { credentials: 'same-origin' })
 			.then((r) => r.text())
 			.then((xml) => this.modeler.importXML(xml))
 			.then(() => {
@@ -195,6 +201,8 @@ class BpmnEditorPage {
 			.then((r) => {
 				if (r.message && r.message.ok) {
 					this.current.file_url = r.message.file_url;
+					this.versionmap = this.versionmap || {};
+					this.versionmap[r.message.file_url] = String(Date.now());
 					frappe.show_alert({ message: __('BPMN guardado'), indicator: 'green' });
 					this.marcar_sucio(false);
 					this.status(`${__('Guardado')}: ${this.current.file_name}`, 'var(--green-600)');
