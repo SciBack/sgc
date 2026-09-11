@@ -167,3 +167,68 @@ class FichaCaracterizacionProceso(Document):
 			if codigo in declarados:
 				continue
 			frappe.db.set_value("Indicador", codigo, "proceso", None, update_modified=False)
+
+	@frappe.whitelist()
+	def datos_ficha(self):
+		"""Todo lo que la ficha necesita para imprimirse, resuelto en Python.
+
+		Lo pidió la DPGC el 10-sep: el cliente debe ver un PDF, no el formulario
+		editable, y las TAREAS tienen que salir del diagrama al documento. Aquí se
+		resuelven los enlaces que el Jinja no debe resolver: el proceso, los
+		procedimientos de cada actividad y las tareas de sus diagramas.
+
+		La plantilla solo itera; si mañana cambia el formato del PDF, esto no cambia.
+		"""
+		from sgc.bpmn_editor import tareas_del_diagrama
+
+		proceso = (
+			frappe.db.get_value(
+				"Proceso", self.proceso, ["name", "codigo", "proceso", "nivel", "nivel_bpm"], as_dict=True
+			)
+			if self.proceso
+			else None
+		)
+
+		actividades = []
+		for fila in self.get("actividades") or []:
+			procedimiento = None
+			tareas = []
+			if fila.procedimiento:
+				procedimiento = frappe.db.get_value(
+					"Procedimiento", fila.procedimiento, ["name", "codigo", "titulo", "estado"], as_dict=True
+				)
+				# Las tareas se leen del BPMN del procedimiento: no hay lista paralela
+				# que mantener, así que el documento no puede contradecir al diagrama.
+				try:
+					tareas = tareas_del_diagrama("Procedimiento", fila.procedimiento)
+				except Exception:
+					tareas = []
+			actividades.append({
+				"descripcion": fila.descripcion,
+				"orden": fila.orden,
+				"procedimiento": procedimiento,
+				"tareas": tareas,
+			})
+
+		indicadores = []
+		for fila in self.get("indicadores") or []:
+			if not fila.indicador:
+				continue
+			indicadores.append(
+				frappe.db.get_value(
+					"Indicador", fila.indicador, ["name", "codigo", "nombre", "categoria"], as_dict=True
+				)
+				or {"name": fila.indicador}
+			)
+
+		return {
+			"proceso": proceso,
+			"actividades": actividades,
+			"indicadores": indicadores,
+			"entradas": [f.as_dict() for f in self.get("entradas") or []],
+			"salidas": [f.as_dict() for f in self.get("salidas") or []],
+			"registros": [f.as_dict() for f in self.get("registros") or []],
+			"riesgos": [f.as_dict() for f in self.get("riesgos") or []],
+			"documentos": [f.as_dict() for f in self.get("documentos_asociados") or []],
+			"cambios": [f.as_dict() for f in self.get("control_cambios") or []],
+		}

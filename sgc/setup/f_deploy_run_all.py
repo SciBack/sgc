@@ -34,6 +34,7 @@ Orden (por dependencia real, no alfabético):
   17. f17_alcance_marcos — clasifica cada marco (licenciamiento / acreditación)
                                reales del workflow de Informe Cumplimiento
   18. f18_workspace — workspace nativo del Desk
+  19. f19_ficha_pdf — Print Format institucional de la ficha de caracterización
   19. f19_nivel_bpm — puebla `nivel_bpm` (N0/N1/N2) en los Proceso existentes
   20. f20_categoria_indicador — recoloca los Indicador que dicen acreditar sin marco que lo respalde
 
@@ -71,6 +72,7 @@ from sgc.setup import (
     f16_workflow_hallazgo_auditoria,
     f17_alcance_marcos,
     f18_workspace,
+    f19_ficha_pdf,
     f19_nivel_bpm,
     f20_categoria_indicador,
 )
@@ -94,6 +96,7 @@ STEPS = [
     ("f16_workflow_hallazgo_auditoria", f16_workflow_hallazgo_auditoria),
     ("f17_alcance_marcos", f17_alcance_marcos),
     ("f18_workspace", f18_workspace),
+    ("f19_ficha_pdf", f19_ficha_pdf),
     ("f19_nivel_bpm", f19_nivel_bpm),
     ("f20_categoria_indicador", f20_categoria_indicador),
 ]
