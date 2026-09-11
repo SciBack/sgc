@@ -323,10 +323,15 @@ class IntegrationTestProcesoTree(IntegrationTestCase):
 		self.assertEqual(familia["doctype"], "")
 		self.assertTrue(familia["expandable"])
 
+		# Se mide EN CALIENTE. La primera llamada a una ruta paga la inicialización
+		# perezosa de Frappe (metadatos, roles) y eso son ~15 consultas que no tienen
+		# nada que ver con el proveedor: medir en frío mide el arranque, no el coste.
+		# El test original calentaba por eso mismo.
+		proceso_tree.get_children("Proceso", familia["value"])
+
 		# Umbral, no medición exacta: lo que se vigila es que el coste NO crezca con
-		# el número de procesos. Con 22 raíces, un N+1 se dispararía muy por encima
-		# de esto; fijar el número exacto solo obliga a retocarlo en cada cambio.
-		with self.assertQueryCount(15):
+		# el número de procesos. Con 22 raíces, un N+1 se dispararía muy por encima.
+		with self.assertQueryCount(10):
 			hijos = proceso_tree.get_children("Proceso", familia["value"])
 
 		self.assertTrue(raices_fixture.issubset({nodo["docname"] for nodo in hijos}))
