@@ -1,0 +1,211 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-11 10:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "codigo",
+  "nombre",
+  "tipo",
+  "sistema_origen",
+  "descripcion",
+  "sec_gobierno",
+  "responsable",
+  "unidad_organica",
+  "es_autoritativa",
+  "confidencialidad",
+  "sec_recojo",
+  "periodicidad",
+  "metodo_recojo",
+  "protocolo",
+  "ultima_carga",
+  "sec_estado",
+  "estado",
+  "notas"
+ ],
+ "fields": [
+  {
+   "fieldname": "codigo",
+   "label": "Código",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1,
+   "description": "Código corto y estable. Es el nombre del documento."
+  },
+  {
+   "fieldname": "nombre",
+   "label": "Nombre",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "tipo",
+   "label": "Tipo",
+   "fieldtype": "Select",
+   "reqd": 1,
+   "in_list_view": 1,
+   "options": "Sistema transaccional\nData warehouse\nEncuesta o instrumento\nRegistro manual\nEnte externo\nCálculo derivado"
+  },
+  {
+   "fieldname": "sistema_origen",
+   "label": "Sistema de origen",
+   "fieldtype": "Data",
+   "description": "Oracle LAMB, DW, LimeSurvey, GLPI…"
+  },
+  {
+   "fieldname": "descripcion",
+   "label": "Descripción",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "sec_gobierno",
+   "fieldtype": "Section Break",
+   "label": "Gobierno del dato"
+  },
+  {
+   "fieldname": "responsable",
+   "label": "Responsable",
+   "fieldtype": "Link",
+   "options": "User",
+   "reqd": 1,
+   "description": "Quién responde por este dato. El criterio 8.1 pide procedimientos con responsable."
+  },
+  {
+   "fieldname": "unidad_organica",
+   "label": "Unidad orgánica",
+   "fieldtype": "Link",
+   "options": "Unidad Organica"
+  },
+  {
+   "fieldname": "es_autoritativa",
+   "label": "Es fuente autoritativa",
+   "fieldtype": "Check",
+   "default": "0",
+   "description": "Marca la fuente de verdad cuando el mismo dato existe en varios sitios."
+  },
+  {
+   "fieldname": "confidencialidad",
+   "label": "Confidencialidad",
+   "fieldtype": "Select",
+   "reqd": 1,
+   "default": "Interna",
+   "options": "Pública\nInterna\nRestringida\nConfidencial",
+   "description": "Exigido por el criterio 8.1: disponibilidad, integridad y CONFIDENCIALIDAD."
+  },
+  {
+   "fieldname": "sec_recojo",
+   "fieldtype": "Section Break",
+   "label": "Recojo"
+  },
+  {
+   "fieldname": "periodicidad",
+   "label": "Periodicidad",
+   "fieldtype": "Select",
+   "reqd": 1,
+   "options": "Diaria\nSemanal\nMensual\nBimestral\nSemestral\nAnual\nEventual",
+   "description": "La «frecuencia de la medición» que nombra el criterio 8.1."
+  },
+  {
+   "fieldname": "metodo_recojo",
+   "label": "Método",
+   "fieldtype": "Select",
+   "default": "Manual",
+   "options": "Automático\nManual\nMixto"
+  },
+  {
+   "fieldname": "protocolo",
+   "label": "Protocolo",
+   "fieldtype": "Data",
+   "depends_on": "eval:doc.metodo_recojo!='Manual'",
+   "description": "API REST, SQL, CSV, OAI-PMH…"
+  },
+  {
+   "fieldname": "ultima_carga",
+   "label": "Última carga",
+   "fieldtype": "Datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sec_estado",
+   "fieldtype": "Section Break",
+   "label": ""
+  },
+  {
+   "fieldname": "estado",
+   "label": "Estado",
+   "fieldtype": "Select",
+   "default": "Activa",
+   "options": "Activa\nSuspendida\nBaja",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "notas",
+   "label": "Notas",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-11 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Estructura",
+ "name": "Fuente Dato",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1,
+   "export": 1,
+   "role": "DPGC"
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1,
+   "export": 1,
+   "role": "Analista de Calidad (DPGC)"
+  },
+  {
+   "read": 1,
+   "role": "Auditor Interno"
+  },
+  {
+   "read": 1,
+   "role": "Responsable de Calidad de Programa"
+  },
+  {
+   "read": 1,
+   "role": "Coordinador de Calidad de Facultad"
+  },
+  {
+   "read": 1,
+   "role": "Miembro de Comité de Calidad"
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "field:codigo",
+ "title_field": "nombre",
+ "show_title_field_in_link": 1
+}
