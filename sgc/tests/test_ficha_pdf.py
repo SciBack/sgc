@@ -21,11 +21,54 @@ from sgc.tests import factories
 
 
 class IntegrationTestFichaPDF(IntegrationTestCase):
+	"""⚠️ El render real NO se ejercita aquí, y es deliberado.
+
+	`_render` pasa por la vista `printview` de Frappe, que incluye los *bundles*
+	de assets del Desk. En CI esos assets no se construyen, así que
+	`include_style('print.bundle.css')` revienta con
+	`AttributeError: 'NoneType' object has no attribute 'get'`. Y como
+	`sincronizar()` se traga los fallos del derivado —a propósito: un PDF que no
+	sale no puede impedir guardar la ficha—, el síntoma no era un error sino
+	**cero PDFs**, y con él caían todos los asertos de «hay un PDF».
+
+	Lo que estas pruebas comprueban es la GESTIÓN del adjunto: que se reemplace y
+	no se acumule, que se retire al despublicar, que no sobreviva a su ficha, que
+	el contrato no prometa ficheros ausentes. Nada de eso necesita que el PDF esté
+	bien dibujado — necesita bytes. Así que se sustituye el render y las pruebas
+	dejan de depender del entorno (y de arrancar un Chrome por caso).
+
+	Lo que sí depende de la plantilla —que el PDF público no lleve nombres— se
+	comprueba renderizando el Print Format directamente, sin la envoltura
+	`printview` que es la que arrastra los assets.
+	"""
+
+	def _pdf_minimo(self):
+		"""Un PDF de verdad, no unos bytes que lo parezcan.
+
+		Frappe valida el adjunto al escribirlo: comprueba el marcador EOF y además
+		lo abre con `pypdf` para ver si lleva JavaScript. Un PDF escrito a mano se
+		queda corto («startxref not found»), así que se genera con la misma librería.
+		"""
+		from io import BytesIO
+
+		from pypdf import PdfWriter
+
+		escritor = PdfWriter()
+		escritor.add_blank_page(width=72, height=72)
+		buffer = BytesIO()
+		escritor.write(buffer)
+		return buffer.getvalue()
+
+
 	def setUp(self):
 		frappe.set_user("Administrator")
 		self.fichas = []
+		self._render_real = ficha_pdf._render
+		pdf = self._pdf_minimo()
+		ficha_pdf._render = lambda ficha: pdf
 
 	def tearDown(self):
+		ficha_pdf._render = self._render_real
 		for f in self.fichas:
 			if frappe.db.exists("Ficha Caracterizacion Proceso", f):
 				frappe.delete_doc("Ficha Caracterizacion Proceso", f, ignore_permissions=True, force=True)
@@ -161,10 +204,12 @@ class IntegrationTestFichaPDF(IntegrationTestCase):
 		ficha.estado = "Publicado"
 		ficha.save(ignore_permissions=True)
 
-		html = frappe.get_print(
-			"Ficha Caracterizacion Proceso", ficha.name,
-			print_format=ficha_pdf.PRINT_FORMAT, as_pdf=False,
-		)
+		# Se renderiza la PLANTILLA sola, no `get_print`: esa pasa por la vista
+		# `printview`, que incluye los bundles de assets del Desk — y en CI no
+		# están construidos, así que revienta por algo que nada tiene que ver con
+		# lo que aquí se comprueba. Lo que importa es qué pinta la plantilla.
+		plantilla = frappe.db.get_value("Print Format", ficha_pdf.PRINT_FORMAT, "html")
+		html = frappe.render_template(plantilla, {"doc": ficha.reload() or ficha, "frappe": frappe})
 		texto = re.sub(r"<[^>]+>", " ", html)
 		for campo, nombre in nombres.items():
 			self.assertNotIn(
