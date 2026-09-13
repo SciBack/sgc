@@ -21,6 +21,13 @@ Ejecutar (lo hace el orquestador):
 import frappe
 
 PRINT_FORMAT_NAME = "Ficha de Caracterizacion UPeU"
+# Variante para el portal PÚBLICO. Idéntica salvo el control de emisión: donde la
+# interna nombra a las tres personas que firman, esta cita el ACTO que aprueba.
+# Motivo: el portal es una web abierta y los nombres son datos personales
+# (Ley 29733). Publicar el PDF publicaría los nombres aunque la lista blanca de
+# campos del portal no los incluya — el dato salía por el PDF, no por la API.
+# Verificado en el lab el 13-sep-2026: el PDF traía los tres `full_name`.
+PRINT_FORMAT_PUBLICO = "Ficha de Caracterizacion UPeU (publico)"
 DOCTYPE = "Ficha Caracterizacion Proceso"
 
 # El membrete se espera en /files/membrete-upeu.png (público). Si no estuviera, el
@@ -256,6 +263,54 @@ def run():
     # Que sea el formato por defecto del doctype: quien pulse Imprimir obtiene el
     # documento institucional, no el volcado estándar de campos.
     frappe.db.set_value("DocType", DOCTYPE, "default_print_format", PRINT_FORMAT_NAME)
+
+    # La variante pública NO se fija por defecto: el Desk debe seguir imprimiendo
+    # la institucional, con sus firmas. La pública existe solo para el portal.
+    campos_pub = dict(campos, html=HTML_PUBLICO)
+    if frappe.db.exists("Print Format", PRINT_FORMAT_PUBLICO):
+        pf2 = frappe.get_doc("Print Format", PRINT_FORMAT_PUBLICO)
+        for clave, valor in campos_pub.items():
+            pf2.set(clave, valor)
+        pf2.save(ignore_permissions=True)
+        accion_pub = "actualizado"
+    else:
+        pf2 = frappe.get_doc(dict(doctype="Print Format", name=PRINT_FORMAT_PUBLICO, **campos_pub))
+        pf2.insert(ignore_permissions=True)
+        accion_pub = "creado"
+
     frappe.db.commit()
     print(f"Print Format '{PRINT_FORMAT_NAME}' {accion} y fijado por defecto en {DOCTYPE}")
-    return {"print_format": PRINT_FORMAT_NAME, "accion": accion}
+    print(f"Print Format '{PRINT_FORMAT_PUBLICO}' {accion_pub} (sin nombres; para el portal)")
+    return {"print_format": PRINT_FORMAT_NAME, "accion": accion,
+            "print_format_publico": PRINT_FORMAT_PUBLICO, "accion_publico": accion_pub}
+
+
+# La pública se deriva de la interna: una sola plantilla que mantener. Si mañana
+# cambia el diseño, cambia en las dos; lo único que difiere es el control de emisión.
+HTML_PUBLICO = HTML.replace(
+    """  <h3>6. Control de emisión</h3>
+  <table class="firmas">
+    <thead><tr><th style="width:33%">Elaborado por</th><th style="width:33%">Revisado por</th><th>Aprobado por</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>{{ frappe.db.get_value("User", doc.elaborado_por, "full_name") or doc.elaborado_por or "—" }}</td>
+        <td>{{ frappe.db.get_value("User", doc.revisado_por, "full_name") or doc.revisado_por or "—" }}</td>
+        <td>{{ frappe.db.get_value("User", doc.aprobado_por, "full_name") or doc.aprobado_por or "—" }}</td>
+      </tr>
+    </tbody>
+  </table>""",
+    """  <h3>6. Control de emisión</h3>
+  <table class="firmas">
+    <thead><tr><th style="width:33%">Versión</th><th style="width:33%">Fecha de emisión</th><th>Estado</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>{{ doc.version or "—" }}</td>
+        <td>{{ frappe.utils.formatdate(doc.fecha_emision) if doc.fecha_emision else "—" }}</td>
+        <td>{{ doc.estado or "—" }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="nota">Elaborado, revisado y aprobado conforme al procedimiento documental
+  del Sistema de Gestión de la Calidad. La identificación nominal de quienes
+  intervinieron consta en el expediente interno.</p>""",
+)

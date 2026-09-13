@@ -138,3 +138,37 @@ class IntegrationTestFichaPDF(IntegrationTestCase):
 			frappe.db.get_value("Ficha Caracterizacion Proceso", ficha.name, "estado"), "Publicado",
 			"la ficha se guarda aunque su derivado falle",
 		)
+
+	def test_el_pdf_del_portal_no_lleva_nombres_de_personas(self):
+		"""El agujero que la lista blanca de campos NO tapaba.
+
+		El portal filtra qué campos expone, y `elaborado_por`/`revisado_por`/
+		`aprobado_por` nunca estuvieron en esa lista. Daba igual: la plantilla
+		institucional imprime los `full_name` de los tres, así que **el dato salía
+		por el PDF**. Verificado en el lab el 13-sep-2026 sobre FICHA-S04.04.
+
+		El PDF del portal usa la variante pública, que cita el ACTO (versión, fecha,
+		estado, resolución) en vez de a las personas.
+		"""
+		import re
+
+		ficha = self._ficha_publicada()
+		nombres = {}
+		for campo in ("elaborado_por", "revisado_por", "aprobado_por"):
+			usuario = frappe.session.user
+			ficha.set(campo, usuario)
+			nombres[campo] = frappe.db.get_value("User", usuario, "full_name") or usuario
+		ficha.estado = "Publicado"
+		ficha.save(ignore_permissions=True)
+
+		html = frappe.get_print(
+			"Ficha Caracterizacion Proceso", ficha.name,
+			print_format=ficha_pdf.PRINT_FORMAT, as_pdf=False,
+		)
+		texto = re.sub(r"<[^>]+>", " ", html)
+		for campo, nombre in nombres.items():
+			self.assertNotIn(
+				nombre, texto,
+				f"el PDF público no puede llevar el nombre de {campo}: es dato personal (Ley 29733)",
+			)
+		self.assertIn("Versión", texto, "en su lugar debe constar el acto: versión, fecha, estado")
