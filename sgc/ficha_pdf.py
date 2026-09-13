@@ -20,6 +20,7 @@ Dos decisiones que el consumidor necesita dar por ciertas:
    vigente. Un solo fichero por ficha es la única forma de que retirar la
    publicación retire de verdad el contenido.
 """
+import os
 import re
 
 import frappe
@@ -156,4 +157,28 @@ def pdf_publicado(ficha: str) -> dict | None:
 	if not adjuntos:
 		return None
 	doc = frappe.get_doc("File", adjuntos[0].name)
+
+	# Que exista el REGISTRO no garantiza que exista el FICHERO: son dos cosas
+	# distintas y se pueden separar (un File huérfano de un intento fallido, un
+	# borrado a mano en disco, una restauración de base sin sus adjuntos). Quien
+	# llame a esto asumirá que puede servir lo que devuelve —y hará `open()`
+	# directamente—, así que si el fichero no está, aquí se responde «no hay»
+	# igual que si no hubiera registro. Un contrato que promete un fichero tiene
+	# que comprobar el fichero.
+	if not _existe_en_disco(doc):
+		frappe.log_error(
+			title="Ficha PDF: registro sin fichero",
+			message=f"{ficha}: el File {doc.name} ({doc.file_name}) no tiene fichero en disco.",
+		)
+		return None
+
 	return {"file_name": doc.file_name, "file_url": doc.file_url}
+
+
+def _existe_en_disco(doc) -> bool:
+	"""¿El File tiene de verdad su fichero detrás?"""
+	try:
+		ruta = doc.get_full_path()
+	except Exception:
+		return False
+	return bool(ruta) and os.path.isfile(ruta)

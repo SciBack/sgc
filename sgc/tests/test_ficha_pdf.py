@@ -172,3 +172,31 @@ class IntegrationTestFichaPDF(IntegrationTestCase):
 				f"el PDF público no puede llevar el nombre de {campo}: es dato personal (Ley 29733)",
 			)
 		self.assertIn("Versión", texto, "en su lugar debe constar el acto: versión, fecha, estado")
+
+	def test_no_promete_un_fichero_que_no_esta(self):
+		"""El registro `File` y el fichero son dos cosas distintas y se separan.
+
+		Si `pdf_publicado()` devolviera la ruta de un registro huérfano, quien la
+		consuma haría `open()` y petaría —o serviría un 500 en una web pública—.
+		Ante un registro sin fichero se responde «no hay», igual que sin registro.
+		"""
+		import os
+
+		ficha = self._ficha_publicada()
+		ficha.estado = "Publicado"
+		ficha.save(ignore_permissions=True)
+		self.assertIsNotNone(ficha_pdf.pdf_publicado(ficha.name))
+
+		# Se borra el FICHERO dejando el registro: el caso que el contrato no cubría.
+		nombre = frappe.get_all(
+			"File",
+			filters={"attached_to_doctype": "Ficha Caracterizacion Proceso", "attached_to_name": ficha.name},
+			pluck="name",
+		)[0]
+		ruta = frappe.get_doc("File", nombre).get_full_path()
+		os.remove(ruta)
+
+		self.assertIsNone(
+			ficha_pdf.pdf_publicado(ficha.name),
+			"con el registro presente pero el fichero ausente, no se puede prometer el PDF",
+		)
