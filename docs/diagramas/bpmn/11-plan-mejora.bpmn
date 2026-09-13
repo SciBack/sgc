@@ -102,16 +102,18 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_En_ejecucion_Devolver_a_borrador_hacia_Borrador" bpmnElement="Flow_En_ejecucion_Devolver_a_borrador_hacia_Borrador">
         <di:waypoint x="830" y="160" />
-        <di:waypoint x="550" y="160" />
+        <di:waypoint x="830" y="120" />
+        <di:waypoint x="490" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_En_ejecucion_Cerrar_plan" bpmnElement="Flow_gw_En_ejecucion_Cerrar_plan">
-        <di:waypoint x="715" y="160" />
-        <di:waypoint x="1030" y="160" />
+        <di:waypoint x="690" y="135" />
+        <di:waypoint x="690" y="120" />
+        <di:waypoint x="1090" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_En_ejecucion_Cerrar_plan_hacia_Cerrado" bpmnElement="Flow_En_ejecucion_Cerrar_plan_hacia_Cerrado">
-        <di:waypoint x="1090" y="200" />
-        <di:waypoint x="1090" y="210" />
-        <di:waypoint x="1230" y="210" />
+        <di:waypoint x="1150" y="160" />
+        <di:waypoint x="1150" y="192" />
+        <di:waypoint x="1248" y="192" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

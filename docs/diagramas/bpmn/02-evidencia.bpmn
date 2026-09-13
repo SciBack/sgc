@@ -152,6 +152,12 @@
         <sgc:transicion rol="Analista de Calidad (DPGC)" autoaprobacion="1" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
+    <bpmn:textAnnotation id="Control_1">
+      <bpmn:documentation>sgc.sgc_nucleo.doctype.evidencia.evidencia.Evidencia._validar_trazabilidad_si_valida</bpmn:documentation>
+      <bpmn:text>Validar (desde Pendiente o Subsanada): requiere al
+menos una Trazabilidad hacia un elemento del marco o
+proceso. Sin vínculo se rechaza el guardado.</bpmn:text>
+    </bpmn:textAnnotation>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="Diagram_1">
     <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
@@ -215,6 +221,9 @@
       <bpmndi:BPMNShape id="Shape_Auto_Valida__Vencida" bpmnElement="Auto_Valida__Vencida">
         <dc:Bounds x="1037" y="622" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Control_1" bpmnElement="Control_1">
+        <dc:Bounds x="200" y="800" width="420" height="84" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Edge_Flow_Valida_sigue" bpmnElement="Flow_Valida_sigue">
         <di:waypoint x="1080" y="160" />
         <di:waypoint x="1230" y="160" />
@@ -225,8 +234,8 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_auto_in_Pendiente_Vencida" bpmnElement="Flow_auto_in_Pendiente_Vencida">
         <di:waypoint x="455" y="185" />
-        <di:waypoint x="455" y="640" />
-        <di:waypoint x="630" y="640" />
+        <di:waypoint x="455" y="622" />
+        <di:waypoint x="648" y="622" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_auto_out_Pendiente_Vencida" bpmnElement="Flow_auto_out_Pendiente_Vencida">
         <di:waypoint x="666" y="640" />
@@ -234,8 +243,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_auto_in_Valida_Vencida" bpmnElement="Flow_auto_in_Valida_Vencida">
         <di:waypoint x="1055" y="185" />
-        <di:waypoint x="1055" y="640" />
-        <di:waypoint x="1037" y="640" />
+        <di:waypoint x="1055" y="622" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_auto_out_Valida_Vencida" bpmnElement="Flow_auto_out_Valida_Vencida">
         <di:waypoint x="1037" y="640" />
@@ -246,26 +254,27 @@
         <di:waypoint x="630" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Pendiente_Validar_hacia_Valida" bpmnElement="Flow_Pendiente_Validar_hacia_Valida">
-        <di:waypoint x="750" y="160" />
+        <di:waypoint x="690" y="120" />
+        <di:waypoint x="1030" y="120" />
         <di:waypoint x="1030" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Pendiente_Observar" bpmnElement="Flow_gw_Pendiente_Observar">
-        <di:waypoint x="480" y="160" />
-        <di:waypoint x="830" y="160" />
+        <di:waypoint x="455" y="135" />
+        <di:waypoint x="455" y="120" />
+        <di:waypoint x="890" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Pendiente_Observar_hacia_Observada" bpmnElement="Flow_Pendiente_Observar_hacia_Observada">
         <di:waypoint x="890" y="200" />
-        <di:waypoint x="890" y="320" />
-        <di:waypoint x="865" y="320" />
+        <di:waypoint x="890" y="295" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Observada_Subsanar" bpmnElement="Flow_gw_Observada_Subsanar">
         <di:waypoint x="915" y="320" />
         <di:waypoint x="1090" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Observada_Subsanar_hacia_Subsanada" bpmnElement="Flow_Observada_Subsanar_hacia_Subsanada">
-        <di:waypoint x="1150" y="280" />
-        <di:waypoint x="1150" y="160" />
-        <di:waypoint x="1430" y="160" />
+        <di:waypoint x="1210" y="320" />
+        <di:waypoint x="1210" y="185" />
+        <di:waypoint x="1455" y="185" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Observada_Subsanar_2" bpmnElement="Flow_gw_Observada_Subsanar_2">
         <di:waypoint x="890" y="345" />
@@ -273,9 +282,9 @@
         <di:waypoint x="1090" y="480" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Observada_Subsanar_hacia_Subsanada_2" bpmnElement="Flow_Observada_Subsanar_hacia_Subsanada_2">
-        <di:waypoint x="1150" y="440" />
-        <di:waypoint x="1150" y="160" />
-        <di:waypoint x="1430" y="160" />
+        <di:waypoint x="1210" y="480" />
+        <di:waypoint x="1210" y="185" />
+        <di:waypoint x="1455" y="185" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Subsanada_Validar" bpmnElement="Flow_gw_Subsanada_Validar">
         <di:waypoint x="1480" y="160" />
@@ -283,16 +292,19 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Subsanada_Validar_hacia_Valida" bpmnElement="Flow_Subsanada_Validar_hacia_Valida">
         <di:waypoint x="1630" y="160" />
-        <di:waypoint x="1080" y="160" />
+        <di:waypoint x="1630" y="135" />
+        <di:waypoint x="1055" y="135" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Subsanada_Observar" bpmnElement="Flow_gw_Subsanada_Observar">
-        <di:waypoint x="1480" y="160" />
-        <di:waypoint x="1830" y="160" />
+        <di:waypoint x="1455" y="135" />
+        <di:waypoint x="1455" y="120" />
+        <di:waypoint x="1890" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Subsanada_Observar_hacia_Observada" bpmnElement="Flow_Subsanada_Observar_hacia_Observada">
-        <di:waypoint x="1890" y="200" />
-        <di:waypoint x="1890" y="320" />
-        <di:waypoint x="915" y="320" />
+        <di:waypoint x="1830" y="160" />
+        <di:waypoint x="1830" y="205" />
+        <di:waypoint x="890" y="205" />
+        <di:waypoint x="890" y="295" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

@@ -145,16 +145,19 @@
         <di:waypoint x="830" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_En_revision_Aprobar_hacia_Aprobado" bpmnElement="Flow_En_revision_Aprobar_hacia_Aprobado">
-        <di:waypoint x="950" y="160" />
+        <di:waypoint x="890" y="120" />
+        <di:waypoint x="1230" y="120" />
         <di:waypoint x="1230" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_En_revision_Observar" bpmnElement="Flow_gw_En_revision_Observar">
-        <di:waypoint x="680" y="160" />
-        <di:waypoint x="1030" y="160" />
+        <di:waypoint x="655" y="135" />
+        <di:waypoint x="655" y="120" />
+        <di:waypoint x="1090" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_En_revision_Observar_hacia_Borrador" bpmnElement="Flow_En_revision_Observar_hacia_Borrador">
         <di:waypoint x="1030" y="160" />
-        <di:waypoint x="550" y="160" />
+        <di:waypoint x="1030" y="120" />
+        <di:waypoint x="490" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Aprobado_Observar" bpmnElement="Flow_gw_Aprobado_Observar">
         <di:waypoint x="1280" y="160" />
@@ -162,12 +165,12 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Aprobado_Observar_hacia_Borrador" bpmnElement="Flow_Aprobado_Observar_hacia_Borrador">
         <di:waypoint x="1430" y="160" />
-        <di:waypoint x="550" y="160" />
+        <di:waypoint x="1430" y="120" />
+        <di:waypoint x="490" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Aprobado_Presentar_a_SUNEDU" bpmnElement="Flow_gw_Aprobado_Presentar_a_SUNEDU">
         <di:waypoint x="1255" y="185" />
-        <di:waypoint x="1255" y="320" />
-        <di:waypoint x="1195" y="320" />
+        <di:waypoint x="1255" y="280" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Aprobado_Presentar_a_SUNEDU_hacia_Presentado_a_SUNEDU" bpmnElement="Flow_Aprobado_Presentar_a_SUNEDU_hacia_Presentado_a_SUNEDU">
         <di:waypoint x="1315" y="320" />

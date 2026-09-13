@@ -17,10 +17,17 @@ auditoría.
 **El layout se respeta mientras siga siendo válido.** Si recolocas las cajas en
 Camunda, la siguiente regeneración conserva tus posiciones y solo actualiza la
 semántica. Lo que no sobrevive es mover *flechas*: esas salen del código.
+Las flechas de secuencia usan rutas ortogonales de borde a borde. Si la ruta
+directa cruza una actividad, se desvía por una franja libre, sin mover las cajas.
+Las pruebas comprueban que ningún segmento atraviese el interior de un nodo,
+incluidos origen y destino, en los 15 diagramas. No garantizan separación entre
+todas las flechas ni sustituyen la revisión visual de su lectura.
 
-Y hay dos condiciones para que el layout guardado se conserve, **que se aplican
-al diagrama entero, no caja a caja**: que cada nodo caiga dentro de la banda de
-su carril y que no haya dos nodos pisándose. Si una falla, se descarta el layout
+Hay cuatro condiciones para que el layout guardado se conserve, **que se aplican
+al diagrama entero, no caja a caja**: que todos los nodos tengan posición previa,
+que cada nodo caiga dentro de la banda de su carril, que no haya dos nodos
+pisándose y que las tareas conserven al menos 120×80 px. Así se descartan las
+antiguas cajas de 36×36 px de tareas automáticas. Si una falla, se descarta el layout
 completo y se recalcula todo — un diagrama mitad conservado mitad recalculado
 acaba con cajas superpuestas, porque las posiciones nuevas no saben qué celdas
 ocupan las viejas.
@@ -118,6 +125,27 @@ reglas completas que condicionan cada paso. Incluyen los efectos y saltos entre
 procesos declarados en `EFECTOS_AL_ENTRAR` y `SALTOS_ENTRE_PROCESOS` del generador;
 no se debe asumir que esas listas cubren todos los efectos de los controladores.
 Conviene saberlo antes de usarlos como referencia única.
+
+### Controles operativos incorporados el 2026-09-13
+
+Los diagramas 02, 03, 10 y 12 incluyen anotaciones visibles debajo del pool,
+sin flechas ni tareas humanas nuevas. Cada anotación conserva en
+`bpmn:documentation` la función exacta de su controlador:
+
+- Evidencia: trazabilidad requerida al validar.
+- Autoevaluación: sincronización aditiva de evidencias y propuesta de nivel al
+  guardar valoraciones; bloqueo de edición tras submit; confirmaciones necesarias
+  para cerrar. El cierre intercala una tarea automática que congela el marco y
+  registra la vigencia dentro del mismo submit, antes de llegar a Cerrada.
+- No Conformidad: requisitos acumulativos de responsable, causa, compromiso,
+  tratamiento y evidencia de cierre.
+- Acción de Mejora: ajuste del avance y recálculo del plan al guardar o borrar.
+
+Las anotaciones tienen ancho fijo, líneas cortas y separación vertical; se
+recalculan al regenerar. Los efectos automáticos también conservan su origen en
+el XML. Las pruebas puras verifican geometría, origen, secuencia de cierre y
+ejecución del controlador de submit con dependencias aisladas. Esto no certifica
+la equivalencia completa ni la aceptación operacional por Calidad.
 
 Desde el 2026-09-13 el CI verifica la concordancia sin necesitar Frappe:
 

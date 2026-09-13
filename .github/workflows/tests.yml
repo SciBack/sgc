@@ -66,6 +66,7 @@ jobs:
           python -m unittest discover -s tests -p 'test_ingesta_reintento.py'
           python -m unittest discover -s sgc/tests -p 'test_indicadores_ingesta_puro.py'
           python -m unittest discover -s tests -p 'test_bpmn_validacion.py'
+          python -m unittest discover -s tests -p 'test_bpmn_controles.py'
 
       - name: Dependencias del sistema
         run: |

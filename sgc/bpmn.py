@@ -34,7 +34,9 @@ ejecutar aquí (gateways paralelos, temporizadores, subprocesos). La traducción
 inversa tiene que rechazar lo que no sea representable en vez de ignorarlo.
 """
 
+import textwrap
 import unicodedata
+from itertools import pairwise
 from xml.sax.saxutils import escape, quoteattr
 
 NS = {
@@ -103,6 +105,12 @@ TRANSICIONES_AUTOMATICAS = [
 # efecto ocurre al cerrar, antes de que el proceso termine, y así se lee.
 EFECTOS_AL_ENTRAR = [
     {
+        "document_type": "Autoevaluacion",
+        "estado": "Cerrada",
+        "etiqueta": "Congelar marco y registrar vigencia",
+        "origen": "sgc.sgc_nucleo.doctype.autoevaluacion.autoevaluacion.Autoevaluacion.before_submit",
+    },
+    {
         "document_type": "Aplicacion Instrumento",
         "estado": "Cerrada",
         "etiqueta": "Publicar valores de indicador",
@@ -110,6 +118,48 @@ EFECTOS_AL_ENTRAR = [
                   ".publicar_valores_indicador",
     },
 ]
+
+# Controles del controlador, no nuevas acciones de workflow. Son anotaciones
+# visibles fuera de los carriles: un guardado ordinario no se convierte en una
+# transición humana. El origen completo se conserva en documentation del XML.
+CONTROLES_OPERATIVOS = {
+    "Evidencia": [
+        ("Validar (desde Pendiente o Subsanada): requiere al menos una Trazabilidad "
+         "hacia un elemento del marco o proceso. Sin vínculo se rechaza el guardado.",
+         "sgc.sgc_nucleo.doctype.evidencia.evidencia.Evidencia._validar_trazabilidad_si_valida"),
+    ],
+    "Autoevaluacion": [
+        ("Al guardar una valoración de criterio: sincronizar sus evidencias con Trazabilidad. "
+         "Es aditivo: quitar una evidencia del selector no borra el vínculo creado.",
+         "sgc.sgc_nucleo.doctype.valoracion_criterio.valoracion_criterio.ValoracionCriterio._sincronizar_trazabilidad"),
+        ("Al guardar una valoración de criterio: recalcular el nivel propuesto del estándar. "
+         "El nivel oficial requiere confirmación humana.",
+         "sgc.sgc_nucleo.doctype.valoracion_criterio.valoracion_criterio.ValoracionCriterio.on_update"),
+        ("Autoevaluación enviada (docstatus=1): se rechaza crear o editar valoraciones de criterio, "
+         "antes de sincronizar sus evidencias.",
+         "sgc.sgc_nucleo.doctype.valoracion_criterio.valoracion_criterio.ValoracionCriterio.validate"),
+        ("Cerrar: exige todos los estándares confirmados. El mismo submit congela el marco y "
+         "registra la vigencia; si faltan confirmaciones, no se persiste el cierre.",
+         "sgc.sgc_nucleo.doctype.autoevaluacion.autoevaluacion.Autoevaluacion.before_submit"),
+    ],
+    "No Conformidad": [
+        ("Analizar causa: requiere responsable. Tratar: exige análisis de causa redactado cuando "
+         "corresponde; una NC mayor siempre lo requiere. Controles acumulativos en cada guardado.",
+         "sgc.sgc_nucleo.doctype.no_conformidad.no_conformidad.NoConformidad.validate"),
+        ("Enviar a verificación: exige fecha de compromiso y plan de mejora o corrección inmediata. "
+         "Ambos cierres requieren evidencia. Estos requisitos se mantienen en etapas posteriores.",
+         "sgc.sgc_nucleo.doctype.no_conformidad.no_conformidad.NoConformidad.validate"),
+    ],
+    "Accion Mejora": [
+        ("Al guardar: Planificada fija avance 0; Ejecutada y Verificada eficaz, 100. "
+         "Al cambiar a otro estado, un avance heredado de 100 se reinicia a 0; "
+         "un avance manual menor se conserva.",
+         "sgc.sgc_nucleo.doctype.accion_mejora.accion_mejora.AccionMejora._fijar_avance"),
+        ("Al guardar o borrar una acción: recalcular avance y semáforo del plan vinculado. "
+         "Al borrar, excluir esta acción del cálculo. No depende solo de cambiar de estado.",
+         "sgc.sgc_nucleo.doctype.accion_mejora.accion_mejora.AccionMejora._recalcular_plan"),
+    ],
+}
 
 # Lo que un proceso le manda a OTRO proceso.
 #
@@ -520,10 +570,10 @@ def layout_de(xml):
 def exportar_todos(destino, preservar_layout=True):
     """Escribe un `.bpmn` por cada workflow declarado. Devuelve el informe.
 
-    Con `preservar_layout`, las posiciones de un fichero ya existente se
-    conservan y solo se calculan las de los elementos nuevos. Así la semántica
-    (que sale del código) se actualiza sola sin destruir el ajuste visual (que
-    lo hace una persona con criterio).
+    Con `preservar_layout`, se conservan las posiciones si el inventario de
+    nodos sigue completo y no hay solapes ni nodos fuera de sus carriles.
+    Un nodo nuevo obliga a recalcular el conjunto para evitar mezclar posiciones
+    incompatibles. Las anotaciones se distribuyen siempre debajo de los pools.
     """
     import pathlib
 
@@ -580,8 +630,60 @@ def _centro(x, y, ancho, alto):
     return x + ancho / 2, y + alto / 2
 
 
+def _ruta_flujo(origen, destino, cajas):
+    """Ruta ortogonal borde a borde, sin atravesar interiores de ningún nodo.
+
+    Preferir conexiones directas; si una caja interrumpe el trayecto, buscar
+    codos en franjas libres a 20 px de los nodos. No se mueve ninguna actividad.
+    Las cajas de origen/destino también son obstáculos: evita volver a entrar
+    en la propia tarea al cambiar de carril o compartir columna.
+    """
+    def puertos(caja):
+        x, y, w, h = caja
+        return [(int(x + w), int(y + h / 2)), (int(x), int(y + h / 2)),
+                (int(x + w / 2), int(y)), (int(x + w / 2), int(y + h))]
+
+    def libre(a, b):
+        x1, y1 = a
+        x2, y2 = b
+        if x1 != x2 and y1 != y2:
+            return False
+        for x, y, w, h in cajas:
+            if x1 == x2:
+                if x < x1 < x + w and max(min(y1, y2), y) < min(max(y1, y2), y + h):
+                    return False
+            elif y < y1 < y + h and max(min(x1, x2), x) < min(max(x1, x2), x + w):
+                return False
+        return True
+
+    rutas = []
+    xs = sorted({int(v) for x, _y, w, _h in cajas for v in (x - 20, x + w + 20)})
+    ys = sorted({int(v) for _x, y, _w, h in cajas for v in (y - 20, y + h + 20)})
+
+    def aceptar(puntos):
+        puntos = [p for i, p in enumerate(puntos) if i == 0 or p != puntos[i - 1]]
+        if all(libre(a, b) for a, b in pairwise(puntos)):
+            distancia = sum(abs(a[0] - b[0]) + abs(a[1] - b[1]) for a, b in pairwise(puntos))
+            rutas.append((distancia + 20 * (len(puntos) - 2), puntos))
+
+    for inicio in puertos(origen):
+        for fin in puertos(destino):
+            aceptar([inicio, fin])
+            aceptar([inicio, (inicio[0], fin[1]), fin])
+            aceptar([inicio, (fin[0], inicio[1]), fin])
+            for y in ys:
+                aceptar([inicio, (inicio[0], y), (fin[0], y), fin])
+            for x in xs:
+                aceptar([inicio, (x, inicio[1]), (x, fin[1]), fin])
+    if not rutas:
+        raise ValueError("No hay ruta ortogonal libre entre los nodos; revisar su layout")
+    return min(rutas, key=lambda r: (r[0], r[1]))[1]
+
+
 class _Nodo:
     """Un elemento del diagrama, con su geometría ya resuelta."""
+
+    TIPOS_TAREA = ("userTask", "serviceTask", "sendTask")
 
     def __init__(self, nid, tipo, nombre, carril, col, fila):
         self.id = nid
@@ -593,13 +695,15 @@ class _Nodo:
 
     @property
     def ancho(self):
-        return {"userTask": ANCHO_TAREA, "exclusiveGateway": LADO_GATEWAY}.get(
-            self.tipo, LADO_EVENTO)
+        if self.tipo in self.TIPOS_TAREA:
+            return ANCHO_TAREA
+        return LADO_GATEWAY if self.tipo == "exclusiveGateway" else LADO_EVENTO
 
     @property
     def alto(self):
-        return {"userTask": ALTO_TAREA, "exclusiveGateway": LADO_GATEWAY}.get(
-            self.tipo, LADO_EVENTO)
+        if self.tipo in self.TIPOS_TAREA:
+            return ALTO_TAREA
+        return LADO_GATEWAY if self.tipo == "exclusiveGateway" else LADO_EVENTO
 
     @property
     def x(self):
@@ -791,6 +895,7 @@ def construir(spec, layout_previo=None):
             continue              # nadie llega a ese estado: nada que interponer
         nodos[nid] = _Nodo(nid, "serviceTask", efecto["etiqueta"], CARRIL_SISTEMA, 0,
                            fila_de[CARRIL_SISTEMA])
+        nodos[nid].origen = efecto["origen"]
         for k in entrantes:
             fid, origen, _dest, etiqueta, ext = flujos[k]
             flujos[k] = (fid, origen, nid, etiqueta, ext)
@@ -859,8 +964,13 @@ def _serializar(spec, carriles, nodos, flujos, layout_previo=None, mensajes=None
     # dos tareas dibujadas una encima de otra —pasó, y se conservaban tan
     # contentas porque cada una estaba «en su sitio»—.
     guardadas = [(n, layout_previo[n.id]) for n in nodos.values() if n.id in layout_previo]
-    layout_valido = bool(guardadas) and all(
-        _cabe_en_su_carril(n, caja) for n, caja in guardadas
+    # Si aparecen nodos nuevos, recalcular TODO: una posición calculada podría
+    # ocupar una caja previamente ajustada aunque las antiguas no se solapen.
+    layout_valido = len(guardadas) == len(nodos) and bool(guardadas) and all(
+        _cabe_en_su_carril(n, caja)
+        and (n.tipo not in _Nodo.TIPOS_TAREA
+             or (caja[2] >= ANCHO_TAREA and caja[3] >= ALTO_TAREA))
+        for n, caja in guardadas
     ) and not any(
         _se_pisan(guardadas[i][1], guardadas[j][1])
         for i in range(len(guardadas)) for j in range(i + 1, len(guardadas))
@@ -915,6 +1025,23 @@ def _serializar(spec, carriles, nodos, flujos, layout_previo=None, mensajes=None
             destinos.append(hacia)
     id_destino = {d: _id("Participant", d) for d in destinos}
 
+    # Panel de controles fuera del pool y de los mensajes: lectura por tarjetas
+    # de ancho estable, líneas cortas y espacio entre filas. No son flowNodes ni
+    # se les dibujan flechas que sugieran un nuevo orden de ejecución.
+    anotaciones = []
+    columnas = max(1, min(3, int(ancho_pool // 460)))
+    y_notas = Y_ORIGEN + alto_pool + 80 + len(destinos) * (ALTO_DESTINO + 20)
+    alto_fila = 0
+    for i, (texto, origen) in enumerate(CONTROLES_OPERATIVOS.get(spec["document_type"], [])):
+        if i and i % columnas == 0:
+            y_notas += alto_fila + 32
+            alto_fila = 0
+        lineas = textwrap.wrap(texto, width=52)
+        alto = 24 + len(lineas) * 20
+        alto_fila = max(alto_fila, alto)
+        anotaciones.append((f"Control_{i + 1}", "\n".join(lineas), origen,
+                            X_ORIGEN + (i % columnas) * 460, y_notas, 420, alto))
+
     a(f'  <bpmn:collaboration id="{collab_id}">')
     a(f'    <bpmn:participant id="{part_id}" name={quoteattr(spec["name"])} processRef="{proc_id}" />')
     for d in destinos:
@@ -953,6 +1080,8 @@ def _serializar(spec, carriles, nodos, flujos, layout_previo=None, mensajes=None
     for n in nodos.values():
         etiqueta = f" name={quoteattr(n.nombre)}" if n.nombre else ""
         a(f"    <bpmn:{n.tipo} id=\"{n.id}\"{etiqueta}>")
+        if getattr(n, "origen", None):
+            a(f"      <bpmn:documentation>{escape(n.origen)}</bpmn:documentation>")
         for fid in entrantes.get(n.id, []):
             a(f"      <bpmn:incoming>{fid}</bpmn:incoming>")
         for fid in salientes.get(n.id, []):
@@ -974,6 +1103,11 @@ def _serializar(spec, carriles, nodos, flujos, layout_previo=None, mensajes=None
               f'autoaprobacion="{int(ext["autoaprobacion"] or 0)}" />')
             a("      </bpmn:extensionElements>")
         a("    </bpmn:sequenceFlow>")
+    for nid, texto, origen, _x, _y, _w, _h in anotaciones:
+        a(f'    <bpmn:textAnnotation id="{nid}">')
+        a(f"      <bpmn:documentation>{escape(origen)}</bpmn:documentation>")
+        a(f"      <bpmn:text>{escape(texto)}</bpmn:text>")
+        a("    </bpmn:textAnnotation>")
     a("  </bpmn:process>")
 
     # --- Diagrama (posiciones). Sin esto, un modelador no tiene qué dibujar ---
@@ -994,6 +1128,10 @@ def _serializar(spec, carriles, nodos, flujos, layout_previo=None, mensajes=None
         a(f'      <bpmndi:BPMNShape id="Shape_{n.id}" bpmnElement="{n.id}">')
         a(f'        <dc:Bounds x="{int(gx)}" y="{int(gy)}" '
           f'width="{int(gw)}" height="{int(gh)}" />')
+        a("      </bpmndi:BPMNShape>")
+    for nid, _texto, _origen, x, y, w, h in anotaciones:
+        a(f'      <bpmndi:BPMNShape id="Shape_{nid}" bpmnElement="{nid}">')
+        a(f'        <dc:Bounds x="{x}" y="{y}" width="{w}" height="{h}" />')
         a("      </bpmndi:BPMNShape>")
     # Los pools destino van debajo del principal, uno por fila. Un pool caja
     # negra se dibuja como una banda estrecha: no tiene interior que mostrar.
@@ -1020,32 +1158,11 @@ def _serializar(spec, carriles, nodos, flujos, layout_previo=None, mensajes=None
         a("      </bpmndi:BPMNEdge>")
 
     for fid, src, tgt, _nombre, _ext in flujos:
-        ns, nt = nodos[src], nodos[tgt]
-        sx, sy, sw, sh = geom(ns)
-        tx, ty, tw, th = geom(nt)
-        cx1, cy1 = _centro(sx, sy, sw, sh)
-        cx2, cy2 = _centro(tx, ty, tw, th)
-        # Salir por el borde, no por el centro: una flecha centro a centro
-        # atraviesa las dos cajas y el diagrama se lee mal. Si el destino está a
-        # la izquierda (una devolución), se sale por el borde contrario.
+        ruta = _ruta_flujo(geom(nodos[src]), geom(nodos[tgt]),
+                           [geom(n) for n in nodos.values()])
         a(f'      <bpmndi:BPMNEdge id="Edge_{fid}" bpmnElement="{fid}">')
-        if abs(cy1 - cy2) < 1:
-            # misma altura: recta horizontal de borde a borde
-            if cx2 >= cx1:
-                x1, x2 = sx + sw, tx
-            else:
-                x1, x2 = sx, tx + tw
-            a(f'        <di:waypoint x="{int(x1)}" y="{int(cy1)}" />')
-            a(f'        <di:waypoint x="{int(x2)}" y="{int(cy2)}" />')
-        else:
-            # cambia de carril: codo en L. Sale por arriba o por abajo, recorre
-            # el desnivel en vertical y entra por el lado del destino. Una recta
-            # diagonal entre dos carriles cruza el resto del dibujo.
-            y1 = sy + sh if cy2 > cy1 else sy
-            x2 = tx if cx2 >= cx1 else tx + tw
-            a(f'        <di:waypoint x="{int(cx1)}" y="{int(y1)}" />')
-            a(f'        <di:waypoint x="{int(cx1)}" y="{int(cy2)}" />')
-            a(f'        <di:waypoint x="{int(x2)}" y="{int(cy2)}" />')
+        for x, y in ruta:
+            a(f'        <di:waypoint x="{x}" y="{y}" />')
         a("      </bpmndi:BPMNEdge>")
     a("    </bpmndi:BPMNPlane>")
     a("  </bpmndi:BPMNDiagram>")

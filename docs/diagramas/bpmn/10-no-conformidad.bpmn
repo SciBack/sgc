@@ -99,6 +99,20 @@
         <sgc:transicion rol="DPGC" autoaprobacion="1" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
+    <bpmn:textAnnotation id="Control_1">
+      <bpmn:documentation>sgc.sgc_nucleo.doctype.no_conformidad.no_conformidad.NoConformidad.validate</bpmn:documentation>
+      <bpmn:text>Analizar causa: requiere responsable. Tratar: exige
+análisis de causa redactado cuando corresponde; una
+NC mayor siempre lo requiere. Controles acumulativos
+en cada guardado.</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="Control_2">
+      <bpmn:documentation>sgc.sgc_nucleo.doctype.no_conformidad.no_conformidad.NoConformidad.validate</bpmn:documentation>
+      <bpmn:text>Enviar a verificación: exige fecha de compromiso y
+plan de mejora o corrección inmediata. Ambos cierres
+requieren evidencia. Estos requisitos se mantienen
+en etapas posteriores.</bpmn:text>
+    </bpmn:textAnnotation>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="Diagram_1">
     <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
@@ -141,6 +155,12 @@
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
         <dc:Bounds x="312" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Control_1" bpmnElement="Control_1">
+        <dc:Bounds x="200" y="480" width="420" height="104" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Control_2" bpmnElement="Control_2">
+        <dc:Bounds x="660" y="480" width="420" height="104" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
         <di:waypoint x="348" y="160" />
         <di:waypoint x="430" y="160" />
@@ -154,33 +174,37 @@
         <di:waypoint x="830" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_En_tratamiento_Enviar_a_verificacion_hacia_En_verificacion" bpmnElement="Flow_En_tratamiento_Enviar_a_verificacion_hacia_En_verificacion">
-        <di:waypoint x="890" y="200" />
-        <di:waypoint x="890" y="320" />
-        <di:waypoint x="1030" y="320" />
+        <di:waypoint x="950" y="160" />
+        <di:waypoint x="950" y="295" />
+        <di:waypoint x="1055" y="295" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_En_verificacion_Cerrar_eficaz" bpmnElement="Flow_gw_En_verificacion_Cerrar_eficaz">
         <di:waypoint x="1080" y="320" />
         <di:waypoint x="1230" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_En_verificacion_Cerrar_eficaz_hacia_Cerrada_eficaz" bpmnElement="Flow_En_verificacion_Cerrar_eficaz_hacia_Cerrada_eficaz">
-        <di:waypoint x="1350" y="320" />
+        <di:waypoint x="1290" y="280" />
+        <di:waypoint x="1830" y="280" />
         <di:waypoint x="1830" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_En_verificacion_Cerrar_no_eficaz" bpmnElement="Flow_gw_En_verificacion_Cerrar_no_eficaz">
-        <di:waypoint x="1080" y="320" />
-        <di:waypoint x="1430" y="320" />
+        <di:waypoint x="1055" y="295" />
+        <di:waypoint x="1055" y="280" />
+        <di:waypoint x="1490" y="280" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_En_verificacion_Cerrar_no_eficaz_hacia_Cerrada_no_eficaz" bpmnElement="Flow_En_verificacion_Cerrar_no_eficaz_hacia_Cerrada_no_eficaz">
-        <di:waypoint x="1550" y="320" />
+        <di:waypoint x="1490" y="280" />
+        <di:waypoint x="2030" y="280" />
         <di:waypoint x="2030" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_En_verificacion_Reabrir_tratamiento" bpmnElement="Flow_gw_En_verificacion_Reabrir_tratamiento">
-        <di:waypoint x="1080" y="320" />
-        <di:waypoint x="1630" y="320" />
+        <di:waypoint x="1055" y="295" />
+        <di:waypoint x="1055" y="280" />
+        <di:waypoint x="1690" y="280" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_En_verificacion_Reabrir_tratamiento_hacia_En_tratamiento" bpmnElement="Flow_En_verificacion_Reabrir_tratamiento_hacia_En_tratamiento">
-        <di:waypoint x="1690" y="280" />
-        <di:waypoint x="1690" y="160" />
+        <di:waypoint x="1630" y="320" />
+        <di:waypoint x="1630" y="160" />
         <di:waypoint x="950" y="160" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
