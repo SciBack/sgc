@@ -41,19 +41,31 @@ cualquier cambio en `sgc/` exige reconstruir, o el lab mide código antiguo.
 
 ```bash
 cd ~/proyectos/labs/frappe-sgc
-# apps.json apunta por defecto a main; para probar una rama, cámbiala aquí
-export APPS_JSON_BASE64=$(base64 < apps.json | tr -d '\n')
+# apps.json apunta por defecto a main; para probar una rama, cámbiala ahí
 
 cd frappe_docker
 docker build \
+  --secret id=apps_json,src=../apps.json \
   --build-arg=FRAPPE_PATH=https://github.com/frappe/frappe \
   --build-arg=FRAPPE_BRANCH=version-16 \
-  --build-arg=APPS_JSON_BASE64="$APPS_JSON_BASE64" \
   --build-arg=CACHE_BUST="$(date +%s)" \
   --platform=linux/arm64 \
   --tag=sgc-nativo:v16 \
   --file=images/custom/Containerfile .
 ```
+
+⚠️ **`apps.json` va como SECRET, no como `--build-arg`.** El Containerfile lo monta
+con `--mount=type=secret,id=apps_json`; `APPS_JSON_BASE64` **no existe** en él.
+Pasarlo como build-arg **no da error**: el build termina bien y produce una imagen
+**sin la app**, solo con `frappe`. Verificado el 13-sep. Se detecta así:
+
+```bash
+docker run --rm --entrypoint sh sgc-nativo:v16 -c 'ls /home/frappe/frappe-bench/apps/'
+# debe listar: frappe  sgc
+```
+
+**Comprobar siempre la imagen antes de desplegarla**, y que contenga algún símbolo
+del cambio que motivó la reconstrucción.
 
 `CACHE_BUST` es necesario: sin él Docker reutiliza la capa del `git clone` y
 reconstruye con el código de la vez anterior — el fallo más fácil de no ver.
@@ -109,7 +121,13 @@ server version: 16.14 · pg_dump version: 15.19
 La imagen trae cliente 15 y el servidor es 16.14. **Es exactamente el fallo que
 bloqueó el respaldo de producción**, así que el lab sirve para reproducirlo. La
 salida es volcar desde el contenedor de Postgres, que sí tiene cliente 16 (comando
-arriba). Una imagen reconstruida con base actual incorpora cliente 16.
+arriba).
+
+⚠️ **Reconstruir la imagen NO lo arregla**, comprobado el 13-sep: la base es
+`python:3.14-slim-bookworm` y Debian bookworm trae **cliente 15**, así que una
+imagen recién construida da el mismo error contra el servidor 16.14. Para tener
+cliente 16 hay que añadir el repositorio PGDG en el Containerfile — que es lo que
+se hizo a mano en la candidata de producción, no algo que salga solo.
 
 ### 4. `bench console` miente al cargar datos
 
