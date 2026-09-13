@@ -1,0 +1,174 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-11 10:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "codigo",
+  "nombre",
+  "descripcion",
+  "sec_audiencia",
+  "rol_destinatario",
+  "ambito",
+  "unidad_organica",
+  "programa_sede",
+  "sec_contenido",
+  "indicadores",
+  "periodo_default",
+  "sec_estado",
+  "estado"
+ ],
+ "fields": [
+  {
+   "fieldname": "codigo",
+   "label": "Código",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "nombre",
+   "label": "Nombre",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "descripcion",
+   "label": "Descripción",
+   "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "sec_audiencia",
+   "fieldtype": "Section Break",
+   "label": "Audiencia"
+  },
+  {
+   "fieldname": "rol_destinatario",
+   "label": "Rol destinatario",
+   "fieldtype": "Link",
+   "options": "Role",
+   "reqd": 1,
+   "in_list_view": 1,
+   "description": "El criterio 8.6 exige que la información esté accesible a QUIEN DECIDE. El tablero se define por rol, no por persona."
+  },
+  {
+   "fieldname": "ambito",
+   "label": "Ámbito",
+   "fieldtype": "Select",
+   "reqd": 1,
+   "default": "Institucional",
+   "in_list_view": 1,
+   "options": "Institucional\nUnidad orgánica\nPrograma-sede"
+  },
+  {
+   "fieldname": "unidad_organica",
+   "label": "Unidad orgánica",
+   "fieldtype": "Link",
+   "options": "Unidad Organica",
+   "depends_on": "eval:doc.ambito=='Unidad orgánica'"
+  },
+  {
+   "fieldname": "programa_sede",
+   "label": "Programa-sede",
+   "fieldtype": "Link",
+   "options": "Programa Sede",
+   "depends_on": "eval:doc.ambito=='Programa-sede'"
+  },
+  {
+   "fieldname": "sec_contenido",
+   "fieldtype": "Section Break",
+   "label": "Contenido"
+  },
+  {
+   "fieldname": "indicadores",
+   "label": "Indicadores",
+   "fieldtype": "Table",
+   "options": "Tablero Indicador Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "periodo_default",
+   "label": "Período por defecto",
+   "fieldtype": "Link",
+   "options": "Periodo Academico",
+   "description": "Si se deja vacío, el tablero abre en el período vigente."
+  },
+  {
+   "fieldname": "sec_estado",
+   "fieldtype": "Section Break",
+   "label": ""
+  },
+  {
+   "fieldname": "estado",
+   "label": "Estado",
+   "fieldtype": "Select",
+   "default": "Borrador",
+   "options": "Borrador\nPublicado\nArchivado",
+   "in_list_view": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-11 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "Tablero Indicadores",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1,
+   "export": 1,
+   "role": "DPGC"
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1,
+   "export": 1,
+   "role": "Analista de Calidad (DPGC)"
+  },
+  {
+   "read": 1,
+   "role": "Auditor Interno"
+  },
+  {
+   "read": 1,
+   "role": "Responsable de Calidad de Programa"
+  },
+  {
+   "read": 1,
+   "role": "Coordinador de Calidad de Facultad"
+  },
+  {
+   "read": 1,
+   "role": "Miembro de Comité de Calidad"
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "field:codigo",
+ "title_field": "nombre",
+ "show_title_field_in_link": 1
+}

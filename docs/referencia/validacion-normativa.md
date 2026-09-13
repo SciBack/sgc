@@ -186,12 +186,19 @@ se cumple por el mero hecho de que el software exista.
 
 | Criterio | Qué exige | Qué lo soporta |
 |---|---|---|
-| 8.1 | Mecanismos que garanticen **disponibilidad, integridad y confidencialidad** | Permisos por rol y ámbito, respaldo con restauración probada, registro de cambios |
+| 8.1 | Mecanismos que garanticen **disponibilidad, integridad y confidencialidad** | Permisos por rol y ámbito, respaldo con restauración probada, registro de cambios · **`Fuente Dato`** (origen, responsable, periodicidad y clasificación de confidencialidad) · **`Regla Validacion`** (qué se considera dato íntegro) · **`Alerta Indicador`** (rastro del análisis periódico) |
 | 8.2 | Información de empleadores, egresados, docentes y estudiantes | `Grupo Interes`, `Instrumento`, `Aplicacion Instrumento`, `Resultado Instrumento` |
 | 8.3 | Indicadores de desempeño docente (ID2, ID19) | `Indicador` + `Ficha Indicador` + `Valor Indicador` |
 | 8.4 | Indicadores de evaluación del aprendizaje (ID4, ID10) | ídem, alimentado por conector |
 | 8.5 | Indicadores de graduación y titulación (ID25, ID28, ID29) | ídem |
-| 8.6 | Información **accesible al personal directivo** para decidir | Tablero y listas filtradas por rol |
+| 8.6 | Información **accesible al personal directivo** para decidir | **`Tablero Indicadores`**, definido **por rol** y no por persona: lo que se acredita es que el cargo tiene acceso |
+
+**Añadido el 11-sep-2026.** Hasta esa fecha el criterio 8.1 se sostenía solo sobre
+mecanismos genéricos de la plataforma —permisos, respaldo, registro de cambios— y el
+origen de cada dato vivía como **texto libre** en `Ficha Indicador.fuente_dato` y
+`fuente_autoritativa`. Servía para leerlo, no para demostrar nada: no se podía listar qué
+indicadores dependen de una fuente, ni quién responde por ella, ni si dos fichas nombraban
+la misma fuente de dos maneras. El 8.6 no tenía ningún soporte.
 
 Los criterios 8.3 a 8.5 **nombran indicadores concretos del propio modelo**, así que la
 trazabilidad indicador → criterio no es interpretación: está en la norma.

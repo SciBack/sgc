@@ -1,0 +1,228 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-11 10:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "codigo",
+  "indicador",
+  "valor_indicador",
+  "tipo",
+  "severidad",
+  "sec_ambito",
+  "periodo_academico",
+  "programa_sede",
+  "unidad_organica",
+  "sec_detalle",
+  "valor_medido",
+  "meta",
+  "mensaje",
+  "sec_atencion",
+  "responsable",
+  "estado",
+  "fecha_deteccion",
+  "fecha_cierre",
+  "justificacion_descarte",
+  "accion_mejora"
+ ],
+ "fields": [
+  {
+   "fieldname": "codigo",
+   "label": "Código",
+   "fieldtype": "Data",
+   "unique": 1,
+   "read_only": 1,
+   "in_list_view": 1,
+   "description": "ALE-{año}-NNNN. Lo compone el propio documento."
+  },
+  {
+   "fieldname": "indicador",
+   "label": "Indicador",
+   "fieldtype": "Link",
+   "options": "Indicador",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "valor_indicador",
+   "label": "Medición",
+   "fieldtype": "Link",
+   "options": "Valor Indicador",
+   "description": "La medición que disparó la alerta, cuando la hubo."
+  },
+  {
+   "fieldname": "tipo",
+   "label": "Tipo",
+   "fieldtype": "Select",
+   "reqd": 1,
+   "in_list_view": 1,
+   "options": "Meta no alcanzada\nSin medición en el período\nMedición vencida\nValidación fallida\nVariación anómala"
+  },
+  {
+   "fieldname": "severidad",
+   "label": "Severidad",
+   "fieldtype": "Select",
+   "reqd": 1,
+   "default": "Media",
+   "in_list_view": 1,
+   "options": "Crítica\nAlta\nMedia\nBaja"
+  },
+  {
+   "fieldname": "sec_ambito",
+   "fieldtype": "Section Break",
+   "label": "Ámbito"
+  },
+  {
+   "fieldname": "periodo_academico",
+   "label": "Período",
+   "fieldtype": "Link",
+   "options": "Periodo Academico"
+  },
+  {
+   "fieldname": "programa_sede",
+   "label": "Programa-sede",
+   "fieldtype": "Link",
+   "options": "Programa Sede"
+  },
+  {
+   "fieldname": "unidad_organica",
+   "label": "Unidad orgánica",
+   "fieldtype": "Link",
+   "options": "Unidad Organica"
+  },
+  {
+   "fieldname": "sec_detalle",
+   "fieldtype": "Section Break",
+   "label": "Detalle"
+  },
+  {
+   "fieldname": "valor_medido",
+   "label": "Valor medido",
+   "fieldtype": "Float",
+   "read_only": 1
+  },
+  {
+   "fieldname": "meta",
+   "label": "Meta",
+   "fieldtype": "Float",
+   "read_only": 1
+  },
+  {
+   "fieldname": "mensaje",
+   "label": "Mensaje",
+   "fieldtype": "Small Text",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sec_atencion",
+   "fieldtype": "Section Break",
+   "label": "Atención"
+  },
+  {
+   "fieldname": "responsable",
+   "label": "Responsable",
+   "fieldtype": "Link",
+   "options": "User",
+   "description": "A quién le toca. Sale del responsable del indicador si no se indica."
+  },
+  {
+   "fieldname": "estado",
+   "label": "Estado",
+   "fieldtype": "Select",
+   "reqd": 1,
+   "default": "Abierta",
+   "in_list_view": 1,
+   "options": "Abierta\nEn atención\nResuelta\nDescartada"
+  },
+  {
+   "fieldname": "fecha_deteccion",
+   "label": "Detectada",
+   "fieldtype": "Datetime",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "fecha_cierre",
+   "label": "Cerrada",
+   "fieldtype": "Datetime",
+   "read_only": 1,
+   "depends_on": "eval:['Resuelta','Descartada'].includes(doc.estado)"
+  },
+  {
+   "fieldname": "justificacion_descarte",
+   "label": "Justificación",
+   "fieldtype": "Small Text",
+   "depends_on": "eval:doc.estado=='Descartada'",
+   "description": "Descartar una alerta sin decir por qué deja un hueco en la evidencia."
+  },
+  {
+   "fieldname": "accion_mejora",
+   "label": "Acción de mejora",
+   "fieldtype": "Link",
+   "options": "Accion Mejora",
+   "description": "Si la alerta derivó en una acción, queda enlazada aquí."
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-11 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "Alerta Indicador",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1,
+   "export": 1,
+   "role": "DPGC"
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1,
+   "export": 1,
+   "role": "Analista de Calidad (DPGC)"
+  },
+  {
+   "read": 1,
+   "role": "Auditor Interno"
+  },
+  {
+   "read": 1,
+   "role": "Responsable de Calidad de Programa"
+  },
+  {
+   "read": 1,
+   "role": "Coordinador de Calidad de Facultad"
+  },
+  {
+   "read": 1,
+   "role": "Miembro de Comité de Calidad"
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "field:codigo",
+ "title_field": "mensaje",
+ "show_title_field_in_link": 1
+}

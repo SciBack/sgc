@@ -82,6 +82,20 @@
         <sgc:transicion rol="DPGC" autoaprobacion="1" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
+    <bpmn:textAnnotation id="Control_1">
+      <bpmn:documentation>sgc.sgc_nucleo.doctype.accion_mejora.accion_mejora.AccionMejora._fijar_avance</bpmn:documentation>
+      <bpmn:text>Al guardar: Planificada fija avance 0; Ejecutada y
+Verificada eficaz, 100. Al cambiar a otro estado, un
+avance heredado de 100 se reinicia a 0; un avance
+manual menor se conserva.</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="Control_2">
+      <bpmn:documentation>sgc.sgc_nucleo.doctype.accion_mejora.accion_mejora.AccionMejora._recalcular_plan</bpmn:documentation>
+      <bpmn:text>Al guardar o borrar una acción: recalcular avance y
+semáforo del plan vinculado. Al borrar, excluir esta
+acción del cálculo. No depende solo de cambiar de
+estado.</bpmn:text>
+    </bpmn:textAnnotation>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="Diagram_1">
     <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
@@ -118,6 +132,12 @@
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
         <dc:Bounds x="302" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Control_1" bpmnElement="Control_1">
+        <dc:Bounds x="200" y="480" width="420" height="104" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Control_2" bpmnElement="Control_2">
+        <dc:Bounds x="660" y="480" width="420" height="104" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
         <di:waypoint x="338" y="160" />
         <di:waypoint x="430" y="160" />
@@ -127,29 +147,31 @@
         <di:waypoint x="630" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_En_ejecucion_Marcar_ejecutada_hacia_Ejecutada" bpmnElement="Flow_En_ejecucion_Marcar_ejecutada_hacia_Ejecutada">
-        <di:waypoint x="690" y="200" />
-        <di:waypoint x="690" y="342" />
-        <di:waypoint x="830" y="342" />
+        <di:waypoint x="750" y="160" />
+        <di:waypoint x="750" y="317" />
+        <di:waypoint x="855" y="317" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Ejecutada_Verificar_eficaz" bpmnElement="Flow_gw_Ejecutada_Verificar_eficaz">
         <di:waypoint x="880" y="342" />
         <di:waypoint x="1030" y="342" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Ejecutada_Verificar_eficaz_hacia_Verificada_eficaz" bpmnElement="Flow_Ejecutada_Verificar_eficaz_hacia_Verificada_eficaz">
-        <di:waypoint x="1150" y="342" />
+        <di:waypoint x="1090" y="302" />
+        <di:waypoint x="1630" y="302" />
         <di:waypoint x="1630" y="342" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_Ejecutada_Verificar_no_eficaz" bpmnElement="Flow_gw_Ejecutada_Verificar_no_eficaz">
-        <di:waypoint x="880" y="342" />
-        <di:waypoint x="1230" y="342" />
+        <di:waypoint x="855" y="317" />
+        <di:waypoint x="855" y="302" />
+        <di:waypoint x="1290" y="302" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Ejecutada_Verificar_no_eficaz_hacia_Verificada_no_eficaz" bpmnElement="Flow_Ejecutada_Verificar_no_eficaz_hacia_Verificada_no_eficaz">
         <di:waypoint x="1350" y="342" />
         <di:waypoint x="1430" y="342" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Verificada_no_eficaz_Reabrir_hacia_En_ejecucion" bpmnElement="Flow_Verificada_no_eficaz_Reabrir_hacia_En_ejecucion">
-        <di:waypoint x="1490" y="302" />
-        <di:waypoint x="1490" y="160" />
+        <di:waypoint x="1430" y="342" />
+        <di:waypoint x="1430" y="160" />
         <di:waypoint x="750" y="160" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

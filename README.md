@@ -10,6 +10,10 @@ operativa; no hay una SPA propia que compilar o desplegar.
 
 ### Documentación
 
+Estado de la refactorización y verificaciones del 13-sep-2026:
+[balance de hardening y pendientes](docs/desarrollo/2026-09-13-balance-hardening.md).
+La aprobación de CI de una candidata no implica despliegue ni aceptación operativa.
+
 Manuales de uso, referencia de módulos y guía de arquitectura en `docs-site/`
 (Astro + Starlight), publicada en <https://sciback.github.io/sgc/>.
 

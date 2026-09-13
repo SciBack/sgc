@@ -22,6 +22,8 @@ import frappe
 from frappe import _
 from frappe.utils import get_datetime
 
+from sgc.bpmn_validacion import validar_bpmn
+
 # Frappe puede añadir `content_hash[-6:]` al nombre de un adjunto al escribirlo
 # (`file_manager.get_file_name`). Para volver a encontrar ESE adjunto en el
 # siguiente guardado hay que comparar por el nombre de partida, no por el que
@@ -95,10 +97,10 @@ def guardar_bpmn(doctype, docname, file_name, xml):
 	_check(doctype, docname, "write")
 	if not (file_name or "").lower().endswith(".bpmn"):
 		frappe.throw(_("El nombre de archivo debe terminar en .bpmn"))
-	if "<bpmn:definitions" not in xml and "<definitions" not in xml:
-		frappe.throw(_("El contenido no parece un BPMN válido"))
-
-	contenido = xml.encode("utf-8")
+	try:
+		contenido = validar_bpmn(xml)
+	except ValueError as exc:
+		frappe.throw(_("BPMN rechazado: {0}").format(str(exc)))
 	existentes = [
 		f.name
 		for f in frappe.get_all(
@@ -108,6 +110,19 @@ def guardar_bpmn(doctype, docname, file_name, xml):
 		)
 		if _mismo_diagrama(f.file_name, file_name)
 	]
+
+	# Revisar TODOS los adjuntos coincidentes antes de escribir o borrar alguno.
+	# Un XML nuevo sin las marcas SGC no habilita sobrescribir un generado.
+	documentos = []
+	for nombre in existentes:
+		actual = frappe.get_doc("File", nombre)
+		if not (actual.file_url or "").startswith(("/files/", "/private/files/")):
+			frappe.throw(_("El editor solo modifica adjuntos locales; no descarga enlaces externos"))
+		try:
+			validar_bpmn(actual.get_content())
+		except ValueError as exc:
+			frappe.throw(_("El adjunto actual no es editable: {0}").format(str(exc)))
+		documentos.append(actual)
 
 	if existentes:
 		# Se reescribe el MISMO File en su sitio, en vez de borrarlo y crear otro.
@@ -123,7 +138,7 @@ def guardar_bpmn(doctype, docname, file_name, xml):
 		# `File.save_file(overwrite=True)` salta esa generación de nombre y sobrescribe
 		# el fichero en disco, que es justo lo que queremos: el adjunto conserva su
 		# nombre y su URL, y quien lo tuviera abierto no pierde la referencia.
-		f = frappe.get_doc("File", existentes[0])
+		f = documentos[0]
 		for sobrante in existentes[1:]:
 			frappe.delete_doc("File", sobrante, ignore_permissions=True, force=True)
 		# `ignore_existing_file_check=True` es imprescindible, no una precaución.

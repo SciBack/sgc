@@ -12,9 +12,10 @@ Dos cosas que no son obvias y que este informe respeta:
 
 1. **`valor_num` es el valor del indicador; el `n=` del texto es el tamaño de la muestra.**
    25 % de 12 docentes: el valor es 25, la n es 12. Confundirlos da un informe que miente.
-2. **El cumplimiento se lee, no se deduce.** El juicio lo emite el productor contra su marco
-   normativo, y el mismo valor puede cumplir un marco e incumplir otro. Aquí no se recalcula
-   comparando valor con meta: se muestra lo que el productor declaró.
+2. **El cumplimiento respeta el contrato del productor.** Los registros legacy muestran
+   su juicio textual. La ingesta estructurada declara operador y meta: se comparan solo
+   cuando las unidades coinciden. Una ingesta corrupta queda sin juicio, sin recuperar
+   el texto histórico que pudiera seguir almacenado.
 
 Las otras fuentes no se ocultan: se cuentan en el mensaje de cabecera, para que nadie crea
 que lo que ve es todo lo que hay.
@@ -26,9 +27,9 @@ from frappe import _
 # Se importa el parser del motor de indicadores en vez de repetir aquí la lectura del
 # contrato: si el productor cambia el formato, hay un solo sitio que corregir.
 from sgc.indicadores_acreditacion import (
+	_leer_medicion,
 	_nombres_de_indicador,
 	_orden_codigo,
-	_parsear_valor_texto,
 	fuente_preferida,
 )
 
@@ -40,6 +41,8 @@ CAMPOS = [
 	"unidad_organica",
 	"valor_num",
 	"valor_texto",
+	"ingesta_clave",
+	"datos_ingesta",
 	"fuente",
 	"fecha",
 ]
@@ -59,7 +62,7 @@ def execute(filters=None):
 
 	filas = []
 	for r in registros:
-		leido = _parsear_valor_texto(r.valor_texto or "")
+		leido = _leer_medicion(r)
 		cumple = leido.get("cumple")
 		if filters.get("solo_incumplidos") and cumple is not False:
 			continue
@@ -69,7 +72,7 @@ def execute(filters=None):
 				"nombre": nombres.get(r.indicador, ""),
 				"programa_sede": r.programa_sede,
 				"periodo_academico": r.periodo_academico,
-				"valor": r.valor_num,
+				"valor": leido.get("valor_num", r.valor_num),
 				"meta": leido.get("meta_texto") or "",
 				# Tres estados, no dos: que el productor no se pronuncie no es un "No".
 				"cumple": {True: _("Sí"), False: _("No")}.get(cumple, "—"),

@@ -1,5 +1,14 @@
 # Concordancia entre los diagramas BPMN y el sistema real
 
+> **Revisión del código: 2026-09-13, base `962af18`.** Los 15 archivos coinciden
+> con su regeneración preservando el layout. `deploy/check_bpmn.py` verifica
+> inventario y contenido en CI, con pruebas que introducen deriva deliberada.
+> Esto acredita concordancia con el generador, **no cobertura completa de las
+> validaciones de los controladores** ni de los BPMN institucionales adjuntos.
+> Las observaciones de producción que siguen son históricas (24 de agosto),
+> no una certificación del runtime actual. El editor embebido ya existe en
+> `sgc/bpmn_editor.py` y la página `bpmn-editor` del Desk.
+
 **Fecha:** 2026-08-24 · **Versión en producción:** `sgc-frappe:v106`
 **Los quince flujos están recorridos contra producción.**
 
@@ -524,12 +533,16 @@ que se ponga sería una invención.
 
 ## Riesgo de deriva
 
-Nada compara automáticamente los `.bpmn` en disco contra lo que generaría el
-código. **Ya falló una vez**: al crear el workflow del hallazgo de auditoría
-hubo 15 workflows y 14 diagramas hasta que alguien lo notó.
+**Cerrado el 2026-09-13 para los archivos canónicos:** el CI ejecuta
+`python deploy/check_bpmn.py` antes de instalar Frappe. Falla si falta un BPMN,
+hay uno sin workflow o el contenido difiere del generador. Conserva como entrada
+el layout existente y no modifica los archivos. Las pruebas del control comprueban
+que detecta una alteración semántica y un archivo ausente/huérfano.
 
-Un test que regenere en memoria y falle si el disco difiere cerraría el hueco, y
-ahora es viable: el generador ya no necesita un bench para leer los specs.
+Sigue pendiente representar todas las precondiciones y efectos de los
+controladores. La comprobación tampoco alcanza los adjuntos editables almacenados
+en Frappe; requieren validación de estructura y revisión contra el procedimiento
+operativo correspondiente.
 
 **Ojo con Camunda:** abrir un diagrama y guardarlo reescribe el fichero. El
 layout se conserva al regenerar, pero **editar flechas a mano se pierde** — y

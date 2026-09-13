@@ -57,6 +57,17 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Concordancia BPMN con el código (sin Frappe)
+        working-directory: sgc
+        run: |
+          python deploy/check_bpmn.py
+          python -m unittest discover -s deploy -p 'test_check_bpmn.py'
+          python -m unittest discover -s tests -p 'test_ingesta_contrato.py'
+          python -m unittest discover -s tests -p 'test_ingesta_reintento.py'
+          python -m unittest discover -s sgc/tests -p 'test_indicadores_ingesta_puro.py'
+          python -m unittest discover -s tests -p 'test_bpmn_validacion.py'
+          python -m unittest discover -s tests -p 'test_bpmn_controles.py'
+
       - name: Dependencias del sistema
         run: |
           sudo apt-get update
@@ -104,3 +115,12 @@ jobs:
         run: |
           bench --site test_site.localhost set-config allow_tests true
           bench --site test_site.localhost run-tests --app sgc
+
+      - name: Ingesta concurrente y rollback real por WSGI (sitio efímero)
+        working-directory: frappe-bench/sites
+        env:
+          SGC_INGESTA_CI: '1'
+          SITES_PATH: ${{ github.workspace }}/frappe-bench/sites
+        run: |
+          ../env/bin/python ../apps/sgc/tests/test_ci_ingesta_guard.py
+          ../env/bin/python ../apps/sgc/deploy/ci_ingesta_transacciones.py

@@ -1,0 +1,180 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-11 10:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "codigo",
+  "nombre",
+  "fuente_dato",
+  "indicador",
+  "sec_regla",
+  "tipo_regla",
+  "campo_objetivo",
+  "valor_min",
+  "valor_max",
+  "expresion",
+  "sec_resultado",
+  "severidad",
+  "mensaje",
+  "activa"
+ ],
+ "fields": [
+  {
+   "fieldname": "codigo",
+   "label": "Código",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "nombre",
+   "label": "Nombre",
+   "fieldtype": "Data",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "fuente_dato",
+   "label": "Fuente de dato",
+   "fieldtype": "Link",
+   "options": "Fuente Dato",
+   "description": "Deja en blanco si la regla aplica al indicador, venga de donde venga."
+  },
+  {
+   "fieldname": "indicador",
+   "label": "Indicador",
+   "fieldtype": "Link",
+   "options": "Indicador"
+  },
+  {
+   "fieldname": "sec_regla",
+   "fieldtype": "Section Break",
+   "label": "Regla"
+  },
+  {
+   "fieldname": "tipo_regla",
+   "label": "Tipo",
+   "fieldtype": "Select",
+   "reqd": 1,
+   "in_list_view": 1,
+   "options": "Obligatorio\nRango\nFormato\nCoherencia entre campos\nUnicidad\nVariación entre períodos"
+  },
+  {
+   "fieldname": "campo_objetivo",
+   "label": "Campo evaluado",
+   "fieldtype": "Data",
+   "description": "Campo de Valor Indicador sobre el que se evalúa. Por defecto, valor_num."
+  },
+  {
+   "fieldname": "valor_min",
+   "label": "Mínimo",
+   "fieldtype": "Float",
+   "depends_on": "eval:['Rango','Variación entre períodos'].includes(doc.tipo_regla)"
+  },
+  {
+   "fieldname": "valor_max",
+   "label": "Máximo",
+   "fieldtype": "Float",
+   "depends_on": "eval:['Rango','Variación entre períodos'].includes(doc.tipo_regla)"
+  },
+  {
+   "fieldname": "expresion",
+   "label": "Expresión",
+   "fieldtype": "Small Text",
+   "depends_on": "eval:doc.tipo_regla=='Coherencia entre campos'",
+   "description": "Condición que debe cumplirse. Se evalúa sobre el documento, sin acceso al sistema."
+  },
+  {
+   "fieldname": "sec_resultado",
+   "fieldtype": "Section Break",
+   "label": "Resultado"
+  },
+  {
+   "fieldname": "severidad",
+   "label": "Severidad",
+   "fieldtype": "Select",
+   "reqd": 1,
+   "default": "Advertencia",
+   "in_list_view": 1,
+   "options": "Bloqueante\nAdvertencia\nInformativa",
+   "description": "Bloqueante impide guardar; las demás solo avisan y quedan registradas."
+  },
+  {
+   "fieldname": "mensaje",
+   "label": "Mensaje al usuario",
+   "fieldtype": "Small Text",
+   "reqd": 1
+  },
+  {
+   "fieldname": "activa",
+   "label": "Activa",
+   "fieldtype": "Check",
+   "default": "1",
+   "in_list_view": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-11 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Estructura",
+ "name": "Regla Validacion",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1,
+   "export": 1,
+   "role": "DPGC"
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "report": 1,
+   "export": 1,
+   "role": "Analista de Calidad (DPGC)"
+  },
+  {
+   "read": 1,
+   "role": "Auditor Interno"
+  },
+  {
+   "read": 1,
+   "role": "Responsable de Calidad de Programa"
+  },
+  {
+   "read": 1,
+   "role": "Coordinador de Calidad de Facultad"
+  },
+  {
+   "read": 1,
+   "role": "Miembro de Comité de Calidad"
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "field:codigo",
+ "title_field": "nombre",
+ "show_title_field_in_link": 1
+}
