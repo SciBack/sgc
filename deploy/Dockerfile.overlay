@@ -3,6 +3,36 @@
 ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
 USER root
+# Debian bookworm trae pg_dump 15: no puede respaldar el servidor PostgreSQL 16.
+# Instalar solo el cliente desde PGDG; cambios de distro requieren revisión explícita.
+RUN set -eu; \
+    . /etc/os-release; \
+    test "$ID" = debian; \
+    test "$VERSION_CODENAME" = bookworm; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends ca-certificates curl; \
+    install -d -m 0755 /usr/share/postgresql-common/pgdg; \
+    curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
+        https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+        -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc; \
+    chmod 0644 /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc; \
+    printf '%s\n' 'Types: deb' 'URIs: https://apt.postgresql.org/pub/repos/apt' \
+        'Suites: bookworm-pgdg' 'Components: main' \
+        'Signed-By: /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc' \
+        > /etc/apt/sources.list.d/pgdg.sources; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends postgresql-client-16; \
+    apt-get clean; \
+    rm -rf /var/lib/apt/lists/*
+
+# Evitar que pg_wrapper o una versión heredada seleccionen otro major.
+ENV PATH="/usr/lib/postgresql/16/bin:${PATH}"
+RUN set -eu; \
+    for binary in pg_dump pg_restore psql; do \
+        test "$(command -v "$binary")" = "/usr/lib/postgresql/16/bin/$binary"; \
+        "$binary" --version | grep -E "^$binary \(PostgreSQL\) 16\."; \
+    done
+
 RUN rm -rf /home/frappe/frappe-bench/apps/sgc /home/frappe/frappe-bench/assets/sgc
 COPY --chown=frappe:frappe . /home/frappe/frappe-bench/apps/sgc
 USER frappe
