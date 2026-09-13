@@ -82,6 +82,77 @@ try:
 finally: frappe.destroy()
 PY
 SH
+# Verifica backup/restauración nativos de Bench con DB y archivos no vacíos.
+app "$CANDIDATE_IMAGE" -s <<'SH'
+set -euo pipefail
+cd sites
+../env/bin/python <<'PYSEED'
+from pathlib import Path
+import frappe
+frappe.init(site='migration-test.localhost',sites_path='/home/frappe/frappe-bench/sites'); frappe.connect(); frappe.set_user('Administrator')
+try:
+    assert frappe.local.site == 'migration-test.localhost'
+    for relative, content in (('public/files/rehearsal-public.txt', b'Public fixture backup 7.25\n'),
+                              ('private/files/rehearsal-private.txt', b'Private fixture backup 7.25\n')):
+        path = Path(frappe.get_site_path(relative))
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(content)
+finally: frappe.destroy()
+PYSEED
+cd ..
+BACKUP_DIR=/tmp/sgc-backup-rehearsal
+mkdir -m 700 "$BACKUP_DIR"
+bench --site migration-test.localhost backup --with-files --ignore-backup-conf \
+    --backup-path-db "$BACKUP_DIR/database.sql.gz" \
+    --backup-path-files "$BACKUP_DIR/public.tar" \
+    --backup-path-private-files "$BACKUP_DIR/private.tar" \
+    --backup-path-conf "$BACKUP_DIR/site_config.json"
+gzip -t "$BACKUP_DIR/database.sql.gz"
+tar -tf "$BACKUP_DIR/public.tar" >/dev/null
+tar -tf "$BACKUP_DIR/private.tar" >/dev/null
+# Destruir los testigos antes de restaurar: evita falsos positivos por datos intactos.
+cd sites
+../env/bin/python <<'PYDESTROY'
+import json
+from pathlib import Path
+import frappe
+frappe.init(site='migration-test.localhost',sites_path='/home/frappe/frappe-bench/sites'); frappe.connect()
+try:
+    assert frappe.local.site == 'migration-test.localhost'
+    config = json.loads(Path('/tmp/sgc-backup-rehearsal/site_config.json').read_text())
+    assert config['db_name'] == frappe.conf.db_name == 'readiness'
+    names = frappe.get_all('Valor Indicador', filters={'fuente':'test-migration'}, pluck='name')
+    assert len(names) == 1
+    frappe.db.set_value('Valor Indicador', names[0], 'valor_num', 99)
+    frappe.db.commit()
+    for relative in ('public/files/rehearsal-public.txt', 'private/files/rehearsal-private.txt'):
+        Path(frappe.get_site_path(relative)).unlink()
+finally: frappe.destroy()
+PYDESTROY
+cd ..
+bench --site migration-test.localhost restore "$BACKUP_DIR/database.sql.gz" \
+    --db-root-username postgres --db-root-password "$POSTGRES_PASSWORD" \
+    --with-public-files "$BACKUP_DIR/public.tar" \
+    --with-private-files "$BACKUP_DIR/private.tar" --force
+cd sites
+../env/bin/python <<'PYVERIFY'
+from pathlib import Path
+import frappe
+frappe.init(site='migration-test.localhost',sites_path='/home/frappe/frappe-bench/sites'); frappe.connect()
+try:
+    assert frappe.local.site == 'migration-test.localhost'
+    for dt in ('Fuente Dato','Regla Validacion','Alerta Indicador','Tablero Indicadores','Lote Ingesta'):
+        assert frappe.db.exists('DocType', dt), dt
+    rows=frappe.get_all('Valor Indicador',filters={'fuente':'test-migration'},fields=['valor_num','ingesta_clave'])
+    assert len(rows)==1 and rows[0].valor_num==7.25 and not rows[0].ingesta_clave
+    assert frappe.db.count('Lote Ingesta')==0
+    for relative, content in (('public/files/rehearsal-public.txt', b'Public fixture backup 7.25\n'),
+                              ('private/files/rehearsal-private.txt', b'Private fixture backup 7.25\n')):
+        assert Path(frappe.get_site_path(relative)).read_bytes() == content, relative
+    print('BACKUP/RESTORE BENCH: medición 7.25, cinco DocTypes y archivos público/privado recuperados')
+finally: frappe.destroy()
+PYVERIFY
+SH
 # Restauración completa del DB efímero, no solo limpieza de tablas conocidas.
 DB_OWNER="$(docker exec "$PREFIX-pg" psql -U postgres -Atc "SELECT pg_get_userbyid(datdba) FROM pg_database WHERE datname='readiness'")"
 test -n "$DB_OWNER"
