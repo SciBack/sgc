@@ -200,3 +200,44 @@ class IntegrationTestFichaPDF(IntegrationTestCase):
 			ficha_pdf.pdf_publicado(ficha.name),
 			"con el registro presente pero el fichero ausente, no se puede prometer el PDF",
 		)
+
+	def test_datos_ficha_no_filtra_correos_ni_metadatos(self):
+		"""La cuarta vez que el mismo patrón mordió al portal.
+
+		`datos_ficha()` devolvía las tablas hijas con `as_dict()`, y todo documento
+		de Frappe lleva `owner` y `modified_by`, que son correos. En el lab salían
+		26 de esos campos en un solo JSON. Valían «Administrator» porque los datos
+		entraron por script —así que mirando la salida no se veía nada raro—, pero
+		en cuanto alguien edite una ficha desde el Desk pasan a ser su correo, y
+		esto lo consume una web abierta.
+
+		Y `registros.responsable` es un Link a `User`: un campo de NEGOCIO que
+		además es una persona, así que una limpieza genérica de metadatos no lo
+		habría quitado.
+		"""
+		PROHIBIDOS = {"owner", "modified_by", "creation", "modified", "docstatus",
+		              "_user_tags", "_comments", "_assign", "_liked_by", "responsable"}
+
+		def recorrer(obj, ruta=""):
+			encontrados = []
+			if isinstance(obj, dict):
+				for clave, valor in obj.items():
+					if clave in PROHIBIDOS:
+						encontrados.append(f"{ruta}.{clave}")
+					encontrados += recorrer(valor, f"{ruta}.{clave}")
+			elif isinstance(obj, list):
+				for i, valor in enumerate(obj):
+					encontrados += recorrer(valor, f"{ruta}[{i}]")
+			return encontrados
+
+		ficha = self._ficha_publicada()
+		ficha.append("registros", {"registro": "Bitácora", "responsable": frappe.session.user,
+		                           "frecuencia_revision": "Mensual"})
+		ficha.append("entradas", {"insumo": "Solicitud", "proveedor": "Usuario"})
+		ficha.save(ignore_permissions=True)
+
+		fugas = recorrer(ficha.datos_ficha())
+		self.assertEqual(
+			fugas, [],
+			f"datos_ficha() no puede entregar metadatos ni personas: {fugas}",
+		)
