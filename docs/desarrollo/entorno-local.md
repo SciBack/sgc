@@ -80,6 +80,33 @@ docker exec -e PGPASSWORD=<pass> sgc-test-db-1 \
 
 Credenciales en `sites/calidad.localhost/site_config.json` dentro del contenedor.
 
+### Desplegar la imagen nueva
+
+```bash
+docker tag sgc-nativo:v16 sgc-nativo:v16-<fecha>      # guardar la anterior: rollback
+docker tag sgc-nativo:v16-nueva sgc-nativo:v16
+cd ~/proyectos/labs/frappe-sgc/frappe_docker
+docker compose --project-name sgc-test \
+  -f compose.yaml -f ../pg16.yaml -f ../arm64.yaml up -d --force-recreate
+```
+
+**Los datos sobreviven** —viven en los volúmenes `sgc-test_sites` y el de Postgres—,
+pero conviene respaldar igualmente antes.
+
+⚠️ **Recrear hace correr el `configurator`, que REESCRIBE `common_site_config.json`.**
+Como el `.env` del lab no define `REDIS_CACHE` / `REDIS_QUEUE`, los deja en
+`"redis://"` a secas y el **websocket entra en bucle de reinicio** intentando
+conectar a `127.0.0.1:6379`. Verificado el 13-sep. Restaurar a mano:
+
+```json
+"redis_cache":    "redis://redis-cache:6379",
+"redis_queue":    "redis://redis-queue:6379",
+"redis_socketio": "redis://redis-queue:6379"
+```
+
+y reiniciar backend, websocket, colas y scheduler. (Lo definitivo sería añadir esas
+variables al `.env`, pendiente.)
+
 ## Cuatro trampas verificadas (13-sep-2026)
 
 Todas costaron tiempo real y ninguna es evidente.
