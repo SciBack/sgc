@@ -114,12 +114,23 @@ Dos matices que el texto de los diagramas ya recoge y conviene no perder:
 
 Ver [`CONCORDANCIA.md`](../CONCORDANCIA.md): estos diagramas representan
 **estados, transiciones y quién puede ejecutarlas**, pero hoy no representan las
-reglas que condicionan cada paso ni cómo un proceso dispara al siguiente.
+reglas completas que condicionan cada paso. Incluyen los efectos y saltos entre
+procesos declarados en `EFECTOS_AL_ENTRAR` y `SALTOS_ENTRE_PROCESOS` del generador;
+no se debe asumir que esas listas cubren todos los efectos de los controladores.
 Conviene saberlo antes de usarlos como referencia única.
+
+Desde el 2026-09-13 el CI verifica la concordancia sin necesitar Frappe:
+
+```bash
+python3 deploy/check_bpmn.py
+python3 -m unittest discover -s deploy -p 'test_check_bpmn.py'
+```
+
+Este control no valida los diagramas institucionales almacenados como adjuntos.
 
 ## Cómo verlos
 
 Son XML. Se abren con [Camunda Modeler](https://camunda.com/download/modeler/) o
-arrastrándolos a [demo.bpmn.io](https://demo.bpmn.io). Aún **no hay visor dentro
-del sistema** (estaba previsto en `docs/decisiones/bpmn-herramientas.md`, punto
-2, y no se implementó).
+arrastrándolos a [demo.bpmn.io](https://demo.bpmn.io). El Desk ya incluye visor
+y la página `bpmn-editor` para adjuntos institucionales. Los 15 workflows se
+mantienen desde sus specs y se regeneran; editar un adjunto no cambia el workflow.

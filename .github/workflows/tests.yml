@@ -57,6 +57,12 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Concordancia BPMN con el código (sin Frappe)
+        working-directory: sgc
+        run: |
+          python deploy/check_bpmn.py
+          python -m unittest discover -s deploy -p 'test_check_bpmn.py'
+
       - name: Dependencias del sistema
         run: |
           sudo apt-get update
