@@ -16,6 +16,10 @@ from frappe.model.document import Document
 
 
 class FuenteDato(Document):
+	def before_rename(self, old, new, merge=False):
+		if self.usuario_ingesta or frappe.db.exists('Lote Ingesta', {'fuente_dato': self.name}):
+			frappe.throw(_('La identidad de una fuente de ingesta no se renombra ni fusiona.'))
+
 	def validate(self):
 		if self.usuario_ingesta and not (self.codigo_publicacion or "").strip():
 			frappe.throw(_("Una cuenta de ingesta necesita un código de publicación estable."))

@@ -1,0 +1,262 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "SGC ingesta de indicadores",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/method/sgc.ingesta.publicar_lote": {
+      "post": {
+        "operationId": "publicarLote",
+        "security": [
+          {
+            "FrappeToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "lote"
+                ],
+                "properties": {
+                  "lote": {
+                    "$ref": "#/components/schemas/Lote"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Comprobar message.estado: rechazo de negocio también devuelve HTTP 200.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "$ref": "#/components/schemas/Resultado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error Frappe de autenticación, permiso, estructura o transacción. No implica lote persistido."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "FrappeToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "token API_KEY:API_SECRET"
+      }
+    },
+    "schemas": {
+      "Lote": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "version",
+          "fuente_dato",
+          "run_id",
+          "extraido_en",
+          "mediciones"
+        ],
+        "properties": {
+          "version": {
+            "type": "integer",
+            "const": 1
+          },
+          "fuente_dato": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 140
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 140
+          },
+          "extraido_en": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "mediciones": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 500,
+            "items": {
+              "$ref": "#/components/schemas/Medicion"
+            }
+          }
+        }
+      },
+      "Medicion": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "indicador",
+          "periodo_academico",
+          "valor_num",
+          "unidad",
+          "formula_version",
+          "estado_medicion",
+          "corte_inicio",
+          "corte_fin"
+        ],
+        "properties": {
+          "indicador": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 140
+          },
+          "periodo_academico": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 140
+          },
+          "unidad": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 140
+          },
+          "formula_version": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 140
+          },
+          "programa_sede": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 140
+          },
+          "unidad_organica": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 140
+          },
+          "corte_inicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "corte_fin": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "numerador": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "denominador": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "exclusiveMinimum": 0
+          },
+          "cobertura_pct": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 100
+          },
+          "meta_valor": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "valor_num": {
+            "type": "number"
+          },
+          "estado_medicion": {
+            "enum": [
+              "Provisional",
+              "Validado"
+            ]
+          },
+          "meta_operador": {
+            "enum": [
+              ">",
+              ">=",
+              "<",
+              "<=",
+              "=",
+              null
+            ]
+          },
+          "meta_unidad": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 140
+          }
+        },
+        "description": "Ámbitos mutuamente excluyentes; numerador/denominador y meta completa; inicio<=fin<=extracción. Validaciones cruzadas en servidor."
+      },
+      "Resultado": {
+        "type": "object",
+        "required": [
+          "lote",
+          "estado",
+          "mediciones",
+          "advertencias",
+          "errores"
+        ],
+        "properties": {
+          "lote": {
+            "type": "string"
+          },
+          "estado": {
+            "enum": [
+              "Aceptado",
+              "Rechazado"
+            ]
+          },
+          "mediciones": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "advertencias": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "errores": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  }
+}

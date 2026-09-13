@@ -35,10 +35,12 @@ Cuatro reglas de diseño, ninguna accidental:
    el grano del programa de la autoevaluación; agregarle el institucional
    produciría dos filas del mismo indicador con cifras legítimamente distintas.
 
-4. **Nunca se infiere el cumplimiento.** Si el productor declaró en el texto si
+4. **El contrato determina el cumplimiento.** En registros legacy, si el productor declaró en el texto si
    la medición cumple la meta, se respeta; si no lo declaró, queda en `None` y
    la UI lo muestra neutro. Recalcularlo aquí exigiría asumir el sentido de la
    comparación (≥ o ≤) y el redondeo, que son del productor, no de la vista.
+   La ingesta estructurada sí declara operador y unidades: su comparación
+   explícita solo se evalúa cuando las unidades de valor y meta coinciden.
 
 El campo `valor_texto` es prosa libre en el doctype, pero los conectores lo
 escriben con una convención estable de la que se extraen los metadatos:
@@ -50,9 +52,12 @@ y lo que no, lo deja crudo en `texto` con `contrato_reconocido=False`. Un cambio
 de formato del productor degrada la presentación, nunca rompe la página.
 """
 
+import json
 import re
 
 import frappe
+
+from sgc.ingesta_contrato import normalizar_lote
 
 # Fuente por defecto de los indicadores calculados. Es un DEFAULT, no una
 # constante de negocio: cada institución nombra a su productor como quiera y lo
@@ -190,6 +195,51 @@ def _parsear_valor_texto(texto):
     return meta
 
 
+def _leer_medicion(registro):
+    """La ingesta estructurada es autoritativa; su corrupción nunca recupera prosa vieja.
+
+    El contrato v1 declara operador, meta y unidades: se compara solo si ambas
+    unidades coinciden exactamente. Los registros legacy conservan el parser
+    tolerante y su juicio declarado, sin inferencias nuevas.
+    """
+    if not registro.get("ingesta_clave"):
+        return _parsear_valor_texto(registro.get("valor_texto"))
+
+    meta = _parsear_valor_texto("")
+    meta.update(provisional=True, error_ingesta="datos_ingesta_invalidos",
+                texto="Datos de ingesta inválidos", valor_num=None, unidad="", sufijo="")
+    try:
+        fila = json.loads(registro.get("datos_ingesta") or "")
+        if not isinstance(fila, dict):
+            return meta
+        # Reusar el contrato puro evita aceptar estados/números/fechas inválidos.
+        # Solo necesitamos validar la medición; el corte final sirve como límite
+        # local, sin inventar ni presentar una fecha de extracción del lote.
+        datos = normalizar_lote({
+            "version": 1, "fuente_dato": "lectura", "run_id": "lectura",
+            "extraido_en": fila.get("corte_fin"), "mediciones": [fila],
+        })["mediciones"][0]
+    except (ValueError, TypeError, OverflowError):
+        return meta
+
+    cobertura = datos["cobertura_pct"]
+    meta.update(
+        texto="", n=datos["denominador"], meta=datos["meta_valor"],
+        meta_operador=datos["meta_operador"] or "", meta_sufijo=datos["meta_unidad"] or "",
+        cobertura=cobertura, contrato_reconocido=True, error_ingesta=None,
+        provisional=(datos["estado_medicion"] != "Validado" or cobertura is None),
+        valor_num=datos["valor_num"], unidad=datos["unidad"],
+        sufijo=_sufijo_de_unidad(datos["unidad"]),
+    )
+    meta["meta_texto"] = _componer_meta(meta)
+    if datos["meta_valor"] is not None and datos["unidad"] == datos["meta_unidad"]:
+        valor, umbral = datos["valor_num"], datos["meta_valor"]
+        meta["cumple"] = {">": valor > umbral, ">=": valor >= umbral,
+                          "<": valor < umbral, "<=": valor <= umbral,
+                          "=": valor == umbral}[datos["meta_operador"]]
+    return meta
+
+
 def _sufijo_de_unidad(unidad):
     """Símbolo corto para pegar al número, o "" si la unidad no es pegable.
 
@@ -280,7 +330,8 @@ def indicadores_de_autoevaluacion(autoevaluacion, fuente=None):
             "periodo_academico": par["periodo_academico"],
             "fuente": fuente,
         },
-        fields=["name", "indicador", "valor_num", "valor_texto", "fecha", "calculado"],
+        fields=["name", "indicador", "valor_num", "valor_texto", "fecha", "calculado",
+                "ingesta_clave", "datos_ingesta"],
         # Más reciente primero: `fecha` es opcional, así que `creation` desempata.
         order_by="fecha desc, creation desc",
     )
@@ -305,7 +356,7 @@ def indicadores_de_autoevaluacion(autoevaluacion, fuente=None):
             "valor_num": v.valor_num,
             "calculado": bool(v.calculado),
             "fecha": v.fecha,
-            **_parsear_valor_texto(v.valor_texto),
+            **_leer_medicion(v),
         }
         for codigo, v in vistos.items()
     ]

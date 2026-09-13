@@ -9,6 +9,9 @@ from sgc.tests import factories
 
 
 class IntegrationTestIngesta(IntegrationTestCase):
+    def tearDown(self):
+        frappe.set_user('Administrator')
+
     def setUp(self):
         frappe.set_user('Administrator')
         self.indicador = factories.crear_indicador().name
@@ -111,3 +114,37 @@ class IntegrationTestIngesta(IntegrationTestCase):
         r = ingesta.publicar_lote(self.datos)
         self.assertEqual(r['estado'], 'Aceptado')
         self.assertEqual(r['mediciones'], [vi.name])
+
+    def test_legacy_no_elude_fuente_ni_periodo_anterior(self):
+        frappe.db.set_value('Fuente Dato', self.fuente.name, 'usuario_ingesta', None)
+        vi = factories.crear_valor_indicador(self.indicador, periodo_academico=self.periodo,
+                                            fuente=self.fuente.codigo_publicacion, valor_num=10)
+        frappe.db.set_value('Fuente Dato', self.fuente.name, 'usuario_ingesta', 'Administrator')
+        vi.fuente = 'manual'
+        with self.assertRaises(frappe.ValidationError):
+            vi.save(ignore_permissions=True)
+        frappe.db.set_value('Fuente Dato', self.fuente.name, 'usuario_ingesta', None)
+        frappe.db.set_value('Periodo Academico', self.periodo, 'estado', 'cerrado')
+        vi.periodo_academico = None
+        with self.assertRaises(frappe.ValidationError):
+            vi.save(ignore_permissions=True)
+
+    def test_identidad_fuente_no_se_renombra(self):
+        ingesta.publicar_lote(self.datos)
+        with self.assertRaises(frappe.ValidationError):
+            frappe.rename_doc('Fuente Dato', self.fuente.name, self.fuente.name + '-nueva', force=True)
+
+    def test_productor_respeta_user_permission_indicador(self):
+        usuario = frappe.get_doc({'doctype': 'User', 'email': 'ingesta-' + frappe.generate_hash(length=8) + '@example.test',
+            'first_name': 'Productor de prueba', 'send_welcome_email': 0,
+            'roles': [{'role': 'System Manager'}]}).insert(ignore_permissions=True)
+        frappe.get_doc({'doctype': 'User Permission', 'user': usuario.name, 'allow': 'Indicador',
+                        'for_value': self.indicador, 'apply_to_all_doctypes': 1}).insert(ignore_permissions=True)
+        otro = factories.crear_indicador().name
+        frappe.db.set_value('Fuente Dato', self.fuente.name, 'usuario_ingesta', usuario.name)
+        frappe.clear_cache(user=usuario.name)
+        frappe.set_user(usuario.name)
+        self.assertEqual(ingesta.publicar_lote(self.datos)['estado'], 'Aceptado')
+        self.datos['run_id'] = 'fuera-de-ambito'
+        self.datos['mediciones'][0]['indicador'] = otro
+        self.assertEqual(ingesta.publicar_lote(self.datos)['estado'], 'Rechazado')

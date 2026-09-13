@@ -418,3 +418,31 @@ class IntegrationTestIndicadoresAcreditacion(IntegrationTestCase):
             )
         finally:
             frappe.db.set_default(ia.CLAVE_DEFAULT_FUENTE, ia.FUENTE_POR_DEFECTO)
+
+    def test_ingesta_estructurada_prevalece_sobre_texto_historico(self):
+        from sgc.tests.test_indicadores_ingesta_puro import structured
+
+        vi = self._publicar("TEST-ID60", valor_num=50, valor_texto=TEXTO_CUMPLE)
+        datos = structured(indicador=vi.indicador, periodo_academico=self.periodo,
+                           programa_sede=self.ps, cobertura_pct=None, estado_medicion="Validado")
+        frappe.db.set_value("Valor Indicador", vi.name, {
+            "ingesta_clave": "test-lector-" + vi.name, "datos_ingesta": datos["datos_ingesta"],
+        })
+        fila = ia.indicadores_de_autoevaluacion(self.ae)["filas"][0]
+        self.assertEqual(fila["n"], 10)
+        self.assertEqual(fila["meta_texto"], ">= 60%")
+        self.assertFalse(fila["cumple"])
+        self.assertTrue(fila["provisional"])
+        self.assertIsNone(fila["cobertura"])
+        self.assertEqual(fila["marco"], "")
+
+    def test_ingesta_corrupta_no_reutiliza_el_cumple_del_texto(self):
+        vi = self._publicar("TEST-ID61", valor_num=50, valor_texto=TEXTO_CUMPLE)
+        frappe.db.set_value("Valor Indicador", vi.name, {
+            "ingesta_clave": "test-lector-" + vi.name, "datos_ingesta": "{",
+        })
+        fila = ia.indicadores_de_autoevaluacion(self.ae)["filas"][0]
+        self.assertIsNone(fila["cumple"])
+        self.assertIsNone(fila["valor_num"])
+        self.assertTrue(fila["provisional"])
+        self.assertTrue(fila["error_ingesta"])

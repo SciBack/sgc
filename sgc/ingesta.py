@@ -92,7 +92,8 @@ def _prevalidar(fuente, datos):
                     raise ErrorContrato(f'{campo}: referencia inexistente')
             if frappe.db.get_value('Periodo Academico', fila['periodo_academico'], 'estado') != 'abierto':
                 raise ErrorContrato('Período cerrado')
-            # Frappe aplica también User Permission del usuario técnico a los Links.
+            # El servicio escribe con privilegios internos después del preflight;
+            # comprobar aquí permisos del documento y de todos sus Links.
             if fila.get('programa_sede'):
                 from sgc.permissions import programas_permitidos
                 permitidos = programas_permitidos()
@@ -102,6 +103,13 @@ def _prevalidar(fuente, datos):
             if any(a['severidad'] == 'Bloqueante' for a in avisos):
                 raise ErrorContrato('; '.join(a['mensaje'] for a in avisos if a['severidad'] == 'Bloqueante'))
             nombre = _existente(fuente, fila)
+            candidato = frappe.get_doc('Valor Indicador', nombre) if nombre else frappe.new_doc('Valor Indicador')
+            if nombre and not frappe.has_permission('Valor Indicador', ptype='write', doc=candidato):
+                raise ErrorContrato('Medición vigente fuera del ámbito autorizado')
+            candidato.update({k: fila.get(k) for k in ('indicador', 'periodo_academico', 'programa_sede', 'unidad_organica')})
+            candidato.fuente_dato = fuente.name
+            if not frappe.has_permission('Valor Indicador', ptype='write' if nombre else 'create', doc=candidato):
+                raise ErrorContrato('Referencias fuera del ámbito autorizado')
             if nombre:
                 anterior = frappe.db.get_value('Valor Indicador', nombre, 'corte_fin')
                 if anterior and instante(fila['corte_fin']) < instante(anterior):

@@ -120,3 +120,30 @@ class IntegrationTestReportIndicadores(IntegrationTestCase):
 
         items = dict(f18_workspace.CARDS)["Marcos e indicadores"]
         self.assertIn(("Report", "Indicadores de Acreditacion"), items)
+
+    def test_reporte_prefiere_ingesta_y_no_prosa_historica(self):
+        from sgc.tests.test_indicadores_ingesta_puro import structured
+
+        vi = self._valor(TEXTO_CUMPLE, 50)
+        datos = structured(indicador=self.ind, periodo_academico=self.periodo, programa_sede=self.ps)
+        frappe.db.set_value("Valor Indicador", vi.name, {
+            "ingesta_clave": "test-informe-" + vi.name, "datos_ingesta": datos["datos_ingesta"],
+        })
+        fila = self._ejecutar(fuente="dw")[1][0]
+        self.assertEqual(fila["muestra"], 10)
+        self.assertEqual(fila["meta"], ">= 60%")
+        self.assertEqual(fila["cumple"], "No")
+        self.assertEqual(fila["provisional"], 1)
+        self.assertEqual(fila["marco"], "")
+
+    def test_reporte_ingesta_corrupta_queda_sin_juicio(self):
+        vi = self._valor(TEXTO_CUMPLE, 50)
+        frappe.db.set_value("Valor Indicador", vi.name, {
+            "ingesta_clave": "test-informe-" + vi.name, "datos_ingesta": "{",
+        })
+        fila = self._ejecutar(fuente="dw")[1][0]
+        self.assertEqual(fila["cumple"], "—")
+        self.assertEqual(fila["meta"], "")
+        self.assertIsNone(fila["muestra"])
+        self.assertIsNone(fila["valor"])
+        self.assertEqual(fila["provisional"], 1)

@@ -14,16 +14,18 @@ class ValorIndicador(Document):
             frappe.throw('El valor de indicador debe ser finito')
         if self.programa_sede and self.unidad_organica:
             frappe.throw('Una medición no puede pertenecer a dos ámbitos')
-        if self.periodo_academico and frappe.db.get_value('Periodo Academico', self.periodo_academico, 'estado') != 'abierto':
-            frappe.throw('No se puede modificar una medición de un período cerrado')
+        anterior = self.get_doc_before_save()
+        periodos = {self.periodo_academico, anterior.periodo_academico if anterior else None}
+        for periodo in periodos - {None, ''}:
+            if frappe.db.get_value('Periodo Academico', periodo, 'estado') != 'abierto':
+                frappe.throw('No se puede modificar una medición de un período cerrado')
         if en_ingesta():
             return
-        anterior = self.get_doc_before_save()
         protegida = bool(self.ingesta_clave or self.fuente_dato or self.lote_ingesta
                          or (anterior and (anterior.ingesta_clave or anterior.fuente_dato)))
-        if self.fuente:
+        for fuente in {self.fuente, anterior.fuente if anterior else None} - {None, ''}:
             protegida = protegida or bool(frappe.db.exists('Fuente Dato', {
-                'codigo_publicacion': self.fuente, 'usuario_ingesta': ['is', 'set']}))
+                'codigo_publicacion': fuente, 'usuario_ingesta': ['is', 'set']}))
         if protegida:
             frappe.throw('Esta fuente o medición se administra mediante la API de ingesta')
         # Reglas por indicador también gobiernan la edición manual; las de fuente
