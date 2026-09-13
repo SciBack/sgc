@@ -38,9 +38,21 @@ class FichaCaracterizacionProceso(Document):
 		# ningún indicador apuntando a una ficha que no existe.
 		self._sincronizar_indicadores()
 
+		# El PDF que sirve el portal se hace AQUÍ, no cuando alguien lo descarga:
+		# el motor de impresión es Chrome y la vitrina no tiene login ni límite de
+		# peticiones. Ver `sgc.ficha_pdf`.
+		from sgc.ficha_pdf import sincronizar as sincronizar_pdf
+
+		sincronizar_pdf(self)
+
 	def on_trash(self):
 		"""Al borrar la ficha, ningún indicador queda apuntando a este proceso."""
 		self._limpiar_indicadores_huerfanos(declarados=set())
+		# Sin esto el PDF sobreviviría a su ficha y seguiría siendo descargable:
+		# los adjuntos se sirven por permiso de doctype, sin mirar al padre.
+		from sgc.ficha_pdf import retirar
+
+		retirar(self.name)
 
 	# ------------------------------------------------------------ validaciones
 
