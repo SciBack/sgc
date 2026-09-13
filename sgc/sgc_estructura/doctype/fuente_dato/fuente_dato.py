@@ -17,6 +17,14 @@ from frappe.model.document import Document
 
 class FuenteDato(Document):
 	def validate(self):
+		if self.usuario_ingesta and not (self.codigo_publicacion or "").strip():
+			frappe.throw(_("Una cuenta de ingesta necesita un código de publicación estable."))
+		if self.usuario_ingesta == "Guest":
+			frappe.throw(_("Guest no puede ser una cuenta de ingesta."))
+		previous = self.get_doc_before_save()
+		if previous and previous.codigo_publicacion != self.codigo_publicacion:
+			if frappe.db.exists("Lote Ingesta", {"fuente_dato": self.name}):
+				frappe.throw(_("No cambies el código de una fuente con lotes; requiere migración."))
 		# Una fuente automática sin protocolo no se puede reproducir: quien venga
 		# después no sabe por dónde entra el dato.
 		if self.metodo_recojo in ("Automático", "Mixto") and not (self.protocolo or "").strip():

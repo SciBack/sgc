@@ -17,7 +17,17 @@
   "calculado",
   "fuente",
   "fecha",
-  "registrado_por"
+  "registrado_por",
+  "fuente_dato",
+  "ingesta_clave",
+  "lote_ingesta",
+  "datos_ingesta",
+  "cobertura_pct",
+  "unidad_medicion",
+  "formula_version",
+  "corte_inicio",
+  "corte_fin",
+  "estado_medicion"
  ],
  "fields": [
   {
@@ -32,14 +42,14 @@
   {
    "fieldname": "autoevaluacion",
    "fieldtype": "Link",
-   "label": "Autoevaluaci\u00f3n",
+   "label": "Autoevaluación",
    "options": "Autoevaluacion"
   },
   {
    "fieldname": "periodo_academico",
    "fieldtype": "Link",
    "in_standard_filter": 1,
-   "label": "Periodo acad\u00e9mico",
+   "label": "Periodo académico",
    "options": "Periodo Academico"
   },
   {
@@ -52,14 +62,14 @@
   {
    "fieldname": "unidad_organica",
    "fieldtype": "Link",
-   "label": "Unidad org\u00e1nica",
+   "label": "Unidad orgánica",
    "options": "Unidad Organica"
   },
   {
    "fieldname": "valor_num",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Valor num\u00e9rico"
+   "label": "Valor numérico"
   },
   {
    "fieldname": "valor_texto",
@@ -87,6 +97,70 @@
    "fieldtype": "Link",
    "label": "Registrado por",
    "options": "User"
+  },
+  {
+   "fieldname": "fuente_dato",
+   "fieldtype": "Link",
+   "label": "Fuente registrada",
+   "options": "Fuente Dato",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ingesta_clave",
+   "fieldtype": "Data",
+   "label": "Identidad de ingesta",
+   "unique": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "lote_ingesta",
+   "fieldtype": "Link",
+   "label": "Último lote",
+   "options": "Lote Ingesta",
+   "read_only": 1
+  },
+  {
+   "fieldname": "datos_ingesta",
+   "fieldtype": "Long Text",
+   "label": "Contrato de medición",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cobertura_pct",
+   "fieldtype": "Float",
+   "label": "Cobertura de ingesta (%)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "unidad_medicion",
+   "fieldtype": "Data",
+   "label": "Unidad de medición",
+   "read_only": 1
+  },
+  {
+   "fieldname": "formula_version",
+   "fieldtype": "Data",
+   "label": "Versión de fórmula",
+   "read_only": 1
+  },
+  {
+   "fieldname": "corte_inicio",
+   "fieldtype": "Data",
+   "label": "Inicio del corte (UTC)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "corte_fin",
+   "fieldtype": "Data",
+   "label": "Fin del corte (UTC)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "estado_medicion",
+   "fieldtype": "Select",
+   "label": "Estado de medición",
+   "options": "\nProvisional\nValidado",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,

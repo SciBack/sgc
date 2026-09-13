@@ -22,7 +22,9 @@
   "ultima_carga",
   "sec_estado",
   "estado",
-  "notas"
+  "notas",
+  "usuario_ingesta",
+  "codigo_publicacion"
  ],
  "fields": [
   {
@@ -145,6 +147,20 @@
    "fieldname": "notas",
    "label": "Notas",
    "fieldtype": "Small Text"
+  },
+  {
+   "fieldname": "usuario_ingesta",
+   "fieldtype": "Link",
+   "label": "Cuenta de ingesta",
+   "options": "User",
+   "description": "Cuenta técnica autorizada a publicar esta fuente. Vacío: ingesta v1 desactivada."
+  },
+  {
+   "fieldname": "codigo_publicacion",
+   "fieldtype": "Data",
+   "label": "Código en las mediciones",
+   "unique": 1,
+   "description": "Código estable del productor, por ejemplo el campo fuente de sus mediciones heredadas."
   }
  ],
  "index_web_pages_for_search": 1,

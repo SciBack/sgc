@@ -1,0 +1,76 @@
+{
+ "doctype": "DocType",
+ "name": "Lote Ingesta",
+ "module": "SGC Nucleo",
+ "autoname": "prompt",
+ "allow_rename": 0,
+ "track_changes": 1,
+ "field_order": [
+  "fuente_dato",
+  "run_id",
+  "hash_contenido",
+  "estado",
+  "extraido_en",
+  "respuesta"
+ ],
+ "fields": [
+  {
+   "fieldname": "fuente_dato",
+   "fieldtype": "Link",
+   "label": "Fuente",
+   "options": "Fuente Dato",
+   "reqd": 1
+  },
+  {
+   "fieldname": "run_id",
+   "fieldtype": "Data",
+   "label": "ID del productor",
+   "reqd": 1
+  },
+  {
+   "fieldname": "hash_contenido",
+   "fieldtype": "Data",
+   "label": "Hash del contenido",
+   "reqd": 1
+  },
+  {
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "label": "Estado",
+   "options": "Aceptado\nRechazado",
+   "reqd": 1
+  },
+  {
+   "fieldname": "extraido_en",
+   "fieldtype": "Data",
+   "label": "Extraído (UTC)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "respuesta",
+   "fieldtype": "Long Text",
+   "label": "Resultado",
+   "reqd": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1
+  },
+  {
+   "role": "DPGC",
+   "read": 1
+  },
+  {
+   "role": "Analista de Calidad (DPGC)",
+   "read": 1
+  },
+  {
+   "role": "Auditor Interno",
+   "read": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC"
+}
