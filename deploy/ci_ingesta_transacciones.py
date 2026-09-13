@@ -67,7 +67,9 @@ def request_worker(sites_path, token, payload, barrier, output, inject_failure=F
         def synchronized_authorize(name):
             # Connection IDs prove these are independent request transactions.
             observed['backend_pid'] = frappe.db.sql('SELECT pg_backend_pid()')[0][0]
-            if barrier is not None:
+            initial_attempt = 'attempts' not in observed
+            observed['attempts'] = observed.get('attempts', 0) + 1
+            if barrier is not None and initial_attempt:
                 pids[slot] = observed['backend_pid']
                 barrier.wait(timeout=30)
             source = original_authorize(name)

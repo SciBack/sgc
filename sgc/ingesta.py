@@ -54,6 +54,20 @@ def _autorizar(nombre):
     return fuente
 
 
+def _autorizar_con_reintento(nombre):
+    # PostgreSQL/Frappe usa REPEATABLE READ: esperar FOR UPDATE puede producir
+    # 40001 si el ganador actualizó ultima_carga. Renovar el snapshot únicamente
+    # antes de cualquier escritura; nunca revertir trabajo previo del llamador.
+    for intento in range(3):
+        try:
+            return _autorizar(nombre)
+        except Exception as exc:
+            if (getattr(exc, 'pgcode', None) != '40001' or intento == 2
+                    or getattr(frappe.db, 'transaction_writes', None) != 0):
+                raise
+            frappe.db.rollback()
+
+
 def _reglas(fuente, indicador):
     filas = frappe.get_all('Regla Validacion', filters={'activa': 1}, fields=[
         'name', 'fuente_dato', 'indicador', 'tipo_regla', 'campo_objetivo',
@@ -126,7 +140,7 @@ def publicar_lote(lote):
         datos = normalizar_lote(lote)
     except ErrorContrato as exc:
         frappe.throw(str(exc))
-    fuente = _autorizar(datos['fuente_dato'])
+    fuente = _autorizar_con_reintento(datos['fuente_dato'])
     nombre_lote = huella([fuente.name, datos['run_id']])
     fingerprint = huella(datos)
     if frappe.db.exists('Lote Ingesta', nombre_lote):

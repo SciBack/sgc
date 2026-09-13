@@ -57,6 +57,11 @@ Errores de autenticación/autorización, de estructura o fallos inesperados usan
 la respuesta de error Frappe, y no prometen un Lote Ingesta persistido.
 
 Cada fuente serializa sus publicaciones mediante bloqueo de fila PostgreSQL.
+Si PostgreSQL detecta conflicto de serialización al adquirir ese bloqueo, se
+renueva la transacción hasta tres intentos, únicamente cuando todavía no contiene
+escrituras. No se revierte trabajo previo de un llamador ni se repiten escrituras
+parciales. Si persiste el conflicto, el productor recibe error y conserva su lote
+para repetirlo con la misma identidad.
 El POST confirma una sola transacción: no hay commits por medición. Un rechazo
 de negocio guarda el lote rechazado sin mediciones; un error inesperado revierte
 toda la transacción. Un mismo run_id y contenido normalizado devuelve la respuesta
@@ -77,6 +82,8 @@ para eludir la API. La asignación de cuentas y permisos debe hacerse antes del
 piloto, con una cuenta distinta del administrador y con alcance probado.
 
 Validación local: `python -m unittest discover -s tests -p 'test_ingesta_contrato.py'`.
-Integración Frappe/PostgreSQL: GitHub Actions, `sgc.tests.test_ingesta`. Las pruebas
-de concurrencia real y fallo transaccional después de la primera escritura son
-gates pendientes: no inferirlas solamente de una prueba de repetición secuencial.
+Integración Frappe/PostgreSQL: GitHub Actions, `sgc.tests.test_ingesta`. El runner
+`deploy/ci_ingesta_transacciones.py` prueba peticiones WSGI con conexiones distintas,
+bloqueo real observado en PostgreSQL y reversión tras primera medición/alerta.
+Solo puede ejecutarse en el sitio efímero de CI. Su resultado debe estar aprobado
+para el commit candidato; una prueba de repetición secuencial no lo sustituye.
