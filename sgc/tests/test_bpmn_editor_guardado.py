@@ -134,3 +134,25 @@ class IntegrationTestGuardadoBPMN(IntegrationTestCase):
             "el hash del registro tiene que describir el fichero que hay en disco",
         )
         self.assertEqual(doc.file_size, len(contenido.encode()), "el tamaño del registro también")
+
+    def test_xml_falso_y_script_no_crean_adjuntos(self):
+        p = self._proceso()
+        for contenido in (
+            '<definitions xmlns="urn:fake"/>',
+            XML_A.replace('id="A"/>', 'id="A"><bpmn:scriptTask/></bpmn:definitions>'),
+            '<!DOCTYPE definitions [<!ENTITY x "expandir">]>' + XML_A,
+        ):
+            with self.subTest(contenido=contenido), self.assertRaises(frappe.ValidationError):
+                be.guardar_bpmn("Proceso", p, NOMBRE, contenido)
+        self.assertEqual(be.listar_bpmn("Proceso", p), [])
+
+    def test_generado_existente_no_se_sobrescribe_quitando_su_marca(self):
+        from frappe.utils.file_manager import save_file
+
+        p = self._proceso()
+        generado = XML_A.replace('id="A"', 'id="A" exporter="SGC"')
+        archivo = save_file(NOMBRE, generado.encode(), "Proceso", p, is_private=1)
+        with self.assertRaises(frappe.ValidationError):
+            be.guardar_bpmn("Proceso", p, archivo.file_name, XML_B)
+        self.assertEqual(frappe.get_doc("File", archivo.name).get_content(), generado)
+        self.assertEqual(len(be.listar_bpmn("Proceso", p)), 1)

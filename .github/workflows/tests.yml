@@ -64,6 +64,7 @@ jobs:
           python -m unittest discover -s deploy -p 'test_check_bpmn.py'
           python -m unittest discover -s tests -p 'test_ingesta_contrato.py'
           python -m unittest discover -s sgc/tests -p 'test_indicadores_ingesta_puro.py'
+          python -m unittest discover -s tests -p 'test_bpmn_validacion.py'
 
       - name: Dependencias del sistema
         run: |

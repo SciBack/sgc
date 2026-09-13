@@ -135,9 +135,16 @@ class IntegrationTestIngesta(IntegrationTestCase):
             frappe.rename_doc('Fuente Dato', self.fuente.name, self.fuente.name + '-nueva', force=True)
 
     def test_productor_respeta_user_permission_indicador(self):
+        from frappe.permissions import add_permission, update_permission_property
+
+        rol = 'Productor-test-' + frappe.generate_hash(length=8)
+        frappe.get_doc({'doctype': 'Role', 'role_name': rol, 'desk_access': 1}).insert(ignore_permissions=True)
+        add_permission('Valor Indicador', rol, 0)
+        for permiso in ('read', 'write', 'create'):
+            update_permission_property('Valor Indicador', rol, 0, permiso, 1)
         usuario = frappe.get_doc({'doctype': 'User', 'email': 'ingesta-' + frappe.generate_hash(length=8) + '@example.test',
             'first_name': 'Productor de prueba', 'send_welcome_email': 0,
-            'roles': [{'role': 'System Manager'}]}).insert(ignore_permissions=True)
+            'roles': [{'role': rol}]}).insert(ignore_permissions=True)
         frappe.get_doc({'doctype': 'User Permission', 'user': usuario.name, 'allow': 'Indicador',
                         'for_value': self.indicador, 'apply_to_all_doctypes': 1}).insert(ignore_permissions=True)
         otro = factories.crear_indicador().name
