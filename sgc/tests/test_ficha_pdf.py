@@ -1,71 +1,288 @@
 # Copyright (c) 2026, SciBack and contributors
 # For license information, please see license.txt
-"""La ficha se entrega como PDF institucional, no como formulario editable.
+"""El PDF de la ficha se pregenera al publicar y se retira al despublicar.
 
-Lo pidió la DPGC el 10-sep-2026: «el cliente lo que debería visualizar es el PDF,
-no el formulario editable». Y con las TAREAS dentro del documento, porque el
-flujograma solo muestra actividades.
+Estas pruebas fijan el contrato que consume el portal público. Dos de ellas
+existen por hallazgos concretos, no por completitud:
 
-Estos tests fijan las dos cosas: que el formato existe y es el predeterminado del
-doctype, y que los datos que consume salen resueltos de Python —incluidas las
-tareas leídas del BPMN— para que la plantilla solo tenga que iterar.
+- El adjunto NO se acumula al republicar. Si se acumulara, quedaría descargable
+  el PDF de una versión que ya no está vigente: los adjuntos de Frappe se sirven
+  comprobando el permiso del DOCTYPE, nunca el estado del documento padre.
+  Comprobado en el lab el 13-sep-2026 bajando el BPMN de un procedimiento en
+  Borrador con el token del portal (HTTP 200).
+- El nombre aguanta el sufijo hexadecimal que Frappe añade ante colisiones. Es
+  el mismo fallo que hizo crecer sin fin los nombres de los .bpmn.
 """
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from sgc.setup import f19_ficha_pdf
+from sgc import ficha_pdf
 from sgc.tests import factories
 
 
 class IntegrationTestFichaPDF(IntegrationTestCase):
-    def setUp(self):
-        frappe.set_user("Administrator")
+	"""⚠️ El render real NO se ejercita aquí, y es deliberado.
 
-    def test_el_formato_existe_y_es_el_predeterminado(self):
-        f19_ficha_pdf.run()
-        nombre = f19_ficha_pdf.PRINT_FORMAT_NAME
-        self.assertTrue(frappe.db.exists("Print Format", nombre))
+	`_render` pasa por la vista `printview` de Frappe, que incluye los *bundles*
+	de assets del Desk. En CI esos assets no se construyen, así que
+	`include_style('print.bundle.css')` revienta con
+	`AttributeError: 'NoneType' object has no attribute 'get'`. Y como
+	`sincronizar()` se traga los fallos del derivado —a propósito: un PDF que no
+	sale no puede impedir guardar la ficha—, el síntoma no era un error sino
+	**cero PDFs**, y con él caían todos los asertos de «hay un PDF».
 
-        pf = frappe.get_doc("Print Format", nombre)
-        self.assertEqual(pf.doc_type, f19_ficha_pdf.DOCTYPE)
-        self.assertEqual(pf.print_format_type, "Jinja")
-        self.assertTrue(pf.custom_format, "sin custom_format, Frappe ignora la plantilla")
-        self.assertEqual(
-            frappe.db.get_value("DocType", f19_ficha_pdf.DOCTYPE, "default_print_format"),
-            nombre,
-            "quien pulse Imprimir debe obtener el documento institucional, no el volcado de campos",
-        )
+	Lo que estas pruebas comprueban es la GESTIÓN del adjunto: que se reemplace y
+	no se acumule, que se retire al despublicar, que no sobreviva a su ficha, que
+	el contrato no prometa ficheros ausentes. Nada de eso necesita que el PDF esté
+	bien dibujado — necesita bytes. Así que se sustituye el render y las pruebas
+	dejan de depender del entorno (y de arrancar un Chrome por caso).
 
-    def test_correr_dos_veces_no_duplica_ni_rompe(self):
-        f19_ficha_pdf.run()
-        f19_ficha_pdf.run()  # corre en cada after_migrate
-        self.assertEqual(
-            frappe.db.count("Print Format", {"name": f19_ficha_pdf.PRINT_FORMAT_NAME}), 1
-        )
+	Lo que sí depende de la plantilla —que el PDF público no lleve nombres— se
+	comprueba renderizando el Print Format directamente, sin la envoltura
+	`printview` que es la que arrastra los assets.
+	"""
 
-    def test_la_plantilla_no_consulta_la_base(self):
-        """Mismo contrato que el informe SINEACE: el Jinja itera, Python resuelve."""
-        html = f19_ficha_pdf.HTML
-        self.assertIn("doc.datos_ficha()", html)
-        self.assertNotIn("frappe.get_all", html)
-        self.assertNotIn("frappe.db.sql", html)
+	def _pdf_minimo(self):
+		"""Un PDF de verdad, no unos bytes que lo parezcan.
 
-    def test_los_datos_traen_las_tareas_del_diagrama(self):
-        """La tabla de tareas del PDF sale del BPMN, no de una lista paralela."""
-        proceso = factories.crear_proceso()
-        ficha = frappe.get_doc({
-            "doctype": "Ficha Caracterizacion Proceso",
-            "proceso": proceso.name,
-            "objetivo": "Objetivo de prueba",
-        }).insert(ignore_permissions=True)
+		Frappe valida el adjunto al escribirlo: comprueba el marcador EOF y además
+		lo abre con `pypdf` para ver si lleva JavaScript. Un PDF escrito a mano se
+		queda corto («startxref not found»), así que se genera con la misma librería.
+		"""
+		from io import BytesIO
 
-        datos = ficha.datos_ficha()
+		from pypdf import PdfWriter
 
-        # el contrato que la plantilla espera, exista o no contenido
-        for clave in ("proceso", "actividades", "indicadores", "entradas", "salidas", "cambios"):
-            self.assertIn(clave, datos, f"la plantilla itera sobre «{clave}»")
-        self.assertEqual(datos["proceso"]["name"], proceso.name)
-        self.assertIsInstance(datos["actividades"], list)
+		escritor = PdfWriter()
+		escritor.add_blank_page(width=72, height=72)
+		buffer = BytesIO()
+		escritor.write(buffer)
+		return buffer.getvalue()
 
-        frappe.delete_doc("Ficha Caracterizacion Proceso", ficha.name, ignore_permissions=True, force=True)
-        frappe.db.commit()
+
+	def setUp(self):
+		frappe.set_user("Administrator")
+		self.fichas = []
+		self._render_real = ficha_pdf._render
+		pdf = self._pdf_minimo()
+		ficha_pdf._render = lambda ficha: pdf
+
+	def tearDown(self):
+		ficha_pdf._render = self._render_real
+		for f in self.fichas:
+			if frappe.db.exists("Ficha Caracterizacion Proceso", f):
+				frappe.delete_doc("Ficha Caracterizacion Proceso", f, ignore_permissions=True, force=True)
+		frappe.db.commit()
+
+	# ------------------------------------------------------------------ puras
+
+	def test_el_nombre_lleva_prefijo_propio(self):
+		"""Sin prefijo, «el .pdf más reciente» sirve cualquier anexo que alguien suba."""
+		self.assertEqual(ficha_pdf.nombre_pdf("FICHA-S04.01"), "ficha-FICHA-S04.01.pdf")
+
+	def test_reconoce_su_pdf_aunque_frappe_le_ponga_sufijo(self):
+		self.assertTrue(ficha_pdf.es_el_pdf("ficha-FICHA-S04.01.pdf", "FICHA-S04.01"))
+		self.assertTrue(ficha_pdf.es_el_pdf("ficha-FICHA-S04.01a1b2c3.pdf", "FICHA-S04.01"))
+		self.assertTrue(ficha_pdf.es_el_pdf("ficha-FICHA-S04.01a1b2c3d4e5f6.pdf", "FICHA-S04.01"))
+
+	def test_no_confunde_un_anexo_con_su_pdf(self):
+		"""El caso que rompe «el .pdf más reciente adjunto al documento»."""
+		for ajeno in ("anexo-evidencia.pdf", "ficha-FICHA-S04.02.pdf", "informe.pdf", ""):
+			with self.subTest(ajeno=ajeno):
+				self.assertFalse(ficha_pdf.es_el_pdf(ajeno, "FICHA-S04.01"))
+
+	def test_un_bpmn_no_es_el_pdf(self):
+		self.assertFalse(ficha_pdf.es_el_pdf("ficha-FICHA-S04.01.bpmn", "FICHA-S04.01"))
+
+	# ----------------------------------------------------------- integración
+
+	def _ficha_publicada(self):
+		proceso = factories.crear_proceso().name
+		ficha = frappe.get_doc({
+			"doctype": "Ficha Caracterizacion Proceso",
+			"proceso": proceso,
+			"version": "1.0",
+			"objetivo": "Probar la pregeneración del PDF.",
+			"estado": "Borrador",
+		}).insert(ignore_permissions=True)
+		self.fichas.append(ficha.name)
+		return ficha
+
+	def _pdfs_de(self, ficha):
+		return [
+			f.file_name
+			for f in frappe.get_all(
+				"File",
+				filters={"attached_to_doctype": "Ficha Caracterizacion Proceso", "attached_to_name": ficha},
+				fields=["file_name"],
+			)
+			if ficha_pdf.es_el_pdf(f.file_name, ficha)
+		]
+
+	def test_publicar_deja_el_pdf_y_despublicar_lo_retira(self):
+		ficha = self._ficha_publicada()
+		self.assertEqual(self._pdfs_de(ficha.name), [], "en Borrador no debe haber PDF")
+
+		ficha.estado = "Publicado"
+		ficha.save(ignore_permissions=True)
+		self.assertEqual(len(self._pdfs_de(ficha.name)), 1, "publicar tiene que dejar el PDF hecho")
+
+		ficha.estado = "Borrador"
+		ficha.save(ignore_permissions=True)
+		self.assertEqual(
+			self._pdfs_de(ficha.name), [],
+			"despublicar debe BORRAR el fichero: mientras exista se puede descargar",
+		)
+
+	def test_republicar_no_acumula_un_segundo_pdf(self):
+		"""Acumular dejaría descargable el PDF de una versión ya no vigente."""
+		ficha = self._ficha_publicada()
+		for estado in ("Publicado", "Borrador", "Publicado", "Borrador", "Publicado"):
+			ficha.estado = estado
+			ficha.save(ignore_permissions=True)
+		self.assertEqual(len(self._pdfs_de(ficha.name)), 1, "cada publicación reemplaza, no añade")
+
+	def test_pdf_publicado_no_entrega_nada_si_no_esta_publicada(self):
+		"""El contrato del portal: pregunta por la ficha, recibe el fichero o nada."""
+		ficha = self._ficha_publicada()
+		ficha.estado = "Publicado"
+		ficha.save(ignore_permissions=True)
+		self.assertIsNotNone(ficha_pdf.pdf_publicado(ficha.name))
+
+		ficha.estado = "Borrador"
+		ficha.save(ignore_permissions=True)
+		self.assertIsNone(
+			ficha_pdf.pdf_publicado(ficha.name),
+			"una ficha no publicada no puede entregar su PDF por esta vía",
+		)
+
+	def test_borrar_la_ficha_no_deja_el_pdf_huerfano(self):
+		ficha = self._ficha_publicada()
+		ficha.estado = "Publicado"
+		ficha.save(ignore_permissions=True)
+		nombre = ficha.name
+		self.assertEqual(len(self._pdfs_de(nombre)), 1)
+
+		frappe.delete_doc("Ficha Caracterizacion Proceso", nombre, ignore_permissions=True, force=True)
+		self.fichas.remove(nombre)
+		self.assertEqual(self._pdfs_de(nombre), [], "el PDF no puede sobrevivir a su ficha")
+
+	def test_un_fallo_al_renderizar_no_impide_guardar_la_ficha(self):
+		"""El PDF es un derivado: perder el original por no poder dibujarlo sería
+		el peor intercambio posible."""
+		from unittest.mock import patch
+
+		ficha = self._ficha_publicada()
+		with patch.object(ficha_pdf, "_render", side_effect=RuntimeError("chrome no está")):
+			ficha.estado = "Publicado"
+			ficha.save(ignore_permissions=True)   # no debe propagar
+
+		self.assertEqual(
+			frappe.db.get_value("Ficha Caracterizacion Proceso", ficha.name, "estado"), "Publicado",
+			"la ficha se guarda aunque su derivado falle",
+		)
+
+	def test_el_pdf_del_portal_no_lleva_nombres_de_personas(self):
+		"""El agujero que la lista blanca de campos NO tapaba.
+
+		El portal filtra qué campos expone, y `elaborado_por`/`revisado_por`/
+		`aprobado_por` nunca estuvieron en esa lista. Daba igual: la plantilla
+		institucional imprime los `full_name` de los tres, así que **el dato salía
+		por el PDF**. Verificado en el lab el 13-sep-2026 sobre FICHA-S04.04.
+
+		El PDF del portal usa la variante pública, que cita el ACTO (versión, fecha,
+		estado, resolución) en vez de a las personas.
+		"""
+		import re
+
+		ficha = self._ficha_publicada()
+		nombres = {}
+		for campo in ("elaborado_por", "revisado_por", "aprobado_por"):
+			usuario = frappe.session.user
+			ficha.set(campo, usuario)
+			nombres[campo] = frappe.db.get_value("User", usuario, "full_name") or usuario
+		ficha.estado = "Publicado"
+		ficha.save(ignore_permissions=True)
+
+		# Se renderiza la PLANTILLA sola, no `get_print`: esa pasa por la vista
+		# `printview`, que incluye los bundles de assets del Desk — y en CI no
+		# están construidos, así que revienta por algo que nada tiene que ver con
+		# lo que aquí se comprueba. Lo que importa es qué pinta la plantilla.
+		plantilla = frappe.db.get_value("Print Format", ficha_pdf.PRINT_FORMAT, "html")
+		html = frappe.render_template(plantilla, {"doc": ficha.reload() or ficha, "frappe": frappe})
+		texto = re.sub(r"<[^>]+>", " ", html)
+		for campo, nombre in nombres.items():
+			self.assertNotIn(
+				nombre, texto,
+				f"el PDF público no puede llevar el nombre de {campo}: es dato personal (Ley 29733)",
+			)
+		self.assertIn("Versión", texto, "en su lugar debe constar el acto: versión, fecha, estado")
+
+	def test_no_promete_un_fichero_que_no_esta(self):
+		"""El registro `File` y el fichero son dos cosas distintas y se separan.
+
+		Si `pdf_publicado()` devolviera la ruta de un registro huérfano, quien la
+		consuma haría `open()` y petaría —o serviría un 500 en una web pública—.
+		Ante un registro sin fichero se responde «no hay», igual que sin registro.
+		"""
+		import os
+
+		ficha = self._ficha_publicada()
+		ficha.estado = "Publicado"
+		ficha.save(ignore_permissions=True)
+		self.assertIsNotNone(ficha_pdf.pdf_publicado(ficha.name))
+
+		# Se borra el FICHERO dejando el registro: el caso que el contrato no cubría.
+		nombre = frappe.get_all(
+			"File",
+			filters={"attached_to_doctype": "Ficha Caracterizacion Proceso", "attached_to_name": ficha.name},
+			pluck="name",
+		)[0]
+		ruta = frappe.get_doc("File", nombre).get_full_path()
+		os.remove(ruta)
+
+		self.assertIsNone(
+			ficha_pdf.pdf_publicado(ficha.name),
+			"con el registro presente pero el fichero ausente, no se puede prometer el PDF",
+		)
+
+	def test_datos_ficha_no_filtra_correos_ni_metadatos(self):
+		"""La cuarta vez que el mismo patrón mordió al portal.
+
+		`datos_ficha()` devolvía las tablas hijas con `as_dict()`, y todo documento
+		de Frappe lleva `owner` y `modified_by`, que son correos. En el lab salían
+		26 de esos campos en un solo JSON. Valían «Administrator» porque los datos
+		entraron por script —así que mirando la salida no se veía nada raro—, pero
+		en cuanto alguien edite una ficha desde el Desk pasan a ser su correo, y
+		esto lo consume una web abierta.
+
+		Y `registros.responsable` es un Link a `User`: un campo de NEGOCIO que
+		además es una persona, así que una limpieza genérica de metadatos no lo
+		habría quitado.
+		"""
+		PROHIBIDOS = {"owner", "modified_by", "creation", "modified", "docstatus",
+		              "_user_tags", "_comments", "_assign", "_liked_by", "responsable"}
+
+		def recorrer(obj, ruta=""):
+			encontrados = []
+			if isinstance(obj, dict):
+				for clave, valor in obj.items():
+					if clave in PROHIBIDOS:
+						encontrados.append(f"{ruta}.{clave}")
+					encontrados += recorrer(valor, f"{ruta}.{clave}")
+			elif isinstance(obj, list):
+				for i, valor in enumerate(obj):
+					encontrados += recorrer(valor, f"{ruta}[{i}]")
+			return encontrados
+
+		ficha = self._ficha_publicada()
+		ficha.append("registros", {"registro": "Bitácora", "responsable": frappe.session.user,
+		                           "frecuencia_revision": "Mensual"})
+		ficha.append("entradas", {"insumo": "Solicitud", "proveedor": "Usuario"})
+		ficha.save(ignore_permissions=True)
+
+		fugas = recorrer(ficha.datos_ficha())
+		self.assertEqual(
+			fugas, [],
+			f"datos_ficha() no puede entregar metadatos ni personas: {fugas}",
+		)

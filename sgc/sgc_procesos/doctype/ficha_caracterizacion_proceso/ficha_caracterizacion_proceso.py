@@ -28,6 +28,16 @@ from frappe.model.document import Document
 CATEGORIA_PROCESO = "Proceso"
 
 
+def _filas(tabla, *campos):
+	"""Las filas de una tabla hija, solo con los campos nombrados.
+
+	Existe para que ningún metadato de Frappe (`owner`, `modified_by`, `creation`,
+	`docstatus`…) salga por `datos_ficha()`. Devolver `as_dict()` publicaba correos
+	sin que nadie lo pidiera.
+	"""
+	return [{c: fila.get(c) for c in campos} for fila in (tabla or [])]
+
+
 class FichaCaracterizacionProceso(Document):
 	def validate(self):
 		self._validar_indicadores()
@@ -38,9 +48,21 @@ class FichaCaracterizacionProceso(Document):
 		# ningún indicador apuntando a una ficha que no existe.
 		self._sincronizar_indicadores()
 
+		# El PDF que sirve el portal se hace AQUÍ, no cuando alguien lo descarga:
+		# el motor de impresión es Chrome y la vitrina no tiene login ni límite de
+		# peticiones. Ver `sgc.ficha_pdf`.
+		from sgc.ficha_pdf import sincronizar as sincronizar_pdf
+
+		sincronizar_pdf(self)
+
 	def on_trash(self):
 		"""Al borrar la ficha, ningún indicador queda apuntando a este proceso."""
 		self._limpiar_indicadores_huerfanos(declarados=set())
+		# Sin esto el PDF sobreviviría a su ficha y seguiría siendo descargable:
+		# los adjuntos se sirven por permiso de doctype, sin mirar al padre.
+		from sgc.ficha_pdf import retirar
+
+		retirar(self.name)
 
 	# ------------------------------------------------------------ validaciones
 
@@ -225,10 +247,25 @@ class FichaCaracterizacionProceso(Document):
 			"proceso": proceso,
 			"actividades": actividades,
 			"indicadores": indicadores,
-			"entradas": [f.as_dict() for f in self.get("entradas") or []],
-			"salidas": [f.as_dict() for f in self.get("salidas") or []],
-			"registros": [f.as_dict() for f in self.get("registros") or []],
-			"riesgos": [f.as_dict() for f in self.get("riesgos") or []],
-			"documentos": [f.as_dict() for f in self.get("documentos_asociados") or []],
-			"cambios": [f.as_dict() for f in self.get("control_cambios") or []],
+			# Proyección EXPLÍCITA, campo a campo. Antes era `f.as_dict()`, que
+			# devuelve el documento entero — y todo documento de Frappe lleva
+			# `owner` y `modified_by`, que son correos. En el lab salían 26 campos
+			# de metadatos de usuario en un solo JSON. Hoy valen «Administrator»
+			# porque los datos entraron por script, así que mirando la salida no se
+			# ve nada raro; en cuanto alguien edite una ficha desde el Desk pasan a
+			# ser su correo, y esto lo consume una web abierta (Ley 29733).
+			#
+			# La proyección se hace AQUÍ y no en cada consumidor: el siguiente que
+			# use este método puede no mirar. Añadir un campo a una tabla hija ya no
+			# lo publica solo — hay que venir a nombrarlo, que es justo lo que se
+			# quiere de una lista blanca.
+			"entradas": _filas(self.get("entradas"), "proveedor", "unidad_organica", "insumo"),
+			"salidas": _filas(self.get("salidas"), "entregable", "cliente", "unidad_organica"),
+			# `responsable` se queda fuera a propósito: es un Link a `User`, o sea
+			# una persona. No es un metadato —es un campo de negocio— así que una
+			# limpieza genérica de `owner`/`modified_by` NO lo quitaría.
+			"registros": _filas(self.get("registros"), "registro", "frecuencia_revision"),
+			"riesgos": _filas(self.get("riesgos"), "riesgo_identificado", "accion_mitigacion"),
+			"documentos": _filas(self.get("documentos_asociados"), "documento_controlado", "nota"),
+			"cambios": _filas(self.get("control_cambios"), "version", "fecha", "detalle"),
 		}
