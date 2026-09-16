@@ -23,6 +23,12 @@ class BpmnEditorPage {
 		this.filemap = {};
 		this.current = null;
 		this.sucio = false;
+		this.avisar_al_salir = (evento) => {
+			evento.preventDefault();
+			// Cadena por compatibilidad: el navegador solo abre su diálogo si el
+			// valor devuelto es verdadero. El texto lo pone él, no nosotros.
+			return (evento.returnValue = __('Hay cambios sin guardar. ¿Seguro que quieres salir?'));
+		};
 		this.render_shell();
 		this.load_assets();
 	}
@@ -32,8 +38,6 @@ class BpmnEditorPage {
 			<div class="bpmn-toolbar" style="margin-bottom:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
 				<span class="bpmn-doc text-muted" style="font-size:12px;"></span>
 				<select class="form-control bpmn-file-select" style="max-width:360px;height:28px;"></select>
-				<button class="btn btn-default btn-xs bpmn-importar">${__('Importar .bpmn')}</button>
-				<button class="btn btn-default btn-xs bpmn-descartar">${__('Descartar cambios')}</button>
 				<span class="bpmn-status" style="margin-left:auto;font-size:12px;"></span>
 			</div>
 			<div class="bpmn-canvas" style="height:74vh;border:1px solid var(--border-color);border-radius:6px;background:#fff;"></div>
@@ -64,12 +68,15 @@ class BpmnEditorPage {
 		this.modeler = new BpmnJS({ container: this.$body.find('.bpmn-canvas')[0] });
 
 		this.page.set_primary_action(__('Guardar'), () => this.save(), 'octicon octicon-check');
-		this.page.set_secondary_action(__('Descargar .bpmn'), () => this.download());
+		/* Cancelar junto a Guardar, no perdido entre los controles del lienzo.
+		   Antes era un botón gris del mismo tamaño que «Importar», y quien
+		   buscaba cómo deshacer no lo encontraba. */
+		this.page.set_secondary_action(__('Cancelar'), () => this.descartar());
+		this.page.add_menu_item(__('Importar .bpmn'), () => this.importar());
+		this.page.add_menu_item(__('Descargar .bpmn'), () => this.download());
 		this.page.add_menu_item(__('Ajustar a pantalla'), () => this.fit());
 
 		this.$body.find('.bpmn-file-select').on('change', (e) => this.open($(e.target).val()));
-		this.$body.find('.bpmn-importar').on('click', () => this.importar());
-		this.$body.find('.bpmn-descartar').on('click', () => this.descartar());
 		// Todo cambio en el lienzo pasa por el commandStack, incluido deshacer y rehacer.
 		this.modeler.on('commandStack.changed', () => this.marcar_sucio(true));
 		this.load_list();
@@ -161,9 +168,13 @@ class BpmnEditorPage {
 
 	marcar_sucio(sucio) {
 		this.sucio = sucio;
-		this.$body.find('.bpmn-descartar').toggleClass('btn-warning', sucio);
 		if (sucio) {
-			this.status(__('Cambios sin guardar'), 'var(--orange-600)');
+			this.page.set_indicator(__('Cambios sin guardar'), 'orange');
+			this.status('');
+			addEventListener('beforeunload', this.avisar_al_salir, { capture: true });
+		} else {
+			this.page.clear_indicator();
+			removeEventListener('beforeunload', this.avisar_al_salir, { capture: true });
 		}
 	}
 
