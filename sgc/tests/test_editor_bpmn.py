@@ -14,11 +14,12 @@ Dos cosas que se vieron usándolo en producción:
 
 2. **No había vuelta desde un editor de escritorio.** Se podía descargar el `.bpmn` para
    abrirlo en Bizagi, pero no devolverlo: había que pasar por el panel de adjuntos, que
-   nadie encuentra. Ahora se importa desde el propio editor.
+   nadie encuentra. Ahora se importa desde el propio editor, en el menú «⋯» de la página.
 
 3. **No había forma de arrepentirse.** Con el diagrama a medio cambiar, la única salida
-   era abandonar la página y confiar en que nada se hubiera escrito. Ahora hay «Descartar
-   cambios», que vuelve al último guardado previa confirmación.
+   era abandonar la página y confiar en que nada se hubiera escrito. Ahora «Cancelar» es
+   la acción secundaria de la página —junto a «Guardar», donde el Desk la pone siempre— y
+   vuelve al último guardado previa confirmación.
 
 Importar NO guarda: carga el diagrama en pantalla y avisa de que hay que pulsar «Guardar».
 Que un fichero de fuera se persista sin un acto explícito sería justo lo que un SGC no
@@ -48,7 +49,11 @@ class TestEditorBPMN(FrappeTestCase):
 
     def test_se_puede_importar_un_bpmn_editado_fuera(self):
         self.assertIn("importar()", self.fuente, "falta la importación")
-        self.assertIn("bpmn-importar", self.fuente, "la importación debe tener su botón visible")
+        self.assertIn(
+            "add_menu_item(__('Importar .bpmn')",
+            self.fuente,
+            "la importación debe estar colgada del menú de la página, no suelta en el lienzo",
+        )
         self.assertIn("importXML", self.fuente)
 
     def test_importar_no_guarda_por_su_cuenta(self):
@@ -59,7 +64,11 @@ class TestEditorBPMN(FrappeTestCase):
 
     def test_se_pueden_descartar_los_cambios(self):
         self.assertIn("descartar()", self.fuente, "falta la acción de descartar")
-        self.assertIn("bpmn-descartar", self.fuente, "descartar debe tener su botón visible")
+        self.assertIn(
+            "set_secondary_action(__('Cancelar')",
+            self.fuente,
+            "descartar debe ser la acción secundaria de la página, al lado de «Guardar»",
+        )
 
     def test_descartar_pide_confirmacion_y_recarga_lo_guardado(self):
         bloque = self.fuente[self.fuente.index("\tdescartar()") : self.fuente.index("\tmarcar_sucio(")]
@@ -75,6 +84,15 @@ class TestEditorBPMN(FrappeTestCase):
             2,
             "el flag se limpia exactamente en dos sitios: al cargar y al guardar",
         )
+
+    def test_salir_con_cambios_sin_guardar_avisa(self):
+        bloque = self.fuente[self.fuente.index("\tmarcar_sucio(") :]
+        self.assertIn("addEventListener('beforeunload'", bloque, "salir con cambios debe avisar")
+        self.assertIn(
+            "removeEventListener('beforeunload'", bloque, "el aviso se retira cuando ya no hay cambios"
+        )
+        self.assertIn("set_indicator(", bloque, "el estado sucio se ve en la cabecera de la página")
+        self.assertIn("clear_indicator()", bloque, "el indicador se apaga al guardar o descartar")
 
     def test_descargar_sigue_disponible_para_el_viaje_de_ida(self):
         self.assertIn("Descargar .bpmn", self.fuente)
