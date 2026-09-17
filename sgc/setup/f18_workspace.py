@@ -233,6 +233,53 @@ SIDEBARS = {
         ("Periodos académicos", "DocType", "Periodo Academico"),
         ("Volver al SGC", "Workspace", WS),
     ],
+    "SGC Nucleo": [
+        ("Documentos controlados", "DocType", "Documento Controlado"),
+        ("Evidencias", "DocType", "Evidencia"),
+        ("Trazabilidad", "DocType", "Trazabilidad"),
+        ("Autoevaluación", "DocType", "Autoevaluacion"),
+        ("Valoración de criterios", "DocType", "Valoracion Criterio"),
+        ("Valoración de estándares", "DocType", "Valoracion Estandar"),
+        ("Valores de indicador", "DocType", "Valor Indicador"),
+        ("Hallazgos", "DocType", "Hallazgo"),
+        ("No conformidades", "DocType", "No Conformidad"),
+        ("Planes de mejora", "DocType", "Plan Mejora"),
+        ("Acciones de mejora", "DocType", "Accion Mejora"),
+        ("Tableros de indicadores", "DocType", "Tablero Indicadores"),
+        ("Alertas de indicador", "DocType", "Alerta Indicador"),
+        ("Lotes de ingesta", "DocType", "Lote Ingesta"),
+        ("Volver al SGC", "Workspace", WS),
+    ],
+    "SGC Gobierno": [
+        ("Política de calidad", "DocType", "Politica Calidad"),
+        ("Objetivos de calidad", "DocType", "Objetivo Calidad"),
+        ("Comités", "DocType", "Comite"),
+        ("Reuniones", "DocType", "Reunion"),
+        ("Acuerdos", "DocType", "Acuerdo"),
+        ("Grupos de interés", "DocType", "Grupo Interes"),
+        ("Instrumentos", "DocType", "Instrumento"),
+        ("Aplicación de instrumentos", "DocType", "Aplicacion Instrumento"),
+        ("Resultados de instrumento", "DocType", "Resultado Instrumento"),
+        ("Volver al SGC", "Workspace", WS),
+    ],
+    "SGC Riesgos": [
+        ("Riesgos", "DocType", "Riesgo"),
+        ("Matrices de riesgo", "DocType", "Matriz Riesgo"),
+        ("Evaluación de riesgos", "DocType", "Evaluacion Riesgo"),
+        ("Tratamiento de riesgos", "DocType", "Tratamiento Riesgo"),
+        ("Entes externos", "DocType", "Ente Externo"),
+        ("Obligaciones", "DocType", "Obligacion Ente"),
+        ("Entregas de obligación", "DocType", "Entrega Obligacion"),
+        ("Volver al SGC", "Workspace", WS),
+    ],
+    "SGC Auditoria": [
+        ("Programa de auditoría", "DocType", "Programa Auditoria"),
+        ("Auditorías", "DocType", "Auditoria"),
+        ("Hallazgos de auditoría", "DocType", "Hallazgo Auditoria"),
+        ("Informes de auditoría", "DocType", "Informe Auditoria"),
+        ("Revisión por la dirección", "DocType", "Revision Direccion"),
+        ("Volver al SGC", "Workspace", WS),
+    ],
 }
 
 
@@ -261,8 +308,12 @@ def _sidebars_por_modulo():
         return
     for titulo, items in SIDEBARS.items():
         try:
+            # Se recrea, no se conserva. Con `continue`, una barra creada en un
+            # despliegue viejo quedaba congelada para siempre: añadir un módulo
+            # o corregir un rótulo aquí no llegaba a producción, y el código
+            # decía una cosa mientras la pantalla mostraba otra.
             if frappe.db.exists("Workspace Sidebar", titulo):
-                continue
+                frappe.delete_doc("Workspace Sidebar", titulo, force=1, ignore_permissions=True)
             barra = frappe.new_doc("Workspace Sidebar")
             barra.title = titulo
             barra.module = titulo
