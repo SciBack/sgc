@@ -65,7 +65,15 @@ Después del despliegue, comprobar:
 docker compose ps
 curl -fsSI https://DOMINIO/desk
 curl -fsSI https://DOMINIO/api/method/ping
+# Sin sesión, la autorización del manual redirige al login (302). Un 417 significa
+# que el `forward_auth` del proxy apunta a un método que ya no existe.
+curl -s -o /dev/null -w '%{http_code}\n' https://DOMINIO/api/method/sgc.manual_auth.authorize
 ~~~
+
+**Comprobar cada ruta que el proxy sirve, no solo la aplicación.** El manual y el portal
+público se sirven por delante de Frappe, así que pueden caerse sin que el sitio principal deje
+de responder 200 — que es justo lo que pasó: `/manual` estuvo tres semanas devolviendo 417 sin
+que nada lo señalara (issue #67). Lo que lo habría cortado el primer día es esta línea.
 
 ## Contribuir
 
