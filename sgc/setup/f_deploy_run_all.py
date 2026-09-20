@@ -37,6 +37,7 @@ Orden (por dependencia real, no alfabético):
   19. f19_ficha_pdf — Print Format institucional de la ficha de caracterización
   19. f19_nivel_bpm — puebla `nivel_bpm` (N0/N1/N2) en los Proceso existentes
   20. f20_categoria_indicador — recoloca los Indicador que dicen acreditar sin marco que lo respalde
+  21. f21_dashboards — cuadros de mando nativos (sin Heatmap: ignora permisos)
 
 Ejecutar manualmente:
     bench --site <site> execute sgc.setup.f_deploy_run_all.run
@@ -75,6 +76,7 @@ from sgc.setup import (
     f19_ficha_pdf,
     f19_nivel_bpm,
     f20_categoria_indicador,
+    f21_dashboards,
 )
 
 STEPS = [
@@ -99,6 +101,7 @@ STEPS = [
     ("f19_ficha_pdf", f19_ficha_pdf),
     ("f19_nivel_bpm", f19_nivel_bpm),
     ("f20_categoria_indicador", f20_categoria_indicador),
+    ("f21_dashboards", f21_dashboards),
 ]
 
 
