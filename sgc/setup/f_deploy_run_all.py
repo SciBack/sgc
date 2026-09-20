@@ -16,6 +16,7 @@ Orden (por dependencia real, no alfabético):
   1. f1_run_all      — estructura: los 68 DocTypes (SIN esto nada más aplica)
   2. f2_run_all      — fields custom + carga CONEAU + workflows Autoevaluacion/NC
   3. f3b_rbac        — RBAC institucional (roles + matriz de permisos + role profiles)
+  3b. f3b_branding   — identidad visual; lee site_config, neutra si no se declara
   4. f4_workflow_mejora      — workflow Plan/Accion de Mejora
   5. f5_workflow_documental  — workflow Documento Controlado
   6. f6_informe_cbc          — Print Format Diagnóstico CBC SUNEDU
@@ -37,6 +38,7 @@ Orden (por dependencia real, no alfabético):
   19. f19_ficha_pdf — Print Format institucional de la ficha de caracterización
   19. f19_nivel_bpm — puebla `nivel_bpm` (N0/N1/N2) en los Proceso existentes
   20. f20_categoria_indicador — recoloca los Indicador que dicen acreditar sin marco que lo respalde
+  21. f21_dashboards — cuadros de mando nativos (sin Heatmap: ignora permisos)
 
 Ejecutar manualmente:
     bench --site <site> execute sgc.setup.f_deploy_run_all.run
@@ -56,6 +58,7 @@ _ES_LOCK_DE_DOCUMENTO = re.compile(r"[0-9a-f]{16,}")
 from sgc.setup import (
     f1_run_all,
     f2_run_all,
+    f3b_branding,
     f3b_rbac,
     f4_workflow_mejora,
     f5_workflow_documental,
@@ -75,12 +78,14 @@ from sgc.setup import (
     f19_ficha_pdf,
     f19_nivel_bpm,
     f20_categoria_indicador,
+    f21_dashboards,
 )
 
 STEPS = [
     ("f1_run_all", f1_run_all),
     ("f2_run_all", f2_run_all),
     ("f3b_rbac", f3b_rbac),
+    ("f3b_branding", f3b_branding),
     ("f4_workflow_mejora", f4_workflow_mejora),
     ("f5_workflow_documental", f5_workflow_documental),
     ("f6_informe_cbc", f6_informe_cbc),
@@ -99,6 +104,7 @@ STEPS = [
     ("f19_ficha_pdf", f19_ficha_pdf),
     ("f19_nivel_bpm", f19_nivel_bpm),
     ("f20_categoria_indicador", f20_categoria_indicador),
+    ("f21_dashboards", f21_dashboards),
 ]
 
 
