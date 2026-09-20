@@ -36,15 +36,29 @@ TRATAMIENTO_CERRADO = ("Implementado", "Verificado")
 
 DIAS_AVISO_REVISION = 30
 
-# ⚠️ NO añadir aquí un filtro `["<campo fecha>", "is", "set"]`.
+# Límite inferior de los rangos de fecha. No es decorativo: es lo que deja fuera
+# a los documentos SIN fecha. Ver la nota de abajo.
+FECHA_MINIMA = "1900-01-01"
+
+# ⚠️ EL VENCIMIENTO SE FILTRA CON `between`, NUNCA CON `<` NI CON `is set`.
 #
-# Frappe lo traduce a `campo <> ''`, y PostgreSQL rechaza comparar una columna
-# `date` con cadena vacía: «invalid input syntax for type date: ""». MariaDB sí
-# lo acepta, así que es de los fallos que solo aparecen en este motor — y no
-# falla solo esa consulta: aborta la transacción y arrastra al resto.
+# Frappe envuelve los filtros en `coalesce(campo, <centinela>)` para imitar el
+# comportamiento del `db_query` antiguo, y para un campo `Date` ese centinela es
+# `'0001-01-01'` (`frappe/database/query.py:1815`). Consecuencia: un
+# `fecha < hoy` se convierte en `coalesce(fecha,'0001-01-01') < hoy`, que es
+# **verdadero para las filas sin fecha**. Una acción a la que nadie le puso plazo
+# aparecería como vencida.
 #
-# Además sobra: una comparación `fecha < X` ya excluye los NULL, porque en SQL
-# `NULL < X` no es verdadero. Los tests de «sin fecha no cuenta» lo comprueban.
+# `is set` tampoco vale: se traduce a `campo <> ''`, y PostgreSQL rechaza comparar
+# una columna `date` con cadena vacía («invalid input syntax for type date: ""»).
+# MariaDB lo acepta, así que es de los fallos que solo se ven en este motor, y no
+# falla solo esa consulta: aborta la transacción y arrastra a las siguientes.
+#
+# `between` es el operador que Frappe deja sin envolver a propósito, y lo razona
+# en el código (`query.py:1869-1878`): «null value in column will never match
+# filter, so coalesce is extra cost that prevents index usage». Es decir, hace
+# justo lo que aquí se necesita —excluir lo que no tiene fecha— y además permite
+# usar el índice.
 
 
 def _contar(doctype, filtros):
@@ -64,13 +78,14 @@ def acciones_vencidas():
     """Acciones de mejora cuyo plazo pasó y que siguen sin verificarse.
 
     Una acción sin `fecha_compromiso` NO cuenta como vencida: no tiene plazo que
-    incumplir. Que eso sea un problema distinto lo cubre la validación de
+    incumplir, y quien lo garantiza es el `between` (ver la nota de arriba). Que
+    la falta de fecha sea un problema distinto lo cubre la validación de
     `accion_mejora.py`, que exige la fecha al pasar a ejecución.
     """
     return _contar(
         "Accion Mejora",
         [
-            ["fecha_compromiso", "<", nowdate()],
+            ["fecha_compromiso", "between", [FECHA_MINIMA, add_days(nowdate(), -1)]],
             ["estado", "not in", ACCION_CERRADA],
         ],
     )
@@ -82,7 +97,7 @@ def tratamientos_riesgo_vencidos():
     return _contar(
         "Tratamiento Riesgo",
         [
-            ["fecha_compromiso", "<", nowdate()],
+            ["fecha_compromiso", "between", [FECHA_MINIMA, add_days(nowdate(), -1)]],
             ["estado", "not in", TRATAMIENTO_CERRADO],
         ],
     )
@@ -94,12 +109,14 @@ def documentos_por_revisar():
 
     Incluye los ya vencidos: un documento con la revisión pasada es más urgente
     que uno que vence mañana, y dejarlo fuera del cuadro lo haría invisible justo
-    cuando más importa.
+    cuando más importa. No incluye los que no tienen fecha de revisión: no se
+    sabe de ellos que toque revisarlos, solo que nadie lo ha fijado.
     """
     return _contar(
         "Documento Controlado",
         [
-            ["fecha_proxima_revision", "<=", add_days(nowdate(), DIAS_AVISO_REVISION)],
+            ["fecha_proxima_revision", "between",
+             [FECHA_MINIMA, add_days(nowdate(), DIAS_AVISO_REVISION)]],
             ["estado", "=", "Publicado"],
         ],
     )

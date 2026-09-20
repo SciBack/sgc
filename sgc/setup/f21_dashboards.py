@@ -35,12 +35,13 @@ import json
 import frappe
 
 # --- Tarjetas -------------------------------------------------------------
-# (nombre, etiqueta, doctype, modulo, tipo, filtros|metodo, color)
+# El `label` hace de nombre: `NumberCard.autoname()` copia el label al name
+# (`frappe/desk/doctype/number_card/number_card.py:53`). Por eso lleva el prefijo
+# "SGC - " — ver `_upsert`.
 
 NUMBER_CARDS = [
     {
-        "name": "SGC - No conformidades abiertas",
-        "label": "No conformidades abiertas",
+        "label": "SGC - No conformidades abiertas",
         "document_type": "No Conformidad",
         "module": "SGC Nucleo",
         "type": "Document Type",
@@ -49,8 +50,7 @@ NUMBER_CARDS = [
         "color": "#e24c4c",
     },
     {
-        "name": "SGC - Acciones de mejora vencidas",
-        "label": "Acciones vencidas",
+        "label": "SGC - Acciones de mejora vencidas",
         "document_type": "Accion Mejora",
         "module": "SGC Nucleo",
         "type": "Custom",
@@ -58,8 +58,7 @@ NUMBER_CARDS = [
         "color": "#e24c4c",
     },
     {
-        "name": "SGC - Planes de mejora en rojo",
-        "label": "Planes en rojo",
+        "label": "SGC - Planes de mejora en rojo",
         "document_type": "Plan Mejora",
         "module": "SGC Nucleo",
         "type": "Document Type",
@@ -68,8 +67,7 @@ NUMBER_CARDS = [
         "color": "#e24c4c",
     },
     {
-        "name": "SGC - Documentos por revisar",
-        "label": "Documentos por revisar (30 días)",
+        "label": "SGC - Documentos por revisar",
         "document_type": "Documento Controlado",
         "module": "SGC Nucleo",
         "type": "Custom",
@@ -77,8 +75,7 @@ NUMBER_CARDS = [
         "color": "#f2994a",
     },
     {
-        "name": "SGC - Hallazgos de auditoria abiertos",
-        "label": "Hallazgos de auditoría abiertos",
+        "label": "SGC - Hallazgos de auditoria abiertos",
         "document_type": "Hallazgo Auditoria",
         "module": "SGC Auditoria",
         "type": "Document Type",
@@ -87,8 +84,7 @@ NUMBER_CARDS = [
         "color": "#f2994a",
     },
     {
-        "name": "SGC - Riesgos altos tras tratamiento",
-        "label": "Riesgos altos (residual)",
+        "label": "SGC - Riesgos altos tras tratamiento",
         "document_type": "Evaluacion Riesgo",
         "module": "SGC Riesgos",
         "type": "Document Type",
@@ -97,8 +93,7 @@ NUMBER_CARDS = [
         "color": "#e24c4c",
     },
     {
-        "name": "SGC - Tratamientos de riesgo vencidos",
-        "label": "Tratamientos vencidos",
+        "label": "SGC - Tratamientos de riesgo vencidos",
         "document_type": "Tratamiento Riesgo",
         "module": "SGC Riesgos",
         "type": "Custom",
@@ -177,27 +172,40 @@ TIPOS_PROHIBIDOS = ("Heatmap",)
 def _upsert(doctype, name, campos):
     """Crea o actualiza sin duplicar. Devuelve 'creado' o 'actualizado'.
 
-    `name` NO es un campo del doctype, así que se asigna aparte. Importa en los
-    dos doctypes y por motivos distintos:
+    Para que sea idempotente hay que buscar por el name **que el doctype se va a
+    poner a sí mismo**. No se puede imponer: `set_new_name` descarta cualquier
+    `doc.name` asignado a mano salvo que el autoname sea `prompt` o `uuid`
+    (`frappe/model/naming.py`, `doc.name = None`). Los dos doctypes de aquí lo
+    derivan de un campo:
 
-    * `Dashboard Chart` se nombra por `chart_name` (autoname=field:chart_name),
-      así que su name lo fija ese campo y aquí solo se usa para buscarlo.
-    * `Number Card` no tiene autoname: sin asignar `doc.name` antes de insertar,
-      Frappe le pondría un hash aleatorio y el siguiente migrate no lo
-      encontraría — creando una tarjeta nueva cada vez.
+    * `Dashboard Chart` → `autoname: field:chart_name`, así que name == chart_name.
+    * `Number Card` → no declara autoname, pero su controlador define
+      `autoname()` y copia el `label` (`number_card.py:53`).
+
+    Y hay una trampa detrás: si el name calculado ya existe, `Number Card` **no
+    falla, añade un sufijo numérico** (`number_card.py:56`). Buscar por un name
+    que no coincida con el label no encuentra nada, crea otra tarjeta y el
+    contador crece en cada migrate, en silencio. De ahí la comprobación final:
+    más vale romper el despliegue que acumular tarjetas fantasma.
     """
     if frappe.db.exists(doctype, name):
         doc = frappe.get_doc(doctype, name)
         accion = "actualizado"
     else:
         doc = frappe.new_doc(doctype)
-        doc.name = name
         accion = "creado"
     for k, v in campos.items():
         if doc.meta.has_field(k):
             doc.set(k, v)
     doc.flags.ignore_permissions = True
     doc.save()
+    if doc.name != name:
+        frappe.throw(
+            "F21: se esperaba que {0} se llamara «{1}» y Frappe lo ha nombrado «{2}». "
+            "Repetir el despliegue duplicaria el cuadro en vez de actualizarlo.".format(
+                doctype, name, doc.name
+            )
+        )
     return accion
 
 
@@ -242,8 +250,8 @@ def run():
     resultados = {"cards": [], "charts": []}
 
     for cfg in NUMBER_CARDS:
-        accion = _upsert("Number Card", cfg["name"], _card_fields(cfg))
-        resultados["cards"].append((cfg["name"], accion))
+        accion = _upsert("Number Card", cfg["label"], _card_fields(cfg))
+        resultados["cards"].append((cfg["label"], accion))
 
     for cfg in CHARTS:
         if cfg["type"] in TIPOS_PROHIBIDOS:
@@ -252,7 +260,6 @@ def run():
                 "F21: el tipo de gráfico {0} consulta con get_all e ignora permisos. "
                 "No se admite en los cuadros del SGC.".format(cfg["type"])
             )
-        # El name de un Dashboard Chart ES su chart_name.
         accion = _upsert("Dashboard Chart", cfg["chart_name"], _chart_fields(cfg))
         resultados["charts"].append((cfg["chart_name"], accion))
 

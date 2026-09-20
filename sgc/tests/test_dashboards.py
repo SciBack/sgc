@@ -4,9 +4,10 @@
 """Tests de `sgc.setup.f21_dashboards` y `sgc.dashboards` — cuadros de mando (#30).
 
 Cubre que `run()`:
-- Crea las 7 tarjetas y los 5 gráficos, y es **idempotente** (el fallo que este
-  test previene es real: `Number Card` no tiene autoname, así que sin asignar
-  `doc.name` Frappe le pone un hash y cada migrate crearía una tarjeta nueva).
+- Crea las 7 tarjetas y los 5 gráficos, y es **idempotente**. El fallo que este
+  test previene ya ocurrió: si el name buscado no es exactamente el que el
+  doctype se pone solo, `Number Card` no falla —le añade un sufijo numérico
+  (`number_card.py:56`)— y cada migrate deja siete tarjetas más.
 - No crea **ningún** gráfico de tipo Heatmap, ni siquiera si alguien lo añade a
   la lista: ese tipo consulta con `get_all` e ignora permisos
   (`dashboard_chart.py:245`).
@@ -46,7 +47,8 @@ class IntegrationTestDashboards(IntegrationTestCase):
         f21.run()
         for cfg in f21.NUMBER_CARDS:
             self.assertTrue(
-                frappe.db.exists("Number Card", cfg["name"]), f"falta la tarjeta {cfg['name']}"
+                frappe.db.exists("Number Card", cfg["label"]),
+                f"falta la tarjeta {cfg['label']}",
             )
         for cfg in f21.CHARTS:
             self.assertTrue(
@@ -55,7 +57,7 @@ class IntegrationTestDashboards(IntegrationTestCase):
             )
 
     def test_reejecutar_no_duplica(self):
-        """El fallo que este test previene: Number Card sin autoname."""
+        """El fallo que este test previene: el sufijo silencioso de Number Card."""
         f21.run()
         antes_cards = frappe.db.count("Number Card")
         antes_charts = frappe.db.count("Dashboard Chart")
@@ -66,7 +68,7 @@ class IntegrationTestDashboards(IntegrationTestCase):
     def test_todo_declara_modulo(self):
         """Sin `module`, el filtrado por permisos de Frappe no puede acotar."""
         for cfg in f21.NUMBER_CARDS:
-            self.assertTrue(cfg.get("module"), f"{cfg['name']} sin módulo")
+            self.assertTrue(cfg.get("module"), f"{cfg['label']} sin módulo")
         for cfg in f21.CHARTS:
             self.assertTrue(cfg.get("module"), f"{cfg['chart_name']} sin módulo")
 
@@ -163,6 +165,17 @@ class IntegrationTestDashboards(IntegrationTestCase):
     def test_documento_con_revision_lejana_no_cuenta(self):
         base = dashboards.documentos_por_revisar()
         self._documento(fecha_revision=add_days(nowdate(), 90))
+        self.assertEqual(dashboards.documentos_por_revisar(), base)
+
+    def test_documento_sin_fecha_de_revision_no_cuenta(self):
+        """Sin fecha no se sabe que toque revisarlo, solo que nadie la fijó.
+
+        Es el mismo agujero que el `coalesce` de Frappe abre en las acciones
+        vencidas: con un filtro `<=` a secas, el centinela `'0001-01-01'` haría
+        que estos documentos salieran siempre en el cuadro.
+        """
+        base = dashboards.documentos_por_revisar()
+        self._documento(fecha_revision=None)
         self.assertEqual(dashboards.documentos_por_revisar(), base)
 
     # --- helpers ------------------------------------------------------------
