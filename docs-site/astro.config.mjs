@@ -32,6 +32,7 @@ export default defineConfig({
         { label: 'Preparar pruebas', link: '/preparacion-pruebas/' },
         { label: 'Recorrido E2E', link: '/recorrido-e2e/' },
         { label: 'Flujos funcionales', items: [{ autogenerate: { directory: 'flujos' } }] },
+        { label: 'Manual de uso', items: [{ autogenerate: { directory: 'manual-uso' } }] },
         { label: 'Regresión', link: '/checklist-regresion/' },
         { label: 'Reportar hallazgos', link: '/reportar-hallazgo/' },
         { label: 'Administración', link: '/administracion/' },
