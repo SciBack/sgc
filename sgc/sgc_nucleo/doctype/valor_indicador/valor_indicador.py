@@ -9,9 +9,17 @@ class ValorIndicador(Document):
     def validate(self):
         from sgc.ingesta import en_ingesta
         from sgc.ingesta_contrato import ErrorContrato, evaluar_reglas
+        from sgc.semaforo_indicador import calcular as calcular_semaforo
 
         if self.valor_num is not None and not math.isfinite(float(self.valor_num)):
             frappe.throw('El valor de indicador debe ser finito')
+
+        # El semáforo se calcula ANTES del corte por ingesta de más abajo. Si se
+        # calculara después, las mediciones que entran por la API —que son la vía
+        # del DW, o sea la mayoría— se guardarían sin él, y el cumplimiento solo
+        # se vería en lo tecleado a mano. Es un valor derivado, no una validación:
+        # su sitio es aquí arriba.
+        self.semaforo = calcular_semaforo(self)
         if self.programa_sede and self.unidad_organica:
             frappe.throw('Una medición no puede pertenecer a dos ámbitos')
         anterior = self.get_doc_before_save()

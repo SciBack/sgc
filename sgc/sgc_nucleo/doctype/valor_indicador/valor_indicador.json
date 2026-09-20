@@ -13,6 +13,7 @@
   "programa_sede",
   "unidad_organica",
   "valor_num",
+  "semaforo",
   "valor_texto",
   "calculado",
   "fuente",
@@ -161,6 +162,15 @@
    "label": "Estado de medición",
    "options": "\nProvisional\nValidado",
    "read_only": 1
+  },
+  {
+   "fieldname": "semaforo",
+   "fieldtype": "Select",
+   "label": "Semáforo",
+   "options": "\nVerde\nAmbar\nRojo",
+   "read_only": 1,
+   "in_list_view": 1,
+   "description": "Calculado al guardar contra la meta de la ficha. Vacío si el indicador no tiene meta declarada: no se inventa un color."
   }
  ],
  "grid_page_length": 50,
