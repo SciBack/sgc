@@ -36,6 +36,16 @@ TRATAMIENTO_CERRADO = ("Implementado", "Verificado")
 
 DIAS_AVISO_REVISION = 30
 
+# ⚠️ NO añadir aquí un filtro `["<campo fecha>", "is", "set"]`.
+#
+# Frappe lo traduce a `campo <> ''`, y PostgreSQL rechaza comparar una columna
+# `date` con cadena vacía: «invalid input syntax for type date: ""». MariaDB sí
+# lo acepta, así que es de los fallos que solo aparecen en este motor — y no
+# falla solo esa consulta: aborta la transacción y arrastra al resto.
+#
+# Además sobra: una comparación `fecha < X` ya excluye los NULL, porque en SQL
+# `NULL < X` no es verdadero. Los tests de «sin fecha no cuenta» lo comprueban.
+
 
 def _contar(doctype, filtros):
     """Cuenta respetando permisos. Único punto de consulta del módulo."""
@@ -61,7 +71,6 @@ def acciones_vencidas():
         "Accion Mejora",
         [
             ["fecha_compromiso", "<", nowdate()],
-            ["fecha_compromiso", "is", "set"],
             ["estado", "not in", ACCION_CERRADA],
         ],
     )
@@ -74,7 +83,6 @@ def tratamientos_riesgo_vencidos():
         "Tratamiento Riesgo",
         [
             ["fecha_compromiso", "<", nowdate()],
-            ["fecha_compromiso", "is", "set"],
             ["estado", "not in", TRATAMIENTO_CERRADO],
         ],
     )
@@ -92,7 +100,6 @@ def documentos_por_revisar():
         "Documento Controlado",
         [
             ["fecha_proxima_revision", "<=", add_days(nowdate(), DIAS_AVISO_REVISION)],
-            ["fecha_proxima_revision", "is", "set"],
             ["estado", "=", "Publicado"],
         ],
     )
