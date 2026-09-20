@@ -1,0 +1,115 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:version",
+ "creation": "2026-09-20 18:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "version",
+  "titulo",
+  "estado",
+  "column_break_aprobacion",
+  "fecha_aprobacion",
+  "aprobado_por",
+  "resolucion",
+  "section_break_imagen",
+  "imagen",
+  "notas"
+ ],
+ "fields": [
+  {
+   "fieldname": "version",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Versión",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "default": "Mapa de procesos institucional",
+   "fieldname": "titulo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Título",
+   "reqd": 1
+  },
+  {
+   "default": "Borrador",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Borrador\nVigente\nObsoleto",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_aprobacion",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Fecha en que el órgano de gobierno aprobó esta versión del mapa.",
+   "fieldname": "fecha_aprobacion",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Fecha de aprobación"
+  },
+  {
+   "description": "Órgano que aprueba, no una persona: Consejo Universitario, Comité de Calidad, etc.",
+   "fieldname": "aprobado_por",
+   "fieldtype": "Data",
+   "label": "Aprobado por"
+  },
+  {
+   "description": "Resolución o acta que respalda la aprobación.",
+   "fieldname": "resolucion",
+   "fieldtype": "Data",
+   "label": "Resolución"
+  },
+  {
+   "fieldname": "section_break_imagen",
+   "fieldtype": "Section Break"
+  },
+  {
+   "description": "El cuadro aprobado, con la identidad gráfica de la institución.",
+   "fieldname": "imagen",
+   "fieldtype": "Attach Image",
+   "label": "Imagen del mapa"
+  },
+  {
+   "fieldname": "notas",
+   "fieldtype": "Small Text",
+   "label": "Notas"
+  }
+ ],
+ "image_field": "imagen",
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-20 18:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Procesos",
+ "name": "Mapa Procesos",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

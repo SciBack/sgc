@@ -216,6 +216,16 @@ _ROWS = {
         DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
     },
 
+    # --- Mapa Procesos (#39): la lámina institucional aprobada. La carga y la
+    #     pone en vigor quien gobierna el mapa (DPGC); todos los demás la ven,
+    #     porque es justo el documento que la institución quiere que se
+    #     reconozca. Nadie más escribe: si cualquiera pudiera marcar "vigente",
+    #     el cuadro dejaría de significar "el aprobado". ---
+    "Mapa Procesos": {
+        DPGC: "crw", ANAL: "r", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "crw",
+    },
+
     # --- Comite / Reunion / Acuerdo (gobierno del comité de calidad) ---
     "Comite": {
         DPGC: "crw", ANAL: "rw", CFAC: "r", RPRO: "rw", MIEM: "r", DPROC: "r",
