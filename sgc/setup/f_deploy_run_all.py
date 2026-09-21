@@ -79,6 +79,7 @@ from sgc.setup import (
     f19_nivel_bpm,
     f20_categoria_indicador,
     f21_dashboards,
+    f22_programa_pdf,
 )
 
 STEPS = [
@@ -105,6 +106,7 @@ STEPS = [
     ("f19_nivel_bpm", f19_nivel_bpm),
     ("f20_categoria_indicador", f20_categoria_indicador),
     ("f21_dashboards", f21_dashboards),
+    ("f22_programa_pdf", f22_programa_pdf),
 ]
 
 

@@ -129,3 +129,67 @@ class ProgramaAuditoria(Document):
             # `aprobado_por` y `fecha_aprobacion` ya no se validan aquí: los
             # sella `_sellar_aprobacion` con quien ejecuta la transición. Pedirle
             # al usuario que los escriba era justo lo que los hacía inventables.
+
+    # ------------------------------------------------------------ impresión
+    @frappe.whitelist()
+    def datos_programa(self):
+        """Todo lo que el plan anual necesita para imprimirse, resuelto en Python.
+
+        Mismo contrato que `datos_ficha` (#66): la plantilla solo itera, y aquí se
+        resuelven los enlaces —el periodo, las auditorías del programa y su equipo—
+        que el Jinja no debe resolver.
+
+        Se devuelve una selección explícita de campos, nunca `as_dict()`: eso
+        publicaría `owner`, `modified_by` y cualquier campo interno en un documento
+        que se entrega a un auditor externo.
+
+        Los nombres de las personas SÍ van, a diferencia de la variante pública de
+        la ficha: un plan de auditoría es un documento que se aprueba y se firma, y
+        su valor como evidencia está precisamente en que consta quién lo aprobó.
+        """
+        def _persona(usuario):
+            if not usuario:
+                return None
+            return frappe.db.get_value("User", usuario, ["full_name"], as_dict=True)
+
+        auditorias = []
+        for a in frappe.get_all(
+            "Auditoria",
+            filters={"programa_auditoria": self.name},
+            fields=[
+                "name", "titulo", "tipo", "unidad_organica", "proceso",
+                "programa_sede", "fecha_plan", "fecha_inicio", "fecha_fin", "estado",
+            ],
+            order_by="fecha_plan asc, name asc",
+        ):
+            # El auditor líder es el dato del equipo que importa en el PLAN; el
+            # resto del equipo se nombra al ejecutar cada auditoría, no al
+            # programarla, y puede cambiar sin que el plan deje de ser válido.
+            lider = frappe.get_all(
+                "Equipo Auditoria",
+                filters={"parent": a.name, "parenttype": "Auditoria", "rol": "Auditor lider"},
+                fields=["usuario"],
+                limit=1,
+            )
+            a["auditor_lider"] = _persona(lider[0].usuario) if lider else None
+            auditorias.append(a)
+
+        return {
+            "programa": {
+                "name": self.name,
+                "codigo": self.codigo,
+                "titulo": self.titulo,
+                "objetivo": self.objetivo,
+                "alcance": self.alcance,
+                "estado": self.estado,
+                "fecha_aprobacion": self.fecha_aprobacion,
+            },
+            "periodo": self.periodo_academico,
+            "responsable": _persona(self.responsable),
+            "aprobado_por": _persona(self.aprobado_por),
+            "auditorias": auditorias,
+            # Se cuenta aquí y no en la plantilla: un plan sin auditorías es un
+            # documento válido (se aprueba el marco y luego se programan), pero
+            # tiene que decirlo en vez de mostrar una tabla vacía sin explicación.
+            "total": len(auditorias),
+        }
