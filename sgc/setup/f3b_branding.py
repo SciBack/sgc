@@ -56,6 +56,12 @@ def _config():
         "logo": (conf.get("sgc_logo") or "").strip() or None,
         "favicon": (conf.get("sgc_favicon") or "").strip() or None,
         "copyright": (conf.get("sgc_copyright") or NEUTRO_COPYRIGHT).strip(),
+        # Quinta clave, para los documentos impresos (#73). NO es `app_name`: ahí
+        # va cómo se llama el sistema («SGC UPeU»), aquí cómo se llama la
+        # institución («UNIVERSIDAD PERUANA UNIÓN»), que es lo que encabeza un
+        # documento oficial. Sin declarar, los PDF salen sin nombre — nunca con
+        # el de otra universidad.
+        "institucion": (conf.get("sgc_institucion") or "").strip(),
     }
 
 
@@ -121,4 +127,62 @@ def run():
         "branding OK — app_name={0}, logo={1}, origen={2}".format(
             cfg["app_name"], cfg["logo"] or "(ninguno)", declarado
         )
+    )
+
+
+# ===========================================================================
+# Identidad en los documentos impresos (#73)
+# ===========================================================================
+
+def resolver_identidad(html):
+    """Sustituye los marcadores `%%SGC_*%%` de un Print Format por la identidad
+    declarada en `site_config`.
+
+    Por qué marcadores propios y no Jinja: el HTML de los Print Format YA es una
+    plantilla Jinja de Frappe (`{{ doc.name }}`), que se resuelve al imprimir. Si
+    la identidad fuera también Jinja habría que distinguir dos momentos de render
+    en la misma cadena; y con `str.format` las llaves de Jinja reventarían. Un
+    marcador que no colisiona con nada se sustituye en Python y se acabó.
+
+    Se hornea al crear el formato, no en cada render: es el mismo trato que
+    `f3b_branding` da al Desk, y `f19`/`f6` corren en cada `migrate`, así que un
+    despliegue refresca la identidad. Cambiar `site_config` sin migrar deja el PDF
+    con la identidad anterior hasta el siguiente despliegue.
+
+    Los marcadores:
+        %%SGC_LOGO_IMG%%          -> <img> del logo, o NADA si no hay logo
+        %%SGC_INSTITUCION%%       -> nombre de la institución, o vacío
+        %%SGC_PIE_INSTITUCION%%   -> " <nombre> ·" para el pie, o vacío (sin
+                                     separador suelto)
+    """
+    cfg = _config()
+    institucion = frappe.utils.escape_html(cfg["institucion"]) if cfg["institucion"] else ""
+    logo = cfg["logo"]
+
+    reemplazos = {
+        "%%SGC_LOGO_IMG%%": f'<img src="{frappe.utils.escape_html(logo)}" alt="">' if logo else "",
+        "%%SGC_INSTITUCION%%": institucion,
+        "%%SGC_PIE_INSTITUCION%%": f" {institucion} ·" if institucion else "",
+    }
+
+    for marcador, valor in reemplazos.items():
+        html = html.replace(marcador, valor)
+
+    return html
+
+
+def nombre_institucion():
+    """El nombre de la institución para los documentos, o cadena vacía.
+
+    Cadena de resolución, de lo más explícito a lo más general:
+    `site_config.sgc_institucion` -> default `company` -> `System Settings.app_name`.
+    Si nada está declarado devuelve **vacío**, nunca el nombre de una universidad
+    concreta: hasta #73 estos sitios caían a un literal «Universidad Peruana Unión»
+    que se colaba en el PDF de cualquier instalación.
+    """
+    return (
+        (frappe.conf or {}).get("sgc_institucion")
+        or frappe.db.get_default("company")
+        or frappe.db.get_single_value("System Settings", "app_name")
+        or ""
     )

@@ -64,10 +64,11 @@ import frappe
 from frappe.utils import formatdate
 
 from sgc.scoring import (
-    _sigla_nivel,
-    _estandares_de_autoevaluacion,
     _criterios_de_estandar,
+    _estandares_de_autoevaluacion,
+    _sigla_nivel,
 )
+from sgc.setup.f3b_branding import nombre_institucion
 
 # --- Semáforo por nivel de logro (insumo D §1.2.4) --------------------------
 #   NL  -> rojo   (No Logrado)
@@ -345,11 +346,9 @@ def consolidar(autoevaluacion):
 
     periodo_txt = ae.periodo_academico or ""
 
-    institucion = (
-        frappe.db.get_default("company")
-        or frappe.db.get_single_value("System Settings", "app_name")
-        or "Universidad Peruana Unión"
-    )
+    # #73: sin literal de reserva. Si nadie declara la institución, el documento
+    # sale sin nombre; nunca con el de otra universidad.
+    institucion = nombre_institucion()
 
     cabecera = {
         "codigo": ae.codigo,

@@ -33,6 +33,8 @@ sus componentes (tipo Criterio) cuelgan de cada una en el árbol.
 """
 
 import frappe
+
+from sgc.setup.f3b_branding import nombre_institucion
 from frappe import _
 from frappe.model.document import Document
 from frappe.utils import nowdate
@@ -272,11 +274,8 @@ class InformeCumplimiento(Document):
 		(del Elemento Marco) para que el Print Format solo itere. Único punto de
 		datos del PDF.
 		"""
-		institucion = (
-			frappe.db.get_default("company")
-			or frappe.db.get_single_value("System Settings", "app_name")
-			or "Universidad Peruana Unión"
-		)
+		# #73: sin literal de reserva. Ver `f3b_branding.nombre_institucion`.
+		institucion = nombre_institucion()
 
 		condiciones = []
 		for c in self.condiciones:
