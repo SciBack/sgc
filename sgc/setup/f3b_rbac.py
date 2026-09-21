@@ -429,18 +429,57 @@ _ALLFLAGS = ["read", "write", "create", "delete", "submit", "cancel"]
 
 
 def _ensure_roles():
+    """Crea los roles del catálogo y reconcilia los que ya existen.
+
+    Reconciliar no es cosmético (#57). En Frappe v16 el tipo de usuario se deriva
+    de sus roles (`user.py:404-415`): un rol declarado aquí con `desk_access=1`
+    pero guardado en la base con 0 convierte en `Website User` a quien solo tenga
+    ese rol, y lo deja sin poder entrar al Desk — sin error y sin traza. Pasó el
+    20-sep-2026 con cuatro cuentas de la DPGC. Saltar el rol existente perpetuaba
+    la divergencia: ningún `bench migrate` la corregía.
+
+    Se guarda con `save()` y NO con `db.set_value` a propósito: `Role.on_update`
+    dispara `update_user_type_on_change()`, que reevalúa el `user_type` de todos
+    los usuarios con ese rol. Es lo que repara a quien ya quedó degradado; con
+    una escritura directa a la base, la definición quedaría bien y las personas
+    seguirían fuera.
+
+    Solo se tocan los roles del catálogo: un rol creado fuera de él no es asunto
+    de este paso.
+
+    Returns:
+        (creados, reconciliados) — `reconciliados` es una lista de
+        `(role_name, {campo: (antes, despues)})`, para que el resumen pueda
+        nombrar lo que cambió.
+    """
     creados = 0
+    reconciliados = []
+
     for role_name, desk in ROLES:
-        if frappe.db.exists("Role", role_name):
+        if not frappe.db.exists("Role", role_name):
+            frappe.get_doc({
+                "doctype": "Role",
+                "role_name": role_name,
+                "desk_access": desk,
+                "is_custom": 1,
+            }).insert(ignore_permissions=True)
+            creados += 1
             continue
-        frappe.get_doc({
-            "doctype": "Role",
-            "role_name": role_name,
-            "desk_access": desk,
-            "is_custom": 1,
-        }).insert(ignore_permissions=True)
-        creados += 1
-    return creados
+
+        rol = frappe.get_doc("Role", role_name)
+        cambios = {}
+
+        for campo, declarado in (("desk_access", desk), ("is_custom", 1)):
+            actual = int(rol.get(campo) or 0)
+            if actual != declarado:
+                cambios[campo] = (actual, declarado)
+                rol.set(campo, declarado)
+
+        if cambios:
+            rol.save(ignore_permissions=True)
+            reconciliados.append((role_name, cambios))
+
+    return creados, reconciliados
 
 
 def _apply_docperm(doctype, role, code, permlevel=0):
@@ -556,7 +595,7 @@ def run():
     frappe.flags.in_patch = True
     frappe.flags.in_fixtures = True
 
-    n_roles = _ensure_roles()
+    n_roles, roles_reconciliados = _ensure_roles()
 
     # Aplicar matriz (permlevel 0) + permlevel 1 donde aplique.
     dts_tocados = []
@@ -607,6 +646,15 @@ def run():
     print("=" * 60)
     print(f"  Roles creados en esta corrida : {n_roles} "
           f"(catálogo total: {len(ROLES)} + System Manager core)")
+    # Un rol que cambia de desk_access cambia quién puede entrar al sistema:
+    # se nombra siempre, nunca se resume en un número (#57).
+    print(f"  Roles reconciliados con el catálogo: {len(roles_reconciliados)}")
+    for role_name, cambios in roles_reconciliados:
+        detalle = ", ".join(
+            f"{campo} {antes} -> {despues}"
+            for campo, (antes, despues) in sorted(cambios.items())
+        )
+        print(f"      - {role_name}: {detalle}")
     print(f"  DocTypes con permisos aplicados: {len(dts_tocados)}")
     for dt in dts_tocados:
         print(f"      - {dt}")
@@ -617,6 +665,7 @@ def run():
           "Responsable de Calidad de Programa; read=roles que ven el registro.")
     return {
         "roles_creados": n_roles,
+        "roles_reconciliados": roles_reconciliados,
         "doctypes_aplicados": dts_tocados,
         "docperms": n_docperms,
         "role_profiles": list(ROLE_PROFILES.keys()),
