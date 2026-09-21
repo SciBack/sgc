@@ -428,6 +428,47 @@ _CODE2FLAG = {"c": "create", "r": "read", "w": "write", "s": "submit", "x": "can
 _ALLFLAGS = ["read", "write", "create", "delete", "submit", "cancel"]
 
 
+def ensure_role(role_name):
+    """Crea un `Role` si no existe, con el `desk_access` que declara el CATÁLOGO.
+
+    Es la ÚNICA puerta de creación de roles del arranque (#71). Antes había dos:
+    esta y `f2_workflow._ensure_role`, que hardcodeaba `desk_access: 1` y omitía
+    `is_custom`. Como `f2_workflow` corre ANTES que este paso, se adelantaba al
+    catálogo y los roles nacían con valores que nadie había declarado; en un sitio
+    limpio eso dejaba 6 de los 13 roles divergentes, y `_ensure_roles` los tenía
+    que reconciliar después. El orden de los pasos no debe decidir qué acceso
+    tiene un rol: lo decide el catálogo.
+
+    Un rol FUERA del catálogo se crea igual (hoy no ocurre ninguno: los 13 cubren
+    los 14 módulos que crean roles), pero avisando. Lo que no puede volver a
+    pasar es que aparezca en silencio: `desk_access` decide el `user_type` de las
+    personas, y por ahí se fueron cuatro cuentas de la DPGC el 20-sep-2026.
+
+    Returns:
+        True si lo creó, False si ya existía.
+    """
+    if frappe.db.exists("Role", role_name):
+        return False
+
+    declarado = dict(ROLES)  # se lee en cada llamada: los tests sustituyen ROLES
+    if role_name in declarado:
+        desk = declarado[role_name]
+    else:
+        desk = 1
+        print(
+            f"  AVISO: el rol '{role_name}' no está en el catálogo de f3b_rbac. "
+            f"Creado con desk_access=1 por defecto; declararlo en ROLES si es del producto."
+        )
+
+    frappe.get_doc({
+        "doctype": "Role",
+        "role_name": role_name,
+        "desk_access": desk,
+        "is_custom": 1,
+    }).insert(ignore_permissions=True)
+    return True
+
+
 def _ensure_roles():
     """Crea los roles del catálogo y reconcilia los que ya existen.
 
@@ -456,13 +497,7 @@ def _ensure_roles():
     reconciliados = []
 
     for role_name, desk in ROLES:
-        if not frappe.db.exists("Role", role_name):
-            frappe.get_doc({
-                "doctype": "Role",
-                "role_name": role_name,
-                "desk_access": desk,
-                "is_custom": 1,
-            }).insert(ignore_permissions=True)
+        if ensure_role(role_name):
             creados += 1
             continue
 
