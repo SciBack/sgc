@@ -77,8 +77,9 @@ class IntegrationTestFichaPdfRenombrado(IntegrationTestCase):
         )
 
     def test_el_default_del_doctype_sigue_apuntando_al_formato(self):
-        # `rename_doc` actualiza los campos Link; esto lo fija como contrato, porque
-        # si dejara de hacerlo el Desk imprimiría el volcado estándar sin avisar.
+        # `rename_doc` NO lo arrastra: `default_print_format` es un campo Data, no
+        # un Link. Lo mueve `_renombrar_heredados` a mano. Es el contrato que más
+        # importa aquí: si se pierde, el Desk imprime el volcado estándar sin avisar.
         self._crear_con_nombre_viejo()
 
         f19_ficha_pdf._renombrar_heredados()

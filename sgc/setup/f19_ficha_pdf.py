@@ -245,9 +245,12 @@ def _renombrar_heredados():
     """Renombra en sitio los Print Format que llevaban el nombre del cliente (#65).
 
     Corre ANTES de crear nada, para que `run()` encuentre el formato ya existente
-    y lo actualice en vez de duplicarlo. Renombrar conserva el documento: cualquier
-    referencia por nombre (el `default_print_format` del DocType) se actualiza sola,
-    y `run()` lo vuelve a fijar de todas formas.
+    y lo actualice en vez de duplicarlo. Renombrar conserva el documento.
+
+    Ojo con `default_print_format`: es un campo **Data**, no un Link, así que
+    `rename_doc` NO lo reescribe —solo toca los de tipo Link— y hay que moverlo
+    aquí. `run()` lo refija después para el formato institucional, pero esta
+    función no debe depender de que alguien venga detrás a arreglarla.
 
     Idempotente y defensiva: si el nombre viejo no existe (instalación nueva) no
     hace nada; si YA existe el nuevo, no renombra —eso significaría que hay dos
@@ -277,6 +280,15 @@ def _renombrar_heredados():
             doctype="Print Format", old=viejo, new=nuevo,
             force=True, ignore_permissions=True, show_alert=False,
         )
+
+        # `DocType.default_print_format` es un campo **Data**, no un Link
+        # (`doctype.json`), y `rename_doc` solo reescribe los de tipo Link
+        # (`rename_doc.py:472,486`). Si no se mueve a mano, queda apuntando a un
+        # formato que ya no existe y el Desk imprime el volcado estándar de campos
+        # sin avisar de nada.
+        if frappe.db.get_value("DocType", DOCTYPE, "default_print_format") == viejo:
+            frappe.db.set_value("DocType", DOCTYPE, "default_print_format", nuevo)
+
         renombrados.append((viejo, nuevo))
         print(f"  Print Format renombrado: '{viejo}' -> '{nuevo}'")
 
