@@ -30,7 +30,7 @@ from frappe import _
 # de quienes elaboran, revisan y aprueban; este PDF lo sirve una web abierta, y
 # esos nombres son datos personales (Ley 29733). La lista blanca de campos del
 # portal no bastaba: el dato salía por el PDF. Verificado en el lab el 13-sep-2026.
-PRINT_FORMAT = "Ficha de Caracterizacion UPeU (publico)"
+PRINT_FORMAT = "Ficha de Caracterizacion (publico)"
 DOCTYPE = "Ficha Caracterizacion Proceso"
 ESTADO_PUBLICO = "Publicado"
 

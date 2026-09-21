@@ -1,7 +1,11 @@
+# El canónico no nombra a ninguna institución (#65). `hooks.py` se lee al CARGAR
+# la app, antes de que exista un sitio, así que no puede consultar `site_config`:
+# por eso estos valores son neutros y no parametrizables como los de #40. Lo que
+# el usuario ve en el Desk lo pisa `f3b_branding` desde `site_config`.
 app_name = "sgc"
-app_title = "SGC UPeU"
+app_title = "SGC"
 app_publisher = "SciBack"
-app_description = "Sistema de Gestion de la Calidad - UPeU (SciBack)"
+app_description = "Sistema de Gestion de la Calidad"
 app_email = "atisbo78@gmail.com"
 app_license = "mit"
 
@@ -25,7 +29,7 @@ app_logo_url = "/assets/frappe/images/frappe-framework-logo.svg"
 add_to_apps_screen = [
 	{
 		"name": "sgc",
-		"title": "SGC UPeU",
+		"title": "SGC",
 		"route": "/desk/sgc",
 		"logo": app_logo_url,
 	}

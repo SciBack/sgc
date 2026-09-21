@@ -20,14 +20,14 @@ Ejecutar (lo hace el orquestador):
 """
 import frappe
 
-PRINT_FORMAT_NAME = "Ficha de Caracterizacion UPeU"
+PRINT_FORMAT_NAME = "Ficha de Caracterizacion"
 # Variante para el portal PÚBLICO. Idéntica salvo el control de emisión: donde la
 # interna nombra a las tres personas que firman, esta cita el ACTO que aprueba.
 # Motivo: el portal es una web abierta y los nombres son datos personales
 # (Ley 29733). Publicar el PDF publicaría los nombres aunque la lista blanca de
 # campos del portal no los incluya — el dato salía por el PDF, no por la API.
 # Verificado en el lab el 13-sep-2026: el PDF traía los tres `full_name`.
-PRINT_FORMAT_PUBLICO = "Ficha de Caracterizacion UPeU (publico)"
+PRINT_FORMAT_PUBLICO = "Ficha de Caracterizacion (publico)"
 DOCTYPE = "Ficha Caracterizacion Proceso"
 
 # El membrete se espera en /files/membrete-upeu.png (público). Si no estuviera, el
@@ -231,8 +231,74 @@ HTML = """
 """
 
 
+# Nombres que llevaban el cliente dentro del identificador, hasta #65. Un Print
+# Format se identifica POR SU NOMBRE, así que cambiarlo en el código no basta: sin
+# renombrar lo que ya existe, `run()` crearía dos formatos nuevos y dejaría los
+# viejos huérfanos, con el Desk imprimiendo el que fuera por defecto.
+HEREDADOS = {
+    "Ficha de Caracterizacion UPeU": PRINT_FORMAT_NAME,
+    "Ficha de Caracterizacion UPeU (publico)": PRINT_FORMAT_PUBLICO,
+}
+
+
+def _renombrar_heredados():
+    """Renombra en sitio los Print Format que llevaban el nombre del cliente (#65).
+
+    Corre ANTES de crear nada, para que `run()` encuentre el formato ya existente
+    y lo actualice en vez de duplicarlo. Renombrar conserva el documento.
+
+    Ojo con `default_print_format`: es un campo **Data**, no un Link, así que
+    `rename_doc` NO lo reescribe —solo toca los de tipo Link— y hay que moverlo
+    aquí. `run()` lo refija después para el formato institucional, pero esta
+    función no debe depender de que alguien venga detrás a arreglarla.
+
+    Idempotente y defensiva: si el nombre viejo no existe (instalación nueva) no
+    hace nada; si YA existe el nuevo, no renombra —eso significaría que hay dos
+    formatos y el viejo es el sobrante— y lo dice en vez de romper el arranque.
+
+    Returns:
+        lista de (viejo, nuevo) renombrados en esta corrida.
+    """
+    renombrados = []
+
+    for viejo, nuevo in HEREDADOS.items():
+        if not frappe.db.exists("Print Format", viejo):
+            continue
+        if frappe.db.exists("Print Format", nuevo):
+            print(
+                f"  AVISO: existen '{viejo}' y '{nuevo}' a la vez. No se renombra; "
+                f"revisar cuál está en uso y borrar el sobrante a mano."
+            )
+            continue
+        # OJO: se importa `frappe.model.rename_doc.rename_doc`, NO el atajo
+        # `frappe.rename_doc`. El atajo (frappe/__init__.py:804) es un wrapper que
+        # solo delega y NO expone `ignore_permissions`: pasárselo revienta con
+        # `TypeError: unexpected keyword argument`. La función real sí lo acepta.
+        from frappe.model.rename_doc import rename_doc
+
+        rename_doc(
+            doctype="Print Format", old=viejo, new=nuevo,
+            force=True, ignore_permissions=True, show_alert=False,
+        )
+
+        # `DocType.default_print_format` es un campo **Data**, no un Link
+        # (`doctype.json`), y `rename_doc` solo reescribe los de tipo Link
+        # (`rename_doc.py:472,486`). Si no se mueve a mano, queda apuntando a un
+        # formato que ya no existe y el Desk imprime el volcado estándar de campos
+        # sin avisar de nada.
+        if frappe.db.get_value("DocType", DOCTYPE, "default_print_format") == viejo:
+            frappe.db.set_value("DocType", DOCTYPE, "default_print_format", nuevo)
+
+        renombrados.append((viejo, nuevo))
+        print(f"  Print Format renombrado: '{viejo}' -> '{nuevo}'")
+
+    return renombrados
+
+
 def run():
     """Crea o actualiza el Print Format de la ficha. Idempotente."""
+    renombrados = _renombrar_heredados()
+
     campos = {
         "doc_type": DOCTYPE,
         "print_format_type": "Jinja",
@@ -282,7 +348,8 @@ def run():
     print(f"Print Format '{PRINT_FORMAT_NAME}' {accion} y fijado por defecto en {DOCTYPE}")
     print(f"Print Format '{PRINT_FORMAT_PUBLICO}' {accion_pub} (sin nombres; para el portal)")
     return {"print_format": PRINT_FORMAT_NAME, "accion": accion,
-            "print_format_publico": PRINT_FORMAT_PUBLICO, "accion_publico": accion_pub}
+            "print_format_publico": PRINT_FORMAT_PUBLICO, "accion_publico": accion_pub,
+            "renombrados": renombrados}
 
 
 # La pública se deriva de la interna: una sola plantilla que mantener. Si mañana

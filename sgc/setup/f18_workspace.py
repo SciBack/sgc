@@ -175,7 +175,7 @@ def _desktop_icon():
     """
     try:
         app = (frappe.get_hooks("add_to_apps_screen", app_name="sgc") or [{}])[0]
-        label = app.get("title") or "SGC UPeU"
+        label = app.get("title") or "SGC"
         if frappe.db.exists("Desktop Icon", label):
             return
         icon = frappe.new_doc("Desktop Icon")
