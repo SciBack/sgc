@@ -38,8 +38,12 @@ class IntegrationTestFichaPdfRenombrado(IntegrationTestCase):
     def _crear_con_nombre_viejo(self):
         """Reproduce una instancia anterior a #65: el formato con el nombre del cliente."""
         if frappe.db.exists("Print Format", NUEVO):
-            frappe.rename_doc(
-                "Print Format", NUEVO, VIEJO,
+            # El atajo `frappe.rename_doc` no acepta `ignore_permissions`; la
+            # función real de `frappe.model.rename_doc`, sí. Ver f19_ficha_pdf.
+            from frappe.model.rename_doc import rename_doc
+
+            rename_doc(
+                doctype="Print Format", old=NUEVO, new=VIEJO,
                 force=True, ignore_permissions=True, show_alert=False,
             )
         frappe.db.set_value("DocType", DOCTYPE, "default_print_format", VIEJO)

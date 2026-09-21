@@ -267,8 +267,14 @@ def _renombrar_heredados():
                 f"revisar cuál está en uso y borrar el sobrante a mano."
             )
             continue
-        frappe.rename_doc(
-            "Print Format", viejo, nuevo,
+        # OJO: se importa `frappe.model.rename_doc.rename_doc`, NO el atajo
+        # `frappe.rename_doc`. El atajo (frappe/__init__.py:804) es un wrapper que
+        # solo delega y NO expone `ignore_permissions`: pasárselo revienta con
+        # `TypeError: unexpected keyword argument`. La función real sí lo acepta.
+        from frappe.model.rename_doc import rename_doc
+
+        rename_doc(
+            doctype="Print Format", old=viejo, new=nuevo,
             force=True, ignore_permissions=True, show_alert=False,
         )
         renombrados.append((viejo, nuevo))
