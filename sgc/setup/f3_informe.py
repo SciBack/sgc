@@ -23,6 +23,8 @@ Ejecutar (lo hace el orquestador):
 """
 import frappe
 
+from sgc.setup.f3b_branding import resolver_identidad
+
 PRINT_FORMAT_NAME = "Informe de Autoevaluacion SINEACE"
 DOCTYPE = "Autoevaluacion"
 
@@ -31,7 +33,7 @@ DOCTYPE = "Autoevaluacion"
 # Plantilla Jinja del Print Format
 # ===========================================================================
 # Nota membrete: se deja un <img> con la ruta esperada del logo en /files/.
-# Súbelo una vez a File (público) como `membrete-upeu.png`; si no existe, el
+# El logo sale de `site_config.sgc_logo` (#73). Si no está declarado, el
 # navegador muestra el alt y el texto del membrete igual imprime. (Ver el
 # comentario  {# LOGO UPeU #}  más abajo para cambiar la ruta.)
 
@@ -91,13 +93,12 @@ HTML = r"""
 
 <div class="sgc-informe">
 
-  {# =================== PORTADA (forma libre, membrete UPeU) =================== #}
+  {# ============ PORTADA (forma libre; identidad desde site_config, #73) ============ #}
   <div class="portada">
     <div class="membrete">
-      {# LOGO UPeU: sube el escudo como File público y ajusta la ruta si cambia #}
-      <img src="/files/membrete-upeu.png" alt="UPeU">
+      %%SGC_LOGO_IMG%%
       <div class="inst">
-        <b>UNIVERSIDAD PERUANA UNIÓN</b>
+        <b>%%SGC_INSTITUCION%%</b>
         Dirección de Gestión de la Calidad
       </div>
     </div>
@@ -264,7 +265,7 @@ def run():
         "margin_left": 12.0,
         "margin_right": 12.0,
         "default_print_language": "es",
-        "html": HTML,
+        "html": resolver_identidad(HTML),
     }
 
     if frappe.db.exists("Print Format", PRINT_FORMAT_NAME):

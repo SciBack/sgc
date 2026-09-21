@@ -222,9 +222,11 @@ NOTA_AAA = (
     "cinco con revisión administrativa; cinco con visita intermedia; tres o cuatro años; "
     "aplazamiento; candidatura; demostración de causales; y suspensión. Por eso este marco declara "
     "`reglas_vigencia` en nulo, igual que el licenciamiento: ninguna tabla convierte una "
-    "autoevaluación en años de acreditación.\n\n"
-    "UPeU está acreditada por la AAA desde noviembre de 2024, en el máximo periodo (cinco años, "
-    "hasta ~2029) y para sus tres campus."
+    "autoevaluación en años de acreditación."
+    # #73: aquí había una frase con el estado de acreditación de UPeU. Este texto
+    # describe el MARCO (genérico); qué universidad está acreditada, desde cuándo y
+    # por cuánto es un dato de esa institución, no del marco. Vive en la capa
+    # institución: `instituciones/upeu/calidad-upeu/docs/acreditacion-aaa.md`.
 )
 
 

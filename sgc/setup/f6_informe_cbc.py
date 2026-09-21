@@ -21,6 +21,8 @@ Ejecutar:
 """
 import frappe
 
+from sgc.setup.f3b_branding import resolver_identidad
+
 PRINT_FORMAT_NAME = "Diagnostico CBC SUNEDU"
 DOCTYPE = "Informe Cumplimiento"
 
@@ -83,8 +85,8 @@ HTML = r"""
 
   <div class="portada">
     <div class="membrete">
-      {# LOGO UPeU — mismo File público que el informe de autoevaluación #}
-      <img src="/files/membrete-upeu.png" alt="">
+      {# El logo sale de `site_config` (#73), no del fichero de una universidad #}
+      %%SGC_LOGO_IMG%%
       <div class="inst">
         <b>{{ d.institucion }}</b>
         Dirección de Gestión de la Calidad
@@ -165,7 +167,8 @@ def run():
         "margin_left": 12.0,
         "margin_right": 12.0,
         "default_print_language": "es",
-        "html": HTML,
+        # Identidad horneada desde `site_config` (#73), igual que f19.
+        "html": resolver_identidad(HTML),
     }
 
     if frappe.db.exists("Print Format", PRINT_FORMAT_NAME):

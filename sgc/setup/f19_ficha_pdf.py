@@ -20,6 +20,8 @@ Ejecutar (lo hace el orquestador):
 """
 import frappe
 
+from sgc.setup.f3b_branding import resolver_identidad
+
 PRINT_FORMAT_NAME = "Ficha de Caracterizacion"
 # Variante para el portal PÚBLICO. Idéntica salvo el control de emisión: donde la
 # interna nombra a las tres personas que firman, esta cita el ACTO que aprueba.
@@ -30,8 +32,10 @@ PRINT_FORMAT_NAME = "Ficha de Caracterizacion"
 PRINT_FORMAT_PUBLICO = "Ficha de Caracterizacion (publico)"
 DOCTYPE = "Ficha Caracterizacion Proceso"
 
-# El membrete se espera en /files/membrete-upeu.png (público). Si no estuviera, el
-# bloque de texto institucional imprime igual: el documento nunca sale sin cabecera.
+# El membrete NO lleva institución dentro (#73): sale de `site_config` vía
+# `f3b_branding._config()`, el mismo sitio del que #40 sacó el branding del Desk.
+# Una instancia que no declare su identidad imprime sin logo y sin nombre, nunca
+# con los de otra universidad.
 HTML = """
 <style>
   .sgc-ficha { font-family: "Helvetica Neue", Arial, sans-serif; color: #1f2328;
@@ -78,9 +82,9 @@ HTML = """
 <div class="sgc-ficha">
 
   <div class="membrete">
-    <img src="/files/membrete-upeu.png" alt="">
+    %%SGC_LOGO_IMG%%
     <div class="inst">
-      <b>UNIVERSIDAD PERUANA UNIÓN</b>
+      <b>%%SGC_INSTITUCION%%</b>
       Sistema de Gestión de la Calidad
     </div>
     <div class="doc">
@@ -222,7 +226,7 @@ HTML = """
   {%- endif %}
 
   <div class="pie">
-    Documento generado por el Sistema de Gestión de la Calidad · Universidad Peruana Unión ·
+    Documento generado por el Sistema de Gestión de la Calidad ·%%SGC_PIE_INSTITUCION%%
     {{ frappe.utils.formatdate(frappe.utils.nowdate(), "dd/MM/yyyy") }} ·
     Estado del documento: {{ doc.estado or "—" }}
   </div>
@@ -312,7 +316,9 @@ def run():
         "margin_left": 14.0,
         "margin_right": 14.0,
         "default_print_language": "es",
-        "html": HTML,
+        # La identidad se hornea aquí (#73): el HTML del módulo lleva marcadores,
+        # nunca el nombre ni el logo de una universidad concreta.
+        "html": resolver_identidad(HTML),
     }
 
     if frappe.db.exists("Print Format", PRINT_FORMAT_NAME):
@@ -332,7 +338,7 @@ def run():
 
     # La variante pública NO se fija por defecto: el Desk debe seguir imprimiendo
     # la institucional, con sus firmas. La pública existe solo para el portal.
-    campos_pub = dict(campos, html=HTML_PUBLICO)
+    campos_pub = dict(campos, html=resolver_identidad(HTML_PUBLICO))
     if frappe.db.exists("Print Format", PRINT_FORMAT_PUBLICO):
         pf2 = frappe.get_doc("Print Format", PRINT_FORMAT_PUBLICO)
         for clave, valor in campos_pub.items():
