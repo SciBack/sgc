@@ -43,7 +43,7 @@ def run():
         "Indicador",
         filters={"categoria": "Acreditacion"},
         fields=["name", "marco_normativo"],
-        limit_page_length=0,
+        limit=0,
     )
 
     cambios = []

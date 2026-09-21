@@ -111,7 +111,7 @@ def _valor_periodo_anterior(doc):
         "Valor Indicador",
         filters=filtros,
         fields=["name", "valor_num", "periodo_academico"],
-        limit_page_length=0,
+        limit=0,
     )
     anteriores = []
     for c in candidatos:

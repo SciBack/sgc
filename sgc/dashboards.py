@@ -67,7 +67,7 @@ def _contar(doctype, filtros):
         doctype,
         filters=filtros,
         fields=["name"],
-        limit_page_length=0,
+        limit=0,
         ignore_ifnull=True,
     )
     return len(filas)

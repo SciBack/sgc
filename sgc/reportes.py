@@ -31,7 +31,7 @@ def consultar(doctype, filtros, campos, orden=None):
         filters=filtros,
         fields=campos,
         order_by=orden,
-        limit_page_length=0,
+        limit=0,
         ignore_ifnull=True,
     )
 

@@ -57,7 +57,7 @@ def execute(filters=None):
 		if filters.get(campo):
 			condiciones[campo] = filters.get(campo)
 
-	registros = frappe.get_all("Valor Indicador", filters=condiciones, fields=CAMPOS, limit_page_length=0)
+	registros = frappe.get_all("Valor Indicador", filters=condiciones, fields=CAMPOS, limit=0)
 	nombres = _nombres_de_indicador({r.indicador for r in registros})
 
 	filas = []
@@ -131,7 +131,7 @@ def _aviso_de_otras_fuentes(fuente, condiciones):
 	"""Dice cuántas mediciones quedan fuera, para que nadie lea esto como el total."""
 	otras = {}
 	filtro = {k: v for k, v in condiciones.items() if k != "fuente"}
-	for v in frappe.get_all("Valor Indicador", filters=filtro, fields=["fuente"], limit_page_length=0):
+	for v in frappe.get_all("Valor Indicador", filters=filtro, fields=["fuente"], limit=0):
 		nombre = (v.fuente or "").strip() or _("(sin fuente)")
 		if nombre != fuente:
 			otras[nombre] = otras.get(nombre, 0) + 1

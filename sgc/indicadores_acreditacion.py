@@ -296,7 +296,7 @@ def _motivo_de_ausencia(par, fuente):
         },
         fields=["programa_sede"],
         group_by="programa_sede",
-        limit_page_length=0,
+        limit=0,
     )
     if otros:
         return SIN_MEDICIONES_PERO_HAY_DE_OTRO_PROGRAMA
