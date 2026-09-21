@@ -90,13 +90,22 @@ WF_NC = {
 
 
 def _ensure_role(role_name):
-    """Crea un Role si no existe. Idempotente."""
-    if not frappe.db.exists("Role", role_name):
-        frappe.get_doc({
-            "doctype": "Role",
-            "role_name": role_name,
-            "desk_access": 1,
-        }).insert(ignore_permissions=True)
+    """Crea un Role si no existe, delegando en el catálogo de `f3b_rbac` (#71).
+
+    Seis módulos más (`f5`, `f7`, `f8`, `f10`, `f11`, `f13`) importan esta función,
+    así que conserva su nombre y su firma. Lo que cambia es que ya no decide el
+    `desk_access` por su cuenta: hasta #71 lo hardcodeaba a 1 y omitía `is_custom`,
+    y como este paso corre ANTES que `f3b_rbac`, se adelantaba al catálogo y los
+    roles nacían divergentes (6 de 13 en un sitio limpio).
+
+    El import va dentro de la función a propósito: a nivel de módulo crearía una
+    dependencia de arranque entre dos pasos que el orquestador ejecuta por
+    separado, y bastaría con que `f3b_rbac` importara algo de aquí para tener un
+    ciclo. Idempotente.
+    """
+    from sgc.setup.f3b_rbac import ensure_role
+
+    ensure_role(role_name)
 
 
 def _ensure_workflow_state(state_name, style="Primary"):
