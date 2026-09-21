@@ -67,7 +67,7 @@ def _ultimo_cambio_arbol():
         "Proceso",
         fields=["modified"],
         order_by="modified desc",
-        limit_page_length=1,
+        limit=1,
     )
     return filas[0].modified if filas else None
 
@@ -87,7 +87,7 @@ def mapa_vigente():
             "aprobado_por",
             "resolucion",
         ],
-        limit_page_length=1,
+        limit=1,
     )
     if not filas:
         return {"hay_mapa": False}

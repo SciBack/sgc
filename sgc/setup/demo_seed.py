@@ -19,7 +19,7 @@ def _ins(doc):
 
 
 def run():
-    aes = frappe.get_all("Autoevaluacion", order_by="modified desc", limit_page_length=1, pluck="name")
+    aes = frappe.get_all("Autoevaluacion", order_by="modified desc", limit=1, pluck="name")
     if not aes:
         print("demo_seed: no hay autoevaluación; corre primero f2_e2e_test.")
         return
@@ -29,7 +29,7 @@ def run():
 
     # 1) Evidencias vinculadas a criterios reales (origen_doctype=Elemento Marco)
     crits = frappe.get_all("Valoracion Criterio", {"autoevaluacion": ae}, ["criterio"],
-                           order_by="criterio", limit_page_length=8)
+                           order_by="criterio", limit=8)
     tipos = ["Documento", "Acta", "Registro", "Documento", "Acta", "Registro"]
     titulos = ["Plan de estudios vigente", "Acta del comité de calidad",
                "Registro de encuestas de satisfacción", "Sílabos por competencias",
@@ -73,7 +73,7 @@ def run():
         n_h += 1
 
     # 4) Valores de indicadores
-    inds = frappe.get_all("Indicador", pluck="name", limit_page_length=12)
+    inds = frappe.get_all("Indicador", pluck="name", limit=12)
     vals = [78.5, 92.0, 65.3, 88.0, 71.2, 95.5, 60.0, 83.7, 90.1, 74.4]
     n_vi = 0
     for i, ind in enumerate(inds[:10]):
