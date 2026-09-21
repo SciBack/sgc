@@ -70,6 +70,18 @@ curl -fsSI https://DOMINIO/api/method/ping
 curl -s -o /dev/null -w '%{http_code}\n' https://DOMINIO/api/method/sgc.manual_auth.authorize
 ~~~
 
+Y comprobar que **la gente puede entrar**, que es lo que ninguna de las órdenes de arriba
+pregunta:
+
+~~~bash
+bench --site DOMINIO execute sgc.verificacion.run
+~~~
+
+Un sitio puede responder 200 en todas sus rutas y ser inservible: el 20-sep-2026 cuatro cuentas
+quedaron convertidas en `Website User` al asignarles un rol sin `desk_access`, y estuvieron horas
+sin poder trabajar mientras todas las comprobaciones anteriores salían en verde. Esta orden mira
+lo que importa —quién puede abrir el Desk— y nombra las cuentas afectadas.
+
 **Comprobar cada ruta que el proxy sirve, no solo la aplicación.** El manual y el portal
 público se sirven por delante de Frappe, así que pueden caerse sin que el sitio principal deje
 de responder 200 — que es justo lo que pasó: `/manual` estuvo tres semanas devolviendo 417 sin
