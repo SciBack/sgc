@@ -4,9 +4,9 @@ Una instancia a medias no se distingue a simple vista de una completa: el sitio
 responde, la gente entra, las pantallas se ven. Lo que falta aparece cuando
 alguien lo necesita, y para entonces ya está en uso.
 
-Este paquete es el marco de esa comprobación. Hoy trae **solo los chequeos de
-acceso** (#58); los de configuración —SSO, correo, estructura, marcos, scheduler—
-son #50 y entran aquí sin rediseñar nada: se registran en `CHEQUEOS` y ya.
+Este paquete es el marco de esa comprobación. Hoy trae los chequeos de acceso
+(#58) y el del scheduler (#42); los de configuración —SSO, correo, estructura,
+marcos— son #50 y entran aquí sin rediseñar nada: se registran en `CHEQUEOS` y ya.
 
 Tres niveles, y la diferencia entre ellos es qué se puede hacer con la instancia:
 
@@ -56,10 +56,11 @@ class Hallazgo:
 
 def _chequeos():
     """Los chequeos registrados. Import diferido: cada módulo toca la base."""
-    from sgc.verificacion import accesos
+    from sgc.verificacion import accesos, scheduler
 
     return [
         *accesos.CHEQUEOS,
+        *scheduler.CHEQUEOS,
     ]
 
 
@@ -96,7 +97,7 @@ def run():
     print("=" * 60)
 
     if not hallazgos:
-        print("Sin hallazgos: todas las comprobaciones de acceso pasan.")
+        print("Sin hallazgos: pasan las comprobaciones de acceso y del scheduler.")
         return []
 
     for h in hallazgos:

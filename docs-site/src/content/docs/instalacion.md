@@ -82,6 +82,17 @@ quedaron convertidas en `Website User` al asignarles un rol sin `desk_access`, y
 sin poder trabajar mientras todas las comprobaciones anteriores salían en verde. Esta orden mira
 lo que importa —quién puede abrir el Desk— y nombra las cuentas afectadas.
 
+La misma orden avisa si **las tareas programadas han dejado de correr**. Si el scheduler se
+para tras un despliegue o un reinicio, no falla nada a la vista: simplemente las evidencias y
+los acuerdos vencidos dejan de marcarse como vencidos. El aviso sale cuando una tarea lleva más
+de 48 horas sin terminar bien (según el `Scheduled Job Log` de Frappe), cuando está detenida o
+cuando el scheduler está desactivado. Además, a los System Manager se les muestra al entrar al
+Desk, una vez por sesión, y queda anotado en el Error Log. El umbral se cambia sin tocar código:
+
+~~~bash
+bench --site DOMINIO set-config sgc_scheduler_umbral_horas 72
+~~~
+
 **Comprobar cada ruta que el proxy sirve, no solo la aplicación.** El manual y el portal
 público se sirven por delante de Frappe, así que pueden caerse sin que el sitio principal deje
 de responder 200 — que es justo lo que pasó: `/manual` estuvo tres semanas devolviendo 417 sin
