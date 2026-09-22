@@ -5,8 +5,8 @@ responde, la gente entra, las pantallas se ven. Lo que falta aparece cuando
 alguien lo necesita, y para entonces ya está en uso.
 
 Este paquete es el marco de esa comprobación. Hoy trae los chequeos de acceso
-(#58) y el del scheduler (#42); los de configuración —SSO, correo, estructura,
-marcos— son #50 y entran aquí sin rediseñar nada: se registran en `CHEQUEOS` y ya.
+(#58), del scheduler (#42) y del correo (#41); los de configuración —SSO,
+estructura, marcos— son #50 y entran aquí sin rediseñar nada: se registran en `CHEQUEOS` y ya.
 
 Tres niveles, y la diferencia entre ellos es qué se puede hacer con la instancia:
 
@@ -56,11 +56,12 @@ class Hallazgo:
 
 def _chequeos():
     """Los chequeos registrados. Import diferido: cada módulo toca la base."""
-    from sgc.verificacion import accesos, scheduler
+    from sgc.verificacion import accesos, correo, scheduler
 
     return [
         *accesos.CHEQUEOS,
         *scheduler.CHEQUEOS,
+        *correo.CHEQUEOS,
     ]
 
 
@@ -97,7 +98,7 @@ def run():
     print("=" * 60)
 
     if not hallazgos:
-        print("Sin hallazgos: pasan las comprobaciones de acceso y del scheduler.")
+        print("Sin hallazgos: pasan las comprobaciones de acceso, scheduler y correo.")
         return []
 
     for h in hallazgos:
