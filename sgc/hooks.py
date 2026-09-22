@@ -42,7 +42,7 @@ add_to_apps_screen = [
 # app_include_css = "/assets/sgc/css/sgc.css"
 # desk_home.js: redirige la entrada pelada al Desk (/desk) directo al workspace
 # SGC saltando el apps screen. Archivo plano (no .bundle.) -> se sirve sin build.
-app_include_js = ["/assets/sgc/js/desk_home.js"]
+app_include_js = ["/assets/sgc/js/desk_home.js", "/assets/sgc/js/latido_scheduler.js"]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/sgc/css/sgc.css"
@@ -295,6 +295,8 @@ doc_events = {
 
 # M09 (2026-07-19): cierra el gap de Evidencia.on_update -- una vigencia que
 # expira sin que nadie guarde el documento debe marcarse Vencida igual.
+# Si el scheduler se para, estas tareas dejan de correr sin error: lo vigila
+# `sgc.latido` desde el Desk y desde `sgc.verificacion`, no desde aquí (#42).
 scheduler_events = {
 	"daily": [
 		"sgc.tasks.marcar_evidencias_vencidas",
