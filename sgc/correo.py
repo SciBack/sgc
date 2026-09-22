@@ -16,8 +16,9 @@ SGC: los workflows tienen `send_email_alert=0` y el código no llama a
 `sendmail`. `Notification.send_an_email` resuelve los destinatarios con
 `get_list_of_recipients` y, si queda alguno, envía; si no queda ninguno, sale
 sin enviar ni crear la Communication (frappe/email/doctype/notification/
-notification.py:496-507). Por eso basta con filtrar ahí: lo que se quita no se
-envía, y lo que se quita se anota en `Registro Correo`.
+notification.py:496-507). Por eso basta con filtrar ahí —solo durante el envío
+de correo, nunca para la campana del Desk—: lo que se quita no se envía, y lo
+que se quita se anota en `Registro Correo`.
 
 **Sin configurar, el modo es Ensayo.** Un sitio nuevo no escribe a nadie hasta
 que un administrador lo decide. Los sitios que ya enviaban antes de esta versión
@@ -101,13 +102,25 @@ def lista_blanca():
 class NotificacionSGC(Notification):
 	"""`Notification` que respeta el modo de ensayo y la lista blanca.
 
-	Se registra en `override_doctype_class`. Solo cambia la resolución de
-	destinatarios del canal Email; el resto de canales y el render quedan como
-	en Frappe.
+	Se registra en `override_doctype_class`. Solo filtra mientras se envía un
+	CORREO: Frappe usa el mismo `get_list_of_recipients` para la campana del
+	Desk (`create_system_notification`, notification.py:468), y el ensayo no
+	debe apagar los avisos internos. Tampoco basta con mirar `self.channel`:
+	una regla de canal Email con `send_system_notification` pasa por los dos
+	caminos, y solo el del correo se filtra.
 	"""
+
+	def send_an_email(self, doc, context):
+		self._filtrando_correo = True
+		try:
+			return super().send_an_email(doc, context)
+		finally:
+			self._filtrando_correo = False
 
 	def get_list_of_recipients(self, doc, context):
 		para, cc, cco = super().get_list_of_recipients(doc, context)
+		if not getattr(self, "_filtrando_correo", False):
+			return para, cc, cco
 		a_enviar, registros = decidir({"Para": para, "CC": cc, "CCO": cco}, modo(), lista_blanca())
 		if registros:
 			_registrar(self, doc, context, registros)

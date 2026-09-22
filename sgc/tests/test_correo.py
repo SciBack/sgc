@@ -100,6 +100,28 @@ class IntegrationTestCorreo(IntegrationTestCase):
         self.assertEqual({r.tipo for r in registros}, {"CC", "Para"})
         self.assertEqual(registros[0].asunto, f"Prueba {self.todo.name}")
 
+    def test_el_ensayo_no_apaga_la_campana_del_desk(self):
+        """El ensayo es del correo. Los avisos internos siguen llegando.
+
+        Frappe resuelve con el mismo método los destinatarios del correo y los de
+        la campana; filtrarlos todos dejaba sin avisos del Desk a quien trabaja
+        con el sistema (lo cazó el CI en las notificaciones de workflow).
+        """
+        self._configurar("Ensayo")
+        frappe.db.set_value("Notification", REGLA, "send_system_notification", 1)
+
+        sendmail = self._enviar()
+
+        sendmail.assert_not_called()
+        self.assertTrue(
+            frappe.db.exists(
+                "Notification Log",
+                {"for_user": USUARIO, "document_type": "ToDo", "document_name": self.todo.name},
+            )
+        )
+        # Solo lo del correo queda en el registro: la campana no es un correo retenido.
+        self.assertEqual(len(self._registros()), 2)
+
     def test_con_lista_blanca_solo_se_envia_a_quien_esta_en_ella(self):
         self._configurar("Real", USUARIO)
 
