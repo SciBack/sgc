@@ -10,3 +10,6 @@ sgc.patches.version_documental_a_entero
 # #41: el modo de ensayo nace en Ensayo; los sitios que ya enviaban correo lo
 # conservan en Real para que la actualización no corte avisos en silencio.
 sgc.patches.correo_conservar_envio_real
+# #29: las reglas del SGC nacen de correo con campana; las que eran solo de
+# campana pasan a correo. Va DESPUÉS: el modo se decide con las reglas de antes.
+sgc.patches.notificaciones_por_correo

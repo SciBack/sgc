@@ -6,7 +6,9 @@ transiciones REALES del workflow de Informe Cumplimiento (M17 fase 2).
 
 Cubre que `run()`:
 - Crea las 2 `Notification` declarativas ("... aprobado" / "... presentado a
-  SUNEDU"), `event="Value Change"` sobre `estado`, canal System, attach_print=0.
+  SUNEDU"), `event="Value Change"` sobre `estado`, canal Email con campana,
+  attach_print=0. Las reglas de los demás DocTypes las prueba
+  `test_notificaciones_transicion.py`.
 - Es idempotente.
 - Dispara DE VERDAD al transicionar el doc vía `.save()` (Borrador -> En
   revisión -> Aprobado -> Presentado a SUNEDU, la cadena real del workflow de
@@ -21,6 +23,8 @@ hace no-op silencioso (ver `frappe.model.document.Document.run_notifications`)
 y el test "pasaría" sin haber probado nada. Por eso el setUp llama a `f15.run()`
 y EXPLÍCITAMENTE apaga el flag después, antes de cualquier `.save()` de prueba.
 """
+from unittest.mock import patch
+
 import frappe
 from frappe.tests import IntegrationTestCase
 
@@ -32,6 +36,10 @@ PREFIJO = "TEST-M17W"
 
 class IntegrationTestNotificacionesWorkflow(IntegrationTestCase):
     def setUp(self):
+        # Las reglas son de correo (#29): lo que se comprueba aquí es la campana,
+        # y un sitio con datos reales (el lab) no debe escribir a nadie.
+        patch("frappe.sendmail").start()
+        self.addCleanup(patch.stopall)
         self._user_prev = frappe.session.user
         frappe.set_user("Administrator")
 
@@ -131,7 +139,7 @@ class IntegrationTestNotificacionesWorkflow(IntegrationTestCase):
             self.assertEqual(n["document_type"], "Informe Cumplimiento")
             self.assertEqual(n["event"], "Value Change")
             self.assertEqual(n["value_changed"], "estado")
-            self.assertEqual(n["channel"], "System Notification")
+            self.assertEqual(n["channel"], "Email")
             self.assertEqual(n["attach_print"], 0)
             self.assertEqual(n["enabled"], 1)
 
