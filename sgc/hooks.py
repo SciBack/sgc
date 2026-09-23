@@ -193,6 +193,14 @@ has_permission = {
 	"Plan Mejora": "sgc.permissions.has_permission",
 }
 
+# DocType Class
+# ---------------
+# Las reglas de notificación respetan el modo de ensayo y la lista blanca de
+# `Configuracion Correo` antes de enviar (#41). Ver sgc/correo.py.
+override_doctype_class = {
+	"Notification": "sgc.correo.NotificacionSGC",
+}
+
 # Document Events
 # ---------------
 # Hook on document methods and events

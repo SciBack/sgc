@@ -1,0 +1,60 @@
+{
+ "actions": [],
+ "creation": "2026-09-22 18:00:00.000000",
+ "description": "Cómo sale el correo de las reglas de notificación: en ensayo (no sale nada) o de verdad, y a quién.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "modo",
+  "lista_blanca",
+  "sec_ayuda",
+  "ayuda"
+ ],
+ "fields": [
+  {
+   "fieldname": "modo",
+   "label": "Modo de envío",
+   "fieldtype": "Select",
+   "options": "Ensayo\nReal",
+   "default": "Ensayo",
+   "reqd": 1,
+   "description": "Ensayo: ninguna regla envía correo; se registra a quién se habría escrito. Real: se envía."
+  },
+  {
+   "fieldname": "lista_blanca",
+   "label": "Lista blanca de estreno",
+   "fieldtype": "Small Text",
+   "description": "Una dirección por línea. Mientras tenga alguna, en modo Real solo se escribe a estas; el resto queda registrado como omitido. Vacía: se escribe a todos los destinatarios."
+  },
+  {
+   "fieldname": "sec_ayuda",
+   "fieldtype": "Section Break",
+   "label": "Cómo se enciende"
+  },
+  {
+   "fieldname": "ayuda",
+   "fieldtype": "HTML",
+   "options": "<ol><li>Con el modo en <b>Ensayo</b>, revisar el <a href=\"/desk/registro-correo\">Registro Correo</a> y pulsar <b>Comprobar destinatarios</b>.</li><li>Poner dos o tres direcciones en la lista blanca y pasar a <b>Real</b>.</li><li>Cuando lo que llega sea lo esperado, vaciar la lista blanca en otro guardado aparte.</li></ol>"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-09-22 18:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "Configuracion Correo",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "read": 1,
+   "write": 1,
+   "role": "System Manager"
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

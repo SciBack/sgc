@@ -7,3 +7,6 @@ sgc.patches.version_documental_a_entero
 
 [post_model_sync]
 # Patches added in this section will be executed after doctypes are migrated
+# #41: el modo de ensayo nace en Ensayo; los sitios que ya enviaban correo lo
+# conservan en Real para que la actualización no corte avisos en silencio.
+sgc.patches.correo_conservar_envio_real

@@ -1,0 +1,95 @@
+{
+ "actions": [],
+ "autoname": "hash",
+ "creation": "2026-09-22 18:00:00.000000",
+ "description": "Correos que una regla de notificación habría enviado y no envió: por estar en ensayo o por quedar fuera de la lista blanca.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "resultado",
+  "destinatario",
+  "tipo",
+  "regla",
+  "asunto",
+  "documento_tipo",
+  "documento"
+ ],
+ "fields": [
+  {
+   "fieldname": "resultado",
+   "label": "Resultado",
+   "fieldtype": "Select",
+   "options": "No enviado (ensayo)\nOmitido (fuera de lista blanca)",
+   "read_only": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "destinatario",
+   "label": "Destinatario",
+   "fieldtype": "Data",
+   "options": "Email",
+   "read_only": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "tipo",
+   "label": "Como",
+   "fieldtype": "Select",
+   "options": "Para\nCC\nCCO",
+   "read_only": 1
+  },
+  {
+   "fieldname": "regla",
+   "label": "Regla",
+   "fieldtype": "Link",
+   "options": "Notification",
+   "read_only": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "asunto",
+   "label": "Asunto",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "documento_tipo",
+   "label": "Tipo de documento",
+   "fieldtype": "Link",
+   "options": "DocType",
+   "read_only": 1
+  },
+  {
+   "fieldname": "documento",
+   "label": "Documento",
+   "fieldtype": "Dynamic Link",
+   "options": "documento_tipo",
+   "read_only": 1
+  }
+ ],
+ "in_create": 1,
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-09-22 18:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "Registro Correo",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "read": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "role": "System Manager"
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "destinatario"
+}
