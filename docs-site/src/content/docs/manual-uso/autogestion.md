@@ -7,7 +7,16 @@ Este manual es para el equipo de calidad. Reúne las operaciones que se hacen al
 sistema vivo —cambiar de sitio un proceso, corregir un código, colgar un documento de otro
 proceso— y que **no requieren llamar a nadie**.
 
-Todo lo que hay aquí se hace desde la interfaz, con los permisos que el rol de calidad ya tiene.
+Todo lo que hay aquí se hace desde la interfaz, con los permisos que el **rol de la oficina de
+calidad** ya tiene: el de escritura sobre procesos, procedimientos, documentos, indicadores y
+evidencias.
+
+:::note[Quién puede usar este manual]
+Hace falta el rol de la oficina de calidad. Una cuenta de **solo lectura** —la que se da, por
+ejemplo, para revisar el sistema durante unas pruebas— ve los documentos pero no el menú para
+renombrar ni los campos editables. Si al abrir un proceso no puede cambiar nada, lo que falta es
+el rol, no un paso de este manual: pídaselo al administrador del sistema.
+:::
 
 ## Antes de empezar: cómo se llaman las cosas
 
@@ -18,8 +27,7 @@ código. No hay un identificador oculto detrás.
 Esto tiene una consecuencia práctica que conviene entender antes de tocar nada: **cambiar el
 código es renombrar el documento**. No es editar una etiqueta.
 
-Esto aplica a procesos, procedimientos, documentos controlados, indicadores, evidencias y
-unidades organizativas.
+Esto aplica a procesos, procedimientos, documentos controlados, indicadores y evidencias.
 
 ## Mover un proceso dentro del mapa
 
@@ -33,7 +41,7 @@ el padre.
 El sistema recoloca la rama entera: los hijos del proceso movido van con él. No hay que tocarlos
 uno a uno.
 
-También existe la **vista de árbol**, que muestra la jerarquía completa y es la forma cómoda de
+También existe la **vista de árbol** (en la lista de procesos, cambiar la vista a *Árbol*), que muestra la jerarquía completa y es la forma cómoda de
 ver dónde está cada cosa antes de moverla.
 
 :::caution[Lo que mover NO cambia]
@@ -88,7 +96,8 @@ anterior como obsoleto, que es justo lo que el ciclo documental está pensado pa
 Cambiar de qué proceso depende un procedimiento, un documento o un indicador:
 
 1. Abrir el documento.
-2. Cambiar el campo de enlace (**Proceso**, **Unidad organizativa**, el que corresponda).
+2. Cambiar el campo de enlace que corresponda: **Proceso** en un procedimiento, un documento o un
+   indicador; **Propietario (área)** en un proceso, para cambiar el área dueña.
 3. Guardar.
 
 El cambio queda registrado en el historial del documento, con quién lo hizo y cuándo. No hace
@@ -105,8 +114,9 @@ dice exactamente cómo estaba antes.
 
 ## Lo que no se hace desde aquí
 
-Hay operaciones que el equipo de calidad **no** debería hacer por su cuenta, no por falta de
-permisos sino porque afectan a cómo funciona el sistema entero:
+Hay operaciones que el rol de calidad **no puede** hacer, y no por descuido: afectan a cómo
+funciona el sistema entero, así que quedan reservadas al administrador. Si una hace falta, se
+pide:
 
 | Operación | Por qué no |
 |---|---|
@@ -115,7 +125,9 @@ permisos sino porque afectan a cómo funciona el sistema entero:
 | Cambiar roles y permisos | Puede dejar a alguien sin poder entrar, y eso no se ve hasta que esa persona lo intenta |
 | Modificar los flujos de aprobación | Altera quién puede aprobar qué |
 
-Para cualquiera de ellas, hablar con el equipo técnico antes.
+Borrar, en particular, no está al alcance del rol de calidad en ningún documento. Lo que ya no
+sirve se retira por su ciclo —un documento pasa a *Obsoleto*, un proceso deja de estar
+*Vigente*— y así conserva su historial, que es lo que una auditoría pide ver.
 
 ## Si algo sale mal
 
