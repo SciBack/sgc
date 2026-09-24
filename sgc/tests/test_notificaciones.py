@@ -55,26 +55,41 @@ class IntegrationTestNotificaciones(IntegrationTestCase):
         `Notification.channel` tiene `set_only_once=1` en Frappe, así que
         reasignarlo sobre un documento ya existente lanza
         `CannotChangeConstantError`. Antes de la corrección, `f7` fallaba en TODOS
-        los `bench migrate` de producción (donde las 4 reglas de vencimiento están
-        en "Email" con SMTP real) y había que aplicar a mano un bypass de 3 pasos
-        después de cada despliegue.
+        los `bench migrate` de producción, donde las reglas tenían otro canal que
+        el declarado. Desde #29 el canónico declara "Email": el caso es ahora un
+        sitio que conserva "System Notification".
         """
         f7.run()
         objetivo = f7.NOTIFICACIONES[0]["name"]
-        frappe.db.set_value("Notification", objetivo, "channel", "Email",
+        frappe.db.set_value("Notification", objetivo, "channel", "System Notification",
                             update_modified=False)
 
         f7.run()  # no debe lanzar
 
         self.assertEqual(
-            frappe.db.get_value("Notification", objetivo, "channel"), "Email")
+            frappe.db.get_value("Notification", objetivo, "channel"), "System Notification")
         # Y los destinatarios se siguen reescribiendo desde el código.
         self.assertTrue(frappe.db.count("Notification Recipient", {"parent": objetivo}))
 
-        # Se restaura para no dejar residuo: `set_value` commitea fuera del
-        # rollback de IntegrationTestCase.
-        frappe.db.set_value("Notification", objetivo, "channel",
-                            "System Notification", update_modified=False)
+        # Se restaura para no dejar residuo: `run()` commitea fuera del rollback
+        # de IntegrationTestCase.
+        frappe.db.set_value("Notification", objetivo, "channel", "Email",
+                            update_modified=False)
+        frappe.db.commit()
+
+    def test_las_reglas_nuevas_nacen_de_correo_con_campana(self):
+        """#29: una regla que no existía se crea en "Email" y con la campana."""
+        f7.run()
+        cfg = dict(f7.NOTIFICACIONES[0], name="SGC - Prueba canal por defecto")
+        try:
+            f7._upsert_notification(cfg)
+            canal, campana = frappe.db.get_value(
+                "Notification", cfg["name"], ["channel", "send_system_notification"])
+            self.assertEqual(canal, "Email")
+            self.assertEqual(campana, 1)
+        finally:
+            frappe.delete_doc("Notification", cfg["name"], force=True, ignore_permissions=True)
+            frappe.db.commit()
 
     def test_cubre_los_cinco_doctypes(self):
         """Hay una regla por cada DocType con alerta declarada en f7."""

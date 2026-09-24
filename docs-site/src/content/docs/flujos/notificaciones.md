@@ -31,6 +31,38 @@ un aviso que nunca llegará y el sistema no fallaría: también lo señala
 Al actualizar, un sitio que ya tenía reglas de correo activas **conserva el envío real** (lo
 fija el parche `correo_conservar_envio_real`), para no cortar en silencio avisos que ya llegan.
 
+## Qué avisa el SGC y a quién
+
+Todas las reglas son de **correo y campana** a la vez: la campana del Desk llega siempre, y el
+correo según el modo de arriba.
+
+**Vencimientos** (el scheduler, una vez al día; cada documento coincide un solo día):
+
+| Documento | Cuándo | A quién |
+|---|---|---|
+| Documento Controlado | 15 días antes de la próxima revisión | quien lo elaboró y DPGC |
+| Evidencia | 15 días antes de que venza | quien la cargó y DPGC |
+| Acción de Mejora | 7 días antes de la fecha de compromiso | su responsable y DPGC |
+| Plan de Mejora | 7 días antes de la fecha de compromiso | su responsable y DPGC |
+| Reunión | al convocarla | los asistentes |
+
+**Transiciones de estado**: un correo por cada cambio real de estado, nunca por guardar sin
+cambiarlo. Va a quien tiene que actuar ahora. Si el documento no nombra a esa persona, va al rol
+que actúa en ese paso (entre paréntesis):
+
+| Documento | Estado al que llega → a quién |
+|---|---|
+| Documento Controlado | En revisión → revisor (DPGC) · Observado → quien lo elaboró (Dueño de Proceso) · Aprobado → aprobador (Autoridad Aprobadora) · Obsoleto → quien lo elaboró |
+| Documento Controlado | **Publicado** → quien lo elaboró, revisó y aprobó, y DPGC, **con el archivo adjunto** |
+| No Conformidad | En análisis / En tratamiento → responsable (Responsable de Calidad de Programa) · En verificación → verificador (DPGC) · Cerrada → responsable |
+| Acción de Mejora | En ejecución → responsable (Responsable de Calidad de Programa) · Ejecutada → verificador (DPGC) · Verificada → responsable |
+| Auditoría | En ejecución / Ejecutada / Cerrada → equipo auditor (Auditor Interno) · Informe emitido → DPGC |
+| Hallazgo de Auditoría | Escalado a NC → DPGC · Abierto / Cerrado → Auditor Interno |
+| Informe de Cumplimiento | Aprobado → Autoridad Aprobadora · Presentado a SUNEDU → DPGC |
+
+Si el envío falla (SMTP caído, cuenta sin configurar), el documento se guarda igual y el fallo
+queda en el registro de errores y en la cola de correo.
+
 ## Pasos y resultados esperados
 
 1. Crea un caso próximo a vencer o una transición notificada. Resultado: queda elegible.
@@ -48,7 +80,10 @@ Verifica permisos de lectura/escritura sobre cada DocType y la autorización del
 
 ## Restricciones
 
-Los workflows tienen send_email_alert deshabilitado en varios casos para evitar correos en cada save; no activarlo como arreglo rápido.
+Los workflows tienen `send_email_alert` deshabilitado: dispara en cualquier guardado con una transición pendiente, no solo en la transición real. Los avisos de transición van por las reglas de arriba; no activarlo como arreglo rápido.
+
+Las reglas se reescriben en cada `bench migrate` desde `f7`/`f15`: un cambio hecho a mano en el Desk (días de antelación, destinatarios, texto) se pierde en la siguiente actualización, y una regla desactivada a mano vuelve a activarse. Solo
+se respeta el canal. Para dejar de escribir a alguien, usar el modo de ensayo o la lista blanca.
 
 ## Casos negativos
 

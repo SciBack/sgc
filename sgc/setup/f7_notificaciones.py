@@ -1,12 +1,18 @@
-"""F7 notificaciones — Reglas de alerta del SGC, sin depender de SMTP.
+"""F7 notificaciones — Reglas de alerta del SGC: por correo y en la campana.
 
 Crea/actualiza (idempotente por nombre) varias `Notification` NATIVAS de Frappe,
-con canal `channel="System Notification"`. Se eligió System Notification a
-propósito: el envío por email exige un Email Account configurado (pendiente de
-la contraseña que dará Alberto/DTI). La notificación de escritorio (campana +
-Notification Log) funciona SIN SMTP y queda lista para conmutar a email cuando
-se configure la cuenta: bastará añadir el Email Account y (si se quiere)
-cambiar el `channel` a "Email", o duplicar la regla con canal Email.
+con canal `Email` y además `send_system_notification=1`: el aviso llega al
+correo y a la campana del Desk. La campana funciona sin SMTP; el correo sale por
+la cuenta de correo del sitio.
+
+**Por qué el canónico puede declarar Email sin escribir a nadie por sorpresa
+(#29).** Todo correo de una `Notification` pasa por `sgc.correo.NotificacionSGC`,
+que obedece a `Configuracion Correo`: un sitio nuevo nace en modo **Ensayo** y
+no envía nada —lo anota en `Registro Correo`— hasta que un administrador lo pasa
+a Real, con o sin lista blanca de estreno (#41). Activar el correo es así una
+decisión de despliegue, no un cambio de código. Hasta #29 el canónico declaraba
+`System Notification` y cada institución pasaba las reglas a Email a mano; al
+hacerlo perdía la campana, porque `send_system_notification` quedaba en 0.
 
 Reglas creadas:
   1. Documento Controlado — `Days Before`, 15 días antes de `fecha_proxima_revision`.
@@ -24,19 +30,20 @@ documento. La regla 5 es distinta: notifica a los asistentes convocados, no a
 DPGC (no es un vencimiento que la oficina de calidad deba vigilar).
 
 Cómo funciona el disparo:
-  - Reglas 1-4 (`Days Before`): el scheduler de Frappe (ya habilitado) corre a
-    diario `frappe.email.doctype.notification...` y dispara la regla sobre los
-    documentos cuyo campo de fecha cae exactamente a `days_in_advance` días de
-    hoy y cumplen el `condition`.
+  - Reglas 1-4 (`Days Before`): el scheduler de Frappe corre a diario
+    `trigger_daily_alerts` y dispara la regla sobre los documentos cuyo campo de
+    fecha cae EXACTAMENTE a `days_in_advance` días de hoy y cumplen el
+    `condition`. Un documento coincide un solo día, así que el aviso sale una
+    vez. Si el scheduler se para, no sale ninguno: lo vigila `sgc.latido` (#42).
   - Regla 5 (`New`): Frappe la dispara sola, dentro del propio request de
     `doc.insert()` (`Document.run_notifications` mapea el hook `after_insert`
     al evento `New`) — no depende del scheduler.
 
+Las reglas de TRANSICIÓN de estado viven en `f15_notificaciones_workflow.py` y
+reutilizan `_upsert_notification`.
+
 Ejecutar (idempotente):
     bench --site <site> execute sgc.setup.f7_notificaciones.run
-
-NOTA: el envío por EMAIL queda pendiente del Email Account (contraseña
-Alberto/DTI). Estas reglas ya notifican en la campana/escritorio sin SMTP.
 """
 import frappe
 
@@ -197,18 +204,23 @@ def _upsert_notification(cfg):
         # adjuntar el PDF a la notificación es una decisión aparte, no algo
         # que un script de setup declarativo deba encender solo.
         "attach_print": cfg.get("attach_print", 0),
+        # Adjuntar un fichero del propio documento (p.ej. el `archivo` de un
+        # Documento Controlado al publicarse). Vacío = nada.
+        "attach_files": cfg.get("attach_files", ""),
+        "from_attach_field": cfg.get("from_attach_field"),
+        # La campana del Desk, además del canal. Sin esto, pasar una regla a
+        # Email la quitaba de la campana (así quedaron las 4 de UPeU en julio).
+        "send_system_notification": cfg.get("send_system_notification", 1),
     }
 
     # `Notification.channel` tiene set_only_once=1 en Frappe: reasignarlo sobre un
     # documento YA existente lanza CannotChangeConstantError. Por eso el canal solo
-    # se fija al CREAR. Al actualizar se respeta el que haya en el sitio, que es
-    # deliberado: el canal es configuración de RUNTIME (en producción las 4 reglas
-    # de vencimiento están en "Email" con SMTP real, mientras el canónico declara
-    # "System Notification" por ser agnóstico). Antes de este cambio, `f7` fallaba
-    # en TODOS los `bench migrate` de producción y había que aplicar a mano un
-    # bypass de 3 pasos después de cada despliegue.
+    # se fija al CREAR, y al actualizar se respeta el que haya en el sitio. Los
+    # sitios anteriores a #29, cuyas reglas nacieron en "System Notification", los
+    # pasa a Email una sola vez el parche `notificaciones_por_correo`. Antes de
+    # respetar el canal, `f7` fallaba en TODOS los `bench migrate` de producción.
     if accion == "creada":
-        campos["channel"] = cfg.get("channel", "System Notification")
+        campos["channel"] = cfg.get("channel", "Email")
 
     n.update(campos)
     # date_changed/days_in_advance solo aplican a reglas basadas en fecha
@@ -222,6 +234,8 @@ def _upsert_notification(cfg):
         n.value_changed = cfg["value_changed"]
 
     # Reescribe los destinatarios desde cero para que el upsert sea determinista.
+    # Cada fila admite `condition` (Python sobre `doc`): así una sola regla de
+    # transición avisa a quien toca según el estado al que se llega.
     n.set("recipients", [])
     for rec in cfg["recipients"]:
         n.append("recipients", rec)
@@ -247,12 +261,10 @@ def run():
             detalle = "{0} {1}d".format(event, cfg["days_in_advance"])
         else:
             detalle = event
-        print("Notification '{0}' {1}  ({2} {3}, canal System)".format(
+        print("Notification '{0}' {1}  ({2} {3})".format(
             cfg["name"], accion, cfg["document_type"], detalle))
 
     frappe.db.commit()
 
     print("F7 notificaciones OK:", len(resultados), "reglas (vencimiento + convocatoria).")
-    print("Envío por EMAIL pendiente del Email Account (SMTP). "
-          "Por ahora notifican en la campana/escritorio sin SMTP.")
     return {"notificaciones": resultados}

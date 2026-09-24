@@ -20,9 +20,8 @@ Orden (por dependencia real, no alfabético):
   4. f4_workflow_mejora      — workflow Plan/Accion de Mejora
   5. f5_workflow_documental  — workflow Documento Controlado
   6. f6_informe_cbc          — Print Format Diagnóstico CBC SUNEDU
-  7. f7_notificaciones       — las 4 Notification de M17 (channel queda en
-                               System Notification; activar Email es config de
-                               runtime, ver arquitectura-sgc.md)
+  7. f7_notificaciones       — Notification de vencimiento y convocatoria (correo
+                               + campana; qué se envía lo decide Configuracion Correo)
   8. f8_workflow_auditoria   — workflows Programa Auditoria / Auditoria
   9. f9_workflow_encuestas   — workflow Aplicacion Instrumento
   10. f10_workflow_revision  — workflow Revision Direccion
@@ -30,10 +29,10 @@ Orden (por dependencia real, no alfabético):
   12. f12_workflow_hallazgo     — workflow Hallazgo (Fase 2)
   13. f13_workflow_evidencia    — workflow Evidencia (Fase 2)
   14. f14_workflow_riesgos      — workflows Riesgo + Tratamiento Riesgo (Fase 2)
-  15. f15_notificaciones_workflow — Notification Value Change en transiciones
+  15. f15_notificaciones_workflow — Notification Value Change en las transiciones
+                               reales de estado (un aviso por transición, #29)
   16. f16_workflow_hallazgo_auditoria — workflow Hallazgo Auditoria (M06)
   17. f17_alcance_marcos — clasifica cada marco (licenciamiento / acreditación)
-                               reales del workflow de Informe Cumplimiento
   18. f18_workspace — workspace nativo del Desk
   19. f19_ficha_pdf — Print Format institucional de la ficha de caracterización
   19. f19_nivel_bpm — puebla `nivel_bpm` (N0/N1/N2) en los Proceso existentes
