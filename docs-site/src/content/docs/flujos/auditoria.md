@@ -33,6 +33,26 @@ Programa aprobado/en ejecución, alcance y equipo asignados. Usa identificadores
 | Informe emitido | Cerrar auditoria | Cerrada | DPGC |
 | Informe emitido | Reabrir | Ejecutada | DPGC |
 
+## Plan de actividades
+
+La tabla **Plan de actividades** desglosa la auditoría: qué se hace, qué día y quién
+(ISO 19011:2018 §6.3.2). Cada responsable recibe **una tarea** en su lista de pendientes, no
+una por actividad, que vence en su próxima actividad pendiente y la nombra.
+
+1. Añade dos actividades del mismo responsable en fechas distintas y guarda. Resultado: una
+   sola tarea suya, con la fecha de la más próxima.
+2. Marca **Realizada** la primera y guarda. Resultado: la tarea pasa a la siguiente;
+   **Realizada por** y **Realizada el** se rellenan solos con tu usuario y la fecha de hoy.
+3. Marca la segunda. Resultado: su tarea queda **cerrada**.
+4. Quita a un responsable del plan. Resultado: su tarea queda **cancelada**, no cerrada.
+5. Cierra la auditoría con alguna actividad sin hacer. Resultado: la tarea de ese responsable
+   se **cancela**. Cerrar no convierte en hecho lo pendiente.
+
+La tarea es un recordatorio: cerrarla desde la lista de pendientes no marca la actividad. Quién
+marca una actividad como realizada lo registra el sistema, y lo que se escriba en esos campos no
+prevalece. Por el workflow, marcarla corresponde a quien puede editar la auditoría en ese estado
+(Auditor Interno; DPGC una vez cerrada), no al responsable de la actividad.
+
 ## Permisos
 
 El actor necesita DocPerm sobre el DocType y el rol exacto de la transición. Las transiciones de control sin autoaprobación deben probarse con una cuenta distinta de quien creó el registro.
@@ -62,5 +82,5 @@ El correo y las tareas periódicas requieren scheduler/servidor de correo config
 
 ## Fuente en código
 
-La definición canónica está registrada en el manifiesto de cobertura y en sgc/setup. No se documentan estados adicionales a los definidos por el workflow actual.
+La definición canónica está registrada en el manifiesto de cobertura y en sgc/setup. El plan de actividades y sus tareas, en `sgc_auditoria/doctype/auditoria/auditoria.py` y `sgc/tareas.py`. No se documentan estados adicionales a los definidos por el workflow actual.
 

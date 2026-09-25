@@ -50,21 +50,31 @@ def tareas_abiertas(doctype, name):
 
 
 def sincronizar(doc, responsable, fecha, descripcion, abierta):
-	"""Deja las tareas de `doc` como deben estar. Se puede llamar en cada guardado.
+	"""Un documento con UN responsable. Se puede llamar en cada guardado.
 
 	- `abierta` y con responsable: una tarea abierta suya, con `fecha` como
 	  vencimiento. Si cambió el responsable, la del anterior se **cancela** (no la
 	  terminó él: dejó de ser suya).
 	- no `abierta`: sus tareas abiertas se **cierran** — el trabajo se hizo.
 	"""
+	pendientes = {responsable: (fecha, descripcion)} if abierta and responsable else {}
+	sincronizar_por_responsable(doc, pendientes, terminados=None if not abierta else ())
+
+
+def sincronizar_por_responsable(doc, pendientes, terminados=()):
+	"""Un documento con VARIOS responsables: una tarea abierta por persona.
+
+	`pendientes`: {usuario: (fecha, descripcion)} de quienes tienen trabajo por
+	hacer. Las tareas abiertas de quien ya no está ahí se **cierran** si está en
+	`terminados` —hizo su parte— y se **cancelan** si no —dejó de ser suya—.
+	`terminados=None` significa todos: el documento entero se dio por hecho.
+	"""
 	actuales = tareas_abiertas(doc.doctype, doc.name)
 
 	for tarea in actuales:
-		if not abierta:
-			_cambiar_estado(doc, tarea, CERRADA)
-		elif tarea.allocated_to != responsable:
-			_cambiar_estado(doc, tarea, CANCELADA)
-		else:
+		usuario = tarea.allocated_to
+		if usuario in pendientes:
+			fecha, descripcion = pendientes[usuario]
 			cambios = {}
 			if str(tarea.date or "") != str(fecha or ""):
 				cambios["date"] = fecha
@@ -72,9 +82,15 @@ def sincronizar(doc, responsable, fecha, descripcion, abierta):
 				cambios["description"] = descripcion
 			if cambios:
 				frappe.db.set_value("ToDo", tarea.name, cambios)
+		elif terminados is None or usuario in terminados:
+			_cambiar_estado(doc, tarea, CERRADA)
+		else:
+			_cambiar_estado(doc, tarea, CANCELADA)
 
-	if abierta and responsable and not any(t.allocated_to == responsable for t in actuales):
-		_crear(doc, responsable, fecha, descripcion)
+	con_tarea = {t.allocated_to for t in actuales}
+	for usuario, (fecha, descripcion) in pendientes.items():
+		if usuario and usuario not in con_tarea:
+			_crear(doc, usuario, fecha, descripcion)
 
 
 def _cambiar_estado(doc, tarea, estado):

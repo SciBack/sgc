@@ -81,6 +81,9 @@ ejecución*:
 - Al crearla, el responsable recibe el aviso de asignación (campana, y correo según el modo).
   No lo recibe si se asignó a sí mismo.
 
+Las **actividades de una auditoría** hacen lo mismo, con una tarea por responsable que vence en
+su próxima actividad pendiente (ver *Auditoría → Plan de actividades*).
+
 La tarea es un recordatorio, **no el registro**: cerrarla desde la lista de pendientes no mueve
 la acción, y la evidencia y la verificación siguen viviendo en la acción. La tarea no comparte el
 documento: si el responsable no puede abrirlo con sus roles, el sistema lo avisa al guardar.
