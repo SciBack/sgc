@@ -11,14 +11,24 @@ Contra lo primero, dos interruptores en `Configuracion Correo`: el **modo**
 (Ensayo / Real) y la **lista blanca de estreno**. Contra lo segundo,
 `comprobar_destinatarios`, que dice cuántas personas alcanza cada regla.
 
-**Dónde se intercepta.** Las `Notification` son el único canal de correo del
-SGC: los workflows tienen `send_email_alert=0` y el código no llama a
-`sendmail`. `Notification.send_an_email` resuelve los destinatarios con
-`get_list_of_recipients` y, si queda alguno, envía; si no queda ninguno, sale
-sin enviar ni crear la Communication (frappe/email/doctype/notification/
-notification.py:496-507). Por eso basta con filtrar ahí —solo durante el envío
-de correo, nunca para la campana del Desk—: lo que se quita no se envía, y lo
-que se quita se anota en `Registro Correo`.
+**Dónde se intercepta.** Hay dos caminos de correo, y los dos pasan por aquí:
+
+1. Las **reglas** (`Notification`). Los workflows tienen `send_email_alert=0` y
+   el código no llama a `sendmail`. `Notification.send_an_email` resuelve los
+   destinatarios con `get_list_of_recipients` y, si queda alguno, envía; si no
+   queda ninguno, sale sin enviar ni crear la Communication
+   (frappe/email/doctype/notification/notification.py:496-507). Por eso basta
+   con filtrar ahí —solo durante el envío de correo, nunca para la campana del
+   Desk—.
+2. La **campana** (`Notification Log`). Cada aviso del Desk manda además su
+   propio correo con `frappe.sendmail` si el tipo lo tiene activado
+   (notification_log.py:64): asignaciones, menciones, documentos compartidos.
+   Los de las reglas (tipo `Alert`) no, porque Frappe los excluye
+   (`notification_skip_email_types`). Hasta #35 nadie asignaba tareas de
+   forma automática y este camino no se usaba; desde que la acción de mejora
+   asigna la suya al responsable, sí. Lo filtra `AvisoDeskSGC`.
+
+Lo que se quita no se envía, y se anota en `Registro Correo`.
 
 **Sin configurar, el modo es Ensayo.** Un sitio nuevo no escribe a nadie hasta
 que un administrador lo decide. Los sitios que ya enviaban antes de esta versión
@@ -28,7 +38,15 @@ conservan el envío real: lo fija el parche `correo_conservar_envio_real`.
 import re
 
 import frappe
+from frappe.desk.doctype.notification_log.notification_log import (
+	NotificationLog,
+	set_notifications_as_unseen,
+)
+from frappe.desk.doctype.notification_settings.notification_settings import (
+	is_email_notifications_enabled_for_type,
+)
 from frappe.email.doctype.notification.notification import Notification
+from frappe.utils import strip_html
 
 ENSAYO = "Ensayo"
 REAL = "Real"
@@ -140,18 +158,55 @@ def _asunto(regla, context):
 def _registrar(regla, doc, context, registros):
 	asunto = _asunto(regla, context)
 	for correo, tipo, resultado in registros:
-		frappe.get_doc(
-			{
-				"doctype": "Registro Correo",
-				"resultado": resultado,
-				"destinatario": correo,
-				"tipo": tipo,
-				"regla": regla.name,
-				"asunto": asunto,
-				"documento_tipo": doc.doctype,
-				"documento": doc.name,
-			}
-		).insert(ignore_permissions=True)
+		_anotar(correo, tipo, resultado, asunto, doc.doctype, doc.name, regla=regla.name)
+
+
+def _anotar(correo, tipo, resultado, asunto, documento_tipo, documento, regla=None, aviso=None):
+	frappe.get_doc(
+		{
+			"doctype": "Registro Correo",
+			"resultado": resultado,
+			"destinatario": correo,
+			"tipo": tipo,
+			"regla": regla,
+			"aviso": aviso,
+			"asunto": asunto,
+			"documento_tipo": documento_tipo,
+			"documento": documento,
+		}
+	).insert(ignore_permissions=True)
+
+
+class AvisoDeskSGC(NotificationLog):
+	"""`Notification Log` cuyo correo respeta el modo de ensayo y la lista blanca.
+
+	Se registra en `override_doctype_class`. La campana se crea siempre: lo que
+	se filtra es solo el correo que la acompaña. Si el tipo de aviso no manda
+	correo (`Alert`, o el usuario lo desactivó), no hay nada que decidir y no se
+	anota nada: `Registro Correo` es de correos que habrían salido.
+
+	El camino sin correo repite las dos líneas de `NotificationLog.after_insert`
+	que no son el envío (notification_log.py:62-63). Si Frappe cambia ese
+	método, esta copia se queda atrás sin avisar: lo vigila
+	`test_correo.test_el_aviso_del_desk_sigue_el_after_insert_de_frappe`.
+	"""
+
+	def after_insert(self):
+		if not is_email_notifications_enabled_for_type(self.for_user, self.type):
+			return super().after_insert()
+
+		correo = frappe.db.get_value("User", self.for_user, "email")
+		a_enviar, registros = decidir({"Para": [correo]}, modo(), lista_blanca())
+		if a_enviar["Para"]:
+			return super().after_insert()
+
+		asunto = strip_html(self.subject or "")
+		for destinatario, tipo, resultado in registros:
+			_anotar(
+				destinatario, tipo, resultado, asunto, self.document_type, self.document_name, aviso=self.type
+			)
+		frappe.publish_realtime("notification", after_commit=True, user=self.for_user)
+		set_notifications_as_unseen(self.for_user)
 
 
 # --- comprobación previa de destinatarios -------------------------------------

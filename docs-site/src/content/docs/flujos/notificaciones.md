@@ -31,6 +31,12 @@ un aviso que nunca llegará y el sistema no fallaría: también lo señala
 Al actualizar, un sitio que ya tenía reglas de correo activas **conserva el envío real** (lo
 fija el parche `correo_conservar_envio_real`), para no cortar en silencio avisos que ya llegan.
 
+El modo y la lista blanca valen también para el **correo que acompaña a la campana del Desk**:
+asignaciones de tareas, menciones y documentos compartidos. Frappe lo manda por su cuenta,
+fuera de las reglas; el SGC lo pasa por el mismo filtro, y lo retenido queda en Registro Correo
+con la columna **Aviso del Desk** (`Assignment`, `Mention`…) en lugar de la regla. La campana
+llega siempre.
+
 ## Qué avisa el SGC y a quién
 
 Todas las reglas son de **correo y campana** a la vez: la campana del Desk llega siempre, y el
@@ -62,6 +68,22 @@ que actúa en ese paso (entre paréntesis):
 
 Si el envío falla (SMTP caído, cuenta sin configurar), el documento se guarda igual y el fallo
 queda en el registro de errores y en la cola de correo.
+
+## Tareas en la lista de pendientes
+
+Una **Acción de Mejora** con responsable le deja una tarea (el `ToDo` de Frappe) en su lista de
+pendientes, con la fecha de compromiso como vencimiento, mientras está *Planificada* o *En
+ejecución*:
+
+- Cambiar la fecha de compromiso mueve el vencimiento de la tarea.
+- Cambiar el responsable **cancela** la tarea del anterior y crea la del nuevo.
+- Pasar a *Ejecutada* **cierra** la tarea. *Reabrir* la devuelve.
+- Al crearla, el responsable recibe el aviso de asignación (campana, y correo según el modo).
+  No lo recibe si se asignó a sí mismo.
+
+La tarea es un recordatorio, **no el registro**: cerrarla desde la lista de pendientes no mueve
+la acción, y la evidencia y la verificación siguen viviendo en la acción. La tarea no comparte el
+documento: si el responsable no puede abrirlo con sus roles, el sistema lo avisa al guardar.
 
 ## Pasos y resultados esperados
 
@@ -106,5 +128,5 @@ SMTP, workers y scheduler son obligatorios; usar buzones de prueba.
 
 ## Fuente en código
 
-sgc/setup/f7_notificaciones.py, f15_notificaciones_workflow.py y sgc/correo.py (ensayo, lista blanca y comprobación de destinatarios). El comportamiento descrito debe revisarse de nuevo si estas fuentes cambian.
+sgc/setup/f7_notificaciones.py, f15_notificaciones_workflow.py, sgc/correo.py (ensayo, lista blanca, correo de la campana y comprobación de destinatarios) y sgc/tareas.py (tareas del responsable). El comportamiento descrito debe revisarse de nuevo si estas fuentes cambian.
 
