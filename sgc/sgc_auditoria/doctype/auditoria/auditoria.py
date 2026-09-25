@@ -22,11 +22,18 @@ Y una que no depende del estado: el responsable del proceso auditado no puede
 estar en el equipo auditor (`_validar_independencia_real`). El Check
 `independiente_del_area` lo marca el propio interesado, así que por sí solo no
 prueba nada.
+
+Plan de actividades (#35): cada actividad con responsable le deja a esa persona
+una tarea en su lista de pendientes (`sgc/tareas.py`), una por persona y no por
+actividad, con la próxima actividad pendiente como vencimiento. Quién marcó una
+actividad como realizada lo sella el sistema (`_sellar_actividades`).
 """
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from frappe.utils import nowdate
+from frappe.utils import formatdate, getdate, nowdate
+
+from sgc import tareas
 
 # Orden del ciclo de vida (coincide con el Workflow "Auditoria SGC").
 ORDEN = {
@@ -42,6 +49,68 @@ class Auditoria(Document):
     def validate(self):
         self._validar_requisitos_por_estado()
         self._validar_independencia_real()
+        self._sellar_actividades()
+
+    def on_update(self):
+        self._sincronizar_tareas()
+
+    # ------------------------------------------------ plan de actividades (#35)
+    def _sellar_actividades(self):
+        """Marcar una actividad como realizada ES el acto: lo firma quien lo hace.
+
+        `realizada_por` y `realizada_el` son read_only y los pone el sistema al
+        pasar la casilla de 0 a 1. Mientras sigue marcada se conserva lo sellado,
+        no lo que alguien teclee por API; al desmarcarla se borra, porque la
+        actividad vuelve a estar pendiente.
+        """
+        anterior = self.get_doc_before_save()
+        previas = {f.name: f for f in (anterior.actividades if anterior else [])}
+        for fila in self.actividades:
+            antes = previas.get(fila.name)
+            if not fila.realizada:
+                fila.realizada_por = None
+                fila.realizada_el = None
+            elif antes and antes.realizada:
+                fila.realizada_por = antes.realizada_por
+                fila.realizada_el = antes.realizada_el
+            else:
+                fila.realizada_por = frappe.session.user
+                fila.realizada_el = nowdate()
+
+    def _sincronizar_tareas(self):
+        """Una tarea por responsable con actividades pendientes.
+
+        Vence en la próxima de sus actividades pendientes. Cuando las ha hecho
+        todas, su tarea se cierra; si deja de tener actividades, se cancela. Al
+        cerrar la auditoría no queda nada pendiente: lo que alguien no llegó a
+        hacer se cancela, no se da por hecho.
+        """
+        cerrada = self.estado == "Cerrada"
+        por_usuario = {}
+        for fila in self.actividades:
+            if fila.responsable:
+                por_usuario.setdefault(fila.responsable, []).append(fila)
+
+        pendientes = {}
+        terminados = set()
+        for usuario, filas in por_usuario.items():
+            abiertas = sorted((f for f in filas if not f.realizada), key=lambda f: getdate(f.fecha))
+            if not abiertas:
+                terminados.add(usuario)
+            elif not cerrada:
+                pendientes[usuario] = (abiertas[0].fecha, self._descripcion_tarea(abiertas))
+
+        tareas.sincronizar_por_responsable(self, pendientes, terminados)
+
+    def _descripcion_tarea(self, abiertas):
+        proxima = abiertas[0]
+        return _("Auditoría {0} ({1}): {2} actividad(es) pendiente(s). Próxima, {3}: {4}").format(
+            self.name,
+            self.titulo,
+            len(abiertas),
+            formatdate(proxima.fecha),
+            (proxima.actividad or "").strip()[:200],
+        )
 
     # ------------------------------------------------------------ validaciones
     def _validar_requisitos_por_estado(self):

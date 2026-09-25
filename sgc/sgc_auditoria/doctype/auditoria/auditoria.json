@@ -21,6 +21,7 @@
   "fecha_plan",
   "fecha_inicio",
   "fecha_fin",
+  "actividades",
   "estado",
   "informe"
  ],
@@ -112,6 +113,13 @@
    "label": "Fecha de fin"
   },
   {
+   "fieldname": "actividades",
+   "fieldtype": "Table",
+   "label": "Plan de actividades",
+   "options": "Actividad Auditoria",
+   "description": "Qu\u00e9 se hace cada d\u00eda y qui\u00e9n. Cada responsable recibe una tarea en su lista de pendientes con la pr\u00f3xima actividad; se cierra cuando todas las suyas est\u00e1n realizadas."
+  },
+  {
    "default": "Planificada",
    "fieldname": "estado",
    "fieldtype": "Select",
@@ -130,7 +138,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-04 17:29:32.606433",
+ "modified": "2026-09-24 20:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Auditoria",
  "name": "Auditoria",
