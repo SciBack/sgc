@@ -4,7 +4,9 @@
 import frappe
 from frappe import _
 from frappe.model.document import Document
+from frappe.utils import strip_html
 
+from sgc import tareas
 from sgc.naming import codigo_anual
 
 # Avance implícito por estado: los estados terminales fijan el %. En "En ejecucion"
@@ -18,6 +20,11 @@ ESTADO_AVANCE = {
 # Los dos estados que registran una revisión de eficacia (ISO 9001 §10.2.1 e):
 # entrar en cualquiera de ellos ES el acto de verificar, lo haga quien lo haga.
 VERIFICACIONES = ("Verificada eficaz", "Verificada no eficaz")
+
+# Estados en los que el trabajo está en manos del responsable (#35). En
+# «Ejecutada» ya lo entregó y queda la verificación de la DPGC; «Verificada no
+# eficaz» espera a que alguien la reabra, y al reabrirla vuelve la tarea.
+CON_TAREA = ("Planificada", "En ejecucion")
 
 
 class AccionMejora(Document):
@@ -137,6 +144,24 @@ class AccionMejora(Document):
 
     def on_update(self):
         self._recalcular_plan()
+        self._sincronizar_tarea()
+
+    def _sincronizar_tarea(self):
+        """La tarea del responsable en su lista de pendientes (#35).
+
+        Es el recordatorio, no el registro: el estado, la evidencia y quién
+        verificó siguen viviendo aquí. Ver `sgc/tareas.py`.
+        """
+        descripcion = _("Acción de mejora {0}: {1}").format(
+            self.codigo or self.name, strip_html(self.descripcion or "").strip()[:200]
+        )
+        tareas.sincronizar(
+            self,
+            responsable=self.responsable,
+            fecha=self.fecha_compromiso,
+            descripcion=descripcion,
+            abierta=self.estado in CON_TAREA,
+        )
 
     def on_trash(self):
         # on_trash corre ANTES del delete físico: hay que excluir esta acción del

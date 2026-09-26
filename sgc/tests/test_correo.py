@@ -223,3 +223,98 @@ class IntegrationTestCorreo(IntegrationTestCase):
         correo_conservar_envio_real.execute()
 
         self.assertEqual(correo.modo(), "Ensayo")
+
+    # --- el correo de la campana (#35) ----------------------------------------
+
+    def _aviso_desk(self, tipo="Assignment"):
+        with patch("frappe.desk.doctype.notification_log.notification_log.frappe.sendmail") as sendmail:
+            aviso = frappe.get_doc(
+                {
+                    "doctype": "Notification Log",
+                    "for_user": USUARIO,
+                    "from_user": "Administrator",
+                    "type": tipo,
+                    "subject": "Administrator te asignó una <b>tarea</b>",
+                    "document_type": "ToDo",
+                    "document_name": self.todo.name,
+                }
+            ).insert(ignore_permissions=True)
+        return aviso, sendmail
+
+    def _registros_desk(self):
+        return frappe.get_all(
+            "Registro Correo",
+            filters={"aviso": ["is", "set"], "documento": self.todo.name},
+            fields=["destinatario", "resultado", "aviso", "asunto", "regla"],
+        )
+
+    def test_el_aviso_del_desk_usa_la_clase_del_sgc(self):
+        aviso, _ = self._aviso_desk()
+        self.assertIsInstance(aviso, correo.AvisoDeskSGC)
+
+    def test_en_ensayo_el_aviso_del_desk_no_manda_correo_y_queda_registrado(self):
+        self._configurar("Ensayo")
+
+        aviso, sendmail = self._aviso_desk()
+
+        sendmail.assert_not_called()
+        self.assertTrue(frappe.db.exists("Notification Log", aviso.name), "la campana se crea igual")
+        registros = self._registros_desk()
+        self.assertEqual(len(registros), 1)
+        self.assertEqual(registros[0].destinatario, USUARIO)
+        self.assertEqual(registros[0].resultado, correo.NO_ENVIADO)
+        self.assertEqual(registros[0].aviso, "Assignment")
+        self.assertIsNone(registros[0].regla)
+        self.assertEqual(registros[0].asunto, "Administrator te asignó una tarea")
+
+    def test_fuera_de_la_lista_blanca_el_aviso_del_desk_se_omite(self):
+        self._configurar("Real", "otra-persona@example.com")
+
+        _, sendmail = self._aviso_desk()
+
+        sendmail.assert_not_called()
+        self.assertEqual([r.resultado for r in self._registros_desk()], [correo.OMITIDO])
+
+    def test_en_la_lista_blanca_el_aviso_del_desk_sale(self):
+        self._configurar("Real", USUARIO)
+
+        _, sendmail = self._aviso_desk()
+
+        sendmail.assert_called_once()
+        self.assertEqual(sendmail.call_args.kwargs["recipients"], USUARIO)
+        self.assertEqual(self._registros_desk(), [])
+
+    def test_un_aviso_que_no_manda_correo_no_se_registra(self):
+        """`Alert` es la campana de las reglas: Frappe nunca le añade correo, así
+        que no hay nada retenido que anotar."""
+        self._configurar("Ensayo")
+
+        _, sendmail = self._aviso_desk(tipo="Alert")
+
+        sendmail.assert_not_called()
+        self.assertEqual(self._registros_desk(), [])
+
+    def test_el_aviso_del_desk_sigue_el_after_insert_de_frappe(self):
+        """`AvisoDeskSGC` repite las líneas de `NotificationLog.after_insert` que no
+        son el envío. Si Frappe cambia ese método, esta prueba lo dice."""
+        import inspect
+
+        from frappe.desk.doctype.notification_log.notification_log import NotificationLog
+
+        cuerpo = [
+            linea.strip()
+            for linea in inspect.getsource(NotificationLog.after_insert).splitlines()[1:]
+            if linea.strip()
+        ]
+        self.assertEqual(
+            cuerpo,
+            [
+                'frappe.publish_realtime("notification", after_commit=True, user=self.for_user)',
+                "set_notifications_as_unseen(self.for_user)",
+                "if is_email_notifications_enabled_for_type(self.for_user, self.type):",
+                "try:",
+                "send_notification_email(self)",
+                "except frappe.OutgoingEmailError:",
+                'self.log_error(_("Failed to send notification email"))',
+            ],
+        )

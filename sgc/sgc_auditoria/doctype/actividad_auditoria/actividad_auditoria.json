@@ -1,0 +1,76 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "creation": "2026-09-24 20:00:00.000000",
+ "description": "Una actividad del plan de la auditoría (ISO 19011:2018 §6.3.2): qué se hace, cuándo y quién. Su responsable la tiene en su lista de pendientes hasta que se marca realizada.",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "fecha",
+  "actividad",
+  "responsable",
+  "realizada",
+  "realizada_por",
+  "realizada_el"
+ ],
+ "fields": [
+  {
+   "fieldname": "fecha",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Fecha",
+   "reqd": 1
+  },
+  {
+   "fieldname": "actividad",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Actividad",
+   "reqd": 1
+  },
+  {
+   "fieldname": "responsable",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Responsable",
+   "options": "User"
+  },
+  {
+   "default": "0",
+   "fieldname": "realizada",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Realizada"
+  },
+  {
+   "description": "Lo pone el sistema al marcarla realizada: quién lo hizo.",
+   "fieldname": "realizada_por",
+   "fieldtype": "Link",
+   "label": "Realizada por",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "description": "Lo pone el sistema al marcarla realizada.",
+   "fieldname": "realizada_el",
+   "fieldtype": "Date",
+   "label": "Realizada el",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 0,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-09-24 20:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Auditoria",
+ "name": "Actividad Auditoria",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -2,7 +2,7 @@
  "actions": [],
  "autoname": "hash",
  "creation": "2026-09-22 18:00:00.000000",
- "description": "Correos que una regla de notificación habría enviado y no envió: por estar en ensayo o por quedar fuera de la lista blanca.",
+ "description": "Correos que el sistema habría enviado y no envió —de una regla de notificación o de un aviso del Desk—: por estar en ensayo o por quedar fuera de la lista blanca.",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -10,6 +10,7 @@
   "destinatario",
   "tipo",
   "regla",
+  "aviso",
   "asunto",
   "documento_tipo",
   "documento"
@@ -50,6 +51,15 @@
    "in_standard_filter": 1
   },
   {
+   "fieldname": "aviso",
+   "label": "Aviso del Desk",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "description": "Tipo de aviso de la campana (Assignment, Mention, Share…) cuando el correo no venía de una regla."
+  },
+  {
    "fieldname": "asunto",
    "label": "Asunto",
    "fieldtype": "Small Text",
@@ -73,7 +83,7 @@
  "in_create": 1,
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-09-22 18:00:00.000000",
+ "modified": "2026-09-24 19:30:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "Registro Correo",

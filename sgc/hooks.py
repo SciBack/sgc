@@ -196,9 +196,11 @@ has_permission = {
 # DocType Class
 # ---------------
 # Las reglas de notificación respetan el modo de ensayo y la lista blanca de
-# `Configuracion Correo` antes de enviar (#41). Ver sgc/correo.py.
+# `Configuracion Correo` antes de enviar (#41), y el correo que acompaña a la
+# campana del Desk también (#35: las tareas asignadas lo usan). Ver sgc/correo.py.
 override_doctype_class = {
 	"Notification": "sgc.correo.NotificacionSGC",
+	"Notification Log": "sgc.correo.AvisoDeskSGC",
 }
 
 # Document Events
