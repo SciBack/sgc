@@ -41,6 +41,10 @@ No inventar agregaciones no implementadas; validar unidad, periodo y ámbito.
 
 Estado o valores antes/después, identificador ficticio, rol, URL/método, respuesta y logs correlacionables sin cookies, tokens ni datos personales.
 
+## Aviso de la próxima medición
+
+La ficha del indicador tiene **Próxima medición** y **Días de aviso** (7 por defecto). Ese número de días antes, el responsable recibe un correo. Al registrar un valor, la próxima medición avanza un periodo según la frecuencia (mensual, trimestral, semestral o anual); para «por promoción» se fija a mano.
+
 ## Relación con otros módulos
 
 Procesos, revisión por dirección y gobierno.

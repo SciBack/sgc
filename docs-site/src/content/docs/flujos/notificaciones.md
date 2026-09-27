@@ -51,6 +51,14 @@ correo según el modo de arriba.
 | Acción de Mejora | 7 días antes de la fecha de compromiso | su responsable y DPGC |
 | Plan de Mejora | 7 días antes de la fecha de compromiso | su responsable y DPGC |
 | Reunión | al convocarla | los asistentes |
+| Ficha de indicador | los *días de aviso* antes de la próxima medición (7 por defecto) | el responsable del indicador |
+
+La próxima medición de un indicador avanza sola un periodo (según su frecuencia) cada vez que se registra un valor, también cuando llega por la ingesta del almacén de datos; nunca retrocede.
+
+**Envíos a demanda**, que pasan por el mismo modo de ensayo y lista blanca que las reglas:
+
+- **Enviar por correo** un documento controlado o una ficha de caracterización **publicados**, a usuarios o a cualquier dirección. Ver la página de cada flujo.
+- **Comunicados** de nuevas funcionalidades y de mantenimientos programados, a los usuarios de los roles elegidos. Ver *Comunicado*.
 
 **Transiciones de estado**: un correo por cada cambio real de estado, nunca por guardar sin
 cambiarlo. Va a quien tiene que actuar ahora. Si el documento no nombra a esa persona, va al rol
