@@ -197,6 +197,16 @@ _ROWS = {
         DPROC: "r", DATA: "r", AUDI: "cr", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
     },
 
+    # --- Salida No Conforme (#33, ISO 9001 §8.7): la entrega concreta que
+    #     salió mal. La detecta cualquiera que la vea (auditor, comité,
+    #     coordinación); la tratan el dueño del proceso y la calidad del
+    #     programa; la verifica y cierra la DPGC. Las separaciones de funciones
+    #     las impone el controlador, no esta matriz. ---
+    "Salida No Conforme": {
+        DPGC: "crw", ANAL: "crw", CFAC: "cr", RPRO: "crw", MIEM: "cr",
+        DPROC: "crw", DATA: "r", AUDI: "cr", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
+
     # --- Proceso (tree, mapa E/C/S) — Dueño de Proceso mantiene su ficha;
     #     DPGC gobierna el mapa; SysAdmin sincroniza el Mapa v8.0 cuando llegue. ---
     "Proceso": {

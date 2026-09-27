@@ -38,6 +38,8 @@ Orden (por dependencia real, no alfabético):
   19. f19_nivel_bpm — puebla `nivel_bpm` (N0/N1/N2) en los Proceso existentes
   20. f20_categoria_indicador — recoloca los Indicador que dicen acreditar sin marco que lo respalde
   21. f21_dashboards — cuadros de mando nativos (sin Heatmap: ignora permisos)
+  22. f22_programa_pdf — Print Format del plan anual de auditoría (#66)
+  23. f23_workflow_salida_no_conforme — workflow Salida No Conforme (ISO 9001 §8.7, #33)
 
 Ejecutar manualmente:
     bench --site <site> execute sgc.setup.f_deploy_run_all.run
@@ -79,6 +81,7 @@ from sgc.setup import (
     f20_categoria_indicador,
     f21_dashboards,
     f22_programa_pdf,
+    f23_workflow_salida_no_conforme,
 )
 
 STEPS = [
@@ -106,6 +109,7 @@ STEPS = [
     ("f20_categoria_indicador", f20_categoria_indicador),
     ("f21_dashboards", f21_dashboards),
     ("f22_programa_pdf", f22_programa_pdf),
+    ("f23_workflow_salida_no_conforme", f23_workflow_salida_no_conforme),
 ]
 
 
