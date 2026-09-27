@@ -15,6 +15,8 @@ Cuenta administrativa no usada como actor funcional y respaldo previo a cambios.
 
 Gestionar usuarios, roles, permisos, configuración e importaciones técnicas; mantener estructura donde la matriz lo habilita.
 
+También activa el canal de soporte en **Configuración de soporte** (helpdesk de destino y alternativa por correo): hasta entonces nadie ve **Reportar un problema**. Ver [Reportar un problema](../../flujos/soporte/).
+
 ## Restricciones que deben probarse
 
 No sustituye roles funcionales en decisiones de calidad; varios DocTypes se mantienen deliberadamente en lectura para el administrador.
