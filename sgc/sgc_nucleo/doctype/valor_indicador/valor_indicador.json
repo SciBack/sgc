@@ -14,6 +14,10 @@
   "unidad_organica",
   "valor_num",
   "semaforo",
+  "sec_analisis",
+  "analisis",
+  "analizado_por",
+  "fecha_analisis",
   "valor_texto",
   "calculado",
   "fuente",
@@ -171,12 +175,36 @@
    "read_only": 1,
    "in_list_view": 1,
    "description": "Calculado al guardar contra la meta de la ficha. Vacío si el indicador no tiene meta declarada: no se inventa un color."
+  },
+  {
+   "fieldname": "sec_analisis",
+   "fieldtype": "Section Break",
+   "label": "Análisis del periodo"
+  },
+  {
+   "fieldname": "analisis",
+   "fieldtype": "Text",
+   "label": "Análisis",
+   "description": "Qué explica el resultado de este periodo y qué se hará. Se puede escribir aunque la medición venga de la ingesta."
+  },
+  {
+   "fieldname": "analizado_por",
+   "fieldtype": "Link",
+   "label": "Analizado por",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "fecha_analisis",
+   "fieldtype": "Datetime",
+   "label": "Fecha del análisis",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-04 17:29:32.143763",
+ "modified": "2026-09-27 18:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "Valor Indicador",

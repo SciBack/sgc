@@ -168,6 +168,26 @@ NOTIFICACIONES = [
         ],
     },
     {
+        # El día después de la fecha prevista sin medición nueva: al registrar un
+        # valor, `proxima_medicion` avanza un periodo (#92), así que si la fecha
+        # sigue ahí es que la medición no llegó. Incumplimiento de fecha.
+        "name": "SGC - Medicion de indicador vencida",
+        "document_type": "Ficha Indicador",
+        "event": "Days After",
+        "date_changed": "proxima_medicion",
+        "days_in_advance": 1,
+        "subject": "Medición vencida: {{ doc.indicador or doc.name }} (prevista el {{ doc.proxima_medicion }})",
+        "message": (
+            "<p>La medición del indicador <b>{{ doc.indicador or doc.name }}</b> estaba prevista "
+            "para el <b>{{ doc.proxima_medicion }}</b> y no se ha registrado.</p>"
+            "<p>Registre el valor del periodo o explique el retraso.</p>"
+        ),
+        "recipients": [
+            {"receiver_by_document_field": "responsable"},
+            {"receiver_by_role": ROL_VIGILANCIA},
+        ],
+    },
+    {
         "name": "SGC - Convocatoria de reunion",
         "document_type": "Reunion",
         # A diferencia de las 4 reglas anteriores, esta no es por vencimiento:

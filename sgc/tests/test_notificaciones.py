@@ -30,8 +30,8 @@ class IntegrationTestNotificaciones(IntegrationTestCase):
             fields=["name", "document_type", "event", "date_changed", "channel", "enabled"],
         )
 
-    def test_run_crea_las_seis_reglas(self):
-        """run() deja 6 Notification 'SGC …' activas.
+    def test_run_crea_las_siete_reglas(self):
+        """run() deja 7 Notification 'SGC …' activas.
 
         NO se asserta el canal: `run()` solo lo fija al CREAR y respeta el que
         exista al actualizar (ver `test_run_respeta_el_canal_configurado`). El
@@ -39,10 +39,10 @@ class IntegrationTestNotificaciones(IntegrationTestCase):
         """
         f7.run()
         notifs = self._sgc_notifs()
-        self.assertEqual(len(notifs), 6)
+        self.assertEqual(len(notifs), 7)
         for n in notifs:
             self.assertEqual(n["enabled"], 1)
-            if n["event"] == "Days Before":
+            if n["event"] in ("Days Before", "Days After"):
                 self.assertTrue(n["date_changed"])  # el campo fecha a vigilar
             else:
                 # La regla de convocatoria (Reunion) dispara por evento "New",
@@ -101,7 +101,7 @@ class IntegrationTestNotificaciones(IntegrationTestCase):
         )
 
     def test_run_es_idempotente(self):
-        """Re-ejecutar no duplica: sigue habiendo 6 (se actualizan en sitio)."""
+        """Re-ejecutar no duplica: sigue habiendo 7 (se actualizan en sitio)."""
         f7.run()
         f7.run()
-        self.assertEqual(len(self._sgc_notifs()), 6)
+        self.assertEqual(len(self._sgc_notifs()), 7)

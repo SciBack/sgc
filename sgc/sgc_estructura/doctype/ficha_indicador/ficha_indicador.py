@@ -8,7 +8,7 @@ para el mismo indicador, ni una ficha con ambos anclajes (o ninguno) a la vez.
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from frappe.utils import add_days, add_months, cint, getdate, nowdate
+from frappe.utils import add_days, add_months, cint, flt, getdate, nowdate
 
 # Meses entre mediciones según la frecuencia de la ficha. «por_promocion» no
 # tiene un calendario fijo: su próxima medición se fija a mano.
@@ -49,9 +49,29 @@ class FichaIndicador(Document):
         if cint(self.dias_aviso) < 0:
             frappe.throw(_("Los días de aviso no pueden ser negativos."))
         self.fecha_aviso_medicion = fecha_aviso(self.proxima_medicion, self.dias_aviso)
+        self._validar_participacion()
         if bool(self.indicador) == bool(self.elemento_marco):
             frappe.throw(
                 _("La ficha debe anclarse a exactamente uno: «Indicador» "
                   "(fichas CONEAU/institucionales) o «Elemento marco» "
                   "(alternativa para indicadores CBC) — no ambos, no ninguno.")
+            )
+
+    def _validar_participacion(self):
+        """Peso de cada área en el indicador: sin repetir área, y suman 100 %."""
+        filas = self.participacion_areas or []
+        if not filas:
+            return
+        vistas = set()
+        for fila in filas:
+            if fila.unidad_organica in vistas:
+                frappe.throw(_("El área {0} está repetida en la participación.").format(fila.unidad_organica))
+            vistas.add(fila.unidad_organica)
+            if flt(fila.peso) <= 0:
+                frappe.throw(_("El peso de cada área tiene que ser mayor que cero."))
+        total = sum(flt(f.peso) for f in filas)
+        if abs(total - 100) > 0.01:
+            frappe.throw(
+                _("Los pesos de las áreas suman {0} %: tienen que sumar 100 %.").format(round(total, 2)),
+                title=_("Participación incompleta"),
             )

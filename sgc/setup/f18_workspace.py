@@ -48,7 +48,8 @@ CARDS = [
     ("Gobierno de la calidad", ["Politica Calidad", "Objetivo Calidad", "Comite", "Reunion", "Acuerdo", "Instrumento",
                                 "Aplicacion Instrumento", "Comunicado"]),
     ("Marcos e indicadores", ["Marco Normativo", "Elemento Marco", "Indicador", "Ficha Indicador",
-                              "Escala Valoracion", ("Report", "Indicadores de Acreditacion")]),
+                              "Escala Valoracion", ("Report", "Indicadores de Acreditacion"),
+                              ("Report", "Indicadores por Familia")]),
     ("Estructura", ["Unidad Organica", "Programa", "Programa Sede", "Periodo Academico"]),
 ]
 
@@ -311,6 +312,7 @@ SIDEBARS = {
         ("Indicadores", "DocType", "Indicador"),
         ("Fichas de indicador", "DocType", "Ficha Indicador"),
         ("Informe de indicadores", "Report", "Indicadores de Acreditacion"),
+        ("Indicadores por familia", "Report", "Indicadores por Familia"),
         ("Unidades orgánicas", "DocType", "Unidad Organica"),
         ("Programas", "DocType", "Programa"),
         ("Programas por sede", "DocType", "Programa Sede"),

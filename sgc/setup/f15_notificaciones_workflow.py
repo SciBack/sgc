@@ -38,6 +38,7 @@ Reglas creadas:
   10.  Informe Auditoria     — revisión, devolución, aprobación y distribución (#37).
   11.  Evento Riesgo         — al reportarse («New», a la DPGC).
   12.  Evento Riesgo         — al confirmarse o descartarse (a quien lo reportó).
+  13.  Alerta Indicador      — al crearse abierta (a su responsable; sin él, a la DPGC).
 
 Ejecutar (idempotente):
     bench --site <site> execute sgc.setup.f15_notificaciones_workflow.run
@@ -327,6 +328,28 @@ NOTIFICACIONES = [
         "recipients": [
             _a_rol(ROL_VIGILANCIA, "Escalado a NC"),
             _a_rol(ROL_AUDITOR, "Abierto", "Cerrado"),
+        ],
+    },
+    {
+        # Una alerta de indicador (meta no alcanzada, sin medición, variación
+        # anómala…) avisa a su responsable al crearse; sin responsable, a la DPGC.
+        "name": "SGC - Alerta de indicador",
+        "document_type": "Alerta Indicador",
+        "event": "New",
+        "condition": 'doc.estado == "Abierta"',
+        "subject": "Alerta de indicador ({{ doc.severidad }}): {{ doc.tipo }} — {{ doc.indicador }}",
+        "message": (
+            "<p><b>{{ doc.tipo }}</b> en el indicador <b>{{ doc.indicador }}</b>"
+            "{% if doc.periodo_academico %}, periodo {{ doc.periodo_academico }}{% endif %}.</p>"
+            "{% if doc.meta is not none and doc.valor_medido is not none %}<p>Valor medido: "
+            "{{ doc.valor_medido }} · meta: {{ doc.meta }}.</p>{% endif %}"
+            "{% if doc.mensaje %}<p>{{ doc.mensaje }}</p>{% endif %}"
+            '<p><a href="{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}">'
+            "Abrir en el SGC</a></p>"
+        ),
+        "recipients": [
+            {"receiver_by_document_field": "responsable"},
+            {"receiver_by_role": ROL_VIGILANCIA, "condition": "not doc.responsable"},
         ],
     },
     {

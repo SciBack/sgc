@@ -3,6 +3,23 @@ import math
 
 import frappe
 from frappe.model.document import Document
+from frappe.utils import add_days, now_datetime, nowdate
+
+# El análisis del periodo: se escribe aunque la medición esté protegida (viene de
+# la ingesta) o su periodo esté cerrado, porque no cambia la medición.
+CAMPOS_ANALISIS = ("analisis", "analizado_por", "fecha_analisis")
+# Lo que Frappe cambia solo en cada guardado: no cuenta como modificar la medición.
+_VOLATILES = {"modified", "modified_by", "semaforo", *CAMPOS_ANALISIS}
+DIAS_TAREA_ANALISIS = 7
+
+
+def ficha_de(indicador):
+    """La ficha del indicador, con lo que el análisis necesita."""
+    if not indicador:
+        return None
+    return frappe.db.get_value(
+        "Ficha Indicador", {"indicador": indicador}, ["name", "exige_analisis", "responsable"], as_dict=True
+    )
 
 
 class ValorIndicador(Document):
@@ -20,9 +37,13 @@ class ValorIndicador(Document):
         # se vería en lo tecleado a mano. Es un valor derivado, no una validación:
         # su sitio es aquí arriba.
         self.semaforo = calcular_semaforo(self)
+        self._sellar_analisis()
+        anterior = self.get_doc_before_save()
+        if anterior and self._solo_cambia_el_analisis(anterior):
+            return
+        self._exigir_analisis()
         if self.programa_sede and self.unidad_organica:
             frappe.throw('Una medición no puede pertenecer a dos ámbitos')
-        anterior = self.get_doc_before_save()
         periodos = {self.periodo_academico, anterior.periodo_academico if anterior else None}
         for periodo in periodos - {None, ''}:
             if frappe.db.get_value('Periodo Academico', periodo, 'estado') != 'abierto':
@@ -57,6 +78,44 @@ class ValorIndicador(Document):
 
         avanzar_proxima_medicion(self.indicador, self.fecha)
 
+    def on_update(self):
+        sincronizar_tarea_analisis(self)
+
+    # ---------------------------------------------------------------- análisis
+    def _sellar_analisis(self):
+        """Quién analizó y cuándo lo pone el sistema, al escribir o cambiar el texto."""
+        anterior = self.get_doc_before_save()
+        texto = (self.analisis or "").strip()
+        previo = ((anterior.analisis if anterior else None) or "").strip()
+        if texto != previo:
+            self.analizado_por = frappe.session.user if texto else None
+            self.fecha_analisis = now_datetime() if texto else None
+        elif anterior:
+            self.analizado_por = anterior.analizado_por
+            self.fecha_analisis = anterior.fecha_analisis
+
+    def _solo_cambia_el_analisis(self, anterior):
+        for campo in self.meta.get_valid_columns():
+            if campo in _VOLATILES:
+                continue
+            if self.get(campo) != anterior.get(campo):
+                return False
+        return True
+
+    def _exigir_analisis(self):
+        """Si la ficha lo exige, lo tecleado a mano llega con su análisis."""
+        from sgc.ingesta import en_ingesta
+
+        if en_ingesta() or (self.analisis or "").strip():
+            return
+        ficha = ficha_de(self.indicador)
+        if ficha and ficha.exige_analisis:
+            frappe.throw(
+                'La ficha de este indicador exige el análisis de cada medición: escriba '
+                'qué explica el resultado del periodo.',
+                title='Análisis obligatorio',
+            )
+
     def on_trash(self):
         if self.ingesta_clave:
             frappe.throw('Las mediciones de ingesta se conservan para auditoría')
@@ -64,3 +123,20 @@ class ValorIndicador(Document):
     def before_rename(self, old, new, merge=False):
         if self.ingesta_clave:
             frappe.throw('La identidad de una medición de ingesta no se renombra')
+
+
+def sincronizar_tarea_analisis(valor):
+    """Tarea de analizar el periodo, abierta mientras el valor no tenga análisis.
+
+    Solo si la ficha lo exige, y a nombre de su responsable. Es el camino de las
+    mediciones que llegan por ingesta: se guardan sin análisis y el responsable
+    recibe la tarea; se cierra sola al escribirlo.
+    """
+    from sgc import tareas
+
+    ficha = ficha_de(valor.indicador)
+    abierta = bool(ficha and ficha.exige_analisis and not (valor.analisis or "").strip())
+    responsable = ficha.responsable if ficha else None
+    descripcion = "Analizar la medición de {0}{1}.".format(
+        valor.indicador, f" del periodo {valor.periodo_academico}" if valor.periodo_academico else "")
+    tareas.sincronizar(valor, responsable, add_days(nowdate(), DIAS_TAREA_ANALISIS), descripcion, abierta)
