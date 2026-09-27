@@ -98,6 +98,8 @@ class IntegrationTestCarpetasYRelaciones(_Base):
         self.assertEqual(doc.carpeta, hija.name)
         self.assertEqual(frappe.db.get_value("Carpeta Documental", hija.name, "parent_carpeta_documental"), raiz.name)
         self.assertTrue(frappe.get_meta("Carpeta Documental").is_tree)
+        # Una carpeta de primer nivel cuelga de la raíz con nombre fijo.
+        self.assertEqual(raiz.parent_carpeta_documental, "Carpetas documentales")
 
     def test_documentos_relacionados(self):
         a, b = self._documento(), self._documento()
