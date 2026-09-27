@@ -198,9 +198,13 @@ has_permission = {
 # Las reglas de notificación respetan el modo de ensayo y la lista blanca de
 # `Configuracion Correo` antes de enviar (#41), y el correo que acompaña a la
 # campana del Desk también (#35: las tareas asignadas lo usan). Ver sgc/correo.py.
+#
+# El adjunto de un documento de solo consulta no se entrega a quien solo puede
+# leerlo, por ninguna puerta (#36). Ver sgc/documentos.py.
 override_doctype_class = {
 	"Notification": "sgc.correo.NotificacionSGC",
 	"Notification Log": "sgc.correo.AvisoDeskSGC",
+	"File": "sgc.documentos.FicheroSGC",
 }
 
 # Document Events
@@ -330,9 +334,11 @@ scheduler_events = {
 # Overriding Methods
 # ------------------------------
 #
-# override_whitelisted_methods = {
-# 	"frappe.desk.doctype.event.event.get_events": "sgc.event.get_events"
-# }
+# `zip_files` entrega ficheros comprobando solo la lectura del `File`, no si se
+# pueden descargar: sin esto, un documento de solo consulta saldría en un ZIP (#36).
+override_whitelisted_methods = {
+	"frappe.core.api.file.zip_files": "sgc.documentos.zip_files",
+}
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,
