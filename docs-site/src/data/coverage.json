@@ -30,6 +30,7 @@
     {"id":"evidencia","kind":"workflow","title":"Evidencia","page":"flujos/evidencia.md","sources":["sgc/setup/f13_workflow_evidencia.py"],"status":"operativo"},
     {"id":"riesgo","kind":"workflow","title":"Riesgo","page":"flujos/riesgo.md","sources":["sgc/setup/f14_workflow_riesgos.py"],"status":"operativo"},
     {"id":"tratamiento-riesgo","kind":"workflow","title":"Tratamiento del riesgo","page":"flujos/tratamiento-riesgo.md","sources":["sgc/setup/f14_workflow_riesgos.py"],"status":"operativo"},
+    {"id":"salida-no-conforme","kind":"workflow","title":"Salida no conforme","page":"flujos/salida-no-conforme.md","sources":["sgc/setup/f23_workflow_salida_no_conforme.py","sgc/sgc_nucleo/doctype/salida_no_conforme/salida_no_conforme.py"],"status":"operativo"},
     {"id":"autenticacion-navegacion","kind":"programmatic","title":"Autenticación y navegación","page":"flujos/autenticacion-navegacion.md","sources":["sgc/setup/f3b_sso.py","sgc/permissions.py"],"status":"operativo"},
     {"id":"scoring-confirmacion","kind":"programmatic","title":"Cálculo y confirmación de niveles","page":"flujos/scoring-confirmacion.md","sources":["sgc/scoring.py","sgc/confirmacion.py"],"status":"operativo"},
     {"id":"evidencia-trazabilidad","kind":"programmatic","title":"Evidencia y trazabilidad","page":"flujos/evidencia-trazabilidad.md","sources":["sgc/sgc_nucleo/doctype/evidencia/evidencia.py","sgc/sgc_nucleo/doctype/trazabilidad/trazabilidad.py"],"status":"operativo"},
