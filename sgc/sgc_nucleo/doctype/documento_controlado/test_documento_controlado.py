@@ -125,6 +125,7 @@ class IntegrationTestDocumentoControlado(IntegrationTestCase):
         d.estado = "En revision"
         d.save(ignore_permissions=True)
         d.estado = "Observado"
+        d.observacion = "Corregir el alcance."  # observar exige la observación del revisor
         d.save(ignore_permissions=True)
         # Observado -> Borrador es una transicion permitida.
         d.estado = "Borrador"
@@ -311,6 +312,8 @@ class IntegrationTestFirmaDeAprobacion(IntegrationTestCase):
         doc.reload()
         for estado in ("Observado", "En revision", "Aprobado"):
             doc.estado = estado
+            if estado == "Observado":
+                doc.observacion = "Falta la firma del revisor."
             doc.save(ignore_permissions=True)
         self.assertEqual(doc.aprobado_por, primera)
 

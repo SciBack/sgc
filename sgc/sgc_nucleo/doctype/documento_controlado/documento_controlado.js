@@ -28,6 +28,32 @@ frappe.ui.form.on("Documento Controlado", {
 		sgc.documento.montar_visor(frm);
 		// Enviar por correo lo publicado (#92): ver sgc/public/js/envio_correo.js.
 		frappe.require("/assets/sgc/js/envio_correo.js", () => sgc.envio.boton(frm));
+		sgc.documento.boton_revision(frm);
+	},
+	before_workflow_action(frm) {
+		// Observar exige la observación del revisor. `apply_workflow` recarga el
+		// documento de la base, así que se deja escrita antes en el servidor.
+		if (frm.selected_workflow_action !== "Observar") return;
+		frappe.dom.unfreeze();
+		return new Promise((resolve) => {
+			frappe.prompt(
+				{
+					fieldname: "texto",
+					fieldtype: "Small Text",
+					label: __("Observación del revisor"),
+					description: __("Qué tiene que corregir quien lo elaboró. Queda registrada con su nombre y la fecha."),
+					reqd: 1,
+					default: frm.doc.observacion || "",
+				},
+				(v) =>
+					frm.call("preparar_observacion", { texto: v.texto }).then(() => {
+						frappe.dom.freeze();
+						resolve();
+					}),
+				__("Observar el documento"),
+				__("Observar")
+			);
+		});
 	},
 	archivo(frm) {
 		// Al cambiar el adjunto, la vista previa tiene que seguirlo.
@@ -117,4 +143,33 @@ sgc.documento.montar_visor = function (frm) {
 			${puede ? __("Use «Descargar» para consultarlo.") : ""}
 		 </div>`
 	);
+};
+
+// Revisión de vigencia sin cambios: renueva la vigencia un año y cierra la tarea.
+sgc.documento.boton_revision = function (frm) {
+	if (frm.is_new() || frm.doc.estado !== "Publicado") return;
+	const puede =
+		[frm.doc.dueno_proceso, frm.doc.elaborado_por].includes(frappe.session.user) ||
+		frappe.user.has_role("DPGC") ||
+		frappe.user.has_role("Analista de Calidad (DPGC)");
+	if (!puede) return;
+	frm.add_custom_button(__("Registrar revisión sin cambios"), () => {
+		frappe.prompt(
+			{
+				fieldname: "observacion",
+				fieldtype: "Small Text",
+				label: __("Conclusión de la revisión (opcional)"),
+			},
+			(v) =>
+				frm.call("registrar_revision", { observacion: v.observacion }).then((r) => {
+					frm.reload_doc();
+					frappe.show_alert({
+						message: __("Revisión registrada. Próxima revisión: {0}", [frappe.datetime.str_to_user(r.message)]),
+						indicator: "green",
+					});
+				}),
+			__("El documento sigue vigente"),
+			__("Registrar")
+		);
+	});
 };

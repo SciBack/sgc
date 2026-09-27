@@ -17,6 +17,7 @@
   "solo_consulta",
   "proceso",
   "tema",
+  "carpeta",
   "estado",
   "elaborado_por",
   "revisado_por",
@@ -26,6 +27,13 @@
   "reemplaza_a",
   "descripcion_cambio",
   "historial_cambios",
+  "sec_relaciones",
+  "documentos_relacionados",
+  "dueno_proceso",
+  "difundir_a",
+  "sec_revision",
+  "observacion",
+  "observaciones_revision",
   "seccion_legado",
   "almacenamiento_uri",
   "mayan_document_id"
@@ -188,12 +196,67 @@
    "fieldtype": "Link",
    "label": "Reemplaza a",
    "options": "Documento Controlado"
+  },
+  {
+   "fieldname": "carpeta",
+   "fieldtype": "Link",
+   "label": "Carpeta",
+   "options": "Carpeta Documental",
+   "in_standard_filter": 1,
+   "description": "D\u00f3nde se organiza el documento, adem\u00e1s del proceso y el tema."
+  },
+  {
+   "fieldname": "sec_relaciones",
+   "fieldtype": "Section Break",
+   "label": "Relaciones y difusi\u00f3n",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "documentos_relacionados",
+   "fieldtype": "Table",
+   "label": "Documentos relacionados",
+   "options": "Documento Relacionado"
+  },
+  {
+   "fieldname": "dueno_proceso",
+   "fieldtype": "Link",
+   "label": "Due\u00f1o del proceso",
+   "options": "User",
+   "read_only": 1,
+   "fetch_from": "proceso.responsable",
+   "description": "Recibe el aviso cuando se publica una versi\u00f3n nueva."
+  },
+  {
+   "fieldname": "difundir_a",
+   "fieldtype": "Table MultiSelect",
+   "label": "Difundir tambi\u00e9n a",
+   "options": "Documento Difusion",
+   "description": "Personas del proceso a las que afecta el documento: reciben el aviso de publicaci\u00f3n."
+  },
+  {
+   "fieldname": "sec_revision",
+   "fieldtype": "Section Break",
+   "label": "Observaciones de revisi\u00f3n",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "observacion",
+   "fieldtype": "Small Text",
+   "label": "Observaci\u00f3n del revisor",
+   "description": "Obligatoria para observar el documento. Queda en el registro de abajo con qui\u00e9n y cu\u00e1ndo."
+  },
+  {
+   "fieldname": "observaciones_revision",
+   "fieldtype": "Table",
+   "label": "Registro de observaciones",
+   "options": "Observacion Revision",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-26 19:30:00.000000",
+ "modified": "2026-09-27 16:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "Documento Controlado",

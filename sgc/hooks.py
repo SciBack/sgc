@@ -333,6 +333,7 @@ scheduler_events = {
 	"daily": [
 		"sgc.tasks.marcar_evidencias_vencidas",
 		"sgc.tasks.marcar_acuerdos_vencidos",
+		"sgc.sgc_nucleo.doctype.documento_controlado.documento_controlado.tareas_revision_diaria",
 	],
 }
 
