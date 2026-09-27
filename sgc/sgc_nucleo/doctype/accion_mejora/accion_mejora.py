@@ -37,9 +37,31 @@ class AccionMejora(Document):
 
     def validate(self):
         anterior = self.get_doc_before_save()
+        self._validar_causa()
         self._exigir_lo_de_cada_etapa(anterior)
         self._sellar_verificacion(anterior)
         self._fijar_avance(anterior)
+
+    def _validar_causa(self):
+        """La causa que ataca la acción es una de SU no conformidad (#34).
+
+        Responde a «¿qué acción ataca esta causa?». Se guarda el identificador de
+        la fila de `Causa Identificada` y se copia su descripción; una causa de
+        otra no conformidad, o una que ya no existe, se rechaza.
+        """
+        if not self.causa:
+            self.causa_descripcion = None
+            return
+        fila = frappe.db.get_value(
+            "Causa Identificada", self.causa, ["parent", "parenttype", "descripcion"], as_dict=True
+        )
+        if not fila or fila.parenttype != "No Conformidad" or fila.parent != self.no_conformidad:
+            frappe.throw(
+                _("La causa elegida no pertenece a la no conformidad {0} de esta acción.").format(
+                    self.no_conformidad or _("(sin no conformidad)")),
+                title=_("Causa ajena"),
+            )
+        self.causa_descripcion = fila.descripcion
 
     def _exigir_lo_de_cada_etapa(self, anterior):
         """Lo que cada transición del workflow exige para poder ocurrir.

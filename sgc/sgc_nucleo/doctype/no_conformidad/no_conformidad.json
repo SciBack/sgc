@@ -21,6 +21,8 @@
   "severidad",
   "requiere_analisis_causa",
   "analisis_causa",
+  "metodologia",
+  "causas",
   "correccion_inmediata",
   "plan_mejora",
   "estado",
@@ -119,6 +121,22 @@
    "label": "An\u00e1lisis de causa ra\u00edz"
   },
   {
+   "fieldname": "metodologia",
+   "fieldtype": "Select",
+   "label": "Metodolog\u00eda del an\u00e1lisis",
+   "options": "\nCinco porqu\u00e9s\nEspina de pescado (Ishikawa)\nPareto\nLluvia de ideas\nOtra",
+   "depends_on": "eval:doc.requiere_analisis_causa",
+   "description": "C\u00f3mo se lleg\u00f3 a las causas (ISO 9001 \u00a710.2.1 b). Obligatoria para pasar a tratamiento si la NC requiere an\u00e1lisis."
+  },
+  {
+   "fieldname": "causas",
+   "fieldtype": "Table",
+   "label": "Causas identificadas",
+   "options": "Causa Identificada",
+   "depends_on": "eval:doc.requiere_analisis_causa",
+   "description": "Al menos una causa, y al menos una marcada como ra\u00edz, para pasar a tratamiento."
+  },
+  {
    "fieldname": "correccion_inmediata",
    "fieldtype": "Text",
    "label": "Correcci\u00f3n inmediata (contenci\u00f3n)"
@@ -171,7 +189,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-27 09:00:00.000000",
+ "modified": "2026-09-27 12:30:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "No Conformidad",

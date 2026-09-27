@@ -1,0 +1,77 @@
+{
+ "actions": [],
+ "creation": "2026-09-27 12:30:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "orden",
+  "descripcion",
+  "categoria",
+  "nivel",
+  "frecuencia",
+  "es_causa_raiz"
+ ],
+ "fields": [
+  {
+   "columns": 1,
+   "fieldname": "orden",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Orden"
+  },
+  {
+   "columns": 4,
+   "description": "Qué la produce. En cinco porqués, cada fila es un «¿por qué?» de la cadena.",
+   "fieldname": "descripcion",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Causa",
+   "reqd": 1
+  },
+  {
+   "columns": 2,
+   "fieldname": "categoria",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Categoría (Ishikawa)",
+   "options": "\nPersonas\nMétodo\nMaterial\nMáquina\nMedición\nEntorno"
+  },
+  {
+   "columns": 1,
+   "description": "Profundidad en la cadena de porqués: 1 es el primer «¿por qué?».",
+   "fieldname": "nivel",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Nivel (porqués)"
+  },
+  {
+   "columns": 1,
+   "description": "Cuántas veces aparece la causa en los casos analizados.",
+   "fieldname": "frecuencia",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Frecuencia (Pareto)"
+  },
+  {
+   "columns": 1,
+   "fieldname": "es_causa_raiz",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Causa raíz"
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2026-09-27 12:30:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "Causa Identificada",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}
