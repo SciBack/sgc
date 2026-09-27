@@ -19,6 +19,10 @@ Acción planificada vinculada a un Plan Mejora. Usa identificadores ficticios y 
 4. En estado **Ejecutada**, inicia sesión como **DPGC** y ejecuta **Verificar no eficaz**. Resultado esperado: el registro queda en **Verificada no eficaz** y la acción aparece en su historial.
 5. En estado **Verificada no eficaz**, inicia sesión como **DPGC** y ejecuta **Reabrir**. Resultado esperado: el registro queda en **En ejecucion** y la acción aparece en su historial.
 
+## Qué causa ataca la acción
+
+Si la acción nace de una no conformidad, **Elegir causa** muestra las causas identificadas en esa no conformidad (las raíz, señaladas) y guarda la elegida. Así se puede responder qué acción ataca cada causa.
+
 ## Estados por los que pasa
 
 **Planificada** → **En ejecucion** → **Ejecutada** → **Verificada eficaz** → **Verificada no eficaz**. Las devoluciones o reaperturas se muestran en la tabla, por lo que el recorrido no siempre es lineal.
@@ -45,6 +49,7 @@ No modifiques el campo de estado directamente. No uses System Manager para simul
 - Repetir una acción desde un estado incompatible: el estado no debe cambiar.
 - Omitir un dato obligatorio o relación requerida: el guardado debe fallar con mensaje accionable.
 - Intentar autoaprobar una transición segregada: debe ser rechazada.
+- Enlazar una causa de otra no conformidad: debe rechazarse.
 
 ## Evidencia que debe capturarse
 

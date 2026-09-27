@@ -11,6 +11,8 @@
   "plan_mejora",
   "hallazgo",
   "no_conformidad",
+  "causa",
+  "causa_descripcion",
   "criterio",
   "descripcion",
   "tipo",
@@ -51,6 +53,22 @@
    "in_standard_filter": 1,
    "label": "No conformidad",
    "options": "No Conformidad"
+  },
+  {
+   "fieldname": "causa",
+   "fieldtype": "Data",
+   "label": "Causa que ataca (identificador)",
+   "read_only": 1,
+   "description": "Identificador de la fila de \u00abCausa Identificada\u00bb. Oculto: se muestra la descripci\u00f3n.",
+   "hidden": 1
+  },
+  {
+   "fieldname": "causa_descripcion",
+   "fieldtype": "Small Text",
+   "label": "Causa que ataca",
+   "read_only": 1,
+   "depends_on": "eval:doc.no_conformidad",
+   "description": "Se elige con el bot\u00f3n \u00abElegir causa\u00bb, entre las causas de la no conformidad de esta acci\u00f3n."
   },
   {
    "fieldname": "criterio",
@@ -117,7 +135,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-04 17:29:32.391165",
+ "modified": "2026-09-27 12:30:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "Accion Mejora",
