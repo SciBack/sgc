@@ -290,6 +290,8 @@ standard_queries = {
 }
 
 doc_events = {
+	# Contraseña con elementos seguros (B4): ver sgc/contrasena.py.
+	"User": {"before_validate": "sgc.contrasena.antes_de_validar_usuario"},
 	"Acuerdo": {"autoname": "sgc.naming.correlativo_por_prefijo"},
 	"Aplicacion Instrumento": {"autoname": "sgc.naming.correlativo_por_prefijo"},
 	"Auditoria": {"autoname": "sgc.naming.correlativo_por_prefijo"},
@@ -357,6 +359,9 @@ scheduler_events = {
 # pueden descargar: sin esto, un documento de solo consulta saldría en un ZIP (#36).
 override_whitelisted_methods = {
 	"frappe.core.api.file.zip_files": "sgc.documentos.zip_files",
+	# Restablecer/cambiar la contraseña y su medidor, con la regla de clases (B4).
+	"frappe.core.doctype.user.user.update_password": "sgc.contrasena.update_password",
+	"frappe.core.doctype.user.user.test_password_strength": "sgc.contrasena.test_password_strength",
 }
 #
 # each overriding function accepts a `data` argument;
