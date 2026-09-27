@@ -13,6 +13,11 @@ Cada fila es un par proceso-decisión, con el número de salidas, la cantidad
 afectada (actas, certificados…), cuántas siguen abiertas y cuántas ya escalaron
 a no conformidad. Las que aún no tienen decisión salen como «Sin decidir».
 
+Con **Detalle** marcado, en vez de agrupar lista cada salida con sus datos, los
+del proceso, la fecha y **las personas que intervinieron**: quién la detectó,
+quién la trató, quién decidió y quién verificó. Es el registro que pide §8.7.2 d
+(la autoridad que decide) puesto en una tabla exportable.
+
 Se consulta con `sgc.reportes.consultar`, que respeta permisos.
 """
 from frappe import _
@@ -25,7 +30,41 @@ CERRADA = "Cerrada"
 
 def execute(filters=None):
     filters = filters or {}
+    if filters.get("detalle"):
+        return columnas_detalle(), filas_detalle(filters)
     return columnas(), filas(filters)
+
+
+def columnas_detalle():
+    persona = {"fieldtype": "Link", "options": "User", "width": 170}
+    return [
+        {"fieldname": "name", "label": _("Salida no conforme"), "fieldtype": "Link",
+         "options": "Salida No Conforme", "width": 150},
+        {"fieldname": "titulo", "label": _("Título"), "fieldtype": "Data", "width": 240},
+        {"fieldname": "fecha_deteccion", "label": _("Detectada el"), "fieldtype": "Date", "width": 110},
+        {"fieldname": "proceso", "label": _("Proceso"), "fieldtype": "Link", "options": "Proceso", "width": 150},
+        {"fieldname": "unidad_organica", "label": _("Unidad orgánica"), "fieldtype": "Link",
+         "options": "Unidad Organica", "width": 150},
+        {"fieldname": "origen", "label": _("Origen"), "fieldtype": "Data", "width": 130},
+        {"fieldname": "cantidad_afectada", "label": _("Cantidad afectada"), "fieldtype": "Int", "width": 120},
+        {"fieldname": "estado", "label": _("Estado"), "fieldtype": "Data", "width": 120},
+        {"fieldname": "decision", "label": _("Decisión"), "fieldtype": "Data", "width": 170},
+        {"fieldname": "detectado_por", "label": _("Detectado por"), **persona},
+        {"fieldname": "responsable", "label": _("Responsable del tratamiento"), **persona},
+        {"fieldname": "autorizado_por", "label": _("Decidido por"), **persona},
+        {"fieldname": "verificado_por", "label": _("Verificado por"), **persona},
+        {"fieldname": "no_conformidad", "label": _("No conformidad"), "fieldtype": "Link",
+         "options": "No Conformidad", "width": 150},
+    ]
+
+
+def filas_detalle(filters):
+    campos = [c["fieldname"] for c in columnas_detalle()]
+    registros = consultar("Salida No Conforme", _filtros(filters), campos,
+                          orden="fecha_deteccion desc, creation desc")
+    for r in registros:
+        r["decision"] = r.get("decision") or SIN_DECIDIR
+    return registros
 
 
 def columnas():

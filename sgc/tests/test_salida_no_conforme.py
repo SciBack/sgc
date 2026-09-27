@@ -379,6 +379,33 @@ class IntegrationTestInformeSalidasNoConformes(_Base):
         self.assertEqual(por_decision["Corregir"]["abiertas"], 2)
         self.assertEqual(por_decision[informe.SIN_DECIDIR]["cantidad_afectada"], 5)
 
+    def test_el_detalle_lista_cada_salida_con_los_involucrados(self):
+        """Sexto requisito del bloque: informes con los datos de quien intervino."""
+        doc = self._salida(fecha_deteccion="2026-02-10")
+        doc.responsable = DUENO
+        doc.estado = "En tratamiento"
+        doc.save(ignore_permissions=True)
+        doc.decision = "Corregir"
+        doc.acciones_tomadas = "Se reemitieron."
+        self._como(DPGC)
+        doc.estado = "Tratada"
+        doc.save(ignore_permissions=True)
+        frappe.set_user("Administrator")
+        self._salida(fecha_deteccion="2026-02-11")
+
+        columnas, filas = informe.execute({"proceso": self.proceso, "detalle": 1})
+        nombres = [c["fieldname"] for c in columnas]
+        for campo in ("detectado_por", "responsable", "autorizado_por", "verificado_por",
+                      "proceso", "fecha_deteccion"):
+            self.assertIn(campo, nombres)
+        self.assertEqual(len(filas), 2)
+        fila = next(f for f in filas if f["name"] == doc.name)
+        self.assertEqual(fila["detectado_por"], DETECTOR)
+        self.assertEqual(fila["responsable"], DUENO)
+        self.assertEqual(fila["autorizado_por"], DPGC)
+        otra = next(f for f in filas if f["name"] != doc.name)
+        self.assertEqual(otra["decision"], informe.SIN_DECIDIR)
+
     def test_cuenta_las_escaladas_y_filtra_por_fecha(self):
         a = self._salida(fecha_deteccion="2026-01-10")
         self._salida(fecha_deteccion="2026-03-10")
