@@ -9,7 +9,7 @@ test('acepta el manifiesto canónico completo', async () => {
   const errors = await validateCoverage(coverage, { repoRoot: new URL('../../', import.meta.url) });
   assert.deepEqual(errors, []);
   assert.equal(coverage.roles.length, 14);
-  assert.equal(coverage.flows.filter((flow) => flow.kind === 'workflow').length, 14);
+  assert.equal(coverage.flows.filter((flow) => flow.kind === 'workflow').length, 15);
 });
 
 test('rechaza ids, estados, páginas y fuentes inválidas', async () => {

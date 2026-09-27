@@ -37,7 +37,8 @@ SHORTCUTS = [
 CARDS = [
     ("Gestión documental", ["Documento Controlado", "Evidencia", "Trazabilidad"]),
     ("Autoevaluación", ["Autoevaluacion", "Valoracion Criterio", "Valoracion Estandar", "Valor Indicador"]),
-    ("Mejora continua", ["Hallazgo", "No Conformidad", "Plan Mejora", "Accion Mejora"]),
+    ("Mejora continua", ["Hallazgo", "No Conformidad", "Salida No Conforme", "Plan Mejora", "Accion Mejora",
+                         ("Report", "Salidas No Conformes")]),
     ("Auditoría", ["Programa Auditoria", "Auditoria", "Hallazgo Auditoria", "Informe Auditoria", "Revision Direccion"]),
     ("Riesgos y obligaciones", ["Riesgo", "Tratamiento Riesgo", "Matriz Riesgo", "Evaluacion Riesgo", "Obligacion Ente", "Entrega Obligacion"]),
     ("Procesos", ["Proceso", "Procedimiento", "Ficha Caracterizacion Proceso", "Informe Cumplimiento"]),
@@ -55,6 +56,7 @@ CARDS = [
 ETIQUETAS = {
     "Proceso": "Mapa de procesos",
     "Ficha Caracterizacion Proceso": "Ficha de caracterización",
+    "Salida No Conforme": "Salidas no conformes",
 }
 
 def _contenido():
@@ -243,6 +245,7 @@ SIDEBARS = {
         ("Valores de indicador", "DocType", "Valor Indicador"),
         ("Hallazgos", "DocType", "Hallazgo"),
         ("No conformidades", "DocType", "No Conformidad"),
+        ("Salidas no conformes", "DocType", "Salida No Conforme"),
         ("Planes de mejora", "DocType", "Plan Mejora"),
         ("Acciones de mejora", "DocType", "Accion Mejora"),
         ("Tableros de indicadores", "DocType", "Tablero Indicadores"),

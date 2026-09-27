@@ -1,0 +1,292 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "format:SNC-{YYYY}-{#####}",
+ "creation": "2026-09-27 09:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "titulo",
+  "estado",
+  "origen",
+  "column_break_identificacion",
+  "detectado_por",
+  "fecha_deteccion",
+  "cantidad_afectada",
+  "section_break_ambito",
+  "proceso",
+  "unidad_organica",
+  "column_break_ambito",
+  "programa_sede",
+  "section_break_descripcion",
+  "descripcion",
+  "requisito_incumplido",
+  "section_break_tratamiento",
+  "responsable",
+  "decision",
+  "acciones_tomadas",
+  "justificacion_decision",
+  "column_break_tratamiento",
+  "autorizado_por",
+  "fecha_tratamiento",
+  "evidencia_tratamiento",
+  "section_break_verificacion",
+  "verificacion_conformidad",
+  "observaciones_verificacion",
+  "column_break_verificacion",
+  "verificado_por",
+  "fecha_verificacion",
+  "section_break_enlaces",
+  "no_conformidad",
+  "column_break_enlaces",
+  "accion_mejora"
+ ],
+ "fields": [
+  {
+   "description": "Qué salió mal, en una línea. Ej.: «Actas de notas del curso X con promedios mal calculados».",
+   "fieldname": "titulo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Título",
+   "reqd": 1
+  },
+  {
+   "default": "Detectada",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Detectada\nEn tratamiento\nTratada\nVerificada\nCerrada"
+  },
+  {
+   "description": "Cómo se detectó la salida no conforme.",
+   "fieldname": "origen",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Origen",
+   "options": "Interno\nReclamo de usuario\nAuditoria\nProveedor externo",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_identificacion",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Quien detectó la salida. Si se deja vacío, quien la registra.",
+   "fieldname": "detectado_por",
+   "fieldtype": "Link",
+   "label": "Detectado por",
+   "options": "User"
+  },
+  {
+   "fieldname": "fecha_deteccion",
+   "fieldtype": "Date",
+   "in_standard_filter": 1,
+   "label": "Fecha de detección"
+  },
+  {
+   "description": "Cuántas unidades salieron mal: actas, certificados, constancias…",
+   "fieldname": "cantidad_afectada",
+   "fieldtype": "Int",
+   "label": "Cantidad afectada"
+  },
+  {
+   "fieldname": "section_break_ambito",
+   "fieldtype": "Section Break",
+   "label": "Dónde ocurrió"
+  },
+  {
+   "description": "El proceso del mapa que entregó la salida.",
+   "fieldname": "proceso",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Proceso",
+   "options": "Proceso",
+   "reqd": 1
+  },
+  {
+   "fieldname": "unidad_organica",
+   "fieldtype": "Link",
+   "label": "Unidad orgánica",
+   "options": "Unidad Organica"
+  },
+  {
+   "fieldname": "column_break_ambito",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "programa_sede",
+   "fieldtype": "Link",
+   "label": "Programa / sede",
+   "options": "Programa Sede"
+  },
+  {
+   "fieldname": "section_break_descripcion",
+   "fieldtype": "Section Break",
+   "label": "La no conformidad (ISO 9001 §8.7.2 a)"
+  },
+  {
+   "fieldname": "descripcion",
+   "fieldtype": "Text",
+   "label": "Descripción",
+   "reqd": 1
+  },
+  {
+   "description": "El requisito que la salida no cumple: norma, reglamento, plazo o especificación.",
+   "fieldname": "requisito_incumplido",
+   "fieldtype": "Small Text",
+   "label": "Requisito incumplido",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_tratamiento",
+   "fieldtype": "Section Break",
+   "label": "Tratamiento (ISO 9001 §8.7.1)"
+  },
+  {
+   "description": "Quien ejecuta el tratamiento. Obligatorio desde «En tratamiento».",
+   "fieldname": "responsable",
+   "fieldtype": "Link",
+   "label": "Responsable del tratamiento",
+   "options": "User"
+  },
+  {
+   "description": "Qué se hace con la salida. Obligatoria para pasar a «Tratada».",
+   "fieldname": "decision",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Decisión",
+   "options": "\nCorregir\nAutorizar bajo concesion\nSuspender la entrega\nRetirar lo entregado"
+  },
+  {
+   "description": "Qué se hizo de verdad (§8.7.2 b). Obligatorio para pasar a «Tratada».",
+   "fieldname": "acciones_tomadas",
+   "fieldtype": "Text",
+   "label": "Acciones tomadas"
+  },
+  {
+   "depends_on": "eval:doc.decision==\"Autorizar bajo concesion\"",
+   "description": "Por qué se acepta la salida tal como está (§8.7.2 c).",
+   "fieldname": "justificacion_decision",
+   "fieldtype": "Text",
+   "label": "Justificación de la concesión",
+   "mandatory_depends_on": "eval:doc.decision==\"Autorizar bajo concesion\""
+  },
+  {
+   "fieldname": "column_break_tratamiento",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Lo sella el sistema al pasar a «Tratada»: la autoridad que decidió (§8.7.2 d).",
+   "fieldname": "autorizado_por",
+   "fieldtype": "Link",
+   "label": "Decidido por",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "fecha_tratamiento",
+   "fieldtype": "Date",
+   "label": "Fecha del tratamiento",
+   "read_only": 1
+  },
+  {
+   "description": "Prueba de lo hecho. Obligatoria para verificar.",
+   "fieldname": "evidencia_tratamiento",
+   "fieldtype": "Link",
+   "label": "Evidencia del tratamiento",
+   "options": "Evidencia"
+  },
+  {
+   "fieldname": "section_break_verificacion",
+   "fieldtype": "Section Break",
+   "label": "Verificación"
+  },
+  {
+   "description": "Se comprobó el resultado: si se corrigió, que ahora cumple el requisito (§8.7.1); si no, que la decisión se ejecutó.",
+   "fieldname": "verificacion_conformidad",
+   "fieldtype": "Check",
+   "label": "Resultado comprobado"
+  },
+  {
+   "description": "Obligatorias si se devuelve a tratamiento: por qué no se da por buena.",
+   "fieldname": "observaciones_verificacion",
+   "fieldtype": "Small Text",
+   "label": "Observaciones de la verificación"
+  },
+  {
+   "fieldname": "column_break_verificacion",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Lo sella el sistema al verificar o al devolver a tratamiento.",
+   "fieldname": "verificado_por",
+   "fieldtype": "Link",
+   "label": "Verificado por",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "fecha_verificacion",
+   "fieldtype": "Date",
+   "label": "Fecha de verificación",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_enlaces",
+   "fieldtype": "Section Break",
+   "label": "Relación con la mejora continua"
+  },
+  {
+   "description": "Se rellena al escalar. Una salida aislada no necesita no conformidad; un fallo del sistema sí.",
+   "fieldname": "no_conformidad",
+   "fieldtype": "Link",
+   "label": "No conformidad del sistema",
+   "options": "No Conformidad",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_enlaces",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "accion_mejora",
+   "fieldtype": "Link",
+   "label": "Acción de mejora",
+   "options": "Accion Mejora"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-09-27 09:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "Salida No Conforme",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "titulo,proceso,decision",
+ "show_title_field_in_link": 1,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "titulo",
+ "track_changes": 1
+}

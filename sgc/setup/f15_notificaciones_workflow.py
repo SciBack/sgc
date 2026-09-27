@@ -34,6 +34,7 @@ Reglas creadas:
   6.   Accion Mejora         — cualquier transición.
   7.   Auditoria             — cualquier transición.
   8.   Hallazgo Auditoria    — cualquier transición.
+  9.   Salida No Conforme    — tratamiento, verificación y cierre (#33).
 
 Ejecutar (idempotente):
     bench --site <site> execute sgc.setup.f15_notificaciones_workflow.run
@@ -215,6 +216,27 @@ NOTIFICACIONES = [
             *_a_campo_o_rol("responsable", ROL_CALIDAD_PROGRAMA, "En analisis", "En tratamiento"),
             *_a_campo_o_rol("verificada_por", ROL_VIGILANCIA, "En verificacion"),
             _a_campo("responsable", "Cerrada eficaz", "Cerrada no eficaz"),
+        ],
+    },
+    {
+        "name": "SGC - Salida No Conforme cambia de estado",
+        "document_type": "Salida No Conforme",
+        "event": "Value Change",
+        "value_changed": "estado",
+        "subject": "Salida no conforme {{ doc.name }}: {{ doc.estado }}",
+        "message": _mensaje(
+            "La salida no conforme",
+            {
+                "En tratamiento": "Trátela y registre la decisión y las acciones tomadas.",
+                "Tratada": "Verifique el resultado del tratamiento.",
+                "Cerrada": "Se cerró tras verificar el tratamiento.",
+            },
+            titulo="titulo",
+        ),
+        "recipients": [
+            *_a_campo_o_rol("responsable", ROL_DUENO, "En tratamiento"),
+            _a_rol(ROL_VIGILANCIA, "Tratada"),
+            _a_campo("detectado_por", "Cerrada"),
         ],
     },
     {
