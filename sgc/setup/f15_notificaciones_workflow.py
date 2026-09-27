@@ -46,7 +46,7 @@ Ejecutar (idempotente):
 import frappe
 
 from sgc.setup.f2_workflow import _ensure_role
-from sgc.setup.f7_notificaciones import _upsert_notification
+from sgc.setup.f7_notificaciones import _upsert_notification, limpiar_meta
 
 ROL_APROBADORA = "Autoridad Aprobadora"
 ROL_VIGILANCIA = "DPGC"
@@ -409,6 +409,8 @@ def run():
             cfg["name"], accion, cfg["document_type"], cfg.get("event", "Value Change")))
 
     frappe.db.commit()
+    frappe.flags.in_patch = False
+    limpiar_meta(cfg["document_type"] for cfg in NOTIFICACIONES)
 
     print("F15 notificaciones de workflow OK:", len(resultados), "reglas de transición.")
     return {"notificaciones": resultados}
