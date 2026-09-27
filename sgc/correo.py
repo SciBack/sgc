@@ -135,6 +135,21 @@ class NotificacionSGC(Notification):
 		finally:
 			self._filtrando_correo = False
 
+	def get_attachment(self, doc):
+		"""Sin el fichero de un documento de solo consulta (#36), ni adjuntos vacíos.
+
+		La regla de publicación adjunta el `archivo`: para un documento que solo se
+		consulta en pantalla, eso lo entregaría por correo. Y un documento externo
+		se publica con enlace y sin archivo: Frappe añadiría un adjunto sin fichero.
+		"""
+		adjuntos = super().get_attachment(doc) or []
+		solo_consulta = doc.doctype == "Documento Controlado" and doc.get("solo_consulta")
+		return [
+			a
+			for a in adjuntos
+			if not ("file_url" in a and (solo_consulta or not a.get("file_url")))
+		]
+
 	def get_list_of_recipients(self, doc, context):
 		para, cc, cco = super().get_list_of_recipients(doc, context)
 		if not getattr(self, "_filtrando_correo", False):

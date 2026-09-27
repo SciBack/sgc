@@ -13,6 +13,8 @@
   "version",
   "archivo",
   "visor_documento",
+  "url_externa",
+  "solo_consulta",
   "proceso",
   "tema",
   "estado",
@@ -60,7 +62,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Tipo de documento",
-   "options": "\nManual\nPol\u00edtica\nProcedimiento\nInstructivo\nGu\u00eda\nFormato\nPlan\nInforme",
+   "options": "\nManual\nPol\u00edtica\nProcedimiento\nInstructivo\nGu\u00eda\nFormato\nPlan\nInforme\nDocumentaci\u00f3n externa",
    "reqd": 1
   },
   {
@@ -73,6 +75,22 @@
    "fieldname": "visor_documento",
    "fieldtype": "HTML",
    "label": "Vista previa"
+  },
+  {
+   "fieldname": "url_externa",
+   "fieldtype": "Data",
+   "options": "URL",
+   "label": "Enlace al documento externo",
+   "depends_on": "eval:doc.tipo_documento==\"Documentaci\u00f3n externa\"",
+   "mandatory_depends_on": "eval:doc.tipo_documento==\"Documentaci\u00f3n externa\" && !doc.archivo && ['En revision','Aprobado','Publicado'].includes(doc.estado)",
+   "description": "D\u00f3nde se publica (una norma en un sitio oficial, por ejemplo). Si adem\u00e1s se adjunta una copia, la copia es la que se controla aqu\u00ed."
+  },
+  {
+   "default": "0",
+   "fieldname": "solo_consulta",
+   "fieldtype": "Check",
+   "label": "Solo consulta en pantalla",
+   "description": "Quien solo puede leerlo lo ve en el visor y no lo descarga; lo descarga quien puede editarlo. Es un control disuasorio: quien ve el contenido puede capturarlo. Exige un archivo privado en PDF o imagen."
   },
   {
    "description": "Se recalcula al publicar: la norma exige revisi\u00f3n al menos anual.",
@@ -175,7 +193,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-11 04:30:00.000000",
+ "modified": "2026-09-26 19:30:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "Documento Controlado",

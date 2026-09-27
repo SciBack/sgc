@@ -37,6 +37,49 @@ Documento con código, versión, responsable y archivo/enlace documental disponi
 | Publicado | Derogar | Obsoleto | DPGC |
 | Publicado | *(automático)* Otro documento lo reemplaza | Obsoleto | Sistema |
 
+## Documentación externa
+
+El tipo **Documentación externa** sirve para lo que no se aloja en el SGC; por ejemplo, una
+norma publicada en un sitio oficial. Se controla igual (versión, revisión, aprobación,
+publicación) y tiene sigla **DE** en el código.
+
+1. Crea un documento de tipo *Documentación externa* con **Enlace al documento externo** y
+   sin archivo, y envíalo a revisión. Resultado: pasa. Con cualquier otro tipo, sin archivo, no.
+2. Escribe un enlace que no empiece por `http://` o `https://`. Resultado: el guardado falla.
+3. Abre la ficha. Resultado: el visor muestra el enlace al documento externo.
+
+## Solo consulta en pantalla
+
+Un documento con **Solo consulta en pantalla** marcado solo lo **descarga quien puede
+editarlo**: quien lo elabora o lo administra. Quien solo tiene lectura lo ve en el visor de la
+ficha y no obtiene el fichero:
+
+| Vía | Quien solo lee | Quien puede editar |
+|---|---|---|
+| Visor de la ficha | lo ve | lo ve |
+| Botón «Descargar» | no aparece | descarga |
+| Enlace directo al fichero (`/private/files/…`) | sin permiso (403) | descarga |
+| Descargar varios en ZIP (gestor de ficheros) | el ZIP sale sin él | lo incluye |
+| Correo de publicación | sale sin adjunto | sale sin adjunto |
+
+Exige un **archivo privado** en **PDF o imagen**. Un `.docx` no se puede ver en pantalla, y
+un archivo público lo sirve el servidor web a cualquiera que tenga el enlace. El guardado lo
+rechaza con un mensaje que dice qué falta.
+
+⚠️ **Es un control disuasorio, no una protección técnica fuerte.** Quien ve el contenido
+puede capturarlo. Lo que garantiza es que el sistema no entrega el fichero y que cada acceso
+queda registrado.
+
+## Registro de accesos
+
+Cada apertura en el visor queda registrada como **Consulta** y cada descarga desde la ficha
+como **Descarga**, con usuario y fecha. Las descargas por el enlace directo del fichero las
+registra Frappe por su cuenta. El informe **Accesos a Documentos** (DPGC, Analista y System
+Manager) une las tres fuentes y filtra por documento, usuario y fechas.
+
+El registro vive en el `Access Log` de Frappe y dura lo que dure ese registro: Frappe no lo
+purga salvo que se añada a *Log Settings → Logs To Clear*.
+
 ## Permisos
 
 El actor necesita DocPerm sobre el DocType y el rol exacto de la transición. Las transiciones de control sin autoaprobación deben probarse con una cuenta distinta de quien creó el registro.
@@ -66,5 +109,5 @@ El correo y las tareas periódicas requieren scheduler/servidor de correo config
 
 ## Fuente en código
 
-La definición canónica está registrada en el manifiesto de cobertura y en sgc/setup. No se documentan estados adicionales a los definidos por el workflow actual.
+La definición canónica está registrada en el manifiesto de cobertura y en sgc/setup. La solo consulta, el registro de accesos y la documentación externa, en `sgc/documentos.py`. No se documentan estados adicionales a los definidos por el workflow actual.
 

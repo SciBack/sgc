@@ -39,10 +39,23 @@ class TestVistaPreviaDocumento(FrappeTestCase):
         fuente = JS.read_text(encoding="utf-8")
         self.assertIn("EXTENSIONES_EMBEBIBLES", fuente)
         self.assertIn("application/pdf", fuente)
-        self.assertIn("Abrir en pestaña nueva", fuente)
+        # SVG servido en línea desde el propio dominio puede llevar script (#36).
+        self.assertNotIn("svg:", fuente)
 
-    def test_la_url_del_adjunto_entra_escapada(self):
-        """El nombre del fichero lo elige quien lo sube."""
+    def test_el_visor_pasa_por_el_metodo_que_registra_y_no_por_el_fichero(self):
+        """#36: la URL directa del fichero no la tiene quien solo consulta, y cada
+        apertura debe quedar registrada. El nombre del documento va codificado."""
         fuente = JS.read_text(encoding="utf-8")
-        self.assertNotRegex(fuente, r'src="\$\{url\}')
-        self.assertIn("frappe.utils.escape_html(url)", fuente)
+        self.assertIn("sgc.documentos.${metodo}", fuente)
+        self.assertIn("encodeURIComponent(frm.doc.name)", fuente)
+        self.assertNotRegex(fuente, r"src=\"\$\{(url|frm\.doc\.archivo)")
+
+    def test_solo_ofrece_descargar_a_quien_puede(self):
+        fuente = JS.read_text(encoding="utf-8")
+        self.assertIn("puede_descargar", fuente)
+        self.assertIn("toolbar=0", fuente)
+
+    def test_el_enlace_externo_entra_escapado(self):
+        """El enlace lo escribe quien da de alta el documento."""
+        fuente = JS.read_text(encoding="utf-8")
+        self.assertIn("frappe.utils.escape_html(frm.doc.url_externa)", fuente)

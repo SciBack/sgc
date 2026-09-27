@@ -18,7 +18,9 @@ salen en un solo correo.
 
 La publicación de un Documento Controlado es la excepción: va en su propia regla
 porque adjunta el `archivo` del documento, que es lo que el lector necesita.
-Publicar ya exige el archivo (documento_controlado.py), así que nunca va vacío.
+Publicar exige el archivo, salvo a la documentación externa, que puede ir solo con
+enlace (#36); y un documento de solo consulta no se adjunta. Las dos cosas las
+resuelve `sgc.correo.NotificacionSGC.get_attachment`.
 
 Canal `Email` con campana. Qué se envía de verdad lo decide `Configuracion
 Correo` (#41): un sitio nuevo está en Ensayo y no escribe a nadie.
@@ -178,7 +180,11 @@ NOTIFICACIONES = [
             "<p>Se publicó el documento controlado <b>{{ doc.name }}</b> — "
             "{{ doc.titulo }}"
             "{% if doc.version %}, versión {{ doc.version }}{% endif %}.</p>"
-            "<p>Desde hoy es la versión vigente. Va adjunto.</p>"
+            "<p>Desde hoy es la versión vigente. "
+            "{% if doc.solo_consulta %}Es de solo consulta: se lee en el SGC y no va adjunto."
+            "{% elif doc.archivo %}Va adjunto.{% endif %}</p>"
+            '{% if doc.url_externa %}<p>Documento externo: <a href="{{ doc.url_externa }}">'
+            "{{ doc.url_externa }}</a></p>{% endif %}"
             '<p><a href="{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}">'
             "Abrir en el SGC</a></p>"
         ),

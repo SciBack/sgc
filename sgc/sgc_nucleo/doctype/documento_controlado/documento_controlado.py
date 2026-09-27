@@ -22,6 +22,7 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import add_years, nowdate
 
+from sgc import documentos
 from sgc.naming import siguiente_correlativo
 
 # Transiciones permitidas. Un estado con conjunto vacio es terminal.
@@ -44,6 +45,7 @@ SIGLAS = {
 	"Formato": "RG",
 	"Plan": "PL",
 	"Informe": "IA",
+	"Documentación externa": "DE",
 }
 
 
@@ -67,9 +69,15 @@ class DocumentoControlado(Document):
 		if not self.elaborado_por:
 			self.elaborado_por = frappe.session.user
 
+	def onload(self):
+		# El formulario decide con esto si ofrece descargar o solo el visor (#36).
+		self.set_onload("puede_descargar", documentos.puede_descargar(self))
+
 	def validate(self):
 		self._validar_transicion()
 		self._sellar_aprobacion()
+		self._validar_documentacion_externa()
+		self._validar_solo_consulta()
 		self._validar_requisitos_por_estado()
 		self._validar_descripcion_cambio()
 
@@ -155,9 +163,56 @@ class DocumentoControlado(Document):
 		if self.estado == "Aprobado" and (not anterior or anterior.estado != "Aprobado"):
 			self.aprobado_por = frappe.session.user
 
+	def _tiene_contenido(self):
+		"""El archivo; o, solo en la documentación externa, el enlace a donde vive."""
+		return bool(self.archivo) or (self._es_externo() and bool(self.url_externa))
+
+	def _es_externo(self):
+		return self.tipo_documento == documentos.EXTERNA
+
+	def _validar_documentacion_externa(self):
+		"""Documentación de origen externo (ISO 9001 §7.5.3.2): se identifica y se
+		controla aunque no se aloje aquí (#36)."""
+		if self.url_externa:
+			self.url_externa = self.url_externa.strip()
+			if not documentos.url_externa_valida(self.url_externa):
+				frappe.throw(_("El enlace externo debe empezar por http:// o https://."))
+
+	def _validar_solo_consulta(self):
+		"""Solo se puede restringir la descarga de lo que se puede ver en pantalla (#36).
+
+		- Sin archivo aquí no hay nada que restringir: un enlace externo lo abre
+		  cualquiera.
+		- Un .docx no se dibuja en el navegador: quien no puede descargarlo no
+		  podría leerlo de ninguna forma.
+		- Un fichero PÚBLICO lo sirve el servidor web sin pasar por Frappe: la
+		  restricción sería papel mojado.
+		"""
+		if not self.solo_consulta:
+			return
+		if not self.archivo:
+			frappe.throw(_("«Solo consulta en pantalla» necesita un archivo adjunto."))
+		if not documentos.se_puede_ver_en_pantalla(self.archivo):
+			frappe.throw(
+				_("«Solo consulta en pantalla» necesita un PDF o una imagen: un .{0} no se "
+				  "puede ver en pantalla. Adjunte la versión en PDF.").format(
+					documentos.extension(self.archivo) or "?"
+				)
+			)
+		if not self.archivo.startswith("/private/"):
+			frappe.throw(
+				_("«Solo consulta en pantalla» necesita un archivo privado: uno público lo "
+				  "puede abrir cualquiera con el enlace. Vuelva a adjuntarlo marcado como privado.")
+			)
+
 	def _validar_requisitos_por_estado(self):
 		if self.estado == "En revision":
-			if not self.archivo:
+			if not self._tiene_contenido():
+				if self._es_externo():
+					frappe.throw(
+						_("Adjunte el archivo o indique el enlace al documento externo antes de "
+						  "enviarlo a revisión.")
+					)
 				frappe.throw(_("Adjunte el archivo del documento antes de enviarlo a revisión."))
 			if not self.elaborado_por:
 				frappe.throw(_("Indique quién elaboró el documento antes de enviarlo a revisión."))
@@ -168,8 +223,8 @@ class DocumentoControlado(Document):
 		if self.estado == "Publicado":
 			# Sin las firmas, la norma prohibe comunicar e implementar el documento.
 			faltan = []
-			if not self.archivo:
-				faltan.append(_("el archivo"))
+			if not self._tiene_contenido():
+				faltan.append(_("el archivo o el enlace externo") if self._es_externo() else _("el archivo"))
 			if not self.elaborado_por:
 				faltan.append(_("quién lo elaboró"))
 			if not self.aprobado_por:
