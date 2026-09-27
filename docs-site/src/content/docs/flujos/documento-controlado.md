@@ -103,6 +103,28 @@ Captura del estado anterior, control ejecutado, estado final e historial; URL e 
 
 Un documento **publicado** se puede enviar desde **Enviar por correo** a usuarios del sistema o a cualquier dirección, incluida gente de fuera. Lo pueden hacer la DPGC, su analista y el dueño del proceso. El archivo va adjunto, salvo en un documento de **solo consulta**, que sale solo con el enlace; un documento externo lleva su dirección web. El envío queda en el historial del documento y pasa por el modo de ensayo y la lista blanca del correo.
 
+## Observaciones de los revisores
+
+Al pulsar **Observar**, el sistema pide la **observación del revisor**: sin texto no se puede observar. Al cambiar de estado, la observación pasa al **Registro de observaciones** con quién la hizo, cuándo, en qué paso (por ejemplo, «En revision → Observado») y sobre qué versión; ese registro no se edita y sirve de evidencia de la revisión. Un comentario escrito al aprobar también queda registrado.
+
+- Caso negativo: observar sin escribir la observación debe rechazarse.
+- Caso negativo: solo prepara una observación quien tiene disponible la acción **Observar**.
+
+## Revisión de vigencia
+
+Un documento publicado vence un año después de publicarse. **Quince días antes**, el dueño del proceso (o, si no lo hay, quien lo elaboró) recibe una **tarea** en su lista de pendientes para revisarlo, además del aviso por correo. Si la revisión concluye que sigue siendo válido, **Registrar revisión sin cambios** deja constancia en el historial, renueva la vigencia un año y cierra la tarea. Si hay que cambiarlo, se elabora la versión nueva, que al publicarse deja obsoleta la anterior y cierra su tarea.
+
+Registran la revisión el dueño del proceso, quien lo elaboró, la DPGC o su analista.
+
+## Organización y relaciones
+
+- **Carpeta**: además del proceso y el tema, cada documento se puede archivar en una carpeta del árbol **Carpetas documentales**, que la institución organiza como quiera (Calidad lo mantiene).
+- **Documentos relacionados**: la tabla vincula el documento con otros e indica cómo (referencia, complementa, deriva de, formato de). Un documento no se relaciona consigo mismo ni dos veces igual.
+
+## Difusión al publicar
+
+El aviso de publicación, con el archivo adjunto salvo si es de solo consulta, llega a quien lo elaboró, revisó y aprobó, a la DPGC, al **dueño del proceso** (se toma del proceso) y a las personas de **Difundir también a**: a quien afecta la nueva versión.
+
 ## Relación con otros módulos
 
 Mayan/control documental, notificaciones y auditoría de versiones.
