@@ -13,7 +13,7 @@ Una auditoría con su equipo auditor y sus hallazgos. Usa cuentas separadas: qui
 
 ## Pasos y resultados esperados
 
-1. Crea el informe de la auditoría y redacta el resumen ejecutivo o las conclusiones. Resultado esperado: queda en **Borrador**, con código `IAU-AAAA-NNNN` y los contadores de hallazgos calculados solos.
+1. Crea el informe de la auditoría y redacta el resumen ejecutivo o las conclusiones. Resultado esperado: queda en **Borrador**, con código `IAU-AAAA-NNNN` y los contadores calculados solos: NC mayores y menores, observaciones, oportunidades de mejora y **acciones de mejora** (las de las no conformidades que salieron de esta auditoría).
 2. Como **Auditor Interno**, ejecuta **Enviar a revision**. Resultado esperado: queda en **En revision** y el sistema sella **Emitido por** y la fecha.
 3. Como **DPGC** ajena al equipo auditor, ejecuta **Aprobar**. Resultado esperado: queda en **Aprobado** y el sistema sella **Aprobado por** y la fecha. A partir de aquí el contenido y los contadores ya no cambian.
 4. Indica los **Destinatarios** y ejecuta **Distribuir**. Resultado esperado: queda en **Distribuido**, con **Distribuido por** y la fecha.

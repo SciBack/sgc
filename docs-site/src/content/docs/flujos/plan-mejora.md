@@ -46,6 +46,10 @@ No modifiques el campo de estado directamente. No uses System Manager para simul
 
 Captura del estado anterior, control ejecutado, estado final e historial; URL e identificador ficticio; rol utilizado; mensaje y respuesta HTTP de cada caso negativo. Oculta cookies y datos personales.
 
+## Difusión del plan aprobado
+
+Al ejecutar **Aprobar y ejecutar**, el plan se difunde por correo a su responsable y al responsable de cada acción, con la tabla de acciones (qué, quién y para cuándo) y el enlace. Queda en el historial del plan y pasa por el modo de ensayo y la lista blanca del correo. Un plan que se carga ya en ejecución no se difunde: solo la aprobación es un acto.
+
 ## Relación con otros módulos
 
 Acciones de mejora, hallazgos y no conformidades.

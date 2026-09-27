@@ -58,6 +58,24 @@ NUMBER_CARDS = [
         "color": "#e24c4c",
     },
     {
+        # A13: nº de acciones de mejora (las abiertas; las vencidas van aparte).
+        "label": "SGC - Acciones de mejora abiertas",
+        "document_type": "Accion Mejora",
+        "module": "SGC Nucleo",
+        "type": "Custom",
+        "method": "sgc.dashboards.acciones_abiertas",
+        "color": "#f2994a",
+    },
+    {
+        # A13: nº de incidencias = salidas no conformes y eventos de riesgo sin cerrar.
+        "label": "SGC - Incidencias abiertas",
+        "document_type": "Salida No Conforme",
+        "module": "SGC Nucleo",
+        "type": "Custom",
+        "method": "sgc.dashboards.incidencias_abiertas",
+        "color": "#e24c4c",
+    },
+    {
         "label": "SGC - Planes de mejora en rojo",
         "document_type": "Plan Mejora",
         "module": "SGC Nucleo",

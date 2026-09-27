@@ -43,6 +43,15 @@ No aceptar HTML de error como PDF; no incluir datos de otro ámbito ni secretos 
 
 Estado o valores antes/después, identificador ficticio, rol, URL/método, respuesta y logs correlacionables sin cookies, tokens ni datos personales.
 
+## Cuadros de mando: NC, acciones de mejora e incidencias
+
+Además de las no conformidades abiertas y las acciones vencidas, dos tarjetas responden al pliego de auditorías (nº de NC, nº de acciones de mejora, nº de incidencias):
+
+- **Acciones de mejora abiertas**: las que todavía no se han verificado.
+- **Incidencias abiertas**: salidas no conformes sin cerrar más eventos de riesgo pendientes de decisión (reportados o en evaluación). Una incidencia es algo que ya pasó y se está tratando.
+
+Como el resto de tarjetas, cada una cuenta solo lo que quien la mira puede ver.
+
 ## Relación con otros módulos
 
 Autoevaluación, CBC, auditoría y cumplimiento.

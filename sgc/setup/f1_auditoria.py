@@ -151,6 +151,8 @@ def run():
         {"fieldname":"n_nc_menores","fieldtype":"Int","label":"N.º NC menores"},
         {"fieldname":"n_observaciones","fieldtype":"Int","label":"N.º observaciones"},
         {"fieldname":"n_om","fieldtype":"Int","label":"N.º oportunidades de mejora"},
+        {"fieldname":"n_acciones_mejora","fieldtype":"Int","label":"N.º acciones de mejora","read_only":1,
+         "description":"Acciones de mejora de las no conformidades que salieron de esta auditoría."},
         {"fieldname":"fecha_emision","fieldtype":"Date","label":"Fecha de emisión","in_list_view":1},
         {"fieldname":"emitido_por","fieldtype":"Link","label":"Emitido por","options":"User","read_only":1},
         {"fieldname":"pdf","fieldtype":"Attach","label":"PDF"},
