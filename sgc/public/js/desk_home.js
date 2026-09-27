@@ -33,8 +33,19 @@ frappe.provide("frappe.re_route");
 
 	const default_path = boot.apps_data && boot.apps_data.default_path;
 	const match = typeof default_path === "string" && default_path.match(/^\/desk\/(.+)$/);
-	if (match) {
-		// clave "" = sub_path vacío (= /desk pelado) -> slug del workspace destino
-		frappe.re_route[""] = match[1];
-	}
+	if (!match) return;
+
+	// El destino por defecto es la portada general («SGC», módulo Núcleo), pero no
+	// todos la ven: un Colaborador solo tiene acceso al área de Riesgos, y mandarlo
+	// ahí le pintaba «Sin permiso para Página» (el router, sin workspace visible con
+	// ese nombre, lo busca como Page). El boot trae los workspaces que SÍ puede ver
+	// de cada app (boot.py, load_desktop_data -> app_data[].workspaces).
+	const slug = (nombre) => nombre.toLowerCase().replace(/ /g, "-");
+	const app = (boot.app_data || []).find((a) => a.app_name === "sgc");
+	const visibles = ((app && app.workspaces) || []).map(slug);
+	let destino = match[1];
+	if (visibles.length && !visibles.includes(destino)) destino = visibles[0];
+
+	// clave "" = sub_path vacío (= /desk pelado) -> slug del workspace destino
+	frappe.re_route[""] = destino;
 })();

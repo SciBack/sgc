@@ -30,6 +30,8 @@ SHORTCUTS = [
     ("Hallazgos", "Hallazgo"),
     ("Riesgos", "Riesgo"),
     ("Auditorías", "Auditoria"),
+    # Lo usa cualquier colaborador: es por donde entra quien no tiene rol del SGC.
+    ("Reportar evento de riesgo", "Evento Riesgo"),
 ]
 
 # Tarjetas por área. (título de la tarjeta, [items]); un item es un doctype o la
@@ -41,7 +43,7 @@ CARDS = [
                          ("Report", "Salidas No Conformes")]),
     ("Auditoría", ["Programa Auditoria", "Auditoria", "Lista Verificacion", "Hallazgo Auditoria", "Informe Auditoria",
                    "Revision Direccion"]),
-    ("Riesgos y obligaciones", ["Riesgo", "Tratamiento Riesgo", "Matriz Riesgo", "Evaluacion Riesgo", "Obligacion Ente", "Entrega Obligacion"]),
+    ("Riesgos y obligaciones", ["Riesgo", "Evento Riesgo", "Tratamiento Riesgo", "Matriz Riesgo", "Evaluacion Riesgo", "Obligacion Ente", "Entrega Obligacion"]),
     ("Procesos", ["Proceso", "Procedimiento", "Ficha Caracterizacion Proceso", "Informe Cumplimiento"]),
     ("Gobierno de la calidad", ["Politica Calidad", "Objetivo Calidad", "Comite", "Reunion", "Acuerdo", "Instrumento",
                                 "Aplicacion Instrumento", "Comunicado"]),
@@ -86,6 +88,7 @@ ETIQUETAS = {
     "Salida No Conforme": "Salidas no conformes",
     "Lista Verificacion": "Listas de verificación",
     "Comunicado": "Comunicados",
+    "Evento Riesgo": "Eventos de riesgo",
 }
 
 def _contenido():
@@ -355,6 +358,7 @@ SIDEBARS = {
     "SGC Riesgos": [
         ("Portada del área", "Workspace", "SGC Riesgos"),
         ("Riesgos", "DocType", "Riesgo"),
+        ("Eventos de riesgo", "DocType", "Evento Riesgo"),
         ("Matrices de riesgo", "DocType", "Matriz Riesgo"),
         ("Evaluación de riesgos", "DocType", "Evaluacion Riesgo"),
         ("Tratamiento de riesgos", "DocType", "Tratamiento Riesgo"),

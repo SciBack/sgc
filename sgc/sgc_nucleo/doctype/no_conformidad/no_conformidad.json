@@ -57,7 +57,7 @@
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Origen",
-   "options": "Autoevaluacion\nAuditoria\nQueja/Reclamo\nIndicador fuera de meta\nRevision por direccion\nRiesgo materializado\nIncumplimiento a ente\nProceso\nSalida no conforme\nOtra"
+   "options": "Autoevaluacion\nAuditoria\nQueja/Reclamo\nIndicador fuera de meta\nRevision por direccion\nRiesgo materializado\nEvento de riesgo\nIncumplimiento a ente\nProceso\nSalida no conforme\nOtra"
   },
   {
    "fieldname": "tipo",
@@ -189,7 +189,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-27 12:30:00.000000",
+ "modified": "2026-09-27 14:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "No Conformidad",

@@ -150,7 +150,7 @@ def run():
         {"fieldname":"origen_doctype","fieldtype":"Link","label":"Tipo de documento origen","options":"DocType"},
         {"fieldname":"origen_id","fieldtype":"Dynamic Link","label":"Documento origen","options":"origen_doctype"},
         {"fieldname":"origen_tipo","fieldtype":"Select","label":"Origen",
-         "options":"Autoevaluacion\nAuditoria\nQueja/Reclamo\nIndicador fuera de meta\nRevision por direccion\nRiesgo materializado\nIncumplimiento a ente\nProceso\nSalida no conforme\nOtra","in_standard_filter":1},
+         "options":"Autoevaluacion\nAuditoria\nQueja/Reclamo\nIndicador fuera de meta\nRevision por direccion\nRiesgo materializado\nEvento de riesgo\nIncumplimiento a ente\nProceso\nSalida no conforme\nOtra","in_standard_filter":1},
         {"fieldname":"tipo","fieldtype":"Select","label":"Tipo",
          "options":"No conformidad mayor\nNo conformidad menor\nObservacion\nOportunidad de mejora","in_list_view":1,"in_standard_filter":1},
         {"fieldname":"descripcion","fieldtype":"Text","label":"Descripción"},

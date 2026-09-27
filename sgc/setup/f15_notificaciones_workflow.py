@@ -36,6 +36,8 @@ Reglas creadas:
   8.   Hallazgo Auditoria    — cualquier transición.
   9.   Salida No Conforme    — tratamiento, verificación y cierre (#33).
   10.  Informe Auditoria     — revisión, devolución, aprobación y distribución (#37).
+  11.  Evento Riesgo         — al reportarse («New», a la DPGC).
+  12.  Evento Riesgo         — al confirmarse o descartarse (a quien lo reportó).
 
 Ejecutar (idempotente):
     bench --site <site> execute sgc.setup.f15_notificaciones_workflow.run
@@ -323,6 +325,43 @@ NOTIFICACIONES = [
             _a_rol(ROL_AUDITOR, "Abierto", "Cerrado"),
         ],
     },
+    {
+        # Un reporte nuevo nace en «Reportado»: es su primera transición, pero
+        # `Value Change` no se evalúa al insertar. Por eso esta regla es «New».
+        "name": "SGC - Evento de riesgo reportado",
+        "document_type": "Evento Riesgo",
+        "event": "New",
+        "subject": "Evento de riesgo reportado: {{ doc.titulo }}",
+        "message": (
+            "<p>Se reportó el evento de riesgo <b>{{ doc.name }}</b> — {{ doc.titulo }} "
+            "({{ frappe.utils.formatdate(doc.fecha_evento) }}).</p>"
+            "<p>Tómelo en evaluación y decida si se confirma, lo que abre la no "
+            "conformidad para analizar sus causas y definir el plan de acción, o se descarta.</p>"
+            '<p><a href="{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}">'
+            "Abrir en el SGC</a></p>"
+        ),
+        "recipients": [{"receiver_by_role": ROL_VIGILANCIA}],
+    },
+    {
+        # A quien reportó, cuando Calidad decide: el colaborador que contó algo
+        # tiene que saber qué se hizo con ello, también si se descartó y por qué.
+        "name": "SGC - Evento de riesgo decidido",
+        "document_type": "Evento Riesgo",
+        "event": "Value Change",
+        "value_changed": "estado",
+        "subject": "Evento de riesgo {{ doc.name }}: {{ doc.estado }}",
+        "message": (
+            "<p>El evento de riesgo que reportó, <b>{{ doc.name }}</b> — {{ doc.titulo }}, "
+            "pasó al estado <b>{{ doc.estado }}</b>.</p>"
+            '{% if doc.estado == "Confirmado" %}<p>Calidad lo confirmó y abrió la no '
+            "conformidad {{ doc.no_conformidad or '' }} para analizar sus causas y definir "
+            "el plan de acción.</p>{% endif %}"
+            '{% if doc.estado == "Descartado" %}<p>Motivo: {{ doc.motivo_descarte }}</p>{% endif %}'
+            '<p><a href="{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}">'
+            "Abrir en el SGC</a></p>"
+        ),
+        "recipients": [_a_campo("reportado_por", "Confirmado", "Descartado")],
+    },
 ]
 
 
@@ -339,8 +378,8 @@ def run():
     for cfg in NOTIFICACIONES:
         accion = _upsert_notification(cfg)
         resultados.append((cfg["name"], accion))
-        print("Notification '{0}' {1}  ({2}, Value Change sobre estado)".format(
-            cfg["name"], accion, cfg["document_type"]))
+        print("Notification '{0}' {1}  ({2}, {3})".format(
+            cfg["name"], accion, cfg["document_type"], cfg.get("event", "Value Change")))
 
     frappe.db.commit()
 

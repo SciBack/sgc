@@ -116,8 +116,14 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-07-04 17:29:32.909293",
+ "links": [
+  {
+   "group": "Eventos",
+   "link_doctype": "Evento Riesgo",
+   "link_fieldname": "riesgo"
+  }
+ ],
+ "modified": "2026-09-27 14:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Riesgos",
  "name": "Riesgo",
