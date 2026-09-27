@@ -27,6 +27,9 @@
   "ventana_periodos",
   "fuente_dato",
   "responsable",
+  "proxima_medicion",
+  "dias_aviso",
+  "fecha_aviso_medicion",
   "notas",
   "dominio_dato",
   "fuente_autoritativa"
@@ -149,6 +152,26 @@
    "options": "User"
   },
   {
+   "fieldname": "proxima_medicion",
+   "fieldtype": "Date",
+   "label": "Próxima medición",
+   "description": "Avanza sola al registrar un valor, según la frecuencia. Se puede fijar a mano."
+  },
+  {
+   "fieldname": "dias_aviso",
+   "fieldtype": "Int",
+   "label": "Días de aviso",
+   "default": "7",
+   "description": "Cuántos días antes de la medición se avisa al responsable por correo."
+  },
+  {
+   "fieldname": "fecha_aviso_medicion",
+   "fieldtype": "Date",
+   "label": "Fecha del aviso",
+   "read_only": 1,
+   "description": "Próxima medición menos los días de aviso. Ese día sale el correo."
+  },
+  {
    "description": "Condiciones muestrales (≥70% de matriculados)",
    "fieldname": "notas",
    "fieldtype": "Text",
@@ -195,7 +218,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-04 17:48:52.769878",
+ "modified": "2026-09-27 13:30:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Estructura",
  "name": "Ficha Indicador",

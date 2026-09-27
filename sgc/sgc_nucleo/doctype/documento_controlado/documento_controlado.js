@@ -26,6 +26,8 @@ frappe.ui.form.on("Documento Controlado", {
 		// descargarlo le devolvería «sin permiso». Mejor no ofrecerlo.
 		frm.toggle_display("archivo", puede || !frm.doc.archivo);
 		sgc.documento.montar_visor(frm);
+		// Enviar por correo lo publicado (#92): ver sgc/public/js/envio_correo.js.
+		frappe.require("/assets/sgc/js/envio_correo.js", () => sgc.envio.boton(frm));
 	},
 	archivo(frm) {
 		// Al cambiar el adjunto, la vista previa tiene que seguirlo.

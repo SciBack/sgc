@@ -236,6 +236,14 @@ _ROWS = {
         DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "crw",
     },
 
+    # --- Comunicado (#92): nuevas funcionalidades y mantenimientos. Lo redactan
+    #     y envían la DPGC, su analista y TI (System Manager, que es quien
+    #     programa los mantenimientos); el resto lo lee. ---
+    "Comunicado": {
+        DPGC: "crw", ANAL: "crw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "crw",
+    },
+
     # --- Comite / Reunion / Acuerdo (gobierno del comité de calidad) ---
     "Comite": {
         DPGC: "crw", ANAL: "rw", CFAC: "r", RPRO: "rw", MIEM: "r", DPROC: "r",

@@ -14,5 +14,8 @@ frappe.ui.form.on("Ficha Caracterizacion Proceso", {
 		frm.add_custom_button(__("Editar BPMN"), () => {
 			frappe.set_route("bpmn-editor", frm.doc.doctype, frm.doc.name);
 		});
+
+		// Distribuir la ficha publicada por correo, también a externos (#92).
+		frappe.require("/assets/sgc/js/envio_correo.js", () => sgc.envio.boton(frm));
 	},
 });

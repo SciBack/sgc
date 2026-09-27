@@ -30,8 +30,8 @@ APP = "sgc"
 # Pantallas cuyo nombre técnico ya es el nombre correcto en español: no llevan
 # traducción. Una pantalla nueva va al CSV o aquí, a conciencia.
 IGUALES_EN_ESPANOL = {
-    "Acuerdo", "Evidencia", "Hallazgo", "Indicador", "Instrumento", "Procedimiento",
-    "Proceso", "Programa", "Riesgo", "Trazabilidad",
+    "Acuerdo", "Comunicado", "Evidencia", "Hallazgo", "Indicador", "Instrumento",
+    "Procedimiento", "Proceso", "Programa", "Riesgo", "Trazabilidad",
 }
 
 
