@@ -52,6 +52,7 @@ correo según el modo de arriba.
 | Plan de Mejora | 7 días antes de la fecha de compromiso | su responsable y DPGC |
 | Reunión | al convocarla | los asistentes |
 | Ficha de indicador | los *días de aviso* antes de la próxima medición (7 por defecto) | el responsable del indicador |
+| Ficha de indicador | el día después de la próxima medición, si no llegó el valor (**medición vencida**) | el responsable del indicador y la DPGC |
 
 La próxima medición de un indicador avanza sola un periodo (según su frecuencia) cada vez que se registra un valor, también cuando llega por la ingesta del almacén de datos; nunca retrocede.
 
@@ -72,6 +73,7 @@ que actúa en ese paso (entre paréntesis):
 | Informe de auditoría | En revisión → DPGC · Devuelto a borrador / Aprobado / Distribuido → quien lo emitió |
 | Salida no conforme | En tratamiento → responsable del tratamiento (Dueño de Proceso) · Tratada → DPGC, para verificar · Cerrada → quien la detectó |
 | Evento de riesgo | Al reportarse → DPGC · Confirmado o Descartado → quien lo reportó (con el motivo, si se descartó) |
+| Alerta de indicador | Al crearse abierta → su responsable (sin responsable, DPGC) |
 | Acción de Mejora | En ejecución → responsable (Responsable de Calidad de Programa) · Ejecutada → verificador (DPGC) · Verificada → responsable |
 | Auditoría | En ejecución / Ejecutada / Cerrada → equipo auditor (Auditor Interno) · Informe emitido → DPGC |
 | Hallazgo de Auditoría | Escalado a NC → DPGC · Abierto / Cerrado → Auditor Interno |
