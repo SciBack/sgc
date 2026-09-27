@@ -74,7 +74,7 @@ Captura del estado anterior, control ejecutado, estado final e historial; URL e 
 
 ## Relación con otros módulos
 
-Programa, hallazgos de auditoría, informe y CAPA.
+Programa, [lista de verificación](../lista-verificacion/) (el trabajo de campo, de donde salen los hallazgos), hallazgos de auditoría, informe y CAPA.
 
 ## Acciones operativas o configuración adicional
 

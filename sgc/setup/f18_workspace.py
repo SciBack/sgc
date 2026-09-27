@@ -39,7 +39,8 @@ CARDS = [
     ("Autoevaluación", ["Autoevaluacion", "Valoracion Criterio", "Valoracion Estandar", "Valor Indicador"]),
     ("Mejora continua", ["Hallazgo", "No Conformidad", "Salida No Conforme", "Plan Mejora", "Accion Mejora",
                          ("Report", "Salidas No Conformes")]),
-    ("Auditoría", ["Programa Auditoria", "Auditoria", "Hallazgo Auditoria", "Informe Auditoria", "Revision Direccion"]),
+    ("Auditoría", ["Programa Auditoria", "Auditoria", "Lista Verificacion", "Hallazgo Auditoria", "Informe Auditoria",
+                   "Revision Direccion"]),
     ("Riesgos y obligaciones", ["Riesgo", "Tratamiento Riesgo", "Matriz Riesgo", "Evaluacion Riesgo", "Obligacion Ente", "Entrega Obligacion"]),
     ("Procesos", ["Proceso", "Procedimiento", "Ficha Caracterizacion Proceso", "Informe Cumplimiento"]),
     ("Gobierno de la calidad", ["Politica Calidad", "Objetivo Calidad", "Comite", "Reunion", "Acuerdo", "Instrumento", "Aplicacion Instrumento"]),
@@ -57,6 +58,7 @@ ETIQUETAS = {
     "Proceso": "Mapa de procesos",
     "Ficha Caracterizacion Proceso": "Ficha de caracterización",
     "Salida No Conforme": "Salidas no conformes",
+    "Lista Verificacion": "Listas de verificación",
 }
 
 def _contenido():
@@ -278,6 +280,7 @@ SIDEBARS = {
     "SGC Auditoria": [
         ("Programa de auditoría", "DocType", "Programa Auditoria"),
         ("Auditorías", "DocType", "Auditoria"),
+        ("Listas de verificación", "DocType", "Lista Verificacion"),
         ("Hallazgos de auditoría", "DocType", "Hallazgo Auditoria"),
         ("Informes de auditoría", "DocType", "Informe Auditoria"),
         ("Revisión por la dirección", "DocType", "Revision Direccion"),
