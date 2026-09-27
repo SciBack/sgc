@@ -20,6 +20,16 @@ No conformidad abierta con causa y responsable identificables. Usa identificador
 5. En estado **En verificacion**, inicia sesión como **DPGC** y ejecuta **Cerrar no eficaz**. Resultado esperado: el registro queda en **Cerrada no eficaz** y la acción aparece en su historial.
 6. En estado **En verificacion**, inicia sesión como **DPGC** y ejecuta **Reabrir tratamiento**. Resultado esperado: el registro queda en **En tratamiento** y la acción aparece en su historial.
 
+## Análisis de causas (ISO 9001 §10.2.1 b)
+
+Cuando la no conformidad **requiere análisis de causa** (siempre en una no conformidad mayor), para ejecutar **Tratar** hace falta, además de la narrativa del análisis:
+
+- **Metodología**: cinco porqués, espina de pescado (Ishikawa), Pareto, lluvia de ideas u otra.
+- **Causas identificadas**: al menos una, y al menos una marcada como **causa raíz**.
+- **El dato que pide la metodología** en cada causa: el nivel en la cadena de porqués, la categoría de la espina (personas, método, material, máquina, medición, entorno) o la frecuencia para Pareto.
+
+La tabla se presenta según la metodología: ordenada por nivel, agrupada por categoría o de mayor a menor frecuencia. Las no conformidades que ya estaban en tratamiento antes de este cambio siguen como estaban, sin migrar nada.
+
 ## Estados por los que pasa
 
 **Abierta** → **En analisis** → **En tratamiento** → **En verificacion** → **Cerrada eficaz** → **Cerrada no eficaz**. Las devoluciones o reaperturas se muestran en la tabla, por lo que el recorrido no siempre es lineal.
@@ -47,6 +57,8 @@ No modifiques el campo de estado directamente. No uses System Manager para simul
 - Repetir una acción desde un estado incompatible: el estado no debe cambiar.
 - Omitir un dato obligatorio o relación requerida: el guardado debe fallar con mensaje accionable.
 - Intentar autoaprobar una transición segregada: debe ser rechazada.
+- Tratar una no conformidad que requiere análisis sin metodología, sin causas o sin causa raíz: debe rechazarse diciendo qué falta.
+- Con cinco porqués, Ishikawa o Pareto, dejar una causa sin su nivel, su categoría o su frecuencia: debe rechazarse nombrando las filas.
 
 ## Evidencia que debe capturarse
 
