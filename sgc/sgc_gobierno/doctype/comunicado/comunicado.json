@@ -1,0 +1,165 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "format:COM-{YYYY}-{####}",
+ "creation": "2026-09-27 13:40:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "asunto",
+  "tipo",
+  "estado",
+  "column_break_cabecera",
+  "roles",
+  "section_break_mantenimiento",
+  "inicio_mantenimiento",
+  "column_break_mantenimiento",
+  "fin_mantenimiento",
+  "section_break_mensaje",
+  "mensaje",
+  "section_break_envio",
+  "enviado_por",
+  "fecha_envio",
+  "column_break_envio",
+  "n_destinatarios",
+  "n_retenidos"
+ ],
+ "fields": [
+  {
+   "fieldname": "asunto",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Asunto",
+   "reqd": 1
+  },
+  {
+   "fieldname": "tipo",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Tipo",
+   "options": "Nueva funcionalidad\nMantenimiento programado\nAviso general",
+   "reqd": 1
+  },
+  {
+   "default": "Borrador",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Borrador\nEnviado",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_cabecera",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Se envía a los usuarios activos que tengan alguno de estos roles.",
+   "fieldname": "roles",
+   "fieldtype": "Table MultiSelect",
+   "label": "Destinatarios (roles)",
+   "options": "Comunicado Rol",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:doc.tipo==\"Mantenimiento programado\"",
+   "fieldname": "section_break_mantenimiento",
+   "fieldtype": "Section Break",
+   "label": "Mantenimiento"
+  },
+  {
+   "description": "Se avisa con antelación: al enviar, debe faltar al menos un día.",
+   "fieldname": "inicio_mantenimiento",
+   "fieldtype": "Datetime",
+   "label": "Inicio del mantenimiento",
+   "mandatory_depends_on": "eval:doc.tipo==\"Mantenimiento programado\""
+  },
+  {
+   "fieldname": "column_break_mantenimiento",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fin_mantenimiento",
+   "fieldtype": "Datetime",
+   "label": "Fin previsto"
+  },
+  {
+   "fieldname": "section_break_mensaje",
+   "fieldtype": "Section Break",
+   "label": "Mensaje"
+  },
+  {
+   "fieldname": "mensaje",
+   "fieldtype": "Text Editor",
+   "label": "Mensaje",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_envio",
+   "fieldtype": "Section Break",
+   "label": "Envío"
+  },
+  {
+   "fieldname": "enviado_por",
+   "fieldtype": "Link",
+   "label": "Enviado por",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "fecha_envio",
+   "fieldtype": "Datetime",
+   "label": "Fecha de envío",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_envio",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "n_destinatarios",
+   "fieldtype": "Int",
+   "label": "Enviados",
+   "read_only": 1
+  },
+  {
+   "description": "En modo ensayo o fuera de la lista blanca: constan en Registro Correo.",
+   "fieldname": "n_retenidos",
+   "fieldtype": "Int",
+   "label": "Retenidos por la configuración del correo",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-09-27 13:40:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Gobierno",
+ "name": "Comunicado",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "asunto,tipo",
+ "show_title_field_in_link": 1,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "asunto",
+ "track_changes": 1
+}

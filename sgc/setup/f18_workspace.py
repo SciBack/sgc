@@ -43,7 +43,8 @@ CARDS = [
                    "Revision Direccion"]),
     ("Riesgos y obligaciones", ["Riesgo", "Tratamiento Riesgo", "Matriz Riesgo", "Evaluacion Riesgo", "Obligacion Ente", "Entrega Obligacion"]),
     ("Procesos", ["Proceso", "Procedimiento", "Ficha Caracterizacion Proceso", "Informe Cumplimiento"]),
-    ("Gobierno de la calidad", ["Politica Calidad", "Objetivo Calidad", "Comite", "Reunion", "Acuerdo", "Instrumento", "Aplicacion Instrumento"]),
+    ("Gobierno de la calidad", ["Politica Calidad", "Objetivo Calidad", "Comite", "Reunion", "Acuerdo", "Instrumento",
+                                "Aplicacion Instrumento", "Comunicado"]),
     ("Marcos e indicadores", ["Marco Normativo", "Elemento Marco", "Indicador", "Ficha Indicador",
                               "Escala Valoracion", ("Report", "Indicadores de Acreditacion")]),
     ("Estructura", ["Unidad Organica", "Programa", "Programa Sede", "Periodo Academico"]),
@@ -84,6 +85,7 @@ ETIQUETAS = {
     "Ficha Caracterizacion Proceso": "Ficha de caracterización",
     "Salida No Conforme": "Salidas no conformes",
     "Lista Verificacion": "Listas de verificación",
+    "Comunicado": "Comunicados",
 }
 
 def _contenido():
@@ -347,6 +349,7 @@ SIDEBARS = {
         ("Instrumentos", "DocType", "Instrumento"),
         ("Aplicación de instrumentos", "DocType", "Aplicacion Instrumento"),
         ("Resultados de instrumento", "DocType", "Resultado Instrumento"),
+        ("Comunicados", "DocType", "Comunicado"),
         ("Volver al SGC", "Workspace", WS),
     ],
     "SGC Riesgos": [

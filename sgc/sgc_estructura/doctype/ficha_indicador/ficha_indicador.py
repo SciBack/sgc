@@ -8,10 +8,47 @@ para el mismo indicador, ni una ficha con ambos anclajes (o ninguno) a la vez.
 import frappe
 from frappe import _
 from frappe.model.document import Document
+from frappe.utils import add_days, add_months, cint, getdate, nowdate
+
+# Meses entre mediciones según la frecuencia de la ficha. «por_promocion» no
+# tiene un calendario fijo: su próxima medición se fija a mano.
+MESES_POR_FRECUENCIA = {"mensual": 1, "trimestral": 3, "semestral": 6, "anual": 12}
+
+
+def fecha_aviso(proxima, dias):
+    """El día en que sale el aviso: la próxima medición menos los días de aviso (#92)."""
+    if not proxima:
+        return None
+    return add_days(getdate(proxima), -max(cint(dias), 0))
+
+
+def avanzar_proxima_medicion(indicador, fecha_valor):
+    """Tras registrar un valor, la próxima medición es un periodo después (#92).
+
+    Solo avanza: una medición atrasada que llega tarde no hace retroceder el
+    calendario. Se escribe con `db.set_value` para no revalidar la ficha por cada
+    valor que entra por la ingesta.
+    """
+    ficha = frappe.db.get_value(
+        "Ficha Indicador", {"indicador": indicador},
+        ["name", "frecuencia", "proxima_medicion", "dias_aviso"], as_dict=True,
+    )
+    if not ficha or ficha.frecuencia not in MESES_POR_FRECUENCIA:
+        return
+    nueva = add_months(getdate(fecha_valor or nowdate()), MESES_POR_FRECUENCIA[ficha.frecuencia])
+    if ficha.proxima_medicion and getdate(ficha.proxima_medicion) >= nueva:
+        return
+    frappe.db.set_value("Ficha Indicador", ficha.name, {
+        "proxima_medicion": nueva,
+        "fecha_aviso_medicion": fecha_aviso(nueva, ficha.dias_aviso if ficha.dias_aviso is not None else 7),
+    }, update_modified=False)
 
 
 class FichaIndicador(Document):
     def validate(self):
+        if cint(self.dias_aviso) < 0:
+            frappe.throw(_("Los días de aviso no pueden ser negativos."))
+        self.fecha_aviso_medicion = fecha_aviso(self.proxima_medicion, self.dias_aviso)
         if bool(self.indicador) == bool(self.elemento_marco):
             frappe.throw(
                 _("La ficha debe anclarse a exactamente uno: «Indicador» "

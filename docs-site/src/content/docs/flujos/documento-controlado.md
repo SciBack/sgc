@@ -99,6 +99,10 @@ No modifiques el campo de estado directamente. No uses System Manager para simul
 
 Captura del estado anterior, control ejecutado, estado final e historial; URL e identificador ficticio; rol utilizado; mensaje y respuesta HTTP de cada caso negativo. Oculta cookies y datos personales.
 
+## Enviar por correo
+
+Un documento **publicado** se puede enviar desde **Enviar por correo** a usuarios del sistema o a cualquier dirección, incluida gente de fuera. Lo pueden hacer la DPGC, su analista y el dueño del proceso. El archivo va adjunto, salvo en un documento de **solo consulta**, que sale solo con el enlace; un documento externo lleva su dirección web. El envío queda en el historial del documento y pasa por el modo de ensayo y la lista blanca del correo.
+
 ## Relación con otros módulos
 
 Mayan/control documental, notificaciones y auditoría de versiones.

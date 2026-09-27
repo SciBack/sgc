@@ -21,6 +21,8 @@ Reglas creadas:
   4. Plan de Mejora      — `Days Before`, 7 días antes de `fecha_compromiso`.
   5. Reunion (convocatoria) — `New`, al crear/programar la reunión (no es por
      vencimiento: dispara una sola vez, en el `after_insert`).
+  6. Ficha Indicador (#92) — `Days Before` 0 sobre `fecha_aviso_medicion`: el
+     día en que toca avisar al responsable de la próxima medición.
 
 Las reglas 1-4 evalúan un `condition` (Python sobre `doc`) que descarta los
 estados ya cerrados/obsoletos, para no molestar con lo que ya no requiere
@@ -142,6 +144,26 @@ NOTIFICACIONES = [
         ),
         "recipients": [
             {"receiver_by_role": ROL_VIGILANCIA},
+            {"receiver_by_document_field": "responsable"},
+        ],
+    },
+    {
+        # #92: «avisos por email X días antes de la medición al responsable». La
+        # ficha calcula `fecha_aviso_medicion` = próxima medición menos días de aviso,
+        # así que la regla dispara ESE día (days_in_advance = 0) y cada indicador
+        # tiene su propio X.
+        "name": "SGC - Medicion de indicador proxima",
+        "document_type": "Ficha Indicador",
+        "date_changed": "fecha_aviso_medicion",
+        "days_in_advance": 0,
+        "subject": "Medición de indicador el {{ doc.proxima_medicion }}: {{ doc.indicador or doc.name }}",
+        "message": (
+            "<p>La próxima medición del indicador <b>{{ doc.indicador or doc.name }}</b> "
+            "está prevista para el <b>{{ doc.proxima_medicion }}</b> "
+            "(frecuencia {{ doc.frecuencia }}).</p>"
+            "<p>Prepare los datos de la fuente: {{ doc.fuente_dato or \"—\" }}.</p>"
+        ),
+        "recipients": [
             {"receiver_by_document_field": "responsable"},
         ],
     },

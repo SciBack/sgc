@@ -224,6 +224,54 @@ class AvisoDeskSGC(NotificationLog):
 		set_notifications_as_unseen(self.for_user)
 
 
+# --- envíos a demanda (#92) ------------------------------------------------------
+
+_CORREO = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+
+
+def es_correo(texto):
+	return bool(_CORREO.match((texto or "").strip()))
+
+
+def enviar(para, asunto, mensaje, documento_tipo=None, documento=None, origen=None,
+		   adjuntos=None, formato_impresion=None):
+	"""Envío a demanda (no una regla): el único camino de los envíos nuevos.
+
+	Aplica el mismo modo y la misma lista blanca que las reglas (#41): lo que no
+	sale se anota en `Registro Correo`. Lo que sale va por `Communication`, así
+	queda en el historial del documento. Se usa `_make` y no `make` porque `make`
+	exige el permiso «email», que la matriz no reparte: quien llama a esta función
+	ya ha comprobado quién puede enviar qué.
+
+	Devuelve {"enviados": [...], "retenidos": [(correo, resultado), ...]}.
+	"""
+	from frappe.core.doctype.communication.email import _make
+
+	vistos = []
+	for correo in para or []:
+		c = (correo or "").strip()
+		if c and c.lower() not in {v.lower() for v in vistos}:
+			vistos.append(c)
+
+	a_enviar, registros = decidir({"Para": vistos}, modo(), lista_blanca())
+	for correo, tipo, resultado in registros:
+		_anotar(correo, tipo, resultado, asunto, documento_tipo, documento, aviso=origen)
+
+	if a_enviar["Para"]:
+		_make(
+			doctype=documento_tipo,
+			name=documento,
+			subject=asunto,
+			content=mensaje,
+			recipients=a_enviar["Para"],
+			send_email=1,
+			attachments=adjuntos or None,
+			print_format=formato_impresion,
+			communication_type="Communication",
+		)
+	return {"enviados": a_enviar["Para"], "retenidos": [(c, r) for c, _t, r in registros]}
+
+
 # --- comprobación previa de destinatarios -------------------------------------
 
 

@@ -41,6 +41,10 @@ No alterar estructura sincronizada como actor funcional; validar jerarquías y c
 
 Estado o valores antes/después, identificador ficticio, rol, URL/método, respuesta y logs correlacionables sin cookies, tokens ni datos personales.
 
+## Distribuir la ficha por correo
+
+Una ficha de caracterización **publicada** se distribuye desde **Enviar por correo**, a usuarios del sistema o a personal externo, en PDF. Si hay algún destinatario externo, va en el **formato público**, que cita el acto de aprobación en lugar de los nombres de quienes firman (Ley 29733).
+
 ## Relación con otros módulos
 
 Procedimientos, indicadores, riesgos y documentos.

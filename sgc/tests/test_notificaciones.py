@@ -30,8 +30,8 @@ class IntegrationTestNotificaciones(IntegrationTestCase):
             fields=["name", "document_type", "event", "date_changed", "channel", "enabled"],
         )
 
-    def test_run_crea_las_cinco_reglas(self):
-        """run() deja 5 Notification 'SGC …' activas.
+    def test_run_crea_las_seis_reglas(self):
+        """run() deja 6 Notification 'SGC …' activas.
 
         NO se asserta el canal: `run()` solo lo fija al CREAR y respeta el que
         exista al actualizar (ver `test_run_respeta_el_canal_configurado`). El
@@ -39,7 +39,7 @@ class IntegrationTestNotificaciones(IntegrationTestCase):
         """
         f7.run()
         notifs = self._sgc_notifs()
-        self.assertEqual(len(notifs), 5)
+        self.assertEqual(len(notifs), 6)
         for n in notifs:
             self.assertEqual(n["enabled"], 1)
             if n["event"] == "Days Before":
@@ -91,17 +91,17 @@ class IntegrationTestNotificaciones(IntegrationTestCase):
             frappe.delete_doc("Notification", cfg["name"], force=True, ignore_permissions=True)
             frappe.db.commit()
 
-    def test_cubre_los_cinco_doctypes(self):
+    def test_cubre_los_seis_doctypes(self):
         """Hay una regla por cada DocType con alerta declarada en f7."""
         f7.run()
         dts = {n["document_type"] for n in self._sgc_notifs()}
         self.assertEqual(
             dts,
-            {"Documento Controlado", "Evidencia", "Accion Mejora", "Plan Mejora", "Reunion"},
+            {"Documento Controlado", "Evidencia", "Accion Mejora", "Plan Mejora", "Reunion", "Ficha Indicador"},
         )
 
     def test_run_es_idempotente(self):
-        """Re-ejecutar no duplica: sigue habiendo 5 (se actualizan en sitio)."""
+        """Re-ejecutar no duplica: sigue habiendo 6 (se actualizan en sitio)."""
         f7.run()
         f7.run()
-        self.assertEqual(len(self._sgc_notifs()), 5)
+        self.assertEqual(len(self._sgc_notifs()), 6)

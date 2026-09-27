@@ -49,6 +49,14 @@ class ValorIndicador(Document):
                 frappe.throw(aviso['mensaje'])
             frappe.msgprint(aviso['mensaje'], indicator='orange')
 
+    def after_insert(self):
+        # La próxima medición de su ficha avanza un periodo (#92). Va aquí y no en
+        # validate porque validate sale antes de tiempo en la ingesta, que es la
+        # vía principal de las mediciones.
+        from sgc.sgc_estructura.doctype.ficha_indicador.ficha_indicador import avanzar_proxima_medicion
+
+        avanzar_proxima_medicion(self.indicador, self.fecha)
+
     def on_trash(self):
         if self.ingesta_clave:
             frappe.throw('Las mediciones de ingesta se conservan para auditoría')
