@@ -42,7 +42,7 @@ add_to_apps_screen = [
 # app_include_css = "/assets/sgc/css/sgc.css"
 # desk_home.js: redirige la entrada pelada al Desk (/desk) directo al workspace
 # SGC saltando el apps screen. Archivo plano (no .bundle.) -> se sirve sin build.
-app_include_js = ["/assets/sgc/js/desk_home.js", "/assets/sgc/js/latido_scheduler.js"]
+app_include_js = ["/assets/sgc/js/desk_home.js", "/assets/sgc/js/latido_scheduler.js", "/assets/sgc/js/migas.js"]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/sgc/css/sgc.css"
