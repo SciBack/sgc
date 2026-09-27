@@ -3,7 +3,7 @@
 // La miga de un área del SGC es  ⌂ > Área > Pantalla > Registro  venga de donde
 // venga. Casi todo lo resuelve la configuración (una portada por área, barras sin
 // pantallas repetidas y `translations/es.csv`, ver setup/f18_workspace.py). Aquí
-// solo se cubren tres huecos de Frappe 16.32 (`frappe/public/js/frappe/views/breadcrumbs.js`):
+// solo se cubren cuatro huecos de Frappe 16.32 (`frappe/public/js/frappe/views/breadcrumbs.js`):
 //
 // 1. Al llegar DESDE una portada, `set_workspace` busca el área solo entre las
 //    portadas del módulo de la pantalla y, si no la encuentra, no tiene plan B:
@@ -43,6 +43,26 @@
 			if (actual && es_del_sgc(actual.module)) migas.update();
 		}, 0);
 	});
+
+	// 4. En la ruta de un informe (`query-report`), `router.meta` conserva el módulo
+	//    de la pantalla ANTERIOR (p. ej. «Desk» si se venía de Tareas). Con ese
+	//    módulo, `resolve_sidebar` filtra las barras por su app y descarta las del
+	//    SGC, así que la barra (y el área de la miga) se quedaba en la anterior.
+	//    Si la barra que enlaza el informe es del SGC, se resuelve sin ese módulo.
+	const Barra = frappe.ui && frappe.ui.Sidebar;
+	if (Barra && typeof Barra.prototype.resolve_sidebar === "function") {
+		const resolve_sidebar = Barra.prototype.resolve_sidebar;
+		Barra.prototype.resolve_sidebar = function (entity, module) {
+			if ((frappe.get_route()[0] || "").toLowerCase() === "query-report") {
+				const del_sgc = this.get_workspace_sidebars(entity).some((barra) => {
+					const cfg = (frappe.boot.workspace_sidebar_item || {})[barra.toLowerCase()];
+					return cfg && cfg.app === "sgc";
+				});
+				if (del_sgc) module = undefined;
+			}
+			return resolve_sidebar.call(this, entity, module);
+		};
+	}
 
 	const update = migas.update;
 	migas.update = function () {
