@@ -1,0 +1,100 @@
+{
+ "actions": [],
+ "creation": "2026-09-27 11:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "orden",
+  "pregunta",
+  "criterio",
+  "documento_controlado",
+  "resultado",
+  "evidencia_vista",
+  "evidencia",
+  "notas",
+  "hallazgo"
+ ],
+ "fields": [
+  {
+   "columns": 1,
+   "fieldname": "orden",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Orden"
+  },
+  {
+   "columns": 3,
+   "description": "Qué comprueba el auditor. Ej.: «¿Las actas se firman dentro del plazo del reglamento?».",
+   "fieldname": "pregunta",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Punto a verificar",
+   "reqd": 1
+  },
+  {
+   "columns": 2,
+   "description": "Requisito del marco que respalda el punto.",
+   "fieldname": "criterio",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Criterio",
+   "options": "Elemento Marco"
+  },
+  {
+   "description": "Procedimiento o documento contra el que se verifica.",
+   "fieldname": "documento_controlado",
+   "fieldtype": "Link",
+   "label": "Documento",
+   "options": "Documento Controlado"
+  },
+  {
+   "columns": 2,
+   "fieldname": "resultado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Resultado",
+   "options": "\nConforme\nNo conforme\nObservacion\nNo aplica"
+  },
+  {
+   "columns": 2,
+   "description": "Qué vio el auditor: registros, entrevistas, muestras.",
+   "fieldname": "evidencia_vista",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Evidencia vista"
+  },
+  {
+   "fieldname": "evidencia",
+   "fieldtype": "Link",
+   "label": "Evidencia registrada",
+   "options": "Evidencia"
+  },
+  {
+   "fieldname": "notas",
+   "fieldtype": "Small Text",
+   "label": "Notas"
+  },
+  {
+   "description": "Lo rellena el sistema al generar hallazgos. Impide generar dos veces el mismo.",
+   "fieldname": "hallazgo",
+   "fieldtype": "Link",
+   "label": "Hallazgo generado",
+   "options": "Hallazgo Auditoria",
+   "read_only": 1
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2026-09-27 11:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Auditoria",
+ "name": "Item Verificacion",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}

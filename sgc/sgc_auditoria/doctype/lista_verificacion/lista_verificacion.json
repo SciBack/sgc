@@ -1,0 +1,152 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "format:LV-{YYYY}-{####}",
+ "creation": "2026-09-27 11:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "titulo",
+  "auditoria",
+  "estado",
+  "column_break_cabecera",
+  "proceso",
+  "unidad_organica",
+  "auditor",
+  "fecha_aplicacion",
+  "plantilla_origen",
+  "section_break_items",
+  "items",
+  "section_break_cierre",
+  "completada_por",
+  "column_break_cierre",
+  "fecha_completada"
+ ],
+ "fields": [
+  {
+   "fieldname": "titulo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Título",
+   "reqd": 1
+  },
+  {
+   "description": "Vacía = plantilla reutilizable. Con auditoría = la lista que se aplica en esa auditoría.",
+   "fieldname": "auditoria",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Auditoría",
+   "options": "Auditoria"
+  },
+  {
+   "default": "Borrador",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Borrador\nEn ejecucion\nCompletada"
+  },
+  {
+   "fieldname": "column_break_cabecera",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "proceso",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Proceso",
+   "options": "Proceso"
+  },
+  {
+   "fieldname": "unidad_organica",
+   "fieldtype": "Link",
+   "label": "Unidad orgánica",
+   "options": "Unidad Organica"
+  },
+  {
+   "description": "Quien aplica la lista. Si se deja vacío, quien la registra.",
+   "fieldname": "auditor",
+   "fieldtype": "Link",
+   "label": "Auditor",
+   "options": "User"
+  },
+  {
+   "fieldname": "fecha_aplicacion",
+   "fieldtype": "Date",
+   "label": "Fecha de aplicación"
+  },
+  {
+   "fieldname": "plantilla_origen",
+   "fieldtype": "Link",
+   "label": "Creada desde",
+   "options": "Lista Verificacion",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_items",
+   "fieldtype": "Section Break",
+   "label": "Puntos a verificar (ISO 19011 §6.3.4)"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Puntos",
+   "options": "Item Verificacion"
+  },
+  {
+   "fieldname": "section_break_cierre",
+   "fieldtype": "Section Break",
+   "label": "Cierre"
+  },
+  {
+   "description": "Lo sella el sistema al pasar a «Completada».",
+   "fieldname": "completada_por",
+   "fieldtype": "Link",
+   "label": "Completada por",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_cierre",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fecha_completada",
+   "fieldtype": "Date",
+   "label": "Fecha de cierre",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-09-27 11:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Auditoria",
+ "name": "Lista Verificacion",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "titulo,auditoria",
+ "show_title_field_in_link": 1,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "titulo",
+ "track_changes": 1
+}

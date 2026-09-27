@@ -298,6 +298,14 @@ _ROWS = {
         DPGC: "rws", ANAL: "rw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
         DATA: "r", AUDI: "crwsx", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
     },
+    # --- Lista Verificacion (#32, ISO 19011 §6.3.4): el documento de trabajo
+    #     del auditor. La aplica y completa el auditor; la DPGC y su analista
+    #     mantienen las plantillas; el resto la lee. Generar hallazgos exige
+    #     además crear Hallazgo Auditoria, que es solo del auditor. ---
+    "Lista Verificacion": {
+        DPGC: "crw", ANAL: "crw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
+        DATA: "r", AUDI: "crw", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
+    },
     "Hallazgo Auditoria": {
         DPGC: "rw", ANAL: "rw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
         DATA: "r", AUDI: "crw", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
