@@ -60,6 +60,8 @@ sgc.soporte.abrir = function (valores) {
 
 sgc.soporte.revisar = function (valores, ticket) {
 	const e = frappe.utils.escape_html;
+	// Un <div> con <br> y no un <pre>: Frappe pasa los <pre> por highlight.js, que
+	// se come los saltos de línea y deja el contexto técnico en un solo renglón.
 	const d = new frappe.ui.Dialog({
 		title: __("Esto es lo que se enviará"),
 		fields: [
@@ -67,7 +69,9 @@ sgc.soporte.revisar = function (valores, ticket) {
 				fieldname: "vista",
 				fieldtype: "HTML",
 				options: `<p><b>${e(ticket.asunto)}</b> · ${__("Prioridad")}: ${e(ticket.prioridad)}</p>
-					<pre style="white-space: pre-wrap; max-height: 320px; overflow: auto">${e(ticket.cuerpo)}</pre>`,
+					<div class="small" style="max-height: 320px; overflow: auto; padding: 8px 12px; border-radius: 6px; background: var(--subtle-fg)">${e(
+						ticket.cuerpo
+					).replace(/\n/g, "<br>")}</div>`,
 			},
 		],
 		primary_action_label: __("Enviar"),
@@ -86,9 +90,12 @@ sgc.soporte.revisar = function (valores, ticket) {
 						frappe.msgprint({
 							title: __("Reporte enviado"),
 							indicator: "green",
-							message: res.referencia
-								? __("Su reporte llegó al helpdesk con la referencia {0}.", [e(res.referencia)])
-								: __("Su reporte llegó al helpdesk."),
+							message:
+								res.proveedor === "Correo"
+									? __("Su reporte se envió por correo a {0}.", [e(res.referencia)])
+									: res.referencia
+										? __("Su reporte llegó al helpdesk con la referencia {0}.", [e(res.referencia)])
+										: __("Su reporte llegó al helpdesk."),
 						});
 					} else {
 						sgc.soporte.alternativa(res);
