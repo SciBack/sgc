@@ -50,6 +50,31 @@ CARDS = [
 ]
 
 
+# Áreas del SGC (27-sep-2026). Cada módulo es un área con su PORTADA (un Workspace
+# con el nombre del módulo), su barra lateral y su icono de miga, los cuatro con el
+# MISMO nombre técnico. El nombre que ve la persona sale de `sgc/translations/es.csv`
+# («SGC Auditoria» → «Auditoría»), así que no hay que renombrar nada en la base.
+#
+# Por qué una portada por área, y no solo la general: la miga de Frappe dibuja el
+# área solo si el módulo tiene un workspace visible (`breadcrumbs.js`, que filtra por
+# `frappe.visible_modules`), y su enlace es el del icono. Con un único workspace
+# («SGC», módulo SGC Nucleo), las listas de las otras cinco áreas salían sin área y
+# la misma pantalla daba tres migas distintas según el camino (revisión del 27-sep).
+AREAS = {
+    "SGC Nucleo": ("Gestión de la calidad", ["Gestión documental", "Autoevaluación", "Mejora continua"]),
+    "SGC Estructura": ("Marcos y estructura", ["Marcos e indicadores", "Estructura"]),
+    "SGC Procesos": ("Procesos", ["Procesos"]),
+    "SGC Gobierno": ("Gobierno de la calidad", ["Gobierno de la calidad"]),
+    "SGC Auditoria": ("Auditoría", ["Auditoría"]),
+    "SGC Riesgos": ("Riesgos y obligaciones", ["Riesgos y obligaciones"]),
+}
+
+
+def ruta_area(modulo):
+    """Ruta del Desk de la portada de un área: el slug del nombre del workspace."""
+    return "/desk/" + modulo.lower().replace(" ", "-")
+
+
 # Etiqueta con la que se muestra cada enlace en el workspace. Sin entrada aquí se
 # usa el nombre del doctype, que es lenguaje de desarrollador («Proceso», «Ficha
 # Caracterizacion Proceso»): quien trabaja en Calidad no busca «un proceso», busca
@@ -149,11 +174,44 @@ def run():
     except Exception as e:  # el menú es cosmético; no debe tumbar el deploy
         frappe.logger().warning(f"f18: no se pudo crear el Workspace Sidebar: {e}")
 
+    _portadas_de_area(existe)
     _desktop_icon()
     _iconos_de_miga()
     _sidebars_por_modulo()
 
     print(f"Workspace '{WS}' creado — {len(SHORTCUTS)} accesos, {len(CARDS)} tarjetas")
+
+
+def _portadas_de_area(existe):
+    """Una portada (Workspace) por área, con las tarjetas de esa área.
+
+    Se recrean en cada despliegue, como la general: lo que manda es este código.
+    """
+    tarjetas = dict(CARDS)
+    for i, (modulo, (nombre, cards)) in enumerate(AREAS.items(), start=2):
+        try:
+            if frappe.db.exists("Workspace", modulo):
+                frappe.delete_doc("Workspace", modulo, force=1, ignore_permissions=True)
+            ws = frappe.new_doc("Workspace")
+            ws.name = ws.title = ws.label = modulo
+            ws.public = 1
+            ws.module = modulo
+            ws.icon = "tool"
+            ws.sequence_id = i
+            bloques = [{"id": "hdr", "type": "header", "data": {"text": nombre, "col": 12}}]
+            for j, card in enumerate(cards):
+                bloques.append({"id": f"cd{j}", "type": "card", "data": {"card_name": card, "col": 4}})
+                ws.append("links", {"type": "Card Break", "label": card})
+                for item in tarjetas.get(card, []):
+                    tipo, destino = _destino(item)
+                    if _disponible(tipo, destino, existe):
+                        ws.append("links", {"type": "Link", "link_type": tipo, "link_to": destino,
+                                            "label": ETIQUETAS.get(destino, destino)})
+            ws.content = json.dumps(bloques, ensure_ascii=False)
+            ws.insert(ignore_permissions=True)
+        except Exception as e:  # la portada es navegación; no debe tumbar el deploy
+            frappe.logger().warning(f"f18: no se pudo crear la portada {modulo}: {e}")
+    frappe.db.commit()
 
 
 def _desktop_icon():
@@ -217,14 +275,30 @@ ICONOS_DE_MIGA = [
 # de creación y usa el nombre del doctype como rótulo: salía «Ficha Caracterizacion
 # Pr…» y faltaba todo lo demás. Declararlas aquí sustituye a la autogenerada.
 SIDEBARS = {
+    # La barra general NO repite pantallas de las áreas: si una pantalla está en dos
+    # barras, Frappe elige la barra por historial (`sidebar.js`, resolve_sidebar) y la
+    # miga cambia según el camino. Aquí solo va la navegación entre áreas.
+    WS: [
+        ("Inicio", "Workspace", WS),
+        ("Gestión de la calidad", "Workspace", "SGC Nucleo"),
+        ("Procesos", "Workspace", "SGC Procesos"),
+        ("Auditoría", "Workspace", "SGC Auditoria"),
+        ("Riesgos y obligaciones", "Workspace", "SGC Riesgos"),
+        ("Gobierno de la calidad", "Workspace", "SGC Gobierno"),
+        ("Marcos y estructura", "Workspace", "SGC Estructura"),
+    ],
     "SGC Procesos": [
+        ("Portada del área", "Workspace", "SGC Procesos"),
         ("Mapa de procesos", "DocType", "Proceso"),
         ("Procedimiento", "DocType", "Procedimiento"),
         ("Ficha de caracterización", "DocType", "Ficha Caracterizacion Proceso"),
         ("Informe de cumplimiento", "DocType", "Informe Cumplimiento"),
+        ("Mapa institucional", "DocType", "Mapa Procesos"),
+        ("Interacciones entre procesos", "DocType", "Interaccion Proceso"),
         ("Volver al SGC", "Workspace", WS),
     ],
     "SGC Estructura": [
+        ("Portada del área", "Workspace", "SGC Estructura"),
         ("Marcos normativos", "DocType", "Marco Normativo"),
         ("Estándares y criterios", "DocType", "Elemento Marco"),
         ("Escalas de valoración", "DocType", "Escala Valoracion"),
@@ -235,9 +309,13 @@ SIDEBARS = {
         ("Programas", "DocType", "Programa"),
         ("Programas por sede", "DocType", "Programa Sede"),
         ("Periodos académicos", "DocType", "Periodo Academico"),
+        ("Fuentes de datos", "DocType", "Fuente Dato"),
+        ("Reglas de validación", "DocType", "Regla Validacion"),
+        ("Tesauro", "DocType", "Termino Tesauro"),
         ("Volver al SGC", "Workspace", WS),
     ],
     "SGC Nucleo": [
+        ("Portada del área", "Workspace", "SGC Nucleo"),
         ("Documentos controlados", "DocType", "Documento Controlado"),
         ("Evidencias", "DocType", "Evidencia"),
         ("Trazabilidad", "DocType", "Trazabilidad"),
@@ -253,9 +331,13 @@ SIDEBARS = {
         ("Tableros de indicadores", "DocType", "Tablero Indicadores"),
         ("Alertas de indicador", "DocType", "Alerta Indicador"),
         ("Lotes de ingesta", "DocType", "Lote Ingesta"),
+        ("Mejoramiento continuo", "Report", "Mejoramiento Continuo"),
+        ("Informe de salidas no conformes", "Report", "Salidas No Conformes"),
+        ("Accesos a documentos", "Report", "Accesos a Documentos"),
         ("Volver al SGC", "Workspace", WS),
     ],
     "SGC Gobierno": [
+        ("Portada del área", "Workspace", "SGC Gobierno"),
         ("Política de calidad", "DocType", "Politica Calidad"),
         ("Objetivos de calidad", "DocType", "Objetivo Calidad"),
         ("Comités", "DocType", "Comite"),
@@ -268,6 +350,7 @@ SIDEBARS = {
         ("Volver al SGC", "Workspace", WS),
     ],
     "SGC Riesgos": [
+        ("Portada del área", "Workspace", "SGC Riesgos"),
         ("Riesgos", "DocType", "Riesgo"),
         ("Matrices de riesgo", "DocType", "Matriz Riesgo"),
         ("Evaluación de riesgos", "DocType", "Evaluacion Riesgo"),
@@ -275,30 +358,45 @@ SIDEBARS = {
         ("Entes externos", "DocType", "Ente Externo"),
         ("Obligaciones", "DocType", "Obligacion Ente"),
         ("Entregas de obligación", "DocType", "Entrega Obligacion"),
+        ("Matriz de riesgos (informe)", "Report", "Matriz de Riesgos"),
         ("Volver al SGC", "Workspace", WS),
     ],
     "SGC Auditoria": [
+        ("Portada del área", "Workspace", "SGC Auditoria"),
         ("Programa de auditoría", "DocType", "Programa Auditoria"),
         ("Auditorías", "DocType", "Auditoria"),
         ("Listas de verificación", "DocType", "Lista Verificacion"),
         ("Hallazgos de auditoría", "DocType", "Hallazgo Auditoria"),
         ("Informes de auditoría", "DocType", "Informe Auditoria"),
         ("Revisión por la dirección", "DocType", "Revision Direccion"),
+        ("Resultados de auditoría", "Report", "Resultados de Auditoria"),
         ("Volver al SGC", "Workspace", WS),
     ],
 }
 
+# Módulo de cada barra: el de su área; la general pertenece al núcleo, como su workspace.
+MODULO_DE_BARRA = {WS: "SGC Nucleo"}
+
 
 def _iconos_de_miga():
-    """Crea los iconos que la miga de pan necesita. Idempotente."""
+    """Crea o corrige los iconos que la miga de pan necesita. Idempotente.
+
+    El enlace de cada uno es la portada de su área: pulsar «Auditoría» en la miga
+    lleva al área de auditoría, no a la portada general (hasta el 27-sep los seis
+    enlazaban a /desk/sgc).
+    """
     for label in ICONOS_DE_MIGA:
         try:
-            if frappe.db.exists("Desktop Icon", {"label": label}):
+            enlace = ruta_area(label) if label in AREAS else "/desk/sgc"
+            existente = frappe.db.get_value("Desktop Icon", {"label": label}, "name")
+            if existente:
+                if frappe.db.get_value("Desktop Icon", existente, "link") != enlace:
+                    frappe.db.set_value("Desktop Icon", existente, "link", enlace)
                 continue
             icon = frappe.new_doc("Desktop Icon")
             icon.label = label
             icon.link_type = "External"
-            icon.link = "/desk/sgc"
+            icon.link = enlace
             icon.app = "sgc"
             icon.standard = 0
             icon.hidden = 1
@@ -322,12 +420,19 @@ def _sidebars_por_modulo():
                 frappe.delete_doc("Workspace Sidebar", titulo, force=1, ignore_permissions=True)
             barra = frappe.new_doc("Workspace Sidebar")
             barra.title = titulo
-            barra.module = titulo
+            barra.module = MODULO_DE_BARRA.get(titulo, titulo)
+            # Sin `app`, Frappe descarta la barra al elegir cuál mostrar: filtra las
+            # candidatas por la app del módulo (`sidebar.js`, filter_sidebars_from_app)
+            # y cae en la barra de un módulo arrastrado de la pantalla anterior. Los
+            # informes de auditoría y riesgos salían bajo «Marcos y estructura».
+            barra.app = "sgc"
             barra.header_icon = "tool"
             for etiqueta, tipo, destino in items:
                 if tipo == "DocType" and not frappe.db.exists("DocType", destino):
                     continue
                 if tipo == "Report" and not frappe.db.exists("Report", destino):
+                    continue
+                if tipo == "Workspace" and not frappe.db.exists("Workspace", destino):
                     continue
                 barra.append("items", {
                     "label": etiqueta, "link_type": tipo,
