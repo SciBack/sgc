@@ -56,6 +56,8 @@ Captura del estado anterior, control ejecutado, estado final e historial; URL e 
 
 Tratamientos, procesos, indicadores y revisión por dirección.
 
+- **Eventos de riesgo**: cualquier colaborador puede reportar algo que ya ocurrió, y Calidad lo vincula a este riesgo al evaluarlo; el formulario los muestra en **Conexiones**. Confirmar un evento abre su propia no conformidad y **no** materializa el riesgo: eso sigue siendo una decisión de la DPGC aquí. Ver [Evento de riesgo](../evento-riesgo/).
+
 ## Acciones operativas o configuración adicional
 
 El correo y las tareas periódicas requieren scheduler/servidor de correo configurados. Archivos o integraciones externas requieren sus servicios disponibles; su ausencia no debe reinterpretarse como una transición funcional válida.

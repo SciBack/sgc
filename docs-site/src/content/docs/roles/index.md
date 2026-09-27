@@ -1,11 +1,11 @@
 ---
 title: Roles y permisos
-description: Guías independientes para probar los 14 roles efectivos del SGC.
+description: Guías independientes para probar los 15 roles efectivos del SGC.
 sidebar:
   order: 1
 ---
 
-El catálogo vigente contiene 13 roles propios de SGC y System Manager de Frappe. Los permisos efectivos resultan de tres capas: DocPerm, workflow y, cuando existen, User Permissions por ámbito. Un botón oculto no sustituye una comprobación de autorización en backend.
+El catálogo vigente contiene 14 roles propios de SGC y System Manager de Frappe. Uno de ellos, **Colaborador**, no concede permisos propios: da acceso al Desk a quien no tiene cargo en el SGC para que pueda reportar eventos de riesgo. Los permisos efectivos resultan de tres capas: DocPerm, workflow y, cuando existen, User Permissions por ámbito. Un botón oculto no sustituye una comprobación de autorización en backend.
 
 Para la regresión usa una cuenta separada por rol. No acumules roles en una sola cuenta porque produciría falsos positivos. Revisa cada guía y registra tanto acciones permitidas como denegadas.
 
