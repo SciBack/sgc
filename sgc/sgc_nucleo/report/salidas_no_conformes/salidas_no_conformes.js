@@ -4,6 +4,12 @@
 frappe.query_reports['Salidas No Conformes'] = {
 	filters: [
 		{
+			fieldname: 'detalle',
+			label: __('Detalle (una fila por salida, con los involucrados)'),
+			fieldtype: 'Check',
+			default: 0,
+		},
+		{
 			fieldname: 'desde',
 			label: __('Detectadas desde'),
 			fieldtype: 'Date',

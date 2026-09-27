@@ -26,6 +26,8 @@ Solicitud → generación → descarga. Este proceso no añade estados distintos
 
 Verifica permisos de lectura/escritura sobre cada DocType y la autorización del método backend. La visibilidad de interfaz no reemplaza el control del servidor.
 
+Para **ejecutar** un informe del SGC, Frappe exige el permiso «report» sobre su DocType de referencia. El RBAC lo concede a los roles que leen ese DocType, y solo en los que tienen un informe del SGC (Acción de Mejora, Documento Controlado, Hallazgo de Auditoría, Riesgo, Salida No Conforme y Valor Indicador). Hasta el 27-sep-2026 no lo concedía, y los informes solo abrían como System Manager: pruébalos siempre con una cuenta sin ese rol.
+
 ## Restricciones
 
 No aceptar HTML de error como PDF; no incluir datos de otro ámbito ni secretos en metadatos. No mezclar en un mismo reporte resultados de licenciamiento (cumplimiento de las condiciones básicas de calidad) y de acreditación (niveles NL/L/LP y vigencia en años): son marcos de entes distintos y su cruce produce un resultado inexistente en la norma.

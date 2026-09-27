@@ -65,7 +65,7 @@ Captura del estado anterior, control ejecutado, estado final e historial; URL e 
 - **Escalar a no conformidad** (botón del formulario): crea una no conformidad con origen «Salida no conforme» y deja el enlace en los dos documentos. Si ya estaba escalada, no duplica.
 - **Acción de mejora**: se puede vincular la acción que evita que se repita.
 - **Mapa de procesos**: cada salida pertenece a un proceso.
-- **Informe «Salidas No Conformes»**: agrupa por proceso y decisión, con número de salidas, cantidad afectada, abiertas, cerradas y escaladas; filtra por fechas, proceso, origen y decisión.
+- **Informe «Salidas No Conformes»**: agrupa por proceso y decisión, con número de salidas, cantidad afectada, abiertas, cerradas y escaladas; filtra por fechas, proceso, origen y decisión. Con **Detalle** marcado lista cada salida con su proceso, fecha, decisión y **las personas que intervinieron**: quién la detectó, la trató, decidió y verificó. Lo puede abrir cualquier rol que lea las salidas no conformes.
 
 ## Acciones operativas o configuración adicional
 

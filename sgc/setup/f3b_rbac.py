@@ -527,9 +527,31 @@ def _ensure_roles():
     return creados, reconciliados
 
 
-def _apply_docperm(doctype, role, code, permlevel=0):
+def doctypes_con_informe():
+    """DocTypes que son `ref_doctype` de un informe estándar de la app `sgc`.
+
+    Frappe exige el permiso «report» sobre ese DocType para EJECUTAR el informe
+    (`frappe/desk/query_report.py:263`, `run`), aunque el informe no tenga roles
+    propios. La matriz nunca lo daba: hasta el 27-sep-2026 los seis informes del
+    SGC solo los podía abrir System Manager (comprobado en el lab con un usuario
+    solo DPGC: PermissionError en los seis). Se deriva de los informes que
+    existen para que un informe nuevo no vuelva a nacer inaccesible.
+    """
+    modulos = frappe.get_all("Module Def", filters={"app_name": "sgc"}, pluck="name")
+    if not modulos:
+        return set()
+    return set(frappe.get_all(
+        "Report",
+        filters={"is_standard": "Yes", "module": ["in", modulos], "disabled": 0},
+        pluck="ref_doctype",
+    ))
+
+
+def _apply_docperm(doctype, role, code, permlevel=0, con_informe=False):
     """Crea el DocPerm (role, doctype, permlevel) y setea sus flags desde `code`.
     `code` es un subconjunto de 'crwsx'. read se fuerza si hay cualquier permiso.
+    `con_informe`: el DocType tiene un informe del SGC -> quien lo lee puede
+    ejecutarlo («report»). Mínimo privilegio: solo ahí, no en todo DocType.
     Devuelve dict de flags aplicados."""
     wanted = {flag: 0 for flag in _ALLFLAGS}
     for ch in code:
@@ -544,6 +566,8 @@ def _apply_docperm(doctype, role, code, permlevel=0):
     # setear TODOS los flags explícitamente (0 y 1) para estado determinista.
     for flag in _ALLFLAGS:
         update_permission_property(doctype, role, permlevel, flag, wanted[flag], validate=False)
+    wanted["report"] = 1 if (con_informe and wanted["read"]) else 0
+    update_permission_property(doctype, role, permlevel, "report", wanted["report"], validate=False)
     return wanted
 
 
@@ -645,6 +669,7 @@ def run():
     # Aplicar matriz (permlevel 0) + permlevel 1 donde aplique.
     dts_tocados = []
     n_docperms = 0
+    con_informe = doctypes_con_informe()
     for doctype, per_role in MATRIZ.items():
         if not frappe.db.exists("DocType", doctype):
             # DocType de la matriz que no existe en el esqueleto -> se omite (regla G).
@@ -657,7 +682,8 @@ def run():
         for role, code in per_role.items():
             if not frappe.db.exists("Role", role):
                 continue
-            _apply_docperm(doctype, role, code, permlevel=0)
+            _apply_docperm(doctype, role, code, permlevel=0,
+                           con_informe=doctype in con_informe)
             n_docperms += 1
 
         # permlevel 1 (solo Valoracion Estandar.nivel)
@@ -701,6 +727,7 @@ def run():
         )
         print(f"      - {role_name}: {detalle}")
     print(f"  DocTypes con permisos aplicados: {len(dts_tocados)}")
+    print(f"  Con permiso «report» (tienen informe del SGC): {sorted(con_informe & set(dts_tocados))}")
     for dt in dts_tocados:
         print(f"      - {dt}")
     print(f"  DocPerm (role×doctype×permlevel) escritos: {n_docperms}")
