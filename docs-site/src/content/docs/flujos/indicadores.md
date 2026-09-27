@@ -45,6 +45,28 @@ Estado o valores antes/después, identificador ficticio, rol, URL/método, respu
 
 La ficha del indicador tiene **Próxima medición** y **Días de aviso** (7 por defecto). Ese número de días antes, el responsable recibe un correo. Al registrar un valor, la próxima medición avanza un periodo según la frecuencia (mensual, trimestral, semestral o anual); para «por promoción» se fija a mano.
 
+## Análisis de cada periodo
+
+Si la ficha del indicador marca **Exigir el análisis de cada medición**, cada valor lleva su **análisis**: qué explica el resultado y qué se hará.
+
+- Un valor tecleado no se guarda sin análisis.
+- Un valor que llega por la ingesta del almacén de datos se guarda y deja al responsable del indicador una **tarea de análisis**, que se cierra sola al escribirlo.
+- El análisis se puede escribir aunque la medición venga de la ingesta o su periodo esté cerrado, porque no cambia la medición; nada más de ese valor se puede tocar.
+- **Analizado por** y la fecha los sella el sistema.
+
+## Participación de las áreas
+
+En la ficha, **Participación de las áreas** indica cuánto aporta cada área al indicador. Si se rellena, cada área aparece una vez y los pesos suman 100 %.
+
+## Informe por familias
+
+**Indicadores por familia** agrupa los indicadores por **categoría**, **marco normativo** o **proceso**. Para cada grupo da cuántos indicadores tiene, cuántos tienen medición y cómo está la última (verde, ámbar o rojo), el porcentaje en verde y un gráfico apilado. Se puede limitar a un periodo académico.
+
+## Avisos de estado e incumplimientos de fecha
+
+- **Medición vencida**: el día siguiente a la fecha prevista sin valor nuevo, se avisa al responsable y a la DPGC. Como la próxima medición avanza sola al registrar un valor, si la fecha sigue ahí es que no llegó.
+- **Alerta de indicador**: cada alerta nueva (meta no alcanzada, sin medición, variación anómala…) avisa por correo a su responsable; si no tiene, a la DPGC.
+
 ## Relación con otros módulos
 
 Procesos, revisión por dirección y gobierno.

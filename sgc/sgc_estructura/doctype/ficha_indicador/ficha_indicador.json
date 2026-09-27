@@ -30,6 +30,8 @@
   "proxima_medicion",
   "dias_aviso",
   "fecha_aviso_medicion",
+  "exige_analisis",
+  "participacion_areas",
   "notas",
   "dominio_dato",
   "fuente_autoritativa"
@@ -213,12 +215,26 @@
    "label": "Ventana (periodos)",
    "default": "1",
    "description": "Cuántos periodos hacia atrás consolida el indicador. Un indicador de egresados puede necesitar cinco años; uno de matrícula, uno."
+  },
+  {
+   "fieldname": "exige_analisis",
+   "fieldtype": "Check",
+   "label": "Exigir el análisis de cada medición",
+   "default": "0",
+   "description": "Cada valor de cada periodo tiene que llevar su análisis. Lo tecleado no se guarda sin él; lo que llega por ingesta deja una tarea de análisis al responsable."
+  },
+  {
+   "fieldname": "participacion_areas",
+   "fieldtype": "Table",
+   "label": "Participación de las áreas",
+   "options": "Participacion Area",
+   "description": "Cuánto aporta cada área al indicador. Si se indica, los pesos suman 100 %."
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-27 13:30:00.000000",
+ "modified": "2026-09-27 18:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Estructura",
  "name": "Ficha Indicador",
