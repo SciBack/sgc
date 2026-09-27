@@ -197,6 +197,10 @@ NOTIFICACIONES = [
             {"receiver_by_document_field": "revisado_por"},
             {"receiver_by_document_field": "aprobado_por"},
             {"receiver_by_role": ROL_VIGILANCIA},
+            # A quien afecta la nueva versión: el dueño del proceso y las personas
+            # que el documento nombra para difundirlo (tabla «Difundir también a»).
+            {"receiver_by_document_field": "dueno_proceso"},
+            {"receiver_by_document_field": "usuario,difundir_a"},
         ],
     },
     {

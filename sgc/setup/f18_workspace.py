@@ -37,7 +37,7 @@ SHORTCUTS = [
 # Tarjetas por área. (título de la tarjeta, [items]); un item es un doctype o la
 # tupla ("Report", "<nombre>").
 CARDS = [
-    ("Gestión documental", ["Documento Controlado", "Evidencia", "Trazabilidad"]),
+    ("Gestión documental", ["Documento Controlado", "Carpeta Documental", "Evidencia", "Trazabilidad"]),
     ("Autoevaluación", ["Autoevaluacion", "Valoracion Criterio", "Valoracion Estandar", "Valor Indicador"]),
     ("Mejora continua", ["Hallazgo", "No Conformidad", "Salida No Conforme", "Plan Mejora", "Accion Mejora",
                          ("Report", "Salidas No Conformes")]),
@@ -89,6 +89,7 @@ ETIQUETAS = {
     "Lista Verificacion": "Listas de verificación",
     "Comunicado": "Comunicados",
     "Evento Riesgo": "Eventos de riesgo",
+    "Carpeta Documental": "Carpetas documentales",
 }
 
 def _contenido():
@@ -322,6 +323,7 @@ SIDEBARS = {
     "SGC Nucleo": [
         ("Portada del área", "Workspace", "SGC Nucleo"),
         ("Documentos controlados", "DocType", "Documento Controlado"),
+        ("Carpetas documentales", "DocType", "Carpeta Documental"),
         ("Evidencias", "DocType", "Evidencia"),
         ("Trazabilidad", "DocType", "Trazabilidad"),
         ("Autoevaluación", "DocType", "Autoevaluacion"),

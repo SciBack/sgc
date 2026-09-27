@@ -147,6 +147,12 @@ _ROWS = {
     # APROB (Autoridad Aprobadora) agregado 2026-07-19: ejecuta la transición
     # "Publicar" del workflow (f5_workflow_documental.py) — sin este DocPerm el
     # rol estaba en el workflow pero no podía tocar el documento (H4).
+    # --- Carpeta Documental: el árbol libre de la documentación. Lo mantiene
+    #     Calidad; lo ven todos los que ven documentos. ---
+    "Carpeta Documental": {
+        DPGC: "crw", ANAL: "crw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "r",
+        DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "crw", APROB: "r",
+    },
     "Documento Controlado": {
         DPGC: "crws", ANAL: "crws", CFAC: "r", RPRO: "rw", MIEM: "r",
         DPROC: "crw", DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",

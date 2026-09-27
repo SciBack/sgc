@@ -1,0 +1,95 @@
+{
+ "actions": [],
+ "creation": "2026-09-27 16:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-09-27 16:00:00.000000",
+ "modified_by": "Administrator",
+ "owner": "Administrator",
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "name": "Carpeta Documental",
+ "module": "SGC Nucleo",
+ "is_tree": 1,
+ "nsm_parent_field": "parent_carpeta_documental",
+ "autoname": "format:CD-{#####}",
+ "naming_rule": "Expression (old style)",
+ "title_field": "nombre",
+ "show_title_field_in_link": 1,
+ "search_fields": "nombre",
+ "track_changes": 1,
+ "description": "Árbol de carpetas para organizar la documentación como decida la institución, además del proceso y el tema.",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "write": 1,
+   "role": "System Manager",
+   "report": 1,
+   "export": 1
+  }
+ ],
+ "fields": [
+  {
+   "fieldname": "nombre",
+   "fieldtype": "Data",
+   "label": "Nombre",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "descripcion",
+   "fieldtype": "Small Text",
+   "label": "Descripción"
+  },
+  {
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "label": "Contiene subcarpetas",
+   "default": "1"
+  },
+  {
+   "fieldname": "parent_carpeta_documental",
+   "fieldtype": "Link",
+   "label": "Carpeta superior",
+   "options": "Carpeta Documental"
+  },
+  {
+   "fieldname": "lft",
+   "fieldtype": "Int",
+   "label": "Left",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "rgt",
+   "fieldtype": "Int",
+   "label": "Right",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "old_parent",
+   "fieldtype": "Link",
+   "label": "Old Parent",
+   "options": "Carpeta Documental",
+   "hidden": 1
+  }
+ ],
+ "field_order": [
+  "nombre",
+  "descripcion",
+  "is_group",
+  "parent_carpeta_documental",
+  "lft",
+  "rgt",
+  "old_parent"
+ ]
+}

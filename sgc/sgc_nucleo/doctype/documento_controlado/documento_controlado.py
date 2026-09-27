@@ -20,10 +20,18 @@ Sustituye al puntero a Mayan EDMS: el archivo ahora es un adjunto de Frappe
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from frappe.utils import add_years, nowdate
+from frappe.utils import add_days, add_years, getdate, now_datetime, nowdate
 
-from sgc import documentos
+from sgc import documentos, tareas
 from sgc.naming import siguiente_correlativo
+
+# Días antes de que venza la vigencia en que el responsable recibe la tarea de
+# revisarlo. Los mismos que el aviso por correo «SGC - Documento por revisar».
+DIAS_TAREA_REVISION = 15
+
+# Roles que, además del dueño del proceso y de quien lo elaboró, pueden dejar
+# constancia de una revisión sin cambios.
+ROLES_REVISION = {"DPGC", "Analista de Calidad (DPGC)"}
 
 # Transiciones permitidas. Un estado con conjunto vacio es terminal.
 TRANSICIONES = {
@@ -75,6 +83,9 @@ class DocumentoControlado(Document):
 
 	def validate(self):
 		self._validar_transicion()
+		self._completar_dueno_proceso()
+		self._validar_relacionados()
+		self._registrar_observacion()
 		self._sellar_aprobacion()
 		self._validar_documentacion_externa()
 		self._validar_solo_consulta()
@@ -86,6 +97,7 @@ class DocumentoControlado(Document):
 		# reemplaza), por eso vive aqui y no en validate().
 		if self.estado == "Publicado" and self._estado_anterior() != "Publicado":
 			self._al_publicar()
+		sincronizar_tarea_revision(self)
 
 	# ---------------------------------------------------------------- helpers
 
@@ -136,6 +148,51 @@ class DocumentoControlado(Document):
 				),
 				title=_("Transición no permitida"),
 			)
+
+	def _completar_dueno_proceso(self):
+		"""El dueño del proceso recibe el aviso de publicación: a él le afecta la versión."""
+		self.dueno_proceso = (
+			frappe.db.get_value("Proceso", self.proceso, "responsable") if self.proceso else None
+		)
+
+	def _validar_relacionados(self):
+		vistos = set()
+		for fila in self.documentos_relacionados or []:
+			if fila.documento == self.name:
+				frappe.throw(_("Un documento no se relaciona consigo mismo."))
+			clave = (fila.documento, fila.relacion)
+			if clave in vistos:
+				frappe.throw(_("La relación con {0} está repetida.").format(fila.documento))
+			vistos.add(clave)
+
+	def _registrar_observacion(self):
+		"""Lo que dice un revisor queda como evidencia, ligado al paso del flujo.
+
+		Observar exige escribir la observación. Al cambiar de estado, el texto pasa
+		al registro con quién, cuándo, en qué paso y sobre qué versión —lo sella el
+		sistema— y el campo se vacía para la siguiente ronda. Aprobar con un
+		comentario también lo registra.
+		"""
+		anterior = self._estado_anterior()
+		if anterior is None or anterior == self.estado:
+			return
+		texto = (self.observacion or "").strip()
+		if self.estado == "Observado" and not texto:
+			frappe.throw(
+				_("Escriba la observación del revisor antes de observar el documento: es lo que "
+				  "tiene que corregir quien lo elaboró."),
+				title=_("Observación obligatoria"),
+			)
+		if not texto:
+			return
+		self.append("observaciones_revision", {
+			"fecha": now_datetime(),
+			"revisor": frappe.session.user,
+			"paso": f"{anterior} → {self.estado}",
+			"version": self.version,
+			"observacion": texto,
+		})
+		self.observacion = None
 
 	def _sellar_aprobacion(self):
 		"""Aprobar ES firmar: lo registra quien ejecuta la transición.
@@ -300,3 +357,91 @@ class DocumentoControlado(Document):
 			indicator="orange",
 			alert=True,
 		)
+
+	# ------------------------------------------------------------- revisión
+
+	@frappe.whitelist()
+	def preparar_observacion(self, texto):
+		"""Deja escrita la observación ANTES de la acción «Observar» del workflow.
+
+		`apply_workflow` recarga el documento desde la base (`load_from_db`): lo que
+		se escriba en pantalla sin guardar no llega a la transición. Y guardar no
+		siempre se puede: en «Aprobado» edita la Autoridad Aprobadora, no la DPGC
+		que observa. Solo quien tiene disponible la acción «Observar» puede
+		dejarla; el registro sellado lo hace `_registrar_observacion` al transitar.
+		"""
+		from frappe.model.workflow import get_transitions
+
+		texto = (texto or "").strip()
+		if not texto:
+			frappe.throw(_("Escriba la observación del revisor."))
+		if "Observar" not in {t.action for t in get_transitions(self)}:
+			frappe.throw(_("No puede observar este documento en su estado actual."), frappe.PermissionError)
+		self.db_set("observacion", texto, update_modified=False)
+
+	@frappe.whitelist()
+	def registrar_revision(self, observacion=None):
+		"""Constancia de una revisión SIN cambios: el documento sigue vigente un año más.
+
+		La norma pide revisar el documento al menos una vez al año, no reescribirlo.
+		Cuando la revisión concluye que sigue siendo válido, esto lo deja escrito en
+		el historial, renueva la vigencia y cierra la tarea de revisión.
+		"""
+		if self.estado != "Publicado":
+			frappe.throw(_("Solo se revisa la vigencia de un documento publicado."))
+		usuario = frappe.session.user
+		if not (usuario in (self.dueno_proceso, self.elaborado_por)
+				or ROLES_REVISION & set(frappe.get_roles(usuario))):
+			frappe.throw(
+				_("Registra la revisión el dueño del proceso, quien elaboró el documento o la DPGC."),
+				frappe.PermissionError,
+			)
+		hoy = nowdate()
+		fila = self.append("historial_cambios", {
+			"version": self.version,
+			"fecha": hoy,
+			"descripcion": _("Revisión sin cambios: sigue vigente.") + (
+				" " + observacion.strip() if (observacion or "").strip() else ""),
+			"autor": usuario,
+		})
+		fila.db_insert()
+		self.db_set("fecha_proxima_revision", add_years(hoy, 1), update_modified=False)
+		sincronizar_tarea_revision(self)
+		return self.fecha_proxima_revision
+
+
+def sincronizar_tarea_revision(doc):
+	"""La tarea de revisar el documento, abierta solo mientras toca revisarlo.
+
+	Se abre cuando faltan `DIAS_TAREA_REVISION` días (o menos) para que venza la
+	vigencia de un documento publicado, a nombre del dueño del proceso o, si no
+	lo hay, de quien lo elaboró. Se cierra al renovarse la vigencia (una revisión
+	sin cambios o una nueva publicación) y al dejar de estar publicado.
+	"""
+	responsable = doc.dueno_proceso or doc.elaborado_por
+	fecha = doc.fecha_proxima_revision
+	abierta = bool(
+		doc.estado == "Publicado" and fecha
+		and getdate(fecha) <= getdate(add_days(nowdate(), DIAS_TAREA_REVISION))
+	)
+	descripcion = _("Revisar el documento {0} ({1}): su vigencia vence el {2}.").format(
+		doc.name, doc.titulo or "", frappe.utils.formatdate(fecha) if fecha else "")
+	tareas.sincronizar(doc, responsable, fecha, descripcion, abierta)
+
+
+def tareas_revision_diaria():
+	"""Scheduler diario: abre las tareas que entran en plazo y cierra las que sobran."""
+	limite = add_days(nowdate(), DIAS_TAREA_REVISION)
+	candidatos = set(frappe.get_all(
+		"Documento Controlado",
+		filters={"estado": "Publicado", "fecha_proxima_revision": ["<=", limite]},
+		pluck="name", limit=0,
+	))
+	candidatos |= set(frappe.get_all(
+		"ToDo",
+		filters={"reference_type": "Documento Controlado", "status": tareas.ABIERTA},
+		pluck="reference_name", limit=0,
+	))
+	for nombre in candidatos:
+		if frappe.db.exists("Documento Controlado", nombre):
+			sincronizar_tarea_revision(frappe.get_doc("Documento Controlado", nombre))
