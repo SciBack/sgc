@@ -20,6 +20,10 @@ No conformidad abierta con causa y responsable identificables. Usa identificador
 5. En estado **En verificacion**, inicia sesión como **DPGC** y ejecuta **Cerrar no eficaz**. Resultado esperado: el registro queda en **Cerrada no eficaz** y la acción aparece en su historial.
 6. En estado **En verificacion**, inicia sesión como **DPGC** y ejecuta **Reabrir tratamiento**. Resultado esperado: el registro queda en **En tratamiento** y la acción aparece en su historial.
 
+## Tipos
+
+**No conformidad mayor** (exige siempre análisis de causa), **no conformidad menor**, **potencial no conformidad** (algo que todavía no incumple pero va a incumplir si no se actúa; se trata con acciones preventivas), **observación** y **oportunidad de mejora**.
+
 ## Análisis de causas (ISO 9001 §10.2.1 b)
 
 Cuando la no conformidad **requiere análisis de causa** (siempre en una no conformidad mayor), para ejecutar **Tratar** hace falta, además de la narrativa del análisis:
