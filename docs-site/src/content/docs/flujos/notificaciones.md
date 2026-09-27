@@ -71,6 +71,7 @@ que actúa en ese paso (entre paréntesis):
 | No Conformidad | En análisis / En tratamiento → responsable (Responsable de Calidad de Programa) · En verificación → verificador (DPGC) · Cerrada → responsable |
 | Informe de auditoría | En revisión → DPGC · Devuelto a borrador / Aprobado / Distribuido → quien lo emitió |
 | Salida no conforme | En tratamiento → responsable del tratamiento (Dueño de Proceso) · Tratada → DPGC, para verificar · Cerrada → quien la detectó |
+| Evento de riesgo | Al reportarse → DPGC · Confirmado o Descartado → quien lo reportó (con el motivo, si se descartó) |
 | Acción de Mejora | En ejecución → responsable (Responsable de Calidad de Programa) · Ejecutada → verificador (DPGC) · Verificada → responsable |
 | Auditoría | En ejecución / Ejecutada / Cerrada → equipo auditor (Auditor Interno) · Informe emitido → DPGC |
 | Hallazgo de Auditoría | Escalado a NC → DPGC · Abierto / Cerrado → Auditor Interno |

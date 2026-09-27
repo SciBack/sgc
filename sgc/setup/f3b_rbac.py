@@ -62,6 +62,11 @@ ROLES = [
     ("Responsable de Sede", 1),  # 11 coordinación territorial (requiere fix #3)
     ("Lector Externo",    0),  # 12 evaluador CONEAU/par — SIN desk access (portal/acotado)
     ("Autoridad Aprobadora", 1),  # 13 quien publica documentos/aprueba política (Rector/Decano) — ver H4/H2 2026-07-19
+    # 15 Cualquier trabajador de la institución, sin cargo en el SGC. No tiene
+    #    permisos propios: existe para que la persona sea usuario del Desk y reciba
+    #    «Desk User», que es lo que habilita COLABORADORES (reportar un evento de
+    #    riesgo). Sin ningún rol con desk_access, Frappe la haría Website User.
+    ("Colaborador", 1),
     # 14 SysAdmin = System Manager (Frappe core, no se recrea)
 ]
 
@@ -364,6 +369,13 @@ _ROWS = {
         DPGC: "crw", ANAL: "rw", CFAC: "r", RPRO: "r", MIEM: "r", DPROC: "crw",
         DATA: "r", AUDI: "r", RECT: "r", RSED: "r", DECA: "r", SYSM: "r",
     },
+    # --- Evento Riesgo: lo REPORTA cualquier colaborador (ver COLABORADORES, más
+    #     abajo) y lo decide la DPGC. Todos los reportes los leen solo quienes
+    #     gestionan el riesgo o lo auditan: un evento puede describir a personas
+    #     (Ley 29733), así que el resto de roles ve únicamente lo que reportó. ---
+    "Evento Riesgo": {
+        DPGC: "crw", ANAL: "crw", DPROC: "r", AUDI: "r", RECT: "r", SYSM: "r",
+    },
 
     # --- Cumplimiento regulatorio externo (entes/obligaciones que alimentan
     #     Informe Cumplimiento) — función de DPGC. ---
@@ -441,6 +453,26 @@ PERMLEVEL1 = {
         SYSM: (1, 0),
     },
 }
+
+# ===========================================================================
+# 3b) COLABORADORES — lo que puede hacer CUALQUIER usuario del sistema.
+#    «Desk User» es el rol automático que Frappe da a todo usuario con acceso al
+#    Desk (`frappe/permissions.py`, get_roles: SYSTEM_USER_ROLE). Se aplica con
+#    `if_owner`: cada uno crea y ve SOLO lo suyo. Va aparte de la MATRIZ porque
+#    no es un rol del SGC, y en Custom DocPerm porque, en cuanto un DocType tiene
+#    alguno, Frappe ignora sus DocPerm estándar: declararlo en el .json no bastaría.
+# ===========================================================================
+COLAB = "Desk User"
+COLABORADORES = {
+    # El pliego: «habilita el reporte de eventos de riesgo a tus colaboradores».
+    "Evento Riesgo": "crw",
+}
+
+# Catálogos que el colaborador necesita ELEGIR en un enlace (dónde ocurrió el
+# evento) sin poder abrirlos: permiso «select», sin lectura. Sin él, el campo
+# «Proceso» del reporte no le ofrecía ninguna opción (search_link exige select
+# o read). Son estructura pública: el mapa de procesos se publica.
+SELECCION_COLABORADORES = ("Proceso", "Unidad Organica")
 
 # Roles gestionados por este script (los que limpiamos/re-aplicamos por DocType).
 # Nunca tocamos filas de otros roles (All, Guest, System Manager en DocTypes que no
@@ -587,6 +619,33 @@ def _apply_docperm(doctype, role, code, permlevel=0, con_informe=False):
     return wanted
 
 
+def aplicar_colaboradores(con_informe=frozenset()):
+    """Aplica COLABORADORES: «Desk User» con `if_owner` (cada uno, solo lo suyo).
+
+    Se limpia SOLO la fila de ese rol en SUS DocTypes: el resto de la matriz no
+    gestiona «Desk User». Devuelve cuántos DocPerm escribió.
+    """
+    n = 0
+    for doctype, code in COLABORADORES.items():
+        if not frappe.db.exists("DocType", doctype):
+            print(f"  [SKIP] DocType no existe: {doctype}")
+            continue
+        frappe.db.delete("Custom DocPerm", {"parent": doctype, "role": COLAB})
+        _apply_docperm(doctype, COLAB, code, permlevel=0, con_informe=doctype in con_informe)
+        update_permission_property(doctype, COLAB, 0, "if_owner", 1, validate=False)
+        n += 1
+    for doctype in SELECCION_COLABORADORES:
+        if not frappe.db.exists("DocType", doctype):
+            continue
+        frappe.db.delete("Custom DocPerm", {"parent": doctype, "role": COLAB})
+        add_permission(doctype, COLAB, 0, ptype="select")
+        # `Custom DocPerm.read` nace a 1 por defecto: sin esto, «select» abría
+        # también la ficha (comprobado en el lab).
+        update_permission_property(doctype, COLAB, 0, "read", 0, validate=False)
+        n += 1
+    return n
+
+
 def _clear_sgc_perms(doctype):
     """Elimina los Custom DocPerm de los roles SGC en `doctype` (todos los permlevel),
     para re-aplicar limpio. No toca roles ajenos ni permisos estándar de otros roles."""
@@ -716,6 +775,8 @@ def run():
 
         dts_tocados.append(doctype)
 
+    n_docperms += aplicar_colaboradores(con_informe)
+
     # Renombrar ANTES de crear: si se crearan primero, el renombrado ya no
     # tendría destino libre y los usuarios quedarían en el perfil viejo.
     n_renombrados = _renombrar_role_profiles()
@@ -747,6 +808,8 @@ def run():
     for dt in dts_tocados:
         print(f"      - {dt}")
     print(f"  DocPerm (role×doctype×permlevel) escritos: {n_docperms}")
+    print(f"  Colaboradores ({COLAB}, solo lo propio): {sorted(COLABORADORES)}; "
+          f"solo elegir en enlaces: {list(SELECCION_COLABORADORES)}")
     print(f"  Role Profiles renombrados al vocabulario del requerimiento: {n_renombrados}")
     print(f"  Role Profiles nuevos: {n_profiles} (total definidos: {len(ROLE_PROFILES)})")
     print("  permlevel 1 (Valoracion Estandar.nivel): write=DPGC + "

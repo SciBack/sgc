@@ -8,8 +8,8 @@ test('acepta el manifiesto canónico completo', async () => {
   const coverage = JSON.parse(await readFile(new URL('../src/data/coverage.json', import.meta.url)));
   const errors = await validateCoverage(coverage, { repoRoot: new URL('../../', import.meta.url) });
   assert.deepEqual(errors, []);
-  assert.equal(coverage.roles.length, 14);
-  assert.equal(coverage.flows.filter((flow) => flow.kind === 'workflow').length, 16);
+  assert.equal(coverage.roles.length, 15);
+  assert.equal(coverage.flows.filter((flow) => flow.kind === 'workflow').length, 17);
 });
 
 test('rechaza ids, estados, páginas y fuentes inválidas', async () => {

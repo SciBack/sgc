@@ -1,0 +1,212 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "format:EVR-{YYYY}-{#####}",
+ "creation": "2026-09-27 14:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "titulo",
+  "fecha_evento",
+  "column_break_reporte",
+  "estado",
+  "reportado_por",
+  "fecha_reporte",
+  "section_break_ambito",
+  "proceso",
+  "column_break_ambito",
+  "unidad_organica",
+  "section_break_descripcion",
+  "descripcion",
+  "consecuencias",
+  "acciones_inmediatas",
+  "evidencia",
+  "section_break_evaluacion",
+  "riesgo",
+  "tipo_nc",
+  "motivo_descarte",
+  "column_break_evaluacion",
+  "evaluado_por",
+  "fecha_evaluacion",
+  "no_conformidad"
+ ],
+ "fields": [
+  {
+   "fieldname": "titulo",
+   "fieldtype": "Data",
+   "label": "Qué pasó",
+   "reqd": 1,
+   "in_list_view": 1,
+   "description": "En una línea. Ej.: «Caída del servidor de matrícula durante el primer día»."
+  },
+  {
+   "fieldname": "fecha_evento",
+   "fieldtype": "Date",
+   "label": "Fecha del evento",
+   "reqd": 1,
+   "default": "Today",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "column_break_reporte",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "label": "Estado",
+   "options": "Reportado\nEn evaluacion\nConfirmado\nDescartado",
+   "default": "Reportado",
+   "read_only": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "reportado_por",
+   "fieldtype": "Link",
+   "label": "Reportado por",
+   "options": "User",
+   "read_only": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "fecha_reporte",
+   "fieldtype": "Datetime",
+   "label": "Fecha del reporte",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_ambito",
+   "fieldtype": "Section Break",
+   "label": "Dónde ocurrió"
+  },
+  {
+   "fieldname": "proceso",
+   "fieldtype": "Link",
+   "label": "Proceso",
+   "options": "Proceso",
+   "in_standard_filter": 1,
+   "description": "El proceso del mapa en el que ocurrió, si lo sabe."
+  },
+  {
+   "fieldname": "column_break_ambito",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "unidad_organica",
+   "fieldtype": "Link",
+   "label": "Unidad orgánica",
+   "options": "Unidad Organica"
+  },
+  {
+   "fieldname": "section_break_descripcion",
+   "fieldtype": "Section Break",
+   "label": "Descripción del evento"
+  },
+  {
+   "fieldname": "descripcion",
+   "fieldtype": "Text",
+   "label": "Qué ocurrió",
+   "reqd": 1,
+   "description": "Los hechos: qué pasó, cuándo y a quién afectó."
+  },
+  {
+   "fieldname": "consecuencias",
+   "fieldtype": "Small Text",
+   "label": "Consecuencias observadas"
+  },
+  {
+   "fieldname": "acciones_inmediatas",
+   "fieldtype": "Small Text",
+   "label": "Acciones inmediatas",
+   "description": "Lo que ya se hizo para contener el efecto, si se hizo algo."
+  },
+  {
+   "fieldname": "evidencia",
+   "fieldtype": "Attach",
+   "label": "Evidencia"
+  },
+  {
+   "fieldname": "section_break_evaluacion",
+   "fieldtype": "Section Break",
+   "label": "Evaluación de Calidad",
+   "depends_on": "eval:doc.estado != 'Reportado'"
+  },
+  {
+   "fieldname": "riesgo",
+   "fieldtype": "Link",
+   "label": "Riesgo del registro",
+   "options": "Riesgo",
+   "description": "Lo asigna Calidad al evaluar el evento. Si el proceso quedó vacío, se toma el del riesgo."
+  },
+  {
+   "fieldname": "tipo_nc",
+   "fieldtype": "Select",
+   "label": "Tipo de no conformidad",
+   "options": "No conformidad mayor\nNo conformidad menor",
+   "default": "No conformidad mayor",
+   "description": "Con qué gravedad se abre la no conformidad al confirmar el evento."
+  },
+  {
+   "fieldname": "motivo_descarte",
+   "fieldtype": "Small Text",
+   "label": "Motivo del descarte",
+   "description": "Obligatorio para descartar: quien reportó lo recibe."
+  },
+  {
+   "fieldname": "column_break_evaluacion",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "evaluado_por",
+   "fieldtype": "Link",
+   "label": "Decidido por",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "fecha_evaluacion",
+   "fieldtype": "Date",
+   "label": "Fecha de la decisión",
+   "read_only": 1
+  },
+  {
+   "fieldname": "no_conformidad",
+   "fieldtype": "Link",
+   "label": "No conformidad",
+   "options": "No Conformidad",
+   "read_only": 1,
+   "description": "Donde se hace el análisis de causas y el plan de acción."
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-09-27 15:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Riesgos",
+ "name": "Evento Riesgo",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "titulo,proceso,riesgo",
+ "show_title_field_in_link": 1,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "titulo",
+ "track_changes": 1
+}
