@@ -39,6 +39,7 @@
     {"id":"evidencia-trazabilidad","kind":"programmatic","title":"Evidencia y trazabilidad","page":"flujos/evidencia-trazabilidad.md","sources":["sgc/sgc_nucleo/doctype/evidencia/evidencia.py","sgc/sgc_nucleo/doctype/trazabilidad/trazabilidad.py"],"status":"operativo"},
     {"id":"lista-verificacion","kind":"programmatic","title":"Lista de verificación de auditoría","page":"flujos/lista-verificacion.md","sources":["sgc/sgc_auditoria/doctype/lista_verificacion/lista_verificacion.py"],"status":"operativo"},
     {"id":"comunicado","kind":"programmatic","title":"Comunicado","page":"flujos/comunicado.md","sources":["sgc/sgc_gobierno/doctype/comunicado/comunicado.py","sgc/correo.py"],"status":"operativo"},
+    {"id":"soporte","kind":"programmatic","title":"Reportar un problema","page":"flujos/soporte.md","sources":["sgc/soporte.py","sgc/public/js/soporte.js"],"status":"operativo"},
     {"id":"capa","kind":"programmatic","title":"CAPA desde hallazgos","page":"flujos/capa.md","sources":["sgc/capa.py"],"status":"operativo"},
     {"id":"cbc","kind":"programmatic","title":"Diagnóstico CBC","page":"flujos/cbc.md","sources":["sgc/setup/f6_informe_cbc.py","sgc/sgc_procesos/doctype/cumplimiento_cbc/cumplimiento_cbc.py"],"status":"operativo"},
     {"id":"reportes","kind":"programmatic","title":"Reportes PDF y Excel","page":"flujos/reportes.md","sources":["sgc/informe.py"],"status":"operativo"},
