@@ -120,3 +120,25 @@ def documentos_por_revisar():
             ["estado", "=", "Publicado"],
         ],
     )
+
+
+@frappe.whitelist()
+def acciones_abiertas():
+    """Acciones de mejora que todavía no se han verificado."""
+    return _contar("Accion Mejora", [["estado", "not in", ACCION_CERRADA]])
+
+
+# Una «incidencia» (A13, pliego de auditorías): algo que ya pasó y se está
+# tratando — una salida no conforme o un evento de riesgo reportado. Cuenta
+# cada una solo si quien mira puede verla: `_contar` respeta permisos.
+SALIDA_CERRADA = ["Cerrada"]
+EVENTO_ABIERTO = ["Reportado", "En evaluacion"]
+
+
+@frappe.whitelist()
+def incidencias_abiertas():
+    """Salidas no conformes sin cerrar + eventos de riesgo pendientes de decisión."""
+    total = _contar("Salida No Conforme", [["estado", "not in", SALIDA_CERRADA]])
+    if frappe.db.exists("DocType", "Evento Riesgo"):
+        total += _contar("Evento Riesgo", [["estado", "in", EVENTO_ABIERTO]])
+    return total

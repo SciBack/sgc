@@ -184,3 +184,8 @@ class InformeAuditoria(Document):
         self.n_nc_menores = conteo["n_nc_menores"]
         self.n_observaciones = conteo["n_observaciones"]
         self.n_om = conteo["n_om"]
+
+        # Las acciones de mejora de las NC que salieron de esta auditoría (A13).
+        ncs = [n for n in frappe.get_all("Hallazgo Auditoria", filters={"auditoria": self.auditoria},
+                                         pluck="no_conformidad") if n]
+        self.n_acciones_mejora = frappe.db.count("Accion Mejora", {"no_conformidad": ["in", ncs]}) if ncs else 0

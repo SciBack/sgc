@@ -16,6 +16,7 @@
   "n_nc_menores",
   "n_observaciones",
   "n_om",
+  "n_acciones_mejora",
   "fecha_emision",
   "emitido_por",
   "pdf",
@@ -159,12 +160,19 @@
    "fieldtype": "Date",
    "label": "Fecha de distribuci\u00f3n",
    "read_only": 1
+  },
+  {
+   "fieldname": "n_acciones_mejora",
+   "fieldtype": "Int",
+   "label": "N.\u00ba acciones de mejora",
+   "read_only": 1,
+   "description": "Acciones de mejora de las no conformidades que salieron de esta auditor\u00eda."
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-27 13:00:00.000000",
+ "modified": "2026-09-27 17:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Auditoria",
  "name": "Informe Auditoria",

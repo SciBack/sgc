@@ -65,7 +65,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Tipo",
-   "options": "No conformidad mayor\nNo conformidad menor\nObservacion\nOportunidad de mejora"
+   "options": "No conformidad mayor\nNo conformidad menor\nPotencial no conformidad\nObservacion\nOportunidad de mejora"
   },
   {
    "fieldname": "descripcion",
@@ -189,7 +189,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-27 14:00:00.000000",
+ "modified": "2026-09-27 17:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "No Conformidad",

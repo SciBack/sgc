@@ -36,6 +36,13 @@ class PlanMejora(Document):
         if not self.codigo:
             self.codigo = codigo_anual(self.doctype, "PM")
 
+    def on_update(self):
+        # Solo en la transición real (aprobar): un plan que se carga ya en
+        # ejecución no es un acto de nadie, como en el resto de firmas.
+        anterior = self.get_doc_before_save()
+        if self.estado == "En ejecucion" and anterior and anterior.estado != "En ejecucion":
+            self.difundir()
+
     def validate(self):
         self._sellar_firmas()
         self._validar_puesta_en_ejecucion()
@@ -75,6 +82,71 @@ class PlanMejora(Document):
         if self.estado == "Cerrado" and (not anterior or anterior.estado != "Cerrado"):
             self.cerrado_por = frappe.session.user
             self.fecha_cierre = nowdate()
+
+    # ---------------------------------------------------------------- difusión
+    def difundir(self):
+        """Difunde el plan aprobado por correo a quien tiene que ejecutarlo (M8).
+
+        Hasta aquí llegaba cada acción suelta a su responsable, pero nadie recibía
+        el plan como tal: qué se va a hacer, quién hace cada cosa y para cuándo.
+        Va a la persona responsable del plan y a la de cada acción, y queda en el
+        historial del plan. Pasa por el modo de ensayo y la lista blanca del correo.
+        """
+        from sgc.correo import enviar
+
+        acciones = frappe.get_all(
+            "Accion Mejora",
+            filters={"plan_mejora": self.name},
+            fields=["codigo", "descripcion", "responsable", "fecha_compromiso"],
+            order_by="fecha_compromiso asc, codigo asc",
+            limit=0,
+        )
+        usuarios = [u for u in [self.responsable, *(a.responsable for a in acciones)] if u]
+        correos = []
+        for u in dict.fromkeys(usuarios):
+            correo, activo = frappe.db.get_value("User", u, ["email", "enabled"]) or (None, 0)
+            if activo and correo:
+                correos.append(correo)
+        if not correos:
+            return None
+
+        e = frappe.utils.escape_html
+        filas = "".join(
+            "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td></tr>".format(
+                e(a.codigo or ""),
+                e((a.descripcion or "")[:160]),
+                e(frappe.utils.get_fullname(a.responsable) if a.responsable else "—"),
+                frappe.utils.formatdate(a.fecha_compromiso) if a.fecha_compromiso else "—",
+            )
+            for a in acciones
+        )
+        mensaje = (
+            "<p>Se aprobó el plan de mejora <b>{0}</b> — {1}. Desde hoy está en ejecución.</p>"
+            "<p>Responsable del plan: {2}. Aprobado por: {3}.</p>"
+            '<table border="1" cellpadding="4" style="border-collapse: collapse">'
+            "<tr><th>{4}</th><th>{5}</th><th>{6}</th><th>{7}</th></tr>{8}</table>"
+            '<p><a href="{9}">{10}</a></p>'
+        ).format(
+            e(self.codigo or self.name), e(self.titulo or ""),
+            e(frappe.utils.get_fullname(self.responsable) if self.responsable else "—"),
+            e(frappe.utils.get_fullname(self.aprobado_por) if self.aprobado_por else "—"),
+            _("Acción"), _("Qué"), _("Responsable"), _("Para cuándo"), filas,
+            frappe.utils.get_url_to_form(self.doctype, self.name), _("Abrir el plan en el SGC"),
+        )
+        resultado = enviar(
+            correos,
+            _("Plan de mejora aprobado: {0} — {1}").format(self.codigo or self.name, self.titulo or ""),
+            mensaje,
+            self.doctype,
+            self.name,
+            origen="Difusión del plan",
+        )
+        frappe.msgprint(
+            _("Plan difundido a {0} persona(s); {1} retenida(s) por la configuración del correo.").format(
+                len(resultado["enviados"]), len(resultado["retenidos"])),
+            indicator="green", alert=True,
+        )
+        return resultado
 
     # ------------------------------------------------------------ validaciones
     def _validar_puesta_en_ejecucion(self):

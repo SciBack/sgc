@@ -152,7 +152,7 @@ def run():
         {"fieldname":"origen_tipo","fieldtype":"Select","label":"Origen",
          "options":"Autoevaluacion\nAuditoria\nQueja/Reclamo\nIndicador fuera de meta\nRevision por direccion\nRiesgo materializado\nEvento de riesgo\nIncumplimiento a ente\nProceso\nSalida no conforme\nOtra","in_standard_filter":1},
         {"fieldname":"tipo","fieldtype":"Select","label":"Tipo",
-         "options":"No conformidad mayor\nNo conformidad menor\nObservacion\nOportunidad de mejora","in_list_view":1,"in_standard_filter":1},
+         "options":"No conformidad mayor\nNo conformidad menor\nPotencial no conformidad\nObservacion\nOportunidad de mejora","in_list_view":1,"in_standard_filter":1},
         {"fieldname":"descripcion","fieldtype":"Text","label":"Descripción"},
         {"fieldname":"requisito_incumplido","fieldtype":"Small Text","label":"Requisito incumplido"},
         {"fieldname":"unidad_organica","fieldtype":"Link","label":"Unidad orgánica","options":"Unidad Organica"},
