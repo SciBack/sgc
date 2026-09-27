@@ -42,7 +42,25 @@ add_to_apps_screen = [
 # app_include_css = "/assets/sgc/css/sgc.css"
 # desk_home.js: redirige la entrada pelada al Desk (/desk) directo al workspace
 # SGC saltando el apps screen. Archivo plano (no .bundle.) -> se sirve sin build.
-app_include_js = ["/assets/sgc/js/desk_home.js", "/assets/sgc/js/latido_scheduler.js", "/assets/sgc/js/migas.js"]
+app_include_js = [
+	"/assets/sgc/js/desk_home.js",
+	"/assets/sgc/js/latido_scheduler.js",
+	"/assets/sgc/js/migas.js",
+	"/assets/sgc/js/soporte.js",
+]
+
+# Canal de soporte (#56): «Reportar un problema» en el menú de Ayuda, SOLO si hay un
+# helpdesk configurado (`condition` se evalúa en el navegador contra el boot).
+extend_bootinfo = ["sgc.soporte.boot"]
+standard_help_items = [
+	{
+		"item_label": "Reportar un problema",
+		"item_type": "Action",
+		"action": "sgc.soporte.abrir()",
+		"condition": "frappe.boot.sgc_soporte && frappe.boot.sgc_soporte.activo",
+		"is_standard": 1,
+	},
+]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/sgc/css/sgc.css"

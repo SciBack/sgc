@@ -1,0 +1,129 @@
+{
+ "actions": [],
+ "creation": "2026-09-27 15:00:00.000000",
+ "description": "Canal de soporte: a qué helpdesk llegan los problemas que se reportan desde el sistema.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "activo",
+  "proveedor",
+  "correo_soporte",
+  "sec_zammad",
+  "zammad_url",
+  "zammad_token",
+  "zammad_grupo",
+  "cb_zammad",
+  "prioridad_baja",
+  "prioridad_media",
+  "prioridad_alta",
+  "tiempo_espera",
+  "sec_ayuda",
+  "ayuda"
+ ],
+ "fields": [
+  {
+   "fieldname": "activo",
+   "fieldtype": "Check",
+   "label": "Canal de soporte activo",
+   "default": "0",
+   "description": "Apagado, el menú «Reportar un problema» no aparece y no se envía nada."
+  },
+  {
+   "fieldname": "proveedor",
+   "fieldtype": "Select",
+   "label": "Helpdesk",
+   "options": "Zammad\nCorreo",
+   "default": "Zammad",
+   "description": "Zammad: crea el ticket por su API. Correo: lo envía a la dirección de soporte (pasa por el modo y la lista blanca de Configuración de correo)."
+  },
+  {
+   "fieldname": "correo_soporte",
+   "fieldtype": "Data",
+   "label": "Correo de soporte",
+   "options": "Email",
+   "description": "Destino con el proveedor Correo, y la alternativa que se ofrece a quien reporta si el helpdesk no responde."
+  },
+  {
+   "fieldname": "sec_zammad",
+   "fieldtype": "Section Break",
+   "label": "Zammad",
+   "depends_on": "eval:doc.proveedor=='Zammad'"
+  },
+  {
+   "fieldname": "zammad_url",
+   "fieldtype": "Data",
+   "label": "URL de Zammad",
+   "description": "Ej.: https://soporte.example.edu"
+  },
+  {
+   "fieldname": "zammad_token",
+   "fieldtype": "Password",
+   "label": "Token de acceso",
+   "description": "De una cuenta de servicio propia, con permiso de agente en el grupo de destino (necesario para crear el ticket a nombre de quien reporta)."
+  },
+  {
+   "fieldname": "zammad_grupo",
+   "fieldtype": "Data",
+   "label": "Grupo de destino",
+   "description": "El grupo de Zammad que atiende al SGC."
+  },
+  {
+   "fieldname": "cb_zammad",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "prioridad_baja",
+   "fieldtype": "Data",
+   "label": "Prioridad «Baja» en Zammad",
+   "default": "1 low"
+  },
+  {
+   "fieldname": "prioridad_media",
+   "fieldtype": "Data",
+   "label": "Prioridad «Media» en Zammad",
+   "default": "2 normal"
+  },
+  {
+   "fieldname": "prioridad_alta",
+   "fieldtype": "Data",
+   "label": "Prioridad «Alta» en Zammad",
+   "default": "3 high"
+  },
+  {
+   "fieldname": "tiempo_espera",
+   "fieldtype": "Int",
+   "label": "Espera máxima (segundos)",
+   "default": "10"
+  },
+  {
+   "fieldname": "sec_ayuda",
+   "fieldtype": "Section Break",
+   "label": "Qué viaja en el ticket"
+  },
+  {
+   "fieldname": "ayuda",
+   "fieldtype": "HTML",
+   "options": "<p>Solo lo que escribe quien reporta y un contexto técnico fijo: sistema, institución, versión del SGC y de Frappe, su usuario y roles, y la pantalla en la que estaba <b>sin el identificador del registro</b>. Nunca el contenido de documentos ni datos de otras personas. Quien reporta ve el texto completo antes de enviarlo.</p>"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-09-27 15:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "Configuracion Soporte",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "read": 1,
+   "write": 1,
+   "role": "System Manager"
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
