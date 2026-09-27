@@ -35,6 +35,7 @@ Reglas creadas:
   7.   Auditoria             — cualquier transición.
   8.   Hallazgo Auditoria    — cualquier transición.
   9.   Salida No Conforme    — tratamiento, verificación y cierre (#33).
+  10.  Informe Auditoria     — revisión, devolución, aprobación y distribución (#37).
 
 Ejecutar (idempotente):
     bench --site <site> execute sgc.setup.f15_notificaciones_workflow.run
@@ -216,6 +217,25 @@ NOTIFICACIONES = [
             *_a_campo_o_rol("responsable", ROL_CALIDAD_PROGRAMA, "En analisis", "En tratamiento"),
             *_a_campo_o_rol("verificada_por", ROL_VIGILANCIA, "En verificacion"),
             _a_campo("responsable", "Cerrada eficaz", "Cerrada no eficaz"),
+        ],
+    },
+    {
+        "name": "SGC - Informe de auditoria cambia de estado",
+        "document_type": "Informe Auditoria",
+        "event": "Value Change",
+        "value_changed": "estado",
+        "subject": "Informe de auditoría {{ doc.name }}: {{ doc.estado }}",
+        "message": _mensaje(
+            "El informe de auditoría",
+            {
+                "En revision": "Revíselo: apruébelo o devuélvalo con observaciones.",
+                "Borrador": "Se devolvió con observaciones: corríjalo y vuelva a enviarlo.",
+                "Aprobado": "Está aprobado: ya se puede distribuir y levantar los hallazgos.",
+            },
+        ),
+        "recipients": [
+            _a_rol(ROL_VIGILANCIA, "En revision"),
+            _a_campo("emitido_por", "Borrador", "Aprobado", "Distribuido"),
         ],
     },
     {

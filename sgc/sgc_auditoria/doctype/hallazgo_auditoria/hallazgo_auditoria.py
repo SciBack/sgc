@@ -24,6 +24,7 @@ from frappe.model.document import Document
 from frappe.utils import nowdate
 
 from sgc.naming import siguiente_correlativo
+from sgc.sgc_auditoria.doctype.informe_auditoria.informe_auditoria import informe_aprobado
 from sgc.sgc_nucleo.doctype.trazabilidad.trazabilidad import sincronizar_evidencia_enlace
 
 # Tipos de hallazgo que constituyen una no conformidad escalable a M05, con el
@@ -74,6 +75,7 @@ class HallazgoAuditoria(Document):
 
         self._validar_escalamiento_real()
         self._validar_cierre_de_no_conformidad()
+        self._validar_informe_aprobado_para_cerrar()
         self._sincronizar_trazabilidad()
 
     def _validar_escalamiento_real(self):
@@ -94,6 +96,29 @@ class HallazgoAuditoria(Document):
                   "la No Conformidad. Use la acción de escalamiento, que la crea "
                   "y deja el vínculo."),
                 title=_("Escalamiento sin no conformidad"),
+            )
+
+    def _validar_informe_aprobado_para_cerrar(self):
+        """Un hallazgo no se levanta antes de aprobar el informe (#37).
+
+        El pliego lo pide literal —«enviar el informe a aprobación antes de
+        levantar los hallazgos»— y es la lógica de ISO 19011 §6.5: los hallazgos
+        se dan por buenos en el informe aprobado; cerrarlos antes es cerrar algo
+        que nadie independiente ha revisado todavía. Escalar a no conformidad sí
+        se puede antes: tratar una no conformidad no espera al informe.
+
+        Solo al PASAR a «Cerrado» (una carga ya cerrada no es un acto de nadie).
+        """
+        if self.estado != "Cerrado":
+            return
+        anterior = self.get_doc_before_save()
+        if not anterior or anterior.estado == "Cerrado":
+            return
+        if not informe_aprobado(self.auditoria):
+            frappe.throw(
+                _("El informe de la auditoría {0} todavía no está aprobado: los hallazgos se "
+                  "levantan después de aprobar el informe.").format(self.auditoria),
+                title=_("Informe sin aprobar"),
             )
 
     def _validar_cierre_de_no_conformidad(self):

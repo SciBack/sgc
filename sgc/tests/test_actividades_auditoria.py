@@ -145,6 +145,8 @@ class IntegrationTestActividadesAuditoria(IntegrationTestCase):
         informe = frappe.get_doc(
             {"doctype": "Informe Auditoria", "auditoria": aud.name, "conclusiones": "Prueba."}
         ).insert(ignore_permissions=True)
+        # Desde #37 la auditoría no se cierra con el informe sin aprobar.
+        frappe.db.set_value("Informe Auditoria", informe.name, "estado", "Aprobado", update_modified=False)
         aud.informe = informe.name
         aud.estado = "Cerrada"  # sin recorrer el ciclo: el workflow está desactivado
         aud.save(ignore_permissions=True)

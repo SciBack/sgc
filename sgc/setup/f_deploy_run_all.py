@@ -40,6 +40,7 @@ Orden (por dependencia real, no alfabético):
   21. f21_dashboards — cuadros de mando nativos (sin Heatmap: ignora permisos)
   22. f22_programa_pdf — Print Format del plan anual de auditoría (#66)
   23. f23_workflow_salida_no_conforme — workflow Salida No Conforme (ISO 9001 §8.7, #33)
+  24. f24_workflow_informe_auditoria — revisión y aprobación del informe de auditoría (#37)
 
 Ejecutar manualmente:
     bench --site <site> execute sgc.setup.f_deploy_run_all.run
@@ -82,6 +83,7 @@ from sgc.setup import (
     f21_dashboards,
     f22_programa_pdf,
     f23_workflow_salida_no_conforme,
+    f24_workflow_informe_auditoria,
 )
 
 STEPS = [
@@ -110,6 +112,7 @@ STEPS = [
     ("f21_dashboards", f21_dashboards),
     ("f22_programa_pdf", f22_programa_pdf),
     ("f23_workflow_salida_no_conforme", f23_workflow_salida_no_conforme),
+    ("f24_workflow_informe_auditoria", f24_workflow_informe_auditoria),
 ]
 
 

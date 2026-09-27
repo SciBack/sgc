@@ -152,7 +152,7 @@ def run():
         {"fieldname":"n_observaciones","fieldtype":"Int","label":"N.º observaciones"},
         {"fieldname":"n_om","fieldtype":"Int","label":"N.º oportunidades de mejora"},
         {"fieldname":"fecha_emision","fieldtype":"Date","label":"Fecha de emisión","in_list_view":1},
-        {"fieldname":"emitido_por","fieldtype":"Link","label":"Emitido por","options":"User"},
+        {"fieldname":"emitido_por","fieldtype":"Link","label":"Emitido por","options":"User","read_only":1},
         {"fieldname":"pdf","fieldtype":"Attach","label":"PDF"},
         {"fieldname":"presentado_en","fieldtype":"Link","label":"Presentado en (Revisión Dirección)",
          "options":"Revision Direccion",

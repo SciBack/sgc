@@ -68,6 +68,9 @@ class IntegrationTestAuditoria(IntegrationTestCase):
         })
         doc.flags.ignore_permissions = True
         doc.insert(ignore_permissions=True)
+        # Desde #37 la auditoría no se cierra con el informe sin aprobar; aquí se
+        # prueba la auditoría, así que el informe llega ya aprobado.
+        frappe.db.set_value("Informe Auditoria", doc.name, "estado", "Aprobado", update_modified=False)
         return doc
 
     # ======================================================================
