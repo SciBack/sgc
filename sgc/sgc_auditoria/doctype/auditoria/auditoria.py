@@ -34,6 +34,7 @@ from frappe.model.document import Document
 from frappe.utils import formatdate, getdate, nowdate
 
 from sgc import tareas
+from sgc.sgc_auditoria.doctype.informe_auditoria.informe_auditoria import informe_aprobado
 
 # Orden del ciclo de vida (coincide con el Workflow "Auditoria SGC").
 ORDEN = {
@@ -158,6 +159,16 @@ class Auditoria(Document):
         # "Cerrada": no se cierra una auditoría sin informe emitido.
         if nivel >= 4 and not self.informe:
             frappe.throw(_("No se puede cerrar una auditoría sin informe emitido."))
+
+        # ...ni con el informe sin aprobar (#37, ISO 19011 §6.5). Solo al PASAR a
+        # «Cerrada»: una carga que ya aterriza cerrada no es un acto de nadie.
+        if self.estado == "Cerrada":
+            anterior = self.get_doc_before_save()
+            if anterior and anterior.estado != "Cerrada" and not informe_aprobado(self.name):
+                frappe.throw(
+                    _("No se puede cerrar la auditoría: su informe todavía no está aprobado."),
+                    title=_("Informe sin aprobar"),
+                )
 
     def _validar_independencia_real(self):
         """Nadie audita su propio trabajo (ISO 9001 §9.2.2 c, ISO 19011 cl. 5.5.2).

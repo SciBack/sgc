@@ -20,6 +20,11 @@ class IntegrationTestHallazgoAuditoriaWorkflow(IntegrationTestCase):
         a.flags.ignore_permissions = True
         a.insert(ignore_permissions=True)
         self.auditoria = a.name
+        # Desde #37 un hallazgo no se cierra antes de aprobar el informe de su
+        # auditoría; aquí se prueba el hallazgo, así que el informe ya está aprobado.
+        informe = frappe.get_doc({"doctype": "Informe Auditoria", "auditoria": a.name,
+                                  "conclusiones": "Informe de prueba."}).insert(ignore_permissions=True)
+        frappe.db.set_value("Informe Auditoria", informe.name, "estado", "Aprobado", update_modified=False)
 
     def _hallazgo(self, **kw):
         vals = {"doctype": "Hallazgo Auditoria", "auditoria": self.auditoria,

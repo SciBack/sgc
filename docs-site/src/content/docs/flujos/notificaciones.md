@@ -61,6 +61,7 @@ que actúa en ese paso (entre paréntesis):
 | Documento Controlado | En revisión → revisor (DPGC) · Observado → quien lo elaboró (Dueño de Proceso) · Aprobado → aprobador (Autoridad Aprobadora) · Obsoleto → quien lo elaboró |
 | Documento Controlado | **Publicado** → quien lo elaboró, revisó y aprobó, y DPGC, **con el archivo adjunto**; sin adjunto si es de *solo consulta* o si es un documento externo sin archivo (lleva el enlace) |
 | No Conformidad | En análisis / En tratamiento → responsable (Responsable de Calidad de Programa) · En verificación → verificador (DPGC) · Cerrada → responsable |
+| Informe de auditoría | En revisión → DPGC · Devuelto a borrador / Aprobado / Distribuido → quien lo emitió |
 | Salida no conforme | En tratamiento → responsable del tratamiento (Dueño de Proceso) · Tratada → DPGC, para verificar · Cerrada → quien la detectó |
 | Acción de Mejora | En ejecución → responsable (Responsable de Calidad de Programa) · Ejecutada → verificador (DPGC) · Verificada → responsable |
 | Auditoría | En ejecución / Ejecutada / Cerrada → equipo auditor (Auditor Interno) · Informe emitido → DPGC |

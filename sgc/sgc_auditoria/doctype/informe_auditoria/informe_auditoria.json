@@ -9,6 +9,7 @@
  "field_order": [
   "codigo",
   "auditoria",
+  "estado",
   "resumen_ejecutivo",
   "conclusiones",
   "n_nc_mayores",
@@ -18,7 +19,15 @@
   "fecha_emision",
   "emitido_por",
   "pdf",
-  "presentado_en"
+  "presentado_en",
+  "section_break_aprobacion",
+  "observaciones_revision",
+  "aprobado_por",
+  "fecha_aprobacion",
+  "column_break_distribucion",
+  "destinatarios",
+  "distribuido_por",
+  "fecha_distribucion"
  ],
  "fields": [
   {
@@ -36,6 +45,15 @@
    "label": "Auditor\u00eda",
    "options": "Auditoria",
    "reqd": 1
+  },
+  {
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "label": "Estado",
+   "default": "Borrador",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "options": "Borrador\nEn revision\nAprobado\nDistribuido"
   },
   {
    "fieldname": "resumen_ejecutivo",
@@ -71,13 +89,16 @@
    "fieldname": "fecha_emision",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "Fecha de emisi\u00f3n"
+   "label": "Fecha de emisi\u00f3n",
+   "read_only": 1
   },
   {
    "fieldname": "emitido_por",
    "fieldtype": "Link",
    "label": "Emitido por",
-   "options": "User"
+   "options": "User",
+   "read_only": 1,
+   "description": "Lo sella el sistema al enviar el informe a revisi\u00f3n."
   },
   {
    "fieldname": "pdf",
@@ -90,12 +111,60 @@
    "fieldtype": "Link",
    "label": "Presentado en (Revisi\u00f3n Direcci\u00f3n)",
    "options": "Revision Direccion"
+  },
+  {
+   "fieldname": "section_break_aprobacion",
+   "fieldtype": "Section Break",
+   "label": "Revisi\u00f3n y aprobaci\u00f3n (ISO 19011 \u00a76.5)"
+  },
+  {
+   "fieldname": "observaciones_revision",
+   "fieldtype": "Small Text",
+   "label": "Observaciones de la revisi\u00f3n",
+   "description": "Obligatorias al devolver el informe a borrador: qu\u00e9 hay que corregir."
+  },
+  {
+   "fieldname": "aprobado_por",
+   "fieldtype": "Link",
+   "label": "Aprobado por",
+   "options": "User",
+   "read_only": 1,
+   "description": "Lo sella el sistema al aprobar. No puede ser quien lo emiti\u00f3 ni del equipo auditor."
+  },
+  {
+   "fieldname": "fecha_aprobacion",
+   "fieldtype": "Date",
+   "label": "Fecha de aprobaci\u00f3n",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_distribucion",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "destinatarios",
+   "fieldtype": "Small Text",
+   "label": "Destinatarios",
+   "description": "A qui\u00e9n se distribuye el informe (ISO 19011 \u00a76.5.2). Obligatorio para distribuir."
+  },
+  {
+   "fieldname": "distribuido_por",
+   "fieldtype": "Link",
+   "label": "Distribuido por",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "fecha_distribucion",
+   "fieldtype": "Date",
+   "label": "Fecha de distribuci\u00f3n",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-04 17:29:32.710403",
+ "modified": "2026-09-27 13:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Auditoria",
  "name": "Informe Auditoria",

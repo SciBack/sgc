@@ -31,8 +31,8 @@ export async function validateCoverage(coverage, { repoRoot, requirePages = fals
     }
   }
   if ((coverage.roles ?? []).length !== 14) errors.push('roles: se requieren exactamente 14');
-  if ((coverage.flows ?? []).filter((item) => item.kind === 'workflow').length !== 15) {
-    errors.push('workflows: se requieren exactamente 15');
+  if ((coverage.flows ?? []).filter((item) => item.kind === 'workflow').length !== 16) {
+    errors.push('workflows: se requieren exactamente 16');
   }
   return errors;
 }
