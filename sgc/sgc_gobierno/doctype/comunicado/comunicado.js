@@ -4,7 +4,13 @@
 // Enviar el comunicado (#92). Una sola vez: el servidor lo sella y lo cierra.
 frappe.ui.form.on("Comunicado", {
 	refresh(frm) {
-		if (frm.is_new() || frm.doc.estado !== "Borrador") return;
+		if (frm.doc.estado === "Enviado") {
+			// Lo que salió no se reescribe: el servidor lo impide y la pantalla no lo ofrece.
+			frm.disable_save();
+			frm.set_read_only();
+			return;
+		}
+		if (frm.is_new()) return;
 		frm.add_custom_button(__("Enviar comunicado"), () => {
 			frappe.confirm(
 				__("Se enviará a los usuarios activos de los roles elegidos y no se podrá reenviar. ¿Enviar?"),
