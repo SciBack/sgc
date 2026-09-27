@@ -15,9 +15,10 @@ Cuenta activa en Frappe/Keycloak.
 
 1. Abre una ruta protegida sin sesión. Resultado: el sistema redirige al login.
 2. Autentícate con una cuenta de un solo rol. Resultado: carga el Desk de Frappe y se obtiene la sesión.
-3. Recorre los Workspaces y módulos visibles. Resultado: solo se muestran entradas compatibles con roles.
-4. Abre manualmente una ruta no autorizada. Resultado: backend rechaza los datos aunque la URL exista.
-5. Cierra sesión. Resultado: las rutas protegidas vuelven a pedir autenticación.
+3. Recorre los Workspaces y módulos visibles. Resultado: solo se muestran entradas compatibles con roles. La barra lateral del **Inicio** lleva a las seis áreas —Gestión de la calidad, Procesos, Auditoría, Riesgos y obligaciones, Gobierno de la calidad, Marcos y estructura—, cada una con su portada y su propia barra.
+4. Abre una misma pantalla por tres caminos: desde el Inicio, desde otra pantalla y desde la portada de otra área. Resultado: la miga de pan es siempre **⌂ > Área > Pantalla** (y **> Registro** en un formulario), con nombres en español y el área enlazada a su portada. También en la vista árbol (Proceso, Unidad orgánica, Estándar o criterio) y en los informes.
+5. Abre manualmente una ruta no autorizada. Resultado: backend rechaza los datos aunque la URL exista.
+6. Cierra sesión. Resultado: las rutas protegidas vuelven a pedir autenticación.
 
 ## Estados por los que pasa
 
