@@ -43,6 +43,14 @@ No aceptar una cookie auxiliar como sesión; no considerar el menú como única 
 
 Estado o valores antes/después, identificador ficticio, rol, URL/método, respuesta y logs correlacionables sin cookies, tokens ni datos personales.
 
+## Contraseña con elementos seguros
+
+Además de la fuerza que mide Frappe (entropía, **Puntuación mínima de contraseña** en la configuración del sistema), una contraseña necesita **al menos 8 caracteres, una mayúscula, una minúscula y un número**. Se aplica al fijarla desde el formulario del usuario, al restablecerla o cambiarla desde **Actualizar contraseña**, y en el medidor de la pantalla, que avisa antes de enviar.
+
+- Caso negativo: una contraseña sin mayúsculas, sin minúsculas, sin números o de menos de 8 caracteres se rechaza con el motivo.
+- Quien entra por SSO no usa contraseña del SGC: la regla no le afecta.
+- Se desactiva por sitio con `sgc_contrasena_clases: 0` en `site_config.json`, y también cuando la política de contraseñas de Frappe está apagada.
+
 ## Relación con otros módulos
 
 Todos los módulos, Workspaces, DocTypes y sesión de Frappe.

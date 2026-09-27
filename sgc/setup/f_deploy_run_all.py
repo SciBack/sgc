@@ -182,6 +182,12 @@ def run():
             fallidos.append(name)
             frappe.log_error(title=f"f_deploy_run_all: fallo en {name}")
             print(f"  [FALLO] {name} — ver Error Log")
+    # Los pasos corren con `in_patch`, y con él Frappe construye el meta SIN los
+    # Custom DocPerm (`frappe/model/meta.py:642`): cualquier meta que un paso haya
+    # dejado en caché va sin la matriz RBAC. Se tira toda la caché al acabar para
+    # que un `migrate` sin `clear-cache` no deje a los roles sin permisos.
+    frappe.flags.in_patch = False
+    frappe.clear_cache()
     print("=" * 60)
     print("F_DEPLOY_RUN_ALL — RESUMEN")
     print("=" * 60)

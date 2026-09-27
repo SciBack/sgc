@@ -167,6 +167,15 @@ class IntegrationTestAvisosDeIndicadores(_Base):
         para, _cc, _cco = n.get_list_of_recipients(doc, get_context(doc))
         return {c for c in para if c.endswith("@" + DOMINIO)}
 
+    def test_los_pasos_no_dejan_el_meta_sin_la_matriz(self):
+        """f7/f15 guardan reglas con `in_patch`; el meta de esos DocTypes no puede quedar
+        cacheado sin los Custom DocPerm (le quitaba a la DPGC el «report»)."""
+        for dt in ("Salida No Conforme", "Accion Mejora", "Documento Controlado", "Ficha Indicador"):
+            with self.subTest(doctype=dt):
+                roles = {p.role for p in frappe.get_meta(dt).permissions}
+                self.assertIn("DPGC", roles)
+        self.assertFalse(frappe.flags.in_patch)
+
     def test_medicion_vencida_avisa_al_dia_siguiente(self):
         n = frappe.db.get_value("Notification", "SGC - Medicion de indicador vencida",
                                 ["event", "date_changed", "days_in_advance", "channel"], as_dict=True)

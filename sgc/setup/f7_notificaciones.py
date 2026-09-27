@@ -287,6 +287,20 @@ def _upsert_notification(cfg):
     return accion
 
 
+
+def limpiar_meta(doctypes):
+    """Tira la caché de meta de estos DocTypes al acabar un paso con `in_patch`.
+
+    Con `frappe.flags.in_patch` activo, Frappe construye el meta SIN los Custom
+    DocPerm (`frappe/model/meta.py:642`, set_custom_permissions). Guardar una
+    Notification llama a `frappe.get_meta(document_type)` (`notification.py:245`):
+    si ese meta no estaba en caché, queda cacheado en Redis sin la matriz RBAC, y
+    la DPGC pierde, por ejemplo, el permiso «report» del DocType hasta el próximo
+    clear-cache. Pasó el 27-sep-2026: lo destapó `test_informes_permiso`.
+    """
+    for dt in set(doctypes):
+        frappe.clear_cache(doctype=dt)
+
 def run():
     """Crea/actualiza las Notification del SGC (vencimiento + convocatoria). Idempotente."""
     frappe.flags.in_patch = True
@@ -307,6 +321,8 @@ def run():
             cfg["name"], accion, cfg["document_type"], detalle))
 
     frappe.db.commit()
+    frappe.flags.in_patch = False
+    limpiar_meta(cfg["document_type"] for cfg in NOTIFICACIONES)
 
     print("F7 notificaciones OK:", len(resultados), "reglas (vencimiento + convocatoria).")
     return {"notificaciones": resultados}
