@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Wrapper de cron para sincronizar el tesauro desde VocBench y publicarlo al repo.
 #
-# Corre en un host que ALCANCE VocBench (LAN 192.168.15.231): un host interno del
-# segmento 192.168.15.x, o una máquina con la VPN corporativa. NO corre en el EC2
+# Corre en un host que ALCANCE VocBench (LAN interna, VOCBENCH_ST_HOST): un host interno
+# de ese segmento, o una máquina con la VPN corporativa. NO corre en el EC2
 # de prod (no ve la LAN). El SGC en AWS recibe el cambio por su flujo normal
 # (git pull + bench migrate reimporta el fixture). Ver README-tesauro-cron.md.
 #
@@ -63,7 +63,7 @@ git rev-parse --is-inside-work-tree >/dev/null 2>&1 || fallo "$REPO_DIR no es un
 git checkout "$BRANCH" >>"$LOG" 2>&1 || fallo "no pude cambiar a la rama $BRANCH"
 git pull --quiet --ff-only >>"$LOG" 2>&1 || fallo "git pull falló (revisa conflictos)"
 
-# 3) regenerar el fixture desde VocBench (requiere ver 192.168.15.231)
+# 3) regenerar el fixture desde VocBench (requiere ver VOCBENCH_ST_HOST)
 log "Consultando VocBench..."
 python3 deploy/sync_tesauro_vocbench.py >>"$LOG" 2>&1 || fallo "el sync con VocBench falló (¿VPN/host?)"
 

@@ -164,7 +164,7 @@ def run():
 
     # Frappe 16 dejó de armar el MENÚ lateral del Desk desde el Workspace: usa un
     # doctype nuevo, "Workspace Sidebar". El Workspace de arriba solo alimenta la
-    # RUTA directa /app/<name>; sin el Workspace Sidebar, la home del Desk sale en
+    # RUTA directa /desk/<name>; sin el Workspace Sidebar, la home del Desk sale en
     # blanco para quien no sea Workspace Manager. Se genera con la propia función
     # de Frappe (idempotente; solo crea los que falten). try/except para no romper
     # en versiones anteriores a la introducción del doctype.

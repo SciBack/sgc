@@ -12,7 +12,7 @@ description: Cobertura completa antes de aprobar una versión de SGC.
 
 ## Flujos
 
-- [ ] Los 14 workflows recorren sus transiciones positivas.
+- [ ] Los 18 workflows recorren sus transiciones positivas.
 - [ ] Devoluciones, reaperturas y autoaprobación se prueban.
 - [ ] Scoring distingue propuesta de confirmación.
 - [ ] Evidencia, trazabilidad y CAPA permanecen relacionadas.

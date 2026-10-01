@@ -88,9 +88,8 @@ ningún rol SGC tiene `delete` en ningún DocType de la matriz, por diseño.)
 
 ## Segregación de funciones en los workflows (`allow_self_approval`)
 
-Los 9 workflows nativos del SGC (`f2_workflow.py`, `f4_workflow_mejora.py`,
-`f5_workflow_documental.py`, `f8_workflow_auditoria.py`, `f9_workflow_encuestas.py`,
-`f10_workflow_revision.py`) usan el flag nativo de Frappe `allow_self_approval` por
+Los 18 workflows nativos del SGC (los ficheros `sgc/setup/f*workflow*.py`, de
+`f2_workflow.py` a `f25_workflow_evento_riesgo.py`) usan el flag nativo de Frappe `allow_self_approval` por
 transición: en `0`, quien **creó** el documento no puede ejecutar esa transición
 (la tiene que ejecutar otra persona con el rol permitido). Por defecto está en `0`;
 se marca `1` explícitamente solo en el avance operativo del propio trabajo o en una

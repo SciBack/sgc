@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:sgc="https://sciback.com/schema/sgc/1.0" id="Definitions_1" targetNamespace="https://sciback.com/schema/sgc/1.0" exporter="SGC" exporterVersion="1.0">
+  <bpmn:collaboration id="Collaboration_1">
+    <bpmn:participant id="Participant_Evento_Riesgo" name="Evento Riesgo SGC" processRef="Process_Evento_Riesgo" />
+    <bpmn:participant id="Participant_No_Conformidad" name="No Conformidad" />
+    <bpmn:messageFlow id="Msg_Confirmar__No_Conformidad" name="Abrir no conformidad" sourceRef="Task_En_evaluacion__Confirmar" targetRef="Participant_No_Conformidad" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_Evento_Riesgo" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_DPGC" name="DPGC">
+        <bpmn:flowNodeRef>Task_Reportado__Evaluar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_En_evaluacion__Confirmar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_En_evaluacion__Descartar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_En_evaluacion</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Confirmado</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Descartado</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:userTask id="Task_Reportado__Evaluar" name="Evaluar">
+      <bpmn:incoming>Flow_inicio</bpmn:incoming>
+      <bpmn:outgoing>Flow_Reportado_Evaluar_hacia_En_evaluacion</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_En_evaluacion__Confirmar" name="Confirmar">
+      <bpmn:incoming>Flow_gw_En_evaluacion_Confirmar</bpmn:incoming>
+      <bpmn:outgoing>Flow_En_evaluacion_Confirmar_hacia_Confirmado</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_En_evaluacion__Descartar" name="Descartar">
+      <bpmn:incoming>Flow_gw_En_evaluacion_Descartar</bpmn:incoming>
+      <bpmn:outgoing>Flow_En_evaluacion_Descartar_hacia_Descartado</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_En_evaluacion" name="En evaluacion">
+      <bpmn:incoming>Flow_Reportado_Evaluar_hacia_En_evaluacion</bpmn:incoming>
+      <bpmn:outgoing>Flow_gw_En_evaluacion_Confirmar</bpmn:outgoing>
+      <bpmn:outgoing>Flow_gw_En_evaluacion_Descartar</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_Confirmado" name="Confirmado">
+      <bpmn:incoming>Flow_En_evaluacion_Confirmar_hacia_Confirmado</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="End_Descartado" name="Descartado">
+      <bpmn:incoming>Flow_En_evaluacion_Descartar_hacia_Descartado</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:startEvent id="StartEvent_1" name="Inicio">
+      <bpmn:outgoing>Flow_inicio</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Task_Reportado__Evaluar">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Reportado_Evaluar_hacia_En_evaluacion" sourceRef="Task_Reportado__Evaluar" targetRef="Gateway_En_evaluacion">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_En_evaluacion_Confirmar" sourceRef="Gateway_En_evaluacion" targetRef="Task_En_evaluacion__Confirmar">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_En_evaluacion_Confirmar_hacia_Confirmado" sourceRef="Task_En_evaluacion__Confirmar" targetRef="End_Confirmado">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="0" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_En_evaluacion_Descartar" sourceRef="Gateway_En_evaluacion" targetRef="Task_En_evaluacion__Descartar">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_En_evaluacion_Descartar_hacia_Descartado" sourceRef="Task_En_evaluacion__Descartar" targetRef="End_Descartado">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="0" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_1">
+    <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
+      <bpmndi:BPMNShape id="Shape_Participant_Evento_Riesgo" bpmnElement="Participant_Evento_Riesgo" isHorizontal="true">
+        <dc:Bounds x="200" y="80" width="1346" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
+        <dc:Bounds x="230" y="80" width="1316" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Reportado__Evaluar" bpmnElement="Task_Reportado__Evaluar">
+        <dc:Bounds x="430" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_En_evaluacion__Confirmar" bpmnElement="Task_En_evaluacion__Confirmar">
+        <dc:Bounds x="830" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_En_evaluacion__Descartar" bpmnElement="Task_En_evaluacion__Descartar">
+        <dc:Bounds x="1030" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Gateway_En_evaluacion" bpmnElement="Gateway_En_evaluacion">
+        <dc:Bounds x="630" y="135" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_End_Confirmado" bpmnElement="End_Confirmado">
+        <dc:Bounds x="1230" y="142" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_End_Descartado" bpmnElement="End_Descartado">
+        <dc:Bounds x="1430" y="142" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
+        <dc:Bounds x="230" y="142" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Participant_No_Conformidad" bpmnElement="Participant_No_Conformidad" isHorizontal="true">
+        <dc:Bounds x="200" y="300" width="1346" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_Msg_Confirmar__No_Conformidad" bpmnElement="Msg_Confirmar__No_Conformidad">
+        <di:waypoint x="890" y="200" />
+        <di:waypoint x="890" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
+        <di:waypoint x="266" y="160" />
+        <di:waypoint x="430" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Reportado_Evaluar_hacia_En_evaluacion" bpmnElement="Flow_Reportado_Evaluar_hacia_En_evaluacion">
+        <di:waypoint x="550" y="160" />
+        <di:waypoint x="630" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_En_evaluacion_Confirmar" bpmnElement="Flow_gw_En_evaluacion_Confirmar">
+        <di:waypoint x="680" y="160" />
+        <di:waypoint x="830" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_En_evaluacion_Confirmar_hacia_Confirmado" bpmnElement="Flow_En_evaluacion_Confirmar_hacia_Confirmado">
+        <di:waypoint x="890" y="120" />
+        <di:waypoint x="1230" y="120" />
+        <di:waypoint x="1230" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_En_evaluacion_Descartar" bpmnElement="Flow_gw_En_evaluacion_Descartar">
+        <di:waypoint x="655" y="135" />
+        <di:waypoint x="655" y="120" />
+        <di:waypoint x="1090" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_En_evaluacion_Descartar_hacia_Descartado" bpmnElement="Flow_En_evaluacion_Descartar_hacia_Descartado">
+        <di:waypoint x="1150" y="160" />
+        <di:waypoint x="1150" y="142" />
+        <di:waypoint x="1448" y="142" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
