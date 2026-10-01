@@ -62,6 +62,12 @@ modo que quien los recorra en orden encuentre hecho lo que cada uno necesita.
 | 13 | Riesgo | Gestión preventiva, en paralelo al ciclo correctivo. |
 | 14 | Tratamiento de Riesgo | Lo que se hace con cada riesgo. |
 | 15 | Revisión por la Dirección | Cierra el ciclo (ISO 9001 §9.3): consume las salidas de todo lo demás. |
+| 16 | Informe de Auditoría | Llegó después: su sitio lógico es tras el 08. Sin informe aprobado no se cierran hallazgos ni auditoría. |
+| 17 | Salida No Conforme | Llegó después: su sitio lógico es antes del 10, al que escala si revela un fallo del sistema. |
+| 18 | Evento de Riesgo | Llegó después: su sitio lógico es tras el 14. Lo reporta cualquiera; confirmado, abre una no conformidad. |
+
+Los tres últimos van al final, y no en su sitio, para no renumerar los quince que
+Calidad ya usa como referencia (ver `ORDEN_RECORRIDO` en `sgc/bpmn.py`).
 
 Un workflow nuevo que nadie ordene sale como `99-…`: aparece el último y el
 prefijo repetido canta que falta colocarlo.
@@ -97,6 +103,9 @@ citado en el código del propio proceso.
 | 13 | Riesgo | ISO 9001:2015 §6.1 y §10.2 · ISO 31000 §6.4.2 |
 | 14 | Tratamiento de Riesgo | ISO 31000 (tratamiento y riesgo residual) |
 | 15 | Revisión por la Dirección | ISO 9001:2015 §9.3.1/§9.3.2/§9.3.3 y §5.1.1 · ISO 21001 §9.3 |
+| 16 | Informe de Auditoría | ISO 19011 §6.5 y §6.5.1 · ISO 9001:2015 §9.3 (entrada de la revisión) |
+| 17 | Salida No Conforme | ISO 9001:2015 §8.7 y §8.7.2 |
+| 18 | Evento de Riesgo | **Sin documentación**: su código cita el pliego, no una norma |
 
 **El hueco del 04 es información, no un olvido.** Ninguna norma que el proyecto
 tenga verificada exige aplicar encuestas: los indicadores del modelo del Coneau
@@ -160,5 +169,5 @@ Este control no valida los diagramas institucionales almacenados como adjuntos.
 
 Son XML. Se abren con [Camunda Modeler](https://camunda.com/download/modeler/) o
 arrastrándolos a [demo.bpmn.io](https://demo.bpmn.io). El Desk ya incluye visor
-y la página `bpmn-editor` para adjuntos institucionales. Los 15 workflows se
+y la página `bpmn-editor` para adjuntos institucionales. Los 18 workflows se
 mantienen desde sus specs y se regeneran; editar un adjunto no cambia el workflow.

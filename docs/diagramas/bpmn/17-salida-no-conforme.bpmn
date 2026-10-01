@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:sgc="https://sciback.com/schema/sgc/1.0" id="Definitions_1" targetNamespace="https://sciback.com/schema/sgc/1.0" exporter="SGC" exporterVersion="1.0">
+  <bpmn:collaboration id="Collaboration_1">
+    <bpmn:participant id="Participant_Salida_No_Conforme" name="Salida No Conforme SGC" processRef="Process_Salida_No_Conforme" />
+    <bpmn:participant id="Participant_No_Conformidad" name="No Conformidad" />
+    <bpmn:messageFlow id="Msg_pool__No_Conformidad" name="Escalar a no conformidad" sourceRef="Participant_Salida_No_Conforme" targetRef="Participant_No_Conformidad" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_Salida_No_Conforme" isExecutable="false">
+    <bpmn:documentation>El producto o servicio concreto que salió mal —un acta con notas mal cargadas, un certificado con un error—. ISO 9001:2015 §8.7 obliga a identificarlo y controlarlo para que no se use ni se entregue sin intención, y §8.7.2 a conservar cuatro cosas: la no conformidad, las acciones tomadas, las concesiones obtenidas y la autoridad que decide. No es una «No Conformidad» del sistema: un incidente aislado se queda aquí, y solo si revela un fallo del sistema se escala. La concesión no la autoriza quien detectó ni quien registró la salida.</bpmn:documentation>
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_Dueno_de_Proceso" name="Dueño de Proceso">
+        <bpmn:flowNodeRef>Task_Detectada__Iniciar_tratamiento</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_En_tratamiento__Registrar_tratamiento</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Detectada_5</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_En_tratamiento_2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_DPGC" name="DPGC">
+        <bpmn:flowNodeRef>Task_Detectada__Iniciar_tratamiento_2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_En_tratamiento__Registrar_tratamiento_2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Tratada__Verificar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Tratada__Devolver_a_tratamiento</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Verificada__Cerrar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Tratada</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Cerrada</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:userTask id="Task_Detectada__Iniciar_tratamiento" name="Iniciar tratamiento">
+      <bpmn:incoming>Flow_gw_Detectada_Iniciar_tratamiento</bpmn:incoming>
+      <bpmn:outgoing>Flow_Detectada_Iniciar_tratamiento_hacia_En_tratamiento</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Detectada__Iniciar_tratamiento_2" name="Iniciar tratamiento">
+      <bpmn:incoming>Flow_gw_Detectada_Iniciar_tratamiento_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_Detectada_Iniciar_tratamiento_hacia_En_tratamiento_2</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_En_tratamiento__Registrar_tratamiento" name="Registrar tratamiento">
+      <bpmn:incoming>Flow_gw_En_tratamiento_Registrar_tratamiento</bpmn:incoming>
+      <bpmn:outgoing>Flow_En_tratamiento_Registrar_tratamiento_hacia_Tratada</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_En_tratamiento__Registrar_tratamiento_2" name="Registrar tratamiento">
+      <bpmn:incoming>Flow_gw_En_tratamiento_Registrar_tratamiento_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_En_tratamiento_Registrar_tratamiento_hacia_Tratada_2</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Tratada__Verificar" name="Verificar">
+      <bpmn:incoming>Flow_gw_Tratada_Verificar</bpmn:incoming>
+      <bpmn:outgoing>Flow_Tratada_Verificar_hacia_Verificada</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Tratada__Devolver_a_tratamiento" name="Devolver a tratamiento">
+      <bpmn:incoming>Flow_gw_Tratada_Devolver_a_tratamiento</bpmn:incoming>
+      <bpmn:outgoing>Flow_Tratada_Devolver_a_tratamiento_hacia_En_tratamiento</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_Verificada__Cerrar" name="Cerrar">
+      <bpmn:incoming>Flow_Tratada_Verificar_hacia_Verificada</bpmn:incoming>
+      <bpmn:outgoing>Flow_Verificada_Cerrar_hacia_Cerrada</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_Detectada_5" name="Detectada">
+      <bpmn:incoming>Flow_inicio</bpmn:incoming>
+      <bpmn:outgoing>Flow_gw_Detectada_Iniciar_tratamiento</bpmn:outgoing>
+      <bpmn:outgoing>Flow_gw_Detectada_Iniciar_tratamiento_2</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Gateway_En_tratamiento_2" name="En tratamiento">
+      <bpmn:incoming>Flow_Detectada_Iniciar_tratamiento_hacia_En_tratamiento</bpmn:incoming>
+      <bpmn:incoming>Flow_Detectada_Iniciar_tratamiento_hacia_En_tratamiento_2</bpmn:incoming>
+      <bpmn:incoming>Flow_Tratada_Devolver_a_tratamiento_hacia_En_tratamiento</bpmn:incoming>
+      <bpmn:outgoing>Flow_gw_En_tratamiento_Registrar_tratamiento</bpmn:outgoing>
+      <bpmn:outgoing>Flow_gw_En_tratamiento_Registrar_tratamiento_2</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Gateway_Tratada" name="Tratada">
+      <bpmn:incoming>Flow_En_tratamiento_Registrar_tratamiento_hacia_Tratada</bpmn:incoming>
+      <bpmn:incoming>Flow_En_tratamiento_Registrar_tratamiento_hacia_Tratada_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_gw_Tratada_Verificar</bpmn:outgoing>
+      <bpmn:outgoing>Flow_gw_Tratada_Devolver_a_tratamiento</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_Cerrada" name="Cerrada">
+      <bpmn:incoming>Flow_Verificada_Cerrar_hacia_Cerrada</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:startEvent id="StartEvent_1" name="Inicio">
+      <bpmn:outgoing>Flow_inicio</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_inicio" sourceRef="StartEvent_1" targetRef="Gateway_Detectada_5">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_Detectada_Iniciar_tratamiento" sourceRef="Gateway_Detectada_5" targetRef="Task_Detectada__Iniciar_tratamiento">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Detectada_Iniciar_tratamiento_hacia_En_tratamiento" sourceRef="Task_Detectada__Iniciar_tratamiento" targetRef="Gateway_En_tratamiento_2">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="Dueño de Proceso" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_Detectada_Iniciar_tratamiento_2" sourceRef="Gateway_Detectada_5" targetRef="Task_Detectada__Iniciar_tratamiento_2">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Detectada_Iniciar_tratamiento_hacia_En_tratamiento_2" sourceRef="Task_Detectada__Iniciar_tratamiento_2" targetRef="Gateway_En_tratamiento_2">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_En_tratamiento_Registrar_tratamiento" sourceRef="Gateway_En_tratamiento_2" targetRef="Task_En_tratamiento__Registrar_tratamiento">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_En_tratamiento_Registrar_tratamiento_hacia_Tratada" sourceRef="Task_En_tratamiento__Registrar_tratamiento" targetRef="Gateway_Tratada">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="Dueño de Proceso" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_En_tratamiento_Registrar_tratamiento_2" sourceRef="Gateway_En_tratamiento_2" targetRef="Task_En_tratamiento__Registrar_tratamiento_2">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_En_tratamiento_Registrar_tratamiento_hacia_Tratada_2" sourceRef="Task_En_tratamiento__Registrar_tratamiento_2" targetRef="Gateway_Tratada">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_Tratada_Verificar" sourceRef="Gateway_Tratada" targetRef="Task_Tratada__Verificar">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Tratada_Verificar_hacia_Verificada" sourceRef="Task_Tratada__Verificar" targetRef="Task_Verificada__Cerrar">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="0" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_gw_Tratada_Devolver_a_tratamiento" sourceRef="Gateway_Tratada" targetRef="Task_Tratada__Devolver_a_tratamiento">
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Tratada_Devolver_a_tratamiento_hacia_En_tratamiento" sourceRef="Task_Tratada__Devolver_a_tratamiento" targetRef="Gateway_En_tratamiento_2">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Verificada_Cerrar_hacia_Cerrada" sourceRef="Task_Verificada__Cerrar" targetRef="End_Cerrada">
+      <bpmn:extensionElements>
+        <sgc:transicion rol="DPGC" autoaprobacion="1" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_1">
+    <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
+      <bpmndi:BPMNShape id="Shape_Participant_Salida_No_Conforme" bpmnElement="Participant_Salida_No_Conforme" isHorizontal="true">
+        <dc:Bounds x="200" y="80" width="1946" height="320" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Dueno_de_Proceso" bpmnElement="Lane_Dueno_de_Proceso" isHorizontal="true">
+        <dc:Bounds x="230" y="80" width="1916" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_DPGC" bpmnElement="Lane_DPGC" isHorizontal="true">
+        <dc:Bounds x="230" y="240" width="1916" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Detectada__Iniciar_tratamiento" bpmnElement="Task_Detectada__Iniciar_tratamiento">
+        <dc:Bounds x="630" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Detectada__Iniciar_tratamiento_2" bpmnElement="Task_Detectada__Iniciar_tratamiento_2">
+        <dc:Bounds x="630" y="280" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_En_tratamiento__Registrar_tratamiento" bpmnElement="Task_En_tratamiento__Registrar_tratamiento">
+        <dc:Bounds x="1030" y="120" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_En_tratamiento__Registrar_tratamiento_2" bpmnElement="Task_En_tratamiento__Registrar_tratamiento_2">
+        <dc:Bounds x="1030" y="280" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Tratada__Verificar" bpmnElement="Task_Tratada__Verificar">
+        <dc:Bounds x="1430" y="280" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Tratada__Devolver_a_tratamiento" bpmnElement="Task_Tratada__Devolver_a_tratamiento">
+        <dc:Bounds x="1630" y="280" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Verificada__Cerrar" bpmnElement="Task_Verificada__Cerrar">
+        <dc:Bounds x="1830" y="280" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Gateway_Detectada_5" bpmnElement="Gateway_Detectada_5">
+        <dc:Bounds x="430" y="135" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Gateway_En_tratamiento_2" bpmnElement="Gateway_En_tratamiento_2">
+        <dc:Bounds x="830" y="135" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Gateway_Tratada" bpmnElement="Gateway_Tratada">
+        <dc:Bounds x="1230" y="295" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_End_Cerrada" bpmnElement="End_Cerrada">
+        <dc:Bounds x="2030" y="302" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
+        <dc:Bounds x="230" y="142" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Participant_No_Conformidad" bpmnElement="Participant_No_Conformidad" isHorizontal="true">
+        <dc:Bounds x="200" y="460" width="1946" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_Msg_pool__No_Conformidad" bpmnElement="Msg_pool__No_Conformidad">
+        <di:waypoint x="1173" y="400" />
+        <di:waypoint x="1173" y="460" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
+        <di:waypoint x="266" y="160" />
+        <di:waypoint x="430" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_Detectada_Iniciar_tratamiento" bpmnElement="Flow_gw_Detectada_Iniciar_tratamiento">
+        <di:waypoint x="480" y="160" />
+        <di:waypoint x="630" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Detectada_Iniciar_tratamiento_hacia_En_tratamiento" bpmnElement="Flow_Detectada_Iniciar_tratamiento_hacia_En_tratamiento">
+        <di:waypoint x="750" y="160" />
+        <di:waypoint x="830" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_Detectada_Iniciar_tratamiento_2" bpmnElement="Flow_gw_Detectada_Iniciar_tratamiento_2">
+        <di:waypoint x="455" y="185" />
+        <di:waypoint x="455" y="320" />
+        <di:waypoint x="630" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Detectada_Iniciar_tratamiento_hacia_En_tratamiento_2" bpmnElement="Flow_Detectada_Iniciar_tratamiento_hacia_En_tratamiento_2">
+        <di:waypoint x="750" y="320" />
+        <di:waypoint x="750" y="160" />
+        <di:waypoint x="830" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_En_tratamiento_Registrar_tratamiento" bpmnElement="Flow_gw_En_tratamiento_Registrar_tratamiento">
+        <di:waypoint x="880" y="160" />
+        <di:waypoint x="1030" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_En_tratamiento_Registrar_tratamiento_hacia_Tratada" bpmnElement="Flow_En_tratamiento_Registrar_tratamiento_hacia_Tratada">
+        <di:waypoint x="1150" y="160" />
+        <di:waypoint x="1150" y="295" />
+        <di:waypoint x="1255" y="295" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_En_tratamiento_Registrar_tratamiento_2" bpmnElement="Flow_gw_En_tratamiento_Registrar_tratamiento_2">
+        <di:waypoint x="855" y="185" />
+        <di:waypoint x="855" y="320" />
+        <di:waypoint x="1030" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_En_tratamiento_Registrar_tratamiento_hacia_Tratada_2" bpmnElement="Flow_En_tratamiento_Registrar_tratamiento_hacia_Tratada_2">
+        <di:waypoint x="1150" y="320" />
+        <di:waypoint x="1230" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_Tratada_Verificar" bpmnElement="Flow_gw_Tratada_Verificar">
+        <di:waypoint x="1280" y="320" />
+        <di:waypoint x="1430" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Tratada_Verificar_hacia_Verificada" bpmnElement="Flow_Tratada_Verificar_hacia_Verificada">
+        <di:waypoint x="1490" y="280" />
+        <di:waypoint x="1830" y="280" />
+        <di:waypoint x="1830" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_gw_Tratada_Devolver_a_tratamiento" bpmnElement="Flow_gw_Tratada_Devolver_a_tratamiento">
+        <di:waypoint x="1255" y="295" />
+        <di:waypoint x="1255" y="280" />
+        <di:waypoint x="1690" y="280" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Tratada_Devolver_a_tratamiento_hacia_En_tratamiento" bpmnElement="Flow_Tratada_Devolver_a_tratamiento_hacia_En_tratamiento">
+        <di:waypoint x="1630" y="320" />
+        <di:waypoint x="1630" y="205" />
+        <di:waypoint x="855" y="205" />
+        <di:waypoint x="855" y="185" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Verificada_Cerrar_hacia_Cerrada" bpmnElement="Flow_Verificada_Cerrar_hacia_Cerrada">
+        <di:waypoint x="1950" y="320" />
+        <di:waypoint x="2030" y="320" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
