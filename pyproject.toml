@@ -3,7 +3,7 @@ name = "sgc"
 authors = [
     { name = "SciBack", email = "atisbo78@gmail.com"}
 ]
-description = "Sistema de Gestion de la Calidad - UPeU (SciBack)"
+description = "Sistema de Gestión de la Calidad para universidades (SciBack)"
 requires-python = ">=3.14"
 readme = "README.md"
 dynamic = ["version"]

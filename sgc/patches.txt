@@ -13,3 +13,5 @@ sgc.patches.correo_conservar_envio_real
 # #29: las reglas del SGC nacen de correo con campana; las que eran solo de
 # campana pasan a correo. Va DESPUÉS: el modo se decide con las reglas de antes.
 sgc.patches.notificaciones_por_correo
+# #65: el canónico no nombra al cliente; el módulo vacío «SGC UPeU» se retira si nada lo usa.
+sgc.patches.retirar_modulo_del_cliente

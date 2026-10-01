@@ -1,6 +1,6 @@
-### SGC UPeU
+### SGC
 
-Sistema de Gestion de la Calidad - UPeU (SciBack)
+Sistema de Gestión de la Calidad para universidades (SciBack)
 
 ### Diseño
 
