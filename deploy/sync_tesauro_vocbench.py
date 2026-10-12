@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Re-sincroniza el catálogo `Termino Tesauro` desde VocBench (Tesauro Institucional UPeU).
 
-VocBench vive en la LAN interna de UPeU (192.168.15.231) y NO es alcanzable desde
+VocBench vive en la LAN interna de la institución y NO es alcanzable desde
 el EC2 de producción. Por eso el catálogo NO se sincroniza en vivo: este script se
 corre desde una máquina con la VPN corporativa, regenera el fixture versionado
 `sgc/fixtures/termino_tesauro.json`, y el cambio llega a prod por el flujo normal
@@ -10,10 +10,10 @@ corre desde una máquina con la VPN corporativa, regenera el fixture versionado
 Fuente de verdad: VocBench. Este fixture es una copia. Correr cuando el tesauro cambie.
 
 Uso:
-    source ~/.secrets/vocbench-upeu.env    # VOCBENCH_USER, VOCBENCH_PASS, VOCBENCH_PROJECT
+    source ~/.secrets/vocbench-upeu.env    # VOCBENCH_ST_HOST, VOCBENCH_USER, VOCBENCH_PASS, VOCBENCH_PROJECT
     python3 deploy/sync_tesauro_vocbench.py
 
-Requisitos: VPN corporativa activa (para alcanzar 192.168.15.231:1979).
+Requisitos: VPN corporativa activa (para alcanzar VOCBENCH_ST_HOST:VOCBENCH_ST_PORT).
 
 Esquemas sincronizados (SKOS-XL): Temas, ISCED-F 2013, Líneas de Investigación.
 El código de cada término = "{tipo}-{localname}" derivado de la URI SKOS (estable).
@@ -26,7 +26,7 @@ import urllib.request
 from collections import defaultdict
 from http.cookiejar import CookieJar
 
-ST_HOST = os.environ.get("VOCBENCH_ST_HOST", "192.168.15.231")
+ST_HOST = os.environ.get("VOCBENCH_ST_HOST")  # host interno: va en el .env, no en un repo público
 ST_PORT = os.environ.get("VOCBENCH_ST_PORT", "1979")
 ST = f"http://{ST_HOST}:{ST_PORT}/semanticturkey/it.uniroma2.art.semanticturkey/st-core-services"
 PROJECT = os.environ.get("VOCBENCH_PROJECT", "Tesauro_Institucional_UPeU")
@@ -53,8 +53,8 @@ def _post(url, data):
 
 
 def login():
-    if not (USER and PASS):
-        sys.exit("Faltan VOCBENCH_USER / VOCBENCH_PASS. Corre: source ~/.secrets/vocbench-upeu.env")
+    if not (ST_HOST and USER and PASS):
+        sys.exit("Faltan VOCBENCH_ST_HOST / VOCBENCH_USER / VOCBENCH_PASS. Corre: source ~/.secrets/vocbench-upeu.env")
     _post(f"{ST}/Auth/login", {"email": USER, "password": PASS})
 
 

@@ -203,6 +203,24 @@ SALTOS_ENTRE_PROCESOS = [
         "origen": "sgc.sgc_auditoria.doctype.hallazgo_auditoria.hallazgo_auditoria"
                   ".HallazgoAuditoria.escalar_a_no_conformidad",
     },
+    {
+        # Como el Hallazgo: escalar es un botón, no una transición, y se puede
+        # hacer desde cualquier estado si la salida revela un fallo del sistema.
+        "document_type": "Salida No Conforme",
+        "accion": None,
+        "hacia": "No Conformidad",
+        "etiqueta": "Escalar a no conformidad",
+        "origen": "sgc.sgc_nucleo.doctype.salida_no_conforme.salida_no_conforme"
+                  ".SalidaNoConforme.escalar_a_no_conformidad",
+    },
+    {
+        "document_type": "Evento Riesgo",
+        "accion": "Confirmar",
+        "hacia": "No Conformidad",
+        "etiqueta": "Abrir no conformidad",
+        "origen": "sgc.sgc_riesgos.doctype.evento_riesgo.evento_riesgo"
+                  ".EventoRiesgo._abrir_no_conformidad",
+    },
 ]
 
 CARRIL_SISTEMA = "Sistema (automático)"
@@ -402,6 +420,27 @@ DOCUMENTACION_NORMATIVA = {
         "sistema de gestión (§5.1.1), y esa responsabilidad no se delega en el área "
         "que lo administra."
     ),
+    "Informe Auditoria": (
+        "El informe de una auditoría interna. ISO 19011 §6.5 rige su preparación y "
+        "distribución, y §6.5.1 exige revisarlo y aprobarlo antes de distribuirlo: "
+        "por eso no lo aprueba quien lo emitió, quien lo creó ni nadie del equipo "
+        "auditor, y lo aprobado queda congelado — se distribuye lo que se aprobó. "
+        "Es además una entrada de la revisión por la dirección (ISO 9001:2015 "
+        "§9.3). Que un hallazgo o la auditoría no se cierren sin el informe "
+        "aprobado es regla de la casa, no de la norma."
+    ),
+    "Salida No Conforme": (
+        "El producto o servicio concreto que salió mal —un acta con notas mal "
+        "cargadas, un certificado con un error—. ISO 9001:2015 §8.7 obliga a "
+        "identificarlo y controlarlo para que no se use ni se entregue sin "
+        "intención, y §8.7.2 a conservar cuatro cosas: la no conformidad, las "
+        "acciones tomadas, las concesiones obtenidas y la autoridad que decide. No "
+        "es una «No Conformidad» del sistema: un incidente aislado se queda aquí, y "
+        "solo si revela un fallo del sistema se escala. La concesión no la "
+        "autoriza quien detectó ni quien registró la salida."
+    ),
+    # «Evento Riesgo» no tiene entrada a propósito: su código cita el pliego,
+    # no una norma, y la regla de admisión de arriba manda dejarlo mudo.
 }
 
 
@@ -465,10 +504,11 @@ def _es_spec(valor):
 def _specs_por_ast(archivo):
     """Lee los specs de un módulo de setup SIN ejecutarlo.
 
-    Solo acepta literales (`ast.literal_eval`): si alguien construyera un spec
-    con código —una comprensión, una llamada— aquí se vería como `None` y el
-    módulo se reportaría como no leído, que es preferible a exportar un diagrama
-    incompleto sin avisar.
+    Solo acepta literales (`ast.literal_eval`), admitiendo como literal una
+    constante de módulo ya asignada a un literal. Si alguien construyera un spec
+    con código —una comprensión, una llamada— no se descubriría, y el control de
+    inventario (`deploy/check_bpmn.py`) lo cantaría como «Sin workflow de origen»
+    solo si su .bpmn existe; por eso un workflow nuevo se escribe con literales.
     """
     import ast
 
@@ -476,14 +516,30 @@ def _specs_por_ast(archivo):
         arbol = ast.parse(archivo.read_text(encoding="utf-8"))
     except SyntaxError:
         return None
+    # Las constantes de nivel de módulo (`DPGC = "DPGC"`, `ROLES = [...]`) se
+    # recuerdan y se sustituyen en los specs que las usan. Sin esto, un spec que
+    # escribe `DPGC` en vez de `"DPGC"` no era literal, se descartaba EN SILENCIO
+    # y su diagrama nunca existía: así se perdieron los de f23, f24 y f25, y el
+    # control de concordancia del CI daba OK con tres procesos sin dibujar.
+    constantes = {}
+
+    class _Sustituir(ast.NodeTransformer):
+        def visit_Name(self, nodo):
+            if nodo.id in constantes:
+                return ast.parse(repr(constantes[nodo.id]), mode="eval").body
+            return nodo
+
     hallados = []
     for nodo in arbol.body:
         if not isinstance(nodo, ast.Assign):
             continue
         try:
-            valor = ast.literal_eval(nodo.value)
-        except (ValueError, SyntaxError):
+            valor = ast.literal_eval(_Sustituir().visit(nodo.value))
+        except (ValueError, SyntaxError, TypeError):
             continue
+        for destino in nodo.targets:
+            if isinstance(destino, ast.Name):
+                constantes[destino.id] = valor
         if _es_spec(valor):
             hallados.append(valor)
     return hallados
@@ -504,6 +560,9 @@ def _specs_por_ast(archivo):
 #   13-14  riesgos: gestión preventiva que, al materializarse, también entra a CAPA.
 #   15     la revisión por la dirección cierra el ciclo (ISO 9001 §9.3): consume
 #          las salidas de todos los demás.
+#   16-18  llegados después (#37, #33, reporte de eventos). Van AL FINAL y no en
+#          su sitio lógico (el 16 tras el 08, el 17 antes del 10, el 18 tras el
+#          14) para no renumerar los quince que Calidad ya usa como referencia.
 ORDEN_RECORRIDO = (
     "Documento Controlado",
     "Evidencia",
@@ -520,6 +579,9 @@ ORDEN_RECORRIDO = (
     "Riesgo",
     "Tratamiento Riesgo",
     "Revision Direccion",
+    "Informe Auditoria",
+    "Salida No Conforme",
+    "Evento Riesgo",
 )
 
 

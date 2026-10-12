@@ -1,7 +1,7 @@
 # Sincronización del tesauro (VocBench → SGC) como cron
 
 El catálogo `Termino Tesauro` del SGC es una **copia versionada** del Tesauro
-Institucional UPeU que vive en VocBench (`192.168.15.231`, LAN interna). El SGC en
+Institucional UPeU que vive en VocBench (`VOCBENCH_ST_HOST`, LAN interna). El SGC en
 AWS **nunca** llama a VocBench: solo lee el fixture `sgc/fixtures/termino_tesauro.json`
 que viaja en el repo. Este cron mantiene ese fixture al día.
 
@@ -19,10 +19,10 @@ indicadores de MidPoint (corre donde alcanza la fuente, empuja hacia afuera).
 
 ## Dónde instalarlo
 
-Un host que **alcance `192.168.15.231`**, esté encendido y tenga salida a `github.com`:
+Un host que **alcance `VOCBENCH_ST_HOST`**, esté encendido y tenga salida a `github.com`:
 
-- **Recomendado:** un host dentro del segmento `192.168.15.x` (p. ej. el propio server
-  de VocBench `.231` o el lab `.150`). Ahí VocBench es local, no hace falta VPN.
+- **Recomendado:** un host dentro del segmento de la LAN de VocBench (p. ej. el propio servidor
+  de VocBench o el de laboratorio). Ahí VocBench es local, no hace falta VPN.
 - Alternativa: cualquier host con la VPN corporativa permanente.
 - **No** el EC2 de prod: no ve la LAN.
 
@@ -33,7 +33,7 @@ Un host que **alcance `192.168.15.231`**, esté encendido y tenga salida a `gith
 2. Copiar los secretos de VocBench:
    ```bash
    mkdir -p ~/.secrets && chmod 700 ~/.secrets
-   # subir vocbench-upeu.env (VOCBENCH_USER, VOCBENCH_PASS, VOCBENCH_PROJECT), chmod 600
+   # subir vocbench-upeu.env (VOCBENCH_ST_HOST, VOCBENCH_USER, VOCBENCH_PASS, VOCBENCH_PROJECT), chmod 600
    ```
 3. Opcional, para alertas: `~/.secrets/telegram.env` (`TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`).
 4. `python3` disponible (usa solo stdlib, sin dependencias).

@@ -13,7 +13,7 @@ es seguro y deja el estado exacto de la matriz/los workflows actuales, no
 duplica nada.
 
 Orden (por dependencia real, no alfabético):
-  1. f1_run_all      — estructura: los 68 DocTypes (SIN esto nada más aplica)
+  1. f1_run_all      — estructura: los 92 DocTypes (61 + 31 tablas hijas) (SIN esto nada más aplica)
   2. f2_run_all      — fields custom + carga CONEAU + workflows Autoevaluacion/NC
   3. f3b_rbac        — RBAC institucional (roles + matriz de permisos + role profiles)
   3b. f3b_branding   — identidad visual; lee site_config, neutra si no se declara
