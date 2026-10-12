@@ -13,7 +13,7 @@ configuración se aplican los valores neutros del producto.
 Claves reconocidas en `site_config.json` (todas opcionales):
 
     {
-      "sgc_app_name":   "SGC UPeU",
+      "sgc_app_name":   "SGC <Institución>",
       "sgc_logo":       "/files/membrete-institucional.png",
       "sgc_favicon":    "/files/favicon.ico",
       "sgc_copyright":  "Nombre de la institución — Oficina de Calidad"
@@ -57,8 +57,8 @@ def _config():
         "favicon": (conf.get("sgc_favicon") or "").strip() or None,
         "copyright": (conf.get("sgc_copyright") or NEUTRO_COPYRIGHT).strip(),
         # Quinta clave, para los documentos impresos (#73). NO es `app_name`: ahí
-        # va cómo se llama el sistema («SGC UPeU»), aquí cómo se llama la
-        # institución («UNIVERSIDAD PERUANA UNIÓN»), que es lo que encabeza un
+        # va cómo se llama el sistema («SGC <Institución>»), aquí cómo se llama la
+        # institución («UNIVERSIDAD <NOMBRE>»), que es lo que encabeza un
         # documento oficial. Sin declarar, los PDF salen sin nombre — nunca con
         # el de otra universidad.
         "institucion": (conf.get("sgc_institucion") or "").strip(),

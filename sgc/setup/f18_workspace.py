@@ -265,7 +265,7 @@ def _desktop_icon():
 # en blanco al navegar: Frappe la dibuja buscando un icono cuyo `label` coincida
 # EXACTAMENTE con el título de la barra lateral activa (`breadcrumbs.js`, en
 # `set_workspace_breadcrumb`), y el app declara siete módulos —siete barras— contra
-# un único icono, «SGC UPeU». Van ocultos: existen para resolver la miga, no para
+# un único icono, el del app (`sgc_app_name`). Van ocultos: existen para resolver la miga, no para
 # aparecer como aplicaciones en el conmutador del Desk.
 ICONOS_DE_MIGA = [
     "SGC",

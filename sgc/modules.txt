@@ -1,4 +1,3 @@
-SGC UPeU
 SGC Estructura
 SGC Nucleo
 SGC Auditoria
