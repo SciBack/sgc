@@ -86,7 +86,7 @@ jobs:
       - name: Init bench (Frappe v16.32.0 — versión fijada, sin assets)
         run: |
           bench init \
-            --frappe-branch v16.32.0 \
+            --frappe-branch v16.51.1 \
             --skip-redis-config-generation \
             --skip-assets \
             --python "$(which python)" \

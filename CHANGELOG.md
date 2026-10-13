@@ -9,6 +9,13 @@ migración, y saltársela deja la instancia a medias aunque el sitio responda.
 
 ## [Sin publicar]
 
+## [1.0.1] - 2026-10-13
+
+**Requiere migrar:** sí (cambia la versión de Frappe). Sin cambios de esquema propios del SGC.
+
+### Cambiado
+- Frappe pasa de la 16.32.0 a la **16.51.1**, que incluye correcciones de seguridad.
+
 ### Corregido
 - La página de inicio de sesión salía en parte en inglés («Sign In», la bienvenida, «Forgot
   password?»): Frappe 16 no trae esos textos en español y ahora los trae el SGC.
