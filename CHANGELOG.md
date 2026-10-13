@@ -9,6 +9,11 @@ migración, y saltársela deja la instancia a medias aunque el sitio responda.
 
 ## [Sin publicar]
 
+### Corregido
+- La página de inicio de sesión salía en parte en inglés («Sign In», la bienvenida, «Forgot
+  password?»): Frappe 16 no trae esos textos en español y ahora los trae el SGC.
+- El botón de inicio de sesión institucional mostraba una imagen rota.
+
 ## [1.0.0] - 2026-10-13
 
 Primera versión publicada. Recoge todo lo que el producto hace hoy. Las imágenes que se
