@@ -10,7 +10,7 @@
  "is_standard": 1,
  "label": "SGC - Acciones de mejora abiertas",
  "method": "sgc.dashboards.acciones_abiertas",
- "modified": "2026-10-14 04:11:37.635512",
+ "modified": "2026-10-14 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "SGC - Acciones de mejora abiertas",

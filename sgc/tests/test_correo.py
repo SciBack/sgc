@@ -234,9 +234,13 @@ class IntegrationTestCorreo(IntegrationTestCase):
         self.assertEqual(correo.modo(), "Ensayo")
 
     # --- el correo de la campana (#35) ----------------------------------------
+    # Frappe lo encola sin referencia al documento (notification_log.py, send_notification_email):
+    # se captura lo que entra en la cola y en el registro mientras se crea el aviso.
 
     def _aviso_desk(self, tipo="Assignment"):
-        return frappe.get_doc(
+        colas_antes = set(frappe.get_all("Email Queue", pluck="name"))
+        registros_antes = set(frappe.get_all("Registro Correo", pluck="name"))
+        aviso = frappe.get_doc(
             {
                 "doctype": "Notification Log",
                 "for_user": USUARIO,
@@ -247,39 +251,52 @@ class IntegrationTestCorreo(IntegrationTestCase):
                 "document_name": self.todo.name,
             }
         ).insert(ignore_permissions=True)
+        colas = [
+            (
+                frappe.db.get_value("Email Queue", c, "status"),
+                sorted(frappe.get_all("Email Queue Recipient", filters={"parent": c}, pluck="recipient")),
+            )
+            for c in frappe.get_all("Email Queue", pluck="name")
+            if c not in colas_antes
+        ]
+        registros = [
+            (r.destinatario, r.resultado)
+            for r in frappe.get_all("Registro Correo", fields=["name", "destinatario", "resultado"])
+            if r.name not in registros_antes
+        ]
+        return aviso, colas, registros
 
     def test_en_ensayo_el_aviso_del_desk_no_manda_correo_y_queda_registrado(self):
         self._configurar("Ensayo")
 
-        aviso = self._aviso_desk()
+        aviso, colas, registros = self._aviso_desk()
 
         self.assertTrue(frappe.db.exists("Notification Log", aviso.name), "la campana se crea igual")
-        self.assertEqual(self._cola(), [("Error", [])])
-        registros = self._registros()
-        self.assertEqual([(r.destinatario, r.resultado) for r in registros], [(USUARIO, correo.NO_ENVIADO)])
+        self.assertEqual(colas, [("Error", [])])
+        self.assertEqual(registros, [(USUARIO, correo.NO_ENVIADO)])
 
     def test_fuera_de_la_lista_blanca_el_aviso_del_desk_se_omite(self):
         self._configurar("Real", "otra-persona@example.com")
 
-        self._aviso_desk()
+        _, colas, registros = self._aviso_desk()
 
-        self.assertEqual(self._cola(), [("Error", [])])
-        self.assertEqual([r.resultado for r in self._registros()], [correo.OMITIDO])
+        self.assertEqual(colas, [("Error", [])])
+        self.assertEqual(registros, [(USUARIO, correo.OMITIDO)])
 
     def test_en_la_lista_blanca_el_aviso_del_desk_sale(self):
         self._configurar("Real", USUARIO)
 
-        self._aviso_desk()
+        _, colas, registros = self._aviso_desk()
 
-        self.assertEqual(self._cola(), [("Not Sent", [USUARIO])])
-        self.assertEqual(self._registros(), [])
+        self.assertEqual([para for _estado, para in colas], [[USUARIO]])
+        self.assertEqual(registros, [])
 
     def test_un_aviso_que_no_manda_correo_no_se_registra(self):
         """`Alert` es la campana de las reglas: Frappe nunca le añade correo, así
         que no hay nada retenido que anotar."""
         self._configurar("Ensayo")
 
-        self._aviso_desk(tipo="Alert")
+        _, colas, registros = self._aviso_desk(tipo="Alert")
 
-        self.assertEqual(self._cola(), [])
-        self.assertEqual(self._registros(), [])
+        self.assertEqual(colas, [])
+        self.assertEqual(registros, [])

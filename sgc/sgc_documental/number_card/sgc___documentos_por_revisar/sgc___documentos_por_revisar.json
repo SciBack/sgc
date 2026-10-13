@@ -10,7 +10,7 @@
  "is_standard": 1,
  "label": "SGC - Documentos por revisar",
  "method": "sgc.dashboards.documentos_por_revisar",
- "modified": "2026-10-14 04:11:37.652818",
+ "modified": "2026-10-14 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Documental",
  "name": "SGC - Documentos por revisar",

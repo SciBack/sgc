@@ -10,7 +10,7 @@
  "is_standard": 1,
  "label": "SGC - Incidencias abiertas",
  "method": "sgc.dashboards.incidencias_abiertas",
- "modified": "2026-10-14 04:11:37.638131",
+ "modified": "2026-10-14 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "SGC - Incidencias abiertas",

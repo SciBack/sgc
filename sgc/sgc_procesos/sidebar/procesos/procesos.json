@@ -14,7 +14,7 @@
    "indent": 0,
    "is_default_module": 0,
    "keep_closed": 0,
-   "label": "Portada del \u00e1rea",
+   "label": "Portada del área",
    "link_to": "SGC Procesos",
    "link_type": "Workspace",
    "open_in_new_tab": 1,
@@ -59,7 +59,7 @@
    "indent": 0,
    "is_default_module": 0,
    "keep_closed": 0,
-   "label": "Fichas de caracterizaci\u00f3n",
+   "label": "Fichas de caracterización",
    "link_to": "Ficha Caracterizacion Proceso",
    "link_type": "DocType",
    "open_in_new_tab": 1,
@@ -97,7 +97,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-10-14 04:11:55.141165",
+ "modified": "2026-10-14 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Procesos",
  "name": "Procesos",

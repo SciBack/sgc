@@ -14,7 +14,7 @@
    "indent": 0,
    "is_default_module": 0,
    "keep_closed": 0,
-   "label": "Portada del \u00e1rea",
+   "label": "Portada del área",
    "link_to": "SGC Indicadores",
    "link_type": "Workspace",
    "open_in_new_tab": 1,
@@ -104,7 +104,7 @@
    "indent": 0,
    "is_default_module": 0,
    "keep_closed": 0,
-   "label": "Indicadores de acreditaci\u00f3n",
+   "label": "Indicadores de acreditación",
    "link_to": "Indicadores de Acreditacion",
    "link_type": "Report",
    "open_in_new_tab": 1,
@@ -127,7 +127,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-10-14 04:11:55.396759",
+ "modified": "2026-10-14 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Indicadores",
  "name": "Indicadores",
