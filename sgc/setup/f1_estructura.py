@@ -239,9 +239,9 @@ def run():
          "options": "Universidad\nSede\nVicerrectorado\nFacultad\nEscuela\nDireccion\nOficina\nUnidad",
          "in_list_view": 1, "in_standard_filter": 1,
          "description": "Sede es un registro de Unidad Organica (fix G #3), no un DocType aparte"},
-        {"fieldname": "sede", "fieldtype": "Select", "label": "Sede (denormalizado)",
-         "options": "\nLima\nJuliaca\nTarapoto",
-         "description": "Denormalizado para reporting; la verdad de scoping es la posición en el árbol"},
+        {"fieldname": "sede", "fieldtype": "Link", "label": "Sede", "options": "Unidad Organica",
+         "description": "La unidad de tipo Sede a la que pertenece. Denormalizado para reporting; "
+                        "la verdad de scoping es la posición en el árbol"},
         {"fieldname": "es_campus", "fieldtype": "Check", "label": "Es campus"},
         {"fieldname": "is_group", "fieldtype": "Check", "label": "Es grupo"},
         {"fieldname": "parent_unidad_organica", "fieldtype": "Link", "label": "Unidad padre",

@@ -13,7 +13,7 @@ Mismo contrato que `f19_ficha_pdf`: la plantilla NO consulta la base, llama a
 Idempotente: si el Print Format existe, actualiza su `html`; si no, lo crea.
 
 Ejecutar (lo hace el orquestador):
-    bench --site calidad.upeu.edu.pe execute sgc.setup.f22_programa_pdf.run
+    bench --site <sitio> execute sgc.setup.f22_programa_pdf.run
 """
 
 import frappe

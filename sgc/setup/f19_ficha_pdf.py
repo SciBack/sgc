@@ -16,7 +16,7 @@ que `f3_informe`.
 Idempotente: si el Print Format existe, actualiza su `html`; si no, lo crea.
 
 Ejecutar (lo hace el orquestador):
-    bench --site calidad.upeu.edu.pe execute sgc.setup.f19_ficha_pdf.run
+    bench --site <sitio> execute sgc.setup.f19_ficha_pdf.run
 """
 import frappe
 

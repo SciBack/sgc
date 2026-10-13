@@ -15,7 +15,7 @@ Tres niveles, y la diferencia entre ellos es qué se puede hacer con la instanci
 - `INFO`       — conviene mirarlo; nada se rompe.
 
 Ejecutar:
-    bench --site calidad.upeu.edu.pe execute sgc.verificacion.run
+    bench --site <sitio> execute sgc.verificacion.run
 """
 
 import frappe

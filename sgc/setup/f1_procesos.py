@@ -131,7 +131,7 @@ def run():
         {"fieldname": "documento_controlado", "fieldtype": "Link", "label": "Documento controlado",
          "options": "Documento Controlado"},
         {"fieldname": "diagrama_flujo", "fieldtype": "Attach", "label": "Diagrama de flujo",
-         "description": "Diagrama de flujo formato UPeU (NO BPMN) — adjunto/PDF del editor"},
+         "description": "Diagrama de flujo en el formato de la institución (NO BPMN) — adjunto/PDF del editor"},
         {"fieldname": "estado", "fieldtype": "Select", "label": "Estado",
          "options": "Borrador\nEn revisión\nAprobado\nPublicado\nObsoleto", "default": "Borrador",
          "in_standard_filter": 1},

@@ -124,13 +124,10 @@ standard_help_items = [
 
 # Fixtures
 # ------------------
-# Termino Tesauro: catálogo de lenguaje controlado sincronizado desde el Tesauro
-# Institucional UPeU (VocBench/SKOS). Frappe lo importa en cada `bench migrate`.
-# La fuente de verdad es VocBench (LAN, requiere VPN); este fixture es una copia
-# versionada. Para re-sincronizar: deploy/sync_tesauro_vocbench.py
-fixtures = [
-	{"dt": "Termino Tesauro", "order_by": "codigo asc"},
-]
+# Ninguno, a propósito (#102). Un fixture se importa en CADA sitio en cada `migrate`, así que
+# solo podría llevar datos válidos para cualquier institución. El catálogo `Termino Tesauro`
+# era un fixture con el tesauro de una institución concreta; ahora lo carga cada institución
+# desde su capa (`bench --site <sitio> import-doc <fichero>.json`).
 
 # Installation
 # ------------

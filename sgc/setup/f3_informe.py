@@ -5,7 +5,7 @@ Genera el formato oficial SINEACE.DEA.F.04 (Informe Final de Autoevaluación) co
 Print Format Jinja -> PDF con el motor Chrome de Frappe v16 (soporta flexbox/CSS moderno).
 
 Diseño (verificado contra la Directiva 043-2023 §9.1.4 — F.04 son 6 secciones):
-  Portada (membrete UPeU, título, programa/sede/periodo/marco)
+  Portada (membrete institucional, título, programa/sede/periodo/marco)
   1. Datos informativos     (tabla fija del formato)
   2. Resumen de valoración  (matriz-resumen de los 10 estándares con semáforo + vigencia)
   4. Resultados             (loop por estándar: badge de nivel, criterios, evidencias)
@@ -32,10 +32,9 @@ DOCTYPE = "Autoevaluacion"
 # ===========================================================================
 # Plantilla Jinja del Print Format
 # ===========================================================================
-# Nota membrete: se deja un <img> con la ruta esperada del logo en /files/.
-# El logo sale de `site_config.sgc_logo` (#73). Si no está declarado, el
-# navegador muestra el alt y el texto del membrete igual imprime. (Ver el
-# comentario  {# LOGO UPeU #}  más abajo para cambiar la ruta.)
+# Nota membrete: el logo sale de `site_config.sgc_logo` (#73) y se inserta donde la
+# plantilla dice %%SGC_LOGO_IMG%%. Si no está declarado, el membrete imprime solo
+# el texto.
 
 HTML = r"""
 {# ==== El contrato tipado: un solo punto de datos (= sgc.informe.consolidar) ==== #}
