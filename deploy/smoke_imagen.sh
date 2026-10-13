@@ -11,7 +11,9 @@
 # Uso:  deploy/smoke_imagen.sh <imagen> <version-esperada>
 #       deploy/smoke_imagen.sh ghcr.io/sciback/sgc-frappe:1.0.0 1.0.0
 #
-# No toca nada fuera de lo que crea: red, base y redis se borran al salir, salga bien o mal.
+# No toca nada fuera de lo que crea: base y redis se borran al salir, salga bien o mal. No crea
+# ninguna red: los tres contenedores comparten la del de PostgreSQL y se hablan por 127.0.0.1.
+# Así funciona también en un Docker sin rangos libres para redes nuevas.
 set -euo pipefail
 
 IMAGEN="${1:?uso: smoke_imagen.sh <imagen> <version-esperada>}"
@@ -20,15 +22,12 @@ PREFIJO="sgc-smoke-$$"
 SITIO="smoke.localhost"
 
 limpiar() {
-	docker rm -f "$PREFIJO-pg" "$PREFIJO-redis" >/dev/null 2>&1 || true
-	docker network rm "$PREFIJO" >/dev/null 2>&1 || true
+	docker stop "$PREFIJO-redis" "$PREFIJO-pg" >/dev/null 2>&1 || true
 }
 trap limpiar EXIT
 
-docker network create "$PREFIJO" >/dev/null
-docker run -d --name "$PREFIJO-pg" --network "$PREFIJO" --network-alias pg \
-	-e POSTGRES_PASSWORD=postgres postgres:16 >/dev/null
-docker run -d --name "$PREFIJO-redis" --network "$PREFIJO" --network-alias redis redis:7-alpine >/dev/null
+docker run -d --rm --name "$PREFIJO-pg" -e POSTGRES_PASSWORD=postgres postgres:16 >/dev/null
+docker run -d --rm --name "$PREFIJO-redis" --network "container:$PREFIJO-pg" redis:7-alpine >/dev/null
 
 for _ in $(seq 60); do
 	docker exec "$PREFIJO-pg" pg_isready -U postgres >/dev/null 2>&1 && break
@@ -37,14 +36,14 @@ done
 docker exec "$PREFIJO-pg" pg_isready -U postgres >/dev/null
 
 # Un solo contenedor: el volumen anónimo de `sites` vive lo que vive él.
-SALIDA="$(docker run --rm --network "$PREFIJO" "$IMAGEN" bash -c "
+SALIDA="$(docker run --rm --network "container:$PREFIJO-pg" "$IMAGEN" bash -c "
 set -euo pipefail
-bench set-config -g db_host pg >/dev/null
+bench set-config -g db_host 127.0.0.1 >/dev/null
 bench set-config -g db_port 5432 >/dev/null
-bench set-config -g redis_cache redis://redis:6379 >/dev/null
-bench set-config -g redis_queue redis://redis:6379 >/dev/null
-bench set-config -g redis_socketio redis://redis:6379 >/dev/null
-bench new-site $SITIO --db-type postgres --db-host pg --db-port 5432 \
+bench set-config -g redis_cache redis://127.0.0.1:6379 >/dev/null
+bench set-config -g redis_queue redis://127.0.0.1:6379 >/dev/null
+bench set-config -g redis_socketio redis://127.0.0.1:6379 >/dev/null
+bench new-site $SITIO --db-type postgres --db-host 127.0.0.1 --db-port 5432 \
 	--db-root-username postgres --db-root-password postgres \
 	--admin-password smoke --install-app sgc
 bench --site $SITIO migrate
