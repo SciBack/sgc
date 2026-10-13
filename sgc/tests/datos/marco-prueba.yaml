@@ -1,0 +1,73 @@
+# Marco mínimo para los tests de la carga de marcos (#47). No es ningún marco real.
+urn: urn:intuitem:risk:library:marco-prueba
+locale: es
+ref_id: TEST-MARCO-CARGA
+name: Marco de prueba de la carga
+version: 1
+publication_date: '2026-01-01'
+provider: Ente de prueba
+packager: SciBack
+sgc:
+  escala: TEST-MARCO-CARGA-ESC
+objects:
+  framework:
+    urn: urn:intuitem:risk:framework:marco-prueba
+    ref_id: TEST-MARCO-CARGA
+    name: Marco de prueba de la carga
+    description: Marco mínimo para comprobar la carga por nombre y su idempotencia.
+    min_score: 0
+    max_score: 2
+    scores_definition:
+    - score: 0
+      name: NL — No logrado
+      description: No cumple.
+    - score: 1
+      name: L — Logrado
+      description: Cumple con observaciones.
+    - score: 2
+      name: LP — Logrado plenamente
+      description: Cumple.
+    requirement_nodes:
+    - urn: urn:intuitem:risk:req_node:marco-prueba:root
+      assessable: false
+      depth: 1
+      ref_id: RAIZ
+      name: Raíz del marco de prueba
+    - urn: urn:intuitem:risk:req_node:marco-prueba:e1
+      assessable: true
+      depth: 2
+      ref_id: E1
+      parent_urn: urn:intuitem:risk:req_node:marco-prueba:root
+      name: Estándar de prueba
+      reference_controls:
+      - urn:intuitem:risk:function:marco-prueba:id1
+      - urn:intuitem:risk:function:marco-prueba:id2
+    - urn: urn:intuitem:risk:req_node:marco-prueba:e1.1
+      assessable: true
+      depth: 3
+      ref_id: E1.1
+      parent_urn: urn:intuitem:risk:req_node:marco-prueba:e1
+      name: Criterio de prueba 1
+    - urn: urn:intuitem:risk:req_node:marco-prueba:e1.2
+      assessable: true
+      depth: 3
+      ref_id: E1.2
+      parent_urn: urn:intuitem:risk:req_node:marco-prueba:e1
+      name: Criterio de prueba 2
+  reference_controls:
+  - urn: urn:intuitem:risk:function:marco-prueba:id1
+    ref_id: ID1
+    name: Indicador de prueba uno
+    category: process
+    description: |-
+      OBJETIVO DE MEDICIÓN: Medir algo de prueba.
+      VALOR REFERENCIAL / UMBRAL: ID1 ≥ 60% ±3%
+      PERIODICIDAD (frecuencia de cálculo): Semestral
+      Tipo de dato: Porcentaje
+  - urn: urn:intuitem:risk:function:marco-prueba:id2
+    ref_id: ID2
+    name: Satisfacción de prueba
+    category: process
+    description: |-
+      OBJETIVO DE MEDICIÓN: Medir la satisfacción de prueba.
+      Tipo de dato: Promedio

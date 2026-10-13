@@ -1,62 +1,71 @@
-# -*- coding: utf-8 -*-
 """
-F2 · Agente L — Carga del marco CONEAU Programas 2025 desde el YAML intuitem
-============================================================================
-Puebla los DocTypes F1 (Marco Normativo, Escala Valoracion + Nivel Escala,
-Elemento Marco [Tree], Indicador, Ficha Indicador, Indicador Criterio) a
-partir de `coneau-programas-2025.yaml`.
+Cargador de marcos normativos desde un YAML en formato intuitem
+===============================================================
+Puebla los DocTypes del marco (Marco Normativo, Escala Valoracion + Nivel Escala,
+Elemento Marco [Tree], Indicador, Ficha Indicador, Indicador Criterio) a partir
+de un YAML de biblioteca intuitem. Nació para el modelo CONEAU Programas 2025 y
+conserva el nombre del módulo, pero desde #47 no sabe nada de ningún marco: los
+códigos salen del bloque `sgc:` del propio YAML.
 
-Idempotente: busca por codigo / ref_id antes de crear. Reejecutable sin duplicar.
+**No corre solo.** Hasta #47 el arranque común cargaba CONEAU en TODA instancia
+nueva, fuera o no de una institución que acredita con él. Ahora qué marcos carga
+una instancia lo declara su `site_config` (`sgc_marcos`) y lo aplica
+`sgc.setup.marcos_normativos`, que es quien llama a este cargador.
 
-USO (desde `bench --site <site> console`):
-    from sgc.setup.f2_load_coneau import run
-    run("apps/sgc/sgc/setup/coneau-programas-2025.yaml")
+Idempotente: busca por código antes de crear. Reejecutable sin duplicar, y nunca
+modifica ni borra lo ya cargado.
 
-El orquestador copia el YAML del repo calidad-upeu a esa ruta del bench y la
-pasa como `yaml_path`. Si no se pasa, se intenta la ruta por defecto contigua
-a este módulo.
+Bloque `sgc:` del YAML (todo opcional):
+    escala              código de la Escala Valoracion     (def.: <ref_id>-ESCALA)
+    escala_nombre       su nombre                          (def.: «<nombre del marco> — escala»)
+    ente                ente emisor del Marco Normativo    (def.: vacío; es un Select con opciones fijas)
+    prefijo_elementos   prefijo de los Elemento Marco      (def.: el ref_id del marco)
+    prefijo_indicadores prefijo de los Indicador           (def.: el ref_id del marco + «-»)
 
-Mapeo YAML -> DocTypes (autoridad: F2-CONTRATO.md §3, verificado contra los .json F1):
-  scores_definition        -> Escala Valoracion "CONEAU-NLLP" + hijos Nivel Escala (tabla `niveles`)
-  objects.framework        -> Marco Normativo "CONEAU-Programas-2025"
-  requirement_nodes        -> Elemento Marco (Tree), padres antes que hijos (orden por depth)
-  objects.reference_controls -> Indicador (ID1..ID29) + Ficha Indicador
-  reference_controls por estándar -> Indicador Criterio (indicador <-> Elemento Marco depth=2)
+Mapeo YAML -> DocTypes (F2-CONTRATO.md §3, verificado contra los .json F1):
+  scores_definition          -> Escala Valoracion + hijos Nivel Escala (tabla `niveles`)
+  objects.framework          -> Marco Normativo (código = ref_id del framework)
+  requirement_nodes          -> Elemento Marco (Tree), padres antes que hijos (orden por depth)
+  objects.reference_controls -> Indicador + Ficha Indicador
+  reference_controls por nodo -> Indicador Criterio (indicador <-> Elemento Marco)
 """
 
 import os
 import re
-import yaml
 
 import frappe
+import yaml
 
-# --- Constantes de nomenclatura --------------------------------------------
-CODIGO_ESCALA = "CONEAU-NLLP"
-CODIGO_MARCO = "CONEAU-Programas-2025"
-ENTE = "SINEACE"
-
-# score -> sigla NL/L/LP (según scores_definition: 0=NL, 1=L, 2=LP)
+# Siglas por score cuando el nombre del nivel no la trae («NL — Estándar no logrado» sí).
 SCORE_SIGLA = {0: "NL", 1: "L", 2: "LP"}
 
 
 # ---------------------------------------------------------------------------
 # Utilidades
 # ---------------------------------------------------------------------------
-def _default_yaml_path():
-    return os.path.join(os.path.dirname(__file__), "coneau-programas-2025.yaml")
-
-
 def _load_yaml(yaml_path):
-    if not yaml_path:
-        yaml_path = _default_yaml_path()
-    if not os.path.exists(yaml_path):
-        frappe.throw(
-            "No se encontró el YAML CONEAU en '{0}'. "
-            "El orquestador debe copiarlo a apps/sgc/sgc/setup/coneau-programas-2025.yaml "
-            "o pasar la ruta como argumento.".format(yaml_path)
-        )
-    with open(yaml_path, "r", encoding="utf-8") as fh:
+    if not yaml_path or not os.path.exists(yaml_path):
+        frappe.throw("No se encontró el YAML del marco en '{0}'.".format(yaml_path))
+    with open(yaml_path, encoding="utf-8") as fh:
         return yaml.safe_load(fh)
+
+
+def configuracion(data):
+    """Los códigos con los que se carga el marco: bloque `sgc:` del YAML o sus valores por defecto."""
+    framework = ((data or {}).get("objects") or {}).get("framework") or {}
+    marco = framework.get("ref_id") or (data or {}).get("ref_id")
+    if not marco:
+        frappe.throw("El YAML del marco no declara `ref_id` en objects.framework: no hay código de marco.")
+    extra = (data or {}).get("sgc") or {}
+    nombre = framework.get("name") or data.get("name") or marco
+    return {
+        "marco": marco,
+        "escala": extra.get("escala") or f"{marco}-ESCALA",
+        "escala_nombre": extra.get("escala_nombre") or f"{nombre} — escala",
+        "ente": extra.get("ente") or "",
+        "prefijo_elementos": extra.get("prefijo_elementos") or marco,
+        "prefijo_indicadores": extra["prefijo_indicadores"] if "prefijo_indicadores" in extra else f"{marco}-",
+    }
 
 
 def _urn_ref_id(urn):
@@ -64,38 +73,37 @@ def _urn_ref_id(urn):
     return urn.rsplit(":", 1)[-1]
 
 
-def _sigla_from_urn_function(urn):
-    """urn ...:function:...:id8 -> 'ID8' (para casar con reference_controls)."""
-    return urn.rsplit(":", 1)[-1].upper()
+def _sigla_from_urn_function(urn, cfg):
+    """urn ...:function:...:id8 -> '<prefijo>ID8' (para casar con reference_controls)."""
+    return cfg["prefijo_indicadores"] + urn.rsplit(":", 1)[-1].upper()
 
 
 # ---------------------------------------------------------------------------
 # 1. Escala + Niveles
 # ---------------------------------------------------------------------------
-def _cargar_escala(framework, contadores):
+def _cargar_escala(framework, cfg, contadores):
     scores = framework.get("scores_definition") or []
 
-    if frappe.db.exists("Escala Valoracion", CODIGO_ESCALA):
+    if frappe.db.exists("Escala Valoracion", cfg["escala"]):
         contadores["escalas_existentes"] += 1
         return
 
     escala = frappe.new_doc("Escala Valoracion")
-    escala.codigo = CODIGO_ESCALA
-    escala.nombre = "CONEAU Programas 2025 — NL/L/LP"
+    escala.codigo = cfg["escala"]
+    escala.nombre = cfg["escala_nombre"]
     escala.tipo = "ordinal"
     escala.min_score = framework.get("min_score", 0)
     escala.max_score = framework.get("max_score", 2)
 
     for sc in scores:
         score = sc.get("score")
-        sigla = SCORE_SIGLA.get(score, "")
         # name viene como "NL — Estándar no logrado"; separamos sigla/etiqueta.
         nombre_full = sc.get("name", "") or ""
-        etiqueta = nombre_full
-        if "—" in nombre_full:
-            etiqueta = nombre_full.split("—", 1)[1].strip()
-        elif "-" in nombre_full:
-            etiqueta = nombre_full.split("-", 1)[1].strip()
+        sigla, etiqueta = SCORE_SIGLA.get(score, ""), nombre_full
+        for sep in ("—", "-"):
+            if sep in nombre_full:
+                sigla, etiqueta = (t.strip() for t in nombre_full.split(sep, 1))
+                break
         escala.append(
             "niveles",
             {
@@ -119,21 +127,21 @@ def _cargar_escala(framework, contadores):
 # ---------------------------------------------------------------------------
 # 2. Marco Normativo
 # ---------------------------------------------------------------------------
-def _cargar_marco(data, framework, contadores):
-    if frappe.db.exists("Marco Normativo", CODIGO_MARCO):
+def _cargar_marco(data, framework, cfg, contadores):
+    if frappe.db.exists("Marco Normativo", cfg["marco"]):
         contadores["marcos_existentes"] += 1
         return
 
     marco = frappe.new_doc("Marco Normativo")
-    marco.codigo = CODIGO_MARCO
-    marco.nombre = framework.get("name") or data.get("name") or CODIGO_MARCO
-    marco.ente = ENTE
+    marco.codigo = cfg["marco"]
+    marco.nombre = framework.get("name") or data.get("name") or cfg["marco"]
+    marco.ente = cfg["ente"]
     marco.version = str(data.get("version", "1"))
     pub = data.get("publication_date")
     if pub:
         marco.vigente_desde = str(pub)
     marco.estado = "vigente"
-    marco.escala_valoracion = CODIGO_ESCALA
+    marco.escala_valoracion = cfg["escala"]
     marco.nota_normativa = framework.get("description") or data.get("description") or ""
     marco.flags.ignore_permissions = True
     marco.insert()
@@ -147,27 +155,27 @@ def _cargar_marco(data, framework, contadores):
 DEPTH_TIPO = {1: "Dimension", 2: "Estandar", 3: "Criterio"}
 
 
-def _codigo_elemento(ref_id, urn):
+def _codigo_elemento(ref_id, urn, cfg):
     """
     Código único y estable del Elemento Marco.
     Prefijamos con el marco para no colisionar con otros marcos ya cargados
-    (p.ej. CBC/SUNEDU) que también usan ref_id tipo '1.1'.
+    que también usan ref_id tipo '1.1'.
     """
     base = ref_id if ref_id else _urn_ref_id(urn)
-    return "CONEAU-{0}".format(base)
+    return "{0}-{1}".format(cfg["prefijo_elementos"], base)
 
 
-def _cargar_elementos(framework, contadores):
+def _cargar_elementos(framework, cfg, contadores):
     nodes = framework.get("requirement_nodes") or []
 
     # urn -> codigo (para resolver parent_urn -> parent_elemento_marco)
     urn_a_codigo = {}
     for n in nodes:
-        urn_a_codigo[n["urn"]] = _codigo_elemento(n.get("ref_id"), n["urn"])
+        urn_a_codigo[n["urn"]] = _codigo_elemento(n.get("ref_id"), n["urn"], cfg)
 
     # Crear en orden de depth ascendente (padres antes que hijos) para que el Tree resuelva.
     for node in sorted(nodes, key=lambda n: n.get("depth", 99)):
-        codigo = _codigo_elemento(node.get("ref_id"), node["urn"])
+        codigo = _codigo_elemento(node.get("ref_id"), node["urn"], cfg)
         if frappe.db.exists("Elemento Marco", codigo):
             contadores["elementos_existentes"] += 1
             continue
@@ -180,7 +188,7 @@ def _cargar_elementos(framework, contadores):
         doc = frappe.new_doc("Elemento Marco")
         doc.codigo = codigo
         doc.denominacion = node.get("name") or ""
-        doc.marco_normativo = CODIGO_MARCO
+        doc.marco_normativo = cfg["marco"]
         doc.nivel = str(depth)
         doc.tipo = DEPTH_TIPO.get(depth, "Componente")
         doc.texto_oficial = node.get("description") or ""
@@ -319,11 +327,10 @@ def _categoria_from(indicador):
     return "Proceso"
 
 
-def _cargar_indicadores(framework, contadores):
+def _cargar_indicadores(framework, cfg, contadores):
     controls = framework.get("reference_controls") or []
     for ctrl in controls:
-        ref_id = ctrl.get("ref_id")  # 'ID1'..'ID29'
-        codigo = ref_id
+        codigo = cfg["prefijo_indicadores"] + ctrl.get("ref_id")  # CONEAU: 'ID1'..'ID29', sin prefijo
         if frappe.db.exists("Indicador", codigo):
             contadores["indicadores_existentes"] += 1
             continue
@@ -333,7 +340,7 @@ def _cargar_indicadores(framework, contadores):
         ind = frappe.new_doc("Indicador")
         ind.codigo = codigo
         ind.nombre = ctrl.get("name") or codigo
-        ind.marco_normativo = CODIGO_MARCO
+        ind.marco_normativo = cfg["marco"]
         ind.categoria = _categoria_from(ctrl)
         ind.flags.ignore_permissions = True
         ind.insert()
@@ -374,7 +381,7 @@ def _cargar_indicadores(framework, contadores):
 # ---------------------------------------------------------------------------
 # 5. Indicador Criterio (link Indicador <-> Elemento Marco del estándar)
 # ---------------------------------------------------------------------------
-def _cargar_indicador_criterio(framework, urn_a_codigo, contadores):
+def _cargar_indicador_criterio(framework, urn_a_codigo, cfg, contadores):
     # Indicador Criterio es CHILD de Indicador (tabla `criterios`): se ANEXA al
     # padre, no se inserta suelto. Agrupamos estándares por indicador.
     from collections import defaultdict
@@ -387,7 +394,7 @@ def _cargar_indicador_criterio(framework, urn_a_codigo, contadores):
         if not elem_codigo:
             continue
         for ctrl_urn in controls:
-            sigla = _sigla_from_urn_function(ctrl_urn)  # 'ID8'
+            sigla = _sigla_from_urn_function(ctrl_urn, cfg)  # 'ID8'
             if not frappe.db.exists("Indicador", sigla):
                 contadores["links_indicador_faltante"] += 1
                 continue
@@ -408,47 +415,48 @@ def _cargar_indicador_criterio(framework, urn_a_codigo, contadores):
 # ---------------------------------------------------------------------------
 # Orquestación
 # ---------------------------------------------------------------------------
-def run(yaml_path=None):
+def run(yaml_path, commit=True):
+    """Carga el marco del YAML. Devuelve los contadores (creados / ya existentes).
+
+    `commit=False` deja la transacción abierta: lo usan los tests, que la deshacen.
+    """
+    in_patch = frappe.flags.in_patch
     frappe.flags.in_patch = True
+    try:
+        data = _load_yaml(yaml_path)
+        cfg = configuracion(data)
+        objects = (data or {}).get("objects") or {}
+        framework = objects.get("framework") or {}
+        # reference_controls está a nivel de `objects`, no de framework, en intuitem.
+        framework.setdefault("reference_controls", objects.get("reference_controls") or [])
 
-    data = _load_yaml(yaml_path)
-    objects = (data or {}).get("objects") or {}
-    framework = objects.get("framework") or {}
-    # reference_controls está a nivel de `objects`, no de framework, en intuitem.
-    framework.setdefault("reference_controls", objects.get("reference_controls") or [])
+        contadores = {
+            "escalas": 0, "escalas_existentes": 0, "niveles": 0,
+            "marcos": 0, "marcos_existentes": 0,
+            "elementos": 0, "elementos_existentes": 0, "estandares": 0, "criterios": 0,
+            "indicadores": 0, "indicadores_existentes": 0, "fichas": 0,
+            "links": 0, "links_existentes": 0, "links_indicador_faltante": 0,
+        }
 
-    contadores = {
-        "escalas": 0, "escalas_existentes": 0, "niveles": 0,
-        "marcos": 0, "marcos_existentes": 0,
-        "elementos": 0, "elementos_existentes": 0, "estandares": 0, "criterios": 0,
-        "indicadores": 0, "indicadores_existentes": 0, "fichas": 0,
-        "links": 0, "links_existentes": 0, "links_indicador_faltante": 0,
-    }
+        _cargar_escala(framework, cfg, contadores)
+        _cargar_marco(data, framework, cfg, contadores)
+        urn_a_codigo = _cargar_elementos(framework, cfg, contadores)
+        _cargar_indicadores(framework, cfg, contadores)
+        _cargar_indicador_criterio(framework, urn_a_codigo, cfg, contadores)
+    finally:
+        frappe.flags.in_patch = in_patch
 
-    _cargar_escala(framework, contadores)
-    _cargar_marco(data, framework, contadores)
-    urn_a_codigo = _cargar_elementos(framework, contadores)
-    _cargar_indicadores(framework, contadores)
-    _cargar_indicador_criterio(framework, urn_a_codigo, contadores)
+    if commit:
+        frappe.db.commit()
 
-    frappe.db.commit()
-
-    print("=" * 60)
-    print("F2 · Carga CONEAU Programas 2025 — resumen")
-    print("=" * 60)
-    print("  Marcos creados / ya existentes : {marcos} / {marcos_existentes}".format(**contadores))
-    print("  Escalas creadas / ya existentes: {escalas} / {escalas_existentes}".format(**contadores))
-    print("  Niveles de escala creados      : {niveles}  (esperado 3)".format(**contadores))
-    print("  Elementos Marco creados        : {elementos}  (esperado 64)".format(**contadores))
-    print("     - estándares (depth=2)      : {estandares}  (esperado 10)".format(**contadores))
-    print("     - criterios  (depth=3)      : {criterios}  (esperado 53)".format(**contadores))
-    print("     - ya existentes             : {elementos_existentes}".format(**contadores))
-    print("  Indicadores creados            : {indicadores}  (esperado 29)".format(**contadores))
-    print("     - fichas creadas            : {fichas}  (esperado 29)".format(**contadores))
-    print("     - ya existentes             : {indicadores_existentes}".format(**contadores))
-    print("  Indicador Criterio links       : {links}".format(**contadores))
-    print("     - ya existentes             : {links_existentes}".format(**contadores))
-    print("     - indicador faltante (skip) : {links_indicador_faltante}".format(**contadores))
-    print("=" * 60)
-
+    print("  Marco {0}: {1}".format(cfg["marco"], resumen(contadores)))
     return contadores
+
+
+def resumen(c):
+    """Una línea: lo creado y lo que ya estaba."""
+    return (
+        "marco {marcos}/{marcos_existentes} · escala {escalas}/{escalas_existentes} ({niveles} niveles) · "
+        "elementos {elementos}/{elementos_existentes} · indicadores {indicadores}/{indicadores_existentes} "
+        "({fichas} fichas) · vínculos {links}/{links_existentes}  [creados/ya existentes]"
+    ).format(**c)
