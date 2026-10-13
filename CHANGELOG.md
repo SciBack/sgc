@@ -9,14 +9,25 @@ migración, y saltársela deja la instancia a medias aunque el sitio responda.
 
 ## [Sin publicar]
 
-## [1.0.1] - 2026-10-13
+## [1.1.0] - 2026-10-13
 
-**Requiere migrar:** sí (cambia la versión de Frappe). Sin cambios de esquema propios del SGC.
+**Requiere migrar:** sí (cambia la versión de Frappe y el Desk pasa a ficheros estándar). Sin
+cambios en los datos de calidad.
 
 ### Cambiado
 - Frappe pasa de la 16.32.0 a la **16.51.1**, que incluye correcciones de seguridad.
+- El SGC deja de construirse por encima de Frappe y usa lo que Frappe trae, para que las
+  próximas versiones de Frappe se instalen con un `migrate`:
+  - Las portadas, los menús de cada área, las cifras y los gráficos vienen como documentos
+    estándar de la app, en lugar de crearse con un script en cada despliegue. Lo que una
+    institución personalice en ellos se conserva aparte al actualizar.
+  - El correo (modo de ensayo, lista blanca, adjuntos de solo consulta) se controla en la cola
+    de correo de Frappe, en lugar de sustituir sus clases de avisos.
+  - La entrada al Desk va al SGC con el ajuste «App por defecto» de Frappe.
 
 ### Corregido
+- Con Frappe 16.50 o posterior, los avisos de cambio de estado no salían (ni correo ni
+  campana) por un cambio interno de Frappe. Ya no dependen de él.
 - La página de inicio de sesión salía en parte en inglés («Sign In», la bienvenida, «Forgot
   password?»): Frappe 16 no trae esos textos en español y ahora los trae el SGC.
 - El botón de inicio de sesión institucional mostraba una imagen rota.
