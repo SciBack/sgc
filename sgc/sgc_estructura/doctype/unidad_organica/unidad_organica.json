@@ -44,11 +44,11 @@
    "options": "Universidad\nSede\nVicerrectorado\nFacultad\nEscuela\nDireccion\nOficina\nUnidad"
   },
   {
-   "description": "Denormalizado para reporting; la verdad de scoping es la posici\u00f3n en el \u00e1rbol",
+   "description": "La unidad de tipo Sede a la que pertenece. Denormalizado para reporting; la verdad de scoping es la posición en el árbol.",
    "fieldname": "sede",
-   "fieldtype": "Select",
-   "label": "Sede (denormalizado)",
-   "options": "\nLima\nJuliaca\nTarapoto"
+   "fieldtype": "Link",
+   "label": "Sede",
+   "options": "Unidad Organica"
   },
   {
    "default": "0",
@@ -108,7 +108,7 @@
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2026-07-04 17:48:52.728938",
+ "modified": "2026-10-12 21:12:26.000000",
  "modified_by": "Administrator",
  "module": "SGC Estructura",
  "name": "Unidad Organica",

@@ -7,7 +7,7 @@ copyright: SINEACE - CONEAU. Documento oficial de acceso público del Estado per
 version: 1
 publication_date: '2025-09-26'
 provider: SINEACE-CONEAU
-packager: UPeU-DPGC
+packager: SciBack
 objects:
   framework:
     urn: urn:intuitem:risk:framework:coneau-programas-2025

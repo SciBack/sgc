@@ -4,8 +4,8 @@ Añade evidencias vinculadas a criterios, acciones de mejora en el plan,
 hallazgos extra y valores de indicadores sobre la autoevaluación más reciente.
 Todo marcado con "[DEMO]" y códigos *-DEMO-* para poder borrarlo.
 
-Ejecutar:  bench --site calidad.upeu.edu.pe execute sgc.setup.demo_seed.run
-Borrar:    bench --site calidad.upeu.edu.pe execute sgc.setup.demo_cleanup.run
+Ejecutar:  bench --site <sitio> execute sgc.setup.demo_seed.run
+Borrar:    bench --site <sitio> execute sgc.setup.demo_cleanup.run
 """
 
 import frappe

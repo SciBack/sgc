@@ -45,7 +45,7 @@
    "options": "Documento Controlado"
   },
   {
-   "description": "Diagrama de flujo formato UPeU (NO BPMN) — adjunto/PDF del editor",
+   "description": "Diagrama de flujo en el formato de la institución (NO BPMN) — adjunto/PDF del editor",
    "fieldname": "diagrama_flujo",
    "fieldtype": "Attach",
    "label": "Diagrama de flujo"
@@ -69,7 +69,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-08 12:18:09.840778",
+ "modified": "2026-10-12 21:12:26.000000",
  "modified_by": "Administrator",
  "module": "SGC Procesos",
  "name": "Procedimiento",

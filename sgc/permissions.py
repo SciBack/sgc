@@ -232,7 +232,7 @@ def otorgar_programa(user, programa_sede):
     rebote Evidencia/Comite/Auditoria. Un usuario puede tener varias (varios
     programas). Ejecutar p.ej.:
         bench --site <site> execute sgc.permissions.otorgar_programa \
-            --kwargs '{"user":"x@upeu.edu.pe","programa_sede":"ENF-LIMA"}'
+            --kwargs '{"user":"persona@example.org","programa_sede":"PROG-SEDE"}'
     """
     frappe.only_for(("DPGC", "System Manager"))
     creadas = 0
