@@ -89,11 +89,13 @@ from sgc.setup import (
     f23_workflow_salida_no_conforme,
     f24_workflow_informe_auditoria,
     f25_workflow_evento_riesgo,
+    marcos_normativos,
 )
 
 STEPS = [
     ("f1_run_all", f1_run_all),
     ("f2_run_all", f2_run_all),
+    ("marcos_normativos", marcos_normativos),
     ("f3b_rbac", f3b_rbac),
     ("f3b_branding", f3b_branding),
     ("f3b_sso", f3b_sso),

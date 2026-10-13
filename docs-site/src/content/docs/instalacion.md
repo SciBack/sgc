@@ -22,6 +22,28 @@ bench --site TU_SITE migrate
 El hook de migración aplica de forma idempotente los DocTypes, workflows, RBAC,
 notificaciones y Workspace SGC.
 
+## Marcos normativos: los declara la instancia
+
+Una instalación nueva **no trae ningún marco normativo**: qué estándares de acreditación o
+licenciamiento usa depende del país y de la institución, no del producto. Se declaran en el
+`site_config.json` del sitio y el `migrate` los carga:
+
+~~~bash
+bench --site TU_SITE set-config --parse sgc_marcos '["coneau-programas-2025"]'
+bench --site TU_SITE migrate
+~~~
+
+Cada entrada es el nombre de un marco de `sgc/setup/marcos/` (sin `.yaml`) o la ruta absoluta
+a un YAML propio en formato intuitem. Añadir un marco nuevo es añadir su YAML y declararlo: no
+se toca código. La carga es idempotente, y **dejar de declarar un marco no lo borra**: lo ya
+cargado, con sus valoraciones e indicadores, se queda como está. Para cargar uno suelto:
+
+~~~bash
+bench --site TU_SITE execute sgc.setup.marcos_normativos.cargar --kwargs "{'marco': 'coneau-programas-2025'}"
+~~~
+
+Si una entrada no existe, el `migrate` no carga ninguna y dice cuál falla.
+
 ## Assets y documentación
 
 SGC usa el **Desk nativo de Frappe v16** y el Workspace SGC. Desde la raíz de la app:

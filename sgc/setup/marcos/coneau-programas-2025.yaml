@@ -8,6 +8,14 @@ version: 1
 publication_date: '2025-09-26'
 provider: SINEACE-CONEAU
 packager: SciBack
+# Cómo lo carga el SGC (`sgc.setup.f2_load_coneau`). Los códigos son los que ya
+# existen en las instancias que cargaron este marco: cambiarlos duplicaría la carga.
+sgc:
+  escala: CONEAU-NLLP
+  escala_nombre: CONEAU Programas 2025 — NL/L/LP
+  ente: SINEACE
+  prefijo_elementos: CONEAU
+  prefijo_indicadores: ''
 objects:
   framework:
     urn: urn:intuitem:risk:framework:coneau-programas-2025
