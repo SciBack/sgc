@@ -1,5 +1,6 @@
-# BASE_IMAGE se deriva de la imagen backend activa; no usar un default ni un tag hardcodeado.
-# Se limpian la app y su enlace de assets para no heredar archivos eliminados.
+# BASE_IMAGE es la base que construye deploy/construir_imagen.sh desde cero (#54); no usar un
+# default ni un tag hardcodeado. Se limpian la app y su enlace de assets para no heredar
+# archivos eliminados.
 ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
 USER root
@@ -32,6 +33,18 @@ RUN set -eu; \
         test "$(command -v "$binary")" = "/usr/lib/postgresql/16/bin/$binary"; \
         "$binary" --version | grep -E "^$binary \(PostgreSQL\) 16\."; \
     done
+
+# Página de mantenimiento (#55). Mientras el backend se recrea en una actualización, el nginx
+# del frontend devolvía un 502 desnudo; ahora sirve deploy/mantenimiento.html con un 503 y
+# Retry-After. Con el backend vivo y el sitio en modo mantenimiento, la página «Actualizando»
+# la da Frappe. Se parchea la plantilla de frappe_docker y se comprueba: si su forma cambia,
+# la imagen no llega a construirse sin la página.
+COPY deploy/mantenimiento.html /usr/share/sgc/mantenimiento.html
+RUN set -eu; \
+    t=/templates/nginx/frappe.conf.template; \
+    grep -q '^\s*root /home/frappe/frappe-bench/sites;' "$t"; \
+    sed -i 's|^\(\s*\)root /home/frappe/frappe-bench/sites;|&\n\1error_page 502 504 =503 /__sgc_mantenimiento;\n\1location = /__sgc_mantenimiento {\n\1\tinternal;\n\1\tinclude /etc/nginx/snippets/security_headers.conf;\n\1\tadd_header Retry-After 60 always;\n\1\tadd_header Cache-Control "no-store" always;\n\1\tdefault_type text/html;\n\1\talias /usr/share/sgc/mantenimiento.html;\n\1}|' "$t"; \
+    test "$(grep -c '__sgc_mantenimiento' "$t")" = 2
 
 RUN rm -rf /home/frappe/frappe-bench/apps/sgc /home/frappe/frappe-bench/assets/sgc
 COPY --chown=frappe:frappe . /home/frappe/frappe-bench/apps/sgc

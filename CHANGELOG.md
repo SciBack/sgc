@@ -89,3 +89,12 @@ verificación de instancia (`bench --site <sitio> execute sgc.verificacion.run`)
 - Aviso a los administradores si las tareas programadas dejan de correr.
 - «Ayuda → Reportar un problema» hacia el helpdesk de la institución.
 - Identidad institucional (nombre, logo, membrete) en site_config, fuera del código.
+
+### Publicación y actualización
+- Imagen publicada por el CI para cada versión (`ghcr.io/sciback/sgc-frappe:<versión>`, ARM64),
+  construida desde cero y con su procedencia (versión, commit, Frappe) en las etiquetas. Antes
+  de publicarse, pasa la suite completa y una prueba de humo sobre un sitio nuevo.
+- Actualización de una instancia con un solo comando (`deploy/actualizar.sh`): exige el aviso
+  previo a los usuarios, respalda, pone el sitio en mantenimiento, migra y se comprueba sola. Si
+  la comprobación no pasa, el sitio se queda en mantenimiento y el script dice cómo volver atrás.
+- Página de mantenimiento mientras se recrean los servicios, en lugar de un error de conexión.
