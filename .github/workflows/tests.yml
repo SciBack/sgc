@@ -83,12 +83,13 @@ jobs:
       - name: Instalar frappe-bench
         run: pip install frappe-bench
 
-      - name: Init bench (Frappe v16.32.0 — versión fijada, sin assets)
+      # Con los assets de Frappe compilados, como en la imagen: el correo encolado aplica
+      # email.bundle.css (frappe/email/email_body.py) y sin assets la cola falla.
+      - name: Init bench (Frappe fijado en deploy/frappe.version, con assets)
         run: |
           bench init \
-            --frappe-branch v16.51.1 \
+            --frappe-branch "$(tr -d '[:space:]' < sgc/deploy/frappe.version)" \
             --skip-redis-config-generation \
-            --skip-assets \
             --python "$(which python)" \
             frappe-bench
 
