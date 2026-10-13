@@ -116,10 +116,10 @@ class IntegrationTestReportIndicadores(IntegrationTestCase):
         self.assertEqual(d["ref_doctype"], "Valor Indicador")
 
     def test_el_panel_enlaza_el_informe(self):
-        from sgc.setup import f18_workspace
+        from sgc import escritorio
 
-        items = f18_workspace.TARJETAS["Seguimiento"]
-        self.assertIn(("Report", "Indicadores de Acreditacion"), items)
+        destinos = escritorio.destinos(escritorio.menus()["SGC Indicadores"])
+        self.assertIn("Indicadores de Acreditacion", [d for _e, t, d in destinos if t == "Report"])
 
     def test_reporte_prefiere_ingesta_y_no_prosa_historica(self):
         from sgc.tests.test_indicadores_ingesta_puro import structured

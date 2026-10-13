@@ -1,0 +1,23 @@
+{
+ "color": "#f2994a",
+ "creation": "2026-10-14 04:11:37.652818",
+ "docstatus": 0,
+ "doctype": "Number Card",
+ "document_type": "Documento Controlado",
+ "function": "Count",
+ "idx": 0,
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "SGC - Documentos por revisar",
+ "method": "sgc.dashboards.documentos_por_revisar",
+ "modified": "2026-10-14 04:11:37.652818",
+ "modified_by": "Administrator",
+ "module": "SGC Documental",
+ "name": "SGC - Documentos por revisar",
+ "owner": "Administrator",
+ "report_function": "Sum",
+ "show_full_number": 0,
+ "show_percentage_stats": 0,
+ "stats_time_interval": "Daily",
+ "type": "Custom"
+}

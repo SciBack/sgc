@@ -1,0 +1,90 @@
+{
+ "charts": [],
+ "content": "[{\"id\": \"hdr\", \"type\": \"header\", \"data\": {\"text\": \"Procesos\", \"col\": 12}}, {\"id\": \"cd0\", \"type\": \"card\", \"data\": {\"card_name\": \"Mapa de procesos\", \"col\": 4}}]",
+ "creation": "2026-10-14 04:11:37.332534",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "hide_custom": 0,
+ "icon": "tool",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "SGC Procesos",
+ "link_type": "DocType",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Mapa de procesos",
+   "link_count": 0,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Mapa de procesos",
+   "link_count": 0,
+   "link_to": "Proceso",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Procedimientos",
+   "link_count": 0,
+   "link_to": "Procedimiento",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Fichas de caracterización",
+   "link_count": 0,
+   "link_to": "Ficha Caracterizacion Proceso",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Mapa institucional",
+   "link_count": 0,
+   "link_to": "Mapa Procesos",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Interacciones entre procesos",
+   "link_count": 0,
+   "link_to": "Interaccion Proceso",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-10-14 04:11:37.332534",
+ "modified_by": "Administrator",
+ "module": "SGC Procesos",
+ "name": "SGC Procesos",
+ "number_cards": [],
+ "owner": "Administrator",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 2.0,
+ "shortcuts": [],
+ "standard": 1,
+ "title": "SGC Procesos",
+ "type": "Workspace"
+}

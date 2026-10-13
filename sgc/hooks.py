@@ -40,12 +40,10 @@ add_to_apps_screen = [
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/sgc/css/sgc.css"
-# desk_home.js: redirige la entrada pelada al Desk (/desk) directo al workspace
-# SGC saltando el apps screen. Archivo plano (no .bundle.) -> se sirve sin build.
+# Ficheros planos (no .bundle.) -> se sirven sin build. La entrada al Desk y la miga
+# de pan las resuelve Frappe con los ficheros estándar (sgc/escritorio.py).
 app_include_js = [
-	"/assets/sgc/js/desk_home.js",
 	"/assets/sgc/js/latido_scheduler.js",
-	"/assets/sgc/js/migas.js",
 	"/assets/sgc/js/soporte.js",
 ]
 

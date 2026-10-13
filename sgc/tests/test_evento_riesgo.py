@@ -27,7 +27,8 @@ from frappe.model.workflow import apply_workflow
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, nowdate
 
-from sgc.setup import f3b_rbac, f18_workspace
+from sgc import escritorio
+from sgc.setup import f3b_rbac
 from sgc.setup import f15_notificaciones_workflow as f15
 from sgc.setup import f25_workflow_evento_riesgo as f25
 from sgc.sgc_riesgos.doctype.evento_riesgo.evento_riesgo import ORIGEN_NC
@@ -272,6 +273,5 @@ class IntegrationTestEventoRiesgoMenus(_Base):
         self.assertIn((DOCTYPE, "riesgo"), enlaces)
 
     def test_esta_en_el_area_de_riesgos(self):
-        self.assertIn(DOCTYPE, f18_workspace.TARJETAS["Gestión de riesgos"])
-        barra = [d for _e, t, d in f18_workspace.SIDEBARS["SGC Riesgos"] if t == "DocType"]
-        self.assertIn(DOCTYPE, barra)
+        menu = escritorio.destinos(escritorio.menus()["SGC Riesgos"])
+        self.assertIn(DOCTYPE, [d for _e, t, d in menu if t == "DocType"])

@@ -1,0 +1,121 @@
+{
+ "charts": [],
+ "content": "[{\"id\": \"hdr\", \"type\": \"header\", \"data\": {\"text\": \"Indicadores\", \"col\": 12}}, {\"id\": \"cd0\", \"type\": \"card\", \"data\": {\"card_name\": \"Indicadores y mediciones\", \"col\": 4}}, {\"id\": \"cd1\", \"type\": \"card\", \"data\": {\"card_name\": \"Seguimiento\", \"col\": 4}}]",
+ "creation": "2026-10-14 04:11:37.347309",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "hide_custom": 0,
+ "icon": "tool",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "SGC Indicadores",
+ "link_type": "DocType",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Indicadores y mediciones",
+   "link_count": 0,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Indicadores",
+   "link_count": 0,
+   "link_to": "Indicador",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Fichas de indicador",
+   "link_count": 0,
+   "link_to": "Ficha Indicador",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Mediciones",
+   "link_count": 0,
+   "link_to": "Valor Indicador",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Seguimiento",
+   "link_count": 0,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Tableros de indicadores",
+   "link_count": 0,
+   "link_to": "Tablero Indicadores",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Alertas de indicador",
+   "link_count": 0,
+   "link_to": "Alerta Indicador",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Indicadores de acreditación",
+   "link_count": 0,
+   "link_to": "Indicadores de Acreditacion",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "Valor Indicador",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Indicadores por familia",
+   "link_count": 0,
+   "link_to": "Indicadores por Familia",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "Indicador",
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-10-14 04:11:37.347309",
+ "modified_by": "Administrator",
+ "module": "SGC Indicadores",
+ "name": "SGC Indicadores",
+ "number_cards": [],
+ "owner": "Administrator",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 4.0,
+ "shortcuts": [],
+ "standard": 1,
+ "title": "SGC Indicadores",
+ "type": "Workspace"
+}
