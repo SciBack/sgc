@@ -1,14 +1,14 @@
 """Chequeo del inicio de sesión institucional (#46).
 
-Un sitio sin SSO funciona —se entra con contraseña—, pero tiene que ser un estado DECLARADO:
-por eso es INFO y no silencio. Si `site_config` declara SSO y el registro no coincide con lo
+Un sitio sin SSO funciona —se entra con contraseña—, pero no está completo: cada persona
+necesita una contraseña local más, y la baja en la institución no la deja fuera. Es AVISO (#50). Si `site_config` declara SSO y el registro no coincide con lo
 declarado, es AVISO: alguien espera entrar con su cuenta institucional y el botón no lo hará.
 """
 
 import frappe
 
 from sgc.setup import f3b_sso
-from sgc.verificacion import AVISO, INFO, Hallazgo
+from sgc.verificacion import AVISO, Hallazgo
 
 
 def inicio_de_sesion_institucional():
@@ -22,10 +22,10 @@ def inicio_de_sesion_institucional():
     if cfg is None:
         if activos:
             return []  # hay un registro creado a mano: funciona, solo que no lo gestiona el despliegue
-        return [Hallazgo(INFO, "sso-no-configurado",
+        return [Hallazgo(AVISO, "sso-no-configurado",
                          "No hay inicio de sesión institucional: solo se entra con usuario y contraseña.",
                          remedio="Declarar sgc_sso_issuer, sgc_sso_client_id y sgc_sso_client_secret en "
-                                 "site_config.json y migrar (ver sgc/setup/F3B-SSO-DEPLOY.md).")]
+                                 "site_config.json y migrar (#46; ver sgc/setup/F3B-SSO-DEPLOY.md).")]
 
     esperado = f3b_sso.componer(cfg)
     if not frappe.db.exists("Social Login Key", cfg["proveedor"]):
