@@ -1,0 +1,21 @@
+name: Publicación
+
+# Se dispara al subir un tag vX.Y.Z. Antes de publicar nada comprueba que el tag, la versión de
+# sgc/__init__.py y la entrada del CHANGELOG digan lo mismo (#52). El criterio de versionado
+# está en docs/desarrollo/versionado.md.
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  coherencia:
+    name: Versión coherente con el tag
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - name: Tag, __version__ y CHANGELOG coinciden
+        run: python deploy/check_version.py --tag "${GITHUB_REF_NAME}"
