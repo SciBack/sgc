@@ -40,14 +40,18 @@ propios contenedores, así que no hace falta decirle dónde está. Respaldos y e
 
 | Paso | Qué hace | Quien entra ve |
 |---|---|---|
-| 1 | Descarga la imagen y lee su versión. Sin etiqueta de versión no sigue: no es una imagen publicada. | El sistema, normal |
+| 1 | Descarga la imagen y lee su versión. Si la imagen no lleva etiqueta de versión, no es una imagen publicada y no sigue. | El sistema, normal |
 | 2 | Comprueba el aviso: el Comunicado enviado cuya ventana cubre ahora. | El sistema, normal |
-| 3 | Respaldo de base y ficheros, **fuera del contenedor**. Sin respaldo no sigue. | El sistema, normal |
-| 4 | Modo mantenimiento en el sitio. | Página «Actualizando» de Frappe |
-| 5 | Cambia la imagen en el compose (copia `.bak-<fecha>` de cada fichero tocado) y recrea backend, websocket, scheduler y colas. El frontend sigue en pie. | Página de mantenimiento del SGC |
+| 3 | Modo mantenimiento en el sitio, y **espera 65 s** a que lo noten todos los procesos (Frappe guarda `site_config` 60 s en memoria). | Página «Actualizando» de Frappe |
+| 4 | Respaldo de base y ficheros **con la imagen nueva** (su cliente PostgreSQL es el comprobado), **fuera del contenedor**. Sin respaldo no sigue. | Página «Actualizando» |
+| 5 | Cambia la imagen en el compose (copia `.bak-<fecha>` de cada fichero tocado), comprueba que compose resuelve la nueva y recrea backend, websocket, scheduler y colas. El frontend sigue en pie. | Página de mantenimiento del SGC |
 | 6 | `clear-cache`, `migrate`, `clear-cache`. | Página «Actualizando» |
-| 7 | Recrea el frontend con los assets nuevos. | Unos segundos de corte |
-| 8 | Comprobación: verificación de instancia sin bloqueantes, versión de la instancia igual a la de la imagen y migrate registrado. Si pasa, **quita el modo mantenimiento**. | El sistema, actualizado |
+| 7 | Recrea el frontend con los assets nuevos. | Un segundo de corte |
+| 8 | Comprobación: **cada servicio corre la imagen nueva**, verificación de instancia sin bloqueantes, versión de la instancia igual a la de la imagen y migrate registrado. Si pasa, **quita el modo mantenimiento**, que tarda hasta un minuto en desaparecer. | El sistema, actualizado |
+
+**Cuánto dura** (ensayo en el lab, 13-oct-2026, con una copia de producción): unos **3 minutos**
+de punta a punta. Uno es la espera del paso 3. El resto es sobre todo el `migrate` con
+`f_deploy_run_all`.
 
 Una corrección urgente que no puede esperar 24 h se hace con `--sin-aviso "motivo"`. El motivo
 queda escrito en la salida.
@@ -88,9 +92,10 @@ SGC_DB_ROOT_USER=<superusuario> SGC_DB_ROOT_PASSWORD=<contraseña> \
   ./actualizar.sh volver --proyecto <p> --sitio <s> --restaurar-base
 ```
 
-Restaurar **borra lo que se haya escrito después del respaldo**. Por eso el sitio está en
-mantenimiento desde antes de respaldar hasta el final: en una actualización normal no se pierde
-nada.
+Restaurar **borra lo que se haya escrito después del respaldo**. Por eso el sitio entra en
+mantenimiento, y el script espera a que surta efecto, **antes** de respaldar: entre el respaldo y
+la vuelta atrás nadie ha podido escribir. Comprobado en el ensayo: un registro creado después de
+actualizar desapareció al restaurar, y uno creado antes del respaldo siguió en su sitio.
 
 ## Notas
 
@@ -104,6 +109,12 @@ nada.
 - **Proxy delante.** Si delante del frontend hay otro proxy (Caddy, otro nginx), sigue pasando la
   página de mantenimiento. Solo los segundos del paso 7 dependen de ese proxy; el mismo
   `mantenimiento.html` puede servirse desde él para cubrirlos.
-- **Versiones anteriores a la 1.0.0** no tienen `sgc.mantenimiento` ni `sgc.estado`. La primera
-  actualización desde ellas necesita `--sin-aviso` (con el aviso hecho a mano). Al volver a una
-  de ellas, la comprobación se queda en la verificación de instancia.
+- **Versiones anteriores a la 1.0.0** no tienen `sgc.mantenimiento` ni `sgc.estado`, y las más
+  antiguas tampoco `sgc.verificacion`. Desde ellas:
+  - La primera actualización necesita `--sin-aviso`, con el aviso hecho a mano.
+  - Su frontend no tiene la página de mantenimiento: mientras se recrea el backend, quien entra ve
+    un 502. Es la única vez; desde la 1.0.0 la página va en la imagen.
+  - Al volver a una de ellas, la comprobación no puede pasar, y el sitio se queda en
+    mantenimiento a propósito. Se mira la imagen de cada servicio y se quita a mano.
+- **Unos segundos sin respuesta.** Cuando el backend desaparece, nginx tarda unos segundos en
+  darse cuenta antes de servir la página de mantenimiento. Se vio en el ensayo; no es un error.
