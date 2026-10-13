@@ -1,9 +1,12 @@
-SGC Nucleo,Gestión de la calidad
-SGC Estructura,Marcos y estructura
 SGC Procesos,Procesos
-SGC Gobierno,Gobierno de la calidad
+SGC Documental,Documentos
+SGC Indicadores,Indicadores
+SGC Acreditacion,Acreditación y licenciamiento
+SGC Nucleo,Mejora continua
 SGC Auditoria,Auditoría
-SGC Riesgos,Riesgos y obligaciones
+SGC Riesgos,Riesgos
+SGC Gobierno,Dirección y partes interesadas
+SGC Estructura,Configuración
 Accion Mejora,Acción de mejora
 Alerta Indicador,Alerta de indicador
 Aplicacion Instrumento,Aplicación de instrumento

@@ -20,57 +20,101 @@ import frappe
 
 WS = "SGC"
 
-# Accesos rápidos (lo que se usa a diario). (etiqueta, destino) donde el destino es
-# un doctype, o la tupla ("Report", "<nombre>") para un informe.
+# =============================================================================
+# NAVEGACIÓN DEL SGC — una sola definición para el inicio, las portadas y los menús
+# =============================================================================
+#
+# Hasta el 12-oct-2026 los menús se agrupaban por MÓDULO TÉCNICO, que es como se
+# repartió el código al programarlo, no como trabaja la DPGC: los indicadores
+# estaban en tres sitios, «Gestión de la calidad» mezclaba documentos, acreditación,
+# mejora y lotes técnicos de ingesta, el informe de cumplimiento SUNEDU colgaba de
+# «Procesos» y la revisión por la dirección de «Auditoría». Ahora cada ÁREA es una
+# tarea de la DPGC, y las pantallas se movieron al módulo de su área (las migas de
+# Frappe dependen del módulo: ver `migas.js`).
+#
+# Todo sale de AREAS + TARJETAS + ETIQUETAS: el inicio, la portada de cada área y su
+# barra lateral se generan de aquí, así que no pueden volver a contradecirse.
+
+# Cada área: módulo -> (nombre visible, [tarjetas de su portada]). El ORDEN es el
+# del menú: de lo que define el sistema (procesos, documentos) a lo que lo mide y
+# lo mejora, y al final la configuración. El nombre visible tiene que coincidir
+# con `translations/es.csv` (lo comprueba test_migas).
+AREAS = {
+    "SGC Procesos": ("Procesos", ["Mapa de procesos"]),
+    "SGC Documental": ("Documentos", ["Documentos"]),
+    "SGC Indicadores": ("Indicadores", ["Indicadores y mediciones", "Seguimiento"]),
+    "SGC Acreditacion": ("Acreditación y licenciamiento",
+                         ["Autoevaluación", "Marcos de calidad", "Licenciamiento y obligaciones"]),
+    "SGC Nucleo": ("Mejora continua", ["Hallazgos e incidencias", "Planes y acciones"]),
+    "SGC Auditoria": ("Auditoría", ["Auditoría interna"]),
+    "SGC Riesgos": ("Riesgos", ["Gestión de riesgos"]),
+    "SGC Gobierno": ("Dirección y partes interesadas", ["Dirección", "Partes interesadas y encuestas"]),
+    "SGC Estructura": ("Configuración", ["Estructura institucional", "Datos e integraciones", "Sistema"]),
+}
+
+# Tarjetas: (título, [items]); un item es un doctype o ("Report", "<nombre>"). Cada
+# pantalla está en UNA sola tarjeta y en el área de su módulo (test_modulos_por_area).
+# Fuera de los menús a propósito: las tablas hijas y `Trazabilidad` (el vínculo entre
+# una evidencia y lo que acredita, que se gestiona desde la propia evidencia).
+TARJETAS = {
+    "Mapa de procesos": ["Proceso", "Procedimiento", "Ficha Caracterizacion Proceso",
+                         "Mapa Procesos", "Interaccion Proceso"],
+    "Documentos": ["Documento Controlado", "Carpeta Documental", ("Report", "Accesos a Documentos")],
+    "Indicadores y mediciones": ["Indicador", "Ficha Indicador", "Valor Indicador"],
+    "Seguimiento": ["Tablero Indicadores", "Alerta Indicador", ("Report", "Indicadores de Acreditacion"),
+                    ("Report", "Indicadores por Familia")],
+    "Autoevaluación": ["Autoevaluacion", "Evidencia", "Valoracion Criterio", "Valoracion Estandar"],
+    "Marcos de calidad": ["Marco Normativo", "Elemento Marco", "Escala Valoracion"],
+    "Licenciamiento y obligaciones": ["Informe Cumplimiento", "Ente Externo", "Obligacion Ente",
+                                      "Entrega Obligacion"],
+    "Hallazgos e incidencias": ["Hallazgo", "No Conformidad", "Salida No Conforme"],
+    "Planes y acciones": ["Plan Mejora", "Accion Mejora", ("Report", "Mejoramiento Continuo"),
+                          ("Report", "Salidas No Conformes")],
+    "Auditoría interna": ["Programa Auditoria", "Auditoria", "Lista Verificacion", "Hallazgo Auditoria",
+                          "Informe Auditoria", ("Report", "Resultados de Auditoria")],
+    "Gestión de riesgos": ["Riesgo", "Evento Riesgo", "Matriz Riesgo", "Evaluacion Riesgo",
+                           "Tratamiento Riesgo", ("Report", "Matriz de Riesgos")],
+    "Dirección": ["Politica Calidad", "Objetivo Calidad", "Revision Direccion", "Comite", "Reunion",
+                  "Acuerdo", "Comunicado"],
+    "Partes interesadas y encuestas": ["Grupo Interes", "Instrumento", "Aplicacion Instrumento",
+                                       "Resultado Instrumento"],
+    "Estructura institucional": ["Unidad Organica", "Programa", "Programa Sede", "Periodo Academico"],
+    "Datos e integraciones": ["Fuente Dato", "Regla Validacion", "Lote Ingesta", "Termino Tesauro"],
+    "Sistema": ["Configuracion Correo", "Configuracion Soporte", "Registro Correo"],
+}
+CARDS = list(TARJETAS.items())  # compatibilidad con quien importe CARDS
+
+# Accesos rápidos del inicio: lo que se abre a diario, uno por área de trabajo.
 SHORTCUTS = [
-    ("Indicadores", ("Report", "Indicadores de Acreditacion")),
+    ("Mapa de procesos", "Proceso"),
     ("Documentos", "Documento Controlado"),
-    ("Evidencias", "Evidencia"),
+    ("Indicadores", "Indicador"),
     ("Autoevaluación", "Autoevaluacion"),
-    ("Hallazgos", "Hallazgo"),
-    ("Riesgos", "Riesgo"),
+    ("No conformidades", "No Conformidad"),
     ("Auditorías", "Auditoria"),
+    ("Riesgos", "Riesgo"),
     # Lo usa cualquier colaborador: es por donde entra quien no tiene rol del SGC.
     ("Reportar evento de riesgo", "Evento Riesgo"),
 ]
 
-# Tarjetas por área. (título de la tarjeta, [items]); un item es un doctype o la
-# tupla ("Report", "<nombre>").
-CARDS = [
-    ("Gestión documental", ["Documento Controlado", "Carpeta Documental", "Evidencia", "Trazabilidad"]),
-    ("Autoevaluación", ["Autoevaluacion", "Valoracion Criterio", "Valoracion Estandar", "Valor Indicador"]),
-    ("Mejora continua", ["Hallazgo", "No Conformidad", "Salida No Conforme", "Plan Mejora", "Accion Mejora",
-                         ("Report", "Salidas No Conformes")]),
-    ("Auditoría", ["Programa Auditoria", "Auditoria", "Lista Verificacion", "Hallazgo Auditoria", "Informe Auditoria",
-                   "Revision Direccion"]),
-    ("Riesgos y obligaciones", ["Riesgo", "Evento Riesgo", "Tratamiento Riesgo", "Matriz Riesgo", "Evaluacion Riesgo", "Obligacion Ente", "Entrega Obligacion"]),
-    ("Procesos", ["Proceso", "Procedimiento", "Ficha Caracterizacion Proceso", "Informe Cumplimiento"]),
-    ("Gobierno de la calidad", ["Politica Calidad", "Objetivo Calidad", "Comite", "Reunion", "Acuerdo", "Instrumento",
-                                "Aplicacion Instrumento", "Comunicado"]),
-    ("Marcos e indicadores", ["Marco Normativo", "Elemento Marco", "Indicador", "Ficha Indicador",
-                              "Escala Valoracion", ("Report", "Indicadores de Acreditacion"),
-                              ("Report", "Indicadores por Familia")]),
-    ("Estructura", ["Unidad Organica", "Programa", "Programa Sede", "Periodo Academico"]),
-]
-
-
-# Áreas del SGC (27-sep-2026). Cada módulo es un área con su PORTADA (un Workspace
-# con el nombre del módulo), su barra lateral y su icono de miga, los cuatro con el
-# MISMO nombre técnico. El nombre que ve la persona sale de `sgc/translations/es.csv`
-# («SGC Auditoria» → «Auditoría»), así que no hay que renombrar nada en la base.
-#
-# Por qué una portada por área, y no solo la general: la miga de Frappe dibuja el
-# área solo si el módulo tiene un workspace visible (`breadcrumbs.js`, que filtra por
-# `frappe.visible_modules`), y su enlace es el del icono. Con un único workspace
-# («SGC», módulo SGC Nucleo), las listas de las otras cinco áreas salían sin área y
-# la misma pantalla daba tres migas distintas según el camino (revisión del 27-sep).
-AREAS = {
-    "SGC Nucleo": ("Gestión de la calidad", ["Gestión documental", "Autoevaluación", "Mejora continua"]),
-    "SGC Estructura": ("Marcos y estructura", ["Marcos e indicadores", "Estructura"]),
-    "SGC Procesos": ("Procesos", ["Procesos"]),
-    "SGC Gobierno": ("Gobierno de la calidad", ["Gobierno de la calidad"]),
-    "SGC Auditoria": ("Auditoría", ["Auditoría"]),
-    "SGC Riesgos": ("Riesgos y obligaciones", ["Riesgos y obligaciones"]),
+# Cifras (Number Card) y gráficos (Dashboard Chart) que crea f21. Hasta el 12-oct no
+# estaban en ninguna portada: existían y nadie los veía. Clave = portada; el valor es
+# la etiqueta visible, y el documento se llama «SGC - <etiqueta>».
+CIFRAS = {
+    "SGC": ["Documentos por revisar", "No conformidades abiertas", "Acciones de mejora vencidas",
+            "Hallazgos de auditoria abiertos", "Riesgos altos tras tratamiento",
+            "Tratamientos de riesgo vencidos"],
+    "SGC Documental": ["Documentos por revisar"],
+    "SGC Nucleo": ["No conformidades abiertas", "Acciones de mejora abiertas", "Acciones de mejora vencidas",
+                   "Incidencias abiertas", "Planes de mejora en rojo"],
+    "SGC Auditoria": ["Hallazgos de auditoria abiertos"],
+    "SGC Riesgos": ["Riesgos altos tras tratamiento", "Tratamientos de riesgo vencidos"],
+}
+GRAFICOS = {
+    "SGC Nucleo": ["No conformidades por origen", "No conformidades detectadas por mes",
+                   "Acciones de mejora por estado"],
+    "SGC Auditoria": ["Hallazgos de auditoría por tipo"],
+    "SGC Riesgos": ["Riesgos por categoría"],
 }
 
 
@@ -79,34 +123,121 @@ def ruta_area(modulo):
     return "/desk/" + modulo.lower().replace(" ", "-")
 
 
-# Etiqueta con la que se muestra cada enlace en el workspace. Sin entrada aquí se
-# usa el nombre del doctype, que es lenguaje de desarrollador («Proceso», «Ficha
-# Caracterizacion Proceso»): quien trabaja en Calidad no busca «un proceso», busca
-# el mapa. La clave es el nombre EXACTO del doctype.
+# Cómo se llama cada pantalla en tarjetas y menús: en plural y en el lenguaje de quien
+# trabaja en Calidad, no el nombre técnico del doctype. Cubre TODAS las de TARJETAS
+# (lo comprueba test_modulos_por_area): sin entrada, el menú enseñaría «Ficha Caracterizacion
+# Proceso». La miga usa el singular de `translations/es.csv`.
 ETIQUETAS = {
     "Proceso": "Mapa de procesos",
-    "Ficha Caracterizacion Proceso": "Ficha de caracterización",
-    "Salida No Conforme": "Salidas no conformes",
-    "Lista Verificacion": "Listas de verificación",
-    "Comunicado": "Comunicados",
-    "Evento Riesgo": "Eventos de riesgo",
+    "Procedimiento": "Procedimientos",
+    "Ficha Caracterizacion Proceso": "Fichas de caracterización",
+    "Mapa Procesos": "Mapa institucional",
+    "Interaccion Proceso": "Interacciones entre procesos",
+    "Documento Controlado": "Documentos controlados",
     "Carpeta Documental": "Carpetas documentales",
+    "Accesos a Documentos": "Accesos a documentos",
+    "Indicador": "Indicadores",
+    "Ficha Indicador": "Fichas de indicador",
+    "Valor Indicador": "Mediciones",
+    "Tablero Indicadores": "Tableros de indicadores",
+    "Alerta Indicador": "Alertas de indicador",
+    "Indicadores de Acreditacion": "Indicadores de acreditación",
+    "Indicadores por Familia": "Indicadores por familia",
+    "Autoevaluacion": "Autoevaluaciones",
+    "Evidencia": "Evidencias",
+    "Valoracion Criterio": "Valoración de criterios",
+    "Valoracion Estandar": "Valoración de estándares",
+    "Marco Normativo": "Marcos normativos",
+    "Elemento Marco": "Estándares y criterios",
+    "Escala Valoracion": "Escalas de valoración",
+    "Informe Cumplimiento": "Informe de cumplimiento (SUNEDU)",
+    "Ente Externo": "Entes externos",
+    "Obligacion Ente": "Obligaciones ante entes",
+    "Entrega Obligacion": "Entregas de obligaciones",
+    "Hallazgo": "Hallazgos",
+    "No Conformidad": "No conformidades",
+    "Salida No Conforme": "Salidas no conformes",
+    "Plan Mejora": "Planes de mejora",
+    "Accion Mejora": "Acciones de mejora",
+    "Mejoramiento Continuo": "Informe de mejoramiento continuo",
+    "Salidas No Conformes": "Informe de salidas no conformes",
+    "Programa Auditoria": "Programas de auditoría",
+    "Auditoria": "Auditorías",
+    "Lista Verificacion": "Listas de verificación",
+    "Hallazgo Auditoria": "Hallazgos de auditoría",
+    "Informe Auditoria": "Informes de auditoría",
+    "Resultados de Auditoria": "Resultados de auditoría",
+    "Riesgo": "Riesgos",
+    "Evento Riesgo": "Eventos de riesgo",
+    "Matriz Riesgo": "Matrices de riesgo",
+    "Evaluacion Riesgo": "Evaluaciones de riesgo",
+    "Tratamiento Riesgo": "Tratamientos de riesgo",
+    "Matriz de Riesgos": "Matriz de riesgos (informe)",
+    "Politica Calidad": "Política de calidad",
+    "Objetivo Calidad": "Objetivos de calidad",
+    "Revision Direccion": "Revisión por la dirección",
+    "Comite": "Comités",
+    "Reunion": "Reuniones",
+    "Acuerdo": "Acuerdos",
+    "Comunicado": "Comunicados",
+    "Grupo Interes": "Grupos de interés",
+    "Instrumento": "Instrumentos (encuestas)",
+    "Aplicacion Instrumento": "Aplicaciones de encuestas",
+    "Resultado Instrumento": "Resultados de encuestas",
+    "Unidad Organica": "Unidades orgánicas",
+    "Programa": "Programas",
+    "Programa Sede": "Programas por sede",
+    "Periodo Academico": "Periodos académicos",
+    "Fuente Dato": "Fuentes de datos",
+    "Regla Validacion": "Reglas de validación",
+    "Lote Ingesta": "Lotes de ingesta",
+    "Termino Tesauro": "Tesauro",
+    "Configuracion Correo": "Configuración de correo",
+    "Configuracion Soporte": "Configuración de soporte",
+    "Registro Correo": "Registro de correos",
 }
 
-def _contenido():
-    """El layout del área central: cabecera + accesos + cabecera + tarjetas.
 
-    Son bloques del editor nativo de Frappe (shortcut / card / header). No es HTML
-    a medida: es lo mismo que genera la UI cuando se arma un workspace a mano.
+def _bloques_de_cifras(portada, prefijo):
+    """Bloques de contenido para las cifras y gráficos de una portada."""
+    b = []
+    for i, etiqueta in enumerate(CIFRAS.get(portada, [])):
+        b.append({"id": f"{prefijo}n{i}", "type": "number_card",
+                  "data": {"number_card_name": etiqueta, "col": 4}})
+    for i, etiqueta in enumerate(GRAFICOS.get(portada, [])):
+        b.append({"id": f"{prefijo}g{i}", "type": "chart",
+                  "data": {"chart_name": etiqueta, "col": 6}})
+    return b
+
+
+def _anadir_cifras(ws, portada):
+    """Enlaza al workspace las cifras y gráficos que existen (los crea f21)."""
+    for etiqueta in CIFRAS.get(portada, []):
+        if frappe.db.exists("Number Card", f"SGC - {etiqueta}"):
+            ws.append("number_cards", {"number_card_name": f"SGC - {etiqueta}", "label": etiqueta})
+    for etiqueta in GRAFICOS.get(portada, []):
+        if frappe.db.exists("Dashboard Chart", f"SGC - {etiqueta}"):
+            ws.append("charts", {"chart_name": f"SGC - {etiqueta}", "label": etiqueta})
+
+
+def _contenido():
+    """El inicio: accesos del día a día, el estado del sistema en cifras y una tarjeta
+    por área con sus pantallas, en el mismo orden que el menú.
+
+    Son bloques del editor nativo de Frappe. No es HTML a medida: es lo mismo que
+    genera la UI cuando se arma un workspace a mano.
     """
     b = [{"id": "hdr_a", "type": "header",
           "data": {"text": "Sistema de Gestión de la Calidad", "col": 12}}]
     for i, (label, _dt) in enumerate(SHORTCUTS):
         b.append({"id": f"sc{i}", "type": "shortcut",
                   "data": {"shortcut_name": label, "col": 3}})
-    b.append({"id": "hdr_b", "type": "header", "data": {"text": "Módulos", "col": 12}})
-    for i, (card, _items) in enumerate(CARDS):
-        b.append({"id": f"cd{i}", "type": "card", "data": {"card_name": card, "col": 4}})
+    if CIFRAS.get(WS):
+        b.append({"id": "hdr_c", "type": "header", "data": {"text": "Estado del sistema", "col": 12}})
+        b += _bloques_de_cifras(WS, "in")
+    b.append({"id": "hdr_b", "type": "header", "data": {"text": "Áreas", "col": 12}})
+    for i, (_modulo, (nombre, _cards)) in enumerate(AREAS.items()):
+        b.append({"id": f"cd{i}", "type": "card", "data": {"card_name": nombre, "col": 4}})
     return json.dumps(b, ensure_ascii=False)
 
 
@@ -150,14 +281,17 @@ def run():
         if _disponible(tipo, nombre, existe):
             ws.append("shortcuts", {"type": tipo, "link_to": nombre, "label": label})
 
-    for card, items in CARDS:
-        ws.append("links", {"type": "Card Break", "label": card})
-        for item in items:
-            tipo, nombre = _destino(item)
-            if _disponible(tipo, nombre, existe):
-                ws.append("links", {"type": "Link", "link_type": tipo,
-                                    "link_to": nombre,
-                                    "label": ETIQUETAS.get(nombre, nombre)})
+    # Una tarjeta por área, con el nombre del área y todas sus pantallas.
+    for _modulo, (nombre_area, cards) in AREAS.items():
+        ws.append("links", {"type": "Card Break", "label": nombre_area})
+        for card in cards:
+            for item in TARJETAS[card]:
+                tipo, nombre = _destino(item)
+                if _disponible(tipo, nombre, existe):
+                    ws.append("links", {"type": "Link", "link_type": tipo,
+                                        "link_to": nombre,
+                                        "label": ETIQUETAS.get(nombre, nombre)})
+    _anadir_cifras(ws, WS)
 
     ws.insert(ignore_permissions=True)
     frappe.db.commit()
@@ -186,7 +320,8 @@ def run():
     _iconos_de_miga()
     _sidebars_por_modulo()
 
-    print(f"Workspace '{WS}' creado — {len(SHORTCUTS)} accesos, {len(CARDS)} tarjetas")
+    print(f"Workspace '{WS}' creado — {len(SHORTCUTS)} accesos, {len(AREAS)} áreas, "
+          f"{len(CIFRAS.get(WS, []))} cifras en el inicio")
 
 
 def _portadas_de_area(existe):
@@ -194,7 +329,7 @@ def _portadas_de_area(existe):
 
     Se recrean en cada despliegue, como la general: lo que manda es este código.
     """
-    tarjetas = dict(CARDS)
+    tarjetas = TARJETAS
     for i, (modulo, (nombre, cards)) in enumerate(AREAS.items(), start=2):
         try:
             if frappe.db.exists("Workspace", modulo):
@@ -206,6 +341,8 @@ def _portadas_de_area(existe):
             ws.icon = "tool"
             ws.sequence_id = i
             bloques = [{"id": "hdr", "type": "header", "data": {"text": nombre, "col": 12}}]
+            bloques += _bloques_de_cifras(modulo, "p")
+            _anadir_cifras(ws, modulo)
             for j, card in enumerate(cards):
                 bloques.append({"id": f"cd{j}", "type": "card", "data": {"card_name": card, "col": 4}})
                 ws.append("links", {"type": "Card Break", "label": card})
@@ -264,126 +401,38 @@ def _desktop_icon():
 # Un Desktop Icon por cada barra lateral del SGC. Sin esto la MIGA DE PAN se queda
 # en blanco al navegar: Frappe la dibuja buscando un icono cuyo `label` coincida
 # EXACTAMENTE con el título de la barra lateral activa (`breadcrumbs.js`, en
-# `set_workspace_breadcrumb`), y el app declara siete módulos —siete barras— contra
-# un único icono, el del app (`sgc_app_name`). Van ocultos: existen para resolver la miga, no para
+# `set_workspace_breadcrumb`). Van ocultos: existen para resolver la miga, no para
 # aparecer como aplicaciones en el conmutador del Desk.
-ICONOS_DE_MIGA = [
-    "SGC",
-    "SGC Nucleo",
-    "SGC Estructura",
-    "SGC Procesos",
-    "SGC Gobierno",
-    "SGC Auditoria",
-    "SGC Riesgos",
-]
+ICONOS_DE_MIGA = [WS, *AREAS]
 
-# Barras laterales con nombres de persona. Frappe autogenera una por módulo cuando no
-# existe el registro, pero la arma con los TRES primeros doctypes del módulo por fecha
-# de creación y usa el nombre del doctype como rótulo: salía «Ficha Caracterizacion
-# Pr…» y faltaba todo lo demás. Declararlas aquí sustituye a la autogenerada.
-SIDEBARS = {
-    # La barra general NO repite pantallas de las áreas: si una pantalla está en dos
-    # barras, Frappe elige la barra por historial (`sidebar.js`, resolve_sidebar) y la
-    # miga cambia según el camino. Aquí solo va la navegación entre áreas.
-    WS: [
-        ("Inicio", "Workspace", WS),
-        ("Gestión de la calidad", "Workspace", "SGC Nucleo"),
-        ("Procesos", "Workspace", "SGC Procesos"),
-        ("Auditoría", "Workspace", "SGC Auditoria"),
-        ("Riesgos y obligaciones", "Workspace", "SGC Riesgos"),
-        ("Gobierno de la calidad", "Workspace", "SGC Gobierno"),
-        ("Marcos y estructura", "Workspace", "SGC Estructura"),
-    ],
-    "SGC Procesos": [
-        ("Portada del área", "Workspace", "SGC Procesos"),
-        ("Mapa de procesos", "DocType", "Proceso"),
-        ("Procedimiento", "DocType", "Procedimiento"),
-        ("Ficha de caracterización", "DocType", "Ficha Caracterizacion Proceso"),
-        ("Informe de cumplimiento", "DocType", "Informe Cumplimiento"),
-        ("Mapa institucional", "DocType", "Mapa Procesos"),
-        ("Interacciones entre procesos", "DocType", "Interaccion Proceso"),
-        ("Volver al SGC", "Workspace", WS),
-    ],
-    "SGC Estructura": [
-        ("Portada del área", "Workspace", "SGC Estructura"),
-        ("Marcos normativos", "DocType", "Marco Normativo"),
-        ("Estándares y criterios", "DocType", "Elemento Marco"),
-        ("Escalas de valoración", "DocType", "Escala Valoracion"),
-        ("Indicadores", "DocType", "Indicador"),
-        ("Fichas de indicador", "DocType", "Ficha Indicador"),
-        ("Informe de indicadores", "Report", "Indicadores de Acreditacion"),
-        ("Indicadores por familia", "Report", "Indicadores por Familia"),
-        ("Unidades orgánicas", "DocType", "Unidad Organica"),
-        ("Programas", "DocType", "Programa"),
-        ("Programas por sede", "DocType", "Programa Sede"),
-        ("Periodos académicos", "DocType", "Periodo Academico"),
-        ("Fuentes de datos", "DocType", "Fuente Dato"),
-        ("Reglas de validación", "DocType", "Regla Validacion"),
-        ("Tesauro", "DocType", "Termino Tesauro"),
-        ("Volver al SGC", "Workspace", WS),
-    ],
-    "SGC Nucleo": [
-        ("Portada del área", "Workspace", "SGC Nucleo"),
-        ("Documentos controlados", "DocType", "Documento Controlado"),
-        ("Carpetas documentales", "DocType", "Carpeta Documental"),
-        ("Evidencias", "DocType", "Evidencia"),
-        ("Trazabilidad", "DocType", "Trazabilidad"),
-        ("Autoevaluación", "DocType", "Autoevaluacion"),
-        ("Valoración de criterios", "DocType", "Valoracion Criterio"),
-        ("Valoración de estándares", "DocType", "Valoracion Estandar"),
-        ("Valores de indicador", "DocType", "Valor Indicador"),
-        ("Hallazgos", "DocType", "Hallazgo"),
-        ("No conformidades", "DocType", "No Conformidad"),
-        ("Salidas no conformes", "DocType", "Salida No Conforme"),
-        ("Planes de mejora", "DocType", "Plan Mejora"),
-        ("Acciones de mejora", "DocType", "Accion Mejora"),
-        ("Tableros de indicadores", "DocType", "Tablero Indicadores"),
-        ("Alertas de indicador", "DocType", "Alerta Indicador"),
-        ("Lotes de ingesta", "DocType", "Lote Ingesta"),
-        ("Mejoramiento continuo", "Report", "Mejoramiento Continuo"),
-        ("Informe de salidas no conformes", "Report", "Salidas No Conformes"),
-        ("Accesos a documentos", "Report", "Accesos a Documentos"),
-        ("Volver al SGC", "Workspace", WS),
-    ],
-    "SGC Gobierno": [
-        ("Portada del área", "Workspace", "SGC Gobierno"),
-        ("Política de calidad", "DocType", "Politica Calidad"),
-        ("Objetivos de calidad", "DocType", "Objetivo Calidad"),
-        ("Comités", "DocType", "Comite"),
-        ("Reuniones", "DocType", "Reunion"),
-        ("Acuerdos", "DocType", "Acuerdo"),
-        ("Grupos de interés", "DocType", "Grupo Interes"),
-        ("Instrumentos", "DocType", "Instrumento"),
-        ("Aplicación de instrumentos", "DocType", "Aplicacion Instrumento"),
-        ("Resultados de instrumento", "DocType", "Resultado Instrumento"),
-        ("Comunicados", "DocType", "Comunicado"),
-        ("Volver al SGC", "Workspace", WS),
-    ],
-    "SGC Riesgos": [
-        ("Portada del área", "Workspace", "SGC Riesgos"),
-        ("Riesgos", "DocType", "Riesgo"),
-        ("Eventos de riesgo", "DocType", "Evento Riesgo"),
-        ("Matrices de riesgo", "DocType", "Matriz Riesgo"),
-        ("Evaluación de riesgos", "DocType", "Evaluacion Riesgo"),
-        ("Tratamiento de riesgos", "DocType", "Tratamiento Riesgo"),
-        ("Entes externos", "DocType", "Ente Externo"),
-        ("Obligaciones", "DocType", "Obligacion Ente"),
-        ("Entregas de obligación", "DocType", "Entrega Obligacion"),
-        ("Matriz de riesgos (informe)", "Report", "Matriz de Riesgos"),
-        ("Volver al SGC", "Workspace", WS),
-    ],
-    "SGC Auditoria": [
-        ("Portada del área", "Workspace", "SGC Auditoria"),
-        ("Programa de auditoría", "DocType", "Programa Auditoria"),
-        ("Auditorías", "DocType", "Auditoria"),
-        ("Listas de verificación", "DocType", "Lista Verificacion"),
-        ("Hallazgos de auditoría", "DocType", "Hallazgo Auditoria"),
-        ("Informes de auditoría", "DocType", "Informe Auditoria"),
-        ("Revisión por la dirección", "DocType", "Revision Direccion"),
-        ("Resultados de auditoría", "Report", "Resultados de Auditoria"),
-        ("Volver al SGC", "Workspace", WS),
-    ],
-}
+
+def _barras():
+    """Barras laterales: la general (solo navega entre áreas) y una por área.
+
+    Se generan de AREAS + TARJETAS, en el mismo orden que la portada: lo que ve la
+    persona en el menú es exactamente lo que ve en la portada del área. Frappe
+    autogenera una barra por módulo si no existe el registro, pero con los TRES
+    primeros doctypes por fecha de creación y su nombre técnico; declararlas aquí la
+    sustituye.
+
+    La barra general NO repite pantallas de las áreas: si una pantalla está en dos
+    barras, Frappe elige la barra por historial (`sidebar.js`, resolve_sidebar) y la
+    miga cambia según el camino.
+    """
+    barras = {WS: [("Inicio", "Workspace", WS)] + [
+        (nombre, "Workspace", modulo) for modulo, (nombre, _c) in AREAS.items()]}
+    for modulo, (_nombre, cards) in AREAS.items():
+        items = [("Portada del área", "Workspace", modulo)]
+        for card in cards:
+            for item in TARJETAS[card]:
+                tipo, destino = _destino(item)
+                items.append((ETIQUETAS.get(destino, destino), tipo, destino))
+        items.append(("Volver al inicio", "Workspace", WS))
+        barras[modulo] = items
+    return barras
+
+
+SIDEBARS = _barras()
 
 # Módulo de cada barra: el de su área; la general pertenece al núcleo, como su workspace.
 MODULO_DE_BARRA = {WS: "SGC Nucleo"}

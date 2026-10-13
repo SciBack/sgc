@@ -87,7 +87,7 @@ NUMBER_CARDS = [
     {
         "label": "SGC - Documentos por revisar",
         "document_type": "Documento Controlado",
-        "module": "SGC Nucleo",
+        "module": "SGC Documental",
         "type": "Custom",
         "method": "sgc.dashboards.documentos_por_revisar",
         "color": "#f2994a",

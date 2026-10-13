@@ -55,7 +55,7 @@
       <bpmn:outgoing>Flow_inicio</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:serviceTask id="Efecto_Cerrada__Congelar_marco_y_registrar_vigencia" name="Congelar marco y registrar vigencia">
-      <bpmn:documentation>sgc.sgc_nucleo.doctype.autoevaluacion.autoevaluacion.Autoevaluacion.before_submit</bpmn:documentation>
+      <bpmn:documentation>sgc.sgc_acreditacion.doctype.autoevaluacion.autoevaluacion.Autoevaluacion.before_submit</bpmn:documentation>
       <bpmn:incoming>Flow_Consolidada_Cerrar_hacia_Cerrada</bpmn:incoming>
       <bpmn:outgoing>Flow_efecto_Cerrada</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -93,26 +93,26 @@
     <bpmn:sequenceFlow id="Flow_efecto_Cerrada" sourceRef="Efecto_Cerrada__Congelar_marco_y_registrar_vigencia" targetRef="End_Cerrada">
     </bpmn:sequenceFlow>
     <bpmn:textAnnotation id="Control_1">
-      <bpmn:documentation>sgc.sgc_nucleo.doctype.valoracion_criterio.valoracion_criterio.ValoracionCriterio._sincronizar_trazabilidad</bpmn:documentation>
+      <bpmn:documentation>sgc.sgc_acreditacion.doctype.valoracion_criterio.valoracion_criterio.ValoracionCriterio._sincronizar_trazabilidad</bpmn:documentation>
       <bpmn:text>Al guardar una valoración de criterio: sincronizar
 sus evidencias con Trazabilidad. Es aditivo: quitar
 una evidencia del selector no borra el vínculo
 creado.</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:textAnnotation id="Control_2">
-      <bpmn:documentation>sgc.sgc_nucleo.doctype.valoracion_criterio.valoracion_criterio.ValoracionCriterio.on_update</bpmn:documentation>
+      <bpmn:documentation>sgc.sgc_acreditacion.doctype.valoracion_criterio.valoracion_criterio.ValoracionCriterio.on_update</bpmn:documentation>
       <bpmn:text>Al guardar una valoración de criterio: recalcular el
 nivel propuesto del estándar. El nivel oficial
 requiere confirmación humana.</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:textAnnotation id="Control_3">
-      <bpmn:documentation>sgc.sgc_nucleo.doctype.valoracion_criterio.valoracion_criterio.ValoracionCriterio.validate</bpmn:documentation>
+      <bpmn:documentation>sgc.sgc_acreditacion.doctype.valoracion_criterio.valoracion_criterio.ValoracionCriterio.validate</bpmn:documentation>
       <bpmn:text>Autoevaluación enviada (docstatus=1): se rechaza
 crear o editar valoraciones de criterio, antes de
 sincronizar sus evidencias.</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:textAnnotation id="Control_4">
-      <bpmn:documentation>sgc.sgc_nucleo.doctype.autoevaluacion.autoevaluacion.Autoevaluacion.before_submit</bpmn:documentation>
+      <bpmn:documentation>sgc.sgc_acreditacion.doctype.autoevaluacion.autoevaluacion.Autoevaluacion.before_submit</bpmn:documentation>
       <bpmn:text>Cerrar: exige todos los estándares confirmados. El
 mismo submit congela el marco y registra la
 vigencia; si faltan confirmaciones, no se persiste

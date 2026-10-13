@@ -4,7 +4,7 @@
 """Tareas programadas (scheduler_events) del app.
 
 Cubren el gap de `Evidencia.on_update` (`_marcar_vencida_si_expiro`, ver
-sgc/sgc_nucleo/doctype/evidencia/evidencia.py): ese flip solo corre cuando
+sgc/sgc_acreditacion/doctype/evidencia/evidencia.py): ese flip solo corre cuando
 alguien guarda el documento, así que una Evidencia cuya `vigencia_hasta`
 expiró y a la que nadie vuelve a tocar queda "Pendiente"/"Valida" para
 siempre. Este job cierra ese gap recorriendo la tabla directamente.

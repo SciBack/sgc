@@ -12,7 +12,7 @@ import frappe
 from frappe.tests.utils import FrappeTestCase
 
 RAIZ = pathlib.Path(frappe.get_app_path("sgc"))
-JS = RAIZ / "sgc_nucleo" / "doctype" / "documento_controlado" / "documento_controlado.js"
+JS = RAIZ / "sgc_documental" / "doctype" / "documento_controlado" / "documento_controlado.js"
 
 
 class TestVistaPreviaDocumento(FrappeTestCase):

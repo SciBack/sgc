@@ -4,3 +4,6 @@ SGC Auditoria
 SGC Riesgos
 SGC Gobierno
 SGC Procesos
+SGC Documental
+SGC Indicadores
+SGC Acreditacion

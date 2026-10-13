@@ -153,7 +153,7 @@
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
     <bpmn:textAnnotation id="Control_1">
-      <bpmn:documentation>sgc.sgc_nucleo.doctype.evidencia.evidencia.Evidencia._validar_trazabilidad_si_valida</bpmn:documentation>
+      <bpmn:documentation>sgc.sgc_acreditacion.doctype.evidencia.evidencia.Evidencia._validar_trazabilidad_si_valida</bpmn:documentation>
       <bpmn:text>Validar (desde Pendiente o Subsanada): requiere al
 menos una Trazabilidad hacia un elemento del marco o
 proceso. Sin vínculo se rechaza el guardado.</bpmn:text>

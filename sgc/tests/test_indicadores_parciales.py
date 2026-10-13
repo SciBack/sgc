@@ -22,7 +22,7 @@ from sgc import tareas
 from sgc.ingesta import _escritura
 from sgc.setup import f7_notificaciones as f7
 from sgc.setup import f15_notificaciones_workflow as f15
-from sgc.sgc_estructura.report.indicadores_por_familia import indicadores_por_familia as informe
+from sgc.sgc_indicadores.report.indicadores_por_familia import indicadores_por_familia as informe
 from sgc.tests import factories
 
 DOMINIO = "sgc-prueba-ind.example.com"

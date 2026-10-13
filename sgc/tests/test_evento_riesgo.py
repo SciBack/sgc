@@ -272,6 +272,6 @@ class IntegrationTestEventoRiesgoMenus(_Base):
         self.assertIn((DOCTYPE, "riesgo"), enlaces)
 
     def test_esta_en_el_area_de_riesgos(self):
-        self.assertIn(DOCTYPE, dict(f18_workspace.CARDS)["Riesgos y obligaciones"])
+        self.assertIn(DOCTYPE, f18_workspace.TARJETAS["Gestión de riesgos"])
         barra = [d for _e, t, d in f18_workspace.SIDEBARS["SGC Riesgos"] if t == "DocType"]
         self.assertIn(DOCTYPE, barra)

@@ -33,7 +33,7 @@ Elemento Marco EN VIVO, tal como antes. Una vez enviada (docstatus=1), lee del s
 congelado — así una edición posterior al marco (reparenteo, texto corregido) NO cambia
 retroactivamente un informe ya cerrado.
 
-Contrato de `marco_snapshot` (lo puebla `sgc.sgc_nucleo.doctype.autoevaluacion` +
+Contrato de `marco_snapshot` (lo puebla `sgc.sgc_acreditacion.doctype.autoevaluacion` +
 `sgc.scoring` antes del submit; este módulo SOLO lo lee):
 
     {

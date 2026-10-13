@@ -26,7 +26,7 @@ from frappe.core.doctype.file.utils import find_file_by_url
 from frappe.tests import IntegrationTestCase
 
 from sgc import documentos
-from sgc.sgc_nucleo.report.accesos_a_documentos import accesos_a_documentos as informe
+from sgc.sgc_documental.report.accesos_a_documentos import accesos_a_documentos as informe
 from sgc.tests import factories
 
 LECTOR = "sgc-prueba-copias-lector@example.com"

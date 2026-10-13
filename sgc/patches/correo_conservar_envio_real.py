@@ -16,7 +16,7 @@ import frappe
 
 
 def execute():
-	frappe.reload_doc("sgc_nucleo", "doctype", "configuracion_correo")
+	frappe.reload_doc("sgc_estructura", "doctype", "configuracion_correo")
 
 	if frappe.db.get_single_value("Configuracion Correo", "modo"):
 		return

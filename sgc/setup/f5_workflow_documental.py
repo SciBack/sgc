@@ -65,7 +65,7 @@ def run():
     n_doc = _upsert_workflow(WF_DOCUMENTO)
 
     # Raíz del árbol de carpetas documentales (el resto cuelga de ella).
-    from sgc.sgc_nucleo.doctype.carpeta_documental.carpeta_documental import asegurar_raiz
+    from sgc.sgc_documental.doctype.carpeta_documental.carpeta_documental import asegurar_raiz
 
     if frappe.db.exists("DocType", "Carpeta Documental"):
         asegurar_raiz()
