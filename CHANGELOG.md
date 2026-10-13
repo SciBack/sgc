@@ -83,6 +83,9 @@ verificación de instancia (`bench --site <sitio> execute sgc.verificacion.run`)
 - Alta de una institución con un solo comando y un perfil: identidad, marcos, estructura y SSO.
 - Importador de la estructura institucional desde CSV o Excel, que carga todo o nada.
 - Verificación de instancia: dice qué falta para estar operable y quién no puede entrar.
+- Estado de la instancia para soporte (`/api/method/sgc.estado.instancia`, solo System Manager):
+  versión, último migrate y si quedó uno pendiente, scheduler, correo y SSO. No devuelve datos
+  de negocio ni de personas.
 - Aviso a los administradores si las tareas programadas dejan de correr.
 - «Ayuda → Reportar un problema» hacia el helpdesk de la institución.
 - Identidad institucional (nombre, logo, membrete) en site_config, fuera del código.
