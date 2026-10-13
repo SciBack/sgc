@@ -40,6 +40,7 @@ export default defineConfig({
         { label: 'Referencia técnica existente', collapsed: true, items: [
           { label: 'Arquitectura', link: '/arquitectura/' },
           { label: 'Instalación', link: '/instalacion/' },
+          { label: 'Alta de una institución', link: '/alta-de-institucion/' },
           { label: 'Estado del producto', link: '/roadmap/' },
           { label: 'Biblioteca Frappe v16', link: '/referencias/frappe/' },
           { label: 'Módulos', items: [{ autogenerate: { directory: 'modulos' } }] },

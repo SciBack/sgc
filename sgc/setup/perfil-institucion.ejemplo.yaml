@@ -1,0 +1,35 @@
+# Perfil de institución para el alta (#49):
+#   bench --site <sitio> execute sgc.setup.alta_institucion.run --kwargs "{'perfil': '/ruta/perfil.yaml'}"
+#
+# Copiarlo a la capa de la institución (nunca al repositorio del producto) y rellenarlo.
+# Las rutas relativas parten de la carpeta de este fichero. Todo bloque es opcional salvo
+# `institucion.nombre`; lo que no se declara no se toca.
+
+institucion:
+  nombre: Universidad de Ejemplo           # encabeza los documentos oficiales (PDF)
+  sistema: SGC Universidad de Ejemplo      # cómo se llama el sistema en la cabecera
+  # logo: /files/logo-institucional.png    # subido antes al sitio
+  # favicon: /files/favicon.ico
+  # copyright: Universidad de Ejemplo — Dirección de Calidad
+
+# Inicio de sesión institucional (OIDC). El cliente se registra antes en el proveedor de
+# identidad, con el redirect_uri que imprime el alta. El SECRETO no va aquí: se exporta en la
+# variable de entorno que nombra `client_secret_env` antes de lanzar el comando. Si el
+# registro ya existe con su secreto, puede omitirse.
+identidad_digital:
+  issuer: https://idp.example.org/realms/ejemplo
+  client_id: sgc
+  client_secret_env: SGC_SSO_CLIENT_SECRET
+  etiqueta: Cuenta institucional
+  # proveedor: keycloak                    # nombre del registro; keycloak usa el callback nativo
+  # rutas: {autorizacion: /protocol/openid-connect/auth, token: /protocol/openid-connect/token, usuario: /protocol/openid-connect/userinfo}
+
+# Perfil de país: marcos normativos a cargar. Nombres de sgc/setup/marcos/ o rutas a un YAML
+# propio en formato intuitem. Una lista vacía no carga ninguno.
+pais:
+  marcos:
+    - coneau-programas-2025
+
+# Estructura institucional (#48): carpeta con unidades.csv, programas.csv, programas-sede.csv y
+# periodos.csv, o un .xlsx con hojas de esos nombres. Esta apunta a las plantillas de ejemplo.
+estructura: ../public/plantillas/estructura
