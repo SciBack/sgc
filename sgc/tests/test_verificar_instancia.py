@@ -268,7 +268,9 @@ class IntegrationTestInstancia(_ConSavepoint):
         resultado, salida = self._run(solo="estructura")  # salir=True: no termina
         self.assertIsNone(resultado)
         self.assertIn("✓ estructura_organizativa", salida)
-        self.assertIn("0 bloqueante(s)", salida)
+        # En un sitio limpio no hay ningún hallazgo («Sin hallazgos»); en una copia de
+        # producción, avisos. En ninguno de los dos puede haber un bloqueante.
+        self.assertNotIn("[BLOQUEANTE]", salida)
 
     def test_cada_chequeo_se_puede_correr_por_separado(self):
         self._sin_estructura()
