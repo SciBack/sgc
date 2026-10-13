@@ -5,15 +5,13 @@
 
 Se monta una `Notification` de canal Email con destinatarios por rol y en copia,
 y se la hace enviar con `Notification.send`, el mismo camino que usa el
-scheduler. `frappe.sendmail` se sustituye por un mock: lo que se comprueba es a
-quién se le PIDE enviar, que es lo que decide el SGC. Que el correo salga luego
-por SMTP es cosa de Frappe y de la cuenta de correo, no de esta prueba —y así no
-depende de que el CI tenga una configurada—.
+scheduler. Lo que se comprueba es lo que queda en la cola de Frappe (`Email
+Queue`): a quién va y en qué estado, que es lo que decide el SGC en su gancho
+`before_insert`. Que el correo salga luego por SMTP es cosa de Frappe y de la
+cuenta de correo, no de esta prueba.
 
 Todo se deshace al final de cada test (sin commit).
 """
-from unittest.mock import patch
-
 import frappe
 from frappe.tests import IntegrationTestCase
 
@@ -70,30 +68,48 @@ class IntegrationTestCorreo(IntegrationTestCase):
         frappe.db.set_single_value("Configuracion Correo", {"modo": modo, "lista_blanca": lista})
 
     def _enviar(self):
-        regla = frappe.get_doc("Notification", REGLA)
-        with patch("frappe.sendmail") as sendmail:
-            regla.send(self.todo)
-        return sendmail
+        frappe.get_doc("Notification", REGLA).send(self.todo)
+
+    def _cola(self, referencia=None):
+        """[(estado, [destinatarios])] de lo que la regla dejó en la cola."""
+        colas = frappe.get_all(
+            "Email Queue",
+            filters={"reference_doctype": "ToDo", "reference_name": referencia or self.todo.name},
+            fields=["name", "status"],
+            order_by="creation",
+        )
+        return [
+            (
+                c.status,
+                sorted(
+                    frappe.get_all("Email Queue Recipient", filters={"parent": c.name}, pluck="recipient")
+                ),
+            )
+            for c in colas
+        ]
 
     def _registros(self):
         return frappe.get_all(
             "Registro Correo",
-            filters={"regla": REGLA, "documento": self.todo.name},
+            filters={"documento": self.todo.name, "aviso": ["is", "not set"]},
             fields=["destinatario", "tipo", "resultado", "asunto"],
             order_by="destinatario",
         )
 
     # --- la intercepción ---------------------------------------------------
 
-    def test_la_regla_usa_la_clase_del_sgc(self):
-        self.assertIsInstance(frappe.get_doc("Notification", REGLA), correo.NotificacionSGC)
+    def test_el_filtro_es_un_gancho_estandar_de_la_cola(self):
+        """Nada de sobrescribir clases de Frappe: un `doc_events` sobre `Email Queue`."""
+        self.assertIn("sgc.correo.filtrar_cola", frappe.get_hooks("doc_events")["Email Queue"]["before_insert"])
+        self.assertNotIn("Notification", frappe.get_hooks("override_doctype_class"))
+        self.assertNotIn("Notification Log", frappe.get_hooks("override_doctype_class"))
 
     def test_en_ensayo_no_se_envia_y_queda_registrado(self):
         self._configurar("Ensayo")
 
-        sendmail = self._enviar()
+        self._enviar()
 
-        sendmail.assert_not_called()
+        self.assertEqual(self._cola(), [("Error", [])])
         registros = self._registros()
         self.assertEqual([r.destinatario for r in registros], [EN_COPIA, USUARIO])
         self.assertEqual({r.resultado for r in registros}, {correo.NO_ENVIADO})
@@ -101,47 +117,40 @@ class IntegrationTestCorreo(IntegrationTestCase):
         self.assertEqual(registros[0].asunto, f"Prueba {self.todo.name}")
 
     def test_el_ensayo_no_apaga_la_campana_del_desk(self):
-        """El ensayo es del correo. Los avisos internos siguen llegando.
-
-        Frappe resuelve con el mismo método los destinatarios del correo y los de
-        la campana; filtrarlos todos dejaba sin avisos del Desk a quien trabaja
-        con el sistema (lo cazó el CI en las notificaciones de workflow).
-        """
+        """El ensayo es del correo. Los avisos internos siguen llegando."""
         self._configurar("Ensayo")
         frappe.db.set_value("Notification", REGLA, "send_system_notification", 1)
 
-        sendmail = self._enviar()
+        self._enviar()
 
-        sendmail.assert_not_called()
+        self.assertEqual(self._cola(), [("Error", [])])
         self.assertTrue(
             frappe.db.exists(
                 "Notification Log",
                 {"for_user": USUARIO, "document_type": "ToDo", "document_name": self.todo.name},
             )
         )
-        # Solo lo del correo queda en el registro: la campana no es un correo retenido.
-        self.assertEqual(len(self._registros()), 2)
 
     def test_con_lista_blanca_solo_se_envia_a_quien_esta_en_ella(self):
         self._configurar("Real", USUARIO)
 
-        sendmail = self._enviar()
+        self._enviar()
 
-        sendmail.assert_called_once()
-        self.assertEqual(sendmail.call_args.kwargs["recipients"], [USUARIO])
-        self.assertEqual(sendmail.call_args.kwargs["cc"], [])
+        self.assertEqual(self._cola(), [("Not Sent", [USUARIO])])
         registros = self._registros()
         self.assertEqual([(r.destinatario, r.resultado) for r in registros], [(EN_COPIA, correo.OMITIDO)])
 
     def test_en_real_sin_lista_blanca_se_envia_a_todos(self):
         self._configurar("Real")
 
-        sendmail = self._enviar()
+        self._enviar()
 
-        sendmail.assert_called_once()
-        self.assertEqual(sendmail.call_args.kwargs["recipients"], [USUARIO])
-        self.assertEqual(sendmail.call_args.kwargs["cc"], [EN_COPIA])
+        self.assertEqual(self._cola(), [("Not Sent", sorted([USUARIO, EN_COPIA]))])
         self.assertEqual(self._registros(), [])
+
+    def test_el_asunto_codificado_se_lee_legible(self):
+        crudo = "Subject: =?utf-8?q?Revisi=C3=B3n_pendiente?=\n\ncuerpo"
+        self.assertEqual(correo.asunto_del_mensaje(crudo), "Revisión pendiente")
 
     # --- la comprobación previa --------------------------------------------
 
@@ -227,94 +236,50 @@ class IntegrationTestCorreo(IntegrationTestCase):
     # --- el correo de la campana (#35) ----------------------------------------
 
     def _aviso_desk(self, tipo="Assignment"):
-        with patch("frappe.desk.doctype.notification_log.notification_log.frappe.sendmail") as sendmail:
-            aviso = frappe.get_doc(
-                {
-                    "doctype": "Notification Log",
-                    "for_user": USUARIO,
-                    "from_user": "Administrator",
-                    "type": tipo,
-                    "subject": "Administrator te asignó una <b>tarea</b>",
-                    "document_type": "ToDo",
-                    "document_name": self.todo.name,
-                }
-            ).insert(ignore_permissions=True)
-        return aviso, sendmail
-
-    def _registros_desk(self):
-        return frappe.get_all(
-            "Registro Correo",
-            filters={"aviso": ["is", "set"], "documento": self.todo.name},
-            fields=["destinatario", "resultado", "aviso", "asunto", "regla"],
-        )
-
-    def test_el_aviso_del_desk_usa_la_clase_del_sgc(self):
-        aviso, _ = self._aviso_desk()
-        self.assertIsInstance(aviso, correo.AvisoDeskSGC)
+        return frappe.get_doc(
+            {
+                "doctype": "Notification Log",
+                "for_user": USUARIO,
+                "from_user": "Administrator",
+                "type": tipo,
+                "subject": "Administrator te asignó una <b>tarea</b>",
+                "document_type": "ToDo",
+                "document_name": self.todo.name,
+            }
+        ).insert(ignore_permissions=True)
 
     def test_en_ensayo_el_aviso_del_desk_no_manda_correo_y_queda_registrado(self):
         self._configurar("Ensayo")
 
-        aviso, sendmail = self._aviso_desk()
+        aviso = self._aviso_desk()
 
-        sendmail.assert_not_called()
         self.assertTrue(frappe.db.exists("Notification Log", aviso.name), "la campana se crea igual")
-        registros = self._registros_desk()
-        self.assertEqual(len(registros), 1)
-        self.assertEqual(registros[0].destinatario, USUARIO)
-        self.assertEqual(registros[0].resultado, correo.NO_ENVIADO)
-        self.assertEqual(registros[0].aviso, "Assignment")
-        self.assertIsNone(registros[0].regla)
-        self.assertEqual(registros[0].asunto, "Administrator te asignó una tarea")
+        self.assertEqual(self._cola(), [("Error", [])])
+        registros = self._registros()
+        self.assertEqual([(r.destinatario, r.resultado) for r in registros], [(USUARIO, correo.NO_ENVIADO)])
 
     def test_fuera_de_la_lista_blanca_el_aviso_del_desk_se_omite(self):
         self._configurar("Real", "otra-persona@example.com")
 
-        _, sendmail = self._aviso_desk()
+        self._aviso_desk()
 
-        sendmail.assert_not_called()
-        self.assertEqual([r.resultado for r in self._registros_desk()], [correo.OMITIDO])
+        self.assertEqual(self._cola(), [("Error", [])])
+        self.assertEqual([r.resultado for r in self._registros()], [correo.OMITIDO])
 
     def test_en_la_lista_blanca_el_aviso_del_desk_sale(self):
         self._configurar("Real", USUARIO)
 
-        _, sendmail = self._aviso_desk()
+        self._aviso_desk()
 
-        sendmail.assert_called_once()
-        self.assertEqual(sendmail.call_args.kwargs["recipients"], USUARIO)
-        self.assertEqual(self._registros_desk(), [])
+        self.assertEqual(self._cola(), [("Not Sent", [USUARIO])])
+        self.assertEqual(self._registros(), [])
 
     def test_un_aviso_que_no_manda_correo_no_se_registra(self):
         """`Alert` es la campana de las reglas: Frappe nunca le añade correo, así
         que no hay nada retenido que anotar."""
         self._configurar("Ensayo")
 
-        _, sendmail = self._aviso_desk(tipo="Alert")
+        self._aviso_desk(tipo="Alert")
 
-        sendmail.assert_not_called()
-        self.assertEqual(self._registros_desk(), [])
-
-    def test_el_aviso_del_desk_sigue_el_after_insert_de_frappe(self):
-        """`AvisoDeskSGC` repite las líneas de `NotificationLog.after_insert` que no
-        son el envío. Si Frappe cambia ese método, esta prueba lo dice."""
-        import inspect
-
-        from frappe.desk.doctype.notification_log.notification_log import NotificationLog
-
-        cuerpo = [
-            linea.strip()
-            for linea in inspect.getsource(NotificationLog.after_insert).splitlines()[1:]
-            if linea.strip()
-        ]
-        self.assertEqual(
-            cuerpo,
-            [
-                'frappe.publish_realtime("notification", after_commit=True, user=self.for_user)',
-                "set_notifications_as_unseen(self.for_user)",
-                "if is_email_notifications_enabled_for_type(self.for_user, self.type):",
-                "try:",
-                "send_notification_email(self)",
-                "except frappe.OutgoingEmailError:",
-                'self.log_error(_("Failed to send notification email"))',
-            ],
-        )
+        self.assertEqual(self._cola(), [])
+        self.assertEqual(self._registros(), [])

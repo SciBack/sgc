@@ -11,22 +11,12 @@ Contra lo primero, dos interruptores en `Configuracion Correo`: el **modo**
 (Ensayo / Real) y la **lista blanca de estreno**. Contra lo segundo,
 `comprobar_destinatarios`, que dice cuántas personas alcanza cada regla.
 
-**Dónde se intercepta.** Hay dos caminos de correo, y los dos pasan por aquí:
-
-1. Las **reglas** (`Notification`). Los workflows tienen `send_email_alert=0` y
-   el código no llama a `sendmail`. `Notification.send_an_email` resuelve los
-   destinatarios con `get_list_of_recipients` y, si queda alguno, envía; si no
-   queda ninguno, sale sin enviar ni crear la Communication
-   (frappe/email/doctype/notification/notification.py:496-507). Por eso basta
-   con filtrar ahí —solo durante el envío de correo, nunca para la campana del
-   Desk—.
-2. La **campana** (`Notification Log`). Cada aviso del Desk manda además su
-   propio correo con `frappe.sendmail` si el tipo lo tiene activado
-   (notification_log.py:64): asignaciones, menciones, documentos compartidos.
-   Los de las reglas (tipo `Alert`) no, porque Frappe los excluye
-   (`notification_skip_email_types`). Hasta #35 nadie asignaba tareas de
-   forma automática y este camino no se usaba; desde que la acción de mejora
-   asigna la suya al responsable, sí. Lo filtra `AvisoDeskSGC`.
+**Dónde se intercepta.** En la cola de correo de Frappe (`Email Queue`), con un
+`doc_events` estándar: por ahí pasa todo correo, venga de una regla, de la
+campana del Desk o de un envío a demanda. Hasta la 1.0.1 se interceptaba
+sobrescribiendo las clases `Notification` y `Notification Log`, y Frappe 16.50
+cambió la firma de `send_an_email`: cada aviso fallaba en silencio. Un gancho
+sobre la cola no depende de esas clases.
 
 Lo que se quita no se envía, y se anota en `Registro Correo`.
 
@@ -38,14 +28,6 @@ conservan el envío real: lo fija el parche `correo_conservar_envio_real`.
 import re
 
 import frappe
-from frappe.desk.doctype.notification_log.notification_log import (
-	NotificationLog,
-	set_notifications_as_unseen,
-)
-from frappe.desk.doctype.notification_settings.notification_settings import (
-	is_email_notifications_enabled_for_type,
-)
-from frappe.email.doctype.notification.notification import Notification
 from frappe.utils import strip_html
 
 ENSAYO = "Ensayo"
@@ -114,114 +96,94 @@ def lista_blanca():
 	return normalizar_lista(frappe.db.get_single_value("Configuracion Correo", "lista_blanca"))
 
 
-# --- intercepción --------------------------------------------------------------
+# --- intercepción: la cola de correo de Frappe ------------------------------------
 
 
-class NotificacionSGC(Notification):
-	"""`Notification` que respeta el modo de ensayo y la lista blanca.
+def filtrar_cola(doc, method=None):
+	"""`doc_events` de «Email Queue», en `before_insert`: el único punto de control.
 
-	Se registra en `override_doctype_class`. Solo filtra mientras se envía un
-	CORREO: Frappe usa el mismo `get_list_of_recipients` para la campana del
-	Desk (`create_system_notification`, notification.py:468), y el ensayo no
-	debe apagar los avisos internos. Tampoco basta con mirar `self.channel`:
-	una regla de canal Email con `send_system_notification` pasa por los dos
-	caminos, y solo el del correo se filtra.
+	Todo correo que Frappe envía —reglas, campana del Desk, envíos a demanda,
+	restablecer contraseña— entra en la cola con `EmailQueue.new`, que hace un
+	`insert` normal (frappe/email/doctype/email_queue/email_queue.py:104-117).
+	Filtrar aquí no depende de cómo Frappe arme cada correo: es un gancho
+	estándar sobre un DocType estándar, y sobrevive a las actualizaciones.
+
+	Hace dos cosas:
+
+	1. **Adjuntos de solo consulta (#36).** Un documento que solo se consulta en
+	   pantalla no viaja adjunto por correo; tampoco un adjunto sin fichero.
+	2. **Modo y lista blanca (#41).** Quita los destinatarios no autorizados y
+	   los anota en `Registro Correo`. Si no queda ninguno, el correo queda en
+	   «Error» con el motivo: la cola solo envía lo que está «Not Sent» o
+	   «Partially Sent» (frappe/email/queue.py:174), así que no se reintenta solo.
 	"""
+	_quitar_adjuntos_de_solo_consulta(doc)
 
-	def send_an_email(self, doc, context):
-		self._filtrando_correo = True
-		try:
-			return super().send_an_email(doc, context)
-		finally:
-			self._filtrando_correo = False
+	en_copia = {c.lower() for c in normalizar_lista(doc.show_as_cc)}
+	destinos = {"Para": [], "CC": []}
+	for fila in doc.recipients:
+		destinos["CC" if fila.recipient.lower() in en_copia else "Para"].append(fila.recipient)
 
-	def get_attachment(self, doc):
-		"""Sin el fichero de un documento de solo consulta (#36), ni adjuntos vacíos.
+	a_enviar, registros = decidir(destinos, modo(), lista_blanca())
+	if not registros:
+		return
 
-		La regla de publicación adjunta el `archivo`: para un documento que solo se
-		consulta en pantalla, eso lo entregaría por correo. Y un documento externo
-		se publica con enlace y sin archivo: Frappe añadiría un adjunto sin fichero.
-		"""
-		adjuntos = super().get_attachment(doc) or []
-		solo_consulta = doc.doctype == "Documento Controlado" and doc.get("solo_consulta")
-		return [
-			a
-			for a in adjuntos
-			if not ("file_url" in a and (solo_consulta or not a.get("file_url")))
-		]
-
-	def get_list_of_recipients(self, doc, context):
-		para, cc, cco = super().get_list_of_recipients(doc, context)
-		if not getattr(self, "_filtrando_correo", False):
-			return para, cc, cco
-		a_enviar, registros = decidir({"Para": para, "CC": cc, "CCO": cco}, modo(), lista_blanca())
-		if registros:
-			_registrar(self, doc, context, registros)
-		return a_enviar["Para"], a_enviar["CC"], a_enviar["CCO"]
-
-
-def _asunto(regla, context):
-	asunto = regla.subject or ""
-	if "{" in asunto:
-		try:
-			asunto = frappe.render_template(asunto, context)
-		except Exception:
-			pass  # el registro no debe impedir que la regla termine
-	return asunto
-
-
-def _registrar(regla, doc, context, registros):
-	asunto = _asunto(regla, context)
+	autorizados = {c.lower() for correos in a_enviar.values() for c in correos}
+	doc.set("recipients", [f for f in doc.recipients if f.recipient.lower() in autorizados])
+	asunto = asunto_del_mensaje(doc.message)
 	for correo, tipo, resultado in registros:
-		_anotar(correo, tipo, resultado, asunto, doc.doctype, doc.name, regla=regla.name)
+		_anotar(correo, tipo, resultado, asunto, doc.reference_doctype, doc.reference_name)
+
+	if not doc.recipients:
+		doc.status = "Error"
+		doc.error = f"Retenido por el SGC: {registros[0][2]}. Ver Registro Correo."
 
 
-def _anotar(correo, tipo, resultado, asunto, documento_tipo, documento, regla=None, aviso=None):
+def _quitar_adjuntos_de_solo_consulta(doc):
+	if not doc.attachments:
+		return
+	adjuntos = frappe.parse_json(doc.attachments) or []
+	solo_consulta = doc.reference_doctype == "Documento Controlado" and frappe.db.get_value(
+		"Documento Controlado", doc.reference_name, "solo_consulta"
+	)
+
+	def es_fichero(a):
+		return isinstance(a, dict) and ("fid" in a or "file_url" in a)
+
+	quedan = [
+		a
+		for a in adjuntos
+		if not (es_fichero(a) and (solo_consulta or not (a.get("fid") or a.get("file_url"))))
+	]
+	if len(quedan) != len(adjuntos):
+		doc.attachments = frappe.as_json(quedan)
+
+
+def asunto_del_mensaje(mensaje):
+	"""El asunto, legible, de un mensaje MIME tal como lo guarda la cola."""
+	from email import message_from_string
+	from email.header import decode_header, make_header
+
+	try:
+		crudo = message_from_string(mensaje or "").get("Subject") or ""
+		return strip_html(str(make_header(decode_header(crudo))))
+	except Exception:
+		return ""
+
+
+def _anotar(correo, tipo, resultado, asunto, documento_tipo, documento, aviso=None):
 	frappe.get_doc(
 		{
 			"doctype": "Registro Correo",
 			"resultado": resultado,
 			"destinatario": correo,
 			"tipo": tipo,
-			"regla": regla,
 			"aviso": aviso,
 			"asunto": asunto,
 			"documento_tipo": documento_tipo,
 			"documento": documento,
 		}
 	).insert(ignore_permissions=True)
-
-
-class AvisoDeskSGC(NotificationLog):
-	"""`Notification Log` cuyo correo respeta el modo de ensayo y la lista blanca.
-
-	Se registra en `override_doctype_class`. La campana se crea siempre: lo que
-	se filtra es solo el correo que la acompaña. Si el tipo de aviso no manda
-	correo (`Alert`, o el usuario lo desactivó), no hay nada que decidir y no se
-	anota nada: `Registro Correo` es de correos que habrían salido.
-
-	El camino sin correo repite las dos líneas de `NotificationLog.after_insert`
-	que no son el envío (notification_log.py:62-63). Si Frappe cambia ese
-	método, esta copia se queda atrás sin avisar: lo vigila
-	`test_correo.test_el_aviso_del_desk_sigue_el_after_insert_de_frappe`.
-	"""
-
-	def after_insert(self):
-		if not is_email_notifications_enabled_for_type(self.for_user, self.type):
-			return super().after_insert()
-
-		correo = frappe.db.get_value("User", self.for_user, "email")
-		a_enviar, registros = decidir({"Para": [correo]}, modo(), lista_blanca())
-		if a_enviar["Para"]:
-			return super().after_insert()
-
-		asunto = strip_html(self.subject or "")
-		for destinatario, tipo, resultado in registros:
-			_anotar(
-				destinatario, tipo, resultado, asunto, self.document_type, self.document_name, aviso=self.type
-			)
-		frappe.publish_realtime("notification", after_commit=True, user=self.for_user)
-		set_notifications_as_unseen(self.for_user)
 
 
 # --- envíos a demanda (#92) ------------------------------------------------------

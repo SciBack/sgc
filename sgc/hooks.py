@@ -217,8 +217,6 @@ has_permission = {
 # El adjunto de un documento de solo consulta no se entrega a quien solo puede
 # leerlo, por ninguna puerta (#36). Ver sgc/documentos.py.
 override_doctype_class = {
-	"Notification": "sgc.correo.NotificacionSGC",
-	"Notification Log": "sgc.correo.AvisoDeskSGC",
 	"File": "sgc.documentos.FicheroSGC",
 }
 
@@ -289,6 +287,9 @@ standard_queries = {
 doc_events = {
 	# Contraseña con elementos seguros (B4): ver sgc/contrasena.py.
 	"User": {"before_validate": "sgc.contrasena.antes_de_validar_usuario"},
+	# Todo correo pasa por la cola: ahí se aplican el modo de ensayo, la lista blanca y
+	# los adjuntos de solo consulta (sgc/correo.py).
+	"Email Queue": {"before_insert": "sgc.correo.filtrar_cola"},
 	"Acuerdo": {"autoname": "sgc.naming.correlativo_por_prefijo"},
 	"Aplicacion Instrumento": {"autoname": "sgc.naming.correlativo_por_prefijo"},
 	"Auditoria": {"autoname": "sgc.naming.correlativo_por_prefijo"},
