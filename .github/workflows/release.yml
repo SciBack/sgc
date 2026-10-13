@@ -1,21 +1,123 @@
 name: Publicación
 
-# Se dispara al subir un tag vX.Y.Z. Antes de publicar nada comprueba que el tag, la versión de
-# sgc/__init__.py y la entrada del CHANGELOG digan lo mismo (#52). El criterio de versionado
-# está en docs/desarrollo/versionado.md.
+# Publica la imagen desplegable del SGC (#54) al subir un tag vX.Y.Z:
+#
+#   coherencia  el tag, sgc/__init__.py y el CHANGELOG dicen lo mismo (#52)
+#   tests       la suite completa; si falla, no se publica nada
+#   imagen      construcción ARM64 desde cero, prueba de humo en un sitio nuevo y publicación
+#
+# En una PR que toque la receta de la imagen, construye y prueba la imagen pero NO la publica:
+# así un cambio en la receta se ve roto antes del merge y no el día de publicar.
+#
+# Publicar no es desplegar: la imagen queda en el registro, y desplegarla es decisión de
+# quien opera cada instancia (docs/despliegue/actualizacion.md).
 
 on:
   push:
     tags: ['v*']
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/release.yml
+      - deploy/Dockerfile.overlay
+      - deploy/construir_imagen.sh
+      - deploy/smoke_imagen.sh
+      - deploy/imagen.env
+      - deploy/frappe.version
+  workflow_dispatch:
+
+concurrency:
+  group: publicacion-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  IMAGEN: ghcr.io/sciback/sgc-frappe
 
 jobs:
   coherencia:
     name: Versión coherente con el tag
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.v.outputs.version }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.14'
       - name: Tag, __version__ y CHANGELOG coinciden
-        run: python deploy/check_version.py --tag "${GITHUB_REF_NAME}"
+        id: v
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            python deploy/check_version.py --tag "$GITHUB_REF_NAME"
+          else
+            python deploy/check_version.py
+          fi
+          echo "version=$(sed -n 's/^__version__ = "\(.*\)"$/\1/p' sgc/__init__.py)" >> "$GITHUB_OUTPUT"
+
+  tests:
+    name: Suite completa
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: coherencia
+    uses: ./.github/workflows/tests.yml
+
+  imagen:
+    name: Imagen ARM64
+    needs: [coherencia, tests]
+    # En una PR la suite ya corre en tests.yml; aquí se salta y solo cuenta que no haya fallado.
+    if: ${{ !cancelled() && needs.coherencia.result == 'success' && (needs.tests.result == 'success' || needs.tests.result == 'skipped') }}
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 90
+    permissions:
+      contents: read
+      packages: write
+    env:
+      VERSION: ${{ needs.coherencia.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Construir desde cero
+        run: |
+          # La app se instala en la base desde el tag; en una PR, desde su rama.
+          REF="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
+          deploy/construir_imagen.sh "$REF" "sgc-frappe:candidata"
+
+      - name: Procedencia en las etiquetas de la imagen
+        # El checkout es GITHUB_SHA también en una PR (su commit de merge).
+        run: |
+          docker image inspect sgc-frappe:candidata --format '{{json .Config.Labels}}' | python3 -c '
+          import json, os, sys
+          etiquetas = json.load(sys.stdin)
+          print(json.dumps({k: v for k, v in etiquetas.items() if k.startswith(("org.opencontainers", "pe.sciback"))}, indent=1))
+          esperado = {"org.opencontainers.image.version": os.environ["VERSION"],
+                      "org.opencontainers.image.revision": os.environ["GITHUB_SHA"]}
+          malas = {k: (etiquetas.get(k), v) for k, v in esperado.items() if etiquetas.get(k) != v}
+          sys.exit(f"Etiquetas que no cuadran (tiene, esperado): {malas}" if malas else 0)
+          '
+
+      - name: Prueba de humo en un sitio nuevo
+        run: deploy/smoke_imagen.sh sgc-frappe:candidata "$VERSION"
+
+      - name: Entrar en el registro
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publicar
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          CORTO="${GITHUB_SHA:0:7}"
+          for etiqueta in "$VERSION" "sha-$CORTO"; do
+            docker tag sgc-frappe:candidata "$IMAGEN:$etiqueta"
+            docker push "$IMAGEN:$etiqueta"
+          done
+          DIGEST="$(docker image inspect "$IMAGEN:$VERSION" --format '{{index .RepoDigests 0}}')"
+          {
+            echo "### Imagen publicada"
+            echo
+            echo "- \`$IMAGEN:$VERSION\` (también \`sha-$CORTO\`)"
+            echo "- Digest: \`$DIGEST\`"
+            echo "- Commit: \`$GITHUB_SHA\`"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -9,9 +9,12 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  # La llama release.yml antes de publicar una imagen: si la suite falla, no se publica.
+  workflow_call:
 
 concurrency:
-  group: tests-${{ github.ref }}
+  # Con el nombre del workflow que llama: release.yml y tests.yml no se cancelan entre sí.
+  group: tests-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
