@@ -24,8 +24,8 @@ from frappe.model.document import Document
 from frappe.utils import nowdate
 
 from sgc.naming import siguiente_correlativo
+from sgc.sgc_acreditacion.doctype.trazabilidad.trazabilidad import sincronizar_evidencia_enlace
 from sgc.sgc_auditoria.doctype.informe_auditoria.informe_auditoria import informe_aprobado
-from sgc.sgc_nucleo.doctype.trazabilidad.trazabilidad import sincronizar_evidencia_enlace
 
 # Tipos de hallazgo que constituyen una no conformidad escalable a M05, con el
 # `tipo` equivalente en el DocType No Conformidad (Select real de ambos .json).
@@ -158,7 +158,7 @@ class HallazgoAuditoria(Document):
 
         Destino: `criterio_incumplido` (Elemento Marco) y/o `proceso` -- este
         hallazgo, a diferencia de Cumplimiento CBC, sí tiene ambos campos. Ver
-        `sgc.sgc_nucleo.doctype.trazabilidad.trazabilidad.sincronizar_evidencia_enlace`.
+        `sgc.sgc_acreditacion.doctype.trazabilidad.trazabilidad.sincronizar_evidencia_enlace`.
         """
         sincronizar_evidencia_enlace(
             self.evidencia, elemento_marco=self.criterio_incumplido, proceso=self.proceso

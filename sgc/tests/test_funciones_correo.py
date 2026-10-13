@@ -27,7 +27,7 @@ from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, add_months, add_to_date, getdate, now_datetime, nowdate
 
 from sgc import correo, envio
-from sgc.sgc_estructura.doctype.ficha_indicador.ficha_indicador import fecha_aviso
+from sgc.sgc_indicadores.doctype.ficha_indicador.ficha_indicador import fecha_aviso
 from sgc.tests import factories
 
 DISTRIBUYE = "sgc-prueba-envio-dpgc@example.com"

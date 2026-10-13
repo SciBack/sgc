@@ -87,7 +87,7 @@ TRANSICIONES_AUTOMATICAS = [
         "hasta": "Obsoleto",
         "disparador": "mensaje",
         "etiqueta": "Otro documento lo reemplaza",
-        "origen": "sgc.sgc_nucleo.doctype.documento_controlado.documento_controlado"
+        "origen": "sgc.sgc_documental.doctype.documento_controlado.documento_controlado"
                   ".DocumentoControlado._obsoletar_reemplazado",
     },
 ]
@@ -108,7 +108,7 @@ EFECTOS_AL_ENTRAR = [
         "document_type": "Autoevaluacion",
         "estado": "Cerrada",
         "etiqueta": "Congelar marco y registrar vigencia",
-        "origen": "sgc.sgc_nucleo.doctype.autoevaluacion.autoevaluacion.Autoevaluacion.before_submit",
+        "origen": "sgc.sgc_acreditacion.doctype.autoevaluacion.autoevaluacion.Autoevaluacion.before_submit",
     },
     {
         "document_type": "Aplicacion Instrumento",
@@ -126,21 +126,21 @@ CONTROLES_OPERATIVOS = {
     "Evidencia": [
         ("Validar (desde Pendiente o Subsanada): requiere al menos una Trazabilidad "
          "hacia un elemento del marco o proceso. Sin vínculo se rechaza el guardado.",
-         "sgc.sgc_nucleo.doctype.evidencia.evidencia.Evidencia._validar_trazabilidad_si_valida"),
+         "sgc.sgc_acreditacion.doctype.evidencia.evidencia.Evidencia._validar_trazabilidad_si_valida"),
     ],
     "Autoevaluacion": [
         ("Al guardar una valoración de criterio: sincronizar sus evidencias con Trazabilidad. "
          "Es aditivo: quitar una evidencia del selector no borra el vínculo creado.",
-         "sgc.sgc_nucleo.doctype.valoracion_criterio.valoracion_criterio.ValoracionCriterio._sincronizar_trazabilidad"),
+         "sgc.sgc_acreditacion.doctype.valoracion_criterio.valoracion_criterio.ValoracionCriterio._sincronizar_trazabilidad"),
         ("Al guardar una valoración de criterio: recalcular el nivel propuesto del estándar. "
          "El nivel oficial requiere confirmación humana.",
-         "sgc.sgc_nucleo.doctype.valoracion_criterio.valoracion_criterio.ValoracionCriterio.on_update"),
+         "sgc.sgc_acreditacion.doctype.valoracion_criterio.valoracion_criterio.ValoracionCriterio.on_update"),
         ("Autoevaluación enviada (docstatus=1): se rechaza crear o editar valoraciones de criterio, "
          "antes de sincronizar sus evidencias.",
-         "sgc.sgc_nucleo.doctype.valoracion_criterio.valoracion_criterio.ValoracionCriterio.validate"),
+         "sgc.sgc_acreditacion.doctype.valoracion_criterio.valoracion_criterio.ValoracionCriterio.validate"),
         ("Cerrar: exige todos los estándares confirmados. El mismo submit congela el marco y "
          "registra la vigencia; si faltan confirmaciones, no se persiste el cierre.",
-         "sgc.sgc_nucleo.doctype.autoevaluacion.autoevaluacion.Autoevaluacion.before_submit"),
+         "sgc.sgc_acreditacion.doctype.autoevaluacion.autoevaluacion.Autoevaluacion.before_submit"),
     ],
     "No Conformidad": [
         ("Analizar causa: requiere responsable. Tratar: exige análisis de causa redactado cuando "

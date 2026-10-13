@@ -96,7 +96,7 @@ class TestControlesBpmn(unittest.TestCase):
         scoring.construir_snapshot = Mock(return_value='snapshot-ficticio')
         confirmacion = types.ModuleType('sgc.confirmacion')
         confirmacion.calcular_vigencia_oficial = Mock(return_value={'ok': True, 'vigencia': '3 años'})
-        path = ROOT / 'sgc/sgc_nucleo/doctype/autoevaluacion/autoevaluacion.py'
+        path = ROOT / 'sgc/sgc_acreditacion/doctype/autoevaluacion/autoevaluacion.py'
         spec = importlib.util.spec_from_file_location('ae_aislada_bpmn', path)
         module = importlib.util.module_from_spec(spec)
         with patch.dict(sys.modules, {'frappe': frappe, 'frappe.model.document': document,

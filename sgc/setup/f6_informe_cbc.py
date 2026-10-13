@@ -10,7 +10,7 @@ básicas de calidad (CBC) del Modelo de Licenciamiento Institucional de la Suned
 Ley 32105 pone en manos de la Sunedu para verificar el cumplimiento continuo de
 esas condiciones (art. 13.5); por eso este PDF es entregable al regulador y no
 un reporte de consumo interno. Contexto completo en el docstring de
-`sgc/sgc_procesos/doctype/informe_cumplimiento/informe_cumplimiento.py`.
+`sgc/sgc_acreditacion/doctype/informe_cumplimiento/informe_cumplimiento.py`.
 
 La plantilla NO consulta la BD: llama al método whitelisted
 `doc.datos_diagnostico()` (= consolidado en informe_cumplimiento.py). El Jinja

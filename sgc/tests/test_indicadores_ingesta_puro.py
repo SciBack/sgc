@@ -40,7 +40,7 @@ class TestLectoresIngesta(unittest.TestCase):
         self.frappe._ = lambda value: value
         self.frappe._dict = Row
         self.ia = load(ROOT / 'indicadores_acreditacion.py', 'lector_aislado', {'frappe': self.frappe})
-        self.report = load(ROOT / 'sgc_nucleo/report/indicadores_de_acreditacion/indicadores_de_acreditacion.py',
+        self.report = load(ROOT / 'sgc_indicadores/report/indicadores_de_acreditacion/indicadores_de_acreditacion.py',
                            'reporte_aislado', {'frappe': self.frappe, 'sgc.indicadores_acreditacion': self.ia})
 
     def test_prefiere_json_sobre_prosa_obsoleta(self):

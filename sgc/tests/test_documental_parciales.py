@@ -23,7 +23,7 @@ from frappe.utils import add_days, add_years, getdate, nowdate
 from sgc import tareas
 from sgc.setup import f5_workflow_documental as f5
 from sgc.setup import f15_notificaciones_workflow as f15
-from sgc.sgc_nucleo.doctype.documento_controlado.documento_controlado import (
+from sgc.sgc_documental.doctype.documento_controlado.documento_controlado import (
     DIAS_TAREA_REVISION,
     tareas_revision_diaria,
 )

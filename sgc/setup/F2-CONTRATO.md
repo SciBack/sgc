@@ -84,6 +84,6 @@ Verificación esperada tras cargar: 1 Marco, 1 Escala+3 niveles, **64 Elemento M
 
 ## 5. Entrega de cada agente
 - **L** → `apps/sgc/sgc/setup/f2_load_coneau.py` con `run()`.
-- **S** → `apps/sgc/sgc/setup/f2_fields.py` (`run()`, añade los campos §1) + `apps/sgc/sgc/scoring.py` (funciones §2) + hook `on_update` en el controlador `sgc/sgc/sgc_nucleo/doctype/valoracion_criterio/valoracion_criterio.py` que llame al motor.
+- **S** → `apps/sgc/sgc/setup/f2_fields.py` (`run()`, añade los campos §1) + `apps/sgc/sgc/scoring.py` (funciones §2) + hook `on_update` en el controlador `sgc/sgc/sgc_acreditacion/doctype/valoracion_criterio/valoracion_criterio.py` que llame al motor.
 - **W** → `apps/sgc/sgc/setup/f2_workflow.py` (`run()`, crea los Workflow) + `apps/sgc/sgc/capa.py` (funciones §4).
 - Idempotente. Español. Devuelve: qué creó/añadió, y qué asume `[VERIFICAR]`.

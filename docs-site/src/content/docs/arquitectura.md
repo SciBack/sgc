@@ -19,12 +19,15 @@ en JSON, sus controladores Python y módulos transversales bajo sgc.
 
 ~~~text
 sgc/
-├── sgc_nucleo/       corazón operativo: autoevaluación, documentos, evidencias y CAPA
-├── sgc_estructura/   marcos normativos y estructura organizacional
-├── sgc_gobierno/     comités, políticas, objetivos e instrumentos
-├── sgc_procesos/     mapa de procesos, CBC e informes de cumplimiento
-├── sgc_riesgos/      riesgos y obligaciones con entes externos
-└── sgc_auditoria/    auditoría interna y revisión por la dirección
+├── sgc_procesos/      Procesos: mapa, procedimientos, fichas e interacciones
+├── sgc_documental/    Documentos: control documental y carpetas
+├── sgc_indicadores/   Indicadores: fichas, mediciones, tableros y alertas
+├── sgc_acreditacion/  Acreditación y licenciamiento: autoevaluación, evidencias, marcos, CBC y obligaciones
+├── sgc_nucleo/        Mejora continua: hallazgos, no conformidades, salidas no conformes, planes y acciones
+├── sgc_auditoria/     Auditoría: programa, auditorías, listas, hallazgos e informes
+├── sgc_riesgos/       Riesgos: inventario, matrices, tratamiento y eventos
+├── sgc_gobierno/      Dirección y partes interesadas: política, objetivos, revisión por la dirección, comités y encuestas
+└── sgc_estructura/    Configuración: estructura institucional, datos e integraciones, correo y soporte
 ~~~
 
 ## Lógica transversal

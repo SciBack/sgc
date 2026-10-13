@@ -47,4 +47,4 @@ Captura de la vista previa, del mensaje final con la referencia y del ticket en 
 
 ## Fuente en código
 
-`sgc/soporte.py` (composición, lista blanca y proveedores), `sgc/public/js/soporte.js` (diálogo en dos pasos), `sgc/sgc_nucleo/doctype/configuracion_soporte/` (configuración) y `standard_help_items` en `sgc/hooks.py` (el menú).
+`sgc/soporte.py` (composición, lista blanca y proveedores), `sgc/public/js/soporte.js` (diálogo en dos pasos), `sgc/sgc_estructura/doctype/configuracion_soporte/` (configuración) y `standard_help_items` en `sgc/hooks.py` (el menú).

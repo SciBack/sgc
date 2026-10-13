@@ -82,7 +82,7 @@ institucional**. Hoy nadie calcula `Autoevaluacion.puntaje_excelencia` y los cri
 de la Tabla 10 no están cargados como elementos del marco, así que el techo real del
 motor son **6 años**. La opción existe en el campo oficial porque la norma la
 contempla, no porque el motor la proponga — ver
-[Módulo Núcleo](../../modulos/nucleo/).
+[Acreditación y licenciamiento](../../modulos/acreditacion/).
 :::
 
 ## Paso 5 — Generar el informe

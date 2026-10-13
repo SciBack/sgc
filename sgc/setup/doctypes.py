@@ -13,6 +13,21 @@ DocTypes, que es la única diferencia real entre ellos.
 import frappe
 
 
+def _modulo_de_su_carpeta(name, por_defecto):
+    """El módulo de una pantalla es la carpeta donde vive su JSON.
+
+    Los `f1_*` declaran un módulo por fichero, pero desde los menús por área (12-oct)
+    varias pantallas viven en otro módulo. Así no hay dos verdades: manda la carpeta.
+    """
+    import os
+
+    carpeta = frappe.scrub(name)
+    for modulo in frappe.get_module_list("sgc"):
+        if os.path.isdir(frappe.get_app_path("sgc", frappe.scrub(modulo), "doctype", carpeta)):
+            return modulo
+    return por_defecto
+
+
 def crear_doctype(name, module, fields, istable=0, is_tree=0, autoname=None,
                   title_field=None, search_fields=None, track_changes=1):
     """Crea el DocType si no existe. Idempotente: si ya está, no lo toca.
@@ -24,6 +39,7 @@ def crear_doctype(name, module, fields, istable=0, is_tree=0, autoname=None,
     """
     if frappe.db.exists("DocType", name):
         return
+    module = _modulo_de_su_carpeta(name, module)
     doc = {
         "doctype": "DocType", "name": name, "module": module, "custom": 0,
         "istable": istable, "is_tree": is_tree,

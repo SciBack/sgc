@@ -87,7 +87,7 @@ NUMBER_CARDS = [
     {
         "label": "SGC - Documentos por revisar",
         "document_type": "Documento Controlado",
-        "module": "SGC Nucleo",
+        "module": "SGC Documental",
         "type": "Custom",
         "method": "sgc.dashboards.documentos_por_revisar",
         "color": "#f2994a",
@@ -227,6 +227,22 @@ def _upsert(doctype, name, campos):
     return accion
 
 
+def _filtros_json(cfg):
+    """Filtros en el formato de 4 elementos que espera el Desk: [doctype, campo, op, valor, oculto].
+
+    Las declaraciones de arriba usan el corto `[campo, op, valor]`, que el servidor
+    admite (`frappe.utils.data.get_filter`) pero el widget de gráfico no: al pintar el
+    gráfico monta un `FilterGroup` que lee la posición 0 como doctype y la 1 como campo
+    (`chart_widget.js`, `filter_list.js:validate_args`). Con el corto, el Desk avisaba
+    «Filtro no válido: not in» al abrir la portada. No se vio hasta el 12-oct porque
+    los gráficos no estaban en ninguna portada.
+    """
+    filtros = []
+    for f in cfg.get("filters", []):
+        filtros.append([cfg["document_type"], *f, False] if len(f) == 3 else list(f))
+    return json.dumps(filtros)
+
+
 def _card_fields(cfg):
     campos = {
         "label": cfg["label"],
@@ -241,7 +257,7 @@ def _card_fields(cfg):
         campos["method"] = cfg["method"]
     else:
         campos["function"] = cfg["function"]
-        campos["filters_json"] = json.dumps(cfg.get("filters", []))
+        campos["filters_json"] = _filtros_json(cfg)
     return campos
 
 
@@ -252,7 +268,7 @@ def _chart_fields(cfg):
         "module": cfg["module"],
         "chart_type": cfg["chart_type"],
         "type": cfg["type"],
-        "filters_json": json.dumps(cfg.get("filters", [])),
+        "filters_json": _filtros_json(cfg),
         "is_public": 1,
         "timeseries": cfg.get("timeseries", 0),
     }

@@ -5,7 +5,7 @@
 
 Cubre el gap real que cada job cierra: el controlador solo marca "Vencida"/
 "Vencido" cuando alguien guarda el documento (ver
-sgc/sgc_nucleo/doctype/evidencia/evidencia.py::_marcar_vencida_si_expiro y
+sgc/sgc_acreditacion/doctype/evidencia/evidencia.py::_marcar_vencida_si_expiro y
 sgc/sgc_gobierno/doctype/acuerdo/acuerdo.py::_marcar_vencido_si_expiro); si
 nadie lo vuelve a tocar tras la fecha de vencimiento, se queda en su estado
 de gestión para siempre. Estos tests siembran esa situación con un

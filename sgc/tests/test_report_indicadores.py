@@ -23,7 +23,7 @@ por test y factories idempotentes.
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from sgc.sgc_nucleo.report.indicadores_de_acreditacion import indicadores_de_acreditacion as informe
+from sgc.sgc_indicadores.report.indicadores_de_acreditacion import indicadores_de_acreditacion as informe
 from sgc.tests import factories
 
 # Convención real de los conectores: el n= es la muestra, no el valor.
@@ -105,7 +105,7 @@ class IntegrationTestReportIndicadores(IntegrationTestCase):
 
         ruta = (
             pathlib.Path(frappe.get_app_path("sgc"))
-            / "sgc_nucleo"
+            / "sgc_indicadores"
             / "report"
             / "indicadores_de_acreditacion"
             / "indicadores_de_acreditacion.json"
@@ -118,7 +118,7 @@ class IntegrationTestReportIndicadores(IntegrationTestCase):
     def test_el_panel_enlaza_el_informe(self):
         from sgc.setup import f18_workspace
 
-        items = dict(f18_workspace.CARDS)["Marcos e indicadores"]
+        items = f18_workspace.TARJETAS["Seguimiento"]
         self.assertIn(("Report", "Indicadores de Acreditacion"), items)
 
     def test_reporte_prefiere_ingesta_y_no_prosa_historica(self):

@@ -1,6 +1,8 @@
 ---
-title: Módulo Gobierno (sgc_gobierno)
+title: Dirección y partes interesadas (sgc_gobierno)
 description: Los órganos de gobierno de la calidad y sus instrumentos de gestión.
+sidebar:
+  order: 8
 ---
 
 Los órganos de gobierno de la calidad y sus instrumentos de gestión: comités,
@@ -19,3 +21,15 @@ políticas, objetivos y la escucha de grupos de interés.
 | **Instrumento** | Un instrumento de recolección (encuesta, entrevista) aplicado a un Grupo de Interés. |
 | **Aplicacion Instrumento** | Una aplicación concreta de un Instrumento (fecha, alcance). |
 | **Resultado Instrumento** | Los resultados/datos recogidos en una Aplicacion Instrumento. |
+
+## Revisión por la dirección
+
+| DocType | Rol |
+|---|---|
+| **Revision Direccion** | Una sesión de revisión del SGC por la alta dirección. |
+| **Entrada Revision** | Tabla hija: las entradas de la revisión (resultados de auditorías, no conformidades, estado de acciones, cambios de contexto). |
+| **Salida Revision** | Tabla hija: las decisiones/salidas de la revisión (mejoras, recursos necesarios, cambios de política). |
+
+El rol **Auditor Interno** (ver [RBAC](../../desarrollo/rbac/)) crea y gestiona
+Hallazgos de auditoría, pero no valora autoevaluaciones ni cierra Planes de Mejora —
+esa separación de funciones es deliberada.
