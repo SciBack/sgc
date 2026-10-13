@@ -44,6 +44,40 @@ bench --site SITE_DESCARTABLE run-tests --app sgc
 La versión de Frappe, el CI y la biblioteca de referencia se consultan en
 [Biblioteca Frappe v16](../referencias/frappe/).
 
+## Cargar la estructura de la institución
+
+Una instancia recién instalada no sabe nada de la institución, y casi todo cuelga de su
+estructura: unidades orgánicas, programas, programas por sede y periodos académicos. Se carga
+desde hojas de cálculo, una por entidad:
+
+| Hoja | Columnas (* obligatoria) |
+|---|---|
+| `unidades` | `codigo`*, `nombre`*, `tipo`, `padre`, `sede`, `es_campus` |
+| `programas` | `codigo`*, `nombre`*, `codigo_oficial`, `nivel`, `facultad`, `escuela`, `estado` |
+| `programas-sede` | `codigo`*, `programa`*, `sede`*, `escuela`, `licencia`, `estado` |
+| `periodos` | `codigo`*, `anio`, `semestre`, `fecha_inicio`, `fecha_fin`, `estado` |
+
+Las referencias (`padre`, `sede`, `facultad`, `escuela`, `programa`) son **códigos**, de la misma
+hoja o ya existentes. Las fechas van como `AAAA-MM-DD` y el periodo vigente es el `abierto`. La
+fuente es una carpeta con `unidades.csv`, `programas.csv`, `programas-sede.csv` y `periodos.csv`
+(UTF-8), o un `.xlsx` con hojas de esos nombres. Hay **plantillas con un ejemplo** que se importan
+tal cual, en `sgc/public/plantillas/estructura/` del repositorio y en
+`https://DOMINIO/assets/sgc/plantillas/estructura/unidades.csv` (y las otras tres) del sitio.
+
+~~~bash
+# Sin `aplicar`: valida todo, ensaya la escritura y la deshace
+bench --site TU_SITE execute sgc.setup.importador_estructura.run --kwargs "{'ruta': '/ruta/estructura'}"
+# Importar de verdad
+bench --site TU_SITE execute sgc.setup.importador_estructura.run --kwargs "{'ruta': '/ruta/estructura', 'aplicar': 1}"
+~~~
+
+**O entra todo o no entra nada.** Antes de escribir se valida el conjunto contra lo que ya hay:
+obligatorias, códigos repetidos, padres que no existen, ciclos, valores fuera de lista, sedes que
+no son de tipo Sede, fechas al revés y que el árbol resultante tenga **una sola raíz**. Si algo
+falla no se importa ninguna fila, se dice cuál y por qué, y el comando termina con código 1. El
+orden de las filas da igual: los padres se crean antes que los hijos. Reimportar la misma hoja
+no duplica: actualiza por código lo que haya cambiado. Nunca borra lo que no esté en la hoja.
+
 ## Construir el overlay Docker
 
 El Dockerfile overlay añade SGC sobre la imagen Frappe base y ejecuta el build de assets.
