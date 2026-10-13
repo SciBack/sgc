@@ -28,6 +28,10 @@ REGLA = "SGC Prueba - Correo"
 
 class IntegrationTestCorreo(IntegrationTestCase):
     def setUp(self):
+        # Sin cuenta de salida, la cola de Frappe falla antes de encolar; con `mute_emails`
+        # usa una cuenta ficticia y encola sin enviar (EmailAccount.find_outgoing).
+        frappe.flags.mute_emails = True
+        self.addCleanup(setattr, frappe.flags, "mute_emails", False)
         for rol in (ROL, ROL_VACIO):
             if not frappe.db.exists("Role", rol):
                 frappe.get_doc({"doctype": "Role", "role_name": rol, "desk_access": 1}).insert(

@@ -58,6 +58,10 @@ class IntegrationTestNotificacionesTransicion(IntegrationTestCase):
         frappe.flags.in_patch = False
 
     def setUp(self):
+        # Sin cuenta de salida, la cola de Frappe falla antes de encolar; con `mute_emails`
+        # usa una cuenta ficticia y encola sin enviar (EmailAccount.find_outgoing).
+        frappe.flags.mute_emails = True
+        self.addCleanup(setattr, frappe.flags, "mute_emails", False)
         frappe.set_user("Administrator")
         frappe.db.set_single_value("Configuracion Correo", {"modo": correo.REAL, "lista_blanca": ""})
 
