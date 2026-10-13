@@ -1,0 +1,8 @@
+codigo,nombre,tipo,padre,sede,es_campus
+EJ-UNIV,Universidad de Ejemplo,Universidad,,,0
+EJ-SEDE-CENTRAL,Sede Central,Sede,EJ-UNIV,,1
+EJ-SEDE-NORTE,Sede Norte,Sede,EJ-UNIV,,1
+EJ-VRA,Vicerrectorado Académico,Vicerrectorado,EJ-UNIV,,0
+EJ-DIR-CALIDAD,Dirección de Calidad,Direccion,EJ-UNIV,EJ-SEDE-CENTRAL,0
+EJ-FAC-ING,Facultad de Ingeniería,Facultad,EJ-VRA,EJ-SEDE-CENTRAL,0
+EJ-EP-SIS,Escuela Profesional de Ingeniería de Sistemas,Escuela,EJ-FAC-ING,EJ-SEDE-CENTRAL,0
