@@ -73,7 +73,7 @@ ese correo.
 ## 5. Comprobar
 
 - `bench --site <sitio> execute sgc.verificacion.run`:
-  - `sso-no-configurado` (INFO) si no hay inicio de sesión institucional;
+  - `sso-no-configurado` (AVISO) si no hay inicio de sesión institucional;
   - `sso-desalineado` (AVISO) si el registro no coincide con lo declarado;
   - nada si está bien.
 - En el host público: el botón con la etiqueta en `/login`, que lleva al proveedor; tras

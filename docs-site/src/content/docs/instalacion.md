@@ -93,6 +93,25 @@ Desk, una vez por sesión, y queda anotado en el Error Log. El umbral se cambia 
 bench --site DOMINIO set-config sgc_scheduler_umbral_horas 72
 ~~~
 
+Y sobre todo responde **qué le falta a la instancia para estar operable**. Una instalación
+recién hecha arranca, deja entrar y enseña sus pantallas, pero sin el alta de la institución no
+sirve para trabajar. La orden lo separa en tres niveles, y cada hallazgo dice qué hacer:
+
+| Nivel | Qué mira |
+|---|---|
+| **Bloqueante** | Sin ninguna unidad orgánica; sin periodo académico abierto; matriz de permisos o flujos de aprobación sin aplicar; nadie puede abrir el Desk |
+| **Aviso** | Sin inicio de sesión institucional; sin cuenta de correo saliente o con el correo silenciado; sin marcos vigentes o con alguno caducado; identidad neutra; periodo abierto vencido o sin fechas; procesos vigentes sin responsable; tareas programadas paradas |
+| **Info** | Árbol de unidades con varias raíces, marcos sin alcance, sin logotipo, correo en ensayo o con lista blanca |
+
+Lo que no da hallazgos sale al final como comprobado. Con algún bloqueante la orden termina
+con **código de salida 1**, para encadenarla en un despliegue automatizado. Cada comprobación
+se puede correr por separado, por grupo o por nombre (la lista sale si se pide uno que no existe):
+
+~~~bash
+bench --site DOMINIO execute sgc.verificacion.run --kwargs "{'solo': 'estructura'}"
+bench --site DOMINIO execute sgc.verificacion.run --kwargs "{'solo': 'periodo_vigente,cuenta_saliente'}"
+~~~
+
 **Comprobar cada ruta que el proxy sirve, no solo la aplicación.** El manual y el portal
 público se sirven por delante de Frappe, así que pueden caerse sin que el sitio principal deje
 de responder 200 — que es justo lo que pasó: `/manual` estuvo tres semanas devolviendo 417 sin
