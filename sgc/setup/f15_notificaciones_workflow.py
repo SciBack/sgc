@@ -20,7 +20,7 @@ La publicación de un Documento Controlado es la excepción: va en su propia reg
 porque adjunta el `archivo` del documento, que es lo que el lector necesita.
 Publicar exige el archivo, salvo a la documentación externa, que puede ir solo con
 enlace (#36); y un documento de solo consulta no se adjunta. Las dos cosas las
-resuelve `sgc.correo.NotificacionSGC.get_attachment`.
+resuelve `sgc.correo.filtrar_cola` (adjuntos de solo consulta).
 
 Canal `Email` con campana. Qué se envía de verdad lo decide `Configuracion
 Correo` (#41): un sitio nuevo está en Ensayo y no escribe a nadie.

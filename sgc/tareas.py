@@ -26,7 +26,7 @@ se avisa a quien guarda, que es quien puede corregirlo.
 
 **El aviso.** Se usa el nativo (`notify_assignment`): campana y, si el usuario
 lo tiene activado, correo — que pasa por el modo de ensayo y la lista blanca
-(`sgc.correo.AvisoDeskSGC`). Frappe no avisa a quien se asigna a sí mismo
+(`sgc.correo.filtrar_cola`). Frappe no avisa a quien se asigna a sí mismo
 (`assign_to.py:279`), y está bien: ya lo sabe, porque lo acaba de hacer.
 """
 

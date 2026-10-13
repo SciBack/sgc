@@ -112,7 +112,9 @@ def componer(cfg):
         "redirect_url": NATIVOS.get(cfg["proveedor"], RUTA_GENERICA.format(proveedor=cfg["proveedor"])),
         "auth_url_data": json.dumps({"response_type": "code", "scope": "openid email profile"}),
         "user_id_property": "sub",
-        "icon": "fa fa-key",
+        # Sin icono: Frappe solo trata `icon` como clase de icono si el proveedor se llama «Custom»;
+        # con cualquier otro nombre lo pone como <img src=…> y el botón sale con una imagen rota.
+        "icon": "",
         "client_id": cfg["client_id"],
         "enable_social_login": cfg["habilitado"],
     }

@@ -13,10 +13,13 @@ Mantenerse en la última release de Frappe v16 es el objetivo — pero actualiza
 **conscientemente**, no por deriva. Para subir de versión:
 
 1. Ver la última tag:  `git ls-remote --tags --refs https://github.com/frappe/frappe | grep -oE 'v16\.[0-9]+\.[0-9]+$' | sort -V | tail -1`
-2. Escribir esa tag en `deploy/frappe.version`.
-3. Actualizarla también en `.github/workflows/tests.yml` (`--frappe-branch <tag>`).
-4. Reconstruir imágenes con `--build-arg FRAPPE_BRANCH=<tag>` (lab y base de prod).
-5. Correr la suite; si verde, desplegar.
+2. Escribir esa tag en `deploy/frappe.version`. Es el único sitio: el CI (`tests.yml`) y la
+   imagen (`construir_imagen.sh`) la leen de ahí.
+3. Abrir la PR: el CI corre la suite y construye y prueba la imagen con esa versión.
+4. Si está en verde, publicar una versión del SGC y actualizar con `deploy/actualizar.sh`.
+
+Como el SGC no sobrescribe clases ni parchea el Desk de Frappe (desde la 1.1.0), lo normal es
+que una versión nueva de Frappe no exija tocar código del SGC.
 
 Así "siempre la última" es una decisión revisada, reproducible y reversible.
 

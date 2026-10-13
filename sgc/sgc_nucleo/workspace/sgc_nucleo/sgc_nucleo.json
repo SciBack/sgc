@@ -1,0 +1,121 @@
+{
+ "charts": [],
+ "content": "[{\"id\": \"hdr\", \"type\": \"header\", \"data\": {\"text\": \"Mejora continua\", \"col\": 12}}, {\"id\": \"pn0\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"No conformidades abiertas\", \"col\": 4}}, {\"id\": \"pn1\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Acciones de mejora abiertas\", \"col\": 4}}, {\"id\": \"pn2\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Acciones de mejora vencidas\", \"col\": 4}}, {\"id\": \"pn3\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Incidencias abiertas\", \"col\": 4}}, {\"id\": \"pn4\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Planes de mejora en rojo\", \"col\": 4}}, {\"id\": \"pg0\", \"type\": \"chart\", \"data\": {\"chart_name\": \"No conformidades por origen\", \"col\": 6}}, {\"id\": \"pg1\", \"type\": \"chart\", \"data\": {\"chart_name\": \"No conformidades detectadas por mes\", \"col\": 6}}, {\"id\": \"pg2\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Acciones de mejora por estado\", \"col\": 6}}, {\"id\": \"cd0\", \"type\": \"card\", \"data\": {\"card_name\": \"Hallazgos e incidencias\", \"col\": 4}}, {\"id\": \"cd1\", \"type\": \"card\", \"data\": {\"card_name\": \"Planes y acciones\", \"col\": 4}}]",
+ "creation": "2026-10-14 04:11:37.378973",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "hide_custom": 0,
+ "icon": "tool",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "SGC Nucleo",
+ "link_type": "DocType",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Hallazgos e incidencias",
+   "link_count": 0,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Hallazgos",
+   "link_count": 0,
+   "link_to": "Hallazgo",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "No conformidades",
+   "link_count": 0,
+   "link_to": "No Conformidad",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Salidas no conformes",
+   "link_count": 0,
+   "link_to": "Salida No Conforme",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Planes y acciones",
+   "link_count": 0,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Planes de mejora",
+   "link_count": 0,
+   "link_to": "Plan Mejora",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Acciones de mejora",
+   "link_count": 0,
+   "link_to": "Accion Mejora",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Informe de mejoramiento continuo",
+   "link_count": 0,
+   "link_to": "Mejoramiento Continuo",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "Accion Mejora",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Informe de salidas no conformes",
+   "link_count": 0,
+   "link_to": "Salidas No Conformes",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "Salida No Conforme",
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-10-14 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "SGC Nucleo",
+ "number_cards": [],
+ "owner": "Administrator",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 6.0,
+ "shortcuts": [],
+ "standard": 1,
+ "title": "SGC Nucleo",
+ "type": "Workspace"
+}

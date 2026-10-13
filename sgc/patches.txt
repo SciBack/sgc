@@ -17,3 +17,6 @@ sgc.patches.correo_conservar_envio_real
 sgc.patches.notificaciones_por_correo
 # #65: el canónico no nombra al cliente; el módulo vacío «SGC UPeU» se retira si nada lo usa.
 sgc.patches.retirar_modulo_del_cliente
+# 1.1.0: el Desk como ficheros estándar; entrada al SGC con el ajuste nativo de Frappe.
+sgc.patches.retirar_desk_construido
+sgc.patches.app_por_defecto

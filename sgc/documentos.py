@@ -20,7 +20,7 @@ las puertas del sistema, y que cada consulta y cada descarga queda registrada.
    de la app (file.py:971). Se cierra en `zip_files` de aquí, registrado en
    `override_whitelisted_methods`.
 4. La regla de correo de publicación adjunta el `archivo` (f15). Se cierra en
-   `sgc.correo.NotificacionSGC.get_attachment`.
+   `sgc.correo.filtrar_cola` (adjuntos de solo consulta).
 
 Un hook `has_permission` sobre `File` NO serviría: ninguna de las tres primeras
 puertas pasa por él.

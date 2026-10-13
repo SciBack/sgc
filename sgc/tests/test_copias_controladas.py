@@ -187,8 +187,15 @@ class IntegrationTestCopiasControladas(IntegrationTestCase):
 
     # -- puerta 4: el adjunto del correo de publicación ------------------------
     def _adjuntos_de_publicacion(self, doc):
+        """Lo que adjunta la regla de publicación, tras pasar por la cola de correo del SGC."""
+        from sgc import correo
+
         regla = frappe.get_doc("Notification", REGLA_PUBLICACION)
-        return [a.get("file_url") for a in regla.get_attachment(doc) if "file_url" in a]
+        cola = frappe.new_doc("Email Queue")
+        cola.reference_doctype, cola.reference_name = doc.doctype, doc.name
+        cola.attachments = frappe.as_json(regla.get_attachment(doc))
+        correo._quitar_adjuntos_de_solo_consulta(cola)
+        return [a.get("file_url") for a in frappe.parse_json(cola.attachments) if "file_url" in a]
 
     def test_el_correo_de_publicacion_no_adjunta_un_documento_de_solo_consulta(self):
         doc, _ = self._documento(solo_consulta=1)

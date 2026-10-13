@@ -6,7 +6,7 @@ correo y a la campana del Desk. La campana funciona sin SMTP; el correo sale por
 la cuenta de correo del sitio.
 
 **Por qué el canónico puede declarar Email sin escribir a nadie por sorpresa
-(#29).** Todo correo de una `Notification` pasa por `sgc.correo.NotificacionSGC`,
+(#29).** Todo correo de una `Notification` pasa por `sgc.correo.filtrar_cola` (la cola de correo),
 que obedece a `Configuracion Correo`: un sitio nuevo nace en modo **Ensayo** y
 no envía nada —lo anota en `Registro Correo`— hasta que un administrador lo pasa
 a Real, con o sin lista blanca de estreno (#41). Activar el correo es así una

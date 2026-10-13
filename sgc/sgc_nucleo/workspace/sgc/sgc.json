@@ -1,0 +1,838 @@
+{
+ "charts": [],
+ "content": "[{\"id\": \"hdr_a\", \"type\": \"header\", \"data\": {\"text\": \"Sistema de Gesti\\u00f3n de la Calidad\", \"col\": 12}}, {\"id\": \"sc0\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Mapa de procesos\", \"col\": 3}}, {\"id\": \"sc1\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Documentos\", \"col\": 3}}, {\"id\": \"sc2\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Indicadores\", \"col\": 3}}, {\"id\": \"sc3\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Autoevaluaci\\u00f3n\", \"col\": 3}}, {\"id\": \"sc4\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"No conformidades\", \"col\": 3}}, {\"id\": \"sc5\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Auditor\\u00edas\", \"col\": 3}}, {\"id\": \"sc6\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Riesgos\", \"col\": 3}}, {\"id\": \"sc7\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Reportar evento de riesgo\", \"col\": 3}}, {\"id\": \"hdr_c\", \"type\": \"header\", \"data\": {\"text\": \"Estado del sistema\", \"col\": 12}}, {\"id\": \"inn0\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Documentos por revisar\", \"col\": 4}}, {\"id\": \"inn1\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"No conformidades abiertas\", \"col\": 4}}, {\"id\": \"inn2\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Acciones de mejora vencidas\", \"col\": 4}}, {\"id\": \"inn3\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Hallazgos de auditoria abiertos\", \"col\": 4}}, {\"id\": \"inn4\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Riesgos altos tras tratamiento\", \"col\": 4}}, {\"id\": \"inn5\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Tratamientos de riesgo vencidos\", \"col\": 4}}, {\"id\": \"hdr_b\", \"type\": \"header\", \"data\": {\"text\": \"\\u00c1reas\", \"col\": 12}}, {\"id\": \"cd0\", \"type\": \"card\", \"data\": {\"card_name\": \"Procesos\", \"col\": 4}}, {\"id\": \"cd1\", \"type\": \"card\", \"data\": {\"card_name\": \"Documentos\", \"col\": 4}}, {\"id\": \"cd2\", \"type\": \"card\", \"data\": {\"card_name\": \"Indicadores\", \"col\": 4}}, {\"id\": \"cd3\", \"type\": \"card\", \"data\": {\"card_name\": \"Acreditaci\\u00f3n y licenciamiento\", \"col\": 4}}, {\"id\": \"cd4\", \"type\": \"card\", \"data\": {\"card_name\": \"Mejora continua\", \"col\": 4}}, {\"id\": \"cd5\", \"type\": \"card\", \"data\": {\"card_name\": \"Auditor\\u00eda\", \"col\": 4}}, {\"id\": \"cd6\", \"type\": \"card\", \"data\": {\"card_name\": \"Riesgos\", \"col\": 4}}, {\"id\": \"cd7\", \"type\": \"card\", \"data\": {\"card_name\": \"Direcci\\u00f3n y partes interesadas\", \"col\": 4}}, {\"id\": \"cd8\", \"type\": \"card\", \"data\": {\"card_name\": \"Configuraci\\u00f3n\", \"col\": 4}}]",
+ "creation": "2026-10-14 04:11:37.300241",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "hide_custom": 0,
+ "icon": "tool",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "SGC",
+ "link_type": "DocType",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Procesos",
+   "link_count": 0,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Mapa de procesos",
+   "link_count": 0,
+   "link_to": "Proceso",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Procedimientos",
+   "link_count": 0,
+   "link_to": "Procedimiento",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Fichas de caracterización",
+   "link_count": 0,
+   "link_to": "Ficha Caracterizacion Proceso",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Mapa institucional",
+   "link_count": 0,
+   "link_to": "Mapa Procesos",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Interacciones entre procesos",
+   "link_count": 0,
+   "link_to": "Interaccion Proceso",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Documentos",
+   "link_count": 0,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Documentos controlados",
+   "link_count": 0,
+   "link_to": "Documento Controlado",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Carpetas documentales",
+   "link_count": 0,
+   "link_to": "Carpeta Documental",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Accesos a documentos",
+   "link_count": 0,
+   "link_to": "Accesos a Documentos",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "Documento Controlado",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Indicadores",
+   "link_count": 0,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Indicadores",
+   "link_count": 0,
+   "link_to": "Indicador",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Fichas de indicador",
+   "link_count": 0,
+   "link_to": "Ficha Indicador",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Mediciones",
+   "link_count": 0,
+   "link_to": "Valor Indicador",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Tableros de indicadores",
+   "link_count": 0,
+   "link_to": "Tablero Indicadores",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Alertas de indicador",
+   "link_count": 0,
+   "link_to": "Alerta Indicador",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Indicadores de acreditación",
+   "link_count": 0,
+   "link_to": "Indicadores de Acreditacion",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "Valor Indicador",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Indicadores por familia",
+   "link_count": 0,
+   "link_to": "Indicadores por Familia",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "Indicador",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Acreditación y licenciamiento",
+   "link_count": 0,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Autoevaluaciones",
+   "link_count": 0,
+   "link_to": "Autoevaluacion",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Evidencias",
+   "link_count": 0,
+   "link_to": "Evidencia",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Valoración de criterios",
+   "link_count": 0,
+   "link_to": "Valoracion Criterio",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Valoración de estándares",
+   "link_count": 0,
+   "link_to": "Valoracion Estandar",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Marcos normativos",
+   "link_count": 0,
+   "link_to": "Marco Normativo",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Estándares y criterios",
+   "link_count": 0,
+   "link_to": "Elemento Marco",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Escalas de valoración",
+   "link_count": 0,
+   "link_to": "Escala Valoracion",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Informe de cumplimiento (SUNEDU)",
+   "link_count": 0,
+   "link_to": "Informe Cumplimiento",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Entes externos",
+   "link_count": 0,
+   "link_to": "Ente Externo",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Obligaciones ante entes",
+   "link_count": 0,
+   "link_to": "Obligacion Ente",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Entregas de obligaciones",
+   "link_count": 0,
+   "link_to": "Entrega Obligacion",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Mejora continua",
+   "link_count": 0,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Hallazgos",
+   "link_count": 0,
+   "link_to": "Hallazgo",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "No conformidades",
+   "link_count": 0,
+   "link_to": "No Conformidad",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Salidas no conformes",
+   "link_count": 0,
+   "link_to": "Salida No Conforme",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Planes de mejora",
+   "link_count": 0,
+   "link_to": "Plan Mejora",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Acciones de mejora",
+   "link_count": 0,
+   "link_to": "Accion Mejora",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Informe de mejoramiento continuo",
+   "link_count": 0,
+   "link_to": "Mejoramiento Continuo",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "Accion Mejora",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Informe de salidas no conformes",
+   "link_count": 0,
+   "link_to": "Salidas No Conformes",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "Salida No Conforme",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Auditoría",
+   "link_count": 0,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Programas de auditoría",
+   "link_count": 0,
+   "link_to": "Programa Auditoria",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Auditorías",
+   "link_count": 0,
+   "link_to": "Auditoria",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Listas de verificación",
+   "link_count": 0,
+   "link_to": "Lista Verificacion",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Hallazgos de auditoría",
+   "link_count": 0,
+   "link_to": "Hallazgo Auditoria",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Informes de auditoría",
+   "link_count": 0,
+   "link_to": "Informe Auditoria",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Resultados de auditoría",
+   "link_count": 0,
+   "link_to": "Resultados de Auditoria",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "Hallazgo Auditoria",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Riesgos",
+   "link_count": 0,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Riesgos",
+   "link_count": 0,
+   "link_to": "Riesgo",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Eventos de riesgo",
+   "link_count": 0,
+   "link_to": "Evento Riesgo",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Matrices de riesgo",
+   "link_count": 0,
+   "link_to": "Matriz Riesgo",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Evaluaciones de riesgo",
+   "link_count": 0,
+   "link_to": "Evaluacion Riesgo",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Tratamientos de riesgo",
+   "link_count": 0,
+   "link_to": "Tratamiento Riesgo",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Matriz de riesgos (informe)",
+   "link_count": 0,
+   "link_to": "Matriz de Riesgos",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "Riesgo",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Dirección y partes interesadas",
+   "link_count": 0,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Política de calidad",
+   "link_count": 0,
+   "link_to": "Politica Calidad",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Objetivos de calidad",
+   "link_count": 0,
+   "link_to": "Objetivo Calidad",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Revisión por la dirección",
+   "link_count": 0,
+   "link_to": "Revision Direccion",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Comités",
+   "link_count": 0,
+   "link_to": "Comite",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reuniones",
+   "link_count": 0,
+   "link_to": "Reunion",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Acuerdos",
+   "link_count": 0,
+   "link_to": "Acuerdo",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Comunicados",
+   "link_count": 0,
+   "link_to": "Comunicado",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Grupos de interés",
+   "link_count": 0,
+   "link_to": "Grupo Interes",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Instrumentos (encuestas)",
+   "link_count": 0,
+   "link_to": "Instrumento",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Aplicaciones de encuestas",
+   "link_count": 0,
+   "link_to": "Aplicacion Instrumento",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Resultados de encuestas",
+   "link_count": 0,
+   "link_to": "Resultado Instrumento",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Configuración",
+   "link_count": 0,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Unidades orgánicas",
+   "link_count": 0,
+   "link_to": "Unidad Organica",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Programas",
+   "link_count": 0,
+   "link_to": "Programa",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Programas por sede",
+   "link_count": 0,
+   "link_to": "Programa Sede",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Periodos académicos",
+   "link_count": 0,
+   "link_to": "Periodo Academico",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Fuentes de datos",
+   "link_count": 0,
+   "link_to": "Fuente Dato",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reglas de validación",
+   "link_count": 0,
+   "link_to": "Regla Validacion",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Lotes de ingesta",
+   "link_count": 0,
+   "link_to": "Lote Ingesta",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Tesauro",
+   "link_count": 0,
+   "link_to": "Termino Tesauro",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Configuración de correo",
+   "link_count": 0,
+   "link_to": "Configuracion Correo",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Configuración de soporte",
+   "link_count": 0,
+   "link_to": "Configuracion Soporte",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Registro de correos",
+   "link_count": 0,
+   "link_to": "Registro Correo",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-10-14 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "SGC",
+ "number_cards": [],
+ "owner": "Administrator",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 1.0,
+ "shortcuts": [
+  {
+   "doc_view": "",
+   "label": "Mapa de procesos",
+   "link_to": "Proceso",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Documentos",
+   "link_to": "Documento Controlado",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Indicadores",
+   "link_to": "Indicador",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Autoevaluación",
+   "link_to": "Autoevaluacion",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "No conformidades",
+   "link_to": "No Conformidad",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Auditorías",
+   "link_to": "Auditoria",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Riesgos",
+   "link_to": "Riesgo",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Reportar evento de riesgo",
+   "link_to": "Evento Riesgo",
+   "type": "DocType"
+  }
+ ],
+ "standard": 1,
+ "title": "SGC",
+ "type": "Workspace"
+}

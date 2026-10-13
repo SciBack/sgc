@@ -14,9 +14,8 @@ Dos niveles:
   Conformidad de verdad: guardar sin cambiar el estado no envía, el modo de
   ensayo no envía, y un SMTP caído no impide guardar.
 
-`frappe.sendmail` se sustituye por un mock en TODO el módulo: el lab es una
-copia de producción con la cuenta de correo real, y un aviso a un rol llegaría
-a las personas que lo tienen. Lo que se comprueba es a quién se le PIDE enviar.
+Lo que se comprueba del envío es lo que queda en la cola de Frappe (`Email
+Queue`): las reglas no envían al momento, encolan, y el SGC filtra en ese punto.
 
 Los roles de un sitio con datos (el lab) tienen más usuarios que los de la
 prueba; por eso se comprueba que el usuario de prueba está o no está, nunca la
@@ -59,8 +58,10 @@ class IntegrationTestNotificacionesTransicion(IntegrationTestCase):
         frappe.flags.in_patch = False
 
     def setUp(self):
-        self.sendmail = patch("frappe.sendmail").start()
-        self.addCleanup(patch.stopall)
+        # Sin cuenta de salida, la cola de Frappe falla antes de encolar; con `mute_emails`
+        # usa una cuenta ficticia y encola sin enviar (EmailAccount.find_outgoing).
+        frappe.flags.mute_emails = True
+        self.addCleanup(setattr, frappe.flags, "mute_emails", False)
         frappe.set_user("Administrator")
         frappe.db.set_single_value("Configuracion Correo", {"modo": correo.REAL, "lista_blanca": ""})
 
@@ -272,8 +273,24 @@ class IntegrationTestNotificacionesTransicion(IntegrationTestCase):
         doc = frappe.get_doc(
             {"doctype": "No Conformidad", "titulo": "NC de prueba", "responsable": self.persona["responsable"]}
         ).insert(ignore_permissions=True)
-        self.sendmail.reset_mock()
+        self._ya_en_cola = set(self._colas(doc.name))
         return doc.name
+
+    def _colas(self, nombre):
+        return frappe.get_all(
+            "Email Queue", filters={"reference_doctype": "No Conformidad", "reference_name": nombre}, pluck="name"
+        )
+
+    def _nuevas(self, nombre):
+        """(estado, destinatarios, asunto) de lo encolado desde `_nc_real`."""
+        nuevas = []
+        for cola in self._colas(nombre):
+            if cola in self._ya_en_cola:
+                continue
+            fila = frappe.db.get_value("Email Queue", cola, ["status", "message"], as_dict=True)
+            para = frappe.get_all("Email Queue Recipient", filters={"parent": cola}, pluck="recipient")
+            nuevas.append((fila.status, sorted(para), correo.asunto_del_mensaje(fila.message)))
+        return nuevas
 
     def _pasar_a(self, nombre, estado):
         # Documento recién leído: Frappe no reevalúa una regla ya ejecutada sobre
@@ -287,20 +304,22 @@ class IntegrationTestNotificacionesTransicion(IntegrationTestCase):
 
         self._pasar_a(nombre, "En analisis")
 
-        self.assertEqual(self.sendmail.call_count, 1)
-        self.assertEqual(self.sendmail.call_args.kwargs["recipients"], [self.persona["responsable"]])
-        self.assertIn("En analisis", self.sendmail.call_args.kwargs["subject"])
+        nuevas = self._nuevas(nombre)
+        self.assertEqual(len(nuevas), 1)
+        estado, para, asunto = nuevas[0]
+        self.assertEqual((estado, para), ("Not Sent", [self.persona["responsable"]]))
+        self.assertIn("En analisis", asunto)
 
     def test_guardar_sin_cambiar_el_estado_no_envia(self):
         nombre = self._nc_real()
         self._pasar_a(nombre, "En analisis")
-        self.sendmail.reset_mock()
+        self._ya_en_cola = set(self._colas(nombre))
 
         doc = frappe.get_doc("No Conformidad", nombre)
         doc.descripcion = "Otra redacción, mismo estado"
         doc.save(ignore_permissions=True)
 
-        self.sendmail.assert_not_called()
+        self.assertEqual(self._nuevas(nombre), [])
 
     def test_en_ensayo_la_transicion_no_envia_y_queda_registrada(self):
         frappe.db.set_single_value("Configuracion Correo", "modo", correo.ENSAYO)
@@ -308,19 +327,19 @@ class IntegrationTestNotificacionesTransicion(IntegrationTestCase):
 
         self._pasar_a(nombre, "En analisis")
 
-        self.sendmail.assert_not_called()
+        self.assertEqual([(e, p) for e, p, _a in self._nuevas(nombre)], [("Error", [])])
         self.assertTrue(
             frappe.db.exists(
                 "Registro Correo",
-                {"regla": R_NC, "documento": nombre, "destinatario": self.persona["responsable"]},
+                {"documento": nombre, "destinatario": self.persona["responsable"], "resultado": correo.NO_ENVIADO},
             )
         )
 
     def test_si_el_correo_falla_el_documento_se_guarda_igual(self):
         nombre = self._nc_real()
-        self.sendmail.side_effect = Exception("SMTP caído")
 
-        self._pasar_a(nombre, "En analisis")
+        with patch("frappe.sendmail", side_effect=Exception("SMTP caído")):
+            self._pasar_a(nombre, "En analisis")
 
         self.assertEqual(frappe.db.get_value("No Conformidad", nombre, "estado"), "En analisis")
 

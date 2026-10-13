@@ -35,11 +35,11 @@ Orden (por dependencia real, no alfabético):
                                reales de estado (un aviso por transición, #29)
   16. f16_workflow_hallazgo_auditoria — workflow Hallazgo Auditoria (M06)
   17. f17_alcance_marcos — clasifica cada marco (licenciamiento / acreditación)
-  18. f18_workspace — workspace nativo del Desk
+  18. (retirado en 1.1.0) portadas y menús: ficheros estándar en cada módulo, ver sgc/escritorio.py
   19. f19_ficha_pdf — Print Format institucional de la ficha de caracterización
   19. f19_nivel_bpm — puebla `nivel_bpm` (N0/N1/N2) en los Proceso existentes
   20. f20_categoria_indicador — recoloca los Indicador que dicen acreditar sin marco que lo respalde
-  21. f21_dashboards — cuadros de mando nativos (sin Heatmap: ignora permisos)
+  21. (retirado en 1.1.0) cifras y gráficos: ficheros estándar en cada módulo
   22. f22_programa_pdf — Print Format del plan anual de auditoría (#66)
   23. f23_workflow_salida_no_conforme — workflow Salida No Conforme (ISO 9001 §8.7, #33)
   24. f24_workflow_informe_auditoria — revisión y aprobación del informe de auditoría (#37)
@@ -80,11 +80,9 @@ from sgc.setup import (
     f15_notificaciones_workflow,
     f16_workflow_hallazgo_auditoria,
     f17_alcance_marcos,
-    f18_workspace,
     f19_ficha_pdf,
     f19_nivel_bpm,
     f20_categoria_indicador,
-    f21_dashboards,
     f22_programa_pdf,
     f23_workflow_salida_no_conforme,
     f24_workflow_informe_auditoria,
@@ -113,11 +111,9 @@ STEPS = [
     ("f15_notificaciones_workflow", f15_notificaciones_workflow),
     ("f16_workflow_hallazgo_auditoria", f16_workflow_hallazgo_auditoria),
     ("f17_alcance_marcos", f17_alcance_marcos),
-    ("f18_workspace", f18_workspace),
     ("f19_ficha_pdf", f19_ficha_pdf),
     ("f19_nivel_bpm", f19_nivel_bpm),
     ("f20_categoria_indicador", f20_categoria_indicador),
-    ("f21_dashboards", f21_dashboards),
     ("f22_programa_pdf", f22_programa_pdf),
     ("f23_workflow_salida_no_conforme", f23_workflow_salida_no_conforme),
     ("f24_workflow_informe_auditoria", f24_workflow_informe_auditoria),

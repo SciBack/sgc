@@ -40,12 +40,10 @@ add_to_apps_screen = [
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/sgc/css/sgc.css"
-# desk_home.js: redirige la entrada pelada al Desk (/desk) directo al workspace
-# SGC saltando el apps screen. Archivo plano (no .bundle.) -> se sirve sin build.
+# Ficheros planos (no .bundle.) -> se sirven sin build. La entrada al Desk y la miga
+# de pan las resuelve Frappe con los ficheros estándar (sgc/escritorio.py).
 app_include_js = [
-	"/assets/sgc/js/desk_home.js",
 	"/assets/sgc/js/latido_scheduler.js",
-	"/assets/sgc/js/migas.js",
 	"/assets/sgc/js/soporte.js",
 ]
 
@@ -217,8 +215,6 @@ has_permission = {
 # El adjunto de un documento de solo consulta no se entrega a quien solo puede
 # leerlo, por ninguna puerta (#36). Ver sgc/documentos.py.
 override_doctype_class = {
-	"Notification": "sgc.correo.NotificacionSGC",
-	"Notification Log": "sgc.correo.AvisoDeskSGC",
 	"File": "sgc.documentos.FicheroSGC",
 }
 
@@ -289,6 +285,9 @@ standard_queries = {
 doc_events = {
 	# Contraseña con elementos seguros (B4): ver sgc/contrasena.py.
 	"User": {"before_validate": "sgc.contrasena.antes_de_validar_usuario"},
+	# Todo correo pasa por la cola: ahí se aplican el modo de ensayo, la lista blanca y
+	# los adjuntos de solo consulta (sgc/correo.py).
+	"Email Queue": {"before_insert": "sgc.correo.filtrar_cola"},
 	"Acuerdo": {"autoname": "sgc.naming.correlativo_por_prefijo"},
 	"Aplicacion Instrumento": {"autoname": "sgc.naming.correlativo_por_prefijo"},
 	"Auditoria": {"autoname": "sgc.naming.correlativo_por_prefijo"},

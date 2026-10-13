@@ -1,7 +1,7 @@
 # Copyright (c) 2026, SciBack and Contributors
 # See license.txt
 
-"""Tests de `sgc.setup.f21_dashboards` y `sgc.dashboards` — cuadros de mando (#30).
+"""Tests de los cuadros de mando (#30): las cifras y gráficos estándar y `sgc.dashboards`.
 
 Cubre que `run()`:
 - Crea las 7 tarjetas y los 5 gráficos, y es **idempotente**. El fallo que este
@@ -31,8 +31,10 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, nowdate
 
-from sgc import dashboards
-from sgc.setup import f21_dashboards as f21
+from sgc import dashboards, escritorio
+
+# Un heatmap ignora los permisos del usuario al agregar: no puede ir en un cuadro del SGC.
+TIPOS_PROHIBIDOS = {"Heatmap"}
 
 PREFIJO = "TEST-DASH"
 
@@ -41,66 +43,24 @@ class IntegrationTestDashboards(IntegrationTestCase):
     def tearDown(self):
         frappe.flags.in_patch = False
 
-    # --- creación e idempotencia -------------------------------------------
+    # --- los ficheros estándar ---------------------------------------------
 
-    def test_crea_todas_las_tarjetas_y_graficos(self):
-        f21.run()
-        for cfg in f21.NUMBER_CARDS:
-            self.assertTrue(
-                frappe.db.exists("Number Card", cfg["label"]),
-                f"falta la tarjeta {cfg['label']}",
-            )
-        for cfg in f21.CHARTS:
-            self.assertTrue(
-                frappe.db.exists("Dashboard Chart", cfg["chart_name"]),
-                f"falta el gráfico {cfg['chart_name']}",
-            )
+    def test_cada_cifra_y_grafico_esta_en_la_base(self):
+        """Los sincroniza Frappe en el migrate («Syncing dashboards»), no un script del SGC."""
+        for cfg in escritorio.cifras():
+            self.assertTrue(frappe.db.exists("Number Card", cfg["name"]), f"falta la tarjeta {cfg['name']}")
+        for cfg in escritorio.graficos():
+            self.assertTrue(frappe.db.exists("Dashboard Chart", cfg["name"]), f"falta el gráfico {cfg['name']}")
 
-    def test_reejecutar_no_duplica(self):
-        """El fallo que este test previene: el sufijo silencioso de Number Card."""
-        f21.run()
-        antes_cards = frappe.db.count("Number Card")
-        antes_charts = frappe.db.count("Dashboard Chart")
-        f21.run()
-        self.assertEqual(frappe.db.count("Number Card"), antes_cards)
-        self.assertEqual(frappe.db.count("Dashboard Chart"), antes_charts)
-
-    def test_todo_declara_modulo(self):
+    def test_todo_es_estandar_y_declara_modulo(self):
         """Sin `module`, el filtrado por permisos de Frappe no puede acotar."""
-        for cfg in f21.NUMBER_CARDS:
-            self.assertTrue(cfg.get("module"), f"{cfg['label']} sin módulo")
-        for cfg in f21.CHARTS:
-            self.assertTrue(cfg.get("module"), f"{cfg['chart_name']} sin módulo")
+        for cfg in escritorio.cifras() + escritorio.graficos():
+            self.assertTrue(cfg.get("module"), f"{cfg['name']} sin módulo")
+            self.assertEqual(cfg.get("is_standard"), 1, f"{cfg['name']} no es estándar")
 
-    # --- la restricción del heatmap ----------------------------------------
-
-    def test_ningun_grafico_declarado_es_heatmap(self):
-        for cfg in f21.CHARTS:
-            self.assertNotIn(
-                cfg["type"],
-                f21.TIPOS_PROHIBIDOS,
-                f"{cfg['chart_name']} usa {cfg['type']}, que ignora permisos",
-            )
-
-    def test_run_rechaza_un_heatmap_anadido_a_mano(self):
-        """Defensa en profundidad: si alguien lo añade a la lista, run() falla."""
-        original = list(f21.CHARTS)
-        f21.CHARTS.append(
-            {
-                "chart_name": f"{PREFIJO} heatmap",
-                "document_type": "No Conformidad",
-                "module": "SGC Nucleo",
-                "chart_type": "Count",
-                "type": "Heatmap",
-                "filters": [],
-            }
-        )
-        try:
-            with self.assertRaises(frappe.ValidationError):
-                f21.run()
-        finally:
-            f21.CHARTS[:] = original
-            frappe.db.rollback()
+    def test_ningun_grafico_es_heatmap(self):
+        for cfg in escritorio.graficos():
+            self.assertNotIn(cfg.get("type"), TIPOS_PROHIBIDOS, f"{cfg['name']} usa {cfg.get('type')}, que ignora permisos")
 
     # --- los métodos de cálculo --------------------------------------------
 
@@ -219,10 +179,8 @@ class IntegrationTestFiltrosDelDesk(IntegrationTestCase):
         """El widget de gráfico lee [doctype, campo, op, valor]: con el corto avisa «Filtro no válido»."""
         import json
 
-        f21.run()
-        for doctype in ("Dashboard Chart", "Number Card"):
-            for nombre, filtros in frappe.get_all(doctype, filters={"name": ["like", "SGC - %"]},
-                                                  fields=["name", "filters_json"], as_list=True):
-                for f in json.loads(filtros or "[]"):
-                    self.assertGreaterEqual(len(f), 4, f"{nombre}: filtro corto {f}")
-                    self.assertTrue(frappe.db.exists("DocType", f[0]), f"{nombre}: {f[0]} no es un doctype")
+        for cfg in escritorio.cifras() + escritorio.graficos():
+            nombre = cfg["name"]
+            for f in json.loads(cfg.get("filters_json") or "[]"):
+                self.assertGreaterEqual(len(f), 4, f"{nombre}: filtro corto {f}")
+                self.assertTrue(frappe.db.exists("DocType", f[0]), f"{nombre}: {f[0]} no es un doctype")

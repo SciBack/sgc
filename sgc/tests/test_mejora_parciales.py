@@ -17,9 +17,8 @@ from unittest.mock import patch
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from sgc import dashboards
+from sgc import dashboards, escritorio
 from sgc.setup import f4_workflow_mejora as f4
-from sgc.setup import f21_dashboards as f21
 from sgc.tests import factories
 
 MAKE = "frappe.core.doctype.communication.email._make"
@@ -119,9 +118,7 @@ class IntegrationTestDifusionDelPlan(_Base):
 
 class IntegrationTestIndicadoresA13(_Base):
     def test_tarjetas_de_acciones_e_incidencias(self):
-        # No se llama a f21.run(): comitea y dejaría persistidos los datos de la clase.
-        # Las tarjetas las crea el despliegue (after_migrate).
-        declaradas = {c["label"]: c for c in f21.NUMBER_CARDS}
+        declaradas = {c["label"]: c for c in escritorio.cifras()}
         for etiqueta, metodo in (("SGC - Acciones de mejora abiertas", "sgc.dashboards.acciones_abiertas"),
                                  ("SGC - Incidencias abiertas", "sgc.dashboards.incidencias_abiertas")):
             self.assertEqual(declaradas[etiqueta]["method"], metodo)
