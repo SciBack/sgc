@@ -56,12 +56,13 @@ class Hallazgo:
 
 def _chequeos():
     """Los chequeos registrados. Import diferido: cada módulo toca la base."""
-    from sgc.verificacion import accesos, correo, scheduler
+    from sgc.verificacion import accesos, correo, scheduler, sso
 
     return [
         *accesos.CHEQUEOS,
         *scheduler.CHEQUEOS,
         *correo.CHEQUEOS,
+        *sso.CHEQUEOS,
     ]
 
 

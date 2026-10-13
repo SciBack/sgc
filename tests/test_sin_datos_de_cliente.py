@@ -60,6 +60,16 @@ class TestSinDatosDeCliente(unittest.TestCase):
 		]
 		self.assertEqual(hallazgos, [])
 
+	def test_el_sso_no_apunta_a_ninguna_institucion(self):
+		"""#46: el issuer, el realm y el host del proveedor salen de site_config, no del código."""
+		hallazgos = [
+			f"{ruta.name}:{n}: {linea.strip()[:80]}"
+			for ruta in (APP / "setup" / "f3b_sso.py", APP / "setup" / "F3B-SSO-DEPLOY.md")
+			for n, linea in enumerate(ruta.read_text(encoding="utf-8").splitlines(), 1)
+			if MARCAS.search(linea) or re.search(r"https://(?!<|idp\.example\.org|https)[a-z0-9.-]+\.(pe|edu|com|org)\b", linea)
+		]
+		self.assertEqual(hallazgos, [])
+
 
 if __name__ == "__main__":
 	unittest.main()

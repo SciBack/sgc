@@ -17,6 +17,8 @@ Orden (por dependencia real, no alfabético):
   2. f2_run_all      — fields custom + carga CONEAU + workflows Autoevaluacion/NC
   3. f3b_rbac        — RBAC institucional (roles + matriz de permisos + role profiles)
   3b. f3b_branding   — identidad visual; lee site_config, neutra si no se declara
+  3c. f3b_sso        — inicio de sesión institucional (OIDC); lee site_config, y sin
+                       sgc_sso_issuer no hace nada y lo dice (#46)
   4. f4_workflow_mejora      — workflow Plan/Accion de Mejora
   5. f5_workflow_documental  — workflow Documento Controlado
   6. f6_informe_cbc          — Print Format Diagnóstico CBC SUNEDU
@@ -63,6 +65,7 @@ from sgc.setup import (
     f2_run_all,
     f3b_branding,
     f3b_rbac,
+    f3b_sso,
     f4_workflow_mejora,
     f5_workflow_documental,
     f6_informe_cbc,
@@ -93,6 +96,7 @@ STEPS = [
     ("f2_run_all", f2_run_all),
     ("f3b_rbac", f3b_rbac),
     ("f3b_branding", f3b_branding),
+    ("f3b_sso", f3b_sso),
     ("f4_workflow_mejora", f4_workflow_mejora),
     ("f5_workflow_documental", f5_workflow_documental),
     ("f6_informe_cbc", f6_informe_cbc),

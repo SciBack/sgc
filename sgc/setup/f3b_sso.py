@@ -1,163 +1,191 @@
-"""F3b SSO — SSO OIDC del SGC-Frappe contra Keycloak UPeU (realm `upeu`).
+"""F3b SSO — inicio de sesión institucional (OIDC) del SGC, configurado desde el despliegue (#46).
 
-Crea/actualiza (idempotente) un DocType **Social Login Key** que habilita el
-login OIDC de Frappe contra Keycloak. NO contiene secretos: `client_id` y
-`client_secret` son PARÁMETROS que el orquestador inyecta en el despliegue
-desde `~/.secrets/sgc-sso.env` (ver F3B-SSO-DEPLOY.md).
+Crea o actualiza, de forma idempotente, el `Social Login Key` con el que Frappe ofrece el botón
+«Iniciar sesión con …» contra el proveedor de identidad de la institución. **No lleva ningún
+dato de una institución**: todo sale de `site_config.json`, igual que la identidad visual
+(`f3b_branding`). Corre en cada `migrate` como paso del orquestador.
 
-Decisiones verificadas contra el código de Frappe v16
-(apps/frappe/frappe/integrations/oauth2_logins.py y
-apps/frappe/frappe/utils/oauth.py):
+Claves (todas en `site_config.json` del sitio):
 
-1) Keycloak es proveedor NATIVO en Frappe v16 — existe el callback
-   `login_via_keycloak` que llama `login_via_oauth2("keycloak", ...)`.
-   Ese callback busca el Social Login Key cuyo `name == "keycloak"`.
+    sgc_sso_issuer         URL del issuer OIDC (p. ej. https://idp.example.org/realms/x).
+                           SIN ella el paso no hace nada y lo dice: un sitio sin SSO es un
+                           estado válido, pero declarado, no un olvido.
+    sgc_sso_client_id      Client ID registrado en el proveedor.
+    sgc_sso_client_secret  Client secret. Solo es obligatorio para CREAR el registro: si ya
+                           existe con un secreto, se conserva. Nunca se imprime.
+    sgc_sso_proveedor      Nombre del registro. Por defecto «keycloak», que usa el callback
+                           NATIVO de Frappe (`login_via_keycloak`). Con otro nombre se usa el
+                           callback genérico `custom/<proveedor>`, que también funciona.
+    sgc_sso_etiqueta       Texto del botón de inicio de sesión. Por defecto «Cuenta institucional».
+    sgc_sso_rutas          Opcional: {"autorizacion", "token", "usuario"} relativas al issuer.
+                           Por defecto, las de un realm de Keycloak.
+    sgc_sso_habilitado     Opcional, 1 por defecto. 0 deja el registro creado pero apagado.
 
-2) El `name` del doc se autogenera con `frappe.scrub(provider_name)`
-   (SocialLoginKey.autoname). Para que el callback nativo resuelva el
-   proveedor, el `name` DEBE ser exactamente "keycloak", por lo que
-   `provider_name` debe scrubbear a "keycloak" → usamos "Keycloak".
-   (Si se usara "Keycloak UPeU", el name sería "keycloak_upeu" y el
-   callback nativo NO lo encontraría; habría que caer al callback
-   genérico `custom/<provider>`. Aquí elegimos el nativo por robustez.)
+Decisiones verificadas contra el código de Frappe v16:
 
-3) Con `custom_base_url=1`, Frappe compone las URLs como
-   `base_url + path_relativo` (utils/oauth.py::build_oauth_url). Por eso
-   `base_url` debe ser el ISSUER (`.../realms/upeu`) y los endpoints van
-   como paths relativos `/protocol/openid-connect/{auth,token,userinfo}`.
+1) El callback nativo `login_via_keycloak` busca el `Social Login Key` con name «keycloak»
+   (`frappe/integrations/oauth2_logins.py`). El genérico `custom` resuelve el proveedor por el
+   último tramo de la ruta y exige que exista un registro con ese name.
+2) El name se autogenera con `frappe.scrub(provider_name)` (`SocialLoginKey.autoname`), y
+   `provider_name` —que es además el TEXTO DEL BOTÓN— es set_only_once. Por eso se crea con
+   `provider_name = <proveedor>` (para fijar el name) y la etiqueta se escribe después.
+3) Con `custom_base_url=1`, Frappe compone las URLs como `base_url + ruta`
+   (`frappe/utils/oauth.py`), así que `base_url` es el ISSUER y las rutas van relativas.
+4) Identidad (utils/oauth.py): el usuario se busca POR CORREO (`email|upn|unique_name`) y el
+   identificador social es `user_id_property` (`sub`). Con el autorregistro desactivado, un
+   correo que no exista en el sitio no entra.
 
-4) Redirect URI (verificado): el sitio Frappe compone
-   `get_url()` + `redirect_url` →
-   `https://<host>/api/method/frappe.integrations.oauth2_logins.login_via_keycloak`
-
-5) Mapeo de identidad (utils/oauth.py): email = `email|upn|unique_name`;
-   first = `first_name|given_name|name`; last = `last_name|family_name`;
-   userid social = `user_id_property` (default "sub"). Keycloak emite
-   `sub`, `email`, `given_name`, `family_name`, `preferred_username`.
-
-Ejecutar (en despliegue, con secretos ya cargados por el orquestador):
-    bench --site <site> execute sgc.setup.f3b_sso.configurar_keycloak \
-        --kwargs "{'client_id': '...', 'client_secret': '...'}"
+Cambiar `sgc_sso_proveedor` y volver a migrar deja solo el nuevo: el registro que este paso
+gestionaba antes se elimina. Un `Social Login Key` creado a mano, que este paso no gestiona,
+nunca se toca.
 """
 
 import json
+import re
 
 import frappe
 
-# name canónico del Social Login Key. Debe coincidir con el proveedor que
-# busca el callback nativo login_via_keycloak → login_via_oauth2("keycloak").
-PROVIDER_NAME = "Keycloak"          # frappe.scrub("Keycloak") == "keycloak"
-PROVIDER_KEY = "keycloak"           # == name del doc (autoname/scrub)
+PROVEEDOR_POR_DEFECTO = "keycloak"
+ETIQUETA_POR_DEFECTO = "Cuenta institucional"
+NATIVOS = {"keycloak": "/api/method/frappe.integrations.oauth2_logins.login_via_keycloak"}
+RUTA_GENERICA = "/api/method/frappe.integrations.oauth2_logins.custom/{proveedor}"
+RUTAS_POR_DEFECTO = {
+    "autorizacion": "/protocol/openid-connect/auth",
+    "token": "/protocol/openid-connect/token",
+    "usuario": "/protocol/openid-connect/userinfo",
+}
+# Qué registro gestiona este paso: así un cambio de proveedor no deja el anterior vivo, y un
+# registro creado a mano no se borra nunca.
+CLAVE_GESTIONADO = "sgc_sso_proveedor_gestionado"
 
-# Callback nativo de Frappe v16 (ruta relativa; el sitio antepone su URL).
-REDIRECT_PATH = "/api/method/frappe.integrations.oauth2_logins.login_via_keycloak"
 
-# Endpoints OIDC relativos al issuer (se concatenan a base_url=issuer).
-AUTHORIZE_PATH = "/protocol/openid-connect/auth"
-TOKEN_PATH = "/protocol/openid-connect/token"
-USERINFO_PATH = "/protocol/openid-connect/userinfo"
+class ConfiguracionInvalida(Exception):
+    pass
 
 
-def configurar_keycloak(
-    client_id,
-    client_secret,
-    issuer="https://keyid.upeu.edu.pe/realms/upeu",
-    base_url="https://keyid.upeu.edu.pe",  # informativo; ver nota abajo
-    enable=True,
-):
-    """Crea/actualiza (idempotente) el Social Login Key `keycloak`.
+# ---------------------------------------------------------------- lógica pura
 
-    Args:
-        client_id: Client ID del cliente `sgc-frappe` en Keycloak (realm upeu).
-                   Parámetro obligatorio, NO hardcodeado.
-        client_secret: Client Secret del mismo cliente (confidential).
-                   Parámetro obligatorio, NO hardcodeado.
-        issuer: Issuer OIDC del realm. Se usa como `base_url` del doc para que
-                Frappe (custom_base_url=1) resuelva los paths relativos OIDC.
-        base_url: Se acepta por compatibilidad con el orquestador, pero el
-                `base_url` efectivo del doc es el ISSUER (ver punto 3 del
-                encabezado). Se ignora para el cálculo de endpoints.
-        enable: si True, activa `enable_social_login`.
 
-    Returns:
-        str: el `name` del Social Login Key creado/actualizado ("keycloak").
+def leer(conf):
+    """La configuración de SSO declarada en `conf` (un site_config), o None si no hay.
+
+    Normaliza y valida sin tocar la base de datos. El secreto viaja aparte del resto
+    para que nada que se imprima o se compare lo arrastre.
     """
-    # --- Validación: los secretos deben llegar y no vacíos (NO hardcodeados) ---
-    if not client_id or not str(client_id).strip():
-        frappe.throw(
-            "configurar_keycloak: 'client_id' es obligatorio y no puede estar vacío. "
-            "Inyéctalo desde ~/.secrets/sgc-sso.env en el despliegue."
+    issuer = str(conf.get("sgc_sso_issuer") or "").strip().rstrip("/")
+    if not issuer:
+        return None
+    if not issuer.startswith("https://"):
+        raise ConfiguracionInvalida(f"sgc_sso_issuer debe ser una URL https:// (es «{issuer}»)")
+    client_id = str(conf.get("sgc_sso_client_id") or "").strip()
+    if not client_id:
+        raise ConfiguracionInvalida("falta sgc_sso_client_id")
+    proveedor = str(conf.get("sgc_sso_proveedor") or PROVEEDOR_POR_DEFECTO).strip()
+    if not re.fullmatch(r"[a-z0-9_]+", proveedor):
+        raise ConfiguracionInvalida(
+            f"sgc_sso_proveedor solo admite minúsculas, cifras y «_» (es «{proveedor}»): es el name del registro"
         )
-    if not client_secret or not str(client_secret).strip():
-        frappe.throw(
-            "configurar_keycloak: 'client_secret' es obligatorio y no puede estar vacío. "
-            "Inyéctalo desde ~/.secrets/sgc-sso.env en el despliegue."
-        )
-    if not issuer or not str(issuer).strip():
-        frappe.throw("configurar_keycloak: 'issuer' es obligatorio.")
-
-    client_id = str(client_id).strip()
-    client_secret = str(client_secret).strip()
-    # base_url del doc = issuer (sin barra final) para que build_oauth_url
-    # componga issuer + /protocol/openid-connect/... correctamente.
-    issuer = str(issuer).strip().rstrip("/")
-
-    frappe.flags.in_patch = True
-
-    # scope OIDC estándar; response_type=code (Authorization Code Flow).
-    auth_url_data = json.dumps(
-        {"response_type": "code", "scope": "openid email profile"}
-    )
-
-    values = {
-        "social_login_provider": "Custom",   # tratamos el doc como Custom para
-                                             # fijar explícitamente los endpoints
-                                             # (no dependemos del wizard nativo).
-        "provider_name": PROVIDER_NAME,
-        "custom_base_url": 1,                # => endpoints = base_url + path
-        "base_url": issuer,                  # ISSUER del realm
-        "icon": "fa fa-key",
-        "authorize_url": AUTHORIZE_PATH,
-        "access_token_url": TOKEN_PATH,
-        "api_endpoint": USERINFO_PATH,
-        "redirect_url": REDIRECT_PATH,       # callback nativo login_via_keycloak
-        "auth_url_data": auth_url_data,
-        "user_id_property": "sub",           # identificador estable OIDC
+    rutas = {**RUTAS_POR_DEFECTO, **(conf.get("sgc_sso_rutas") or {})}
+    for clave, ruta in rutas.items():
+        if not str(ruta).startswith("/"):
+            raise ConfiguracionInvalida(f"sgc_sso_rutas.{clave} debe empezar por «/» (es «{ruta}»)")
+    return {
+        "issuer": issuer,
         "client_id": client_id,
-        "client_secret": client_secret,      # campo Password: se cifra al guardar
-        "enable_social_login": 1 if enable else 0,
+        "client_secret": str(conf.get("sgc_sso_client_secret") or "").strip() or None,
+        "proveedor": proveedor,
+        "etiqueta": str(conf.get("sgc_sso_etiqueta") or ETIQUETA_POR_DEFECTO).strip(),
+        "rutas": rutas,
+        "habilitado": 1 if conf.get("sgc_sso_habilitado", 1) else 0,
     }
 
-    if frappe.db.exists("Social Login Key", PROVIDER_KEY):
-        doc = frappe.get_doc("Social Login Key", PROVIDER_KEY)
-        # provider_name y social_login_provider son set_only_once: no reescribir.
-        for k, v in values.items():
-            if k in ("provider_name", "social_login_provider"):
-                continue
-            if doc.meta.has_field(k):
-                doc.set(k, v)
-        accion = "actualizado"
+
+def componer(cfg):
+    """Los campos del `Social Login Key` (sin secreto ni etiqueta) a partir de la configuración."""
+    return {
+        "social_login_provider": "Custom",
+        "custom_base_url": 1,
+        "base_url": cfg["issuer"],
+        "authorize_url": cfg["rutas"]["autorizacion"],
+        "access_token_url": cfg["rutas"]["token"],
+        "api_endpoint": cfg["rutas"]["usuario"],
+        "redirect_url": NATIVOS.get(cfg["proveedor"], RUTA_GENERICA.format(proveedor=cfg["proveedor"])),
+        "auth_url_data": json.dumps({"response_type": "code", "scope": "openid email profile"}),
+        "user_id_property": "sub",
+        "icon": "fa fa-key",
+        "client_id": cfg["client_id"],
+        "enable_social_login": cfg["habilitado"],
+    }
+
+
+# ---------------------------------------------------------------- aplicación
+
+
+def aplicar(cfg):
+    """Crea o actualiza el registro. Devuelve (name, acción). Idempotente."""
+    campos = componer(cfg)
+    proveedor = cfg["proveedor"]
+    if frappe.db.exists("Social Login Key", proveedor):
+        doc = frappe.get_doc("Social Login Key", proveedor)
+        cambios = {k: v for k, v in campos.items()
+                   if k != "social_login_provider" and str(doc.get(k) or "") != str(v)}
+        doc.update(cambios)
+        # El secreto se guarda cifrado: solo se reescribe si se declaró y es distinto. Si no se
+        # declara, se conserva el que ya tiene el registro.
+        secreto_nuevo = bool(cfg["client_secret"]) and cfg["client_secret"] != doc.get_password(
+            "client_secret", raise_exception=False)
+        if secreto_nuevo:
+            doc.client_secret = cfg["client_secret"]
+        accion = "actualizado" if cambios or secreto_nuevo else "sin cambios"
     else:
+        if not cfg["client_secret"]:
+            raise ConfiguracionInvalida("falta sgc_sso_client_secret para crear el registro")
         doc = frappe.new_doc("Social Login Key")
-        for k, v in values.items():
-            if doc.meta.has_field(k):
-                doc.set(k, v)
+        doc.provider_name = proveedor  # fija el name (autoname = scrub(provider_name))
+        doc.update(campos)
+        doc.client_secret = cfg["client_secret"]
         accion = "creado"
+    if accion != "sin cambios":
+        doc.flags.ignore_permissions = True
+        doc.save()
+    # provider_name es set_only_once, y es el texto del botón: se escribe aparte.
+    if frappe.db.get_value("Social Login Key", doc.name, "provider_name") != cfg["etiqueta"]:
+        frappe.db.set_value("Social Login Key", doc.name, "provider_name", cfg["etiqueta"])
+        if accion == "sin cambios":
+            accion = "actualizado"
+    return doc.name, accion
 
-    doc.flags.ignore_permissions = True
-    doc.save()
+
+def _retirar_anterior(actual):
+    """Si este paso gestionaba otro proveedor, lo elimina. Nunca toca uno creado a mano."""
+    anterior = frappe.db.get_default(CLAVE_GESTIONADO)
+    if anterior and anterior != actual and frappe.db.exists("Social Login Key", anterior):
+        frappe.delete_doc("Social Login Key", anterior, ignore_permissions=True, force=True)
+        return anterior
+    return None
+
+
+def run():
+    """Paso del orquestador: aplica la configuración de site_config, o declara que no la hay."""
+    try:
+        cfg = leer(frappe.conf)
+    except ConfiguracionInvalida as e:
+        print(f"SSO: configuración inválida en site_config — {e}. No se toca nada.")
+        return "invalida"
+    if cfg is None:
+        print("SSO: no configurado (sin sgc_sso_issuer en site_config). Solo se entra con contraseña; "
+              "no se crea ni se toca ningún Social Login Key.")
+        return "sin-configurar"
+    try:
+        nombre, accion = aplicar(cfg)
+    except ConfiguracionInvalida as e:
+        print(f"SSO: {e}. No se crea nada.")
+        return "invalida"
+    retirado = _retirar_anterior(nombre)
+    frappe.db.set_default(CLAVE_GESTIONADO, nombre)
     frappe.db.commit()
-
-    redirect_uri = frappe.utils.get_url(REDIRECT_PATH)
-    print(
-        "SSO Keycloak {0}: name='{1}' · enable={2}\n"
-        "  issuer      = {3}\n"
-        "  authorize   = {3}{4}\n"
-        "  token       = {3}{5}\n"
-        "  userinfo    = {3}{6}\n"
-        "  redirect_uri= {7}".format(
-            accion, doc.name, values["enable_social_login"], issuer,
-            AUTHORIZE_PATH, TOKEN_PATH, USERINFO_PATH, redirect_uri,
-        )
-    )
-    return doc.name
+    print(f"SSO {accion}: «{cfg['etiqueta']}» (registro «{nombre}», "
+          f"{'activo' if cfg['habilitado'] else 'apagado'}) · issuer {cfg['issuer']} · "
+          f"redirect_uri {frappe.utils.get_url(componer(cfg)['redirect_url'])}"
+          + (f" · retirado el anterior «{retirado}»" if retirado else ""))
+    return accion

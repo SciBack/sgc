@@ -57,7 +57,7 @@ Todos los módulos, Workspaces, DocTypes y sesión de Frappe.
 
 ## Acciones operativas o configuración adicional
 
-Keycloak/SSO requiere proveedor disponible; el login local debe conservarse.
+El botón de inicio de sesión con la cuenta institucional aparece solo si el sitio declara su proveedor de identidad en `site_config.json` (claves `sgc_sso_*`); lo aplica cada `migrate`. Sin esa configuración se entra con usuario y contraseña, y la verificación de la instancia lo indica como `sso-no-configurado`. La cuenta se enlaza **por correo**: si el correo que entrega el proveedor no coincide con el del usuario en el SGC, el botón no deja entrar. El login local debe conservarse como red de seguridad mientras no se haya probado el SSO con cada persona.
 
 ## Fuente en código
 
