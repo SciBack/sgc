@@ -212,3 +212,17 @@ class IntegrationTestDashboards(IntegrationTestCase):
         doc.db_set("fecha_proxima_revision", fecha_revision)
         doc.db_set("estado", "Publicado")
         return doc
+
+
+class IntegrationTestFiltrosDelDesk(IntegrationTestCase):
+    def test_los_filtros_se_guardan_en_el_formato_del_desk(self):
+        """El widget de gráfico lee [doctype, campo, op, valor]: con el corto avisa «Filtro no válido»."""
+        import json
+
+        f21.run()
+        for doctype in ("Dashboard Chart", "Number Card"):
+            for nombre, filtros in frappe.get_all(doctype, filters={"name": ["like", "SGC - %"]},
+                                                  fields=["name", "filters_json"], as_list=True):
+                for f in json.loads(filtros or "[]"):
+                    self.assertGreaterEqual(len(f), 4, f"{nombre}: filtro corto {f}")
+                    self.assertTrue(frappe.db.exists("DocType", f[0]), f"{nombre}: {f[0]} no es un doctype")
