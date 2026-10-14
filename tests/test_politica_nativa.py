@@ -88,5 +88,18 @@ class TestPoliticaNativa(unittest.TestCase):
 				self.assertEqual(tipos - BLOQUES_NATIVOS, set())
 
 
+	def test_esperan_mi_decision_filtra_estados_que_existen(self):
+		"""La bandeja de decisiones filtra Workflow Action por estado: un estado renombrado la vaciaría sin avisar."""
+		estados = {s["state"] for w in json.loads((APP / "fixtures" / "workflow.json").read_text(encoding="utf-8"))
+				   for s in w["states"]}
+		portada = json.loads((APP / "sgc_nucleo" / "workspace" / "sgc" / "sgc.json").read_text(encoding="utf-8"))
+		lista = next(q for q in portada["quick_lists"] if q["document_type"] == "Workflow Action")
+		filtrados = json.loads(re.search(r'"in",(\[.*?\])\]', lista["quick_list_filter"]).group(1))
+		self.assertTrue(filtrados)
+		self.assertEqual(sorted(set(filtrados) - estados), [])
+		atajo = next(s for s in portada["shortcuts"] if s["link_to"] == "Workflow Action")
+		self.assertEqual(atajo["stats_filter"], lista["quick_list_filter"])
+
+
 if __name__ == "__main__":
 	unittest.main()
