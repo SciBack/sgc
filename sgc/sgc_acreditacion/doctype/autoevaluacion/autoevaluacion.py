@@ -28,7 +28,8 @@ class Autoevaluacion(Document):
         for criterio in scoring._criterios_valorables_del_marco(self.marco_normativo, autoevaluacion=self.name):
             if criterio in existentes:
                 continue
-            valoracion = frappe.get_doc({"doctype": "Valoracion Criterio", "autoevaluacion": self.name, "criterio": criterio})
+            valoracion = frappe.get_doc({"doctype": "Valoracion Criterio", "autoevaluacion": self.name, "criterio": criterio,
+                                         "cumple": ""})  # el Select no tiene opción vacía: sin esto nace «Cumple»
             valoracion.flags.preparada_al_iniciar = True
             valoracion.insert(ignore_permissions=True)
 

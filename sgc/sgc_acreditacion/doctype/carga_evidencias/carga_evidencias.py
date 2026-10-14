@@ -126,7 +126,8 @@ class CargaEvidencias(Document):
 	# ------------------------------------------------------------ proceso
 
 	def procesar(self):
-		contenido = frappe.get_doc("File", {"file_url": self.archivo_zip}).get_content()
+		with open(frappe.get_doc("File", {"file_url": self.archivo_zip}).get_full_path(), "rb") as f:
+			contenido = f.read()  # bytes tal cual: get_content() decodifica a texto y rompe el ZIP
 		try:
 			zf = zipfile.ZipFile(io.BytesIO(contenido))
 		except zipfile.BadZipFile:
