@@ -23,7 +23,7 @@
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "C\u00f3digo",
+   "label": "Código",
    "reqd": 1,
    "unique": 1
   },
@@ -85,22 +85,10 @@
    "read_only": 1
   },
   {
-   "default": "0",
-   "fieldname": "is_group",
-   "fieldtype": "Check",
-   "label": "Es grupo"
-  },
-  {
    "fieldname": "old_parent",
    "fieldtype": "Link",
    "hidden": 1,
    "label": "Old Parent",
-   "options": "Unidad Organica"
-  },
-  {
-   "fieldname": "parent_unidad_organica",
-   "fieldtype": "Link",
-   "label": "Unidad padre",
    "options": "Unidad Organica"
   }
  ],
@@ -108,7 +96,7 @@
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2026-10-12 21:12:26.000000",
+ "modified": "2026-10-14 13:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Estructura",
  "name": "Unidad Organica",
@@ -117,23 +105,81 @@
  "permissions": [
   {
    "create": 1,
-   "delete": 1,
-   "email": 1,
    "export": 1,
-   "print": 1,
    "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
+   "role": "DPGC",
    "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Analista de Calidad (DPGC)",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Coordinador de Calidad de Facultad"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Responsable de Calidad de Programa"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Miembro de Comité de Calidad"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Dueño de Proceso"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Data Steward"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Auditor Interno"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Rectorado/VR (lectura)"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Responsable de Sede"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Decano/Director (lectura)"
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "role": "System Manager",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "role": "Desk User",
+   "select": 1
   }
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
+ "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
  "title_field": "nombre",
- "show_title_field_in_link": 1,
  "track_changes": 1
 }

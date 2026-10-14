@@ -1,0 +1,1 @@
+<p>La evidencia <b>{{ doc.name }}</b> vence su vigencia el <b>{{ doc.vigencia_hasta }}</b>.</p><p>Estado actual: {{ doc.estado }}. Actualice o reemplace la evidencia para que el programa no quede con soporte vencido.</p>

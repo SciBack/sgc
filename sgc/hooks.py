@@ -120,6 +120,9 @@ standard_help_items = [
 # 	"filters": "sgc.utils.jinja_filters"
 # }
 
+# La identidad de la institución, leída al imprimir por los formatos estándar (sgc/identidad.py).
+jinja = {"methods": ["sgc.identidad.sgc_identidad"]}
+
 # Fixtures
 # ------------------
 # Ninguno, a propósito (#102). Un fixture se importa en CADA sitio en cada `migrate`, así que

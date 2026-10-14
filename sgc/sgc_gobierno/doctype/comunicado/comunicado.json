@@ -1,8 +1,7 @@
 {
  "actions": [],
- "allow_rename": 0,
  "autoname": "format:COM-{YYYY}-{####}",
- "creation": "2026-09-27 13:40:00.000000",
+ "creation": "2026-09-27 13:40:00",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -56,7 +55,7 @@
    "fieldtype": "Column Break"
   },
   {
-   "description": "Se envía a los usuarios activos que tengan alguno de estos roles.",
+   "description": "Se env\u00eda a los usuarios activos que tengan alguno de estos roles.",
    "fieldname": "roles",
    "fieldtype": "Table MultiSelect",
    "label": "Destinatarios (roles)",
@@ -70,7 +69,7 @@
    "label": "Mantenimiento"
   },
   {
-   "description": "Se avisa con antelación: al enviar, debe faltar al menos un día.",
+   "description": "Se avisa con antelaci\u00f3n: al enviar, debe faltar al menos un d\u00eda.",
    "fieldname": "inicio_mantenimiento",
    "fieldtype": "Datetime",
    "label": "Inicio del mantenimiento",
@@ -99,7 +98,7 @@
   {
    "fieldname": "section_break_envio",
    "fieldtype": "Section Break",
-   "label": "Envío"
+   "label": "Env\u00edo"
   },
   {
    "fieldname": "enviado_por",
@@ -111,7 +110,7 @@
   {
    "fieldname": "fecha_envio",
    "fieldtype": "Datetime",
-   "label": "Fecha de envío",
+   "label": "Fecha de env\u00edo",
    "read_only": 1
   },
   {
@@ -128,13 +127,12 @@
    "description": "En modo ensayo o fuera de la lista blanca: constan en Registro Correo.",
    "fieldname": "n_retenidos",
    "fieldtype": "Int",
-   "label": "Retenidos por la configuración del correo",
+   "label": "Retenidos por la configuraci\u00f3n del correo",
    "read_only": 1
   }
  ],
- "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-09-27 13:40:00.000000",
+ "modified": "2026-10-13 19:40:58.967813",
  "modified_by": "Administrator",
  "module": "SGC Gobierno",
  "name": "Comunicado",
@@ -143,12 +141,69 @@
  "permissions": [
   {
    "create": 1,
-   "delete": 1,
+   "export": 1,
+   "read": 1,
+   "role": "DPGC",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "role": "Analista de Calidad (DPGC)",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Coordinador de Calidad de Facultad"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Responsable de Calidad de Programa"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Miembro de Comit\u00e9 de Calidad"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Due\u00f1o de Proceso"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Data Steward"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Auditor Interno"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Rectorado/VR (lectura)"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Responsable de Sede"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Decano/Director (lectura)"
+  },
+  {
+   "create": 1,
    "email": 1,
    "export": 1,
    "print": 1,
    "read": 1,
-   "report": 1,
    "role": "System Manager",
    "share": 1,
    "write": 1

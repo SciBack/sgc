@@ -1,0 +1,37 @@
+{
+ "attach_files": "",
+ "attach_print": 0,
+ "channel": "Email",
+ "condition": "doc.estado != \"Vencida\"",
+ "condition_type": "Python",
+ "creation": "2026-07-15 12:15:18.482993",
+ "date_changed": "vigencia_hasta",
+ "days_in_advance": 15,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Evidencia",
+ "enabled": 1,
+ "event": "Days Before",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "<p>La evidencia <b>{{ doc.name }}</b> vence su vigencia el <b>{{ doc.vigencia_hasta }}</b>.</p><p>Estado actual: {{ doc.estado }}. Actualice o reemplace la evidencia para que el programa no quede con soporte vencido.</p>",
+ "message_type": "Markdown",
+ "minutes_offset": 0,
+ "modified": "2026-10-13 19:41:04.133498",
+ "modified_by": "Administrator",
+ "module": "SGC Acreditacion",
+ "name": "SGC - Evidencia por vencer",
+ "notification_type": "Alert",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_role": "DPGC"
+  },
+  {
+   "receiver_by_document_field": "cargado_por"
+  }
+ ],
+ "send_system_notification": 1,
+ "send_to_all_assignees": 0,
+ "subject": "Evidencia {{ doc.name }} vence su vigencia el {{ doc.vigencia_hasta }}"
+}

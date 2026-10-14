@@ -43,7 +43,7 @@
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "C\u00f3digo",
+   "label": "Código",
    "reqd": 1,
    "unique": 1
   },
@@ -51,26 +51,26 @@
    "fieldname": "titulo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "T\u00edtulo",
+   "label": "Título",
    "reqd": 1
   },
   {
    "default": "1",
-   "description": "N\u00famero entero. Sube de uno en uno con cada aprobaci\u00f3n: una versi\u00f3n solo existe cuando se aprueba, as\u00ed que no hay medias versiones.",
+   "description": "Número entero. Sube de uno en uno con cada aprobación: una versión solo existe cuando se aprueba, así que no hay medias versiones.",
    "fieldname": "version",
    "fieldtype": "Int",
    "in_list_view": 1,
-   "label": "Versi\u00f3n",
+   "label": "Versión",
    "non_negative": 1
   },
   {
-   "description": "Tipo documental. Determina el prefijo del c\u00f3digo SGC.",
+   "description": "Tipo documental. Determina el prefijo del código SGC.",
    "fieldname": "tipo_documento",
    "fieldtype": "Select",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Tipo de documento",
-   "options": "\nManual\nPol\u00edtica\nProcedimiento\nInstructivo\nGu\u00eda\nFormato\nPlan\nInforme\nDocumentaci\u00f3n externa",
+   "options": "\nManual\nPolítica\nProcedimiento\nInstructivo\nGuía\nFormato\nPlan\nInforme\nDocumentación externa",
    "reqd": 1
   },
   {
@@ -85,34 +85,34 @@
    "label": "Vista previa"
   },
   {
+   "depends_on": "eval:doc.tipo_documento==\"Documentación externa\"",
+   "description": "Dónde se publica (una norma en un sitio oficial, por ejemplo). Si además se adjunta una copia, la copia es la que se controla aquí.",
    "fieldname": "url_externa",
    "fieldtype": "Data",
-   "options": "URL",
    "label": "Enlace al documento externo",
-   "depends_on": "eval:doc.tipo_documento==\"Documentaci\u00f3n externa\"",
-   "mandatory_depends_on": "eval:doc.tipo_documento==\"Documentaci\u00f3n externa\" && !doc.archivo && ['En revision','Aprobado','Publicado'].includes(doc.estado)",
-   "description": "D\u00f3nde se publica (una norma en un sitio oficial, por ejemplo). Si adem\u00e1s se adjunta una copia, la copia es la que se controla aqu\u00ed."
+   "mandatory_depends_on": "eval:doc.tipo_documento==\"Documentación externa\" && !doc.archivo && ['En revision','Aprobado','Publicado'].includes(doc.estado)",
+   "options": "URL"
   },
   {
    "default": "0",
+   "description": "Quien solo puede leerlo lo ve en el visor y no lo descarga; lo descarga quien puede editarlo. Es un control disuasorio: quien ve el contenido puede capturarlo. Exige un archivo privado en PDF o imagen.",
    "fieldname": "solo_consulta",
    "fieldtype": "Check",
-   "label": "Solo consulta en pantalla",
-   "description": "Quien solo puede leerlo lo ve en el visor y no lo descarga; lo descarga quien puede editarlo. Es un control disuasorio: quien ve el contenido puede capturarlo. Exige un archivo privado en PDF o imagen."
+   "label": "Solo consulta en pantalla"
   },
   {
-   "description": "Se recalcula al publicar: la norma exige revisi\u00f3n al menos anual.",
+   "description": "Se recalcula al publicar: la norma exige revisión al menos anual.",
    "fieldname": "fecha_proxima_revision",
    "fieldtype": "Date",
-   "label": "Pr\u00f3xima revisi\u00f3n",
+   "label": "Próxima revisión",
    "read_only": 1
   },
   {
    "depends_on": "eval:doc.__islocal != 1",
-   "description": "Obligatorio al cambiar de versi\u00f3n. Se archiva en el historial al publicar.",
+   "description": "Obligatorio al cambiar de versión. Se archiva en el historial al publicar.",
    "fieldname": "descripcion_cambio",
    "fieldtype": "Small Text",
-   "label": "Descripci\u00f3n del cambio (versi\u00f3n actual)"
+   "label": "Descripción del cambio (versión actual)"
   },
   {
    "fieldname": "historial_cambios",
@@ -125,7 +125,7 @@
    "collapsible": 1,
    "fieldname": "seccion_legado",
    "fieldtype": "Section Break",
-   "label": "Legado (Mayan) \u2014 solo lectura"
+   "label": "Legado (Mayan) — solo lectura"
   },
   {
    "description": "Campo legado. El archivo ahora vive en el campo Archivo.",
@@ -135,7 +135,7 @@
    "read_only": 1
   },
   {
-   "description": "Campo legado del tiempo en que los documentos viv\u00edan en Mayan EDMS.",
+   "description": "Campo legado del tiempo en que los documentos vivían en Mayan EDMS.",
    "fieldname": "mayan_document_id",
    "fieldtype": "Data",
    "label": "ID documento en Mayan",
@@ -149,13 +149,13 @@
    "options": "Proceso"
   },
   {
+   "description": "Tema del tesauro institucional que clasifica el documento (lenguaje controlado, VocBench).",
    "fieldname": "tema",
    "fieldtype": "Link",
+   "in_standard_filter": 1,
    "label": "Tema",
-   "options": "Termino Tesauro",
    "link_filters": "[[\"Termino Tesauro\",\"esquema\",\"=\",\"Temas\"]]",
-   "description": "Tema del tesauro institucional que clasifica el documento (lenguaje controlado, VocBench).",
-   "in_standard_filter": 1
+   "options": "Termino Tesauro"
   },
   {
    "default": "Borrador",
@@ -186,10 +186,10 @@
    "read_only": 1
   },
   {
-   "description": "Se fija sola al publicar. Solo se rellena a mano si el documento se public\u00f3 en una fecha distinta de hoy.",
+   "description": "Se fija sola al publicar. Solo se rellena a mano si el documento se publicó en una fecha distinta de hoy.",
    "fieldname": "fecha_publicacion",
    "fieldtype": "Date",
-   "label": "Fecha de publicaci\u00f3n"
+   "label": "Fecha de publicación"
   },
   {
    "fieldname": "reemplaza_a",
@@ -198,18 +198,18 @@
    "options": "Documento Controlado"
   },
   {
+   "description": "Dónde se organiza el documento, además del proceso y el tema.",
    "fieldname": "carpeta",
    "fieldtype": "Link",
-   "label": "Carpeta",
-   "options": "Carpeta Documental",
    "in_standard_filter": 1,
-   "description": "D\u00f3nde se organiza el documento, adem\u00e1s del proceso y el tema."
+   "label": "Carpeta",
+   "options": "Carpeta Documental"
   },
   {
+   "collapsible": 1,
    "fieldname": "sec_relaciones",
    "fieldtype": "Section Break",
-   "label": "Relaciones y difusi\u00f3n",
-   "collapsible": 1
+   "label": "Relaciones y difusión"
   },
   {
    "fieldname": "documentos_relacionados",
@@ -218,32 +218,32 @@
    "options": "Documento Relacionado"
   },
   {
+   "description": "Recibe el aviso cuando se publica una versión nueva.",
+   "fetch_from": "proceso.responsable",
    "fieldname": "dueno_proceso",
    "fieldtype": "Link",
-   "label": "Due\u00f1o del proceso",
+   "label": "Dueño del proceso",
    "options": "User",
-   "read_only": 1,
-   "fetch_from": "proceso.responsable",
-   "description": "Recibe el aviso cuando se publica una versi\u00f3n nueva."
+   "read_only": 1
   },
   {
+   "description": "Personas del proceso a las que afecta el documento: reciben el aviso de publicación.",
    "fieldname": "difundir_a",
    "fieldtype": "Table MultiSelect",
-   "label": "Difundir tambi\u00e9n a",
-   "options": "Documento Difusion",
-   "description": "Personas del proceso a las que afecta el documento: reciben el aviso de publicaci\u00f3n."
+   "label": "Difundir también a",
+   "options": "Documento Difusion"
   },
   {
+   "collapsible": 1,
    "fieldname": "sec_revision",
    "fieldtype": "Section Break",
-   "label": "Observaciones de revisi\u00f3n",
-   "collapsible": 1
+   "label": "Observaciones de revisión"
   },
   {
+   "description": "Obligatoria para observar el documento. Queda en el registro de abajo con quién y cuándo.",
    "fieldname": "observacion",
    "fieldtype": "Small Text",
-   "label": "Observaci\u00f3n del revisor",
-   "description": "Obligatoria para observar el documento. Queda en el registro de abajo con qui\u00e9n y cu\u00e1ndo."
+   "label": "Observación del revisor"
   },
   {
    "fieldname": "observaciones_revision",
@@ -256,32 +256,110 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-12 20:28:02.000000",
+ "modified": "2026-10-14 13:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Documental",
  "name": "Documento Controlado",
  "owner": "Administrator",
  "permissions": [
   {
+   "read": 1,
+   "role": "Portal Publico"
+  },
+  {
    "create": 1,
-   "delete": 1,
-   "email": 1,
    "export": 1,
-   "print": 1,
    "read": 1,
    "report": 1,
-   "role": "System Manager",
-   "share": 1,
+   "role": "DPGC",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Analista de Calidad (DPGC)",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Coordinador de Calidad de Facultad"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Responsable de Calidad de Programa",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Miembro de Comité de Calidad"
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Dueño de Proceso",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Data Steward"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Auditor Interno"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Rectorado/VR (lectura)"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Responsable de Sede"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Decano/Director (lectura)"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Autoridad Aprobadora",
    "write": 1
   }
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
  "search_fields": "titulo,codigo",
+ "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
  "title_field": "titulo",
- "show_title_field_in_link": 1,
  "track_changes": 1
 }

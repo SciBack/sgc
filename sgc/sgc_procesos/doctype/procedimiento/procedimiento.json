@@ -20,7 +20,7 @@
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Código",
+   "label": "C\u00f3digo",
    "reqd": 1,
    "unique": 1
   },
@@ -28,7 +28,7 @@
    "fieldname": "titulo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Título"
+   "label": "T\u00edtulo"
   },
   {
    "fieldname": "proceso",
@@ -45,16 +45,16 @@
    "options": "Documento Controlado"
   },
   {
-   "description": "Diagrama de flujo en el formato de la institución (NO BPMN) — adjunto/PDF del editor",
+   "description": "Diagrama de flujo en el formato de la instituci\u00f3n (NO BPMN) \u2014 adjunto/PDF del editor",
    "fieldname": "diagrama_flujo",
    "fieldtype": "Attach",
    "label": "Diagrama de flujo"
   },
   {
+   "description": "Se dibuja el BPMN adjunto. Solo lectura: para modificarlo, \u00abEditar BPMN\u00bb.",
    "fieldname": "visor_bpmn",
    "fieldtype": "HTML",
    "label": "Diagrama del procedimiento",
-   "description": "Se dibuja el BPMN adjunto. Solo lectura: para modificarlo, «Editar BPMN».",
    "read_only": 1
   },
   {
@@ -63,37 +63,93 @@
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Estado",
-   "options": "Borrador\nEn revisión\nAprobado\nPublicado\nObsoleto"
+   "options": "Borrador\nEn revisi\u00f3n\nAprobado\nPublicado\nObsoleto"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-12 21:12:26.000000",
+ "modified": "2026-10-13 19:41:02.067785",
  "modified_by": "Administrator",
  "module": "SGC Procesos",
  "name": "Procedimiento",
  "owner": "Administrator",
  "permissions": [
   {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
    "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
+   "role": "Portal Publico"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "DPGC",
    "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Analista de Calidad (DPGC)",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Coordinador de Calidad de Facultad"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Responsable de Calidad de Programa"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Miembro de Comit\u00e9 de Calidad"
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "role": "Due\u00f1o de Proceso",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Data Steward"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Auditor Interno"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Rectorado/VR (lectura)"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Responsable de Sede"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Decano/Director (lectura)"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "System Manager"
   }
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
+ "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
  "title_field": "titulo",
- "show_title_field_in_link": 1,
  "track_changes": 1
 }

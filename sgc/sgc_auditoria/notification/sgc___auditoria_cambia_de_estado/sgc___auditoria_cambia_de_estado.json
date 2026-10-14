@@ -1,0 +1,42 @@
+{
+ "attach_files": "",
+ "attach_print": 0,
+ "channel": "Email",
+ "condition_type": "Python",
+ "creation": "2026-09-24 07:30:03.406950",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Auditoria",
+ "enabled": 1,
+ "event": "Value Change",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "{% set que_hacer = {\"Ejecutada\": \"Emita el informe de auditor\u00eda.\", \"Informe emitido\": \"Revise el informe y cierre la auditor\u00eda.\"} %}<p>La auditor\u00eda <b>{{ doc.name }}</b>{% if doc.titulo %} \u2014 {{ doc.titulo }}{% endif %} pas\u00f3 al estado <b>{{ doc.estado }}</b>.</p>{% if que_hacer.get(doc.estado) %}<p>{{ que_hacer.get(doc.estado) }}</p>{% endif %}<p><a href=\"{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}\">Abrir en el SGC</a></p>",
+ "message_type": "Markdown",
+ "minutes_offset": 0,
+ "modified": "2026-10-13 19:41:03.945220",
+ "modified_by": "Administrator",
+ "module": "SGC Auditoria",
+ "name": "SGC - Auditoria cambia de estado",
+ "notification_type": "Alert",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "condition": "doc.estado in (\"En ejecucion\", \"Ejecutada\", \"Cerrada\")",
+   "receiver_by_document_field": "usuario,equipo"
+  },
+  {
+   "condition": "doc.estado in (\"En ejecucion\", \"Ejecutada\", \"Cerrada\") and not doc.equipo",
+   "receiver_by_role": "Auditor Interno"
+  },
+  {
+   "condition": "doc.estado == \"Informe emitido\"",
+   "receiver_by_role": "DPGC"
+  }
+ ],
+ "send_system_notification": 1,
+ "send_to_all_assignees": 0,
+ "subject": "Auditor\u00eda {{ doc.name }}: {{ doc.estado }}",
+ "value_changed": "estado"
+}

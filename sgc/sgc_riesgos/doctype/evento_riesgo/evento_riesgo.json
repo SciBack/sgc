@@ -1,8 +1,7 @@
 {
  "actions": [],
- "allow_rename": 0,
  "autoname": "format:EVR-{YYYY}-{#####}",
- "creation": "2026-09-27 14:00:00.000000",
+ "creation": "2026-09-27 14:00:00",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -32,42 +31,42 @@
  ],
  "fields": [
   {
+   "description": "En una l\u00ednea. Ej.: \u00abCa\u00edda del servidor de matr\u00edcula durante el primer d\u00eda\u00bb.",
    "fieldname": "titulo",
    "fieldtype": "Data",
-   "label": "Qué pasó",
-   "reqd": 1,
    "in_list_view": 1,
-   "description": "En una línea. Ej.: «Caída del servidor de matrícula durante el primer día»."
+   "label": "Qu\u00e9 pas\u00f3",
+   "reqd": 1
   },
   {
+   "default": "Today",
    "fieldname": "fecha_evento",
    "fieldtype": "Date",
+   "in_list_view": 1,
    "label": "Fecha del evento",
-   "reqd": 1,
-   "default": "Today",
-   "in_list_view": 1
+   "reqd": 1
   },
   {
    "fieldname": "column_break_reporte",
    "fieldtype": "Column Break"
   },
   {
+   "default": "Reportado",
    "fieldname": "estado",
    "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Estado",
    "options": "Reportado\nEn evaluacion\nConfirmado\nDescartado",
-   "default": "Reportado",
-   "read_only": 1,
-   "in_list_view": 1,
-   "in_standard_filter": 1
+   "read_only": 1
   },
   {
    "fieldname": "reportado_por",
    "fieldtype": "Link",
+   "in_standard_filter": 1,
    "label": "Reportado por",
    "options": "User",
-   "read_only": 1,
-   "in_standard_filter": 1
+   "read_only": 1
   },
   {
    "fieldname": "fecha_reporte",
@@ -78,15 +77,15 @@
   {
    "fieldname": "section_break_ambito",
    "fieldtype": "Section Break",
-   "label": "Dónde ocurrió"
+   "label": "D\u00f3nde ocurri\u00f3"
   },
   {
+   "description": "El proceso del mapa en el que ocurri\u00f3, si lo sabe.",
    "fieldname": "proceso",
    "fieldtype": "Link",
-   "label": "Proceso",
-   "options": "Proceso",
    "in_standard_filter": 1,
-   "description": "El proceso del mapa en el que ocurrió, si lo sabe."
+   "label": "Proceso",
+   "options": "Proceso"
   },
   {
    "fieldname": "column_break_ambito",
@@ -95,20 +94,20 @@
   {
    "fieldname": "unidad_organica",
    "fieldtype": "Link",
-   "label": "Unidad orgánica",
+   "label": "Unidad org\u00e1nica",
    "options": "Unidad Organica"
   },
   {
    "fieldname": "section_break_descripcion",
    "fieldtype": "Section Break",
-   "label": "Descripción del evento"
+   "label": "Descripci\u00f3n del evento"
   },
   {
+   "description": "Los hechos: qu\u00e9 pas\u00f3, cu\u00e1ndo y a qui\u00e9n afect\u00f3.",
    "fieldname": "descripcion",
    "fieldtype": "Text",
-   "label": "Qué ocurrió",
-   "reqd": 1,
-   "description": "Los hechos: qué pasó, cuándo y a quién afectó."
+   "label": "Qu\u00e9 ocurri\u00f3",
+   "reqd": 1
   },
   {
    "fieldname": "consecuencias",
@@ -116,10 +115,10 @@
    "label": "Consecuencias observadas"
   },
   {
+   "description": "Lo que ya se hizo para contener el efecto, si se hizo algo.",
    "fieldname": "acciones_inmediatas",
    "fieldtype": "Small Text",
-   "label": "Acciones inmediatas",
-   "description": "Lo que ya se hizo para contener el efecto, si se hizo algo."
+   "label": "Acciones inmediatas"
   },
   {
    "fieldname": "evidencia",
@@ -127,31 +126,31 @@
    "label": "Evidencia"
   },
   {
+   "depends_on": "eval:doc.estado != 'Reportado'",
    "fieldname": "section_break_evaluacion",
    "fieldtype": "Section Break",
-   "label": "Evaluación de Calidad",
-   "depends_on": "eval:doc.estado != 'Reportado'"
+   "label": "Evaluaci\u00f3n de Calidad"
   },
   {
+   "description": "Lo asigna Calidad al evaluar el evento. Si el proceso qued\u00f3 vac\u00edo, se toma el del riesgo.",
    "fieldname": "riesgo",
    "fieldtype": "Link",
    "label": "Riesgo del registro",
-   "options": "Riesgo",
-   "description": "Lo asigna Calidad al evaluar el evento. Si el proceso quedó vacío, se toma el del riesgo."
+   "options": "Riesgo"
   },
   {
+   "default": "No conformidad mayor",
+   "description": "Con qu\u00e9 gravedad se abre la no conformidad al confirmar el evento.",
    "fieldname": "tipo_nc",
    "fieldtype": "Select",
    "label": "Tipo de no conformidad",
-   "options": "No conformidad mayor\nNo conformidad menor",
-   "default": "No conformidad mayor",
-   "description": "Con qué gravedad se abre la no conformidad al confirmar el evento."
+   "options": "No conformidad mayor\nNo conformidad menor"
   },
   {
+   "description": "Obligatorio para descartar: quien report\u00f3 lo recibe.",
    "fieldname": "motivo_descarte",
    "fieldtype": "Small Text",
-   "label": "Motivo del descarte",
-   "description": "Obligatorio para descartar: quien reportó lo recibe."
+   "label": "Motivo del descarte"
   },
   {
    "fieldname": "column_break_evaluacion",
@@ -167,21 +166,20 @@
   {
    "fieldname": "fecha_evaluacion",
    "fieldtype": "Date",
-   "label": "Fecha de la decisión",
+   "label": "Fecha de la decisi\u00f3n",
    "read_only": 1
   },
   {
+   "description": "Donde se hace el an\u00e1lisis de causas y el plan de acci\u00f3n.",
    "fieldname": "no_conformidad",
    "fieldtype": "Link",
    "label": "No conformidad",
    "options": "No Conformidad",
-   "read_only": 1,
-   "description": "Donde se hace el análisis de causas y el plan de acción."
+   "read_only": 1
   }
  ],
- "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-09-27 15:00:00.000000",
+ "modified": "2026-10-13 19:40:59.555135",
  "modified_by": "Administrator",
  "module": "SGC Riesgos",
  "name": "Evento Riesgo",
@@ -190,14 +188,44 @@
  "permissions": [
   {
    "create": 1,
-   "delete": 1,
-   "email": 1,
    "export": 1,
-   "print": 1,
    "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
+   "role": "DPGC",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "role": "Analista de Calidad (DPGC)",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Due\u00f1o de Proceso"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Auditor Interno"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Rectorado/VR (lectura)"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "System Manager"
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "if_owner": 1,
+   "read": 1,
+   "role": "Desk User",
    "write": 1
   }
  ],

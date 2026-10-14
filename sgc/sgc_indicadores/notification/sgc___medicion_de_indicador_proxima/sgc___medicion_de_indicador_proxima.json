@@ -1,0 +1,33 @@
+{
+ "attach_files": "",
+ "attach_print": 0,
+ "channel": "Email",
+ "condition_type": "Python",
+ "creation": "2026-09-27 13:28:52.211721",
+ "date_changed": "fecha_aviso_medicion",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Ficha Indicador",
+ "enabled": 1,
+ "event": "Days Before",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "<p>La pr\u00f3xima medici\u00f3n del indicador <b>{{ doc.indicador or doc.name }}</b> est\u00e1 prevista para el <b>{{ doc.proxima_medicion }}</b> (frecuencia {{ doc.frecuencia }}).</p><p>Prepare los datos de la fuente: {{ doc.fuente_dato or \"\u2014\" }}.</p>",
+ "message_type": "Markdown",
+ "minutes_offset": 0,
+ "modified": "2026-10-13 19:41:03.871568",
+ "modified_by": "Administrator",
+ "module": "SGC Indicadores",
+ "name": "SGC - Medicion de indicador proxima",
+ "notification_type": "Alert",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_document_field": "responsable"
+  }
+ ],
+ "send_system_notification": 1,
+ "send_to_all_assignees": 0,
+ "subject": "Medici\u00f3n de indicador el {{ doc.proxima_medicion }}: {{ doc.indicador or doc.name }}"
+}

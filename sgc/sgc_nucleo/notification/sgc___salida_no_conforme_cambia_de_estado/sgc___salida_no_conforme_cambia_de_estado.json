@@ -1,0 +1,46 @@
+{
+ "attach_files": "",
+ "attach_print": 0,
+ "channel": "Email",
+ "condition_type": "Python",
+ "creation": "2026-09-27 09:19:06.746831",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Salida No Conforme",
+ "enabled": 1,
+ "event": "Value Change",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "{% set que_hacer = {\"En tratamiento\": \"Tr\u00e1tela y registre la decisi\u00f3n y las acciones tomadas.\", \"Tratada\": \"Verifique el resultado del tratamiento.\", \"Cerrada\": \"Se cerr\u00f3 tras verificar el tratamiento.\"} %}<p>La salida no conforme <b>{{ doc.name }}</b>{% if doc.titulo %} \u2014 {{ doc.titulo }}{% endif %} pas\u00f3 al estado <b>{{ doc.estado }}</b>.</p>{% if que_hacer.get(doc.estado) %}<p>{{ que_hacer.get(doc.estado) }}</p>{% endif %}<p><a href=\"{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}\">Abrir en el SGC</a></p>",
+ "message_type": "Markdown",
+ "minutes_offset": 0,
+ "modified": "2026-10-13 19:41:03.902185",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "SGC - Salida No Conforme cambia de estado",
+ "notification_type": "Alert",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "condition": "doc.estado == \"En tratamiento\"",
+   "receiver_by_document_field": "responsable"
+  },
+  {
+   "condition": "doc.estado == \"En tratamiento\" and not doc.responsable",
+   "receiver_by_role": "Due\u00f1o de Proceso"
+  },
+  {
+   "condition": "doc.estado == \"Tratada\"",
+   "receiver_by_role": "DPGC"
+  },
+  {
+   "condition": "doc.estado == \"Cerrada\"",
+   "receiver_by_document_field": "detectado_por"
+  }
+ ],
+ "send_system_notification": 1,
+ "send_to_all_assignees": 0,
+ "subject": "Salida no conforme {{ doc.name }}: {{ doc.estado }}",
+ "value_changed": "estado"
+}

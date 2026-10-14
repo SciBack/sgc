@@ -1,0 +1,50 @@
+{
+ "attach_files": "",
+ "attach_print": 0,
+ "channel": "Email",
+ "condition_type": "Python",
+ "creation": "2026-09-24 07:30:03.380200",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "No Conformidad",
+ "enabled": 1,
+ "event": "Value Change",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "{% set que_hacer = {\"En analisis\": \"Analice la causa ra\u00edz.\", \"En tratamiento\": \"Ejecute el tratamiento acordado.\", \"En verificacion\": \"Verifique la eficacia del tratamiento y cierre la no conformidad.\", \"Cerrada no eficaz\": \"Se cerr\u00f3 como no eficaz: valore si hace falta otra acci\u00f3n.\"} %}<p>La no conformidad <b>{{ doc.name }}</b>{% if doc.titulo %} \u2014 {{ doc.titulo }}{% endif %} pas\u00f3 al estado <b>{{ doc.estado }}</b>.</p>{% if que_hacer.get(doc.estado) %}<p>{{ que_hacer.get(doc.estado) }}</p>{% endif %}<p><a href=\"{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}\">Abrir en el SGC</a></p>",
+ "message_type": "Markdown",
+ "minutes_offset": 0,
+ "modified": "2026-10-13 19:41:03.996906",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "SGC - No Conformidad cambia de estado",
+ "notification_type": "Alert",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "condition": "doc.estado in (\"En analisis\", \"En tratamiento\")",
+   "receiver_by_document_field": "responsable"
+  },
+  {
+   "condition": "doc.estado in (\"En analisis\", \"En tratamiento\") and not doc.responsable",
+   "receiver_by_role": "Responsable de Calidad de Programa"
+  },
+  {
+   "condition": "doc.estado == \"En verificacion\"",
+   "receiver_by_document_field": "verificada_por"
+  },
+  {
+   "condition": "doc.estado == \"En verificacion\" and not doc.verificada_por",
+   "receiver_by_role": "DPGC"
+  },
+  {
+   "condition": "doc.estado in (\"Cerrada eficaz\", \"Cerrada no eficaz\")",
+   "receiver_by_document_field": "responsable"
+  }
+ ],
+ "send_system_notification": 1,
+ "send_to_all_assignees": 0,
+ "subject": "No conformidad {{ doc.name }}: {{ doc.estado }}",
+ "value_changed": "estado"
+}

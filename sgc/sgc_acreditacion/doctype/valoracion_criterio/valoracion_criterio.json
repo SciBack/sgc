@@ -80,7 +80,7 @@
    "label": "Comentario (sustento)"
   },
   {
-   "description": "Evidencias que sustentan el juicio. Cada una genera su Trazabilidad hacia el criterio (RNF09), que es lo que consume el informe de autoevaluación.",
+   "description": "Evidencias que sustentan el juicio. Cada una genera su Trazabilidad hacia el criterio (RNF09), que es lo que consume el informe de autoevaluaci\u00f3n.",
    "fieldname": "evidencia",
    "fieldtype": "Table MultiSelect",
    "label": "Evidencias",
@@ -90,31 +90,79 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-12 20:28:02.000000",
+ "modified": "2026-10-13 19:41:03.462738",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Valoracion Criterio",
  "owner": "Administrator",
  "permissions": [
   {
+   "export": 1,
+   "read": 1,
+   "role": "DPGC",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Analista de Calidad (DPGC)",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Coordinador de Calidad de Facultad",
+   "write": 1
+  },
+  {
    "create": 1,
-   "delete": 1,
+   "export": 1,
+   "read": 1,
+   "role": "Responsable de Calidad de Programa",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "role": "Miembro de Comit\u00e9 de Calidad",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Auditor Interno"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Rectorado/VR (lectura)"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Responsable de Sede"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Decano/Director (lectura)"
+  },
+  {
    "email": 1,
    "export": 1,
    "print": 1,
    "read": 1,
-   "report": 1,
    "role": "System Manager",
-   "share": 1,
-   "write": 1
+   "share": 1
   }
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
+ "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
  "title_field": "criterio",
- "show_title_field_in_link": 1,
  "track_changes": 1
 }

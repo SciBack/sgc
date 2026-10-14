@@ -1,0 +1,38 @@
+{
+ "attach_files": "",
+ "attach_print": 0,
+ "channel": "Email",
+ "condition_type": "Python",
+ "creation": "2026-09-27 13:01:40.759825",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Informe Auditoria",
+ "enabled": 1,
+ "event": "Value Change",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "{% set que_hacer = {\"En revision\": \"Rev\u00edselo: apru\u00e9belo o devu\u00e9lvalo con observaciones.\", \"Borrador\": \"Se devolvi\u00f3 con observaciones: corr\u00edjalo y vuelva a enviarlo.\", \"Aprobado\": \"Est\u00e1 aprobado: ya se puede distribuir y levantar los hallazgos.\"} %}<p>El informe de auditor\u00eda <b>{{ doc.name }}</b> pas\u00f3 al estado <b>{{ doc.estado }}</b>.</p>{% if que_hacer.get(doc.estado) %}<p>{{ que_hacer.get(doc.estado) }}</p>{% endif %}<p><a href=\"{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}\">Abrir en el SGC</a></p>",
+ "message_type": "Markdown",
+ "minutes_offset": 0,
+ "modified": "2026-10-13 19:41:03.881344",
+ "modified_by": "Administrator",
+ "module": "SGC Auditoria",
+ "name": "SGC - Informe de auditoria cambia de estado",
+ "notification_type": "Alert",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "condition": "doc.estado == \"En revision\"",
+   "receiver_by_role": "DPGC"
+  },
+  {
+   "condition": "doc.estado in (\"Borrador\", \"Aprobado\", \"Distribuido\")",
+   "receiver_by_document_field": "emitido_por"
+  }
+ ],
+ "send_system_notification": 1,
+ "send_to_all_assignees": 0,
+ "subject": "Informe de auditor\u00eda {{ doc.name }}: {{ doc.estado }}",
+ "value_changed": "estado"
+}

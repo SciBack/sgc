@@ -1,0 +1,1 @@
+<p>El plan de mejora <b>{{ doc.name }}</b> tiene fecha compromiso el <b>{{ doc.fecha_compromiso }}</b>.</p><p>Estado actual: {{ doc.estado }} · Semáforo: {{ doc.semaforo }}. Revise el avance de sus acciones antes del vencimiento.</p>

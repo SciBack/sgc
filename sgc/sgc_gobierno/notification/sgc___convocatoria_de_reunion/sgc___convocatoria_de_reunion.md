@@ -1,0 +1,1 @@
+<p>Ha sido convocado a la reunión <b>{{ doc.name }}</b>{% if doc.titulo %} — {{ doc.titulo }}{% endif %} del comité <b>{{ doc.comite }}</b>.</p><p>Fecha: <b>{{ doc.fecha }}</b>. Modalidad: {{ doc.modalidad or "No especificada" }}.</p>{% if doc.agenda %}<p>Agenda:</p>{{ doc.agenda }}{% endif %}

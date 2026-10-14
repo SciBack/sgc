@@ -47,14 +47,14 @@
   {
    "fieldname": "autoevaluacion",
    "fieldtype": "Link",
-   "label": "Autoevaluación",
+   "label": "Autoevaluaci\u00f3n",
    "options": "Autoevaluacion"
   },
   {
    "fieldname": "periodo_academico",
    "fieldtype": "Link",
    "in_standard_filter": 1,
-   "label": "Periodo académico",
+   "label": "Periodo acad\u00e9mico",
    "options": "Periodo Academico"
   },
   {
@@ -67,14 +67,14 @@
   {
    "fieldname": "unidad_organica",
    "fieldtype": "Link",
-   "label": "Unidad orgánica",
+   "label": "Unidad org\u00e1nica",
    "options": "Unidad Organica"
   },
   {
    "fieldname": "valor_num",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Valor numérico"
+   "label": "Valor num\u00e9rico"
   },
   {
    "fieldname": "valor_texto",
@@ -114,20 +114,20 @@
    "fieldname": "ingesta_clave",
    "fieldtype": "Data",
    "label": "Identidad de ingesta",
-   "unique": 1,
-   "read_only": 1
+   "read_only": 1,
+   "unique": 1
   },
   {
    "fieldname": "lote_ingesta",
    "fieldtype": "Link",
-   "label": "Último lote",
+   "label": "\u00daltimo lote",
    "options": "Lote Ingesta",
    "read_only": 1
   },
   {
    "fieldname": "datos_ingesta",
    "fieldtype": "Long Text",
-   "label": "Contrato de medición",
+   "label": "Contrato de medici\u00f3n",
    "read_only": 1
   },
   {
@@ -139,13 +139,13 @@
   {
    "fieldname": "unidad_medicion",
    "fieldtype": "Data",
-   "label": "Unidad de medición",
+   "label": "Unidad de medici\u00f3n",
    "read_only": 1
   },
   {
    "fieldname": "formula_version",
    "fieldtype": "Data",
-   "label": "Versión de fórmula",
+   "label": "Versi\u00f3n de f\u00f3rmula",
    "read_only": 1
   },
   {
@@ -163,29 +163,29 @@
   {
    "fieldname": "estado_medicion",
    "fieldtype": "Select",
-   "label": "Estado de medición",
+   "label": "Estado de medici\u00f3n",
    "options": "\nProvisional\nValidado",
    "read_only": 1
   },
   {
+   "description": "Calculado al guardar contra la meta de la ficha. Vac\u00edo si el indicador no tiene meta declarada: no se inventa un color.",
    "fieldname": "semaforo",
    "fieldtype": "Select",
-   "label": "Semáforo",
-   "options": "\nVerde\nAmbar\nRojo",
-   "read_only": 1,
    "in_list_view": 1,
-   "description": "Calculado al guardar contra la meta de la ficha. Vacío si el indicador no tiene meta declarada: no se inventa un color."
+   "label": "Sem\u00e1foro",
+   "options": "\nVerde\nAmbar\nRojo",
+   "read_only": 1
   },
   {
    "fieldname": "sec_analisis",
    "fieldtype": "Section Break",
-   "label": "Análisis del periodo"
+   "label": "An\u00e1lisis del periodo"
   },
   {
+   "description": "Qu\u00e9 explica el resultado de este periodo y qu\u00e9 se har\u00e1. Se puede escribir aunque la medici\u00f3n venga de la ingesta.",
    "fieldname": "analisis",
    "fieldtype": "Text",
-   "label": "Análisis",
-   "description": "Qué explica el resultado de este periodo y qué se hará. Se puede escribir aunque la medición venga de la ingesta."
+   "label": "An\u00e1lisis"
   },
   {
    "fieldname": "analizado_por",
@@ -197,38 +197,107 @@
   {
    "fieldname": "fecha_analisis",
    "fieldtype": "Datetime",
-   "label": "Fecha del análisis",
+   "label": "Fecha del an\u00e1lisis",
    "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-12 20:28:02.000000",
+ "modified": "2026-10-13 19:41:03.342023",
  "modified_by": "Administrator",
  "module": "SGC Indicadores",
  "name": "Valor Indicador",
  "owner": "Administrator",
  "permissions": [
   {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "DPGC",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Analista de Calidad (DPGC)",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Coordinador de Calidad de Facultad"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Responsable de Calidad de Programa",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Miembro de Comit\u00e9 de Calidad"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Due\u00f1o de Proceso",
+   "write": 1
+  },
+  {
    "create": 1,
-   "delete": 1,
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Data Steward",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Auditor Interno"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Rectorado/VR (lectura)"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Responsable de Sede"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Decano/Director (lectura)"
+  },
+  {
    "email": 1,
    "export": 1,
    "print": 1,
    "read": 1,
    "report": 1,
    "role": "System Manager",
-   "share": 1,
-   "write": 1
+   "share": 1
   }
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
+ "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
  "title_field": "indicador",
- "show_title_field_in_link": 1,
  "track_changes": 1
 }

@@ -1,0 +1,32 @@
+{
+ "attach_files": "",
+ "attach_print": 0,
+ "channel": "Email",
+ "condition_type": "Python",
+ "creation": "2026-07-19 10:30:08.292528",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Reunion",
+ "enabled": 1,
+ "event": "New",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "<p>Ha sido convocado a la reuni\u00f3n <b>{{ doc.name }}</b>{% if doc.titulo %} \u2014 {{ doc.titulo }}{% endif %} del comit\u00e9 <b>{{ doc.comite }}</b>.</p><p>Fecha: <b>{{ doc.fecha }}</b>. Modalidad: {{ doc.modalidad or \"No especificada\" }}.</p>{% if doc.agenda %}<p>Agenda:</p>{{ doc.agenda }}{% endif %}",
+ "message_type": "Markdown",
+ "minutes_offset": 0,
+ "modified": "2026-10-13 19:41:04.047795",
+ "modified_by": "Administrator",
+ "module": "SGC Gobierno",
+ "name": "SGC - Convocatoria de reunion",
+ "notification_type": "Alert",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_document_field": "usuario,asistentes"
+  }
+ ],
+ "send_system_notification": 1,
+ "send_to_all_assignees": 0,
+ "subject": "Convocatoria a reuni\u00f3n {{ doc.name }} del comit\u00e9 {{ doc.comite }} el {{ doc.fecha }}"
+}

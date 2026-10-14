@@ -1,0 +1,1 @@
+<p>La próxima medición del indicador <b>{{ doc.indicador or doc.name }}</b> está prevista para el <b>{{ doc.proxima_medicion }}</b> (frecuencia {{ doc.frecuencia }}).</p><p>Prepare los datos de la fuente: {{ doc.fuente_dato or "—" }}.</p>

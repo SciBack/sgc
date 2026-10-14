@@ -1,8 +1,7 @@
 {
  "actions": [],
- "allow_rename": 0,
  "autoname": "format:SNC-{YYYY}-{#####}",
- "creation": "2026-09-27 09:00:00.000000",
+ "creation": "2026-09-27 09:00:00",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -43,11 +42,11 @@
  ],
  "fields": [
   {
-   "description": "Qué salió mal, en una línea. Ej.: «Actas de notas del curso X con promedios mal calculados».",
+   "description": "Qu\u00e9 sali\u00f3 mal, en una l\u00ednea. Ej.: \u00abActas de notas del curso X con promedios mal calculados\u00bb.",
    "fieldname": "titulo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Título",
+   "label": "T\u00edtulo",
    "reqd": 1
   },
   {
@@ -60,7 +59,7 @@
    "options": "Detectada\nEn tratamiento\nTratada\nVerificada\nCerrada"
   },
   {
-   "description": "Cómo se detectó la salida no conforme.",
+   "description": "C\u00f3mo se detect\u00f3 la salida no conforme.",
    "fieldname": "origen",
    "fieldtype": "Select",
    "in_standard_filter": 1,
@@ -73,7 +72,7 @@
    "fieldtype": "Column Break"
   },
   {
-   "description": "Quien detectó la salida. Si se deja vacío, quien la registra.",
+   "description": "Quien detect\u00f3 la salida. Si se deja vac\u00edo, quien la registra.",
    "fieldname": "detectado_por",
    "fieldtype": "Link",
    "label": "Detectado por",
@@ -83,10 +82,10 @@
    "fieldname": "fecha_deteccion",
    "fieldtype": "Date",
    "in_standard_filter": 1,
-   "label": "Fecha de detección"
+   "label": "Fecha de detecci\u00f3n"
   },
   {
-   "description": "Cuántas unidades salieron mal: actas, certificados, constancias…",
+   "description": "Cu\u00e1ntas unidades salieron mal: actas, certificados, constancias\u2026",
    "fieldname": "cantidad_afectada",
    "fieldtype": "Int",
    "label": "Cantidad afectada"
@@ -94,10 +93,10 @@
   {
    "fieldname": "section_break_ambito",
    "fieldtype": "Section Break",
-   "label": "Dónde ocurrió"
+   "label": "D\u00f3nde ocurri\u00f3"
   },
   {
-   "description": "El proceso del mapa que entregó la salida.",
+   "description": "El proceso del mapa que entreg\u00f3 la salida.",
    "fieldname": "proceso",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -109,7 +108,7 @@
   {
    "fieldname": "unidad_organica",
    "fieldtype": "Link",
-   "label": "Unidad orgánica",
+   "label": "Unidad org\u00e1nica",
    "options": "Unidad Organica"
   },
   {
@@ -125,16 +124,16 @@
   {
    "fieldname": "section_break_descripcion",
    "fieldtype": "Section Break",
-   "label": "La no conformidad (ISO 9001 §8.7.2 a)"
+   "label": "La no conformidad (ISO 9001 \u00a78.7.2 a)"
   },
   {
    "fieldname": "descripcion",
    "fieldtype": "Text",
-   "label": "Descripción",
+   "label": "Descripci\u00f3n",
    "reqd": 1
   },
   {
-   "description": "El requisito que la salida no cumple: norma, reglamento, plazo o especificación.",
+   "description": "El requisito que la salida no cumple: norma, reglamento, plazo o especificaci\u00f3n.",
    "fieldname": "requisito_incumplido",
    "fieldtype": "Small Text",
    "label": "Requisito incumplido",
@@ -143,36 +142,36 @@
   {
    "fieldname": "section_break_tratamiento",
    "fieldtype": "Section Break",
-   "label": "Tratamiento (ISO 9001 §8.7.1)"
+   "label": "Tratamiento (ISO 9001 \u00a78.7.1)"
   },
   {
-   "description": "Quien ejecuta el tratamiento. Obligatorio desde «En tratamiento».",
+   "description": "Quien ejecuta el tratamiento. Obligatorio desde \u00abEn tratamiento\u00bb.",
    "fieldname": "responsable",
    "fieldtype": "Link",
    "label": "Responsable del tratamiento",
    "options": "User"
   },
   {
-   "description": "Qué se hace con la salida. Obligatoria para pasar a «Tratada».",
+   "description": "Qu\u00e9 se hace con la salida. Obligatoria para pasar a \u00abTratada\u00bb.",
    "fieldname": "decision",
    "fieldtype": "Select",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Decisión",
+   "label": "Decisi\u00f3n",
    "options": "\nCorregir\nAutorizar bajo concesion\nSuspender la entrega\nRetirar lo entregado"
   },
   {
-   "description": "Qué se hizo de verdad (§8.7.2 b). Obligatorio para pasar a «Tratada».",
+   "description": "Qu\u00e9 se hizo de verdad (\u00a78.7.2 b). Obligatorio para pasar a \u00abTratada\u00bb.",
    "fieldname": "acciones_tomadas",
    "fieldtype": "Text",
    "label": "Acciones tomadas"
   },
   {
    "depends_on": "eval:doc.decision==\"Autorizar bajo concesion\"",
-   "description": "Por qué se acepta la salida tal como está (§8.7.2 c).",
+   "description": "Por qu\u00e9 se acepta la salida tal como est\u00e1 (\u00a78.7.2 c).",
    "fieldname": "justificacion_decision",
    "fieldtype": "Text",
-   "label": "Justificación de la concesión",
+   "label": "Justificaci\u00f3n de la concesi\u00f3n",
    "mandatory_depends_on": "eval:doc.decision==\"Autorizar bajo concesion\""
   },
   {
@@ -180,7 +179,7 @@
    "fieldtype": "Column Break"
   },
   {
-   "description": "Lo sella el sistema al pasar a «Tratada»: la autoridad que decidió (§8.7.2 d).",
+   "description": "Lo sella el sistema al pasar a \u00abTratada\u00bb: la autoridad que decidi\u00f3 (\u00a78.7.2 d).",
    "fieldname": "autorizado_por",
    "fieldtype": "Link",
    "label": "Decidido por",
@@ -203,19 +202,20 @@
   {
    "fieldname": "section_break_verificacion",
    "fieldtype": "Section Break",
-   "label": "Verificación"
+   "label": "Verificaci\u00f3n"
   },
   {
-   "description": "Se comprobó el resultado: si se corrigió, que ahora cumple el requisito (§8.7.1); si no, que la decisión se ejecutó.",
+   "default": "0",
+   "description": "Se comprob\u00f3 el resultado: si se corrigi\u00f3, que ahora cumple el requisito (\u00a78.7.1); si no, que la decisi\u00f3n se ejecut\u00f3.",
    "fieldname": "verificacion_conformidad",
    "fieldtype": "Check",
    "label": "Resultado comprobado"
   },
   {
-   "description": "Obligatorias si se devuelve a tratamiento: por qué no se da por buena.",
+   "description": "Obligatorias si se devuelve a tratamiento: por qu\u00e9 no se da por buena.",
    "fieldname": "observaciones_verificacion",
    "fieldtype": "Small Text",
-   "label": "Observaciones de la verificación"
+   "label": "Observaciones de la verificaci\u00f3n"
   },
   {
    "fieldname": "column_break_verificacion",
@@ -232,16 +232,16 @@
   {
    "fieldname": "fecha_verificacion",
    "fieldtype": "Date",
-   "label": "Fecha de verificación",
+   "label": "Fecha de verificaci\u00f3n",
    "read_only": 1
   },
   {
    "fieldname": "section_break_enlaces",
    "fieldtype": "Section Break",
-   "label": "Relación con la mejora continua"
+   "label": "Relaci\u00f3n con la mejora continua"
   },
   {
-   "description": "Se rellena al escalar. Una salida aislada no necesita no conformidad; un fallo del sistema sí.",
+   "description": "Se rellena al escalar. Una salida aislada no necesita no conformidad; un fallo del sistema s\u00ed.",
    "fieldname": "no_conformidad",
    "fieldtype": "Link",
    "label": "No conformidad del sistema",
@@ -255,13 +255,12 @@
   {
    "fieldname": "accion_mejora",
    "fieldtype": "Link",
-   "label": "Acción de mejora",
+   "label": "Acci\u00f3n de mejora",
    "options": "Accion Mejora"
   }
  ],
- "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-09-27 09:00:00.000000",
+ "modified": "2026-10-13 19:41:02.994956",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "Salida No Conforme",
@@ -270,15 +269,89 @@
  "permissions": [
   {
    "create": 1,
-   "delete": 1,
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "DPGC",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Analista de Calidad (DPGC)",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Coordinador de Calidad de Facultad"
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Responsable de Calidad de Programa",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Miembro de Comit\u00e9 de Calidad"
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Due\u00f1o de Proceso",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Data Steward"
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Auditor Interno"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Rectorado/VR (lectura)"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Responsable de Sede"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Decano/Director (lectura)"
+  },
+  {
    "email": 1,
    "export": 1,
    "print": 1,
    "read": 1,
    "report": 1,
    "role": "System Manager",
-   "share": 1,
-   "write": 1
+   "share": 1
   }
  ],
  "row_format": "Dynamic",

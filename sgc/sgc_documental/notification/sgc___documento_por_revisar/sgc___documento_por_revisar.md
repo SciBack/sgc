@@ -1,0 +1,1 @@
+<p>El documento controlado <b>{{ doc.name }}</b> ({{ doc.get("titulo") or doc.tipo_documento }}) tiene su <b>próxima revisión programada</b> para el <b>{{ doc.fecha_proxima_revision }}</b>.</p><p>Estado actual: {{ doc.estado }}. Coordine la revisión antes de esa fecha para mantener vigente la Lista Maestra de Documentos.</p>

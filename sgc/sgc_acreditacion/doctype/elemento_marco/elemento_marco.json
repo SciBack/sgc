@@ -26,11 +26,11 @@
  ],
  "fields": [
   {
-   "description": "E1, 1.1, CBC-I, CBC-I.2 \u2014 c\u00f3digo oficial",
+   "description": "E1, 1.1, CBC-I, CBC-I.2 — código oficial",
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "C\u00f3digo",
+   "label": "Código",
    "reqd": 1,
    "unique": 1
   },
@@ -38,7 +38,7 @@
    "fieldname": "denominacion",
    "fieldtype": "Small Text",
    "in_list_view": 1,
-   "label": "Denominaci\u00f3n"
+   "label": "Denominación"
   },
   {
    "fieldname": "marco_normativo",
@@ -49,7 +49,7 @@
    "reqd": 1
   },
   {
-   "description": "Nombre del nivel (Est\u00e1ndar, Criterio\u2026); denormalizado de Nivel Marco",
+   "description": "Nombre del nivel (Estándar, Criterio…); denormalizado de Nivel Marco",
    "fieldname": "nivel",
    "fieldtype": "Data",
    "label": "Nivel"
@@ -62,7 +62,7 @@
    "options": "Dimension\nFactor\nEstandar\nCriterio\nCondicion\nComponente\nIndicador"
   },
   {
-   "description": "Descripci\u00f3n literal (del description del YAML)",
+   "description": "Descripción literal (del description del YAML)",
    "fieldname": "texto_oficial",
    "fieldtype": "Text",
    "label": "Texto oficial"
@@ -73,7 +73,7 @@
    "label": "Orden"
   },
   {
-   "description": "Ponderaci\u00f3n si el modelo la usa (CONEAU no pondera)",
+   "description": "Ponderación si el modelo la usa (CONEAU no pondera)",
    "fieldname": "peso",
    "fieldtype": "Float",
    "label": "Peso"
@@ -86,7 +86,7 @@
    "label": "Es valorable"
   },
   {
-   "description": "Fuente + p\u00e1gina (del annotation del YAML)",
+   "description": "Fuente + página (del annotation del YAML)",
    "fieldname": "nota_normativa",
    "fieldtype": "Text",
    "label": "Nota normativa"
@@ -126,22 +126,10 @@
    "read_only": 1
   },
   {
-   "default": "0",
-   "fieldname": "is_group",
-   "fieldtype": "Check",
-   "label": "Es grupo"
-  },
-  {
    "fieldname": "old_parent",
    "fieldtype": "Link",
    "hidden": 1,
    "label": "Old Parent",
-   "options": "Elemento Marco"
-  },
-  {
-   "fieldname": "parent_elemento_marco",
-   "fieldtype": "Link",
-   "label": "Elemento padre",
    "options": "Elemento Marco"
   }
  ],
@@ -149,7 +137,7 @@
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2026-10-12 20:28:02.000000",
+ "modified": "2026-10-14 13:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Elemento Marco",
@@ -157,13 +145,69 @@
  "owner": "Administrator",
  "permissions": [
   {
+   "export": 1,
+   "read": 1,
+   "role": "Decano/Director (lectura)"
+  },
+  {
    "create": 1,
-   "delete": 1,
+   "export": 1,
+   "read": 1,
+   "role": "Analista de Calidad (DPGC)",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Coordinador de Calidad de Facultad"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Responsable de Calidad de Programa"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Miembro de Comité de Calidad"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Dueño de Proceso"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Data Steward"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Auditor Interno"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Rectorado/VR (lectura)"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Responsable de Sede"
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "role": "DPGC",
+   "write": 1
+  },
+  {
    "email": 1,
    "export": 1,
    "print": 1,
    "read": 1,
-   "report": 1,
    "role": "System Manager",
    "share": 1,
    "write": 1
@@ -171,10 +215,10 @@
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
+ "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
  "title_field": "denominacion",
- "show_title_field_in_link": 1,
  "track_changes": 1
 }
