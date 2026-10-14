@@ -54,11 +54,17 @@
    "type": "Link"
   }
  ],
- "modified": "2026-10-14 12:00:00.000000",
+ "modified": "2026-10-14 15:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Documental",
  "name": "SGC Documental",
- "number_cards": [],
+ "number_cards": [
+  {
+   "doctype": "Workspace Number Card",
+   "label": "Documentos por revisar",
+   "number_card_name": "SGC - Documentos por revisar"
+  }
+ ],
  "owner": "Administrator",
  "public": 1,
  "quick_lists": [],

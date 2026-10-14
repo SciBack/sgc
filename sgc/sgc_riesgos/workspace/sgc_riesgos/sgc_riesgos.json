@@ -1,5 +1,11 @@
 {
- "charts": [],
+ "charts": [
+  {
+   "chart_name": "SGC - Riesgos por categoría",
+   "doctype": "Workspace Chart",
+   "label": "Riesgos por categoría"
+  }
+ ],
  "content": "[{\"id\": \"hdr\", \"type\": \"header\", \"data\": {\"text\": \"Riesgos\", \"col\": 12}}, {\"id\": \"pn0\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Riesgos altos tras tratamiento\", \"col\": 4}}, {\"id\": \"pn1\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Tratamientos de riesgo vencidos\", \"col\": 4}}, {\"id\": \"pg0\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Riesgos por categor\\u00eda\", \"col\": 6}}, {\"id\": \"cd0\", \"type\": \"card\", \"data\": {\"card_name\": \"Gesti\\u00f3n de riesgos\", \"col\": 4}}]",
  "creation": "2026-10-14 04:11:37.396629",
  "custom_blocks": [],
@@ -84,11 +90,22 @@
    "type": "Link"
   }
  ],
- "modified": "2026-10-14 12:00:00.000000",
+ "modified": "2026-10-14 15:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Riesgos",
  "name": "SGC Riesgos",
- "number_cards": [],
+ "number_cards": [
+  {
+   "doctype": "Workspace Number Card",
+   "label": "Riesgos altos tras tratamiento",
+   "number_card_name": "SGC - Riesgos altos tras tratamiento"
+  },
+  {
+   "doctype": "Workspace Number Card",
+   "label": "Tratamientos de riesgo vencidos",
+   "number_card_name": "SGC - Tratamientos de riesgo vencidos"
+  }
+ ],
  "owner": "Administrator",
  "public": 1,
  "quick_lists": [],

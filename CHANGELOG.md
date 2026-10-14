@@ -9,6 +9,15 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.2.2] - 2026-10-14
+
+**Requiere migrar:** sí. Sin cambios en los datos.
+
+### Corregido
+- Las cifras y los gráficos de la página de inicio y de las portadas de cada área no salían
+  desde la 1.1.0: el sitio dibujaba un hueco en su lugar («Estado del sistema» vacío). Las
+  portadas no enlazaban sus cifras y gráficos.
+
 ## [1.2.1] - 2026-10-14
 
 **Requiere migrar:** sí (cambia la versión de Frappe). Sin cambios en los datos de calidad ni en
