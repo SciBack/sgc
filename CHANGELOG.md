@@ -9,6 +9,20 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.5.0] - 2026-10-14
+
+**Requiere migrar:** sí. Cambia el flujo de aprobación de documentos (acción nueva). Sin cambios en
+los datos.
+
+### Cambiado
+- Documentos controlados: un documento **publicado u obsoleto ya no se puede modificar encima**
+  (título, archivo, código, versión, proceso, firmas). Antes se podía cambiar hasta el archivo de
+  un documento vigente sin pasar por revisión ni aprobación (ISO 9001 §7.5.3).
+- Acción nueva **«Nueva version»** (Publicado → Borrador) para el dueño del proceso o la DPGC:
+  sube la versión, limpia las firmas de la ronda anterior y exige describir el cambio antes de
+  enviarlo a revisión. Al publicarse, el cambio queda en el historial del documento.
+- El aviso al aprobar sin «Revisado por» dice dónde se rellena.
+
 ## [1.4.1] - 2026-10-14
 
 **Requiere migrar:** sí. Sin cambios en los datos.

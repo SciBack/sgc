@@ -719,6 +719,28 @@
     "state": "Publicado",
     "transition_tasks": null,
     "workflow_builder_id": null
+   },
+   {
+    "action": "Nueva version",
+    "allow_self_approval": 1,
+    "allowed": "Dueño de Proceso",
+    "condition": null,
+    "next_state": "Borrador",
+    "send_email_to_creator": 0,
+    "state": "Publicado",
+    "transition_tasks": null,
+    "workflow_builder_id": null
+   },
+   {
+    "action": "Nueva version",
+    "allow_self_approval": 1,
+    "allowed": "DPGC",
+    "condition": null,
+    "next_state": "Borrador",
+    "send_email_to_creator": 0,
+    "state": "Publicado",
+    "transition_tasks": null,
+    "workflow_builder_id": null
    }
   ],
   "workflow_data": null,
