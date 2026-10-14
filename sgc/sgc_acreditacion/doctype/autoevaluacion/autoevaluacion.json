@@ -30,7 +30,7 @@
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "C\u00f3digo",
+   "label": "Código",
    "reqd": 1,
    "unique": 1
   },
@@ -38,7 +38,7 @@
    "fieldname": "titulo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "T\u00edtulo"
+   "label": "Título"
   },
   {
    "fieldname": "marco_normativo",
@@ -59,7 +59,7 @@
    "fieldname": "periodo_academico",
    "fieldtype": "Link",
    "in_standard_filter": 1,
-   "label": "Periodo acad\u00e9mico",
+   "label": "Periodo académico",
    "options": "Periodo Academico"
   },
   {
@@ -69,18 +69,20 @@
   },
   {
    "default": "Planificada",
+   "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
    "fieldname": "estado",
    "fieldtype": "Select",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Estado",
-   "options": "Planificada\nEn curso\nEn revision\nConsolidada\nCerrada"
+   "options": "Planificada\nEn curso\nEn revision\nConsolidada\nCerrada",
+   "read_only": 1
   },
   {
    "fieldname": "resultado_vigencia",
    "fieldtype": "Select",
    "label": "Resultado de vigencia",
-   "options": "\nEn proceso\nAcreditado 3 a\u00f1os\nAcreditado 6 a\u00f1os\nAcreditado 8 a\u00f1os"
+   "options": "\nEn proceso\nAcreditado 3 años\nAcreditado 6 años\nAcreditado 8 años"
   },
   {
    "fieldname": "puntaje_excelencia",
@@ -104,7 +106,7 @@
    "label": "Fecha de cierre"
   },
   {
-   "description": "Propuesta por el motor sobre los niveles CONFIRMADOS de los 10 est\u00e1ndares (Tabla 9). El `resultado_vigencia` oficial lo fija el humano.",
+   "description": "Propuesta por el motor sobre los niveles CONFIRMADOS de los 10 estándares (Tabla 9). El `resultado_vigencia` oficial lo fija el humano.",
    "fieldname": "vigencia_propuesta",
    "fieldtype": "Select",
    "label": "Vigencia propuesta (motor)",
@@ -125,7 +127,7 @@
    "label": "Snapshot del marco (al cerrar)"
   },
   {
-   "description": "Copia inmutable del \u00e1rbol del marco normativo (elementos + niveles de escala) tomada justo antes del submit (paso a docstatus=1, estado \"Cerrada\"). El motor de scoring (sgc.scoring) la usa en vez de consultar Elemento Marco en vivo, para que el resultado calculado no cambie si el marco se edita despu\u00e9s del cierre. La escribe `Autoevaluacion.before_submit`.",
+   "description": "Copia inmutable del árbol del marco normativo (elementos + niveles de escala) tomada justo antes del submit (paso a docstatus=1, estado \"Cerrada\"). El motor de scoring (sgc.scoring) la usa en vez de consultar Elemento Marco en vivo, para que el resultado calculado no cambie si el marco se edita después del cierre. La escribe `Autoevaluacion.before_submit`.",
    "fieldname": "marco_snapshot",
    "fieldtype": "JSON",
    "label": "Snapshot del marco (al cerrar)",
@@ -147,7 +149,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-10-13 19:40:58.652559",
+ "modified": "2026-10-14 21:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Autoevaluacion",
@@ -189,7 +191,7 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,

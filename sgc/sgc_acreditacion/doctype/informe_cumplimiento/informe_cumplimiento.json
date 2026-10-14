@@ -32,11 +32,11 @@
    "fieldtype": "Int",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "A\u00f1o",
+   "label": "Año",
    "reqd": 1
   },
   {
-   "description": "Fija CBC-SUNEDU (reutiliza el \u00e1rbol de 8 CBC)",
+   "description": "Fija CBC-SUNEDU (reutiliza el árbol de 8 CBC)",
    "fieldname": "marco_normativo",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -46,33 +46,35 @@
   {
    "fieldname": "unidad_organica",
    "fieldtype": "Link",
-   "label": "Unidad org\u00e1nica (institucional)",
+   "label": "Unidad orgánica (institucional)",
    "options": "Unidad Organica"
   },
   {
-   "description": "El IAC puede apoyarse en una Autoevaluaci\u00f3n contra el marco CBC (A2)",
+   "description": "El IAC puede apoyarse en una Autoevaluación contra el marco CBC (A2)",
    "fieldname": "autoevaluacion",
    "fieldtype": "Link",
-   "label": "Autoevaluaci\u00f3n de apoyo",
+   "label": "Autoevaluación de apoyo",
    "options": "Autoevaluacion"
   },
   {
-   "description": "La obligaci\u00f3n 'IAC' que este informe cumple (B2)",
+   "description": "La obligación 'IAC' que este informe cumple (B2)",
    "fieldname": "obligacion_ente",
    "fieldtype": "Link",
-   "label": "Obligaci\u00f3n al ente",
+   "label": "Obligación al ente",
    "options": "Obligacion Ente"
   },
   {
    "default": "Borrador",
+   "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
    "fieldname": "estado",
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Estado",
-   "options": "Borrador\nEn revisi\u00f3n\nAprobado\nPresentado a SUNEDU"
+   "options": "Borrador\nEn revisión\nAprobado\nPresentado a SUNEDU",
+   "read_only": 1
   },
   {
-   "description": "Si SUNEDU observ\u00f3 un informe ya presentado, el informe corregido apunta aqu\u00ed al que reemplaza.",
+   "description": "Si SUNEDU observó un informe ya presentado, el informe corregido apunta aquí al que reemplaza.",
    "fieldname": "informe_anterior",
    "fieldtype": "Link",
    "label": "Reemplaza al informe",
@@ -81,15 +83,15 @@
   {
    "fieldname": "sec_diagnostico",
    "fieldtype": "Section Break",
-   "label": "Diagn\u00f3stico"
+   "label": "Diagnóstico"
   },
   {
-   "description": "Rojo: alguna CBC No cumple. \u00c1mbar: alguna Cumple parcial. Verde: todas cumplen.",
+   "description": "Rojo: alguna CBC No cumple. Ámbar: alguna Cumple parcial. Verde: todas cumplen.",
    "fieldname": "semaforo",
    "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "Sem\u00e1foro",
-   "options": "\nVerde\n\u00c1mbar\nRojo",
+   "label": "Semáforo",
+   "options": "\nVerde\nÁmbar\nRojo",
    "read_only": 1
   },
   {
@@ -115,7 +117,7 @@
    "read_only": 1
   },
   {
-   "description": "Se autocompletan las 8 CBC del marco al guardar si est\u00e1 vac\u00edo.",
+   "description": "Se autocompletan las 8 CBC del marco al guardar si está vacío.",
    "fieldname": "condiciones",
    "fieldtype": "Table",
    "label": "Condiciones (CBC)",
@@ -130,12 +132,12 @@
   {
    "fieldname": "resumen",
    "fieldtype": "Text Editor",
-   "label": "Resumen / declaraci\u00f3n jurada"
+   "label": "Resumen / declaración jurada"
   },
   {
    "fieldname": "fecha_presentacion",
    "fieldtype": "Date",
-   "label": "Fecha de presentaci\u00f3n"
+   "label": "Fecha de presentación"
   },
   {
    "fieldname": "pdf",
@@ -146,7 +148,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-13 19:41:00.605407",
+ "modified": "2026-10-14 21:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Informe Cumplimiento",
@@ -179,12 +181,12 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "export": 1,

@@ -40,11 +40,12 @@
  ],
  "fields": [
   {
+   "description": "Se genera solo al guardar: PROCESO-SIGLA-NNN (p. ej. S04.01-PR-001). Escríbelo solo si el documento ya tiene un código asignado.",
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Código",
-   "reqd": 1,
+   "reqd": 0,
    "unique": 1
   },
   {
@@ -159,12 +160,14 @@
   },
   {
    "default": "Borrador",
+   "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
    "fieldname": "estado",
    "fieldtype": "Select",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Estado",
-   "options": "Borrador\nEn revision\nAprobado\nPublicado\nObsoleto\nObservado"
+   "options": "Borrador\nEn revision\nAprobado\nPublicado\nObsoleto\nObservado",
+   "read_only": 1
   },
   {
    "fieldname": "elaborado_por",
@@ -256,7 +259,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-14 13:00:00.000000",
+ "modified": "2026-10-14 21:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Documental",
  "name": "Documento Controlado",
