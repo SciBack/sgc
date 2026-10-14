@@ -291,20 +291,14 @@ fixtures = [
 # Installation
 # ------------
 
-# Un site nuevo debe quedar con el mismo contrato funcional que uno migrado.
-# Sin este hook, `bench new-site --install-app sgc` sincroniza los DocTypes pero
-# deja los workflows/RBAC sin crear; cualquier `apply_workflow()` obtiene nombre
-# vacío y falla con `Workflow  not found` hasta ejecutar un migrate adicional.
+# Lo que depende de cada institución (marcos, identidad, SSO) sale de su
+# site_config: también al instalar. Lo demás lo sincroniza Frappe (nativo-frappe.md).
 after_install = "sgc.setup.f_deploy_run_all.run"
 
 # Migration
 # ------------
-# Fase 1 (2026-07-19, hallazgo H8): antes de esto, `bench migrate` NO aplicaba
-# RBAC ni workflows — un site nuevo o recuperado en DR quedaba con System
-# Manager teniendo create/read/write/delete en los 68 DocTypes y ningún rol SGC
-# funcional, hasta que alguien corriera a mano 6+ `bench execute` en el orden
-# correcto (nunca documentado más que como comentario suelto). Todos los pasos
-# de f_deploy_run_all son idempotentes — reejecutar en cada migrate es seguro.
+# Solo los pasos que dependen de cada institución (ver f_deploy_run_all). Permisos,
+# roles, flujos, avisos, formatos y portadas los aplica Frappe en el propio migrate.
 after_migrate = "sgc.setup.f_deploy_run_all.run"
 
 # Uninstallation
@@ -369,12 +363,9 @@ has_permission = {
 
 # DocType Class
 # ---------------
-# Las reglas de notificación respetan el modo de ensayo y la lista blanca de
-# `Configuracion Correo` antes de enviar (#41), y el correo que acompaña a la
-# campana del Desk también (#35: las tareas asignadas lo usan). Ver sgc/correo.py.
-#
-# El adjunto de un documento de solo consulta no se entrega a quien solo puede
-# leerlo, por ninguna puerta (#36). Ver sgc/documentos.py.
+# Deuda nativa conocida (docs/desarrollo/nativo-frappe.md): el adjunto de un
+# documento de solo consulta no se entrega a quien solo puede leerlo, por ninguna
+# puerta (#36). Ver sgc/documentos.py. No añadir otras sin pasar por esa política.
 override_doctype_class = {
 	"File": "sgc.documentos.FicheroSGC",
 }

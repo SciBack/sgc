@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\": \"hdr\", \"type\": \"header\", \"data\": {\"text\": \"Procesos\", \"col\": 12}}, {\"id\": \"cd0\", \"type\": \"card\", \"data\": {\"card_name\": \"Mapa de procesos\", \"col\": 4}}]",
+ "content": "[{\"id\": \"b01\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h3\\\"><b>Procesos</b></span>\", \"col\": 12}}, {\"id\": \"b02\", \"type\": \"paragraph\", \"data\": {\"text\": \"El mapa de procesos de la institución: cada proceso con su responsable, sus procedimientos y su ficha de caracterización.\", \"col\": 12}}, {\"id\": \"b03\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Lo que te toca</b></span>\", \"col\": 12}}, {\"id\": \"b04\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Procesos a mi cargo\", \"col\": 4}}, {\"id\": \"b05\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Procesos vigentes\", \"col\": 4}}, {\"id\": \"b06\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Procesos vigentes sin responsable\", \"col\": 4}}, {\"id\": \"b07\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Procedimientos publicados\", \"col\": 4}}, {\"id\": \"b08\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Fichas en revisión\", \"col\": 4}}, {\"id\": \"b09\", \"type\": \"quick_list\", \"data\": {\"quick_list_name\": \"Mis tareas\", \"col\": 12}}, {\"id\": \"b10\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Recientes</b></span>\", \"col\": 12}}, {\"id\": \"b11\", \"type\": \"quick_list\", \"data\": {\"quick_list_name\": \"Últimos procesos modificados\", \"col\": 6}}, {\"id\": \"b12\", \"type\": \"quick_list\", \"data\": {\"quick_list_name\": \"Últimas fichas\", \"col\": 6}}]",
  "creation": "2026-10-14 04:11:37.332534",
  "custom_blocks": [],
  "docstatus": 0,
@@ -12,78 +12,88 @@
  "is_hidden": 0,
  "label": "SGC Procesos",
  "link_type": "DocType",
- "links": [
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Mapa de procesos",
-   "link_count": 0,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Mapa de procesos",
-   "link_count": 0,
-   "link_to": "Proceso",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Procedimientos",
-   "link_count": 0,
-   "link_to": "Procedimiento",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Fichas de caracterización",
-   "link_count": 0,
-   "link_to": "Ficha Caracterizacion Proceso",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Mapa institucional",
-   "link_count": 0,
-   "link_to": "Mapa Procesos",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Interacciones entre procesos",
-   "link_count": 0,
-   "link_to": "Interaccion Proceso",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  }
- ],
- "modified": "2026-10-14 15:00:00.000000",
+ "links": [],
+ "modified": "2026-10-14 18:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Procesos",
  "name": "SGC Procesos",
  "number_cards": [],
  "owner": "Administrator",
  "public": 1,
- "quick_lists": [],
+ "quick_lists": [
+  {
+   "doctype": "Workspace Quick List",
+   "document_type": "ToDo",
+   "label": "Mis tareas",
+   "quick_list_filter": "[[\"ToDo\",\"allocated_to\",\"=\",frappe.session.user],[\"ToDo\",\"status\",\"=\",\"Open\"],[\"ToDo\",\"reference_type\",\"in\",[\"Proceso\", \"Procedimiento\", \"Ficha Caracterizacion Proceso\"]]]"
+  },
+  {
+   "doctype": "Workspace Quick List",
+   "document_type": "Proceso",
+   "label": "Últimos procesos modificados",
+   "quick_list_filter": "[]"
+  },
+  {
+   "doctype": "Workspace Quick List",
+   "document_type": "Ficha Caracterizacion Proceso",
+   "label": "Últimas fichas",
+   "quick_list_filter": "[]"
+  }
+ ],
  "roles": [],
  "sequence_id": 2.0,
- "shortcuts": [],
+ "shortcuts": [
+  {
+   "color": "Orange",
+   "doc_view": "",
+   "doctype": "Workspace Shortcut",
+   "format": "{}",
+   "label": "Procesos a mi cargo",
+   "link_to": "Proceso",
+   "stats_filter": "[[\"Proceso\",\"responsable\",\"=\",frappe.session.user]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "",
+   "doctype": "Workspace Shortcut",
+   "format": "{} vigentes",
+   "label": "Procesos vigentes",
+   "link_to": "Proceso",
+   "stats_filter": "[[\"Proceso\",\"estado\",\"=\",\"Vigente\"]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Red",
+   "doc_view": "",
+   "doctype": "Workspace Shortcut",
+   "format": "{} sin responsable",
+   "label": "Procesos vigentes sin responsable",
+   "link_to": "Proceso",
+   "stats_filter": "[[\"Proceso\",\"estado\",\"=\",\"Vigente\"],[\"Proceso\",\"responsable\",\"is\",\"not set\"]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "",
+   "doctype": "Workspace Shortcut",
+   "format": "{} publicados",
+   "label": "Procedimientos publicados",
+   "link_to": "Procedimiento",
+   "stats_filter": "[[\"Procedimiento\",\"estado\",\"=\",\"Publicado\"]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "",
+   "doctype": "Workspace Shortcut",
+   "format": "{} en revisión",
+   "label": "Fichas en revisión",
+   "link_to": "Ficha Caracterizacion Proceso",
+   "stats_filter": "[[\"Ficha Caracterizacion Proceso\",\"estado\",\"=\",\"En revisión\"]]",
+   "type": "DocType"
+  }
+ ],
  "standard": 1,
  "title": "SGC Procesos",
  "type": "Workspace"

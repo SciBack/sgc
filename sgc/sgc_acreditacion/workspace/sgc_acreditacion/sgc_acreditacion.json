@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\": \"hdr\", \"type\": \"header\", \"data\": {\"text\": \"Acreditaci\\u00f3n y licenciamiento\", \"col\": 12}}, {\"id\": \"cd0\", \"type\": \"card\", \"data\": {\"card_name\": \"Autoevaluaci\\u00f3n\", \"col\": 4}}, {\"id\": \"cd1\", \"type\": \"card\", \"data\": {\"card_name\": \"Marcos de calidad\", \"col\": 4}}, {\"id\": \"cd2\", \"type\": \"card\", \"data\": {\"card_name\": \"Licenciamiento y obligaciones\", \"col\": 4}}]",
+ "content": "[{\"id\": \"b01\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h3\\\"><b>Acreditación y licenciamiento</b></span>\", \"col\": 12}}, {\"id\": \"b02\", \"type\": \"paragraph\", \"data\": {\"text\": \"Autoevaluaciones contra los marcos normativos, sus evidencias, y las obligaciones y entregas ante los entes externos.\", \"col\": 12}}, {\"id\": \"b03\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Lo que te toca</b></span>\", \"col\": 12}}, {\"id\": \"b04\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Mis autoevaluaciones en curso\", \"col\": 4}}, {\"id\": \"b05\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Mis entregas pendientes\", \"col\": 4}}, {\"id\": \"b06\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Evidencias observadas\", \"col\": 4}}, {\"id\": \"b07\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Entregas vencidas\", \"col\": 4}}, {\"id\": \"b08\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Marcos vigentes\", \"col\": 4}}, {\"id\": \"b09\", \"type\": \"quick_list\", \"data\": {\"quick_list_name\": \"Mis tareas\", \"col\": 12}}, {\"id\": \"b10\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Registrar</b></span>\", \"col\": 12}}, {\"id\": \"b11\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Nueva autoevaluación\", \"col\": 4}}, {\"id\": \"b12\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Recientes</b></span>\", \"col\": 12}}, {\"id\": \"b13\", \"type\": \"quick_list\", \"data\": {\"quick_list_name\": \"Últimas autoevaluaciones\", \"col\": 6}}, {\"id\": \"b14\", \"type\": \"quick_list\", \"data\": {\"quick_list_name\": \"Últimas evidencias\", \"col\": 6}}]",
  "creation": "2026-10-14 04:11:37.356491",
  "custom_blocks": [],
  "docstatus": 0,
@@ -12,156 +12,98 @@
  "is_hidden": 0,
  "label": "SGC Acreditacion",
  "link_type": "DocType",
- "links": [
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Autoevaluación",
-   "link_count": 0,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Autoevaluaciones",
-   "link_count": 0,
-   "link_to": "Autoevaluacion",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Evidencias",
-   "link_count": 0,
-   "link_to": "Evidencia",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Valoración de criterios",
-   "link_count": 0,
-   "link_to": "Valoracion Criterio",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Valoración de estándares",
-   "link_count": 0,
-   "link_to": "Valoracion Estandar",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Marcos de calidad",
-   "link_count": 0,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Marcos normativos",
-   "link_count": 0,
-   "link_to": "Marco Normativo",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Estándares y criterios",
-   "link_count": 0,
-   "link_to": "Elemento Marco",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Escalas de valoración",
-   "link_count": 0,
-   "link_to": "Escala Valoracion",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Licenciamiento y obligaciones",
-   "link_count": 0,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Informe de cumplimiento (SUNEDU)",
-   "link_count": 0,
-   "link_to": "Informe Cumplimiento",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Entes externos",
-   "link_count": 0,
-   "link_to": "Ente Externo",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Obligaciones ante entes",
-   "link_count": 0,
-   "link_to": "Obligacion Ente",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Entregas de obligaciones",
-   "link_count": 0,
-   "link_to": "Entrega Obligacion",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  }
- ],
- "modified": "2026-10-14 15:00:00.000000",
+ "links": [],
+ "modified": "2026-10-14 18:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "SGC Acreditacion",
  "number_cards": [],
  "owner": "Administrator",
  "public": 1,
- "quick_lists": [],
+ "quick_lists": [
+  {
+   "doctype": "Workspace Quick List",
+   "document_type": "ToDo",
+   "label": "Mis tareas",
+   "quick_list_filter": "[[\"ToDo\",\"allocated_to\",\"=\",frappe.session.user],[\"ToDo\",\"status\",\"=\",\"Open\"],[\"ToDo\",\"reference_type\",\"in\",[\"Autoevaluacion\", \"Evidencia\", \"Entrega Obligacion\", \"Informe Cumplimiento\"]]]"
+  },
+  {
+   "doctype": "Workspace Quick List",
+   "document_type": "Autoevaluacion",
+   "label": "Últimas autoevaluaciones",
+   "quick_list_filter": "[]"
+  },
+  {
+   "doctype": "Workspace Quick List",
+   "document_type": "Evidencia",
+   "label": "Últimas evidencias",
+   "quick_list_filter": "[]"
+  }
+ ],
  "roles": [],
  "sequence_id": 5.0,
- "shortcuts": [],
+ "shortcuts": [
+  {
+   "color": "Orange",
+   "doc_view": "",
+   "doctype": "Workspace Shortcut",
+   "format": "{} pendientes",
+   "label": "Mis autoevaluaciones en curso",
+   "link_to": "Autoevaluacion",
+   "stats_filter": "[[\"Autoevaluacion\",\"responsable\",\"=\",frappe.session.user],[\"Autoevaluacion\",\"estado\",\"in\",[\"Planificada\", \"En curso\", \"En revision\"]]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "",
+   "doctype": "Workspace Shortcut",
+   "format": "{} pendientes",
+   "label": "Mis entregas pendientes",
+   "link_to": "Entrega Obligacion",
+   "stats_filter": "[[\"Entrega Obligacion\",\"responsable\",\"=\",frappe.session.user],[\"Entrega Obligacion\",\"estado\",\"in\",[\"Pendiente\", \"En preparacion\", \"Observada\"]]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "",
+   "doctype": "Workspace Shortcut",
+   "format": "{} observadas",
+   "label": "Evidencias observadas",
+   "link_to": "Evidencia",
+   "stats_filter": "[[\"Evidencia\",\"estado\",\"=\",\"Observada\"]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Red",
+   "doc_view": "",
+   "doctype": "Workspace Shortcut",
+   "format": "{} vencidas",
+   "label": "Entregas vencidas",
+   "link_to": "Entrega Obligacion",
+   "stats_filter": "[[\"Entrega Obligacion\",\"fecha_limite\",\"<\",frappe.datetime.get_today()],[\"Entrega Obligacion\",\"estado\",\"in\",[\"Pendiente\", \"En preparacion\", \"Observada\"]]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "",
+   "doctype": "Workspace Shortcut",
+   "format": "{} vigentes",
+   "label": "Marcos vigentes",
+   "link_to": "Marco Normativo",
+   "stats_filter": "[[\"Marco Normativo\",\"estado\",\"=\",\"vigente\"]]",
+   "type": "DocType"
+  },
+  {
+   "color": "",
+   "doc_view": "New",
+   "doctype": "Workspace Shortcut",
+   "format": "",
+   "label": "Nueva autoevaluación",
+   "link_to": "Autoevaluacion",
+   "stats_filter": "",
+   "type": "DocType"
+  }
+ ],
  "standard": 1,
  "title": "SGC Acreditacion",
  "type": "Workspace"

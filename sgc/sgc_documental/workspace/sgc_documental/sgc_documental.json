@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\": \"hdr\", \"type\": \"header\", \"data\": {\"text\": \"Documentos\", \"col\": 12}}, {\"id\": \"pn0\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Documentos por revisar\", \"col\": 4}}, {\"id\": \"cd0\", \"type\": \"card\", \"data\": {\"card_name\": \"Documentos\", \"col\": 4}}]",
+ "content": "[{\"id\": \"b01\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h3\\\"><b>Documentos</b></span>\", \"col\": 12}}, {\"id\": \"b02\", \"type\": \"paragraph\", \"data\": {\"text\": \"Los documentos del sistema se elaboran, revisan, aprueban y publican. Solo los publicados están vigentes.\", \"col\": 12}}, {\"id\": \"b03\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Lo que te toca</b></span>\", \"col\": 12}}, {\"id\": \"b04\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Mis documentos en borrador u observados\", \"col\": 4}}, {\"id\": \"b05\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Documentos de mis procesos en revisión\", \"col\": 4}}, {\"id\": \"b06\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"En revisión\", \"col\": 4}}, {\"id\": \"b07\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Aprobados sin publicar\", \"col\": 4}}, {\"id\": \"b08\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Publicados\", \"col\": 4}}, {\"id\": \"b09\", \"type\": \"quick_list\", \"data\": {\"quick_list_name\": \"Mis tareas\", \"col\": 12}}, {\"id\": \"b10\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Registrar</b></span>\", \"col\": 12}}, {\"id\": \"b11\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Nuevo documento\", \"col\": 4}}, {\"id\": \"b12\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Estado del área</b></span>\", \"col\": 12}}, {\"id\": \"b13\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Documentos por revisar\", \"col\": 4}}, {\"id\": \"b14\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Recientes</b></span>\", \"col\": 12}}, {\"id\": \"b15\", \"type\": \"quick_list\", \"data\": {\"quick_list_name\": \"Últimos documentos modificados\", \"col\": 6}}]",
  "creation": "2026-10-14 04:11:37.339523",
  "custom_blocks": [],
  "docstatus": 0,
@@ -12,49 +12,8 @@
  "is_hidden": 0,
  "label": "SGC Documental",
  "link_type": "DocType",
- "links": [
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Documentos",
-   "link_count": 0,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Documentos controlados",
-   "link_count": 0,
-   "link_to": "Documento Controlado",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Carpetas documentales",
-   "link_count": 0,
-   "link_to": "Carpeta Documental",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Accesos a documentos",
-   "link_count": 0,
-   "link_to": "Accesos a Documentos",
-   "link_type": "Report",
-   "onboard": 0,
-   "report_ref_doctype": "Documento Controlado",
-   "type": "Link"
-  }
- ],
- "modified": "2026-10-14 15:00:00.000000",
+ "links": [],
+ "modified": "2026-10-14 18:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Documental",
  "name": "SGC Documental",
@@ -67,10 +26,84 @@
  ],
  "owner": "Administrator",
  "public": 1,
- "quick_lists": [],
+ "quick_lists": [
+  {
+   "doctype": "Workspace Quick List",
+   "document_type": "ToDo",
+   "label": "Mis tareas",
+   "quick_list_filter": "[[\"ToDo\",\"allocated_to\",\"=\",frappe.session.user],[\"ToDo\",\"status\",\"=\",\"Open\"],[\"ToDo\",\"reference_type\",\"in\",[\"Documento Controlado\"]]]"
+  },
+  {
+   "doctype": "Workspace Quick List",
+   "document_type": "Documento Controlado",
+   "label": "Últimos documentos modificados",
+   "quick_list_filter": "[]"
+  }
+ ],
  "roles": [],
  "sequence_id": 3.0,
- "shortcuts": [],
+ "shortcuts": [
+  {
+   "color": "Orange",
+   "doc_view": "",
+   "doctype": "Workspace Shortcut",
+   "format": "{} pendientes",
+   "label": "Mis documentos en borrador u observados",
+   "link_to": "Documento Controlado",
+   "stats_filter": "[[\"Documento Controlado\",\"owner\",\"=\",frappe.session.user],[\"Documento Controlado\",\"estado\",\"in\",[\"Borrador\", \"Observado\"]]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "",
+   "doctype": "Workspace Shortcut",
+   "format": "{} pendientes",
+   "label": "Documentos de mis procesos en revisión",
+   "link_to": "Documento Controlado",
+   "stats_filter": "[[\"Documento Controlado\",\"dueno_proceso\",\"=\",frappe.session.user],[\"Documento Controlado\",\"estado\",\"in\",[\"En revision\", \"Aprobado\"]]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "",
+   "doctype": "Workspace Shortcut",
+   "format": "{} en revisión",
+   "label": "En revisión",
+   "link_to": "Documento Controlado",
+   "stats_filter": "[[\"Documento Controlado\",\"estado\",\"=\",\"En revision\"]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "",
+   "doctype": "Workspace Shortcut",
+   "format": "{} por publicar",
+   "label": "Aprobados sin publicar",
+   "link_to": "Documento Controlado",
+   "stats_filter": "[[\"Documento Controlado\",\"estado\",\"=\",\"Aprobado\"]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "",
+   "doctype": "Workspace Shortcut",
+   "format": "{} vigentes",
+   "label": "Publicados",
+   "link_to": "Documento Controlado",
+   "stats_filter": "[[\"Documento Controlado\",\"estado\",\"=\",\"Publicado\"]]",
+   "type": "DocType"
+  },
+  {
+   "color": "",
+   "doc_view": "New",
+   "doctype": "Workspace Shortcut",
+   "format": "",
+   "label": "Nuevo documento",
+   "link_to": "Documento Controlado",
+   "stats_filter": "",
+   "type": "DocType"
+  }
+ ],
  "standard": 1,
  "title": "SGC Documental",
  "type": "Workspace"
