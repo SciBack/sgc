@@ -58,6 +58,29 @@ class IntegrationTestDashboards(IntegrationTestCase):
             self.assertTrue(cfg.get("module"), f"{cfg['name']} sin módulo")
             self.assertEqual(cfg.get("is_standard"), 1, f"{cfg['name']} no es estándar")
 
+    def test_cada_bloque_de_cifra_o_grafico_esta_enlazado_en_su_portada(self):
+        """Un bloque de la portada nombra una ETIQUETA; la tabla de la portada la traduce a la
+        cifra o gráfico. Sin esa fila, Frappe dibuja un hueco y nadie se entera: así estuvieron
+        las portadas desde la 1.1.0 hasta la 1.2.2."""
+        import json
+
+        for nombre, portada in escritorio.portadas().items():
+            bloques = json.loads(portada["content"])
+            for tipo, tabla, campo in (("number_card", "number_cards", "number_card_name"), ("chart", "charts", "chart_name")):
+                filas = {f["label"]: f[campo] for f in portada.get(tabla, [])}
+                for b in bloques:
+                    if b["type"] != tipo:
+                        continue
+                    etiqueta = b["data"][campo]
+                    with self.subTest(portada=nombre, bloque=etiqueta):
+                        self.assertIn(etiqueta, filas, "bloque sin fila en la tabla de la portada")
+                        self.assertTrue(frappe.db.exists("Number Card" if tipo == "number_card" else "Dashboard Chart", filas[etiqueta]))
+                # Y en la base, que es lo que se dibuja.
+                en_base = frappe.get_all(f"Workspace {'Number Card' if tipo == 'number_card' else 'Chart'}",
+                                         filters={"parent": nombre}, pluck="label")
+                with self.subTest(portada=nombre, tabla=tabla):
+                    self.assertEqual(set(en_base), set(filas))
+
     def test_ningun_grafico_es_heatmap(self):
         for cfg in escritorio.graficos():
             self.assertNotIn(cfg.get("type"), TIPOS_PROHIBIDOS, f"{cfg['name']} usa {cfg.get('type')}, que ignora permisos")

@@ -772,11 +772,42 @@
    "type": "Link"
   }
  ],
- "modified": "2026-10-14 12:00:00.000000",
+ "modified": "2026-10-14 15:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "SGC",
- "number_cards": [],
+ "number_cards": [
+  {
+   "doctype": "Workspace Number Card",
+   "label": "Documentos por revisar",
+   "number_card_name": "SGC - Documentos por revisar"
+  },
+  {
+   "doctype": "Workspace Number Card",
+   "label": "No conformidades abiertas",
+   "number_card_name": "SGC - No conformidades abiertas"
+  },
+  {
+   "doctype": "Workspace Number Card",
+   "label": "Acciones de mejora vencidas",
+   "number_card_name": "SGC - Acciones de mejora vencidas"
+  },
+  {
+   "doctype": "Workspace Number Card",
+   "label": "Hallazgos de auditoria abiertos",
+   "number_card_name": "SGC - Hallazgos de auditoria abiertos"
+  },
+  {
+   "doctype": "Workspace Number Card",
+   "label": "Riesgos altos tras tratamiento",
+   "number_card_name": "SGC - Riesgos altos tras tratamiento"
+  },
+  {
+   "doctype": "Workspace Number Card",
+   "label": "Tratamientos de riesgo vencidos",
+   "number_card_name": "SGC - Tratamientos de riesgo vencidos"
+  }
+ ],
  "owner": "Administrator",
  "public": 1,
  "quick_lists": [],
