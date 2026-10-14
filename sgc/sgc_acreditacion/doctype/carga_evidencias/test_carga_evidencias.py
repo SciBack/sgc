@@ -64,6 +64,8 @@ class IntegrationTestCargaEvidencias(IntegrationTestCase):
 			"Evidencias/E1/Criterio 1.2/plan_operativo.docx": b"plan 1.2",
 			"Evidencias/Estándar 2/informe.xlsx": b"informe del estandar 2",
 			"Evidencias/otros/suelto.pdf": b"sin criterio",
+			"Evidencias/Criterio 1.2/1. Inventario/inventario.xlsx": b"inventario numerado",
+			"Evidencias/2. Carpeta numerada/z.pdf": b"numerada sin criterio",
 			"__MACOSX/Evidencias/._acta.pdf": b"basura",
 			"Evidencias/.DS_Store": b"basura",
 			"Evidencias/instalador.exe": b"no es evidencia",
@@ -72,9 +74,12 @@ class IntegrationTestCargaEvidencias(IntegrationTestCase):
 		self.assertEqual(self._fila(carga, "Evidencias/E1/Criterio 1.2/plan_operativo.docx").elemento_marco, self.el["1.2"])
 		self.assertEqual(self._fila(carga, "Evidencias/Estándar 2/informe.xlsx").elemento_marco, self.el["E2"])
 		self.assertFalse(self._fila(carga, "Evidencias/otros/suelto.pdf").elemento_marco)
+		# Una carpeta numerada no es el Estándar 1 ni el 2: manda la carpeta de criterio de encima.
+		self.assertEqual(self._fila(carga, "Evidencias/Criterio 1.2/1. Inventario/inventario.xlsx").elemento_marco, self.el["1.2"])
+		self.assertFalse(self._fila(carga, "Evidencias/2. Carpeta numerada/z.pdf").elemento_marco)
 		self.assertIn("tipo no admitido", self._fila(carga, "Evidencias/instalador.exe").resultado)
-		self.assertEqual(len(carga.filas), 5)  # la basura del sistema ni siquiera se lista
-		self.assertEqual((carga.n_creadas, carga.n_vinculadas, carga.n_sin_vinculo, carga.n_omitidos), (4, 3, 1, 1))
+		self.assertEqual(len(carga.filas), 7)  # la basura del sistema ni siquiera se lista
+		self.assertEqual((carga.n_creadas, carga.n_vinculadas, carga.n_sin_vinculo, carga.n_omitidos), (6, 4, 2, 1))
 		self.assertEqual(carga.estado, "Con observaciones")
 
 		ev = frappe.get_doc("Evidencia", self._fila(carga, "Evidencias/E1/Criterio 1.2/plan_operativo.docx").evidencia)

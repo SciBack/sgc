@@ -34,7 +34,7 @@ from frappe.utils import cint
 
 EXTENSIONES = {
 	"pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "odt", "ods", "odp", "rtf", "txt", "csv",
-	"jpg", "jpeg", "png", "gif", "webp", "mp4", "mp3", "zip",
+	"md", "jpg", "jpeg", "png", "gif", "webp", "mp4", "mp3", "zip",
 }
 BASURA = re.compile(r"(^|/)(__MACOSX|\.DS_Store|Thumbs\.db|desktop\.ini|~\$[^/]*|\._[^/]*)(/|$)", re.IGNORECASE)
 MAX_ARCHIVOS = 3000
@@ -48,8 +48,16 @@ def _sin_tildes(texto):
 
 
 def _clave(texto):
-	"""El código que encabeza un nombre de carpeta: «Criterio 1.1 Propósitos» -> «1.1», «E1 …» -> «e1»."""
-	t = PALABRAS.sub("", _sin_tildes(texto).strip())
+	"""El código que encabeza un nombre de carpeta: «Criterio 1.1 Propósitos» -> «1.1», «E1 …» -> «e1».
+
+	«Estándar 1» -> «e1». Un número suelto («1. Inventario») NO es un estándar: las carpetas
+	numeradas son lo más común y casarían por error con el Estándar 1.
+	"""
+	t = _sin_tildes(texto).strip()
+	estandar = re.match(r"^(estandar|est)[\s._-]*(\d+)(?=$|[\s._)\-])", t)
+	if estandar:
+		return "e" + estandar.group(2)
+	t = PALABRAS.sub("", t)
 	m = re.match(r"^([a-z]?\d+(?:\.\d+)*|[ivxlc]+(?:\.\d+)*)(?=$|[\s._)\-])", t)
 	return m.group(1) if m else None
 
@@ -72,7 +80,7 @@ class CargaEvidencias(Document):
 	def _elementos(self):
 		"""{clave: name} de los elementos del marco, por el último tramo del código.
 
-		«CONEAU-1.1» y «CONEAU-INST-1.1» -> «1.1»; «CONEAU-E1» -> «e1» (y «1»); «CBC-I.1» -> «i.1».
+		«CONEAU-1.1» y «CONEAU-INST-1.1» -> «1.1»; «CONEAU-E1» -> «e1»; «CBC-I.1» -> «i.1».
 		Se salta la raíz del marco: su código acaba en un año y casaría con cualquier carpeta «2025».
 		"""
 		claves = {}
@@ -84,8 +92,6 @@ class CargaEvidencias(Document):
 			for k in {_sin_tildes(sufijo), _clave(sufijo) or ""} - {""}:
 				if k not in claves or e.tipo == "Criterio":
 					claves[k] = e.name
-				if e.tipo == "Estandar" and k[:1].isalpha() and k[1:].isdigit():
-					claves.setdefault(k[1:], e.name)  # «Estándar 1» -> «1»
 		return claves
 
 	def _indice(self, zf):
@@ -110,6 +116,8 @@ class CargaEvidencias(Document):
 			return claves.get(_sin_tildes(e)) or claves.get(_clave(e) or ""), fila.get("titulo")
 		for carpeta in reversed(ruta.split("/")[:-1]):
 			k = _clave(carpeta) or ""
+			if k.isdigit():
+				continue  # «1. Inventario»: carpeta numerada, no un código del marco
 			for candidata in (k, k[1:] if k[:1].isalpha() and k[1:2].isdigit() else ""):
 				if candidata in claves:  # «C1.1» vale como «1.1»
 					return claves[candidata], None
