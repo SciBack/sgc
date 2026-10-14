@@ -43,6 +43,7 @@ def _fugas(obj, ruta=""):
 class IntegrationTestPortalPublico(IntegrationTestCase):
 	def setUp(self):
 		frappe.set_user("Administrator")
+		factories.sin_workflow(self, "Ficha Caracterizacion Proceso")
 		self.fichas = []
 
 	def tearDown(self):

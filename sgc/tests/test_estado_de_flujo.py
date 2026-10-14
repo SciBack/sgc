@@ -29,3 +29,13 @@ class IntegrationTestEstadoDeFlujo(IntegrationTestCase):
 							  "tipo_documento": "Procedimiento", "proceso": proceso.name}).insert(ignore_permissions=True)
 		self.assertTrue(doc.codigo.startswith("TEST-EF-01-"))
 		self.assertEqual(doc.name, doc.codigo)
+
+	def test_fichas_y_procedimientos_se_aprueban_por_otra_persona(self):
+		"""Recorrido 14-oct-2026: el dueño publicaba su propia ficha; no había flujo."""
+		for doctype in ("Ficha Caracterizacion Proceso", "Procedimiento"):
+			wf = estandar.workflow_de(doctype)
+			with self.subTest(doctype=doctype):
+				self.assertIsNotNone(wf)
+				aprobar = [t for t in wf["transitions"] if t["action"] == "Aprobar"]
+				self.assertTrue(aprobar and all(t["allowed"] == "DPGC" and not t["allow_self_approval"] for t in aprobar))
+				self.assertNotIn("Dueño de Proceso", {t["allowed"] for t in wf["transitions"] if t["next_state"] in ("Aprobado", "Publicado")})

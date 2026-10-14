@@ -27,6 +27,10 @@ los datos.
 - No conformidades: la persona de la DPGC que confirmaba un evento de riesgo (o escalaba un
   hallazgo) nunca podía cerrar la NC que se abría a su nombre. Ahora la regla es la que importa:
   **quien trató la NC (su responsable) no verifica su eficacia**; quien la creó, sí puede.
+- **Fichas de caracterización y procedimientos tienen flujo de aprobación** (no lo tenían: su
+  estado era libre y el dueño del proceso podía publicar su propia ficha). El dueño elabora y envía
+  a revisión; la DPGC aprueba (no quien la creó) y publica; «Nueva version» y «Derogar» como en los
+  documentos. Diagramas BPMN 19 y 20 y su página en el manual.
 - Indicadores: el responsable de una ficha recibía el aviso de medir y no podía registrar la
   medición (solo el Data Steward creaba). Ahora la registra el responsable de su ficha; la DPGC,
   la analista y el Data Steward, cualquiera.

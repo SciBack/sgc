@@ -62,6 +62,7 @@ class IntegrationTestFichaPDF(IntegrationTestCase):
 
 	def setUp(self):
 		frappe.set_user("Administrator")
+		factories.sin_workflow(self, "Ficha Caracterizacion Proceso")
 		self.fichas = []
 		self._render_real = ficha_pdf._render
 		pdf = self._pdf_minimo()

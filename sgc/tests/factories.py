@@ -615,3 +615,18 @@ def desactivar_workflow(document_type):
         frappe.db.set_value("Workflow", n, "is_active", 0)
     # Limpiar el cache de workflow para que el cambio surta efecto en el mismo request.
     frappe.clear_cache(doctype=document_type)
+
+
+def reactivar_workflow(document_type):
+    """Vuelve a activar los Workflow SGC de un DocType (para `addCleanup` en tests que hacen commit)."""
+    for n in frappe.get_all("Workflow", filters={"document_type": document_type, "name": ["like", "% SGC"]}, pluck="name"):
+        frappe.db.set_value("Workflow", n, "is_active", 1)
+    frappe.db.commit()
+    frappe.clear_cache(doctype=document_type)
+
+
+def sin_workflow(test, document_type):
+    """Desactiva el workflow durante un test y lo restaura al terminar, aunque el test haga commit."""
+    desactivar_workflow(document_type)
+    test.addCleanup(reactivar_workflow, document_type)
+

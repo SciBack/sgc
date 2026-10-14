@@ -35,6 +35,7 @@ Documento con código, versión, responsable y archivo/enlace documental disponi
 | Aprobado | Observar | Observado | DPGC |
 | Aprobado | Publicar | Publicado | Autoridad Aprobadora |
 | Publicado | Derogar | Obsoleto | DPGC |
+| Publicado | Nueva version | Borrador | Dueño de Proceso, DPGC |
 | Publicado | *(automático)* Otro documento lo reemplaza | Obsoleto | Sistema |
 
 ## Documentación externa
@@ -85,6 +86,9 @@ purga salvo que se añada a *Log Settings → Logs To Clear*.
 El actor necesita DocPerm sobre el DocType y el rol exacto de la transición. Las transiciones de control sin autoaprobación deben probarse con una cuenta distinta de quien creó el registro.
 
 ## Restricciones
+
+- **Un documento publicado u obsoleto no se modifica encima** (título, archivo, código, versión, proceso, firmas). Para cambiarlo se ejecuta **Nueva version**: vuelve a **Borrador** con la versión siguiente, las firmas a cero, y exige describir el cambio antes de enviarlo a revisión. Al publicarse, el cambio queda en el historial.
+- **El código se genera solo** al guardar (PROCESO-SIGLA-NNN) si no se escribe uno.
 
 No modifiques el campo de estado directamente. No uses System Manager para simular una decisión funcional. Si el registro está fuera del ámbito de User Permission, debe permanecer invisible o ser rechazado por backend.
 
