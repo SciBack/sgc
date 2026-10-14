@@ -17,6 +17,12 @@
   "peso",
   "es_valorable",
   "nota_normativa",
+  "responsable_sb",
+  "unidad_responsable",
+  "unidades_apoyo",
+  "col_resp",
+  "evidencia_requerida",
+  "estructura_sb",
   "atributos",
   "is_group",
   "parent_elemento_marco",
@@ -90,6 +96,41 @@
    "fieldname": "nota_normativa",
    "fieldtype": "Text",
    "label": "Nota normativa"
+  },
+  {
+   "collapsible": 0,
+   "fieldname": "responsable_sb",
+   "fieldtype": "Section Break",
+   "label": "Responsable y evidencias"
+  },
+  {
+   "description": "La unidad que responde por este elemento durante todo el año y reúne sus evidencias.",
+   "fieldname": "unidad_responsable",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Unidad responsable",
+   "options": "Unidad Organica"
+  },
+  {
+   "description": "Otras unidades que aportan evidencias, una por línea.",
+   "fieldname": "unidades_apoyo",
+   "fieldtype": "Small Text",
+   "label": "Unidades de apoyo"
+  },
+  {
+   "fieldname": "col_resp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Qué documentos o registros sustentan este elemento. Las evidencias reales se vinculan con Trazabilidad.",
+   "fieldname": "evidencia_requerida",
+   "fieldtype": "Text",
+   "label": "Evidencia requerida"
+  },
+  {
+   "fieldname": "estructura_sb",
+   "fieldtype": "Section Break",
+   "label": "Estructura"
   },
   {
    "description": "Lo variable por marco (obligatoriedad, glosa, referencia legal)",
@@ -183,7 +224,7 @@
    "link_fieldname": "elemento_marco"
   }
  ],
- "modified": "2026-10-14 23:00:00.000000",
+ "modified": "2026-10-14 23:45:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Elemento Marco",
@@ -193,61 +234,72 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Decano/Director (lectura)"
+   "role": "Decano/Director (lectura)",
+   "report": 1
   },
   {
    "create": 1,
    "export": 1,
    "read": 1,
    "role": "Analista de Calidad (DPGC)",
-   "write": 1
+   "write": 1,
+   "report": 1
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Coordinador de Calidad de Facultad"
+   "role": "Coordinador de Calidad de Facultad",
+   "report": 1
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Responsable de Calidad de Programa"
+   "role": "Responsable de Calidad de Programa",
+   "report": 1
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comité de Calidad"
+   "role": "Miembro de Comité de Calidad",
+   "report": 1
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Dueño de Proceso"
+   "role": "Dueño de Proceso",
+   "report": 1
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Data Steward"
+   "role": "Data Steward",
+   "report": 1
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Auditor Interno"
+   "role": "Auditor Interno",
+   "report": 1
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Rectorado/VR (lectura)"
+   "role": "Rectorado/VR (lectura)",
+   "report": 1
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Responsable de Sede"
+   "role": "Responsable de Sede",
+   "report": 1
   },
   {
    "create": 1,
    "export": 1,
    "read": 1,
    "role": "DPGC",
-   "write": 1
+   "write": 1,
+   "report": 1
   },
   {
    "email": 1,
@@ -256,7 +308,8 @@
    "read": 1,
    "role": "System Manager",
    "share": 1,
-   "write": 1
+   "write": 1,
+   "report": 1
   }
  ],
  "row_format": "Dynamic",

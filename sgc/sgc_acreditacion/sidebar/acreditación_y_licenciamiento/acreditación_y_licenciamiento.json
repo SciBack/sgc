@@ -74,6 +74,21 @@
    "indent": 0,
    "is_default_module": 0,
    "keep_closed": 0,
+   "label": "Preparación de evidencias (IAC)",
+   "link_to": "Preparacion de Evidencias",
+   "link_type": "Report",
+   "open_in_new_tab": 1,
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "added": 0,
+   "child": 0,
+   "collapsible": 1,
+   "hidden": 0,
+   "indent": 0,
+   "is_default_module": 0,
+   "keep_closed": 0,
    "label": "Valoración de criterios",
    "link_to": "Valoracion Criterio",
    "link_type": "DocType",
@@ -202,7 +217,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-10-14 18:00:00.000000",
+ "modified": "2026-10-14 23:45:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Acreditación y licenciamiento",

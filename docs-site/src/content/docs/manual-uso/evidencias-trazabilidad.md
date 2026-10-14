@@ -39,6 +39,21 @@ Lo que no casa con ningún criterio se crea igual y queda en el detalle como «C
 criterio: vincúlela a mano». Las evidencias nacen **Pendientes**: darlas por válidas sigue
 siendo una decisión de la persona que revisa.
 
+## Preparar las evidencias de un marco (por ejemplo, el IAC de Sunedu)
+
+Cada elemento de un marco normativo (un criterio, una condición básica o una pantalla del MIAC)
+puede tener una **unidad responsable**, sus **unidades de apoyo** y la **evidencia requerida**. Se
+completan en la ficha del elemento (Acreditación y licenciamiento → Estándares y criterios).
+
+El informe **Preparación de evidencias (IAC)** lista, para el marco que elija, cada elemento con
+su responsable, cuántas evidencias tiene vinculadas, cuántas están validadas y el avance por eje.
+Para el Informe Anual de Cumplimiento se usa el marco **«Ejes Temáticos de Autoevaluación del IAC
+(MIAC)»**: 8 ejes, 48 pantallas [P] y 12 formatos [F], con códigos `IAC-1.1.1`. Así, un ZIP con
+carpetas «1.1.1 Modelo educativo» se carga directo a su pantalla.
+
+Los formatos que vienen del SIU (programas, mallas, locales, plana docente) no se corrigen en el
+MIAC: se revisan en el SIU antes del 1 de enero.
+
 ## Vincular la evidencia a un criterio o proceso: Trazabilidad
 
 El vínculo real entre una Evidencia y lo que sustenta (un criterio del marco

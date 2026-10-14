@@ -9,6 +9,21 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.0] - 2026-10-14
+
+**Requiere migrar:** sí. Campos nuevos en Elemento Marco y un informe nuevo. El marco del IAC se
+carga solo en las instancias que lo declaren en `sgc_marcos`.
+
+### Añadido
+- Marco **«Ejes Temáticos de Autoevaluación del IAC (MIAC)»** (Sunedu, RS 00105-2026, Tabla 2):
+  8 ejes, 21 subejes, 48 pantallas y 12 formatos, para preparar el Informe Anual de Cumplimiento.
+  Se declara con `sgc_marcos: ["sunedu-iac-miac-2026"]`.
+- Cada elemento de un marco admite **unidad responsable, unidades de apoyo y evidencia requerida**.
+- Informe **«Preparación de evidencias»**: por elemento, responsable, evidencias vinculadas y
+  validadas y avance por eje.
+- El cargador de marcos admite tipo por nodo, marcos de más de 3 niveles, alcance y marcos sin
+  escala de valoración.
+
 ## [1.6.0] - 2026-10-14
 
 **Requiere migrar:** sí. Pantallas nuevas (Carga de evidencias, informe Implantación del SGC),
