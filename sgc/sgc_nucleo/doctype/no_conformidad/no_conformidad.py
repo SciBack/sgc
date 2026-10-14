@@ -40,9 +40,12 @@ class NoConformidad(Document):
         if nivel >= 1 and not self.responsable:
             frappe.throw(_("Asigna un responsable antes de pasar la NC a análisis."))
 
-        # A partir de "En tratamiento": si requiere análisis de causa, debe estar redactado.
-        if nivel >= 2 and self.requiere_analisis_causa and not (self.analisis_causa or "").strip():
-            frappe.throw(_("Esta NC requiere análisis de causa antes de pasar a tratamiento."))
+        # A partir de "En tratamiento": si requiere análisis de causa, tiene que haberlo. Vale el
+        # análisis estructurado (metodología + causas, ver abajo) o, en NC anteriores a #34, el texto.
+        if (nivel >= 2 and self.requiere_analisis_causa and not (self.analisis_causa or "").strip()
+                and not self.causas):
+            frappe.throw(_("Esta NC requiere análisis de causa antes de pasar a tratamiento: declare la "
+                           "metodología y registre las causas en «Causas identificadas»."))
 
         self._validar_analisis_estructurado(nivel)
 

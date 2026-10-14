@@ -22,6 +22,8 @@ los datos.
   sube la versión, limpia las firmas de la ronda anterior y exige describir el cambio antes de
   enviarlo a revisión. Al publicarse, el cambio queda en el historial del documento.
 - El aviso al aprobar sin «Revisado por» dice dónde se rellena.
+- No conformidades: con el análisis estructurado (metodología y causas) ya no se exige además el
+  texto libre «Análisis de causa raíz»; si falta todo, el aviso dice dónde registrarlo.
 
 ## [1.4.1] - 2026-10-14
 

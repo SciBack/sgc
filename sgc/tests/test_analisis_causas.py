@@ -118,6 +118,18 @@ class IntegrationTestAnalisisCausas(IntegrationTestCase):
                     nc.append("causas", c)
                 self.assertEqual(self._a_tratamiento(nc).estado, "En tratamiento")
 
+    def test_el_analisis_estructurado_basta_sin_el_texto_libre(self):
+        """Recorrido 14-oct-2026: con metodología y causas, el texto libre aparte ya no se exige."""
+        nc = self._nc_en_analisis(metodologia="Lluvia de ideas", analisis_causa=None)
+        self._causa(nc)
+        self.assertEqual(self._a_tratamiento(nc).estado, "En tratamiento")
+
+    def test_sin_texto_ni_causas_dice_donde_registrarlas(self):
+        nc = self._nc_en_analisis(analisis_causa=None)
+        with self.assertRaises(frappe.ValidationError) as ctx:
+            self._a_tratamiento(nc)
+        self.assertIn("Causas identificadas", str(ctx.exception))
+
     # -- lo que no cambia -------------------------------------------------------------
     def test_sin_requerir_analisis_no_se_pide_nada(self):
         nc = self._nc_en_analisis(tipo="No conformidad menor", analisis_causa=None)
