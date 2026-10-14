@@ -9,6 +9,34 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.5.0] - 2026-10-14
+
+**Requiere migrar:** sí. Cambia el flujo de aprobación de documentos (acción nueva). Sin cambios en
+los datos.
+
+### Cambiado
+- Documentos controlados: un documento **publicado u obsoleto ya no se puede modificar encima**
+  (título, archivo, código, versión, proceso, firmas). Antes se podía cambiar hasta el archivo de
+  un documento vigente sin pasar por revisión ni aprobación (ISO 9001 §7.5.3).
+- Acción nueva **«Nueva version»** (Publicado → Borrador) para el dueño del proceso o la DPGC:
+  sube la versión, limpia las firmas de la ronda anterior y exige describir el cambio antes de
+  enviarlo a revisión. Al publicarse, el cambio queda en el historial del documento.
+- El aviso al aprobar sin «Revisado por» dice dónde se rellena.
+- No conformidades: con el análisis estructurado (metodología y causas) ya no se exige además el
+  texto libre «Análisis de causa raíz»; si falta todo, el aviso dice dónde registrarlo.
+- No conformidades: la persona de la DPGC que confirmaba un evento de riesgo (o escalaba un
+  hallazgo) nunca podía cerrar la NC que se abría a su nombre. Ahora la regla es la que importa:
+  **quien trató la NC (su responsable) no verifica su eficacia**; quien la creó, sí puede.
+- **Fichas de caracterización y procedimientos tienen flujo de aprobación** (no lo tenían: su
+  estado era libre y el dueño del proceso podía publicar su propia ficha). El dueño elabora y envía
+  a revisión; la DPGC aprueba (no quien la creó) y publica; «Nueva version» y «Derogar» como en los
+  documentos. Diagramas BPMN 19 y 20 y su página en el manual.
+- Autoevaluación: no se puede **consolidar** con criterios sin valorar (se consolidaba con uno
+  solo de todo el marco CONEAU). «No aplica» cuenta como valoración.
+- Indicadores: el responsable de una ficha recibía el aviso de medir y no podía registrar la
+  medición (solo el Data Steward creaba). Ahora la registra el responsable de su ficha; la DPGC,
+  la analista y el Data Steward, cualquiera.
+
 ## [1.4.1] - 2026-10-14
 
 **Requiere migrar:** sí. Sin cambios en los datos.

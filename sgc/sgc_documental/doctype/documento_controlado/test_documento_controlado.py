@@ -140,7 +140,7 @@ class IntegrationTestDocumentoControlado(IntegrationTestCase):
             d.save(ignore_permissions=True)
 
     def test_publicado_es_terminal_salvo_obsoleto(self):
-        """Desde Publicado solo se puede ir a Obsoleto; regresar a Borrador falla."""
+        """Desde Publicado solo se va a Obsoleto o, con «Nueva version», a Borrador (1.5.0)."""
         d = self._crear(archivo=ARCHIVO, aprobado_por=USER, revisado_por=USER)
         d.estado = "En revision"
         d.save(ignore_permissions=True)
@@ -149,7 +149,7 @@ class IntegrationTestDocumentoControlado(IntegrationTestCase):
         d.estado = "Publicado"
         d.save(ignore_permissions=True)
 
-        d.estado = "Borrador"
+        d.estado = "En revision"
         with self.assertRaises(frappe.ValidationError):
             d.save(ignore_permissions=True)
 
@@ -317,3 +317,63 @@ class IntegrationTestFirmaDeAprobacion(IntegrationTestCase):
             doc.save(ignore_permissions=True)
         self.assertEqual(doc.aprobado_por, primera)
 
+
+class IntegrationTestVersionControlada(IntegrationTestCase):
+    """Recorrido 14-oct-2026: un documento publicado se editaba encima, sin aprobación."""
+
+    def setUp(self):
+        factories.desactivar_workflow("Documento Controlado")
+        self.proceso = factories.crear_proceso().name
+
+    def _crear(self, **overrides):
+        vals = {"doctype": "Documento Controlado", "titulo": "Doc versión controlada",
+                "tipo_documento": "Procedimiento", "proceso": self.proceso}
+        vals.update(overrides)
+        return frappe.get_doc(vals).insert(ignore_permissions=True)
+
+    def _publicado(self):
+        d = self._crear(archivo=ARCHIVO, revisado_por=USER)
+        for estado in ("En revision", "Aprobado", "Publicado"):
+            d.estado = estado
+            d.save(ignore_permissions=True)
+        return d
+
+    def test_el_publicado_no_se_edita_encima(self):
+        """Encontrado en el recorrido: se cambiaban título y archivo de un publicado sin aprobación."""
+        d = self._publicado()
+        for campo, valor in (("titulo", "Otro título"), ("archivo", "/files/otro.pdf"), ("version", 9)):
+            d.reload()
+            d.set(campo, valor)
+            with self.subTest(campo=campo), self.assertRaises(frappe.ValidationError):
+                d.save(ignore_permissions=True)
+
+    def test_el_publicado_admite_lo_que_no_es_contenido(self):
+        d = self._publicado()
+        d.reload()
+        d.solo_consulta = 0
+        d.save(ignore_permissions=True)
+
+    def test_nueva_version_vuelve_a_borrador_y_pide_otra_aprobacion(self):
+        d = self._publicado()
+        d.reload()
+        d.estado = "Borrador"  # la acción «Nueva version» del flujo
+        d.save(ignore_permissions=True)
+        self.assertEqual((d.version, d.aprobado_por, d.revisado_por, d.fecha_publicacion), (2, None, None, None))
+
+        d.estado = "En revision"
+        with self.assertRaises(frappe.ValidationError):  # sin describir el cambio
+            d.save(ignore_permissions=True)
+        d.reload()
+        d.descripcion_cambio = "Se actualiza el alcance."
+        d.revisado_por = USER
+        for estado in ("En revision", "Aprobado", "Publicado"):
+            d.estado = estado
+            d.save(ignore_permissions=True)
+        d.reload()
+        self.assertEqual(d.version, 2)
+        self.assertIn(2, [f.version for f in d.historial_cambios])
+
+    def test_el_flujo_ofrece_nueva_version_desde_publicado(self):
+        wf = frappe.get_doc("Workflow", "Documento Controlado SGC")
+        self.assertTrue(any(t.state == "Publicado" and t.action == "Nueva version" and t.next_state == "Borrador"
+                            for t in wf.transitions))

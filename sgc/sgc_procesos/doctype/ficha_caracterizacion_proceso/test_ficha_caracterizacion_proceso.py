@@ -169,6 +169,7 @@ class IntegrationTestFichaCompleta(IntegrationTestCase):
 	"""La ficha recoge lo que el sistema ya sabe y no se publica incompleta (ISO 9001 §4.4.1)."""
 
 	def setUp(self):
+		factories.sin_workflow(self, "Ficha Caracterizacion Proceso")
 		self.proceso = factories.crear_proceso(is_group=1).name
 
 	def _ficha(self, **extra):

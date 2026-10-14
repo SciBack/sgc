@@ -501,7 +501,8 @@ def specs_de_workflows():
 #   13-14  riesgos: gestión preventiva que, al materializarse, también entra a CAPA.
 #   15     la revisión por la dirección cierra el ciclo (ISO 9001 §9.3): consume
 #          las salidas de todos los demás.
-#   16-18  llegados después (#37, #33, reporte de eventos). Van AL FINAL y no en
+#   16-20  llegados después (#37, #33, reporte de eventos, aprobación de fichas y
+#          procedimientos en 1.5.0). Van AL FINAL y no en
 #          su sitio lógico (el 16 tras el 08, el 17 antes del 10, el 18 tras el
 #          14) para no renumerar los quince que Calidad ya usa como referencia.
 ORDEN_RECORRIDO = (
@@ -523,6 +524,8 @@ ORDEN_RECORRIDO = (
     "Informe Auditoria",
     "Salida No Conforme",
     "Evento Riesgo",
+    "Ficha Caracterizacion Proceso",
+    "Procedimiento",
 )
 
 

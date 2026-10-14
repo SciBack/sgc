@@ -39,9 +39,17 @@ TRANSICIONES = {
 	"En revision": {"Aprobado", "Observado"},
 	"Observado": {"Borrador", "En revision"},
 	"Aprobado": {"Publicado", "Observado"},
-	"Publicado": {"Obsoleto"},
+	# «Nueva version»: el publicado vuelve a elaborarse y sube de versión (ver `_abrir_nueva_version`).
+	"Publicado": {"Obsoleto", "Borrador"},
 	"Obsoleto": set(),
 }
+
+# Lo que hace que un documento sea el que es. Publicado u obsoleto, no cambia: para cambiarlo se
+# abre una versión nueva, que vuelve a pasar por revisión y aprobación (ISO 9001 §7.5.3).
+CONTENIDO_CONGELADO = (
+	"codigo", "titulo", "version", "tipo_documento", "archivo", "url_externa", "proceso",
+	"elaborado_por", "revisado_por", "aprobado_por", "fecha_publicacion", "reemplaza_a",
+)
 
 # Sigla por tipo documental, para componer el codigo SGC.
 SIGLAS = {
@@ -83,6 +91,8 @@ class DocumentoControlado(Document):
 
 	def validate(self):
 		self._validar_transicion()
+		self._congelar_publicado()
+		self._abrir_nueva_version()
 		self._completar_dueno_proceso()
 		self._validar_relacionados()
 		self._registrar_observacion()
@@ -148,6 +158,34 @@ class DocumentoControlado(Document):
 				),
 				title=_("Transición no permitida"),
 			)
+
+	def _congelar_publicado(self):
+		"""Un documento publicado u obsoleto no se edita encima: se versiona."""
+		anterior = self.get_doc_before_save() if not self.is_new() else None
+		if not anterior or anterior.estado not in ("Publicado", "Obsoleto") or anterior.estado != self.estado:
+			return
+		cambiados = [self.meta.get_label(c) for c in CONTENIDO_CONGELADO if (anterior.get(c) or None) != (self.get(c) or None)]
+		if cambiados:
+			frappe.throw(
+				_("Un documento {0} no se modifica ({1}). Para cambiarlo use «Nueva version» en el menú "
+				  "Acciones: vuelve a borrador con la versión siguiente y pasa otra vez por revisión y aprobación.")
+				.format(anterior.estado.lower(), ", ".join(cambiados)),
+				title=_("Documento vigente"),
+			)
+
+	def _abrir_nueva_version(self):
+		"""Al pasar de Publicado a Borrador: versión siguiente y firmas de la ronda nueva.
+
+		Mientras se elabora la versión nueva, el documento deja de estar vigente; la anterior queda
+		en su historial de cambios y su archivo sigue adjunto.
+		"""
+		if self._estado_anterior() != "Publicado" or self.estado != "Borrador":
+			return
+		self.version = (self.version or 1) + 1
+		self.elaborado_por = frappe.session.user
+		self.revisado_por = None
+		self.aprobado_por = None
+		self.fecha_publicacion = None
 
 	def _completar_dueno_proceso(self):
 		"""El dueño del proceso recibe el aviso de publicación: a él le afecta la versión."""
@@ -275,7 +313,7 @@ class DocumentoControlado(Document):
 				frappe.throw(_("Indique quién elaboró el documento antes de enviarlo a revisión."))
 
 		if self.estado == "Aprobado" and not self.revisado_por:
-			frappe.throw(_("Indique quién revisó el documento antes de aprobarlo."))
+			frappe.throw(_("Antes de aprobar, indique en «Revisado por» quién revisó el contenido y guarde; después apruebe."))
 
 		if self.estado == "Publicado":
 			# Sin las firmas, la norma prohibe comunicar e implementar el documento.
@@ -297,6 +335,12 @@ class DocumentoControlado(Document):
 		if self.is_new():
 			return
 
+		if self._estado_anterior() == "Publicado" and self.estado == "Borrador":
+			return  # «Nueva version»: la descripción se pide al enviarla a revisión, no al abrirla
+		if (self.estado == "En revision" and (self.version or 1) > 1 and not self.descripcion_cambio
+				and not any(f.version == self.version for f in (self.historial_cambios or []))):
+			frappe.throw(_("Describa qué cambia en la versión {0} antes de enviarla a revisión.").format(self.version),
+						 title=_("Descripción del cambio obligatoria"))
 		anterior = self.get_doc_before_save()
 		if anterior and anterior.version != self.version and not self.descripcion_cambio:
 			frappe.throw(

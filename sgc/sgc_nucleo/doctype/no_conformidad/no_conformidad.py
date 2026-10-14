@@ -40,9 +40,12 @@ class NoConformidad(Document):
         if nivel >= 1 and not self.responsable:
             frappe.throw(_("Asigna un responsable antes de pasar la NC a análisis."))
 
-        # A partir de "En tratamiento": si requiere análisis de causa, debe estar redactado.
-        if nivel >= 2 and self.requiere_analisis_causa and not (self.analisis_causa or "").strip():
-            frappe.throw(_("Esta NC requiere análisis de causa antes de pasar a tratamiento."))
+        # A partir de "En tratamiento": si requiere análisis de causa, tiene que haberlo. Vale el
+        # análisis estructurado (metodología + causas, ver abajo) o, en NC anteriores a #34, el texto.
+        if (nivel >= 2 and self.requiere_analisis_causa and not (self.analisis_causa or "").strip()
+                and not self.causas):
+            frappe.throw(_("Esta NC requiere análisis de causa antes de pasar a tratamiento: declare la "
+                           "metodología y registre las causas en «Causas identificadas»."))
 
         self._validar_analisis_estructurado(nivel)
 
@@ -136,4 +139,12 @@ class NoConformidad(Document):
 
         anterior = self.get_doc_before_save()
         if not anterior or anterior.estado not in cierres:
+            # Quien trató la NC no verifica su eficacia. Se compara con el responsable (el
+            # ejecutor), no con quien creó el registro: una NC que abre el sistema al confirmar un
+            # evento o escalar un hallazgo queda a nombre de la DPGC, y comparar con el creador le
+            # impedía cerrarla a la única persona que debía hacerlo (recorrido 14-oct-2026).
+            if (anterior and self.responsable and self.responsable == frappe.session.user
+                    and frappe.session.user != "Administrator"):
+                frappe.throw(_("Quien trató la no conformidad no puede verificar su eficacia: que la cierre otra persona de la DPGC."),
+                             title=_("Segregación de funciones"))
             self.verificada_por = frappe.session.user

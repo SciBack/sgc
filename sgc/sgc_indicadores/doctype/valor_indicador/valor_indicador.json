@@ -47,14 +47,14 @@
   {
    "fieldname": "autoevaluacion",
    "fieldtype": "Link",
-   "label": "Autoevaluaci\u00f3n",
+   "label": "Autoevaluación",
    "options": "Autoevaluacion"
   },
   {
    "fieldname": "periodo_academico",
    "fieldtype": "Link",
    "in_standard_filter": 1,
-   "label": "Periodo acad\u00e9mico",
+   "label": "Periodo académico",
    "options": "Periodo Academico"
   },
   {
@@ -67,14 +67,14 @@
   {
    "fieldname": "unidad_organica",
    "fieldtype": "Link",
-   "label": "Unidad org\u00e1nica",
+   "label": "Unidad orgánica",
    "options": "Unidad Organica"
   },
   {
    "fieldname": "valor_num",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Valor num\u00e9rico"
+   "label": "Valor numérico"
   },
   {
    "fieldname": "valor_texto",
@@ -120,14 +120,14 @@
   {
    "fieldname": "lote_ingesta",
    "fieldtype": "Link",
-   "label": "\u00daltimo lote",
+   "label": "Último lote",
    "options": "Lote Ingesta",
    "read_only": 1
   },
   {
    "fieldname": "datos_ingesta",
    "fieldtype": "Long Text",
-   "label": "Contrato de medici\u00f3n",
+   "label": "Contrato de medición",
    "read_only": 1
   },
   {
@@ -139,13 +139,13 @@
   {
    "fieldname": "unidad_medicion",
    "fieldtype": "Data",
-   "label": "Unidad de medici\u00f3n",
+   "label": "Unidad de medición",
    "read_only": 1
   },
   {
    "fieldname": "formula_version",
    "fieldtype": "Data",
-   "label": "Versi\u00f3n de f\u00f3rmula",
+   "label": "Versión de fórmula",
    "read_only": 1
   },
   {
@@ -163,29 +163,29 @@
   {
    "fieldname": "estado_medicion",
    "fieldtype": "Select",
-   "label": "Estado de medici\u00f3n",
+   "label": "Estado de medición",
    "options": "\nProvisional\nValidado",
    "read_only": 1
   },
   {
-   "description": "Calculado al guardar contra la meta de la ficha. Vac\u00edo si el indicador no tiene meta declarada: no se inventa un color.",
+   "description": "Calculado al guardar contra la meta de la ficha. Vacío si el indicador no tiene meta declarada: no se inventa un color.",
    "fieldname": "semaforo",
    "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "Sem\u00e1foro",
+   "label": "Semáforo",
    "options": "\nVerde\nAmbar\nRojo",
    "read_only": 1
   },
   {
    "fieldname": "sec_analisis",
    "fieldtype": "Section Break",
-   "label": "An\u00e1lisis del periodo"
+   "label": "Análisis del periodo"
   },
   {
-   "description": "Qu\u00e9 explica el resultado de este periodo y qu\u00e9 se har\u00e1. Se puede escribir aunque la medici\u00f3n venga de la ingesta.",
+   "description": "Qué explica el resultado de este periodo y qué se hará. Se puede escribir aunque la medición venga de la ingesta.",
    "fieldname": "analisis",
    "fieldtype": "Text",
-   "label": "An\u00e1lisis"
+   "label": "Análisis"
   },
   {
    "fieldname": "analizado_por",
@@ -197,20 +197,21 @@
   {
    "fieldname": "fecha_analisis",
    "fieldtype": "Datetime",
-   "label": "Fecha del an\u00e1lisis",
+   "label": "Fecha del análisis",
    "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-13 19:41:03.342023",
+ "modified": "2026-10-14 22:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Indicadores",
  "name": "Valor Indicador",
  "owner": "Administrator",
  "permissions": [
   {
+   "create": 1,
    "export": 1,
    "read": 1,
    "report": 1,
@@ -218,6 +219,7 @@
    "write": 1
   },
   {
+   "create": 1,
    "export": 1,
    "read": 1,
    "report": 1,
@@ -231,6 +233,7 @@
    "role": "Coordinador de Calidad de Facultad"
   },
   {
+   "create": 1,
    "export": 1,
    "read": 1,
    "report": 1,
@@ -241,13 +244,14 @@
    "export": 1,
    "read": 1,
    "report": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
+   "create": 1,
    "export": 1,
    "read": 1,
    "report": 1,
-   "role": "Due\u00f1o de Proceso",
+   "role": "Dueño de Proceso",
    "write": 1
   },
   {

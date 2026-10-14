@@ -271,3 +271,45 @@ class IntegrationTestNoConformidad(IntegrationTestCase):
         self.assertEqual(nc.verificada_por, ADMIN)
         # la NC mayor arrastro su flag hasta el cierre
         self.assertEqual(nc.requiere_analisis_causa, 1)
+
+
+class IntegrationTestNoConformidadSegregacion(IntegrationTestCase):
+    """Quien trató la NC no la cierra; quien la creó, sí (recorrido 14-oct-2026)."""
+
+    def setUp(self):
+        from sgc.tests import factories
+
+        factories.desactivar_workflow("No Conformidad")
+        self.evidencia = factories.crear_evidencia(enlace_url="https://example.com/cierre").name
+        self.usuarios = []
+        for nombre in ("seg-dpgc", "seg-resp"):
+            email = f"{nombre}@example.com"
+            if not frappe.db.exists("User", email):
+                frappe.get_doc({"doctype": "User", "email": email, "first_name": nombre, "send_welcome_email": 0,
+                                "roles": [{"role": "DPGC"}, {"role": "Responsable de Calidad de Programa"}]}).insert(ignore_permissions=True)
+            self.usuarios.append(email)
+        self.addCleanup(frappe.set_user, "Administrator")
+
+    def _nc_en_verificacion(self, owner, responsable):
+        frappe.set_user(owner)
+        nc = frappe.get_doc({"doctype": "No Conformidad", "titulo": "NC segregación", "tipo": "No conformidad menor",
+                             "estado": "En verificacion", "responsable": responsable, "fecha_compromiso": "2026-12-31",
+                             "correccion_inmediata": "Corrección",
+                             "evidencia_cierre": self.evidencia}).insert(ignore_permissions=True)
+        return nc
+
+    def test_quien_la_trato_no_la_cierra(self):
+        dpgc, resp = self.usuarios
+        nc = self._nc_en_verificacion(owner=dpgc, responsable=resp)
+        frappe.set_user(resp)
+        nc.estado = "Cerrada eficaz"
+        with self.assertRaises(frappe.ValidationError):
+            nc.save(ignore_permissions=True)
+
+    def test_quien_la_creo_si_puede_cerrarla(self):
+        dpgc, resp = self.usuarios
+        nc = self._nc_en_verificacion(owner=dpgc, responsable=resp)
+        frappe.set_user(dpgc)
+        nc.estado = "Cerrada eficaz"
+        nc.save(ignore_permissions=True)
+        self.assertEqual(nc.verificada_por, dpgc)

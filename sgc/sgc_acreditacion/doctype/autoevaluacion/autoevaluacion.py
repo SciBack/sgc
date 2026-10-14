@@ -10,6 +10,30 @@ class Autoevaluacion(Document):
     def validate(self):
         self._validar_marco_es_de_acreditacion()
         self._validar_alcance_coherente()
+        self._validar_consolidacion()
+
+    def _validar_consolidacion(self):
+        """Consolidar exige que cada criterio valorable del marco tenga su valoración.
+
+        Recorrido del 14-oct-2026: la DPGC consolidó una autoevaluación contra el marco CONEAU con
+        un solo criterio valorado; los niveles de los estándares se habrían confirmado sin nada
+        debajo. «No aplica» cuenta como valoración (es un juicio), vacío no.
+        """
+        anterior = self.get_doc_before_save() if not self.is_new() else None
+        if self.estado != "Consolidada" or (anterior and anterior.estado == "Consolidada") or self.is_new():
+            return
+        from sgc import scoring
+
+        marco = self.marco_normativo
+        criterios = scoring._criterios_valorables_del_marco(marco, autoevaluacion=self.name)
+        faltan = [c for c in criterios if not scoring._valoracion_criterio(self.name, c)]
+        if faltan:
+            frappe.throw(
+                _("No se puede consolidar: faltan {0} de {1} criterios por valorar (por ejemplo: {2}). "
+                  "Si un criterio no corresponde, valórelo como «No aplica».").format(
+                    len(faltan), len(criterios), ", ".join(faltan[:5])),
+                title=_("Autoevaluación incompleta"),
+            )
 
     def _validar_marco_es_de_acreditacion(self):
         """Una autoevaluación acredita; no sirve para el permiso de operar.

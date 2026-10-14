@@ -2,6 +2,7 @@
 import math
 
 import frappe
+from frappe import _
 from frappe.model.document import Document
 from frappe.utils import add_days, now_datetime, nowdate
 
@@ -22,7 +23,33 @@ def ficha_de(indicador):
     )
 
 
+# Registran cualquier medición a mano; el resto, solo las de los indicadores de los que responden.
+QUIEN_MIDE_TODO = {"DPGC", "Analista de Calidad (DPGC)", "Data Steward", "System Manager"}
+
+
 class ValorIndicador(Document):
+    def before_insert(self):
+        self._solo_el_responsable_registra()
+
+    def _solo_el_responsable_registra(self):
+        """El aviso «medición próxima» va al responsable de la ficha: él tiene que poder registrarla.
+
+        Recorrido del 14-oct-2026: solo el Data Steward podía crear mediciones, así que el
+        responsable recibía el aviso y no podía cumplirlo. Lo que llega por la API de ingesta tiene
+        su propio control (`sgc.ingesta`).
+        """
+        if self.ingesta_clave or self.lote_ingesta or frappe.session.user == "Administrator":
+            return
+        if QUIEN_MIDE_TODO & set(frappe.get_roles()):
+            return
+        ficha = ficha_de(self.indicador)
+        if not ficha or ficha.responsable != frappe.session.user:
+            frappe.throw(
+                _("Solo el responsable de la ficha del indicador {0} registra sus mediciones (o la DPGC o un Data Steward).")
+                .format(self.indicador),
+                frappe.PermissionError,
+            )
+
     def validate(self):
         from sgc.ingesta import en_ingesta
         from sgc.ingesta_contrato import ErrorContrato, evaluar_reglas

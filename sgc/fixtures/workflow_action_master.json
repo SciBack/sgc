@@ -369,5 +369,12 @@
   "modified": "2026-09-27 14:19:44.913070",
   "name": "Descartar",
   "workflow_action_name": "Descartar"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-04 19:54:25.108354",
+  "name": "Nueva version",
+  "workflow_action_name": "Nueva version"
  }
 ]

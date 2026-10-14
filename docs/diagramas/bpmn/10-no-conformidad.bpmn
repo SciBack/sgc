@@ -82,14 +82,14 @@
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_En_verificacion_Cerrar_eficaz_hacia_Cerrada_eficaz" sourceRef="Task_En_verificacion__Cerrar_eficaz" targetRef="End_Cerrada_eficaz">
       <bpmn:extensionElements>
-        <sgc:transicion rol="DPGC" autoaprobacion="0" />
+        <sgc:transicion rol="DPGC" autoaprobacion="1" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_gw_En_verificacion_Cerrar_no_eficaz" sourceRef="Gateway_En_verificacion" targetRef="Task_En_verificacion__Cerrar_no_eficaz">
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_En_verificacion_Cerrar_no_eficaz_hacia_Cerrada_no_eficaz" sourceRef="Task_En_verificacion__Cerrar_no_eficaz" targetRef="End_Cerrada_no_eficaz">
       <bpmn:extensionElements>
-        <sgc:transicion rol="DPGC" autoaprobacion="0" />
+        <sgc:transicion rol="DPGC" autoaprobacion="1" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_gw_En_verificacion_Reabrir_tratamiento" sourceRef="Gateway_En_verificacion" targetRef="Task_En_verificacion__Reabrir_tratamiento">
