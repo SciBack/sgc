@@ -186,7 +186,6 @@ class DocumentoControlado(Document):
 		self.revisado_por = None
 		self.aprobado_por = None
 		self.fecha_publicacion = None
-		self.flags.nueva_version = True
 
 	def _completar_dueno_proceso(self):
 		"""El dueño del proceso recibe el aviso de publicación: a él le afecta la versión."""
@@ -336,8 +335,8 @@ class DocumentoControlado(Document):
 		if self.is_new():
 			return
 
-		if self.flags.get("nueva_version"):
-			return  # se pide al enviarla a revisión, no al abrirla
+		if self._estado_anterior() == "Publicado" and self.estado == "Borrador":
+			return  # «Nueva version»: la descripción se pide al enviarla a revisión, no al abrirla
 		if (self.estado == "En revision" and (self.version or 1) > 1 and not self.descripcion_cambio
 				and not any(f.version == self.version for f in (self.historial_cambios or []))):
 			frappe.throw(_("Describa qué cambia en la versión {0} antes de enviarla a revisión.").format(self.version),
