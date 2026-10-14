@@ -69,7 +69,7 @@ def fila(criterio, meta, actual, falta):
 	actual = int(actual or 0)
 	estado = ESTADOS[0] if actual >= meta else ESTADOS[1] if actual else ESTADOS[2]
 	return {"criterio": criterio, "meta": meta, "actual": actual,
-			"avance": round(min(100, 100 * actual / meta), 1), "estado": _(estado),
+			"avance": round(min(100, 100 * actual / meta), 1), "estado": estado,
 			"falta": "" if estado == ESTADOS[0] else falta}
 
 

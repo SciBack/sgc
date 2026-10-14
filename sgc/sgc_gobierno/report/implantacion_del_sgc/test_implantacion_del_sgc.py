@@ -9,7 +9,7 @@ from sgc.sgc_gobierno.report.implantacion_del_sgc import implantacion_del_sgc as
 
 class IntegrationTestImplantacionDelSgc(IntegrationTestCase):
 	def test_mide_los_nueve_criterios(self):
-		columnas, data, _mensaje, grafico, resumen = informe.execute()
+		_columnas, data, _mensaje, grafico, resumen = informe.execute()
 		self.assertEqual(len(data), 9)
 		self.assertEqual(len(grafico["data"]["datasets"][0]["values"]), 9)
 		for fila in data:
