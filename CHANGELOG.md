@@ -24,6 +24,9 @@ los datos.
 - El aviso al aprobar sin «Revisado por» dice dónde se rellena.
 - No conformidades: con el análisis estructurado (metodología y causas) ya no se exige además el
   texto libre «Análisis de causa raíz»; si falta todo, el aviso dice dónde registrarlo.
+- No conformidades: la persona de la DPGC que confirmaba un evento de riesgo (o escalaba un
+  hallazgo) nunca podía cerrar la NC que se abría a su nombre. Ahora la regla es la que importa:
+  **quien trató la NC (su responsable) no verifica su eficacia**; quien la creó, sí puede.
 
 ## [1.4.1] - 2026-10-14
 

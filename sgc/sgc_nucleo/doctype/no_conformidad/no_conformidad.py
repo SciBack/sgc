@@ -139,4 +139,12 @@ class NoConformidad(Document):
 
         anterior = self.get_doc_before_save()
         if not anterior or anterior.estado not in cierres:
+            # Quien trató la NC no verifica su eficacia. Se compara con el responsable (el
+            # ejecutor), no con quien creó el registro: una NC que abre el sistema al confirmar un
+            # evento o escalar un hallazgo queda a nombre de la DPGC, y comparar con el creador le
+            # impedía cerrarla a la única persona que debía hacerlo (recorrido 14-oct-2026).
+            if (anterior and self.responsable and self.responsable == frappe.session.user
+                    and frappe.session.user != "Administrator"):
+                frappe.throw(_("Quien trató la no conformidad no puede verificar su eficacia: que la cierre otra persona de la DPGC."),
+                             title=_("Segregación de funciones"))
             self.verificada_por = frappe.session.user

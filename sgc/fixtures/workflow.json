@@ -274,7 +274,7 @@
    },
    {
     "action": "Cerrar eficaz",
-    "allow_self_approval": 0,
+    "allow_self_approval": 1,
     "allowed": "DPGC",
     "condition": null,
     "next_state": "Cerrada eficaz",
@@ -285,7 +285,7 @@
    },
    {
     "action": "Cerrar no eficaz",
-    "allow_self_approval": 0,
+    "allow_self_approval": 1,
     "allowed": "DPGC",
     "condition": null,
     "next_state": "Cerrada no eficaz",
