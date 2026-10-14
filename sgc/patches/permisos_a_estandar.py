@@ -9,6 +9,9 @@ estándar: el permiso efectivo no cambia, pero desde ahora manda el estándar y 
 puede corregirlo. Si una institución los cambió a mano (Role Permission Manager), no coinciden y
 se dejan como están: es su decisión.
 
+En las tablas hijas los Custom DocPerm no sirven de nada (el permiso lo da el documento padre)
+y la matriz antigua también los escribía: se quitan si solo nombran roles del SGC.
+
 Se comparan sin las banderas que no tienen efecto en ese DocType (submit/cancel/amend en uno
 que no se envía, import en uno que no se importa), que la validación estándar no admite.
 """
@@ -50,4 +53,14 @@ def execute():
 			frappe.db.delete("Custom DocPerm", {"parent": dt})
 		else:
 			print(f"permisos_a_estandar: {dt} tiene permisos personalizados distintos; se conservan")
+	_tablas_hijas()
 	frappe.clear_cache()
+
+
+def _tablas_hijas():
+	del_sgc = set(estandar.roles()) | {"System Manager"}
+	modulos = frappe.get_all("Module Def", filters={"app_name": "sgc"}, pluck="name")
+	for dt in frappe.get_all("DocType", filters={"istable": 1, "module": ["in", modulos]}, pluck="name"):
+		roles = set(frappe.get_all("Custom DocPerm", filters={"parent": dt}, pluck="role"))
+		if roles and roles <= del_sgc:
+			frappe.db.delete("Custom DocPerm", {"parent": dt})
