@@ -1,0 +1,855 @@
+# Marco «Ejes Temáticos de Autoevaluación del IAC (MIAC)», Sunedu 2026.
+# Fuente: Instructivo del IAC (RS 00105-2026-SUNEDU), Tabla 2, pp. 25-26. Texto público del Estado.
+# Códigos: IAC-<eje>, IAC-<eje>.<subeje>, IAC-<eje>.<subeje>.<pantalla>: la carga por ZIP reconoce
+# carpetas «1.1.1 Modelo educativo». Lo propio de cada institución (evidencias, responsables) NO va aquí.
+urn: urn:sgc:sunedu:library:iac-miac-2026
+locale: es
+ref_id: SUNEDU-IAC-MIAC-2026
+name: Ejes Temáticos de Autoevaluación del IAC (MIAC) — Sunedu 2026
+description: 'Matriz de Ejes Temáticos de Autoevaluación del Informe Anual de Cumplimiento (IAC) que las universidades
+  licenciadas presentan en el MIAC. Fuente: Instructivo para la presentación del IAC, RS 00105-2026-SUNEDU (21-sep-2026),
+  Tabla 2.'
+copyright: Sunedu. Documento oficial de acceso público del Estado peruano (RS 00105-2026-SUNEDU, anexo). Transcripción
+  de la Tabla 2.
+version: 1
+publication_date: '2026-09-21'
+provider: SUNEDU
+packager: SciBack
+sgc:
+  ente: SUNEDU
+  alcance: Licenciamiento
+  sin_escala: true
+  prefijo_elementos: IAC
+  prefijo_indicadores: IAC-
+objects:
+  framework:
+    urn: urn:sgc:sunedu:framework:iac-miac-2026
+    ref_id: SUNEDU-IAC-MIAC-2026
+    name: Ejes Temáticos de Autoevaluación del IAC (MIAC) — Sunedu 2026
+    description: Eje (N1) → Subeje (N2) → Pantalla [P] o Formato [F] (N3) del MIAC. Sirve para preparar y trazar
+      las evidencias del IAC antes de presentarlo; no se valora con escala.
+    requirement_nodes:
+    - urn: urn:sgc:sunedu:iac-miac-2026:root
+      assessable: false
+      depth: 1
+      ref_id: IAC-2026
+      name: Matriz de Ejes Temáticos de Autoevaluación (MIAC)
+      description: 'Matriz de Ejes Temáticos de Autoevaluación del Módulo de Presentación del Informe Anual de Cumplimiento
+        (MIAC), Tabla 2 del Instructivo aprobado por RS 00105-2026-SUNEDU (pp. 25-26). Tres niveles: Eje (N1), Subeje
+        (N2) y Pantalla de autoevaluación [P] o Formato de carga de datos estructurados [F] (N3).'
+      annotation: Los ejes son categorías de navegación del MIAC; no determinan por sí mismos cumplimiento o incumplimiento
+        de las CBC (Instructivo, Tabla 1). La obligación legal sigue siendo la de las CBC.
+    - urn: urn:sgc:sunedu:iac-miac-2026:1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:root
+      assessable: false
+      depth: 2
+      ref_id: '1'
+      name: Gestión institucional y propuesta académica
+      sgc_tipo: Factor
+      description: 'Eje Temático de Autoevaluación (nivel 1): Gestión institucional y propuesta académica.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:1.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:1
+      assessable: false
+      depth: 3
+      ref_id: '1.1'
+      name: Modelo educativo
+      sgc_tipo: Componente
+      description: 'Subeje Temático de Autoevaluación (nivel 2): Modelo educativo.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:1.1.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:1.1
+      assessable: false
+      depth: 4
+      ref_id: 1.1.1
+      name: '[P] Modelo educativo'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Modelo educativo. Formulario guiado de cuatro secciones: gestión
+        institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:1.2
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:1
+      assessable: false
+      depth: 3
+      ref_id: '1.2'
+      name: Oferta académica
+      sgc_tipo: Componente
+      description: 'Subeje Temático de Autoevaluación (nivel 2): Oferta académica.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:1.2.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:1.2
+      assessable: false
+      depth: 4
+      ref_id: 1.2.1
+      name: '[P] Resoluciones de creación de programas'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Resoluciones de creación de programas. Formulario guiado de
+        cuatro secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas
+        se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:1.2.2
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:1.2
+      assessable: false
+      depth: 4
+      ref_id: 1.2.2
+      name: '[F] Relación de programas'
+      sgc_tipo: Criterio
+      description: 'Formato de carga de datos estructurados [F]: Relación de programas. Se precarga desde el SIU
+        y no se corrige en el MIAC: revisarlo en el SIU antes del 1 de enero.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:1.3
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:1
+      assessable: false
+      depth: 3
+      ref_id: '1.3'
+      name: Propuesta curricular
+      sgc_tipo: Componente
+      description: 'Subeje Temático de Autoevaluación (nivel 2): Propuesta curricular.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:1.3.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:1.3
+      assessable: false
+      depth: 4
+      ref_id: 1.3.1
+      name: '[P] Planes de estudio'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Planes de estudio. Formulario guiado de cuatro secciones: gestión
+        institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:1.3.2
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:1.3
+      assessable: false
+      depth: 4
+      ref_id: 1.3.2
+      name: '[F] Mallas curriculares'
+      sgc_tipo: Criterio
+      description: 'Formato de carga de datos estructurados [F]: Mallas curriculares. Se precarga desde el SIU y
+        no se corrige en el MIAC: revisarlo en el SIU antes del 1 de enero.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:1.3.3
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:1.3
+      assessable: false
+      depth: 4
+      ref_id: 1.3.3
+      name: '[P] Rol y perfil docente por curso'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Rol y perfil docente por curso. Formulario guiado de cuatro
+        secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas
+        se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:1.4
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:1
+      assessable: false
+      depth: 3
+      ref_id: '1.4'
+      name: Gestión de la calidad
+      sgc_tipo: Componente
+      description: 'Subeje Temático de Autoevaluación (nivel 2): Gestión de la calidad.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:1.4.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:1.4
+      assessable: false
+      depth: 4
+      ref_id: 1.4.1
+      name: '[P] Gestión de la calidad'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Gestión de la calidad. Formulario guiado de cuatro secciones:
+        gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas se ven en el
+        MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:2
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:root
+      assessable: false
+      depth: 2
+      ref_id: '2'
+      name: Gestión de la información, transparencia y soporte tecnológico
+      sgc_tipo: Factor
+      description: 'Eje Temático de Autoevaluación (nivel 1): Gestión de la información, transparencia y soporte
+        tecnológico.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:2.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:2
+      assessable: false
+      depth: 3
+      ref_id: '2.1'
+      name: Sistemas de información
+      sgc_tipo: Componente
+      description: 'Subeje Temático de Autoevaluación (nivel 2): Sistemas de información.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:2.1.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:2.1
+      assessable: false
+      depth: 4
+      ref_id: 2.1.1
+      name: '[P] Sistema de gestión académica'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Sistema de gestión académica. Formulario guiado de cuatro secciones:
+        gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas se ven en el
+        MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:2.1.2
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:2.1
+      assessable: false
+      depth: 4
+      ref_id: 2.1.2
+      name: '[P] Sistema de gestión administrativa'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Sistema de gestión administrativa. Formulario guiado de cuatro
+        secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas
+        se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:2.1.3
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:2.1
+      assessable: false
+      depth: 4
+      ref_id: 2.1.3
+      name: '[P] Sistema de gestión de recursos de información'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Sistema de gestión de recursos de información. Formulario guiado
+        de cuatro secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las
+        preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:2.2
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:2
+      assessable: false
+      depth: 3
+      ref_id: '2.2'
+      name: Plataformas de aprendizaje virtual
+      sgc_tipo: Componente
+      description: 'Subeje Temático de Autoevaluación (nivel 2): Plataformas de aprendizaje virtual.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:2.2.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:2.2
+      assessable: false
+      depth: 4
+      ref_id: 2.2.1
+      name: '[P] Plataformas de aprendizaje virtual'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Plataformas de aprendizaje virtual. Formulario guiado de cuatro
+        secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas
+        se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:2.3
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:2
+      assessable: false
+      depth: 3
+      ref_id: '2.3'
+      name: Recursos didácticos digitales
+      sgc_tipo: Componente
+      description: 'Subeje Temático de Autoevaluación (nivel 2): Recursos didácticos digitales.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:2.3.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:2.3
+      assessable: false
+      depth: 4
+      ref_id: 2.3.1
+      name: '[P] Disponibilidad de recursos didácticos digitales'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Disponibilidad de recursos didácticos digitales. Formulario
+        guiado de cuatro secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen.
+        Las preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:2.3.2
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:2.3
+      assessable: false
+      depth: 4
+      ref_id: 2.3.2
+      name: '[P] Plan de implementación de recursos didácticos digitales'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Plan de implementación de recursos didácticos digitales. Formulario
+        guiado de cuatro secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen.
+        Las preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:2.3.3
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:2.3
+      assessable: false
+      depth: 4
+      ref_id: 2.3.3
+      name: '[F] Relación de recursos didácticos digitales'
+      sgc_tipo: Criterio
+      description: 'Formato de carga de datos estructurados [F]: Relación de recursos didácticos digitales.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:2.4
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:2
+      assessable: false
+      depth: 3
+      ref_id: '2.4'
+      name: Transparencia
+      sgc_tipo: Componente
+      description: 'Subeje Temático de Autoevaluación (nivel 2): Transparencia.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:2.4.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:2.4
+      assessable: false
+      depth: 4
+      ref_id: 2.4.1
+      name: '[P] Transparencia'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Transparencia. Formulario guiado de cuatro secciones: gestión
+        institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:3
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:root
+      assessable: false
+      depth: 2
+      ref_id: '3'
+      name: Componentes no presenciales de enseñanza-aprendizaje
+      sgc_tipo: Factor
+      description: 'Eje Temático de Autoevaluación (nivel 1): Componentes no presenciales de enseñanza-aprendizaje.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:3.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:3
+      assessable: false
+      depth: 3
+      ref_id: '3.1'
+      name: Gestión de programas con componentes virtuales
+      sgc_tipo: Componente
+      description: 'Subeje Temático de Autoevaluación (nivel 2): Gestión de programas con componentes virtuales.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:3.1.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:3.1
+      assessable: false
+      depth: 4
+      ref_id: 3.1.1
+      name: '[P] Estructura del área encargada de la gestión de los componentes virtuales'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Estructura del área encargada de la gestión de los componentes
+        virtuales. Formulario guiado de cuatro secciones: gestión institucional, premisas y ejercicios, oportunidad
+        de mejora y resumen. Las preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:3.1.2
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:3.1
+      assessable: false
+      depth: 4
+      ref_id: 3.1.2
+      name: '[P] Lineamientos y procedimientos para el diseño, difusión y entrega de material didáctico'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Lineamientos y procedimientos para el diseño, difusión y entrega
+        de material didáctico. Formulario guiado de cuatro secciones: gestión institucional, premisas y ejercicios,
+        oportunidad de mejora y resumen. Las preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:3.1.3
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:3.1
+      assessable: false
+      depth: 4
+      ref_id: 3.1.3
+      name: '[P] Lineamientos para la difusión y comunicación de los requerimientos necesarios para el desarrollo
+        de los componentes virtuales de los programas'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Lineamientos para la difusión y comunicación de los requerimientos
+        necesarios para el desarrollo de los componentes virtuales de los programas. Formulario guiado de cuatro
+        secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas
+        se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:3.1.4
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:3.1
+      assessable: false
+      depth: 4
+      ref_id: 3.1.4
+      name: '[P] Lineamientos para la recolección de información de estudiantes, egresados, graduados y titulados'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Lineamientos para la recolección de información de estudiantes,
+        egresados, graduados y titulados. Formulario guiado de cuatro secciones: gestión institucional, premisas
+        y ejercicios, oportunidad de mejora y resumen. Las preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:3.1.5
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:3.1
+      assessable: false
+      depth: 4
+      ref_id: 3.1.5
+      name: '[P] Lineamientos del tutor docente virtual'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Lineamientos del tutor docente virtual. Formulario guiado de
+        cuatro secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas
+        se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:4
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:root
+      assessable: false
+      depth: 2
+      ref_id: '4'
+      name: Infraestructura física y equipamiento
+      sgc_tipo: Factor
+      description: 'Eje Temático de Autoevaluación (nivel 1): Infraestructura física y equipamiento.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:4.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:4
+      assessable: false
+      depth: 3
+      ref_id: '4.1'
+      name: Tenencia/titularidad de los locales
+      sgc_tipo: Componente
+      description: 'Subeje Temático de Autoevaluación (nivel 2): Tenencia/titularidad de los locales.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:4.1.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:4.1
+      assessable: false
+      depth: 4
+      ref_id: 4.1.1
+      name: '[F] Relación de locales'
+      sgc_tipo: Criterio
+      description: 'Formato de carga de datos estructurados [F]: Relación de locales. Se precarga desde el SIU y
+        no se corrige en el MIAC: revisarlo en el SIU antes del 1 de enero.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:4.1.2
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:4.1
+      assessable: false
+      depth: 4
+      ref_id: 4.1.2
+      name: '[P] Título de propiedad, contrato o documento similar'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Título de propiedad, contrato o documento similar. Formulario
+        guiado de cuatro secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen.
+        Las preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:4.2
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:4
+      assessable: false
+      depth: 3
+      ref_id: '4.2'
+      name: Estado de la infraestructura física
+      sgc_tipo: Componente
+      description: 'Subeje Temático de Autoevaluación (nivel 2): Estado de la infraestructura física.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:4.2.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:4.2
+      assessable: false
+      depth: 4
+      ref_id: 4.2.1
+      name: '[P] Estado de la infraestructura, equipamiento y mobiliario'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Estado de la infraestructura, equipamiento y mobiliario. Formulario
+        guiado de cuatro secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen.
+        Las preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:4.2.2
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:4.2
+      assessable: false
+      depth: 4
+      ref_id: 4.2.2
+      name: '[F] Estado de infraestructura'
+      sgc_tipo: Criterio
+      description: 'Formato de carga de datos estructurados [F]: Estado de infraestructura.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:4.2.3
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:4.2
+      assessable: false
+      depth: 4
+      ref_id: 4.2.3
+      name: '[P] Estado de aulas, laboratorios y talleres'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Estado de aulas, laboratorios y talleres. Formulario guiado
+        de cuatro secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las
+        preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:4.2.4
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:4.2
+      assessable: false
+      depth: 4
+      ref_id: 4.2.4
+      name: '[F] Relación de laboratorios/talleres y equipamiento'
+      sgc_tipo: Criterio
+      description: 'Formato de carga de datos estructurados [F]: Relación de laboratorios/talleres y equipamiento.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:4.2.5
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:4.2
+      assessable: false
+      depth: 4
+      ref_id: 4.2.5
+      name: '[F] Ambientes para docentes'
+      sgc_tipo: Criterio
+      description: 'Formato de carga de datos estructurados [F]: Ambientes para docentes.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:4.3
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:4
+      assessable: false
+      depth: 3
+      ref_id: '4.3'
+      name: Gestión de la seguridad
+      sgc_tipo: Componente
+      description: 'Subeje Temático de Autoevaluación (nivel 2): Gestión de la seguridad.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:4.3.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:4.3
+      assessable: false
+      depth: 4
+      ref_id: 4.3.1
+      name: '[P] Planes de seguridad'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Planes de seguridad. Formulario guiado de cuatro secciones:
+        gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas se ven en el
+        MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:4.3.2
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:4.3
+      assessable: false
+      depth: 4
+      ref_id: 4.3.2
+      name: '[P] Recolección, transporte y disposición final de residuos'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Recolección, transporte y disposición final de residuos. Formulario
+        guiado de cuatro secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen.
+        Las preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:4.3.3
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:4.3
+      assessable: false
+      depth: 4
+      ref_id: 4.3.3
+      name: '[P] Comités de seguridad biológica, química y radiológica'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Comités de seguridad biológica, química y radiológica. Formulario
+        guiado de cuatro secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen.
+        Las preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:4.3.4
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:4.3
+      assessable: false
+      depth: 4
+      ref_id: 4.3.4
+      name: '[P] Protocolos de seguridad de laboratorios y talleres'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Protocolos de seguridad de laboratorios y talleres. Formulario
+        guiado de cuatro secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen.
+        Las preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:4.3.5
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:4.3
+      assessable: false
+      depth: 4
+      ref_id: 4.3.5
+      name: '[P] Servicio de seguridad y vigilancia'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Servicio de seguridad y vigilancia. Formulario guiado de cuatro
+        secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas
+        se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:4.4
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:4
+      assessable: false
+      depth: 3
+      ref_id: '4.4'
+      name: Mantenimiento de la infraestructura
+      sgc_tipo: Componente
+      description: 'Subeje Temático de Autoevaluación (nivel 2): Mantenimiento de la infraestructura.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:4.4.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:4.4
+      assessable: false
+      depth: 4
+      ref_id: 4.4.1
+      name: '[P] Plan de mantenimiento de infraestructura, equipamiento y mobiliario'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Plan de mantenimiento de infraestructura, equipamiento y mobiliario.
+        Formulario guiado de cuatro secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora
+        y resumen. Las preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:5
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:root
+      assessable: false
+      depth: 2
+      ref_id: '5'
+      name: Investigación
+      sgc_tipo: Factor
+      description: 'Eje Temático de Autoevaluación (nivel 1): Investigación.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:5.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:5
+      assessable: false
+      depth: 3
+      ref_id: '5.1'
+      name: Marco normativo de la investigación
+      sgc_tipo: Componente
+      description: 'Subeje Temático de Autoevaluación (nivel 2): Marco normativo de la investigación.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:5.1.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:5.1
+      assessable: false
+      depth: 4
+      ref_id: 5.1.1
+      name: '[P] Reglamento de investigación'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Reglamento de investigación. Formulario guiado de cuatro secciones:
+        gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas se ven en el
+        MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:5.1.2
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:5.1
+      assessable: false
+      depth: 4
+      ref_id: 5.1.2
+      name: '[P] Política general de investigación'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Política general de investigación. Formulario guiado de cuatro
+        secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas
+        se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:5.1.3
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:5.1
+      assessable: false
+      depth: 4
+      ref_id: 5.1.3
+      name: '[P] Líneas de investigación'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Líneas de investigación. Formulario guiado de cuatro secciones:
+        gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas se ven en el
+        MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:5.2
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:5
+      assessable: false
+      depth: 3
+      ref_id: '5.2'
+      name: Gestión de la investigación
+      sgc_tipo: Componente
+      description: 'Subeje Temático de Autoevaluación (nivel 2): Gestión de la investigación.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:5.2.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:5.2
+      assessable: false
+      depth: 4
+      ref_id: 5.2.1
+      name: '[P] Área encargada de investigación'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Área encargada de investigación. Formulario guiado de cuatro
+        secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas
+        se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:5.2.2
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:5.2
+      assessable: false
+      depth: 4
+      ref_id: 5.2.2
+      name: '[P] Plan de investigación'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Plan de investigación. Formulario guiado de cuatro secciones:
+        gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas se ven en el
+        MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:5.2.3
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:5.2
+      assessable: false
+      depth: 4
+      ref_id: 5.2.3
+      name: '[P] Gestión del docente investigador'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Gestión del docente investigador. Formulario guiado de cuatro
+        secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas
+        se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:5.2.4
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:5.2
+      assessable: false
+      depth: 4
+      ref_id: 5.2.4
+      name: '[F] Registro de proyectos de investigación y tesis'
+      sgc_tipo: Criterio
+      description: 'Formato de carga de datos estructurados [F]: Registro de proyectos de investigación y tesis.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:5.2.5
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:5.2
+      assessable: false
+      depth: 4
+      ref_id: 5.2.5
+      name: '[P] Estado de ejecución de proyectos y tesis'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Estado de ejecución de proyectos y tesis. Formulario guiado
+        de cuatro secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las
+        preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:6
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:root
+      assessable: false
+      depth: 2
+      ref_id: '6'
+      name: Docentes
+      sgc_tipo: Factor
+      description: 'Eje Temático de Autoevaluación (nivel 1): Docentes.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:6.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:6
+      assessable: false
+      depth: 3
+      ref_id: '6.1'
+      name: Requisitos para el ejercicio de la docencia
+      sgc_tipo: Componente
+      description: 'Subeje Temático de Autoevaluación (nivel 2): Requisitos para el ejercicio de la docencia.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:6.1.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:6.1
+      assessable: false
+      depth: 4
+      ref_id: 6.1.1
+      name: '[F] Plana docente'
+      sgc_tipo: Criterio
+      description: 'Formato de carga de datos estructurados [F]: Plana docente. Se precarga desde el SIU y no se
+        corrige en el MIAC: revisarlo en el SIU antes del 1 de enero.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:6.2
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:6
+      assessable: false
+      depth: 3
+      ref_id: '6.2'
+      name: Regulación e implementación de los procesos de gestión docente
+      sgc_tipo: Componente
+      description: 'Subeje Temático de Autoevaluación (nivel 2): Regulación e implementación de los procesos de
+        gestión docente.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:6.2.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:6.2
+      assessable: false
+      depth: 4
+      ref_id: 6.2.1
+      name: '[P] Procesos de la gestión docente'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Procesos de la gestión docente. Formulario guiado de cuatro
+        secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas
+        se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:6.2.2
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:6.2
+      assessable: false
+      depth: 4
+      ref_id: 6.2.2
+      name: '[P] Política y plan de desarrollo docente'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Política y plan de desarrollo docente. Formulario guiado de
+        cuatro secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas
+        se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:7
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:root
+      assessable: false
+      depth: 2
+      ref_id: '7'
+      name: Bienestar universitario y servicios educacionales complementarios básicos
+      sgc_tipo: Factor
+      description: 'Eje Temático de Autoevaluación (nivel 1): Bienestar universitario y servicios educacionales
+        complementarios básicos.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:7.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:7
+      assessable: false
+      depth: 3
+      ref_id: '7.1'
+      name: Marco normativo, planificación e implementación de servicios educacionales complementarios
+      sgc_tipo: Componente
+      description: 'Subeje Temático de Autoevaluación (nivel 2): Marco normativo, planificación e implementación
+        de servicios educacionales complementarios.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:7.1.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:7.1
+      assessable: false
+      depth: 4
+      ref_id: 7.1.1
+      name: '[P] Servicio de becas'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Servicio de becas. Formulario guiado de cuatro secciones: gestión
+        institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:7.1.2
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:7.1
+      assessable: false
+      depth: 4
+      ref_id: 7.1.2
+      name: '[P] Servicio de salud'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Servicio de salud. Formulario guiado de cuatro secciones: gestión
+        institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:7.1.3
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:7.1
+      assessable: false
+      depth: 4
+      ref_id: 7.1.3
+      name: '[P] Servicio psicopedagógico'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Servicio psicopedagógico. Formulario guiado de cuatro secciones:
+        gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas se ven en el
+        MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:7.1.4
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:7.1
+      assessable: false
+      depth: 4
+      ref_id: 7.1.4
+      name: '[P] Prevención y atención del hostigamiento sexual'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Prevención y atención del hostigamiento sexual. Formulario guiado
+        de cuatro secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las
+        preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:7.1.5
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:7.1
+      assessable: false
+      depth: 4
+      ref_id: 7.1.5
+      name: '[P] Inserción laboral y seguimiento'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Inserción laboral y seguimiento. Formulario guiado de cuatro
+        secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas
+        se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:7.1.6
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:7.1
+      assessable: false
+      depth: 4
+      ref_id: 7.1.6
+      name: '[P] Programa deportivo de formación-recreación'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Programa deportivo de formación-recreación. Formulario guiado
+        de cuatro secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las
+        preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:7.1.7
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:7.1
+      assessable: false
+      depth: 4
+      ref_id: 7.1.7
+      name: '[P] Programa deportivo de Alta Competencia (PRODAC)'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Programa deportivo de Alta Competencia (PRODAC). Formulario
+        guiado de cuatro secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen.
+        Las preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:7.1.8
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:7.1
+      assessable: false
+      depth: 4
+      ref_id: 7.1.8
+      name: '[P] Actividades artísticas y culturales'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Actividades artísticas y culturales. Formulario guiado de cuatro
+        secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas
+        se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:7.1.9
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:7.1
+      assessable: false
+      depth: 4
+      ref_id: 7.1.9
+      name: '[P] Atención a la diversidad'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Atención a la diversidad. Formulario guiado de cuatro secciones:
+        gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas se ven en el
+        MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:7.1.10
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:7.1
+      assessable: false
+      depth: 4
+      ref_id: 7.1.10
+      name: '[P] Programa de acceso, permanencia y acompañamiento'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Programa de acceso, permanencia y acompañamiento. Formulario
+        guiado de cuatro secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen.
+        Las preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:7.1.11
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:7.1
+      assessable: false
+      depth: 4
+      ref_id: 7.1.11
+      name: '[P] Cuidado infantil y lactarios institucionales'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Cuidado infantil y lactarios institucionales. Formulario guiado
+        de cuatro secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las
+        preguntas se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:7.2
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:7
+      assessable: false
+      depth: 3
+      ref_id: '7.2'
+      name: Disponibilidad de acervo bibliográfico
+      sgc_tipo: Componente
+      description: 'Subeje Temático de Autoevaluación (nivel 2): Disponibilidad de acervo bibliográfico.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:7.2.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:7.2
+      assessable: false
+      depth: 4
+      ref_id: 7.2.1
+      name: '[F] Relación del acervo bibliográfico físico y virtual'
+      sgc_tipo: Criterio
+      description: 'Formato de carga de datos estructurados [F]: Relación del acervo bibliográfico físico y virtual.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:8
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:root
+      assessable: false
+      depth: 2
+      ref_id: '8'
+      name: Sostenibilidad financiera
+      sgc_tipo: Factor
+      description: 'Eje Temático de Autoevaluación (nivel 1): Sostenibilidad financiera.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:8.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:8
+      assessable: false
+      depth: 3
+      ref_id: '8.1'
+      name: Herramientas de gestión financiera e información histórica y proyectada
+      sgc_tipo: Componente
+      description: 'Subeje Temático de Autoevaluación (nivel 2): Herramientas de gestión financiera e información
+        histórica y proyectada.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:8.1.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:8.1
+      assessable: false
+      depth: 4
+      ref_id: 8.1.1
+      name: '[P] Estados financieros'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Estados financieros. Formulario guiado de cuatro secciones:
+        gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas se ven en el
+        MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:8.1.2
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:8.1
+      assessable: false
+      depth: 4
+      ref_id: 8.1.2
+      name: '[P] Política de gestión financiera'
+      sgc_tipo: Criterio
+      description: 'Pantalla de autoevaluación [P]: Política de gestión financiera. Formulario guiado de cuatro
+        secciones: gestión institucional, premisas y ejercicios, oportunidad de mejora y resumen. Las preguntas
+        se ven en el MIAC.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:8.1.3
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:8.1
+      assessable: false
+      depth: 4
+      ref_id: 8.1.3
+      name: '[F] Estados financieros históricos y proyectados'
+      sgc_tipo: Criterio
+      description: 'Formato de carga de datos estructurados [F]: Estados financieros históricos y proyectados.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:8.2
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:8
+      assessable: false
+      depth: 3
+      ref_id: '8.2'
+      name: Presupuesto institucional histórico y proyectado
+      sgc_tipo: Componente
+      description: 'Subeje Temático de Autoevaluación (nivel 2): Presupuesto institucional histórico y proyectado.'
+    - urn: urn:sgc:sunedu:iac-miac-2026:8.2.1
+      parent_urn: urn:sgc:sunedu:iac-miac-2026:8.2
+      assessable: false
+      depth: 4
+      ref_id: 8.2.1
+      name: '[F] Presupuesto institucional histórico y proyectado'
+      sgc_tipo: Criterio
+      description: 'Formato de carga de datos estructurados [F]: Presupuesto institucional histórico y proyectado.'

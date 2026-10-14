@@ -21,6 +21,12 @@ Bloque `sgc:` del YAML (todo opcional):
     ente                ente emisor del Marco Normativo    (def.: vacío; es un Select con opciones fijas)
     prefijo_elementos   prefijo de los Elemento Marco      (def.: el ref_id del marco)
     prefijo_indicadores prefijo de los Indicador           (def.: el ref_id del marco + «-»)
+    alcance             alcance del Marco Normativo        (def.: vacío; Select de Marco Normativo)
+    sin_escala          true si el marco no se valora      (def.: false; no crea Escala Valoracion)
+
+Por nodo (`requirement_nodes`), además del formato intuitem:
+    sgc_tipo            el `tipo` del Elemento Marco (def.: por profundidad, ver DEPTH_TIPO)
+Un nodo con hijos siempre es grupo, a cualquier profundidad: así caben marcos de más de 3 niveles.
 
 Mapeo YAML -> DocTypes (F2-CONTRATO.md §3, verificado contra los .json F1):
   scores_definition          -> Escala Valoracion + hijos Nivel Escala (tabla `niveles`)
@@ -65,6 +71,8 @@ def configuracion(data):
         "ente": extra.get("ente") or "",
         "prefijo_elementos": extra.get("prefijo_elementos") or marco,
         "prefijo_indicadores": extra["prefijo_indicadores"] if "prefijo_indicadores" in extra else f"{marco}-",
+        "alcance": extra.get("alcance") or "",
+        "sin_escala": bool(extra.get("sin_escala")),
     }
 
 
@@ -82,6 +90,8 @@ def _sigla_from_urn_function(urn, cfg):
 # 1. Escala + Niveles
 # ---------------------------------------------------------------------------
 def _cargar_escala(framework, cfg, contadores):
+    if cfg.get("sin_escala"):
+        return
     scores = framework.get("scores_definition") or []
 
     if frappe.db.exists("Escala Valoracion", cfg["escala"]):
@@ -141,7 +151,10 @@ def _cargar_marco(data, framework, cfg, contadores):
     if pub:
         marco.vigente_desde = str(pub)
     marco.estado = "vigente"
-    marco.escala_valoracion = cfg["escala"]
+    if not cfg.get("sin_escala"):
+        marco.escala_valoracion = cfg["escala"]
+    if cfg.get("alcance"):
+        marco.alcance = cfg["alcance"]
     marco.nota_normativa = framework.get("description") or data.get("description") or ""
     marco.flags.ignore_permissions = True
     marco.insert()
@@ -173,6 +186,8 @@ def _cargar_elementos(framework, cfg, contadores):
     for n in nodes:
         urn_a_codigo[n["urn"]] = _codigo_elemento(n.get("ref_id"), n["urn"], cfg)
 
+    con_hijos = {n.get("parent_urn") for n in nodes if n.get("parent_urn")}
+
     # Crear en orden de depth ascendente (padres antes que hijos) para que el Tree resuelva.
     for node in sorted(nodes, key=lambda n: n.get("depth", 99)):
         codigo = _codigo_elemento(node.get("ref_id"), node["urn"], cfg)
@@ -190,7 +205,7 @@ def _cargar_elementos(framework, cfg, contadores):
         doc.denominacion = node.get("name") or ""
         doc.marco_normativo = cfg["marco"]
         doc.nivel = str(depth)
-        doc.tipo = DEPTH_TIPO.get(depth, "Componente")
+        doc.tipo = node.get("sgc_tipo") or DEPTH_TIPO.get(depth, "Componente")
         doc.texto_oficial = node.get("description") or ""
         doc.nota_normativa = node.get("annotation") or ""
         doc.es_valorable = assessable
@@ -203,8 +218,8 @@ def _cargar_elementos(framework, cfg, contadores):
                 "assessable": bool(assessable),
             }
         )
-        # is_group para no-hojas (raíz y estándares con criterios).
-        doc.is_group = 1 if depth < 3 else 0
+        # is_group para no-hojas: raíz y estándares (como siempre) y cualquier nodo con hijos.
+        doc.is_group = 1 if depth < 3 or node["urn"] in con_hijos else 0
         if parent_codigo:
             doc.parent_elemento_marco = parent_codigo
 
