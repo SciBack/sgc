@@ -9,6 +9,8 @@
  "field_order": [
   "autoevaluacion",
   "criterio",
+  "texto_criterio",
+  "responsable",
   "cumple",
   "observacion",
   "estado",
@@ -23,7 +25,7 @@
    "fieldname": "autoevaluacion",
    "fieldtype": "Link",
    "in_standard_filter": 1,
-   "label": "Autoevaluaci\u00f3n",
+   "label": "Autoevaluación",
    "options": "Autoevaluacion",
    "reqd": 1
   },
@@ -36,6 +38,22 @@
    "reqd": 1
   },
   {
+   "fetch_from": "criterio.texto_oficial",
+   "fieldname": "texto_criterio",
+   "fieldtype": "Small Text",
+   "label": "Qué exige el criterio",
+   "read_only": 1
+  },
+  {
+   "description": "Quien prepara la valoración de este criterio. Recibe la tarea en su lista de pendientes.",
+   "fieldname": "responsable",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Responsable",
+   "options": "User"
+  },
+  {
    "fieldname": "cumple",
    "fieldtype": "Select",
    "in_list_view": 1,
@@ -46,7 +64,7 @@
   {
    "fieldname": "observacion",
    "fieldtype": "Text",
-   "label": "Observaci\u00f3n"
+   "label": "Observación"
   },
   {
    "default": "Pendiente",
@@ -54,7 +72,8 @@
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Estado",
-   "options": "Pendiente\nEn analisis\nValorado\nRevisado"
+   "options": "Pendiente\nEn analisis\nValorado\nRevisado",
+   "in_list_view": 1
   },
   {
    "fieldname": "valorado_por",
@@ -68,7 +87,7 @@
    "label": "Fecha"
   },
   {
-   "description": "Descripci\u00f3n de la debilidad u oportunidad de mejora, si aplica.",
+   "description": "Descripción de la debilidad u oportunidad de mejora, si aplica.",
    "fieldname": "debilidad",
    "fieldtype": "Text",
    "label": "Debilidad / OM"
@@ -80,7 +99,7 @@
    "label": "Comentario (sustento)"
   },
   {
-   "description": "Evidencias que sustentan el juicio. Cada una genera su Trazabilidad hacia el criterio (RNF09), que es lo que consume el informe de autoevaluaci\u00f3n.",
+   "description": "Evidencias que sustentan el juicio. Cada una genera su Trazabilidad hacia el criterio (RNF09), que es lo que consume el informe de autoevaluación.",
    "fieldname": "evidencia",
    "fieldtype": "Table MultiSelect",
    "label": "Evidencias",
@@ -90,7 +109,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-13 19:41:03.462738",
+ "modified": "2026-10-14 20:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Valoracion Criterio",
@@ -125,7 +144,7 @@
    "create": 1,
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad",
+   "role": "Miembro de Comité de Calidad",
    "write": 1
   },
   {

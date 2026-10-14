@@ -32,6 +32,8 @@ class ValoracionCriterio(Document):
 				title=_("Autoevaluación cerrada"),
 			)
 
+		self._validar_unica()
+
 		# El estado operativo se deriva del juicio y nunca de una selección del
 		# navegador. Así una escritura genérica no puede declarar una valoración
 		# revisada o valorada sin haber registrado el resultado correspondiente.
@@ -46,6 +48,22 @@ class ValoracionCriterio(Document):
 		# Último paso: va DESPUÉS del guard de autoevaluación cerrada, para que
 		# una autoevaluación ya cerrada no pueda generar Trazabilidad nueva.
 		self._sincronizar_trazabilidad()
+
+	def _validar_unica(self):
+		"""Un criterio se valora una sola vez por autoevaluación: dos valoraciones darían dos juicios."""
+		otra = frappe.db.get_value("Valoracion Criterio", {
+			"autoevaluacion": self.autoevaluacion, "criterio": self.criterio, "name": ["!=", self.name or ""]})
+		if otra:
+			frappe.throw(_("El criterio {0} ya tiene su valoración en esta autoevaluación: {1}.").format(
+				frappe.bold(self.criterio), frappe.get_desk_link("Valoracion Criterio", otra)))
+
+	def _sincronizar_tarea(self):
+		"""El responsable del criterio tiene una tarea hasta que el criterio queda valorado (`sgc/tareas.py`)."""
+		from sgc import tareas
+
+		ae = frappe.db.get_value("Autoevaluacion", self.autoevaluacion, ["titulo", "fecha_cierre"], as_dict=True) or {}
+		descripcion = _("Valorar el criterio {0} de «{1}»").format(self.criterio, ae.get("titulo") or self.autoevaluacion)
+		tareas.sincronizar(self, self.responsable, ae.get("fecha_cierre"), descripcion, abierta=not self.cumple)
 
 	# ------------------------------------------------------------ trazabilidad
 
@@ -85,6 +103,9 @@ class ValoracionCriterio(Document):
 		"""
 		if not self.autoevaluacion or not self.criterio:
 			return
+		self._sincronizar_tarea()
+		if self.flags.preparada_al_iniciar:
+			return  # nace sin juicio: no hay nada que recalcular
 
 		estandar = frappe.db.get_value(
 			"Elemento Marco", self.criterio, "parent_elemento_marco"
