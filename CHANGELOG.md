@@ -27,6 +27,9 @@ los datos.
 - No conformidades: la persona de la DPGC que confirmaba un evento de riesgo (o escalaba un
   hallazgo) nunca podía cerrar la NC que se abría a su nombre. Ahora la regla es la que importa:
   **quien trató la NC (su responsable) no verifica su eficacia**; quien la creó, sí puede.
+- Indicadores: el responsable de una ficha recibía el aviso de medir y no podía registrar la
+  medición (solo el Data Steward creaba). Ahora la registra el responsable de su ficha; la DPGC,
+  la analista y el Data Steward, cualquiera.
 
 ## [1.4.1] - 2026-10-14
 
