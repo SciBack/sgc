@@ -164,6 +164,46 @@
    "group": "Caracterización",
    "link_doctype": "Proceso",
    "link_fieldname": "parent_proceso"
+  },
+  {
+   "group": "Riesgos",
+   "link_doctype": "Evento Riesgo",
+   "link_fieldname": "proceso"
+  },
+  {
+   "group": "Mejora",
+   "link_doctype": "No Conformidad",
+   "link_fieldname": "proceso"
+  },
+  {
+   "group": "Mejora",
+   "link_doctype": "Salida No Conforme",
+   "link_fieldname": "proceso"
+  },
+  {
+   "group": "Mejora",
+   "link_doctype": "Hallazgo",
+   "link_fieldname": "proceso"
+  },
+  {
+   "group": "Auditoría",
+   "link_doctype": "Auditoria",
+   "link_fieldname": "proceso"
+  },
+  {
+   "group": "Auditoría",
+   "link_doctype": "Hallazgo Auditoria",
+   "link_fieldname": "proceso"
+  },
+  {
+   "group": "Auditoría",
+   "link_doctype": "Lista Verificacion",
+   "link_fieldname": "proceso"
+  },
+  {
+   "group": "Acreditación",
+   "link_doctype": "Trazabilidad",
+   "link_fieldname": "proceso"
   }
  ],
  "modified": "2026-10-14 20:00:00.000000",
