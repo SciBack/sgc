@@ -73,4 +73,4 @@ Los avisos por correo de cada transición salen según `Configuracion Correo` (m
 
 ## Fuente en código
 
-`sgc/sgc_nucleo/doctype/salida_no_conforme/` (controlador), `sgc/setup/f23_workflow_salida_no_conforme.py` (workflow) y `sgc/sgc_nucleo/report/salidas_no_conformes/` (informe).
+`sgc/sgc_nucleo/doctype/salida_no_conforme/` (controlador), el workflow «Salida No Conforme SGC» en `sgc/fixtures/workflow.json` y `sgc/sgc_nucleo/report/salidas_no_conformes/` (informe).

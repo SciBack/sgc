@@ -1,0 +1,452 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-04 19:54:25.060093",
+  "name": "Planificada",
+  "style": "Primary",
+  "workflow_state_name": "Planificada"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-04 19:54:25.067956",
+  "name": "En curso",
+  "style": "Primary",
+  "workflow_state_name": "En curso"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-04 19:54:25.075084",
+  "name": "En revision",
+  "style": "Primary",
+  "workflow_state_name": "En revision"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-04 19:54:25.082192",
+  "name": "Consolidada",
+  "style": "Primary",
+  "workflow_state_name": "Consolidada"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-04 19:54:25.089265",
+  "name": "Cerrada",
+  "style": "Primary",
+  "workflow_state_name": "Cerrada"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-04 19:54:25.211633",
+  "name": "Abierta",
+  "style": "Primary",
+  "workflow_state_name": "Abierta"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-04 19:54:25.218845",
+  "name": "En analisis",
+  "style": "Primary",
+  "workflow_state_name": "En analisis"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-04 19:54:25.225982",
+  "name": "En tratamiento",
+  "style": "Primary",
+  "workflow_state_name": "En tratamiento"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-04 19:54:25.232996",
+  "name": "En verificacion",
+  "style": "Primary",
+  "workflow_state_name": "En verificacion"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-04 19:54:25.239994",
+  "name": "Cerrada eficaz",
+  "style": "Primary",
+  "workflow_state_name": "Cerrada eficaz"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-04 19:54:25.247045",
+  "name": "Cerrada no eficaz",
+  "style": "Primary",
+  "workflow_state_name": "Cerrada no eficaz"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-12 11:57:08.935194",
+  "name": "Borrador",
+  "style": "Primary",
+  "workflow_state_name": "Borrador"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-12 11:57:08.967645",
+  "name": "En ejecucion",
+  "style": "Primary",
+  "workflow_state_name": "En ejecucion"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-12 11:57:08.975746",
+  "name": "Cerrado",
+  "style": "Primary",
+  "workflow_state_name": "Cerrado"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-12 11:57:09.099742",
+  "name": "Ejecutada",
+  "style": "Primary",
+  "workflow_state_name": "Ejecutada"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-12 11:57:09.107273",
+  "name": "Verificada eficaz",
+  "style": "Primary",
+  "workflow_state_name": "Verificada eficaz"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-12 11:57:09.114737",
+  "name": "Verificada no eficaz",
+  "style": "Primary",
+  "workflow_state_name": "Verificada no eficaz"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-14 17:53:13.743010",
+  "name": "Observado",
+  "style": "Primary",
+  "workflow_state_name": "Observado"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-14 17:53:13.751636",
+  "name": "Aprobado",
+  "style": "Primary",
+  "workflow_state_name": "Aprobado"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-14 17:53:13.759714",
+  "name": "Publicado",
+  "style": "Primary",
+  "workflow_state_name": "Publicado"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-14 17:53:13.767445",
+  "name": "Obsoleto",
+  "style": "Primary",
+  "workflow_state_name": "Obsoleto"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-17 17:13:36.697554",
+  "name": "Informe emitido",
+  "style": "Primary",
+  "workflow_state_name": "Informe emitido"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-17 17:13:37.745103",
+  "name": "En campo",
+  "style": "Primary",
+  "workflow_state_name": "En campo"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-17 17:41:06.453813",
+  "name": "Realizada",
+  "style": "Primary",
+  "workflow_state_name": "Realizada"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-19 09:39:45.494950",
+  "name": "En revisión",
+  "style": "Primary",
+  "workflow_state_name": "En revisión"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-19 09:39:45.498060",
+  "name": "Presentado a SUNEDU",
+  "style": "Primary",
+  "workflow_state_name": "Presentado a SUNEDU"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-19 09:39:45.533006",
+  "name": "Abierto",
+  "style": "Primary",
+  "workflow_state_name": "Abierto"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-19 09:39:45.535599",
+  "name": "Verificacion",
+  "style": "Primary",
+  "workflow_state_name": "Verificacion"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-19 09:39:45.537845",
+  "name": "Cerrado eficaz",
+  "style": "Primary",
+  "workflow_state_name": "Cerrado eficaz"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-19 09:39:45.540008",
+  "name": "Cerrado no eficaz",
+  "style": "Primary",
+  "workflow_state_name": "Cerrado no eficaz"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-19 09:39:45.571992",
+  "name": "Pendiente",
+  "style": "Primary",
+  "workflow_state_name": "Pendiente"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-19 09:39:45.574438",
+  "name": "Valida",
+  "style": "Primary",
+  "workflow_state_name": "Valida"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-19 09:39:45.576737",
+  "name": "Observada",
+  "style": "Primary",
+  "workflow_state_name": "Observada"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-19 09:39:45.579004",
+  "name": "Subsanada",
+  "style": "Primary",
+  "workflow_state_name": "Subsanada"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-19 09:39:45.615752",
+  "name": "Identificado",
+  "style": "Primary",
+  "workflow_state_name": "Identificado"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-19 09:39:45.618177",
+  "name": "Evaluado",
+  "style": "Primary",
+  "workflow_state_name": "Evaluado"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-19 09:39:45.620714",
+  "name": "Monitoreado",
+  "style": "Primary",
+  "workflow_state_name": "Monitoreado"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-19 09:39:45.623182",
+  "name": "Materializado",
+  "style": "Primary",
+  "workflow_state_name": "Materializado"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-19 09:39:45.659978",
+  "name": "Planificado",
+  "style": "Primary",
+  "workflow_state_name": "Planificado"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-19 09:39:45.662662",
+  "name": "Implementado",
+  "style": "Primary",
+  "workflow_state_name": "Implementado"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-07-19 09:39:45.664930",
+  "name": "Verificado",
+  "style": "Primary",
+  "workflow_state_name": "Verificado"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-08-19 23:37:30.314040",
+  "name": "Escalado a NC",
+  "style": "Primary",
+  "workflow_state_name": "Escalado a NC"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-27 09:19:07.668617",
+  "name": "Detectada",
+  "style": "Primary",
+  "workflow_state_name": "Detectada"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-27 09:19:07.676662",
+  "name": "Tratada",
+  "style": "Primary",
+  "workflow_state_name": "Tratada"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-27 09:19:07.681070",
+  "name": "Verificada",
+  "style": "Primary",
+  "workflow_state_name": "Verificada"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-27 13:01:41.842919",
+  "name": "Distribuido",
+  "style": "Primary",
+  "workflow_state_name": "Distribuido"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-27 14:19:44.888684",
+  "name": "Reportado",
+  "style": "Primary",
+  "workflow_state_name": "Reportado"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-27 14:19:44.892776",
+  "name": "En evaluacion",
+  "style": "Primary",
+  "workflow_state_name": "En evaluacion"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-27 14:19:44.896408",
+  "name": "Confirmado",
+  "style": "Primary",
+  "workflow_state_name": "Confirmado"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-09-27 14:19:44.900641",
+  "name": "Descartado",
+  "style": "Primary",
+  "workflow_state_name": "Descartado"
+ }
+]

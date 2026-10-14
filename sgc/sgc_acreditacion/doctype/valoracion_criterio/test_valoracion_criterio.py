@@ -15,7 +15,7 @@ EXTRA_TEST_RECORD_DEPENDENCIES = []  # eg. ["User"]
 IGNORE_TEST_RECORD_DEPENDENCIES = []  # eg. ["User"]
 
 # Acciones del Workflow "Autoevaluacion SGC" en orden, hasta "Cerrada"
-# (ver sgc/setup/f2_workflow.py WF_AUTOEVAL["transitions"]).
+# (ver el workflow «Autoevaluacion SGC» de sgc/fixtures/workflow.json).
 _CADENA_CIERRE = ("Iniciar evaluacion", "Enviar a revision", "Consolidar", "Cerrar")
 
 

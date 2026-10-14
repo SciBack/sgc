@@ -1,0 +1,92 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-10-13 19:40:30.920320",
+  "name": "Coordinador de Calidad (Programa)",
+  "role_profile": "Comité de Programa",
+  "roles": [
+   {
+    "role": "Responsable de Calidad de Programa"
+   },
+   {
+    "role": "Miembro de Comité de Calidad"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-10-13 19:40:30.914774",
+  "name": "Coordinador de Calidad (Facultad)",
+  "role_profile": "Coordinación Facultad",
+  "roles": [
+   {
+    "role": "Coordinador de Calidad de Facultad"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-10-13 19:40:30.882165",
+  "name": "Administrador SGC",
+  "role_profile": "Gobierno SGC",
+  "roles": [
+   {
+    "role": "DPGC"
+   },
+   {
+    "role": "Analista de Calidad (DPGC)"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-10-13 19:40:30.942078",
+  "name": "Auditoría Interna",
+  "role_profile": "Auditoría",
+  "roles": [
+   {
+    "role": "Auditor Interno"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-10-13 19:40:30.937006",
+  "name": "Autoridad Rectoral",
+  "role_profile": "Lectura Institucional",
+  "roles": [
+   {
+    "role": "Rectorado/VR (lectura)"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-10-13 19:40:30.925941",
+  "name": "Jefe de Escuela",
+  "role_profile": "Jefe de Escuela",
+  "roles": [
+   {
+    "role": "Decano/Director (lectura)"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-10-13 19:40:30.931463",
+  "name": "Evaluador Externo",
+  "role_profile": "Evaluador Externo",
+  "roles": [
+   {
+    "role": "Lector Externo"
+   }
+  ]
+ }
+]

@@ -86,5 +86,4 @@ class IntegrationTestCategoriaIndicador(IntegrationTestCase):
         # impide que vuelvan a llegar mal etiquetados.
         from sgc.setup import f_deploy_run_all
 
-        nombres = [n for n, _ in f_deploy_run_all.STEPS]
-        self.assertIn("f20_categoria_indicador", nombres)
+        self.assertIn("f20_categoria_indicador", [nombre for nombre, _ in f_deploy_run_all.STEPS])

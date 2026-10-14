@@ -18,7 +18,7 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, today
 
-from sgc.setup.f3b_rbac import MATRIZ
+from sgc import estandar
 from sgc.tests import factories
 from sgc.verificacion import AVISO, BLOQUEANTE, INFO, despliegue, run, verificar
 
@@ -132,13 +132,15 @@ class IntegrationTestProcesos(_ConSavepoint):
 class IntegrationTestDespliegue(_ConSavepoint):
     def _quitar_permisos(self, doctypes):
         for dt in doctypes:
-            frappe.db.delete("Custom DocPerm", {"parent": dt, "role": ["in", list(MATRIZ[dt])]})
+            roles = [p["role"] for p in estandar.permisos()[dt]]
+            frappe.db.delete("Custom DocPerm", {"parent": dt, "role": ["in", roles]})
+            frappe.db.delete("DocPerm", {"parent": dt, "role": ["in", roles]})
 
     def test_con_la_matriz_aplicada_no_hay_hallazgos(self):
         self.assertEqual(self._codigos("permisos_aplicados"), set())
 
     def test_sin_ningun_permiso_del_sgc_es_bloqueante(self):
-        self._quitar_permisos([dt for dt in MATRIZ if frappe.db.exists("DocType", dt)])
+        self._quitar_permisos([dt for dt in estandar.permisos() if frappe.db.exists("DocType", dt)])
         self.assertEqual(self._hallazgos("permisos_aplicados")["rbac-no-aplicado"].nivel, BLOQUEANTE)
 
     def test_un_doctype_sin_permisos_se_nombra(self):

@@ -5,7 +5,7 @@
 
 Dos niveles:
 
-- **A quién va cada aviso.** Para cada regla de `f15`, un documento EN MEMORIA
+- **A quién va cada aviso.** Para cada regla de transición (avisos estándar del módulo), un documento EN MEMORIA
   en cada estado de llegada, y los destinatarios que Frappe resuelve con
   `get_list_of_recipients`, el mismo método que usa al enviar. No hace falta
   recorrer el workflow para saber a quién escribe una regla, y así cada estado
@@ -30,8 +30,6 @@ from frappe.utils import add_days, nowdate
 
 from sgc import correo
 from sgc.patches import notificaciones_por_correo
-from sgc.setup import f7_notificaciones as f7
-from sgc.setup import f15_notificaciones_workflow as f15
 from sgc.tests import factories
 
 DOMINIO = "sgc-transicion.example.com"
@@ -52,9 +50,7 @@ class IntegrationTestNotificacionesTransicion(IntegrationTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        # f15.run() comitea (lo necesita en producción) y deja in_patch=True,
-        # que silencia TODAS las notificaciones: hay que apagarlo antes de guardar.
-        f15.run()
+        # Con in_patch, Frappe no dispara ninguna Notification: el test pasaría sin probar.
         frappe.flags.in_patch = False
 
     def setUp(self):
@@ -131,11 +127,10 @@ class IntegrationTestNotificacionesTransicion(IntegrationTestCase):
             self.assertEqual(n.send_system_notification, 1, regla)
             self.assertEqual(n.enabled, 1, regla)
 
-    def test_run_es_idempotente(self):
-        f15.run()
-        frappe.flags.in_patch = False
-        nombres = [cfg["name"] for cfg in f15.NOTIFICACIONES]
-        self.assertEqual(frappe.db.count("Notification", {"name": ["in", nombres]}), len(nombres))
+    def test_las_reglas_son_estandar(self):
+        """Desde la 1.2.0 son ficheros del módulo que Frappe sincroniza, no las crea un script."""
+        for regla in (R_DOC, R_PUBLICADO, R_NC, R_ACCION, R_AUDITORIA, R_HALLAZGO):
+            self.assertEqual(frappe.db.get_value("Notification", regla, "is_standard"), 1, regla)
 
     # --- Documento Controlado -----------------------------------------------
 
@@ -343,12 +338,10 @@ class IntegrationTestNotificacionesTransicion(IntegrationTestCase):
 
         self.assertEqual(frappe.db.get_value("No Conformidad", nombre, "estado"), "En analisis")
 
-    # --- vencimientos (f7) ---------------------------------------------------
+    # --- vencimientos ---------------------------------------------------
 
     def test_un_vencimiento_avisa_un_solo_dia(self):
         """`Days Before` elige los documentos cuya fecha cae justo a N días: uno por día."""
-        f7.run()
-        frappe.flags.in_patch = False
         regla = frappe.get_doc("Notification", "SGC - Accion de mejora por vencer")
         dias = regla.days_in_advance
 

@@ -1,107 +1,52 @@
 # Copyright (c) 2026, SciBack and Contributors
 # See license.txt
 
-"""Tests de `sgc.setup.f7_notificaciones` — reglas de alerta del SGC (M17).
+"""Los avisos del SGC (M17, #29) como Notification estándar de Frappe.
 
-Cubre que `run()`:
-- Crea las 5 Notification declaradas en `f7.NOTIFICACIONES`: 4 de vencimiento
-  (Documento Controlado, Evidencia, Accion Mejora, Plan Mejora; event="Days
-  Before") + 1 de convocatoria (Reunion; event="New").
-- Es idempotente (re-ejecutar no duplica: actualiza en sitio).
-
-`_sgc_notifs()` filtra por los NOMBRES exactos que `f7.NOTIFICACIONES` declara,
-no por un prefijo `"SGC%"` global: otros módulos (p.ej. f15_notificaciones_workflow)
-también crean `Notification` con el mismo prefijo `"SGC - ..."`, y un filtro
-por prefijo contaría las suyas también, dando un conteo inflado y falso.
+Desde la 1.2.0 cada aviso es un fichero en la carpeta de su módulo (`sgc/<módulo>/notification/`)
+que Frappe sincroniza en cada `migrate`. Hasta entonces los creaban f7 y f15 en cada migrate.
+Lo que se prueba es lo que esos ficheros tienen que cumplir y que llegan a la base.
 """
 
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from sgc.setup import f7_notificaciones as f7
+from sgc import estandar
+
+# Los avisos de vencimiento y convocatoria (antes f7), por DocType.
+VENCIMIENTOS = {"Documento Controlado", "Evidencia", "Accion Mejora", "Plan Mejora", "Reunion", "Ficha Indicador"}
 
 
 class IntegrationTestNotificaciones(IntegrationTestCase):
-    def _sgc_notifs(self):
-        nombres = [cfg["name"] for cfg in f7.NOTIFICACIONES]
-        return frappe.get_all(
-            "Notification",
-            filters={"name": ["in", nombres]},
-            fields=["name", "document_type", "event", "date_changed", "channel", "enabled"],
-        )
+    def test_cada_aviso_estandar_esta_en_la_base(self):
+        avisos = estandar.avisos()
+        self.assertGreaterEqual(len(avisos), 20)
+        for nombre in avisos:
+            with self.subTest(aviso=nombre):
+                self.assertEqual(frappe.db.get_value("Notification", nombre, "is_standard"), 1)
 
-    def test_run_crea_las_siete_reglas(self):
-        """run() deja 7 Notification 'SGC …' activas.
+    def test_son_de_correo_con_campana_y_declaran_modulo(self):
+        """#29: correo y campana; qué sale de verdad lo decide Configuracion Correo (#41)."""
+        for nombre, aviso in estandar.avisos().items():
+            with self.subTest(aviso=nombre):
+                self.assertEqual(aviso["channel"], "Email")
+                self.assertEqual(aviso.get("send_system_notification"), 1)
+                self.assertTrue(aviso.get("module", "").startswith("SGC "))
 
-        NO se asserta el canal: `run()` solo lo fija al CREAR y respeta el que
-        exista al actualizar (ver `test_run_respeta_el_canal_configurado`). El
-        canal es configuración de runtime, no del código.
-        """
-        f7.run()
-        notifs = self._sgc_notifs()
-        self.assertEqual(len(notifs), 7)
-        for n in notifs:
-            self.assertEqual(n["enabled"], 1)
-            if n["event"] in ("Days Before", "Days After"):
-                self.assertTrue(n["date_changed"])  # el campo fecha a vigilar
-            else:
-                # La regla de convocatoria (Reunion) dispara por evento "New",
-                # no tiene campo de fecha a vigilar.
-                self.assertEqual(n["event"], "New")
+    def test_los_de_fecha_vigilan_un_campo_de_fecha(self):
+        for nombre, aviso in estandar.avisos().items():
+            if aviso["event"] in ("Days Before", "Days After"):
+                with self.subTest(aviso=nombre):
+                    self.assertTrue(aviso.get("date_changed"))
 
-    def test_run_respeta_el_canal_configurado(self):
-        """Regresión: `run()` no puede pisar el canal de una regla existente.
+    def test_cubre_los_vencimientos_y_la_convocatoria(self):
+        con_fecha = {a["document_type"] for a in estandar.avisos().values() if a["event"] in ("Days Before", "Days After", "New")}
+        self.assertTrue(VENCIMIENTOS <= con_fecha, VENCIMIENTOS - con_fecha)
 
-        `Notification.channel` tiene `set_only_once=1` en Frappe, así que
-        reasignarlo sobre un documento ya existente lanza
-        `CannotChangeConstantError`. Antes de la corrección, `f7` fallaba en TODOS
-        los `bench migrate` de producción, donde las reglas tenían otro canal que
-        el declarado. Desde #29 el canónico declara "Email": el caso es ahora un
-        sitio que conserva "System Notification".
-        """
-        f7.run()
-        objetivo = f7.NOTIFICACIONES[0]["name"]
-        frappe.db.set_value("Notification", objetivo, "channel", "System Notification",
-                            update_modified=False)
+    def test_ninguno_nombra_a_una_institucion(self):
+        """El canónico vale para cualquier universidad (#65)."""
+        import json
 
-        f7.run()  # no debe lanzar
-
-        self.assertEqual(
-            frappe.db.get_value("Notification", objetivo, "channel"), "System Notification")
-        # Y los destinatarios se siguen reescribiendo desde el código.
-        self.assertTrue(frappe.db.count("Notification Recipient", {"parent": objetivo}))
-
-        # Se restaura para no dejar residuo: `run()` commitea fuera del rollback
-        # de IntegrationTestCase.
-        frappe.db.set_value("Notification", objetivo, "channel", "Email",
-                            update_modified=False)
-        frappe.db.commit()
-
-    def test_las_reglas_nuevas_nacen_de_correo_con_campana(self):
-        """#29: una regla que no existía se crea en "Email" y con la campana."""
-        f7.run()
-        cfg = dict(f7.NOTIFICACIONES[0], name="SGC - Prueba canal por defecto")
-        try:
-            f7._upsert_notification(cfg)
-            canal, campana = frappe.db.get_value(
-                "Notification", cfg["name"], ["channel", "send_system_notification"])
-            self.assertEqual(canal, "Email")
-            self.assertEqual(campana, 1)
-        finally:
-            frappe.delete_doc("Notification", cfg["name"], force=True, ignore_permissions=True)
-            frappe.db.commit()
-
-    def test_cubre_los_seis_doctypes(self):
-        """Hay una regla por cada DocType con alerta declarada en f7."""
-        f7.run()
-        dts = {n["document_type"] for n in self._sgc_notifs()}
-        self.assertEqual(
-            dts,
-            {"Documento Controlado", "Evidencia", "Accion Mejora", "Plan Mejora", "Reunion", "Ficha Indicador"},
-        )
-
-    def test_run_es_idempotente(self):
-        """Re-ejecutar no duplica: sigue habiendo 7 (se actualizan en sitio)."""
-        f7.run()
-        f7.run()
-        self.assertEqual(len(self._sgc_notifs()), 7)
+        texto = json.dumps(estandar.avisos(), ensure_ascii=False).lower()
+        for marca in ("upeu", "universidad peruana", "juliaca", "tarapoto"):
+            self.assertNotIn(marca, texto)

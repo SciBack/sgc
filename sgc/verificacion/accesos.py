@@ -24,7 +24,7 @@ De ahí salen dos fallos distintos, y por eso hay dos chequeos y no uno:
 
 import frappe
 
-from sgc.setup.f3b_rbac import ROLES
+from sgc import estandar
 from sgc.verificacion import AVISO, BLOQUEANTE, INFO, Hallazgo
 
 # Cuentas que el framework gestiona y que no son de nadie: no son hallazgo.
@@ -63,6 +63,11 @@ def _roles_con_desk(roles):
     )
 
 
+def _catalogo():
+    """(rol, desk_access) de los roles que trae el SGC (fixture de Role)."""
+    return [(nombre, int(r.get("desk_access") or 0)) for nombre, r in estandar.roles().items()]
+
+
 def cuentas_que_no_pueden_entrar():
     """Habilitadas, con roles de trabajo, y fuera del Desk. El incidente del 20-sep."""
     afectadas = []
@@ -77,7 +82,7 @@ def cuentas_que_no_pueden_entrar():
         # Un Website User con roles que el catálogo declara CON acceso al Desk es
         # una cuenta que debería trabajar y no puede. Si sus roles son todos de
         # portal (p.ej. «Lector Externo»), ser Website User es lo correcto.
-        declarados_con_desk = [r for r, desk in ROLES if desk and r in roles]
+        declarados_con_desk = [r for r, desk in _catalogo() if desk and r in roles]
         if declarados_con_desk:
             afectadas.append((u, roles, declarados_con_desk))
 
@@ -97,9 +102,9 @@ def cuentas_que_no_pueden_entrar():
             f"{len(afectadas)} cuenta(s) habilitada(s) no pueden abrir el Desk.",
             detalle,
             remedio=(
-                "Sus roles deberían dar acceso. Reejecutar "
-                "`sgc.setup.f3b_rbac.run` reconcilia el catálogo y Frappe recalcula "
-                "el tipo de usuario; comprobar después que `user_type` sea System User."
+                "Sus roles deberían dar acceso. Volver a migrar reimporta el catálogo de "
+                "roles (fixtures) y, al guardar la cuenta, Frappe recalcula el tipo de "
+                "usuario; comprobar después que `user_type` sea System User."
             ),
         )
     ]
@@ -145,7 +150,7 @@ def roles_del_catalogo_divergentes():
     """Roles cuyo `desk_access` no coincide con lo declarado. La causa raíz (#57)."""
     divergentes = []
 
-    for role_name, declarado in ROLES:
+    for role_name, declarado in _catalogo():
         actual = frappe.db.get_value("Role", role_name, "desk_access")
         if actual is None:
             divergentes.append(f"{role_name} — NO EXISTE (declarado desk_access={declarado})")
@@ -164,9 +169,9 @@ def roles_del_catalogo_divergentes():
             f"{len(divergentes)} rol(es) del catálogo no coinciden con lo declarado.",
             divergentes,
             remedio=(
-                "`sgc.setup.f3b_rbac.run` los reconcilia. Se comprueba aunque el "
-                "despliegue lo corrija: esto detecta los cambios hechos a mano desde "
-                "la interfaz, que es de donde vino el incidente del 20-sep-2026."
+                "Volver a migrar los reimporta (fixtures de Role). Se comprueba aunque el "
+                "migrate lo corrija: esto detecta los cambios hechos a mano desde la "
+                "interfaz, que es de donde vino el incidente del 20-sep-2026."
             ),
         )
     ]
@@ -207,7 +212,7 @@ def nadie_puede_entrar():
             "Ninguna cuenta puede abrir el Desk. La instancia responde y es inservible.",
             [f"{len(usuarios)} cuenta(s) habilitada(s), todas Website User"],
             remedio=(
-                "Comprobar el catálogo de roles con `sgc.setup.f3b_rbac.run` y que al "
+                "Volver a migrar (reimporta el catálogo de roles) y comprobar que al "
                 "menos un rol con `desk_access` esté asignado a alguien."
             ),
         )

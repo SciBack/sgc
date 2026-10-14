@@ -51,5 +51,5 @@ La presentación externa y el acuse requieren acción/dato operacional adicional
 
 ## Fuente en código
 
-sgc/setup/f11_workflow_cumplimiento.py. El comportamiento descrito debe revisarse de nuevo si estas fuentes cambian.
+el workflow «Informe Cumplimiento SGC» en sgc/fixtures/workflow.json. El comportamiento descrito debe revisarse de nuevo si estas fuentes cambian.
 

@@ -52,10 +52,9 @@ import unicodedata
 
 import frappe
 
-# Definición del campo. Se asegura AQUÍ y no solo en `f1_estructura`, porque
-# aquel solo crea el DocType cuando aún no existe: en un sitio ya instalado, un
-# campo nuevo en esa lista no llega nunca a la base. Mismo patrón que
-# `f2_fields.py`.
+# Definición del campo. Se asegura AQUÍ y no solo en el JSON del DocType, porque
+# los sitios instalados antes de que existiera lo recibieron así y el paso es
+# idempotente: si el campo ya está, no toca nada.
 CAMPO_ALCANCE = {
     "fieldname": "alcance",
     "fieldtype": "Select",

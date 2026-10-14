@@ -9,7 +9,7 @@ Lo que se puede enviar y cómo:
   el correo es otra puerta de descarga y ya estaba cerrada para las reglas.
 - La ficha de caracterización va en PDF. Si algún destinatario es externo, va en
   el formato **público**, sin los nombres de quienes firman (Ley 29733: publicar
-  de más también incumple; ver f19_ficha_pdf).
+  de más también incumple; ver el formato «Ficha de Caracterizacion (publico)»).
 - Lo envían los roles que gobiernan la documentación, no cualquiera que la lea.
 
 Todo pasa por `sgc.correo.enviar`: modo de ensayo, lista blanca y registro.

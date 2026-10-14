@@ -13,7 +13,7 @@ el método que lo dispara. Mismo patrón que
 Recorrido del 2026-08-23 (flujo 13 en producción), tres cosas que no cuadraban:
 
   1. El método existía pero NO lo llamaba nadie: ni el workflow, ni un hook, ni
-     el frontend. `sgc/bpmn.py` y el propio `f14_workflow_riesgos.py` afirmaban
+     el frontend. `sgc/bpmn.py` y el antiguo script del workflow de riesgos afirmaban
      que «Materializar» disparaba el escalado; se comprobó en producción que
      «Materializar» solo cambiaba el estado y no creaba ninguna No Conformidad.
      Ahora el escalado ES un efecto de entrar en «Materializado» (`on_update`),
@@ -39,7 +39,7 @@ from frappe.model.document import Document
 from frappe.utils import nowdate
 
 # Orden del ciclo de vida (coincide con el Workflow "Riesgo SGC" de
-# `sgc/setup/f14_workflow_riesgos.py`). «Materializado» es una salida alterna de
+# «Riesgo SGC» en `sgc/fixtures/workflow.json`). «Materializado» es una salida alterna de
 # «Monitoreado», no un paso posterior: comparte nivel con él.
 ORDEN = {
     "Identificado": 0,
@@ -229,7 +229,7 @@ class Riesgo(Document):
         muerta. Y sin embargo dos sitios del código ya afirmaban que ocurría:
         `sgc/bpmn.py` (`SALTOS_ENTRE_PROCESOS`, que por eso dibuja el mensaje
         saliendo de la tarea «Materializar») y el docstring de
-        `sgc/setup/f14_workflow_riesgos.py` («materializar dispara potencialmente
+        «Riesgo SGC» (`sgc/fixtures/workflow.json`: «materializar dispara potencialmente
         una NC»). La declaración era correcta; lo que faltaba era el cable.
 
         Va en `on_update` y no en `validate` porque crea OTRO documento: si la

@@ -55,5 +55,5 @@ La sincronización técnica de estructura corresponde a System Manager.
 
 ## Fuente en código
 
-sgc/setup/f1_procesos.py. El comportamiento descrito debe revisarse de nuevo si estas fuentes cambian.
+el DocType `Proceso` (`sgc/sgc_procesos/doctype/proceso/`). El comportamiento descrito debe revisarse de nuevo si estas fuentes cambian.
 

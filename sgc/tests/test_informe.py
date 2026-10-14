@@ -52,7 +52,7 @@ def _cerrar_autoevaluacion(ae_name):
     En revision -[Consolidar]-> Consolidada -[Cerrar]-> Cerrada.
 
     "Cerrar" es la transición cuyo estado destino tiene doc_status="1" en
-    `sgc.setup.f2_workflow.WF_AUTOEVAL` -> dispara el submit automático
+    el workflow «Autoevaluacion SGC» (fixture) dispara el submit automático
     (docstatus 0->1) de Autoevaluacion (is_submittable=1). Requiere el
     workflow ACTIVO (no llamar `factories.desactivar_workflow` antes de esto).
     """

@@ -16,7 +16,7 @@ from unittest.mock import patch
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from sgc.setup import f2_load_coneau, f2_run_all, marcos_normativos
+from sgc.setup import f2_load_coneau, marcos_normativos
 from sgc.setup.f_deploy_run_all import STEPS
 
 YAML_PRUEBA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "datos", "marco-prueba.yaml")
@@ -58,8 +58,6 @@ class TestPerfilDeclarado(IntegrationTestCase):
                          ("CONEAU-Programas-2025", "CONEAU-NLLP", "SINEACE", "CONEAU", ""))
 
     def test_el_arranque_comun_ya_no_carga_ningun_marco(self):
-        import inspect
-        self.assertNotIn("f2_load_coneau", inspect.getsource(f2_run_all))
         self.assertIn("marcos_normativos", [nombre for nombre, _ in STEPS])
 
 

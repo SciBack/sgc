@@ -1,0 +1,373 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-04 19:54:25.108354",
+  "name": "Iniciar evaluacion",
+  "workflow_action_name": "Iniciar evaluacion"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-04 19:54:25.115844",
+  "name": "Enviar a revision",
+  "workflow_action_name": "Enviar a revision"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-04 19:54:25.122870",
+  "name": "Devolver a evaluacion",
+  "workflow_action_name": "Devolver a evaluacion"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-04 19:54:25.129868",
+  "name": "Consolidar",
+  "workflow_action_name": "Consolidar"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-04 19:54:25.136800",
+  "name": "Cerrar",
+  "workflow_action_name": "Cerrar"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-04 19:54:25.254058",
+  "name": "Analizar causa",
+  "workflow_action_name": "Analizar causa"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-04 19:54:25.260825",
+  "name": "Tratar",
+  "workflow_action_name": "Tratar"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-04 19:54:25.267554",
+  "name": "Enviar a verificacion",
+  "workflow_action_name": "Enviar a verificacion"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-04 19:54:25.274261",
+  "name": "Cerrar eficaz",
+  "workflow_action_name": "Cerrar eficaz"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-04 19:54:25.280938",
+  "name": "Cerrar no eficaz",
+  "workflow_action_name": "Cerrar no eficaz"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-04 19:54:25.287667",
+  "name": "Reabrir tratamiento",
+  "workflow_action_name": "Reabrir tratamiento"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-12 11:57:08.986773",
+  "name": "Aprobar y ejecutar",
+  "workflow_action_name": "Aprobar y ejecutar"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-12 11:57:08.995092",
+  "name": "Devolver a borrador",
+  "workflow_action_name": "Devolver a borrador"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-12 11:57:09.002912",
+  "name": "Cerrar plan",
+  "workflow_action_name": "Cerrar plan"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-12 11:57:09.121965",
+  "name": "Iniciar",
+  "workflow_action_name": "Iniciar"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-12 11:57:09.129001",
+  "name": "Marcar ejecutada",
+  "workflow_action_name": "Marcar ejecutada"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-12 11:57:09.136013",
+  "name": "Verificar eficaz",
+  "workflow_action_name": "Verificar eficaz"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-12 11:57:09.142979",
+  "name": "Verificar no eficaz",
+  "workflow_action_name": "Verificar no eficaz"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-12 11:57:09.149949",
+  "name": "Reabrir",
+  "workflow_action_name": "Reabrir"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-14 17:53:13.778336",
+  "name": "Observar",
+  "workflow_action_name": "Observar"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-14 17:53:13.786542",
+  "name": "Aprobar",
+  "workflow_action_name": "Aprobar"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-14 17:53:13.794074",
+  "name": "Corregir",
+  "workflow_action_name": "Corregir"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-14 17:53:13.801811",
+  "name": "Publicar",
+  "workflow_action_name": "Publicar"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-14 17:53:13.809293",
+  "name": "Derogar",
+  "workflow_action_name": "Derogar"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-17 17:13:36.516128",
+  "name": "Aprobar programa",
+  "workflow_action_name": "Aprobar programa"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-17 17:13:36.564132",
+  "name": "Iniciar ejecucion",
+  "workflow_action_name": "Iniciar ejecucion"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-17 17:13:36.572580",
+  "name": "Cerrar programa",
+  "workflow_action_name": "Cerrar programa"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-17 17:13:36.705707",
+  "name": "Iniciar auditoria",
+  "workflow_action_name": "Iniciar auditoria"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-17 17:13:36.713050",
+  "name": "Emitir informe",
+  "workflow_action_name": "Emitir informe"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-17 17:13:36.720048",
+  "name": "Devolver a ejecucion",
+  "workflow_action_name": "Devolver a ejecucion"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-17 17:13:36.727094",
+  "name": "Cerrar auditoria",
+  "workflow_action_name": "Cerrar auditoria"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-17 17:13:37.763645",
+  "name": "Iniciar campo",
+  "workflow_action_name": "Iniciar campo"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-17 17:13:37.771364",
+  "name": "Devolver a planificada",
+  "workflow_action_name": "Devolver a planificada"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-17 17:13:37.778928",
+  "name": "Cerrar aplicacion",
+  "workflow_action_name": "Cerrar aplicacion"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-17 17:41:06.517909",
+  "name": "Realizar revision",
+  "workflow_action_name": "Realizar revision"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-17 17:41:06.526080",
+  "name": "Cerrar revision",
+  "workflow_action_name": "Cerrar revision"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-17 17:41:06.533302",
+  "name": "Reabrir revision",
+  "workflow_action_name": "Reabrir revision"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-19 09:39:45.502716",
+  "name": "Presentar a SUNEDU",
+  "workflow_action_name": "Presentar a SUNEDU"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-19 09:39:45.581207",
+  "name": "Validar",
+  "workflow_action_name": "Validar"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-19 09:39:45.583477",
+  "name": "Subsanar",
+  "workflow_action_name": "Subsanar"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-19 09:39:45.625376",
+  "name": "Evaluar",
+  "workflow_action_name": "Evaluar"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-19 09:39:45.627437",
+  "name": "Iniciar tratamiento",
+  "workflow_action_name": "Iniciar tratamiento"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-19 09:39:45.629569",
+  "name": "Monitorear",
+  "workflow_action_name": "Monitorear"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-19 09:39:45.631961",
+  "name": "Materializar",
+  "workflow_action_name": "Materializar"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-19 09:39:45.667374",
+  "name": "Marcar implementado",
+  "workflow_action_name": "Marcar implementado"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-07-19 09:39:45.669428",
+  "name": "Verificar",
+  "workflow_action_name": "Verificar"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-08-19 23:37:30.319969",
+  "name": "Escalar a NC",
+  "workflow_action_name": "Escalar a NC"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-08-23 18:45:18.814564",
+  "name": "Reabrir escalado",
+  "workflow_action_name": "Reabrir escalado"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-09-27 09:19:07.691202",
+  "name": "Registrar tratamiento",
+  "workflow_action_name": "Registrar tratamiento"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-09-27 09:19:07.695111",
+  "name": "Devolver a tratamiento",
+  "workflow_action_name": "Devolver a tratamiento"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-09-27 13:01:41.848974",
+  "name": "Distribuir",
+  "workflow_action_name": "Distribuir"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-09-27 14:19:44.910406",
+  "name": "Confirmar",
+  "workflow_action_name": "Confirmar"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-09-27 14:19:44.913070",
+  "name": "Descartar",
+  "workflow_action_name": "Descartar"
+ }
+]

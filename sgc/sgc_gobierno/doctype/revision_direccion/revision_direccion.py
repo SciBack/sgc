@@ -13,7 +13,7 @@ cambios en el SGC y necesidades de recursos).
 código legible sin duplicar la lógica de correlativo.
 
 El ciclo de vida (Select `estado`: Planificada / Realizada / Cerrada) lo gobierna
-el Workflow "Revision Direccion SGC" (sgc/setup/f10_workflow_revision.py, preside
+el Workflow "Revision Direccion SGC" (sgc/fixtures/workflow.json, preside
 la DPGC salvo el CIERRE, que ejecuta el Rectorado); este controlador solo aplica,
 de forma incremental, lo que cada etapa exige — mismo enfoque que
 `no_conformidad.py`.

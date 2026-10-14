@@ -12,7 +12,7 @@ de adopción voluntaria; aquí se materializa como un .xlsx descargable.
 El «procedimiento DTN-Pro-01 de SUNEDU» que se citaba aquí como origen del mismo
 requisito NO está verificado contra ninguna norma publicada de la Sunedu: no
 apoyar decisiones en él (aparece igual en `documento_controlado.py` y en
-`setup/f5_workflow_documental.py`).
+«Documento Controlado SGC» en `fixtures/workflow.json`).
 
 El .xlsx se arma con el helper nativo de Frappe `make_xlsx`, que recibe una
 lista de filas (`[encabezados, ...datos]`) y devuelve un BytesIO; la descarga

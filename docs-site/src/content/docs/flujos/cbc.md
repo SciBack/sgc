@@ -51,5 +51,5 @@ La generación PDF requiere motor de impresión disponible.
 
 ## Fuente en código
 
-sgc/setup/f6_informe_cbc.py y Cumplimiento CBC. El comportamiento descrito debe revisarse de nuevo si estas fuentes cambian.
+el formato estándar «Diagnostico CBC SUNEDU» y Cumplimiento CBC. El comportamiento descrito debe revisarse de nuevo si estas fuentes cambian.
 

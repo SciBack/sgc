@@ -43,4 +43,4 @@ Esto lo tiene también cualquier otro usuario del sistema, tenga el rol que teng
 
 ## Fuente verificable
 
-Catálogo de roles y `COLABORADORES` en `sgc/setup/f3b_rbac.py`; el flujo en [Evento de riesgo](../../flujos/evento-riesgo/).
+Catálogo de roles en `sgc/fixtures/role.json` y el permiso del colaborador en el JSON de `Evento Riesgo`; el flujo en [Evento de riesgo](../../flujos/evento-riesgo/).

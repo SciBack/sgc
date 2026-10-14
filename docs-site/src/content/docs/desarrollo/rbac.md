@@ -3,8 +3,10 @@ title: "RBAC: Roles y permisos"
 description: Los 14 roles institucionales, la matriz de permisos (46 DocTypes) y el permlevel del nivel oficial de acreditación.
 ---
 
-El control de acceso institucional se define en `sgc/setup/f3b_rbac.py`, que aplica
-**14 roles** + una matriz rol × DocType × permiso que cubre los **46 DocTypes de
+El control de acceso institucional son documentos estándar de Frappe (desde la 1.2.0):
+los **14 roles** son un fixture (`sgc/fixtures/role.json`, con sus perfiles en
+`role_profile.json`) y los permisos van en el `permissions` del JSON de cada DocType,
+que el `migrate` sincroniza. Juntos forman una matriz rol × DocType × permiso que cubre los **46 DocTypes de
 negocio** del SGC, más una regla especial de permlevel para el campo oficial de
 nivel de acreditación.
 
@@ -82,14 +84,14 @@ demostrar el sistema, usa un usuario con un rol de comité (p. ej. `Comité de
 Programa`), **no** System Manager: con System Manager no vas a poder crear
 autoevaluaciones, evidencias ni documentos en esos DocTypes.
 
-(Matiz técnico: en los DocType fuera de la matriz de este script, `System Manager`
+(Matiz técnico: en los DocType fuera de la matriz, `System Manager`
 conserva los permisos por defecto del `.json` del DocType, incluido `delete` —
 ningún rol SGC tiene `delete` en ningún DocType de la matriz, por diseño.)
 
 ## Segregación de funciones en los workflows (`allow_self_approval`)
 
-Los 18 workflows nativos del SGC (los ficheros `sgc/setup/f*workflow*.py`, de
-`f2_workflow.py` a `f25_workflow_evento_riesgo.py`) usan el flag nativo de Frappe `allow_self_approval` por
+Los 18 workflows nativos del SGC (el fixture `sgc/fixtures/workflow.json`, con sus estados
+y acciones en `workflow_state.json` y `workflow_action_master.json`) usan el flag nativo de Frappe `allow_self_approval` por
 transición: en `0`, quien **creó** el documento no puede ejecutar esa transición
 (la tiene que ejecutar otra persona con el rol permitido). Por defecto está en `0`;
 se marca `1` explícitamente solo en el avance operativo del propio trabajo o en una

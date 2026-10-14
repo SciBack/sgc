@@ -101,7 +101,7 @@ class Evidencia(Document):
 		"Vencida" queda deliberadamente fuera del grafo: la pone el sistema, no
 		una persona). Por eso este flip usa `frappe.db.set_value` directo, que
 		no pasa por el motor de workflow ni por `validate()` -- ver docstring de
-		f13_workflow_evidencia.py.
+		el workflow «Evidencia SGC» (sgc/fixtures/workflow.json).
 		"""
 		if self.vigencia_hasta and getdate(self.vigencia_hasta) < getdate(nowdate()):
 			if self.estado in ("Pendiente", "Valida"):
