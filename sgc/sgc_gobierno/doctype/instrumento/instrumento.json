@@ -21,7 +21,7 @@
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "C\u00f3digo",
+   "label": "Código",
    "reqd": 1,
    "unique": 1
   },
@@ -38,13 +38,13 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Tipo",
-   "options": "Encuesta satisfacci\u00f3n\nFocus group\nEntrevista\nBuz\u00f3n"
+   "options": "Encuesta satisfacción\nFocus group\nEntrevista\nBuzón"
   },
   {
    "fieldname": "grupo_interes",
    "fieldtype": "Link",
    "in_standard_filter": 1,
-   "label": "Grupo de inter\u00e9s",
+   "label": "Grupo de interés",
    "options": "Grupo Interes"
   },
   {
@@ -61,14 +61,14 @@
    "label": "LimeSurvey survey_id"
   },
   {
-   "description": "A qu\u00e9 indicador tributa el resultado (A1).",
+   "description": "A qué indicador tributa el resultado (A1).",
    "fieldname": "indicador",
    "fieldtype": "Link",
    "label": "Indicador",
    "options": "Indicador"
   },
   {
-   "description": "P. ej. Likert 1-5; qu\u00e9 punto es satisfactorio.",
+   "description": "P. ej. Likert 1-5; qué punto es satisfactorio.",
    "fieldname": "escala",
    "fieldtype": "Text",
    "label": "Escala"
@@ -76,8 +76,14 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-10-13 19:41:00.729080",
+ "links": [
+  {
+   "group": "Aplicaciones",
+   "link_doctype": "Aplicacion Instrumento",
+   "link_fieldname": "instrumento"
+  }
+ ],
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Gobierno",
  "name": "Instrumento",
@@ -110,12 +116,12 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "export": 1,

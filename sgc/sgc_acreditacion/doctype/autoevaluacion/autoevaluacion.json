@@ -158,9 +158,29 @@
    "group": "Valoración",
    "link_doctype": "Valoracion Estandar",
    "link_fieldname": "autoevaluacion"
+  },
+  {
+   "group": "Resultados",
+   "link_doctype": "Valor Indicador",
+   "link_fieldname": "autoevaluacion"
+  },
+  {
+   "group": "Mejora",
+   "link_doctype": "Hallazgo",
+   "link_fieldname": "autoevaluacion"
+  },
+  {
+   "group": "Mejora",
+   "link_doctype": "Plan Mejora",
+   "link_fieldname": "autoevaluacion"
+  },
+  {
+   "group": "Informes",
+   "link_doctype": "Informe Cumplimiento",
+   "link_fieldname": "autoevaluacion"
   }
  ],
- "modified": "2026-10-14 20:00:00.000000",
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Autoevaluacion",

@@ -23,7 +23,7 @@
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "C\u00f3digo",
+   "label": "Código",
    "reqd": 1,
    "unique": 1
   },
@@ -40,13 +40,13 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Tipo",
-   "options": "Calidad institucional\nAutoevaluaci\u00f3n de programa\nComit\u00e9 de riesgos\nAd-hoc"
+   "options": "Calidad institucional\nAutoevaluación de programa\nComité de riesgos\nAd-hoc"
   },
   {
    "fieldname": "unidad_organica",
    "fieldtype": "Link",
    "in_standard_filter": 1,
-   "label": "Unidad org\u00e1nica",
+   "label": "Unidad orgánica",
    "options": "Unidad Organica"
   },
   {
@@ -75,10 +75,10 @@
    "options": "Miembro Comite"
   },
   {
-   "description": "Resoluci\u00f3n de creaci\u00f3n (A2).",
+   "description": "Resolución de creación (A2).",
    "fieldname": "documento_controlado",
    "fieldtype": "Link",
-   "label": "Documento de constituci\u00f3n",
+   "label": "Documento de constitución",
    "options": "Documento Controlado"
   },
   {
@@ -93,8 +93,19 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-10-13 19:40:58.854302",
+ "links": [
+  {
+   "group": "Sesiones",
+   "link_doctype": "Reunion",
+   "link_fieldname": "comite"
+  },
+  {
+   "group": "Sesiones",
+   "link_doctype": "Revision Direccion",
+   "link_fieldname": "comite"
+  }
+ ],
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Gobierno",
  "name": "Comite",
@@ -127,12 +138,12 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "export": 1,

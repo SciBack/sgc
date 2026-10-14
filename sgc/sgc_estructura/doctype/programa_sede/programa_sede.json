@@ -16,11 +16,11 @@
  ],
  "fields": [
   {
-   "description": "Ej. ENF-LIMA \u2014 ancla de scoping por RBAC",
+   "description": "Ej. ENF-LIMA — ancla de scoping por RBAC",
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "C\u00f3digo",
+   "label": "Código",
    "reqd": 1,
    "unique": 1
   },
@@ -44,7 +44,7 @@
    "reqd": 1
   },
   {
-   "description": "Direcci\u00f3n de Escuela Profesional de esa sede",
+   "description": "Dirección de Escuela Profesional de esa sede",
    "fieldname": "escuela",
    "fieldtype": "Link",
    "label": "Escuela",
@@ -66,8 +66,59 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-10-13 19:41:02.451483",
+ "links": [
+  {
+   "group": "Acreditación",
+   "link_doctype": "Autoevaluacion",
+   "link_fieldname": "programa_sede"
+  },
+  {
+   "group": "Acreditación",
+   "link_doctype": "Evidencia",
+   "link_fieldname": "programa_sede"
+  },
+  {
+   "group": "Acreditación",
+   "link_doctype": "Carga Evidencias",
+   "link_fieldname": "programa_sede"
+  },
+  {
+   "group": "Medición",
+   "link_doctype": "Valor Indicador",
+   "link_fieldname": "programa_sede"
+  },
+  {
+   "group": "Medición",
+   "link_doctype": "Aplicacion Instrumento",
+   "link_fieldname": "programa_sede"
+  },
+  {
+   "group": "Mejora",
+   "link_doctype": "No Conformidad",
+   "link_fieldname": "programa_sede"
+  },
+  {
+   "group": "Mejora",
+   "link_doctype": "Hallazgo",
+   "link_fieldname": "programa_sede"
+  },
+  {
+   "group": "Mejora",
+   "link_doctype": "Salida No Conforme",
+   "link_fieldname": "programa_sede"
+  },
+  {
+   "group": "Gobierno",
+   "link_doctype": "Comite",
+   "link_fieldname": "programa_sede"
+  },
+  {
+   "group": "Gobierno",
+   "link_doctype": "Auditoria",
+   "link_fieldname": "programa_sede"
+  }
+ ],
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Estructura",
  "name": "Programa Sede",
@@ -99,12 +150,12 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "export": 1,

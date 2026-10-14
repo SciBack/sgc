@@ -30,12 +30,12 @@
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "C\u00f3digo",
+   "label": "Código",
    "reqd": 1,
    "unique": 1
   },
   {
-   "description": "\"IAC \u2014 cumplimiento CBC\", \"Tesis RENATI\", \"SIBE\"",
+   "description": "\"IAC — cumplimiento CBC\", \"Tesis RENATI\", \"SIBE\"",
    "fieldname": "nombre",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -52,10 +52,10 @@
    "reqd": 1
   },
   {
-   "description": "qu\u00e9 se entrega",
+   "description": "qué se entrega",
    "fieldname": "descripcion",
    "fieldtype": "Text",
-   "label": "Descripci\u00f3n"
+   "label": "Descripción"
   },
   {
    "fieldname": "sb_periodicidad",
@@ -71,7 +71,7 @@
    "options": "Continua\nMensual\nSemestral\nAnual\nDecenal\nPor proceso\nOn-demand"
   },
   {
-   "description": "ancla del c\u00e1lculo (p. ej. 31-mar para IAC)",
+   "description": "ancla del cálculo (p. ej. 31-mar para IAC)",
    "fieldname": "fecha_referencia",
    "fieldtype": "Date",
    "label": "Fecha de referencia"
@@ -81,7 +81,7 @@
    "fieldname": "proximo_vencimiento",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "Pr\u00f3ximo vencimiento",
+   "label": "Próximo vencimiento",
    "read_only": 1
   },
   {
@@ -89,7 +89,7 @@
    "fieldtype": "Column Break"
   },
   {
-   "description": "sem\u00e1foro de automatizaci\u00f3n del mapa",
+   "description": "semáforo de automatización del mapa",
    "fieldname": "interoperable",
    "fieldtype": "Select",
    "label": "Interoperable",
@@ -119,10 +119,10 @@
    "options": "User"
   },
   {
-   "description": "\u00e1rea responsable",
+   "description": "área responsable",
    "fieldname": "unidad_organica",
    "fieldtype": "Link",
-   "label": "Unidad org\u00e1nica",
+   "label": "Unidad orgánica",
    "options": "Unidad Organica"
   },
   {
@@ -141,8 +141,19 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-10-13 19:41:01.647666",
+ "links": [
+  {
+   "group": "Entregas",
+   "link_doctype": "Entrega Obligacion",
+   "link_fieldname": "obligacion_ente"
+  },
+  {
+   "group": "Entregas",
+   "link_doctype": "Informe Cumplimiento",
+   "link_fieldname": "obligacion_ente"
+  }
+ ],
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Obligacion Ente",
@@ -175,12 +186,12 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "export": 1,

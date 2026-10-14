@@ -16,11 +16,11 @@
  ],
  "fields": [
   {
-   "description": "ID1\u2026",
+   "description": "ID1…",
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "C\u00f3digo",
+   "label": "Código",
    "reqd": 1,
    "unique": 1
   },
@@ -39,23 +39,23 @@
    "options": "Marco Normativo"
   },
   {
-   "description": "Polim\u00f3rfico: incluye Proceso (indicador de proceso E/C/S)",
+   "description": "Polimórfico: incluye Proceso (indicador de proceso E/C/S)",
    "fieldname": "categoria",
    "fieldtype": "Select",
    "in_standard_filter": 1,
-   "label": "Categor\u00eda",
+   "label": "Categoría",
    "options": "Acreditacion\nGestion\nProceso\nSatisfaccion\nOtra"
   },
   {
    "depends_on": "eval:doc.categoria=='Proceso'",
-   "description": "Solo si categoria=Proceso (polim\u00f3rfico \u2192 B4 SGC Procesos)",
+   "description": "Solo si categoria=Proceso (polimórfico → B4 SGC Procesos)",
    "fieldname": "proceso",
    "fieldtype": "Link",
    "label": "Proceso",
    "options": "Proceso"
   },
   {
-   "description": "N:M indicador\u2194elemento marco (tabla-puente)",
+   "description": "N:M indicador↔elemento marco (tabla-puente)",
    "fieldname": "criterios",
    "fieldtype": "Table",
    "label": "Criterios que tributa",
@@ -64,8 +64,39 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-10-13 19:41:00.377652",
+ "links": [
+  {
+   "group": "Definición",
+   "link_doctype": "Ficha Indicador",
+   "link_fieldname": "indicador"
+  },
+  {
+   "group": "Mediciones",
+   "link_doctype": "Valor Indicador",
+   "link_fieldname": "indicador"
+  },
+  {
+   "group": "Mediciones",
+   "link_doctype": "Alerta Indicador",
+   "link_fieldname": "indicador"
+  },
+  {
+   "group": "Mediciones",
+   "link_doctype": "Regla Validacion",
+   "link_fieldname": "indicador"
+  },
+  {
+   "group": "Uso",
+   "link_doctype": "Objetivo Calidad",
+   "link_fieldname": "indicador"
+  },
+  {
+   "group": "Uso",
+   "link_doctype": "Instrumento",
+   "link_fieldname": "indicador"
+  }
+ ],
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Indicadores",
  "name": "Indicador",
@@ -103,13 +134,13 @@
    "export": 1,
    "read": 1,
    "report": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,
    "read": 1,
    "report": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "create": 1,

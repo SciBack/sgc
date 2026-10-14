@@ -93,8 +93,14 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-10-14 21:00:00.000000",
+ "links": [
+  {
+   "group": "Resultados",
+   "link_doctype": "Resultado Instrumento",
+   "link_fieldname": "aplicacion_instrumento"
+  }
+ ],
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Gobierno",
  "name": "Aplicacion Instrumento",

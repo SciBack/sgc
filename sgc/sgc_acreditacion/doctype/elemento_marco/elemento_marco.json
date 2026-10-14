@@ -136,8 +136,54 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_tree": 1,
- "links": [],
- "modified": "2026-10-14 13:00:00.000000",
+ "links": [
+  {
+   "group": "Valoración",
+   "link_doctype": "Valoracion Criterio",
+   "link_fieldname": "criterio"
+  },
+  {
+   "group": "Valoración",
+   "link_doctype": "Valoracion Estandar",
+   "link_fieldname": "elemento_marco"
+  },
+  {
+   "group": "Evidencias",
+   "link_doctype": "Trazabilidad",
+   "link_fieldname": "elemento_marco"
+  },
+  {
+   "group": "Medición",
+   "link_doctype": "Ficha Indicador",
+   "link_fieldname": "elemento_marco"
+  },
+  {
+   "group": "Mejora",
+   "link_doctype": "No Conformidad",
+   "link_fieldname": "criterio"
+  },
+  {
+   "group": "Mejora",
+   "link_doctype": "Hallazgo",
+   "link_fieldname": "criterio"
+  },
+  {
+   "group": "Mejora",
+   "link_doctype": "Accion Mejora",
+   "link_fieldname": "criterio"
+  },
+  {
+   "group": "Auditoría",
+   "link_doctype": "Hallazgo Auditoria",
+   "link_fieldname": "criterio_incumplido"
+  },
+  {
+   "group": "Riesgos",
+   "link_doctype": "Riesgo",
+   "link_fieldname": "elemento_marco"
+  }
+ ],
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Elemento Marco",

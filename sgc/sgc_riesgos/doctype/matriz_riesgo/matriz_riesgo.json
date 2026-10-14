@@ -20,7 +20,7 @@
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "C\u00f3digo",
+   "label": "Código",
    "reqd": 1,
    "unique": 1
   },
@@ -32,16 +32,16 @@
    "reqd": 1
   },
   {
-   "description": "p. ej. 5 (matriz 5\u00d75)",
+   "description": "p. ej. 5 (matriz 5×5)",
    "fieldname": "dimension",
    "fieldtype": "Int",
    "in_list_view": 1,
-   "label": "Dimensi\u00f3n"
+   "label": "Dimensión"
   },
   {
    "fieldname": "cfg_sb",
    "fieldtype": "Section Break",
-   "label": "Configuraci\u00f3n de escala"
+   "label": "Configuración de escala"
   },
   {
    "description": "[{valor,etiqueta}]",
@@ -56,7 +56,7 @@
    "label": "Niveles de impacto"
   },
   {
-   "description": "mapea rango de score \u2192 Bajo/Moderado/Alto/Extremo + color",
+   "description": "mapea rango de score → Bajo/Moderado/Alto/Extremo + color",
    "fieldname": "umbrales",
    "fieldtype": "JSON",
    "label": "Umbrales"
@@ -64,8 +64,14 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-10-13 19:41:01.244031",
+ "links": [
+  {
+   "group": "Riesgos",
+   "link_doctype": "Riesgo",
+   "link_fieldname": "matriz_riesgo"
+  }
+ ],
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Riesgos",
  "name": "Matriz Riesgo",
@@ -97,12 +103,12 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "export": 1,

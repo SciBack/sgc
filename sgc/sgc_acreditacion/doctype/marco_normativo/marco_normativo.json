@@ -22,11 +22,11 @@
  ],
  "fields": [
   {
-   "description": "CONEAU-PROG-2025, CBC-SUNEDU-2026, ISO-21001\u2026",
+   "description": "CONEAU-PROG-2025, CBC-SUNEDU-2026, ISO-21001…",
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "C\u00f3digo",
+   "label": "Código",
    "reqd": 1,
    "unique": 1
   },
@@ -46,20 +46,20 @@
    "options": "SINEACE\nSUNEDU\nISO\nINTERNACIONAL"
   },
   {
-   "description": "Licenciamiento = permiso para operar (Sunedu). Acreditaci\u00f3n = sello de calidad (Sineace/Coneau), por programa o institucional.",
+   "description": "Licenciamiento = permiso para operar (Sunedu). Acreditación = sello de calidad (Sineace/Coneau), por programa o institucional.",
    "fieldname": "alcance",
    "fieldtype": "Select",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Alcance",
-   "options": "\nLicenciamiento\nAcreditaci\u00f3n de programa\nAcreditaci\u00f3n institucional\nGesti\u00f3n interna"
+   "options": "\nLicenciamiento\nAcreditación de programa\nAcreditación institucional\nGestión interna"
   },
   {
-   "description": "2025, 2026 \u2014 permite convivencia de versiones",
+   "description": "2025, 2026 — permite convivencia de versiones",
    "fieldname": "version",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Versi\u00f3n"
+   "label": "Versión"
   },
   {
    "fieldname": "vigente_desde",
@@ -82,7 +82,7 @@
   {
    "fieldname": "escala_valoracion",
    "fieldtype": "Link",
-   "label": "Escala de valoraci\u00f3n",
+   "label": "Escala de valoración",
    "options": "Escala Valoracion"
   },
   {
@@ -106,8 +106,34 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-10-13 19:41:01.134132",
+ "links": [
+  {
+   "group": "Estructura",
+   "link_doctype": "Elemento Marco",
+   "link_fieldname": "marco_normativo"
+  },
+  {
+   "group": "Uso",
+   "link_doctype": "Autoevaluacion",
+   "link_fieldname": "marco_normativo"
+  },
+  {
+   "group": "Uso",
+   "link_doctype": "Informe Cumplimiento",
+   "link_fieldname": "marco_normativo"
+  },
+  {
+   "group": "Uso",
+   "link_doctype": "Indicador",
+   "link_fieldname": "marco_normativo"
+  },
+  {
+   "group": "Uso",
+   "link_doctype": "Carga Evidencias",
+   "link_fieldname": "marco_normativo"
+  }
+ ],
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Marco Normativo",
@@ -138,12 +164,12 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "export": 1,
