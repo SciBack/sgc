@@ -1,0 +1,234 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "format:CEV-{YYYY}-{####}",
+ "creation": "2026-10-14 09:00:00.000000",
+ "description": "Carga masiva de evidencias desde un ZIP: crea cada Evidencia y su Trazabilidad al criterio.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "datos_sb",
+  "archivo_zip",
+  "marco_normativo",
+  "programa_sede",
+  "periodo_academico",
+  "col1",
+  "unidad_organica",
+  "proceso",
+  "tipo_vinculo",
+  "resultado_sb",
+  "estado",
+  "n_archivos",
+  "n_creadas",
+  "col2",
+  "n_vinculadas",
+  "n_sin_vinculo",
+  "n_omitidos",
+  "filas",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "datos_sb",
+   "fieldtype": "Section Break",
+   "label": "Qué se carga"
+  },
+  {
+   "description": "Un ZIP con las evidencias. Se reconoce el criterio por el nombre de la carpeta («1.1 …», «Criterio 1.1», «E1») o, mejor, por un indice.csv con las columnas archivo,elemento[,titulo].",
+   "fieldname": "archivo_zip",
+   "fieldtype": "Attach",
+   "label": "Archivo ZIP",
+   "reqd": 1
+  },
+  {
+   "fieldname": "marco_normativo",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Marco normativo",
+   "options": "Marco Normativo",
+   "reqd": 1
+  },
+  {
+   "fieldname": "programa_sede",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Programa",
+   "options": "Programa Sede"
+  },
+  {
+   "fieldname": "periodo_academico",
+   "fieldtype": "Link",
+   "label": "Periodo académico",
+   "options": "Periodo Academico"
+  },
+  {
+   "fieldname": "col1",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "unidad_organica",
+   "fieldtype": "Link",
+   "label": "Unidad orgánica",
+   "options": "Unidad Organica"
+  },
+  {
+   "description": "Opcional: además del criterio, cada evidencia queda vinculada a este proceso.",
+   "fieldname": "proceso",
+   "fieldtype": "Link",
+   "label": "Proceso",
+   "options": "Proceso"
+  },
+  {
+   "default": "Soporta",
+   "fieldname": "tipo_vinculo",
+   "fieldtype": "Select",
+   "label": "Tipo de vínculo",
+   "options": "Soporta\nCumple\nParcial"
+  },
+  {
+   "fieldname": "resultado_sb",
+   "fieldtype": "Section Break",
+   "label": "Resultado"
+  },
+  {
+   "default": "Borrador",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Borrador\nEn proceso\nProcesada\nCon observaciones",
+   "read_only": 1
+  },
+  {
+   "fieldname": "n_archivos",
+   "fieldtype": "Int",
+   "label": "Archivos en el ZIP",
+   "read_only": 1
+  },
+  {
+   "fieldname": "n_creadas",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Evidencias creadas",
+   "read_only": 1
+  },
+  {
+   "fieldname": "col2",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "n_vinculadas",
+   "fieldtype": "Int",
+   "label": "Vinculadas a un criterio",
+   "read_only": 1
+  },
+  {
+   "fieldname": "n_sin_vinculo",
+   "fieldtype": "Int",
+   "label": "Sin criterio reconocido",
+   "read_only": 1
+  },
+  {
+   "fieldname": "n_omitidos",
+   "fieldtype": "Int",
+   "label": "Omitidos (duplicados o no admitidos)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "filas",
+   "fieldtype": "Table",
+   "label": "Detalle por archivo",
+   "options": "Carga Evidencias Fila",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Carga Evidencias",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-10-14 09:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Acreditacion",
+ "name": "Carga Evidencias",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "DPGC",
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Analista de Calidad (DPGC)",
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Responsable de Calidad de Programa",
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Dueño de Proceso",
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Miembro de Comité de Calidad",
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

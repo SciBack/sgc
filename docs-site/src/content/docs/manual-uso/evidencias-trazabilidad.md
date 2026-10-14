@@ -14,6 +14,31 @@ Una **Evidencia** puede ser:
 Se exige al menos uno de los dos (archivo o URL) para guardar. El código se genera
 automáticamente (`EVD-AAAA-NNNN`).
 
+## Cargar muchas evidencias a la vez (ZIP)
+
+Si las evidencias ya están ordenadas en carpetas (OneDrive, Drive, una unidad compartida),
+no hace falta subirlas una a una:
+
+1. Descargue la carpeta como **ZIP**.
+2. Menú **Acreditación y licenciamiento → Carga masiva de evidencias → Nuevo**.
+3. Adjunte el ZIP, elija el **marco normativo** y, si aplica, el programa, el periodo, la
+   unidad y el proceso. Todo eso se copia a cada evidencia creada.
+4. Guarde y pulse **Validar**. La carga corre en segundo plano; al terminar, el detalle dice
+   qué pasó con cada archivo.
+
+**Cómo sabe el sistema a qué criterio va cada archivo.** Por el nombre de la carpeta más
+cercana que empiece por un código del marco: `1.1 Propósitos`, `Criterio 1.1`, `C1.1`,
+`E1`, `Estándar 1`, `I.1` (condiciones básicas). Si necesita precisión archivo por archivo,
+ponga en el ZIP un `indice.csv` con las columnas `archivo,elemento,titulo`; el índice manda
+sobre las carpetas.
+
+**Qué se omite, sin borrar nada:** los archivos que ya están cargados (misma huella) o
+repetidos dentro del ZIP, los tipos que no son documentos, imágenes, audio o vídeo, los que
+superan el tamaño máximo y la basura del sistema (`__MACOSX`, `.DS_Store`, `Thumbs.db`).
+Lo que no casa con ningún criterio se crea igual y queda en el detalle como «Creada sin
+criterio: vincúlela a mano». Las evidencias nacen **Pendientes**: darlas por válidas sigue
+siendo una decisión de la persona que revisa.
+
 ## Vincular la evidencia a un criterio o proceso: Trazabilidad
 
 El vínculo real entre una Evidencia y lo que sustenta (un criterio del marco
