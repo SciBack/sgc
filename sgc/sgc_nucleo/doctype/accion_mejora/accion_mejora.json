@@ -92,7 +92,8 @@
    "fieldname": "responsable",
    "fieldtype": "Link",
    "label": "Responsable",
-   "options": "User"
+   "options": "User",
+   "in_standard_filter": 1
   },
   {
    "fieldname": "fecha_inicio",
@@ -136,8 +137,24 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-10-14 21:00:00.000000",
+ "links": [
+  {
+   "group": "Origen",
+   "link_doctype": "Alerta Indicador",
+   "link_fieldname": "accion_mejora"
+  },
+  {
+   "group": "Origen",
+   "link_doctype": "Salida No Conforme",
+   "link_fieldname": "accion_mejora"
+  },
+  {
+   "group": "Origen",
+   "link_doctype": "Tratamiento Riesgo",
+   "link_fieldname": "accion_mejora"
+  }
+ ],
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "Accion Mejora",
@@ -229,5 +246,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "codigo",
- "track_changes": 1
+ "track_changes": 1,
+ "search_fields": "codigo"
 }

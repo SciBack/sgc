@@ -21,7 +21,7 @@
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "C\u00f3digo",
+   "label": "Código",
    "reqd": 1,
    "unique": 1
   },
@@ -29,12 +29,12 @@
    "fieldname": "version",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Versi\u00f3n"
+   "label": "Versión"
   },
   {
    "fieldname": "texto",
    "fieldtype": "Text Editor",
-   "label": "Texto de la pol\u00edtica"
+   "label": "Texto de la política"
   },
   {
    "fieldname": "vigente_desde",
@@ -54,7 +54,7 @@
    "options": "User"
   },
   {
-   "description": "La pol\u00edtica publicada (A2).",
+   "description": "La política publicada (A2).",
    "fieldname": "documento_controlado",
    "fieldtype": "Link",
    "label": "Documento publicado",
@@ -72,8 +72,14 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-10-13 19:41:01.966082",
+ "links": [
+  {
+   "group": "Despliegue",
+   "link_doctype": "Objetivo Calidad",
+   "link_fieldname": "politica_calidad"
+  }
+ ],
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Gobierno",
  "name": "Politica Calidad",
@@ -104,12 +110,12 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "export": 1,
@@ -159,5 +165,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "version",
- "track_changes": 1
+ "track_changes": 1,
+ "search_fields": "version"
 }

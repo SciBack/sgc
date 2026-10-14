@@ -25,7 +25,7 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Obligaci\u00f3n al ente",
+   "label": "Obligación al ente",
    "options": "Obligacion Ente",
    "reqd": 1
   },
@@ -40,7 +40,7 @@
    "fieldname": "fecha_limite",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "Fecha l\u00edmite"
+   "label": "Fecha límite"
   },
   {
    "fieldname": "fecha_entrega",
@@ -60,7 +60,8 @@
    "fieldname": "responsable",
    "fieldtype": "Link",
    "label": "Responsable",
-   "options": "User"
+   "options": "User",
+   "in_standard_filter": 1
   },
   {
    "fieldname": "observaciones",
@@ -87,7 +88,7 @@
    "options": "Informe Cumplimiento"
   },
   {
-   "description": "si una entrega se incumple/observa \u2192 NC (origen=ObligacionEnte)",
+   "description": "si una entrega se incumple/observa → NC (origen=ObligacionEnte)",
    "fieldname": "no_conformidad",
    "fieldtype": "Link",
    "label": "No conformidad",
@@ -97,7 +98,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-13 19:40:59.254685",
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Entrega Obligacion",
@@ -131,12 +132,12 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "export": 1,

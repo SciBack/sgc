@@ -19,12 +19,12 @@
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "C\u00f3digo",
+   "label": "Código",
    "reqd": 1,
    "unique": 1
   },
   {
-   "description": "SUNEDU\u00b7SINEACE\u00b7CONCYTEC\u00b7MINEDU\u00b7INEI\u00b7SUNAT/MTPE\u00b7PRONABEC\u00b7PCM-SGTD",
+   "description": "SUNEDU·SINEACE·CONCYTEC·MINEDU·INEI·SUNAT/MTPE·PRONABEC·PCM-SGTD",
    "fieldname": "nombre",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -58,8 +58,14 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-10-13 19:40:59.155494",
+ "links": [
+  {
+   "group": "Obligaciones",
+   "link_doctype": "Obligacion Ente",
+   "link_fieldname": "ente_externo"
+  }
+ ],
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Ente Externo",
@@ -92,12 +98,12 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "export": 1,
@@ -140,5 +146,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "nombre",
- "track_changes": 1
+ "track_changes": 1,
+ "search_fields": "nombre"
 }

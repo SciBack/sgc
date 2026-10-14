@@ -187,3 +187,56 @@ class IntegrationTestAlcanceDelMarco(IntegrationTestCase):
 		ae = factories.crear_autoevaluacion(marco, prefijo="TESTALCOK")
 		self.assertTrue(ae.name)
 		self.assertFalse(ae.programa_sede)
+
+
+class IntegrationTestEspacioPorCriterio(IntegrationTestCase):
+	"""Al iniciar la evaluación cada criterio tiene ya su valoración, con responsable y tarea."""
+
+	USUARIO = "sgc-prueba-criterio@example.com"
+
+	def setUp(self):
+		self.arbol = factories.crear_marco_prueba(n_estandares=2, n_criterios=2, prefijo="TESTESP")
+		self.ae = factories.crear_autoevaluacion(self.arbol, prefijo="TESTESP").name
+		if not frappe.db.exists("User", self.USUARIO):
+			u = frappe.get_doc({"doctype": "User", "email": self.USUARIO, "first_name": "criterio", "send_welcome_email": 0})
+			u.append("roles", {"role": "Responsable de Calidad de Programa"})
+			u.insert(ignore_permissions=True)
+
+	def _iniciar(self):
+		return apply_workflow(frappe.get_doc("Autoevaluacion", self.ae), "Iniciar evaluacion")
+
+	def _valoraciones(self):
+		return frappe.get_all("Valoracion Criterio", filters={"autoevaluacion": self.ae}, fields=["name", "criterio", "estado"])
+
+	def test_iniciar_crea_una_valoracion_pendiente_por_criterio(self):
+		from sgc import scoring
+
+		self.assertEqual(self._valoraciones(), [])
+		doc = self._iniciar()
+		esperados = set(scoring._criterios_valorables_del_marco(doc.marco_normativo, autoevaluacion=self.ae))
+		valoraciones = self._valoraciones()
+		self.assertEqual({v.criterio for v in valoraciones}, esperados)
+		self.assertEqual({v.estado for v in valoraciones}, {"Pendiente"})
+		doc.save()  # guardar otra vez no duplica
+		self.assertEqual(len(self._valoraciones()), len(esperados))
+
+	def test_el_responsable_tiene_tarea_hasta_valorar(self):
+		self._iniciar()
+		v = frappe.get_doc("Valoracion Criterio", self._valoraciones()[0].name)
+		v.responsable = self.USUARIO
+		v.save()
+		filtro = {"reference_type": "Valoracion Criterio", "reference_name": v.name, "allocated_to": self.USUARIO}
+		self.assertEqual(frappe.db.get_value("ToDo", filtro, "status"), "Open")
+		v.cumple = factories.CUMPLE
+		v.save()
+		self.assertEqual(frappe.db.get_value("ToDo", filtro, "status"), "Closed")
+
+	def test_un_criterio_no_se_valora_dos_veces(self):
+		self._iniciar()
+		criterio = self._valoraciones()[0].criterio
+		with self.assertRaises(frappe.ValidationError):
+			frappe.get_doc({"doctype": "Valoracion Criterio", "autoevaluacion": self.ae, "criterio": criterio}).insert()
+
+	def test_la_autoevaluacion_muestra_sus_valoraciones_en_conexiones(self):
+		enlazados = {l.link_doctype for l in frappe.get_meta("Autoevaluacion").links}
+		self.assertTrue({"Valoracion Criterio", "Valoracion Estandar"} <= enlazados)

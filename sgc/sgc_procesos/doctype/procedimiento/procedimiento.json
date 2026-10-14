@@ -71,7 +71,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-14 22:30:00.000000",
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Procesos",
  "name": "Procedimiento",
@@ -153,5 +153,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "titulo",
- "track_changes": 1
+ "track_changes": 1,
+ "search_fields": "titulo"
 }

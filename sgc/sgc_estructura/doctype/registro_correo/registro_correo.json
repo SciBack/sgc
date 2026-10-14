@@ -83,7 +83,7 @@
  "in_create": 1,
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-12 20:28:02.000000",
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Estructura",
  "name": "Registro Correo",
@@ -101,5 +101,6 @@
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
- "title_field": "destinatario"
+ "title_field": "destinatario",
+ "search_fields": "destinatario"
 }

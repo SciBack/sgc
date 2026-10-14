@@ -88,5 +88,37 @@ class TestPoliticaNativa(unittest.TestCase):
 				self.assertEqual(tipos - BLOQUES_NATIVOS, set())
 
 
+	def test_esperan_mi_decision_filtra_estados_que_existen(self):
+		"""La bandeja de decisiones filtra Workflow Action por estado: un estado renombrado la vaciaría sin avisar."""
+		estados = {s["state"] for w in json.loads((APP / "fixtures" / "workflow.json").read_text(encoding="utf-8"))
+				   for s in w["states"]}
+		portada = json.loads((APP / "sgc_nucleo" / "workspace" / "sgc" / "sgc.json").read_text(encoding="utf-8"))
+		lista = next(q for q in portada["quick_lists"] if q["document_type"] == "Workflow Action")
+		filtrados = json.loads(re.search(r'"in",(\[.*?\])\]', lista["quick_list_filter"]).group(1))
+		self.assertTrue(filtrados)
+		self.assertEqual(sorted(set(filtrados) - estados), [])
+		atajo = next(s for s in portada["shortcuts"] if s["link_to"] == "Workflow Action")
+		self.assertEqual(atajo["stats_filter"], lista["quick_list_filter"])
+
+	def test_las_conexiones_apuntan_a_campos_que_enlazan(self):
+		"""Una Conexión (`links` del DocType) con un campo que no existe rompe el formulario al abrirlo."""
+		doctypes = {}
+		for ruta in APP.glob("*/doctype/*/*.json"):
+			d = json.loads(ruta.read_text(encoding="utf-8"))
+			if d.get("doctype") == "DocType":
+				doctypes[d["name"]] = d
+		for nombre, d in sorted(doctypes.items()):
+			for enlace in d.get("links") or []:
+				destino = doctypes.get(enlace["link_doctype"])
+				if destino is None:
+					continue  # DocType de Frappe
+				with self.subTest(doctype=nombre, enlace=enlace["link_doctype"]):
+					campo = next((f for f in destino["fields"] if f["fieldname"] == enlace["link_fieldname"]), None)
+					self.assertIsNotNone(campo)
+					self.assertIn(campo["fieldtype"], ("Link", "Dynamic Link"))
+					if campo["fieldtype"] == "Link":
+						self.assertEqual(campo["options"], nombre)
+
+
 if __name__ == "__main__":
 	unittest.main()

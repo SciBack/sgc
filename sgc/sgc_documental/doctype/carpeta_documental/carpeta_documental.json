@@ -65,8 +65,14 @@
  ],
  "index_web_pages_for_search": 0,
  "is_tree": 1,
- "links": [],
- "modified": "2026-10-13 19:40:58.757312",
+ "links": [
+  {
+   "group": "Documentos",
+   "link_doctype": "Documento Controlado",
+   "link_fieldname": "carpeta"
+  }
+ ],
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Documental",
  "name": "Carpeta Documental",

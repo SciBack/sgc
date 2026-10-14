@@ -9,6 +9,18 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.6.0] - 2026-10-14
+
+**Requiere migrar:** sí. Pantallas nuevas (Carga de evidencias, informe Implantación del SGC),
+campos nuevos en Valoración de criterio y Conexiones en 30 pantallas. Sin cambios en los datos.
+
+### Añadido
+- **Carga masiva de evidencias desde un ZIP** (Acreditación y licenciamiento → Carga masiva de
+  evidencias). Crea una evidencia por archivo y la vincula al criterio según la carpeta
+  (`1.1 Propósitos`, `Criterio 1.1`, `E1`, `I.1`…) o según un `indice.csv`. Omite repetidos,
+  tipos no admitidos, rutas con «..» y la basura del sistema; deja en el detalle qué pasó con
+  cada archivo. Requiere migrar (pantalla nueva).
+
 ## [1.5.0] - 2026-10-14
 
 **Requiere migrar:** sí. Cambia el flujo de aprobación de documentos (acción nueva). Sin cambios en

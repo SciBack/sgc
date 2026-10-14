@@ -24,7 +24,7 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Comit\u00e9",
+   "label": "Comité",
    "options": "Comite",
    "reqd": 1
   },
@@ -32,12 +32,12 @@
    "fieldname": "titulo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "T\u00edtulo"
+   "label": "Título"
   },
   {
    "fieldname": "numero_sesion",
    "fieldtype": "Int",
-   "label": "N.\u00ba de sesi\u00f3n"
+   "label": "N.º de sesión"
   },
   {
    "fieldname": "fecha",
@@ -49,7 +49,7 @@
    "fieldname": "modalidad",
    "fieldtype": "Select",
    "label": "Modalidad",
-   "options": "Presencial\nVirtual\nH\u00edbrida"
+   "options": "Presencial\nVirtual\nHíbrida"
   },
   {
    "fieldname": "asistentes",
@@ -84,8 +84,19 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-10-13 19:41:02.647003",
+ "links": [
+  {
+   "group": "Resultados",
+   "link_doctype": "Acuerdo",
+   "link_fieldname": "reunion"
+  },
+  {
+   "group": "Resultados",
+   "link_doctype": "Revision Direccion",
+   "link_fieldname": "reunion"
+  }
+ ],
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Gobierno",
  "name": "Reunion",
@@ -120,13 +131,13 @@
    "create": 1,
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad",
+   "role": "Miembro de Comité de Calidad",
    "write": 1
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "export": 1,
@@ -169,5 +180,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "titulo",
- "track_changes": 1
+ "track_changes": 1,
+ "search_fields": "titulo"
 }

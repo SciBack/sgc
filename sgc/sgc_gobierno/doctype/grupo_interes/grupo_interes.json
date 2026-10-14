@@ -17,7 +17,7 @@
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "C\u00f3digo",
+   "label": "Código",
    "reqd": 1,
    "unique": 1
   },
@@ -39,13 +39,19 @@
   {
    "fieldname": "descripcion",
    "fieldtype": "Small Text",
-   "label": "Descripci\u00f3n"
+   "label": "Descripción"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-10-13 19:41:00.068479",
+ "links": [
+  {
+   "group": "Consultas",
+   "link_doctype": "Instrumento",
+   "link_fieldname": "grupo_interes"
+  }
+ ],
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Gobierno",
  "name": "Grupo Interes",
@@ -78,12 +84,12 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "export": 1,
@@ -126,5 +132,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "nombre",
- "track_changes": 1
+ "track_changes": 1,
+ "search_fields": "nombre"
 }

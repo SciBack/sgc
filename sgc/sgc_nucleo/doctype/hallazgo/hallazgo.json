@@ -128,8 +128,14 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-10-14 21:00:00.000000",
+ "links": [
+  {
+   "group": "Mejora",
+   "link_doctype": "Accion Mejora",
+   "link_fieldname": "hallazgo"
+  }
+ ],
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "Hallazgo",
@@ -216,5 +222,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "codigo",
- "track_changes": 1
+ "track_changes": 1,
+ "search_fields": "codigo"
 }

@@ -73,7 +73,8 @@
    "fieldtype": "Link",
    "options": "User",
    "reqd": 1,
-   "description": "Quién responde por este dato. El criterio 8.1 pide procedimientos con responsable."
+   "description": "Quién responde por este dato. El criterio 8.1 pide procedimientos con responsable.",
+   "in_standard_filter": 1
   },
   {
    "fieldname": "unidad_organica",
@@ -141,7 +142,8 @@
    "fieldtype": "Select",
    "default": "Activa",
    "options": "Activa\nSuspendida\nBaja",
-   "in_list_view": 1
+   "in_list_view": 1,
+   "in_standard_filter": 1
   },
   {
    "fieldname": "notas",
@@ -164,8 +166,24 @@
   }
  ],
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-09-11 10:00:00.000000",
+ "links": [
+  {
+   "group": "Datos",
+   "link_doctype": "Valor Indicador",
+   "link_fieldname": "fuente_dato"
+  },
+  {
+   "group": "Datos",
+   "link_doctype": "Lote Ingesta",
+   "link_fieldname": "fuente_dato"
+  },
+  {
+   "group": "Datos",
+   "link_doctype": "Regla Validacion",
+   "link_fieldname": "fuente_dato"
+  }
+ ],
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Estructura",
  "name": "Fuente Dato",
@@ -223,5 +241,6 @@
  "track_changes": 1,
  "autoname": "field:codigo",
  "title_field": "nombre",
- "show_title_field_in_link": 1
+ "show_title_field_in_link": 1,
+ "search_fields": "nombre"
 }

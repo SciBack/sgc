@@ -58,7 +58,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-12 21:12:26.000000",
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Estructura",
  "name": "Termino Tesauro",
@@ -108,5 +108,6 @@
  "sort_order": "ASC",
  "states": [],
  "title_field": "nombre",
- "track_changes": 0
+ "track_changes": 0,
+ "search_fields": "nombre"
 }

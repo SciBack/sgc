@@ -215,9 +215,34 @@
    "group": "Trazabilidad",
    "link_doctype": "Trazabilidad",
    "link_fieldname": "evidencia"
+  },
+  {
+   "group": "Usada en",
+   "link_doctype": "No Conformidad",
+   "link_fieldname": "evidencia_cierre"
+  },
+  {
+   "group": "Usada en",
+   "link_doctype": "Accion Mejora",
+   "link_fieldname": "evidencia_cierre"
+  },
+  {
+   "group": "Usada en",
+   "link_doctype": "Salida No Conforme",
+   "link_fieldname": "evidencia_tratamiento"
+  },
+  {
+   "group": "Usada en",
+   "link_doctype": "Tratamiento Riesgo",
+   "link_fieldname": "evidencia"
+  },
+  {
+   "group": "Usada en",
+   "link_doctype": "Entrega Obligacion",
+   "link_fieldname": "evidencia"
   }
  ],
- "modified": "2026-10-14 21:00:00.000000",
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Evidencia",

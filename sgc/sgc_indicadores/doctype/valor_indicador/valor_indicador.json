@@ -203,8 +203,19 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-10-14 22:00:00.000000",
+ "links": [
+  {
+   "group": "Seguimiento",
+   "link_doctype": "Alerta Indicador",
+   "link_fieldname": "valor_indicador"
+  },
+  {
+   "group": "Origen",
+   "link_doctype": "Resultado Instrumento",
+   "link_fieldname": "valor_indicador"
+  }
+ ],
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Indicadores",
  "name": "Valor Indicador",
@@ -303,5 +314,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "indicador",
- "track_changes": 1
+ "track_changes": 1,
+ "search_fields": "indicador"
 }

@@ -43,13 +43,13 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Tipo",
-   "options": "Entrega\nRetroalimentaci\u00f3n\nControl"
+   "options": "Entrega\nRetroalimentación\nControl"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-13 19:41:00.825574",
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Procesos",
  "name": "Interaccion Proceso",
@@ -81,13 +81,13 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "create": 1,
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "export": 1,
@@ -130,5 +130,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "objeto_intercambio",
- "track_changes": 1
+ "track_changes": 1,
+ "search_fields": "objeto_intercambio"
 }

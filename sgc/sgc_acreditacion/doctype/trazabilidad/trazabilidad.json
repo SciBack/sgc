@@ -43,12 +43,12 @@
   {
    "fieldname": "tipo_vinculo",
    "fieldtype": "Select",
-   "label": "Tipo de v\u00ednculo",
+   "label": "Tipo de vínculo",
    "options": "Cumple\nSoporta\nParcial"
   },
   {
    "default": "Directo",
-   "description": "\"Auto-sincronizado\": la cre\u00f3 el auto-sync de un picklist Evidencia Enlace (Cumplimiento CBC / Hallazgo Auditoria), no una captura manual.",
+   "description": "\"Auto-sincronizado\": la creó el auto-sync de un picklist Evidencia Enlace (Cumplimiento CBC / Hallazgo Auditoria), no una captura manual.",
    "fieldname": "origen",
    "fieldtype": "Select",
    "in_standard_filter": 1,
@@ -69,7 +69,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-13 19:41:03.232588",
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Trazabilidad",
@@ -106,14 +106,14 @@
    "create": 1,
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad",
+   "role": "Miembro de Comité de Calidad",
    "write": 1
   },
   {
    "create": 1,
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso",
+   "role": "Dueño de Proceso",
    "write": 1
   },
   {
@@ -157,5 +157,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "evidencia",
- "track_changes": 1
+ "track_changes": 1,
+ "search_fields": "evidencia"
 }

@@ -75,7 +75,8 @@
    "fieldname": "estado",
    "fieldtype": "Select",
    "label": "Estado",
-   "options": "activo\ninactivo"
+   "options": "activo\ninactivo",
+   "in_standard_filter": 1
   },
   {
    "collapsible": 1,
@@ -93,8 +94,14 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-10-14 13:00:00.000000",
+ "links": [
+  {
+   "group": "Sedes",
+   "link_doctype": "Programa Sede",
+   "link_fieldname": "programa"
+  }
+ ],
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Estructura",
  "name": "Programa",
@@ -176,5 +183,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "nombre",
- "track_changes": 1
+ "track_changes": 1,
+ "search_fields": "nombre"
 }

@@ -12,6 +12,27 @@ class Autoevaluacion(Document):
         self._validar_alcance_coherente()
         self._validar_consolidacion()
 
+    def on_update(self):
+        if self.estado == "En curso":
+            self.preparar_criterios()
+
+    def preparar_criterios(self):
+        """Al iniciar la evaluación, una valoración Pendiente por criterio valorable del marco.
+
+        Sin esto el comité creaba a mano las 53 valoraciones de CONEAU 2025 una por una. Es
+        idempotente: solo crea las que faltan, así que un criterio añadido después también aparece.
+        """
+        from sgc import scoring
+
+        existentes = set(frappe.get_all("Valoracion Criterio", filters={"autoevaluacion": self.name}, pluck="criterio"))
+        for criterio in scoring._criterios_valorables_del_marco(self.marco_normativo, autoevaluacion=self.name):
+            if criterio in existentes:
+                continue
+            valoracion = frappe.get_doc({"doctype": "Valoracion Criterio", "autoevaluacion": self.name, "criterio": criterio,
+                                         "cumple": ""})  # el Select no tiene opción vacía: sin esto nace «Cumple»
+            valoracion.flags.preparada_al_iniciar = True
+            valoracion.insert(ignore_permissions=True)
+
     def _validar_consolidacion(self):
         """Consolidar exige que cada criterio valorable del marco tenga su valoración.
 

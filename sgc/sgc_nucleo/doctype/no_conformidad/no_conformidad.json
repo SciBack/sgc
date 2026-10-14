@@ -162,7 +162,8 @@
    "fieldname": "responsable",
    "fieldtype": "Link",
    "label": "Responsable",
-   "options": "User"
+   "options": "User",
+   "in_standard_filter": 1
   },
   {
    "fieldname": "fecha_deteccion",
@@ -190,8 +191,39 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-10-14 21:00:00.000000",
+ "links": [
+  {
+   "group": "Tratamiento",
+   "link_doctype": "Accion Mejora",
+   "link_fieldname": "no_conformidad"
+  },
+  {
+   "group": "Origen",
+   "link_doctype": "Hallazgo",
+   "link_fieldname": "no_conformidad"
+  },
+  {
+   "group": "Origen",
+   "link_doctype": "Hallazgo Auditoria",
+   "link_fieldname": "no_conformidad"
+  },
+  {
+   "group": "Origen",
+   "link_doctype": "Salida No Conforme",
+   "link_fieldname": "no_conformidad"
+  },
+  {
+   "group": "Origen",
+   "link_doctype": "Evento Riesgo",
+   "link_fieldname": "no_conformidad"
+  },
+  {
+   "group": "Origen",
+   "link_doctype": "Entrega Obligacion",
+   "link_fieldname": "no_conformidad"
+  }
+ ],
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "No Conformidad",

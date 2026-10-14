@@ -258,8 +258,34 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-10-14 21:00:00.000000",
+ "links": [
+  {
+   "group": "Usado en",
+   "link_doctype": "Procedimiento",
+   "link_fieldname": "documento_controlado"
+  },
+  {
+   "group": "Usado en",
+   "link_doctype": "Evidencia",
+   "link_fieldname": "documento_controlado"
+  },
+  {
+   "group": "Usado en",
+   "link_doctype": "Politica Calidad",
+   "link_fieldname": "documento_controlado"
+  },
+  {
+   "group": "Usado en",
+   "link_doctype": "Comite",
+   "link_fieldname": "documento_controlado"
+  },
+  {
+   "group": "Usado en",
+   "link_doctype": "Obligacion Ente",
+   "link_fieldname": "documento_controlado"
+  }
+ ],
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Documental",
  "name": "Documento Controlado",

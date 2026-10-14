@@ -93,7 +93,8 @@
    "fieldname": "responsable",
    "fieldtype": "Link",
    "label": "Responsable",
-   "options": "User"
+   "options": "User",
+   "in_standard_filter": 1
   },
   {
    "fieldname": "fecha_inicio",
@@ -148,8 +149,39 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
- "links": [],
- "modified": "2026-10-14 21:00:00.000000",
+ "links": [
+  {
+   "group": "Valoración",
+   "link_doctype": "Valoracion Criterio",
+   "link_fieldname": "autoevaluacion"
+  },
+  {
+   "group": "Valoración",
+   "link_doctype": "Valoracion Estandar",
+   "link_fieldname": "autoevaluacion"
+  },
+  {
+   "group": "Resultados",
+   "link_doctype": "Valor Indicador",
+   "link_fieldname": "autoevaluacion"
+  },
+  {
+   "group": "Mejora",
+   "link_doctype": "Hallazgo",
+   "link_fieldname": "autoevaluacion"
+  },
+  {
+   "group": "Mejora",
+   "link_doctype": "Plan Mejora",
+   "link_fieldname": "autoevaluacion"
+  },
+  {
+   "group": "Informes",
+   "link_doctype": "Informe Cumplimiento",
+   "link_fieldname": "autoevaluacion"
+  }
+ ],
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Autoevaluacion",

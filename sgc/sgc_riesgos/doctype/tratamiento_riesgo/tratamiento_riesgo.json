@@ -53,7 +53,8 @@
    "fieldname": "responsable",
    "fieldtype": "Link",
    "label": "Responsable",
-   "options": "User"
+   "options": "User",
+   "in_standard_filter": 1
   },
   {
    "fieldname": "fecha_compromiso",
@@ -68,7 +69,8 @@
    "in_list_view": 1,
    "label": "Estado",
    "options": "Planificado\nEn ejecucion\nImplementado\nVerificado",
-   "read_only": 1
+   "read_only": 1,
+   "in_standard_filter": 1
   },
   {
    "fieldname": "sb_ejecucion",
@@ -143,7 +145,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-14 21:00:00.000000",
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Riesgos",
  "name": "Tratamiento Riesgo",
