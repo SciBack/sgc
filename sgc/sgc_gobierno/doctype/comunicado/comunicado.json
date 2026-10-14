@@ -1,7 +1,8 @@
 {
  "actions": [],
+ "allow_rename": 0,
  "autoname": "format:COM-{YYYY}-{####}",
- "creation": "2026-09-27 13:40:00",
+ "creation": "2026-09-27 13:40:00.000000",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -55,7 +56,7 @@
    "fieldtype": "Column Break"
   },
   {
-   "description": "Se env\u00eda a los usuarios activos que tengan alguno de estos roles.",
+   "description": "Se envía a los usuarios activos que tengan alguno de estos roles.",
    "fieldname": "roles",
    "fieldtype": "Table MultiSelect",
    "label": "Destinatarios (roles)",
@@ -69,7 +70,7 @@
    "label": "Mantenimiento"
   },
   {
-   "description": "Se avisa con antelaci\u00f3n: al enviar, debe faltar al menos un d\u00eda.",
+   "description": "Se avisa con antelación: al enviar, debe faltar al menos un día.",
    "fieldname": "inicio_mantenimiento",
    "fieldtype": "Datetime",
    "label": "Inicio del mantenimiento",
@@ -98,7 +99,7 @@
   {
    "fieldname": "section_break_envio",
    "fieldtype": "Section Break",
-   "label": "Env\u00edo"
+   "label": "Envío"
   },
   {
    "fieldname": "enviado_por",
@@ -110,7 +111,7 @@
   {
    "fieldname": "fecha_envio",
    "fieldtype": "Datetime",
-   "label": "Fecha de env\u00edo",
+   "label": "Fecha de envío",
    "read_only": 1
   },
   {
@@ -127,10 +128,11 @@
    "description": "En modo ensayo o fuera de la lista blanca: constan en Registro Correo.",
    "fieldname": "n_retenidos",
    "fieldtype": "Int",
-   "label": "Retenidos por la configuraci\u00f3n del correo",
+   "label": "Retenidos por la configuración del correo",
    "read_only": 1
   }
  ],
+ "index_web_pages_for_search": 0,
  "links": [],
  "modified": "2026-10-13 19:40:58.967813",
  "modified_by": "Administrator",
@@ -166,12 +168,12 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "export": 1,

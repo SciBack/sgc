@@ -13,12 +13,14 @@ RAIZ = "Carpetas documentales"
 
 class CarpetaDocumental(NestedSet):
     def validate(self):
-        if self.name != RAIZ and not self.parent_carpeta_documental and frappe.db.exists(self.doctype, RAIZ):
+        if self.name != RAIZ and not self.parent_carpeta_documental:
+            # La raíz nace con la primera carpeta: así no hace falta un paso de despliegue.
+            asegurar_raiz()
             self.parent_carpeta_documental = RAIZ
 
 
 def asegurar_raiz():
-    """Crea la carpeta raíz si falta. Idempotente (lo llama el despliegue)."""
+    """Crea la carpeta raíz si falta. Idempotente."""
     if frappe.db.exists("Carpeta Documental", RAIZ):
         return False
     frappe.get_doc({"doctype": "Carpeta Documental", "nombre": RAIZ, "is_group": 1}).insert(

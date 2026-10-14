@@ -1,7 +1,8 @@
 {
  "actions": [],
+ "allow_rename": 0,
  "autoname": "format:EVR-{YYYY}-{#####}",
- "creation": "2026-09-27 14:00:00",
+ "creation": "2026-09-27 14:00:00.000000",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -31,11 +32,11 @@
  ],
  "fields": [
   {
-   "description": "En una l\u00ednea. Ej.: \u00abCa\u00edda del servidor de matr\u00edcula durante el primer d\u00eda\u00bb.",
+   "description": "En una línea. Ej.: «Caída del servidor de matrícula durante el primer día».",
    "fieldname": "titulo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Qu\u00e9 pas\u00f3",
+   "label": "Qué pasó",
    "reqd": 1
   },
   {
@@ -77,10 +78,10 @@
   {
    "fieldname": "section_break_ambito",
    "fieldtype": "Section Break",
-   "label": "D\u00f3nde ocurri\u00f3"
+   "label": "Dónde ocurrió"
   },
   {
-   "description": "El proceso del mapa en el que ocurri\u00f3, si lo sabe.",
+   "description": "El proceso del mapa en el que ocurrió, si lo sabe.",
    "fieldname": "proceso",
    "fieldtype": "Link",
    "in_standard_filter": 1,
@@ -94,19 +95,19 @@
   {
    "fieldname": "unidad_organica",
    "fieldtype": "Link",
-   "label": "Unidad org\u00e1nica",
+   "label": "Unidad orgánica",
    "options": "Unidad Organica"
   },
   {
    "fieldname": "section_break_descripcion",
    "fieldtype": "Section Break",
-   "label": "Descripci\u00f3n del evento"
+   "label": "Descripción del evento"
   },
   {
-   "description": "Los hechos: qu\u00e9 pas\u00f3, cu\u00e1ndo y a qui\u00e9n afect\u00f3.",
+   "description": "Los hechos: qué pasó, cuándo y a quién afectó.",
    "fieldname": "descripcion",
    "fieldtype": "Text",
-   "label": "Qu\u00e9 ocurri\u00f3",
+   "label": "Qué ocurrió",
    "reqd": 1
   },
   {
@@ -129,10 +130,10 @@
    "depends_on": "eval:doc.estado != 'Reportado'",
    "fieldname": "section_break_evaluacion",
    "fieldtype": "Section Break",
-   "label": "Evaluaci\u00f3n de Calidad"
+   "label": "Evaluación de Calidad"
   },
   {
-   "description": "Lo asigna Calidad al evaluar el evento. Si el proceso qued\u00f3 vac\u00edo, se toma el del riesgo.",
+   "description": "Lo asigna Calidad al evaluar el evento. Si el proceso quedó vacío, se toma el del riesgo.",
    "fieldname": "riesgo",
    "fieldtype": "Link",
    "label": "Riesgo del registro",
@@ -140,14 +141,14 @@
   },
   {
    "default": "No conformidad mayor",
-   "description": "Con qu\u00e9 gravedad se abre la no conformidad al confirmar el evento.",
+   "description": "Con qué gravedad se abre la no conformidad al confirmar el evento.",
    "fieldname": "tipo_nc",
    "fieldtype": "Select",
    "label": "Tipo de no conformidad",
    "options": "No conformidad mayor\nNo conformidad menor"
   },
   {
-   "description": "Obligatorio para descartar: quien report\u00f3 lo recibe.",
+   "description": "Obligatorio para descartar: quien reportó lo recibe.",
    "fieldname": "motivo_descarte",
    "fieldtype": "Small Text",
    "label": "Motivo del descarte"
@@ -166,11 +167,11 @@
   {
    "fieldname": "fecha_evaluacion",
    "fieldtype": "Date",
-   "label": "Fecha de la decisi\u00f3n",
+   "label": "Fecha de la decisión",
    "read_only": 1
   },
   {
-   "description": "Donde se hace el an\u00e1lisis de causas y el plan de acci\u00f3n.",
+   "description": "Donde se hace el análisis de causas y el plan de acción.",
    "fieldname": "no_conformidad",
    "fieldtype": "Link",
    "label": "No conformidad",
@@ -178,6 +179,7 @@
    "read_only": 1
   }
  ],
+ "index_web_pages_for_search": 0,
  "links": [],
  "modified": "2026-10-13 19:40:59.555135",
  "modified_by": "Administrator",
@@ -203,7 +205,7 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "export": 1,

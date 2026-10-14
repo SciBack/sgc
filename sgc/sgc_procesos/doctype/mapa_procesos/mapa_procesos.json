@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:version",
- "creation": "2026-09-20 18:00:00",
+ "creation": "2026-09-20 18:00:00.000000",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
@@ -23,7 +23,7 @@
    "fieldname": "version",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Versi\u00f3n",
+   "label": "Versión",
    "reqd": 1,
    "unique": 1
   },
@@ -32,7 +32,7 @@
    "fieldname": "titulo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "T\u00edtulo",
+   "label": "Título",
    "reqd": 1
   },
   {
@@ -50,30 +50,30 @@
    "fieldtype": "Column Break"
   },
   {
-   "description": "Fecha en que el \u00f3rgano de gobierno aprob\u00f3 esta versi\u00f3n del mapa.",
+   "description": "Fecha en que el órgano de gobierno aprobó esta versión del mapa.",
    "fieldname": "fecha_aprobacion",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "Fecha de aprobaci\u00f3n"
+   "label": "Fecha de aprobación"
   },
   {
-   "description": "\u00d3rgano que aprueba, no una persona: Consejo Universitario, Comit\u00e9 de Calidad, etc.",
+   "description": "Órgano que aprueba, no una persona: Consejo Universitario, Comité de Calidad, etc.",
    "fieldname": "aprobado_por",
    "fieldtype": "Data",
    "label": "Aprobado por"
   },
   {
-   "description": "Resoluci\u00f3n o acta que respalda la aprobaci\u00f3n.",
+   "description": "Resolución o acta que respalda la aprobación.",
    "fieldname": "resolucion",
    "fieldtype": "Data",
-   "label": "Resoluci\u00f3n"
+   "label": "Resolución"
   },
   {
    "fieldname": "section_break_imagen",
    "fieldtype": "Section Break"
   },
   {
-   "description": "El cuadro aprobado, con la identidad gr\u00e1fica de la instituci\u00f3n.",
+   "description": "El cuadro aprobado, con la identidad gráfica de la institución.",
    "fieldname": "imagen",
    "fieldtype": "Attach Image",
    "label": "Imagen del mapa"
@@ -119,12 +119,12 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "export": 1,

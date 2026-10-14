@@ -51,10 +51,11 @@ class IntegrationTestInformesPermiso(IntegrationTestCase):
         self.assertGreaterEqual(len(informes), 6)
         self.assertEqual({i.ref_doctype for i in informes} - set(doctypes_con_informe()), set())
         for i in informes:
-            self.assertEqual(
-                frappe.db.get_value("Custom DocPerm",
-                                    {"parent": i.ref_doctype, "role": ROL, "permlevel": 0}, "report"),
-                1, f"{ROL} sin «report» en {i.ref_doctype}: no puede abrir {i.name}",
+            # Lo efectivo: los Custom DocPerm si el DocType tiene alguno, si no los estándar.
+            filas = [p for p in frappe.get_meta(i.ref_doctype).permissions
+                     if p.role == ROL and not p.permlevel]
+            self.assertTrue(
+                any(p.report for p in filas), f"{ROL} sin «report» en {i.ref_doctype}: no puede abrir {i.name}"
             )
 
     def test_la_dpgc_ejecuta_cada_informe(self):

@@ -146,10 +146,11 @@ class IntegrationTestDespliegue(_ConSavepoint):
     def test_un_doctype_sin_permisos_se_nombra(self):
         self._quitar_permisos(["Proceso"])
         h = self._hallazgos("permisos_aplicados")["rbac-incompleto"]
-        self.assertEqual((h.nivel, h.detalle), (AVISO, ["Proceso"]))
+        self.assertEqual(h.nivel, AVISO)
+        self.assertEqual([linea.split(":")[0] for linea in h.detalle], ["Proceso"])
 
-    def test_los_workflows_se_leen_de_los_pasos_del_despliegue(self):
-        nombres = {s["name"] for s in despliegue._workflows_declarados()}
+    def test_los_workflows_se_leen_del_fixture(self):
+        nombres = set(estandar.workflows())
         self.assertIn("Autoevaluacion SGC", nombres)
         self.assertGreaterEqual(len(nombres), 15)
 
@@ -163,7 +164,7 @@ class IntegrationTestDespliegue(_ConSavepoint):
         self.assertTrue(any(linea.startswith("Autoevaluacion SGC") for linea in h.detalle))
 
     def test_sin_ningun_workflow_es_bloqueante(self):
-        frappe.db.delete("Workflow", {"name": ["in", [s["name"] for s in despliegue._workflows_declarados()]]})
+        frappe.db.delete("Workflow", {"name": ["in", list(estandar.workflows())]})
         self.assertEqual(self._hallazgos("workflows_aplicados")["workflows-no-aplicados"].nivel, BLOQUEANTE)
 
 

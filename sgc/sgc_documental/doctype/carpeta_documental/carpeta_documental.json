@@ -1,8 +1,8 @@
 {
  "actions": [],
  "autoname": "format:CD-{#####}",
- "creation": "2026-09-27 16:00:00",
- "description": "\u00c1rbol de carpetas para organizar la documentaci\u00f3n como decida la instituci\u00f3n, adem\u00e1s del proceso y el tema.",
+ "creation": "2026-09-27 16:00:00.000000",
+ "description": "Árbol de carpetas para organizar la documentación como decida la institución, además del proceso y el tema.",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -25,7 +25,7 @@
   {
    "fieldname": "descripcion",
    "fieldtype": "Small Text",
-   "label": "Descripci\u00f3n"
+   "label": "Descripción"
   },
   {
    "default": "1",
@@ -63,6 +63,7 @@
    "options": "Carpeta Documental"
   }
  ],
+ "index_web_pages_for_search": 0,
  "is_tree": 1,
  "links": [],
  "modified": "2026-10-13 19:40:58.757312",
@@ -98,12 +99,12 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "export": 1,

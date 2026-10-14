@@ -1,7 +1,8 @@
 {
  "actions": [],
+ "allow_rename": 0,
  "autoname": "format:LV-{YYYY}-{####}",
- "creation": "2026-09-27 11:00:00",
+ "creation": "2026-09-27 11:00:00.000000",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -26,16 +27,16 @@
    "fieldname": "titulo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "T\u00edtulo",
+   "label": "Título",
    "reqd": 1
   },
   {
-   "description": "Vac\u00eda = plantilla reutilizable. Con auditor\u00eda = la lista que se aplica en esa auditor\u00eda.",
+   "description": "Vacía = plantilla reutilizable. Con auditoría = la lista que se aplica en esa auditoría.",
    "fieldname": "auditoria",
    "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Auditor\u00eda",
+   "label": "Auditoría",
    "options": "Auditoria"
   },
   {
@@ -61,11 +62,11 @@
   {
    "fieldname": "unidad_organica",
    "fieldtype": "Link",
-   "label": "Unidad org\u00e1nica",
+   "label": "Unidad orgánica",
    "options": "Unidad Organica"
   },
   {
-   "description": "Quien aplica la lista. Si se deja vac\u00edo, quien la registra.",
+   "description": "Quien aplica la lista. Si se deja vacío, quien la registra.",
    "fieldname": "auditor",
    "fieldtype": "Link",
    "label": "Auditor",
@@ -74,7 +75,7 @@
   {
    "fieldname": "fecha_aplicacion",
    "fieldtype": "Date",
-   "label": "Fecha de aplicaci\u00f3n"
+   "label": "Fecha de aplicación"
   },
   {
    "fieldname": "plantilla_origen",
@@ -86,7 +87,7 @@
   {
    "fieldname": "section_break_items",
    "fieldtype": "Section Break",
-   "label": "Puntos a verificar (ISO 19011 \u00a76.3.4)"
+   "label": "Puntos a verificar (ISO 19011 §6.3.4)"
   },
   {
    "fieldname": "items",
@@ -100,7 +101,7 @@
    "label": "Cierre"
   },
   {
-   "description": "Lo sella el sistema al pasar a \u00abCompletada\u00bb.",
+   "description": "Lo sella el sistema al pasar a «Completada».",
    "fieldname": "completada_por",
    "fieldtype": "Link",
    "label": "Completada por",
@@ -118,6 +119,7 @@
    "read_only": 1
   }
  ],
+ "index_web_pages_for_search": 0,
  "links": [],
  "modified": "2026-10-13 19:41:00.919989",
  "modified_by": "Administrator",
@@ -153,12 +155,12 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "export": 1,
