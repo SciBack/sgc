@@ -23,3 +23,4 @@ sgc.patches.app_por_defecto
 # 1.2.0: permisos, workflows, roles, avisos y formatos como documentos estándar de Frappe.
 sgc.patches.permisos_a_estandar
 sgc.patches.datos_nivel_bpm
+sgc.patches.fichas_completar_desde_el_sistema

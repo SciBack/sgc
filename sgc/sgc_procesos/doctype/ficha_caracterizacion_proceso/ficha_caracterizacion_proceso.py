@@ -27,6 +27,9 @@ from frappe.model.document import Document
 # Valor de `Indicador.categoria` que marca un indicador de desempeño de proceso.
 CATEGORIA_PROCESO = "Proceso"
 
+# Desde estos estados la ficha tiene que estar completa (ISO 9001 §4.4.1).
+ESTADOS_COMPLETOS = ("En revisión", "Aprobado", "Publicado")
+
 
 def _filas(tabla, *campos):
 	"""Las filas de una tabla hija, solo con los campos nombrados.
@@ -40,7 +43,10 @@ def _filas(tabla, *campos):
 
 class FichaCaracterizacionProceso(Document):
 	def validate(self):
+		self.completar_desde_el_sistema()
 		self._validar_indicadores()
+		self._validar_completa()
+		self._sellar()
 
 	def on_update(self):
 		# La sincronización escribe en OTRO doctype (`Indicador`), así que va
@@ -63,6 +69,94 @@ class FichaCaracterizacionProceso(Document):
 		from sgc.ficha_pdf import retirar
 
 		retirar(self.name)
+
+	# ------------------------------------------------- lo que el sistema ya sabe
+
+	def completar_desde_el_sistema(self):
+		"""Añade a la ficha lo que ya cuelga de su proceso en el sistema. Devuelve las filas nuevas.
+
+		Lo que la ficha caracteriza no se teclea dos veces: los procedimientos, documentos y
+		riesgos que apuntan al proceso, y sus subprocesos, aparecen solos. Nunca se quita una
+		fila escrita a mano. Para que algo deje de salir se cambia en su origen (el
+		procedimiento, documento o riesgo deja de apuntar a este proceso).
+
+		Los indicadores NO: su enlace va al revés (la ficha los declara y `Indicador.proceso`
+		es el reflejo, ver `_sincronizar_indicadores`), así que recogerlos de ahí impediría
+		quitar uno.
+		"""
+		if not self.proceso:
+			return []
+		nuevas = []
+
+		ligados = {f.procedimiento for f in self.actividades if f.procedimiento}
+		textos = " ".join(f.descripcion or "" for f in self.actividades)
+		orden = max([f.orden or 0 for f in self.actividades] or [0])
+		for p in frappe.get_all("Procedimiento", filters={"proceso": self.proceso},
+								fields=["name", "codigo", "titulo"], order_by="codigo asc"):
+			if p.name not in ligados:
+				orden += 1
+				nuevas.append(self.append("actividades", {
+					"procedimiento": p.name, "descripcion": p.titulo or p.codigo, "orden": orden}))
+		for h in frappe.get_all("Proceso", filters={"parent_proceso": self.proceso},
+								fields=["name", "codigo", "proceso"], order_by="codigo asc"):
+			if (h.codigo or h.name) not in textos:
+				orden += 1
+				nuevas.append(self.append("actividades", {
+					"descripcion": _("Subproceso {0} — {1}").format(h.codigo or h.name, h.proceso or ""),
+					"orden": orden}))
+
+		ya = {f.documento_controlado for f in self.documentos_asociados}
+		for d in frappe.get_all("Documento Controlado", filters={"proceso": self.proceso, "estado": ["!=", "Obsoleto"]},
+								pluck="name", order_by="name asc"):
+			if d not in ya:
+				nuevas.append(self.append("documentos_asociados", {"documento_controlado": d}))
+
+		ya = {f.riesgo for f in self.riesgos if f.riesgo}
+		for r in frappe.get_all("Riesgo", filters={"proceso": self.proceso}, fields=["name", "titulo"],
+								order_by="name asc"):
+			if r.name not in ya:
+				nuevas.append(self.append("riesgos", {"riesgo": r.name, "riesgo_identificado": r.titulo}))
+		return nuevas
+
+	# ------------------------------------------------------------ completitud
+
+	def faltantes(self):
+		"""Lo que exige ISO 9001 §4.4.1 a una caracterización y la ficha no tiene."""
+		falta = []
+		for campo, texto in (("objetivo", _("el objetivo")), ("alcance", _("el alcance")),
+							 ("recursos", _("los recursos"))):
+			if not (self.get(campo) or "").strip():
+				falta.append(texto)
+		if not (self.proceso and frappe.db.get_value("Proceso", self.proceso, "responsable")):
+			falta.append(_("un responsable en el proceso"))
+		for tabla, texto in (("entradas", _("al menos una entrada")), ("salidas", _("al menos una salida")),
+							 ("actividades", _("al menos una actividad o procedimiento")),
+							 ("indicadores", _("al menos un indicador")), ("riesgos", _("al menos un riesgo"))):
+			if not self.get(tabla):
+				falta.append(texto)
+		return falta
+
+	def _validar_completa(self):
+		if self.estado not in ESTADOS_COMPLETOS or not (self.is_new() or self.has_value_changed("estado")):
+			return
+		falta = self.faltantes()
+		if falta:
+			frappe.throw(
+				_("La ficha no puede pasar a «{0}» porque le falta: {1}.").format(self.estado, ", ".join(falta)),
+				title=_("Ficha incompleta"),
+			)
+
+	def _sellar(self):
+		"""Quién la mandó a revisión, quién la aprobó y cuándo se emitió: lo pone el sistema."""
+		if not (self.is_new() or self.has_value_changed("estado")):
+			return
+		usuario = frappe.session.user
+		if self.estado == "En revisión" and not self.elaborado_por:
+			self.elaborado_por = usuario
+		if self.estado == "Aprobado":
+			self.aprobado_por = usuario
+		if self.estado == "Publicado" and not self.fecha_emision:
+			self.fecha_emision = frappe.utils.today()
 
 	# ------------------------------------------------------------ validaciones
 

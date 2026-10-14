@@ -163,3 +163,79 @@ class IntegrationTestFichaCaracterizacionProceso(IntegrationTestCase):
 		otro_proceso = factories.crear_proceso().name
 		with self.assertRaises(frappe.ValidationError):
 			_crear_ficha(otro_proceso, [ind.name])
+
+
+class IntegrationTestFichaCompleta(IntegrationTestCase):
+	"""La ficha recoge lo que el sistema ya sabe y no se publica incompleta (ISO 9001 §4.4.1)."""
+
+	def setUp(self):
+		self.proceso = factories.crear_proceso(is_group=1).name
+
+	def _ficha(self, **extra):
+		vals = {"doctype": "Ficha Caracterizacion Proceso", "proceso": self.proceso, "version": "1"}
+		vals.update(extra)
+		return frappe.get_doc(vals).insert(ignore_permissions=True)
+
+	# ---------------------------------------------------- lo que ya sabe el sistema
+
+	def test_recoge_procedimientos_documentos_riesgos_y_subprocesos(self):
+		proc = frappe.get_doc({"doctype": "Procedimiento", "codigo": f"TEST-PR-{next(_seq):04d}",
+							   "titulo": "Atender", "proceso": self.proceso}).insert(ignore_permissions=True)
+		doc = factories.crear_documento_controlado(proceso=self.proceso)
+		riesgo = frappe.get_doc({"doctype": "Riesgo", "titulo": "Caída del servicio",
+								 "proceso": self.proceso}).insert(ignore_permissions=True)
+		hijo = factories.crear_proceso(parent_proceso=self.proceso, proceso="Hijo de prueba")
+
+		ficha = self._ficha()
+
+		self.assertIn(proc.name, [a.procedimiento for a in ficha.actividades])
+		self.assertTrue(any(hijo.name in (a.descripcion or "") for a in ficha.actividades))
+		self.assertIn(doc.name, [d.documento_controlado for d in ficha.documentos_asociados])
+		self.assertIn(riesgo.name, [r.riesgo for r in ficha.riesgos])
+
+	def test_no_duplica_al_volver_a_guardar(self):
+		frappe.get_doc({"doctype": "Procedimiento", "codigo": f"TEST-PR-{next(_seq):04d}",
+						"titulo": "Atender", "proceso": self.proceso}).insert(ignore_permissions=True)
+		ficha = self._ficha()
+		antes = len(ficha.actividades)
+		ficha.save(ignore_permissions=True)
+		self.assertEqual(len(ficha.actividades), antes)
+
+	def test_no_quita_lo_escrito_a_mano(self):
+		ficha = self._ficha(actividades=[{"descripcion": "Paso escrito a mano", "orden": 1}])
+		ficha.save(ignore_permissions=True)
+		self.assertIn("Paso escrito a mano", [a.descripcion for a in ficha.actividades])
+
+	# ---------------------------------------------------------------- completitud
+
+	def test_no_se_publica_incompleta_y_dice_que_falta(self):
+		ficha = self._ficha(objetivo="Solo objetivo")
+		ficha.estado = "Publicado"
+		with self.assertRaises(frappe.ValidationError) as e:
+			ficha.save(ignore_permissions=True)
+		mensaje = str(e.exception)
+		for falta in ("alcance", "recursos", "responsable", "indicador", "riesgo"):
+			self.assertIn(falta, mensaje)
+
+	def test_tampoco_pasa_a_revision_incompleta(self):
+		ficha = self._ficha()
+		ficha.estado = "En revisión"
+		self.assertRaises(frappe.ValidationError, ficha.save, ignore_permissions=True)
+
+	def test_completa_se_publica_y_el_sistema_sella(self):
+		ficha = frappe.get_doc(factories.datos_ficha_completa(self.proceso)).insert(ignore_permissions=True)
+		self.assertEqual(ficha.faltantes(), [])
+		ficha.estado = "En revisión"
+		ficha.save(ignore_permissions=True)
+		self.assertEqual(ficha.elaborado_por, frappe.session.user)
+		ficha.estado = "Aprobado"
+		ficha.save(ignore_permissions=True)
+		self.assertEqual(ficha.aprobado_por, frappe.session.user)
+		ficha.estado = "Publicado"
+		ficha.save(ignore_permissions=True)
+		self.assertEqual(str(ficha.fecha_emision), frappe.utils.today())
+
+	def test_volver_a_borrador_no_exige_nada(self):
+		ficha = self._ficha()
+		ficha.estado = "Borrador"
+		ficha.save(ignore_permissions=True)
