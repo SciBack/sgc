@@ -169,7 +169,16 @@ class CargaEvidencias(Document):
 			existentes.add(huella)
 
 			elemento, titulo = self._resolver(ruta, indice, claves)
-			evidencia = self._crear_evidencia(nombre, datos, titulo, ext)
+			frappe.db.savepoint("carga_archivo")
+			try:
+				evidencia = self._crear_evidencia(nombre, datos, titulo, ext)
+			except Exception as e:
+				# Un PDF o imagen dañado no debe tumbar la carga de los otros 499.
+				frappe.db.rollback(save_point="carga_archivo")
+				existentes.discard(huella)
+				self._fila(ruta, resultado=_("Omitido: archivo dañado o no válido ({0})").format(type(e).__name__))
+				omitidos += 1
+				continue
 			creadas += 1
 			if elemento or self.proceso:
 				self._vincular(evidencia, elemento)

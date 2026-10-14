@@ -20,11 +20,32 @@ from sgc.tests import factories
 P = "TCE"
 
 
-def _zip(archivos):
+def _valido(ruta, contenido):
+	"""Frappe valida los PDF y las imágenes al guardar: un PDF/PNG de mentira no entra. Se fabrica uno
+	real y distinto por contenido (la huella cambia con el texto)."""
+	if ruta.lower().endswith(".pdf"):
+		from pypdf import PdfWriter
+
+		w = PdfWriter()
+		w.add_blank_page(width=72, height=72)
+		w.add_metadata({"/Title": contenido.decode()})
+		salida = io.BytesIO()
+		w.write(salida)
+		return salida.getvalue()
+	if ruta.lower().endswith((".jpg", ".png")):
+		from PIL import Image
+
+		salida = io.BytesIO()
+		Image.new("RGB", (8, 8), (len(contenido) % 255, 0, 0)).save(salida, "PNG" if ruta.endswith(".png") else "JPEG")
+		return salida.getvalue()
+	return contenido
+
+
+def _zip(archivos, crudo=()):
 	buffer = io.BytesIO()
 	with zipfile.ZipFile(buffer, "w") as zf:
 		for ruta, contenido in archivos.items():
-			zf.writestr(ruta, contenido)
+			zf.writestr(ruta, contenido if ruta in crudo else _valido(ruta, contenido))
 	return buffer.getvalue()
 
 
@@ -47,9 +68,9 @@ class IntegrationTestCargaEvidencias(IntegrationTestCase):
 					"es_valorable": 1, "parent_elemento_marco": e.name,
 				}).name
 
-	def _cargar(self, archivos, **extra):
+	def _cargar(self, archivos, crudo=(), **extra):
 		adjunto = frappe.get_doc({"doctype": "File", "file_name": f"evidencias-{frappe.generate_hash(length=6)}.zip",
-								  "content": _zip(archivos), "is_private": 1}).insert(ignore_permissions=True)
+								  "content": _zip(archivos, crudo), "is_private": 1}).insert(ignore_permissions=True)
 		carga = frappe.get_doc({"doctype": "Carga Evidencias", "archivo_zip": adjunto.file_url,
 								"marco_normativo": self.marco, **extra}).insert(ignore_permissions=True)
 		carga.submit()
@@ -105,15 +126,15 @@ class IntegrationTestCargaEvidencias(IntegrationTestCase):
 		self.assertEqual(carga.estado, "Procesada")
 
 	def test_repetidos_y_rutas_peligrosas_se_omiten(self):
-		self._cargar({"1.1/acta.pdf": b"contenido unico de prueba de repetidos"})
+		self._cargar({"1.1/acta.docx": b"contenido unico de prueba de repetidos"})
 		carga = self._cargar({
-			"copia/1.1/acta-copia.pdf": b"contenido unico de prueba de repetidos",  # ya cargado
-			"1.2/a.pdf": b"dos veces en el mismo zip",
-			"1.2/b.pdf": b"dos veces en el mismo zip",
+			"copia/1.1/acta-copia.docx": b"contenido unico de prueba de repetidos",  # ya cargado
+			"1.2/a.docx": b"dos veces en el mismo zip",
+			"1.2/b.docx": b"dos veces en el mismo zip",
 			"../fuera.pdf": b"zip slip",
 		})
-		self.assertIn("ya cargado", self._fila(carga, "copia/1.1/acta-copia.pdf").resultado)
-		self.assertIn("ya cargado", self._fila(carga, "1.2/b.pdf").resultado)
+		self.assertIn("ya cargado", self._fila(carga, "copia/1.1/acta-copia.docx").resultado)
+		self.assertIn("ya cargado", self._fila(carga, "1.2/b.docx").resultado)
 		self.assertIn("ruta no permitida", self._fila(carga, "../fuera.pdf").resultado)
 		self.assertEqual((carga.n_creadas, carga.n_omitidos), (1, 3))
 
@@ -123,6 +144,12 @@ class IntegrationTestCargaEvidencias(IntegrationTestCase):
 		fila = self._fila(carga, "varios/foto.jpg")
 		self.assertTrue(frappe.db.exists("Trazabilidad", {"evidencia": fila.evidencia, "proceso": proceso.name}))
 		self.assertEqual(carga.n_sin_vinculo, 0)
+
+	def test_un_pdf_danado_no_tumba_la_carga(self):
+		carga = self._cargar({"1.1/roto.pdf": b"%PDF-esto no es un pdf", "1.1/bueno.pdf": b"bueno"}, crudo=("1.1/roto.pdf",))
+		self.assertIn("dañado", self._fila(carga, "1.1/roto.pdf").resultado)
+		self.assertEqual(self._fila(carga, "1.1/bueno.pdf").elemento_marco, self.el["1.1"])
+		self.assertEqual((carga.n_creadas, carga.n_omitidos), (1, 1))
 
 	def test_no_es_un_zip(self):
 		adjunto = frappe.get_doc({"doctype": "File", "file_name": "falso.zip", "content": b"no soy un zip",
