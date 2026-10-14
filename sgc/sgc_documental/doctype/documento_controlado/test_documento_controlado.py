@@ -140,7 +140,7 @@ class IntegrationTestDocumentoControlado(IntegrationTestCase):
             d.save(ignore_permissions=True)
 
     def test_publicado_es_terminal_salvo_obsoleto(self):
-        """Desde Publicado solo se puede ir a Obsoleto; regresar a Borrador falla."""
+        """Desde Publicado solo se va a Obsoleto o, con «Nueva version», a Borrador (1.5.0)."""
         d = self._crear(archivo=ARCHIVO, aprobado_por=USER, revisado_por=USER)
         d.estado = "En revision"
         d.save(ignore_permissions=True)
@@ -149,7 +149,7 @@ class IntegrationTestDocumentoControlado(IntegrationTestCase):
         d.estado = "Publicado"
         d.save(ignore_permissions=True)
 
-        d.estado = "Borrador"
+        d.estado = "En revision"
         with self.assertRaises(frappe.ValidationError):
             d.save(ignore_permissions=True)
 
@@ -318,7 +318,19 @@ class IntegrationTestFirmaDeAprobacion(IntegrationTestCase):
         self.assertEqual(doc.aprobado_por, primera)
 
 
-    # ------------------------------------------- versión controlada (14-oct-2026)
+class IntegrationTestVersionControlada(IntegrationTestCase):
+    """Recorrido 14-oct-2026: un documento publicado se editaba encima, sin aprobación."""
+
+    def setUp(self):
+        factories.desactivar_workflow("Documento Controlado")
+        self.proceso = factories.crear_proceso().name
+
+    def _crear(self, **overrides):
+        vals = {"doctype": "Documento Controlado", "titulo": "Doc versión controlada",
+                "tipo_documento": "Procedimiento", "proceso": self.proceso}
+        vals.update(overrides)
+        return frappe.get_doc(vals).insert(ignore_permissions=True)
+
     def _publicado(self):
         d = self._crear(archivo=ARCHIVO, revisado_por=USER)
         for estado in ("En revision", "Aprobado", "Publicado"):

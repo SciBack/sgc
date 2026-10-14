@@ -280,6 +280,7 @@ class IntegrationTestNoConformidadSegregacion(IntegrationTestCase):
         from sgc.tests import factories
 
         factories.desactivar_workflow("No Conformidad")
+        self.evidencia = factories.crear_evidencia(enlace_url="https://example.com/cierre").name
         self.usuarios = []
         for nombre in ("seg-dpgc", "seg-resp"):
             email = f"{nombre}@example.com"
@@ -293,7 +294,8 @@ class IntegrationTestNoConformidadSegregacion(IntegrationTestCase):
         frappe.set_user(owner)
         nc = frappe.get_doc({"doctype": "No Conformidad", "titulo": "NC segregación", "tipo": "No conformidad menor",
                              "estado": "En verificacion", "responsable": responsable, "fecha_compromiso": "2026-12-31",
-                             "correccion_inmediata": "Corrección", "evidencia_cierre": "/files/cierre.pdf"}).insert(ignore_permissions=True)
+                             "correccion_inmediata": "Corrección",
+                             "evidencia_cierre": self.evidencia}).insert(ignore_permissions=True)
         return nc
 
     def test_quien_la_trato_no_la_cierra(self):
