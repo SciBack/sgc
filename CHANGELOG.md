@@ -9,6 +9,19 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.2.1] - 2026-10-14
+
+**Requiere migrar:** sí (cambia la versión de Frappe). Sin cambios en los datos de calidad ni en
+los permisos.
+
+### Cambiado
+- Frappe pasa de la 16.51.1 a la **16.52.0**. Trae, entre otras correcciones: el autor de un
+  comentario sale de la sesión y no del navegador; ver los conteos por estado de un flujo exige
+  permiso sobre el flujo; los filtros «está vacío / no está vacío» sobre números y fechas ya no
+  fallan en PostgreSQL; el PDF respeta los saltos de página.
+- Es la primera actualización de Frappe con el SGC sobre configuración nativa (1.2.0): solo
+  cambia `deploy/frappe.version`.
+
 ## [1.2.0] - 2026-10-14
 
 **Requiere migrar:** sí. Sin cambios en los datos de calidad ni en lo que cada persona puede
