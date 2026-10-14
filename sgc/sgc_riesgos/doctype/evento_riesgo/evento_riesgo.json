@@ -53,6 +53,7 @@
   },
   {
    "default": "Reportado",
+   "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
    "fieldname": "estado",
    "fieldtype": "Select",
    "in_list_view": 1,
@@ -181,7 +182,7 @@
  ],
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-13 19:40:59.555135",
+ "modified": "2026-10-14 21:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Riesgos",
  "name": "Evento Riesgo",

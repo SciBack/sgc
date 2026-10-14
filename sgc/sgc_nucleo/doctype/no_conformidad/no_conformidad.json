@@ -37,7 +37,7 @@
    "fieldname": "titulo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "T\u00edtulo",
+   "label": "Título",
    "reqd": 1
   },
   {
@@ -70,7 +70,7 @@
   {
    "fieldname": "descripcion",
    "fieldtype": "Text",
-   "label": "Descripci\u00f3n"
+   "label": "Descripción"
   },
   {
    "fieldname": "requisito_incumplido",
@@ -80,7 +80,7 @@
   {
    "fieldname": "unidad_organica",
    "fieldtype": "Link",
-   "label": "Unidad org\u00e1nica",
+   "label": "Unidad orgánica",
    "options": "Unidad Organica"
   },
   {
@@ -113,24 +113,24 @@
    "default": "0",
    "fieldname": "requiere_analisis_causa",
    "fieldtype": "Check",
-   "label": "Requiere an\u00e1lisis de causa"
+   "label": "Requiere análisis de causa"
   },
   {
    "fieldname": "analisis_causa",
    "fieldtype": "Text",
-   "label": "An\u00e1lisis de causa ra\u00edz"
+   "label": "Análisis de causa raíz"
   },
   {
    "depends_on": "eval:doc.requiere_analisis_causa",
-   "description": "C\u00f3mo se lleg\u00f3 a las causas (ISO 9001 \u00a710.2.1 b). Obligatoria para pasar a tratamiento si la NC requiere an\u00e1lisis.",
+   "description": "Cómo se llegó a las causas (ISO 9001 §10.2.1 b). Obligatoria para pasar a tratamiento si la NC requiere análisis.",
    "fieldname": "metodologia",
    "fieldtype": "Select",
-   "label": "Metodolog\u00eda del an\u00e1lisis",
-   "options": "\nCinco porqu\u00e9s\nEspina de pescado (Ishikawa)\nPareto\nLluvia de ideas\nOtra"
+   "label": "Metodología del análisis",
+   "options": "\nCinco porqués\nEspina de pescado (Ishikawa)\nPareto\nLluvia de ideas\nOtra"
   },
   {
    "depends_on": "eval:doc.requiere_analisis_causa",
-   "description": "Al menos una causa, y al menos una marcada como ra\u00edz, para pasar a tratamiento.",
+   "description": "Al menos una causa, y al menos una marcada como raíz, para pasar a tratamiento.",
    "fieldname": "causas",
    "fieldtype": "Table",
    "label": "Causas identificadas",
@@ -139,7 +139,7 @@
   {
    "fieldname": "correccion_inmediata",
    "fieldtype": "Text",
-   "label": "Correcci\u00f3n inmediata (contenci\u00f3n)"
+   "label": "Corrección inmediata (contención)"
   },
   {
    "fieldname": "plan_mejora",
@@ -149,12 +149,14 @@
   },
   {
    "default": "Abierta",
+   "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
    "fieldname": "estado",
    "fieldtype": "Select",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Estado",
-   "options": "Abierta\nEn analisis\nEn tratamiento\nEn verificacion\nCerrada eficaz\nCerrada no eficaz"
+   "options": "Abierta\nEn analisis\nEn tratamiento\nEn verificacion\nCerrada eficaz\nCerrada no eficaz",
+   "read_only": 1
   },
   {
    "fieldname": "responsable",
@@ -165,7 +167,7 @@
   {
    "fieldname": "fecha_deteccion",
    "fieldtype": "Date",
-   "label": "Fecha de detecci\u00f3n"
+   "label": "Fecha de detección"
   },
   {
    "fieldname": "fecha_compromiso",
@@ -189,7 +191,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-13 19:41:01.413143",
+ "modified": "2026-10-14 21:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "No Conformidad",
@@ -225,12 +227,12 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "export": 1,

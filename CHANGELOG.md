@@ -9,6 +9,17 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.4.1] - 2026-10-14
+
+**Requiere migrar:** sí. Sin cambios en los datos.
+
+### Corregido
+- Un documento controlado nuevo no se podía guardar sin escribir a mano un «Código», aunque el
+  sistema lo genera solo (PROCESO-SIGLA-NNN). El campo deja de ser obligatorio.
+- En los 18 documentos con flujo de aprobación, «Estado» se veía como un desplegable editable:
+  elegir otro estado y guardar no hacía nada. Ahora es de solo lectura y explica que se cambia con
+  el menú «Acciones».
+
 ## [1.4.0] - 2026-10-14
 
 **Requiere migrar:** sí. Las fichas existentes reciben, una vez, lo que el sistema ya sabe de su

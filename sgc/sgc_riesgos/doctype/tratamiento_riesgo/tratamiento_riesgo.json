@@ -47,7 +47,7 @@
    "description": "control/plan de tratamiento",
    "fieldname": "descripcion",
    "fieldtype": "Text",
-   "label": "Descripci\u00f3n"
+   "label": "Descripción"
   },
   {
    "fieldname": "responsable",
@@ -62,16 +62,18 @@
   },
   {
    "default": "Planificado",
+   "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
    "fieldname": "estado",
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Estado",
-   "options": "Planificado\nEn ejecucion\nImplementado\nVerificado"
+   "options": "Planificado\nEn ejecucion\nImplementado\nVerificado",
+   "read_only": 1
   },
   {
    "fieldname": "sb_ejecucion",
    "fieldtype": "Section Break",
-   "label": "Implementaci\u00f3n y verificaci\u00f3n de eficacia"
+   "label": "Implementación y verificación de eficacia"
   },
   {
    "description": "lo sella el sistema al marcar implementado",
@@ -84,7 +86,7 @@
   {
    "fieldname": "fecha_implementacion",
    "fieldtype": "Date",
-   "label": "Fecha de implementaci\u00f3n",
+   "label": "Fecha de implementación",
    "read_only": 1
   },
   {
@@ -102,17 +104,17 @@
   {
    "fieldname": "fecha_verificacion",
    "fieldtype": "Date",
-   "label": "Fecha de verificaci\u00f3n",
+   "label": "Fecha de verificación",
    "read_only": 1
   },
   {
-   "description": "qu\u00e9 se comprob\u00f3 y con qu\u00e9 (ISO 9001:2015 \u00a76.1.2: evaluar la eficacia de estas acciones)",
+   "description": "qué se comprobó y con qué (ISO 9001:2015 §6.1.2: evaluar la eficacia de estas acciones)",
    "fieldname": "resultado_verificacion",
    "fieldtype": "Text",
-   "label": "Resultado de la verificaci\u00f3n"
+   "label": "Resultado de la verificación"
   },
   {
-   "description": "nivel del riesgo que queda DESPU\u00c9S del tratamiento (ISO 31000 \u00a76.5.2)",
+   "description": "nivel del riesgo que queda DESPUÉS del tratamiento (ISO 31000 §6.5.2)",
    "fieldname": "nivel_residual",
    "fieldtype": "Select",
    "label": "Nivel residual",
@@ -124,14 +126,14 @@
    "label": "Costura con mejora / evidencia"
   },
   {
-   "description": "reutiliza el CAPA si el tratamiento es una acci\u00f3n concreta ejecutable",
+   "description": "reutiliza el CAPA si el tratamiento es una acción concreta ejecutable",
    "fieldname": "accion_mejora",
    "fieldtype": "Link",
-   "label": "Acci\u00f3n de mejora",
+   "label": "Acción de mejora",
    "options": "Accion Mejora"
   },
   {
-   "description": "prueba de implementaci\u00f3n del control",
+   "description": "prueba de implementación del control",
    "fieldname": "evidencia",
    "fieldtype": "Link",
    "label": "Evidencia",
@@ -141,7 +143,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-13 19:41:03.125630",
+ "modified": "2026-10-14 21:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Riesgos",
  "name": "Tratamiento Riesgo",
@@ -174,13 +176,13 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "create": 1,
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso",
+   "role": "Dueño de Proceso",
    "write": 1
   },
   {

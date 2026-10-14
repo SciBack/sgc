@@ -27,45 +27,45 @@
    "fieldname": "titulo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "T\u00edtulo",
+   "label": "Título",
    "reqd": 1
   },
   {
    "description": "evento incierto",
    "fieldname": "descripcion",
    "fieldtype": "Text",
-   "label": "Descripci\u00f3n"
+   "label": "Descripción"
   },
   {
    "fieldname": "categoria",
    "fieldtype": "Select",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Categor\u00eda",
+   "label": "Categoría",
    "options": "Estrategico\nOperacional\nCumplimiento\nFinanciero\nReputacional\nSeguridad de informacion\nAcademico"
   },
   {
    "fieldname": "sb_scoping",
    "fieldtype": "Section Break",
-   "label": "\u00c1mbito"
+   "label": "Ámbito"
   },
   {
-   "description": "due\u00f1o del riesgo",
+   "description": "dueño del riesgo",
    "fieldname": "unidad_organica",
    "fieldtype": "Link",
    "in_standard_filter": 1,
-   "label": "Unidad org\u00e1nica",
+   "label": "Unidad orgánica",
    "options": "Unidad Organica"
   },
   {
-   "description": "riesgo de proceso (vincula GRC\u2194gesti\u00f3n por procesos)",
+   "description": "riesgo de proceso (vincula GRC↔gestión por procesos)",
    "fieldname": "proceso",
    "fieldtype": "Link",
    "label": "Proceso",
    "options": "Proceso"
   },
   {
-   "description": "si el riesgo amenaza un est\u00e1ndar/condici\u00f3n (p. ej. una CBC)",
+   "description": "si el riesgo amenaza un estándar/condición (p. ej. una CBC)",
    "fieldname": "elemento_marco",
    "fieldtype": "Link",
    "label": "Elemento de marco",
@@ -76,7 +76,7 @@
    "fieldtype": "Column Break"
   },
   {
-   "description": "fuente del riesgo (\u00a76.4.2)",
+   "description": "fuente del riesgo (§6.4.2)",
    "fieldname": "causa",
    "fieldtype": "Text",
    "label": "Causa"
@@ -98,7 +98,7 @@
    "fieldtype": "Section Break"
   },
   {
-   "description": "qu\u00e9 escala usa",
+   "description": "qué escala usa",
    "fieldname": "matriz_riesgo",
    "fieldtype": "Link",
    "label": "Matriz de riesgo",
@@ -106,12 +106,14 @@
   },
   {
    "default": "Identificado",
+   "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
    "fieldname": "estado",
    "fieldtype": "Select",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Estado",
-   "options": "Identificado\nEvaluado\nEn tratamiento\nMonitoreado\nCerrado\nMaterializado"
+   "options": "Identificado\nEvaluado\nEn tratamiento\nMonitoreado\nCerrado\nMaterializado",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
@@ -123,7 +125,7 @@
    "link_fieldname": "riesgo"
   }
  ],
- "modified": "2026-10-13 19:41:02.874966",
+ "modified": "2026-10-14 21:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Riesgos",
  "name": "Riesgo",
@@ -161,14 +163,14 @@
    "export": 1,
    "read": 1,
    "report": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "create": 1,
    "export": 1,
    "read": 1,
    "report": 1,
-   "role": "Due\u00f1o de Proceso",
+   "role": "Dueño de Proceso",
    "write": 1
   },
   {
