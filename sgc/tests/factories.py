@@ -311,6 +311,12 @@ def confirmar_todo_para_cierre(autoevaluacion, marco=None, sigla="L", prefijo=PR
     # equivocado y el cierre fallaba por "faltan estándares" sin motivo aparente.
     if marco is None:
         marco = frappe.db.get_value("Autoevaluacion", ae, "marco_normativo")
+    # Consolidar exige cada criterio valorado: los que el test no valoró se dan por cumplidos.
+    from sgc import scoring
+
+    for c in scoring._criterios_valorables_del_marco(marco, autoevaluacion=ae):
+        if not scoring._valoracion_criterio(ae, c):
+            valorar_criterio(ae, c, CUMPLE)
     estandares = frappe.get_all(
         "Elemento Marco",
         filters={"marco_normativo": marco, "tipo": "Estandar"},

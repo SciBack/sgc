@@ -105,6 +105,37 @@ class IntegrationTestAutoevaluacion(IntegrationTestCase):
 		self.assertFalse(doc.marco_snapshot)
 
 
+class IntegrationTestConsolidacionCompleta(IntegrationTestCase):
+	"""Recorrido 14-oct-2026: se consolidaba con un solo criterio valorado."""
+
+	def setUp(self):
+		self.arbol = factories.crear_marco_prueba(n_estandares=2, n_criterios=2, prefijo="TESTCONS")
+		self.ae = factories.crear_autoevaluacion(self.arbol, prefijo="TESTCONS").name
+
+	def _hasta_revision(self):
+		doc = frappe.get_doc("Autoevaluacion", self.ae)
+		for accion in ("Iniciar evaluacion", "Enviar a revision"):
+			doc = apply_workflow(doc, accion)
+		return doc
+
+	def test_no_consolida_con_criterios_sin_valorar(self):
+		primero = next(iter(self.arbol["criterios"].values()))[0]
+		factories.valorar_criterio(self.ae, primero)
+		doc = self._hasta_revision()
+		with self.assertRaises(frappe.ValidationError) as ctx:
+			apply_workflow(doc, "Consolidar")
+		self.assertIn("No aplica", str(ctx.exception))
+
+	def test_no_aplica_cuenta_como_valoracion(self):
+		from sgc import scoring
+
+		marco = frappe.db.get_value("Autoevaluacion", self.ae, "marco_normativo")
+		for c in scoring._criterios_valorables_del_marco(marco, autoevaluacion=self.ae):
+			factories.valorar_criterio(self.ae, c, factories.NO_APLICA)
+		doc = self._hasta_revision()
+		self.assertEqual(apply_workflow(doc, "Consolidar").estado, "Consolidada")
+
+
 class IntegrationTestAlcanceDelMarco(IntegrationTestCase):
 	"""Licenciamiento y acreditación no se cruzan; programa e institucional tampoco.
 
