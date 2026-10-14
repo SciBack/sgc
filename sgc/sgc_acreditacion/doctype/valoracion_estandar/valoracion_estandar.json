@@ -22,7 +22,7 @@
    "fieldname": "autoevaluacion",
    "fieldtype": "Link",
    "in_standard_filter": 1,
-   "label": "Autoevaluaci\u00f3n",
+   "label": "Autoevaluación",
    "options": "Autoevaluacion",
    "reqd": 1
   },
@@ -30,7 +30,7 @@
    "fieldname": "elemento_marco",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Est\u00e1ndar (elemento del marco)",
+   "label": "Estándar (elemento del marco)",
    "options": "Elemento Marco",
    "reqd": 1
   },
@@ -46,12 +46,12 @@
    "default": "0",
    "fieldname": "calculado_auto",
    "fieldtype": "Check",
-   "label": "Calculado autom\u00e1ticamente"
+   "label": "Calculado automáticamente"
   },
   {
    "fieldname": "justificacion",
    "fieldtype": "Text",
-   "label": "Justificaci\u00f3n"
+   "label": "Justificación"
   },
   {
    "default": "Borrador",
@@ -68,7 +68,7 @@
    "options": "User"
   },
   {
-   "description": "Lo propone el motor de scoring. El nivel oficial (`nivel`) lo confirma el humano tras revisar la evoluci\u00f3n de los indicadores (\u00b13%).",
+   "description": "Lo propone el motor de scoring. El nivel oficial (`nivel`) lo confirma el humano tras revisar la evolución de los indicadores (±3%).",
    "fieldname": "nivel_propuesto",
    "fieldtype": "Select",
    "in_list_view": 1,
@@ -78,7 +78,7 @@
   },
   {
    "default": "0",
-   "description": "El humano confirm\u00f3 el `nivel` oficial (permlevel 1).",
+   "description": "El humano confirmó el `nivel` oficial (permlevel 1).",
    "fieldname": "confirmado",
    "fieldtype": "Check",
    "label": "Confirmado por humano"
@@ -87,7 +87,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-13 19:41:03.556508",
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Valoracion Estandar",
@@ -120,7 +120,7 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,
@@ -178,7 +178,7 @@
    "export": 1,
    "permlevel": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,
@@ -220,5 +220,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "elemento_marco",
- "track_changes": 1
+ "track_changes": 1,
+ "search_fields": "elemento_marco"
 }

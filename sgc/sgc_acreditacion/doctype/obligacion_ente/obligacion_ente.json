@@ -116,7 +116,8 @@
    "fieldname": "responsable",
    "fieldtype": "Link",
    "label": "Responsable",
-   "options": "User"
+   "options": "User",
+   "in_standard_filter": 1
   },
   {
    "description": "área responsable",
@@ -234,5 +235,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "nombre",
- "track_changes": 1
+ "track_changes": 1,
+ "search_fields": "nombre"
 }

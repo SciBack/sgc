@@ -152,7 +152,8 @@
    "fieldname": "responsable",
    "fieldtype": "Link",
    "label": "Responsable del tratamiento",
-   "options": "User"
+   "options": "User",
+   "in_standard_filter": 1
   },
   {
    "description": "Qué se hace con la salida. Obligatoria para pasar a «Tratada».",
@@ -263,7 +264,7 @@
  ],
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-14 21:00:00.000000",
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "Salida No Conforme",

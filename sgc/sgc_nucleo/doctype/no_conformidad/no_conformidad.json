@@ -162,7 +162,8 @@
    "fieldname": "responsable",
    "fieldtype": "Link",
    "label": "Responsable",
-   "options": "User"
+   "options": "User",
+   "in_standard_filter": 1
   },
   {
    "fieldname": "fecha_deteccion",

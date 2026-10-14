@@ -24,7 +24,7 @@
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "C\u00f3digo",
+   "label": "Código",
    "reqd": 1,
    "unique": 1
   },
@@ -32,14 +32,14 @@
    "fieldname": "politica_calidad",
    "fieldtype": "Link",
    "in_standard_filter": 1,
-   "label": "Pol\u00edtica de calidad",
+   "label": "Política de calidad",
    "options": "Politica Calidad"
   },
   {
    "fieldname": "descripcion",
    "fieldtype": "Text",
    "in_list_view": 1,
-   "label": "Descripci\u00f3n"
+   "label": "Descripción"
   },
   {
    "description": "Medible con un indicador (A1).",
@@ -54,7 +54,7 @@
    "label": "Meta"
   },
   {
-   "description": "% / n.\u00ba",
+   "description": "% / n.º",
    "fieldname": "unidad",
    "fieldtype": "Data",
    "label": "Unidad"
@@ -63,24 +63,25 @@
    "fieldname": "periodo_academico",
    "fieldtype": "Link",
    "in_standard_filter": 1,
-   "label": "Periodo acad\u00e9mico",
+   "label": "Periodo académico",
    "options": "Periodo Academico"
   },
   {
    "fieldname": "unidad_organica",
    "fieldtype": "Link",
    "in_standard_filter": 1,
-   "label": "Unidad org\u00e1nica",
+   "label": "Unidad orgánica",
    "options": "Unidad Organica"
   },
   {
    "fieldname": "responsable",
    "fieldtype": "Link",
    "label": "Responsable",
-   "options": "User"
+   "options": "User",
+   "in_standard_filter": 1
   },
   {
-   "description": "\u00daltimo Valor Indicador del indicador (calculado en F2+).",
+   "description": "Último Valor Indicador del indicador (calculado en F2+).",
    "fieldname": "valor_actual",
    "fieldtype": "Float",
    "label": "Valor actual"
@@ -98,7 +99,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-13 19:41:01.544490",
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Gobierno",
  "name": "Objetivo Calidad",
@@ -131,12 +132,12 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "export": 1,

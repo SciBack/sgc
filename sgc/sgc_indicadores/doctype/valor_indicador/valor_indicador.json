@@ -314,5 +314,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "indicador",
- "track_changes": 1
+ "track_changes": 1,
+ "search_fields": "indicador"
 }

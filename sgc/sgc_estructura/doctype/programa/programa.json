@@ -75,7 +75,8 @@
    "fieldname": "estado",
    "fieldtype": "Select",
    "label": "Estado",
-   "options": "activo\ninactivo"
+   "options": "activo\ninactivo",
+   "in_standard_filter": 1
   },
   {
    "collapsible": 1,
@@ -182,5 +183,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "nombre",
- "track_changes": 1
+ "track_changes": 1,
+ "search_fields": "nombre"
 }

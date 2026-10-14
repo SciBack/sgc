@@ -54,17 +54,17 @@
    "options": "Elemento Marco"
   },
   {
-   "description": "OBJETIVO DE MEDICI\u00d3N: \u2026",
+   "description": "OBJETIVO DE MEDICIÓN: …",
    "fieldname": "objetivo",
    "fieldtype": "Text",
    "label": "Objetivo"
   },
   {
-   "description": "Nivel al que aplica: Institucional, Campus, Facultad, Escuela, \u00c1rea o Proceso (plantilla oficial de Calidad)",
+   "description": "Nivel al que aplica: Institucional, Campus, Facultad, Escuela, Área o Proceso (plantilla oficial de Calidad)",
    "fieldname": "alcance",
    "fieldtype": "Select",
    "label": "Alcance",
-   "options": "Institucional\nCampus\nFacultad\nEscuela\n\u00c1rea\nProceso"
+   "options": "Institucional\nCampus\nFacultad\nEscuela\nÁrea\nProceso"
   },
   {
    "fieldname": "tipo_valor",
@@ -73,75 +73,76 @@
    "options": "porcentaje\nnumerico\nratio\nbooleano\nescala_satisfaccion\ntexto"
   },
   {
-   "description": "FORMA DE C\u00c1LCULO: (EPSC/EPR)\u00d7100",
+   "description": "FORMA DE CÁLCULO: (EPSC/EPR)×100",
    "fieldname": "formula",
    "fieldtype": "Text",
-   "label": "F\u00f3rmula"
+   "label": "Fórmula"
   },
   {
-   "description": "Dato alcanzado o casos favorables (solo indicadores tipo Porcentaje \u2014 plantilla oficial de Calidad). Para f\u00f3rmulas con m\u00e1s de 2 variables, usar el campo Variables.",
+   "description": "Dato alcanzado o casos favorables (solo indicadores tipo Porcentaje — plantilla oficial de Calidad). Para fórmulas con más de 2 variables, usar el campo Variables.",
    "fieldname": "numerador",
    "fieldtype": "Small Text",
    "label": "Numerador"
   },
   {
-   "description": "Total de referencia (solo indicadores tipo Porcentaje \u2014 plantilla oficial de Calidad). Para f\u00f3rmulas con m\u00e1s de 2 variables, usar el campo Variables.",
+   "description": "Total de referencia (solo indicadores tipo Porcentaje — plantilla oficial de Calidad). Para fórmulas con más de 2 variables, usar el campo Variables.",
    "fieldname": "denominador",
    "fieldtype": "Small Text",
    "label": "Denominador"
   },
   {
-   "description": "VARIABLES: EPSC=\u2026, EPR=\u2026 (f\u00f3rmulas de m\u00e1s de 2 variables; para Porcentaje simple usar Numerador/Denominador)",
+   "description": "VARIABLES: EPSC=…, EPR=… (fórmulas de más de 2 variables; para Porcentaje simple usar Numerador/Denominador)",
    "fieldname": "variables",
    "fieldtype": "JSON",
    "label": "Variables"
   },
   {
-   "description": "%, ratio, n.\u00ba",
+   "description": "%, ratio, n.º",
    "fieldname": "unidad",
    "fieldtype": "Small Text",
    "label": "Unidad"
   },
   {
-   "description": "Resultado hist\u00f3rico o inicial del indicador, antes del periodo de medici\u00f3n actual (plantilla oficial de Calidad)",
+   "description": "Resultado histórico o inicial del indicador, antes del periodo de medición actual (plantilla oficial de Calidad)",
    "fieldname": "linea_base",
    "fieldtype": "Float",
-   "label": "L\u00ednea base"
+   "label": "Línea base"
   },
   {
-   "description": "Umbral (ID1 \u2265 60%)",
+   "description": "Umbral (ID1 ≥ 60%)",
    "fieldname": "valor_referencial",
    "fieldtype": "Float",
    "label": "Valor referencial"
   },
   {
    "default": "3",
-   "description": "\u00b13% por defecto (escala oficial \u00a79.1)",
+   "description": "±3% por defecto (escala oficial §9.1)",
    "fieldname": "margen_error",
    "fieldtype": "Float",
    "label": "Margen de error"
   },
   {
    "default": "0",
-   "description": "Si aplica evoluci\u00f3n positiva n-1\u2192n como aceptable",
+   "description": "Si aplica evolución positiva n-1→n como aceptable",
    "fieldname": "regla_evolucion",
    "fieldtype": "Check",
-   "label": "Regla de evoluci\u00f3n"
+   "label": "Regla de evolución"
   },
   {
    "fieldname": "interpretacion",
    "fieldtype": "Text",
-   "label": "Interpretaci\u00f3n"
+   "label": "Interpretación"
   },
   {
    "description": "Mensual/trimestral: indicadores institucionales (plantilla oficial de Calidad). Anual/semestral/por_promocion: indicadores CONEAU ya cargados.",
    "fieldname": "frecuencia",
    "fieldtype": "Select",
    "label": "Frecuencia",
-   "options": "mensual\ntrimestral\nsemestral\nanual\npor_promocion"
+   "options": "mensual\ntrimestral\nsemestral\nanual\npor_promocion",
+   "in_list_view": 1
   },
   {
-   "description": "LAMB \u00b7 Koha \u00b7 DSpace \u00b7 encuesta \u00b7 manual",
+   "description": "LAMB · Koha · DSpace · encuesta · manual",
    "fieldname": "fuente_dato",
    "fieldtype": "Small Text",
    "label": "Fuente de dato"
@@ -151,36 +152,39 @@
    "fieldname": "responsable",
    "fieldtype": "Link",
    "label": "Responsable",
-   "options": "User"
+   "options": "User",
+   "in_standard_filter": 1,
+   "in_list_view": 1
   },
   {
-   "description": "Avanza sola al registrar un valor, seg\u00fan la frecuencia. Se puede fijar a mano.",
+   "description": "Avanza sola al registrar un valor, según la frecuencia. Se puede fijar a mano.",
    "fieldname": "proxima_medicion",
    "fieldtype": "Date",
-   "label": "Pr\u00f3xima medici\u00f3n"
+   "label": "Próxima medición",
+   "in_list_view": 1
   },
   {
    "default": "7",
-   "description": "Cu\u00e1ntos d\u00edas antes de la medici\u00f3n se avisa al responsable por correo.",
+   "description": "Cuántos días antes de la medición se avisa al responsable por correo.",
    "fieldname": "dias_aviso",
    "fieldtype": "Int",
-   "label": "D\u00edas de aviso"
+   "label": "Días de aviso"
   },
   {
-   "description": "Pr\u00f3xima medici\u00f3n menos los d\u00edas de aviso. Ese d\u00eda sale el correo.",
+   "description": "Próxima medición menos los días de aviso. Ese día sale el correo.",
    "fieldname": "fecha_aviso_medicion",
    "fieldtype": "Date",
    "label": "Fecha del aviso",
    "read_only": 1
   },
   {
-   "description": "Condiciones muestrales (\u226570% de matriculados)",
+   "description": "Condiciones muestrales (≥70% de matriculados)",
    "fieldname": "notas",
    "fieldtype": "Text",
    "label": "Notas"
   },
   {
-   "description": "Dominio del dato (contrato de datos: matr\u00edcula, egresados\u2026)",
+   "description": "Dominio del dato (contrato de datos: matrícula, egresados…)",
    "fieldname": "dominio_dato",
    "fieldtype": "Select",
    "in_standard_filter": 1,
@@ -188,14 +192,14 @@
    "options": "D1\nD2\nD3\nD4\nD5\nD6\nD7\nD8"
   },
   {
-   "description": "Sistema fuente de verdad (Oracle LAMB, Koha\u2026)",
+   "description": "Sistema fuente de verdad (Oracle LAMB, Koha…)",
    "fieldname": "fuente_autoritativa",
    "fieldtype": "Small Text",
    "label": "Fuente autoritativa"
   },
   {
    "default": "Mayor es mejor",
-   "description": "En una tasa de graduaci\u00f3n m\u00e1s es mejor; en una de deserci\u00f3n, al rev\u00e9s. Sin declararlo, el sem\u00e1foro saldr\u00eda invertido en la mitad del cat\u00e1logo.",
+   "description": "En una tasa de graduación más es mejor; en una de deserción, al revés. Sin declararlo, el semáforo saldría invertido en la mitad del catálogo.",
    "fieldname": "sentido",
    "fieldtype": "Select",
    "label": "Sentido",
@@ -203,38 +207,38 @@
   },
   {
    "default": "Umbral fijo",
-   "description": "Umbral fijo compara contra el valor referencial. Evoluci\u00f3n compara contra el periodo anterior (sustituye y explicita a 'Regla de evoluci\u00f3n').",
+   "description": "Umbral fijo compara contra el valor referencial. Evolución compara contra el periodo anterior (sustituye y explicita a 'Regla de evolución').",
    "fieldname": "modo_evaluacion",
    "fieldtype": "Select",
-   "label": "Modo de evaluaci\u00f3n",
+   "label": "Modo de evaluación",
    "options": "Umbral fijo\nEvolucion respecto al periodo anterior"
   },
   {
    "default": "1",
-   "description": "Cu\u00e1ntos periodos hacia atr\u00e1s consolida el indicador. Un indicador de egresados puede necesitar cinco a\u00f1os; uno de matr\u00edcula, uno.",
+   "description": "Cuántos periodos hacia atrás consolida el indicador. Un indicador de egresados puede necesitar cinco años; uno de matrícula, uno.",
    "fieldname": "ventana_periodos",
    "fieldtype": "Int",
    "label": "Ventana (periodos)"
   },
   {
    "default": "0",
-   "description": "Cada valor de cada periodo tiene que llevar su an\u00e1lisis. Lo tecleado no se guarda sin \u00e9l; lo que llega por ingesta deja una tarea de an\u00e1lisis al responsable.",
+   "description": "Cada valor de cada periodo tiene que llevar su análisis. Lo tecleado no se guarda sin él; lo que llega por ingesta deja una tarea de análisis al responsable.",
    "fieldname": "exige_analisis",
    "fieldtype": "Check",
-   "label": "Exigir el an\u00e1lisis de cada medici\u00f3n"
+   "label": "Exigir el análisis de cada medición"
   },
   {
-   "description": "Cu\u00e1nto aporta cada \u00e1rea al indicador. Si se indica, los pesos suman 100 %.",
+   "description": "Cuánto aporta cada área al indicador. Si se indica, los pesos suman 100 %.",
    "fieldname": "participacion_areas",
    "fieldtype": "Table",
-   "label": "Participaci\u00f3n de las \u00e1reas",
+   "label": "Participación de las áreas",
    "options": "Participacion Area"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-13 19:40:59.927432",
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Indicadores",
  "name": "Ficha Indicador",
@@ -267,12 +271,12 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "create": 1,
@@ -317,5 +321,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "indicador",
- "track_changes": 1
+ "track_changes": 1,
+ "search_fields": "indicador"
 }

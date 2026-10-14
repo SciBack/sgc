@@ -57,7 +57,8 @@
    "fieldname": "responsable",
    "fieldtype": "Link",
    "label": "Responsable",
-   "options": "User"
+   "options": "User",
+   "in_standard_filter": 1
   },
   {
    "default": "Borrador",
@@ -174,5 +175,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "titulo",
- "track_changes": 1
+ "track_changes": 1,
+ "search_fields": "titulo"
 }

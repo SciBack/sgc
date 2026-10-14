@@ -21,7 +21,7 @@
    "fieldname": "aplicacion_instrumento",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Aplicaci\u00f3n de instrumento",
+   "label": "Aplicación de instrumento",
    "options": "Aplicacion Instrumento",
    "reqd": 1
   },
@@ -29,10 +29,10 @@
    "fieldname": "dimension",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Dimensi\u00f3n"
+   "label": "Dimensión"
   },
   {
-   "description": "Indicador al que tributa esta fila (EXPL\u00cdCITO). Si est\u00e1 vac\u00edo se hereda de Instrumento.indicador; sin ninguno de los dos la fila NO se publica (nunca se infiere por el texto de la dimensi\u00f3n).",
+   "description": "Indicador al que tributa esta fila (EXPLÍCITO). Si está vacío se hereda de Instrumento.indicador; sin ninguno de los dos la fila NO se publica (nunca se infiere por el texto de la dimensión).",
    "fieldname": "indicador",
    "fieldtype": "Link",
    "label": "Indicador",
@@ -45,7 +45,7 @@
    "label": "Valor"
   },
   {
-   "description": "%, media Likert\u2026",
+   "description": "%, media Likert…",
    "fieldname": "unidad",
    "fieldtype": "Data",
    "label": "Unidad"
@@ -71,7 +71,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-13 19:41:02.548756",
+ "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Gobierno",
  "name": "Resultado Instrumento",
@@ -103,12 +103,12 @@
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comit\u00e9 de Calidad"
+   "role": "Miembro de Comité de Calidad"
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Due\u00f1o de Proceso"
+   "role": "Dueño de Proceso"
   },
   {
    "create": 1,
@@ -153,5 +153,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "dimension",
- "track_changes": 1
+ "track_changes": 1,
+ "search_fields": "dimension"
 }

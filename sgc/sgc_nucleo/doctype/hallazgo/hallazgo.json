@@ -222,5 +222,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "codigo",
- "track_changes": 1
+ "track_changes": 1,
+ "search_fields": "codigo"
 }

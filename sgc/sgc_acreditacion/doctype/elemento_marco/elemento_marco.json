@@ -266,5 +266,6 @@
  "sort_order": "DESC",
  "states": [],
  "title_field": "denominacion",
- "track_changes": 1
+ "track_changes": 1,
+ "search_fields": "denominacion"
 }
