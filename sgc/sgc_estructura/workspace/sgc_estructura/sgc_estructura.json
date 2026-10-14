@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\": \"b01\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h3\\\"><b>Configuración</b></span>\", \"col\": 12}}, {\"id\": \"b02\", \"type\": \"paragraph\", \"data\": {\"text\": \"Datos de base del sistema: unidades orgánicas, programas, periodos, fuentes de datos y ajustes de correo y soporte.\", \"col\": 12}}, {\"id\": \"b03\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Lo que te toca</b></span>\", \"col\": 12}}, {\"id\": \"b04\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Unidades orgánicas\", \"col\": 4}}, {\"id\": \"b05\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Programas\", \"col\": 4}}, {\"id\": \"b06\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Periodos abiertos\", \"col\": 4}}, {\"id\": \"b07\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Lotes de ingesta rechazados\", \"col\": 4}}, {\"id\": \"b08\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Recientes</b></span>\", \"col\": 12}}, {\"id\": \"b09\", \"type\": \"quick_list\", \"data\": {\"quick_list_name\": \"Últimos lotes de ingesta\", \"col\": 6}}, {\"id\": \"b10\", \"type\": \"quick_list\", \"data\": {\"quick_list_name\": \"Últimos correos registrados\", \"col\": 6}}]",
+ "content": "[{\"id\": \"b01\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h3\\\"><b>Configuración</b></span>\", \"col\": 12}}, {\"id\": \"b02\", \"type\": \"paragraph\", \"data\": {\"text\": \"Datos de base del sistema: unidades orgánicas, programas, periodos, fuentes de datos y ajustes de correo y soporte.\", \"col\": 12}}, {\"id\": \"b03\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Pendientes del área</b></span>\", \"col\": 12}}, {\"id\": \"b04\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Unidades orgánicas\", \"col\": 4}}, {\"id\": \"b05\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Programas\", \"col\": 4}}, {\"id\": \"b06\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Periodos abiertos\", \"col\": 4}}, {\"id\": \"b07\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Lotes rechazados\", \"col\": 4}}, {\"id\": \"b08\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Recientes</b></span>\", \"col\": 12}}, {\"id\": \"b09\", \"type\": \"quick_list\", \"data\": {\"quick_list_name\": \"Últimos lotes de ingesta\", \"col\": 6}}, {\"id\": \"b10\", \"type\": \"quick_list\", \"data\": {\"quick_list_name\": \"Últimos correos registrados\", \"col\": 6}}]",
  "creation": "2026-10-14 04:11:37.415516",
  "custom_blocks": [],
  "docstatus": 0,
@@ -72,7 +72,7 @@
    "doc_view": "",
    "doctype": "Workspace Shortcut",
    "format": "{} rechazados",
-   "label": "Lotes de ingesta rechazados",
+   "label": "Lotes rechazados",
    "link_to": "Lote Ingesta",
    "stats_filter": "[[\"Lote Ingesta\",\"estado\",\"=\",\"Rechazado\"]]",
    "type": "DocType"

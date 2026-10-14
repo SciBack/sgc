@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\": \"b01\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h3\\\"><b>Acreditación y licenciamiento</b></span>\", \"col\": 12}}, {\"id\": \"b02\", \"type\": \"paragraph\", \"data\": {\"text\": \"Autoevaluaciones contra los marcos normativos, sus evidencias, y las obligaciones y entregas ante los entes externos.\", \"col\": 12}}, {\"id\": \"b03\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Lo que te toca</b></span>\", \"col\": 12}}, {\"id\": \"b04\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Mis autoevaluaciones en curso\", \"col\": 4}}, {\"id\": \"b05\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Mis entregas pendientes\", \"col\": 4}}, {\"id\": \"b06\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Evidencias observadas\", \"col\": 4}}, {\"id\": \"b07\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Entregas vencidas\", \"col\": 4}}, {\"id\": \"b08\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Marcos vigentes\", \"col\": 4}}, {\"id\": \"b09\", \"type\": \"quick_list\", \"data\": {\"quick_list_name\": \"Mis tareas\", \"col\": 12}}, {\"id\": \"b10\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Registrar</b></span>\", \"col\": 12}}, {\"id\": \"b11\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Nueva autoevaluación\", \"col\": 4}}, {\"id\": \"b12\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Recientes</b></span>\", \"col\": 12}}, {\"id\": \"b13\", \"type\": \"quick_list\", \"data\": {\"quick_list_name\": \"Últimas autoevaluaciones\", \"col\": 6}}, {\"id\": \"b14\", \"type\": \"quick_list\", \"data\": {\"quick_list_name\": \"Últimas evidencias\", \"col\": 6}}]",
+ "content": "[{\"id\": \"b01\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h3\\\"><b>Acreditación y licenciamiento</b></span>\", \"col\": 12}}, {\"id\": \"b02\", \"type\": \"paragraph\", \"data\": {\"text\": \"Autoevaluaciones contra los marcos normativos, sus evidencias, y las obligaciones y entregas ante los entes externos.\", \"col\": 12}}, {\"id\": \"b03\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Lo que te toca</b></span>\", \"col\": 12}}, {\"id\": \"b04\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Autoevaluaciones\", \"col\": 4}}, {\"id\": \"b05\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Entregas\", \"col\": 4}}, {\"id\": \"b06\", \"type\": \"quick_list\", \"data\": {\"quick_list_name\": \"Mis tareas\", \"col\": 12}}, {\"id\": \"b07\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Pendientes del área</b></span>\", \"col\": 12}}, {\"id\": \"b08\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Evidencias observadas\", \"col\": 4}}, {\"id\": \"b09\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Entregas vencidas\", \"col\": 4}}, {\"id\": \"b10\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Marcos vigentes\", \"col\": 4}}, {\"id\": \"b11\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Registrar</b></span>\", \"col\": 12}}, {\"id\": \"b12\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Nueva autoevaluación\", \"col\": 4}}, {\"id\": \"b13\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Recientes</b></span>\", \"col\": 12}}, {\"id\": \"b14\", \"type\": \"quick_list\", \"data\": {\"quick_list_name\": \"Últimas autoevaluaciones\", \"col\": 6}}, {\"id\": \"b15\", \"type\": \"quick_list\", \"data\": {\"quick_list_name\": \"Últimas evidencias\", \"col\": 6}}]",
  "creation": "2026-10-14 04:11:37.356491",
  "custom_blocks": [],
  "docstatus": 0,
@@ -47,8 +47,8 @@
    "color": "Orange",
    "doc_view": "",
    "doctype": "Workspace Shortcut",
-   "format": "{} pendientes",
-   "label": "Mis autoevaluaciones en curso",
+   "format": "{}",
+   "label": "Autoevaluaciones",
    "link_to": "Autoevaluacion",
    "stats_filter": "[[\"Autoevaluacion\",\"responsable\",\"=\",frappe.session.user],[\"Autoevaluacion\",\"estado\",\"in\",[\"Planificada\", \"En curso\", \"En revision\"]]]",
    "type": "DocType"
@@ -57,8 +57,8 @@
    "color": "Orange",
    "doc_view": "",
    "doctype": "Workspace Shortcut",
-   "format": "{} pendientes",
-   "label": "Mis entregas pendientes",
+   "format": "{}",
+   "label": "Entregas",
    "link_to": "Entrega Obligacion",
    "stats_filter": "[[\"Entrega Obligacion\",\"responsable\",\"=\",frappe.session.user],[\"Entrega Obligacion\",\"estado\",\"in\",[\"Pendiente\", \"En preparacion\", \"Observada\"]]]",
    "type": "DocType"
