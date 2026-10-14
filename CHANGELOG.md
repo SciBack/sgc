@@ -9,6 +9,26 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.3.0] - 2026-10-14
+
+**Requiere migrar:** sí. Sin cambios en los datos ni en los permisos.
+
+### Cambiado
+- La página de inicio y las portadas de cada área dejan de ser listas de enlaces (que repetían
+  el menú lateral) y enseñan trabajo:
+  - **Lo que te toca:** lo que está a tu nombre (no conformidades, acciones, documentos en
+    borrador, mediciones pendientes, acuerdos, entregas, riesgos…) con su número, y la lista
+    de tus tareas.
+  - **Pendientes del área:** lo que espera a alguien (por verificar, por publicar, sin
+    responsable, vencido…).
+  - **Registrar:** botones para crear lo habitual del área.
+  - **Estado del área** (cifras y gráficos) y **Recientes**.
+- Todo con bloques nativos de Frappe; el índice de pantallas es el menú lateral.
+
+### Para quien desarrolla
+- Política escrita y vigilada en el CI: el SGC se construye con lo que Frappe trae
+  (`docs/desarrollo/nativo-frappe.md`, `tests/test_politica_nativa.py`).
+
 ## [1.2.2] - 2026-10-14
 
 **Requiere migrar:** sí. Sin cambios en los datos.

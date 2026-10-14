@@ -6,7 +6,7 @@
    "label": "Riesgos por categoría"
   }
  ],
- "content": "[{\"id\": \"hdr\", \"type\": \"header\", \"data\": {\"text\": \"Riesgos\", \"col\": 12}}, {\"id\": \"pn0\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Riesgos altos tras tratamiento\", \"col\": 4}}, {\"id\": \"pn1\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Tratamientos de riesgo vencidos\", \"col\": 4}}, {\"id\": \"pg0\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Riesgos por categor\\u00eda\", \"col\": 6}}, {\"id\": \"cd0\", \"type\": \"card\", \"data\": {\"card_name\": \"Gesti\\u00f3n de riesgos\", \"col\": 4}}]",
+ "content": "[{\"id\": \"b01\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h3\\\"><b>Riesgos</b></span>\", \"col\": 12}}, {\"id\": \"b02\", \"type\": \"paragraph\", \"data\": {\"text\": \"Los riesgos identificados, su evaluación y tratamiento, y los eventos de riesgo que puede reportar cualquier persona.\", \"col\": 12}}, {\"id\": \"b03\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Lo que te toca</b></span>\", \"col\": 12}}, {\"id\": \"b04\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Riesgos\", \"col\": 4}}, {\"id\": \"b05\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Tratamientos\", \"col\": 4}}, {\"id\": \"b06\", \"type\": \"quick_list\", \"data\": {\"quick_list_name\": \"Mis tareas\", \"col\": 12}}, {\"id\": \"b07\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Pendientes del área</b></span>\", \"col\": 12}}, {\"id\": \"b08\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Eventos por evaluar\", \"col\": 4}}, {\"id\": \"b09\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Registrar</b></span>\", \"col\": 12}}, {\"id\": \"b10\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Reportar evento de riesgo\", \"col\": 4}}, {\"id\": \"b11\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Nuevo riesgo\", \"col\": 4}}, {\"id\": \"b12\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Estado del área</b></span>\", \"col\": 12}}, {\"id\": \"b13\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Riesgos altos tras tratamiento\", \"col\": 4}}, {\"id\": \"b14\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Tratamientos de riesgo vencidos\", \"col\": 4}}, {\"id\": \"b15\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Riesgos por categoría\", \"col\": 6}}, {\"id\": \"b16\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Recientes</b></span>\", \"col\": 12}}, {\"id\": \"b17\", \"type\": \"quick_list\", \"data\": {\"quick_list_name\": \"Últimos eventos reportados\", \"col\": 6}}, {\"id\": \"b18\", \"type\": \"quick_list\", \"data\": {\"quick_list_name\": \"Últimos riesgos\", \"col\": 6}}]",
  "creation": "2026-10-14 04:11:37.396629",
  "custom_blocks": [],
  "docstatus": 0,
@@ -18,79 +18,8 @@
  "is_hidden": 0,
  "label": "SGC Riesgos",
  "link_type": "DocType",
- "links": [
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Gestión de riesgos",
-   "link_count": 0,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Riesgos",
-   "link_count": 0,
-   "link_to": "Riesgo",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Eventos de riesgo",
-   "link_count": 0,
-   "link_to": "Evento Riesgo",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Matrices de riesgo",
-   "link_count": 0,
-   "link_to": "Matriz Riesgo",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Evaluaciones de riesgo",
-   "link_count": 0,
-   "link_to": "Evaluacion Riesgo",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Tratamientos de riesgo",
-   "link_count": 0,
-   "link_to": "Tratamiento Riesgo",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Matriz de riesgos (informe)",
-   "link_count": 0,
-   "link_to": "Matriz de Riesgos",
-   "link_type": "Report",
-   "onboard": 0,
-   "report_ref_doctype": "Riesgo",
-   "type": "Link"
-  }
- ],
- "modified": "2026-10-14 15:00:00.000000",
+ "links": [],
+ "modified": "2026-10-14 19:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Riesgos",
  "name": "SGC Riesgos",
@@ -108,10 +37,80 @@
  ],
  "owner": "Administrator",
  "public": 1,
- "quick_lists": [],
+ "quick_lists": [
+  {
+   "doctype": "Workspace Quick List",
+   "document_type": "ToDo",
+   "label": "Mis tareas",
+   "quick_list_filter": "[[\"ToDo\",\"allocated_to\",\"=\",frappe.session.user],[\"ToDo\",\"status\",\"=\",\"Open\"],[\"ToDo\",\"reference_type\",\"in\",[\"Riesgo\", \"Tratamiento Riesgo\", \"Evento Riesgo\"]]]"
+  },
+  {
+   "doctype": "Workspace Quick List",
+   "document_type": "Evento Riesgo",
+   "label": "Últimos eventos reportados",
+   "quick_list_filter": "[]"
+  },
+  {
+   "doctype": "Workspace Quick List",
+   "document_type": "Riesgo",
+   "label": "Últimos riesgos",
+   "quick_list_filter": "[]"
+  }
+ ],
  "roles": [],
  "sequence_id": 8.0,
- "shortcuts": [],
+ "shortcuts": [
+  {
+   "color": "Orange",
+   "doc_view": "",
+   "doctype": "Workspace Shortcut",
+   "format": "{}",
+   "label": "Riesgos",
+   "link_to": "Riesgo",
+   "stats_filter": "[[\"Riesgo\",\"propietario\",\"=\",frappe.session.user],[\"Riesgo\",\"estado\",\"not in\",[\"Cerrado\"]]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "",
+   "doctype": "Workspace Shortcut",
+   "format": "{}",
+   "label": "Tratamientos",
+   "link_to": "Tratamiento Riesgo",
+   "stats_filter": "[[\"Tratamiento Riesgo\",\"responsable\",\"=\",frappe.session.user],[\"Tratamiento Riesgo\",\"estado\",\"in\",[\"Planificado\", \"En ejecucion\"]]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "",
+   "doctype": "Workspace Shortcut",
+   "format": "{} por evaluar",
+   "label": "Eventos por evaluar",
+   "link_to": "Evento Riesgo",
+   "stats_filter": "[[\"Evento Riesgo\",\"estado\",\"in\",[\"Reportado\", \"En evaluacion\"]]]",
+   "type": "DocType"
+  },
+  {
+   "color": "",
+   "doc_view": "New",
+   "doctype": "Workspace Shortcut",
+   "format": "",
+   "label": "Reportar evento de riesgo",
+   "link_to": "Evento Riesgo",
+   "stats_filter": "",
+   "type": "DocType"
+  },
+  {
+   "color": "",
+   "doc_view": "New",
+   "doctype": "Workspace Shortcut",
+   "format": "",
+   "label": "Nuevo riesgo",
+   "link_to": "Riesgo",
+   "stats_filter": "",
+   "type": "DocType"
+  }
+ ],
  "standard": 1,
  "title": "SGC Riesgos",
  "type": "Workspace"
