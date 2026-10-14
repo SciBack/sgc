@@ -154,9 +154,19 @@
    "group": "Medición",
    "link_doctype": "Indicador",
    "link_fieldname": "proceso"
+  },
+  {
+   "group": "Riesgos",
+   "link_doctype": "Riesgo",
+   "link_fieldname": "proceso"
+  },
+  {
+   "group": "Caracterización",
+   "link_doctype": "Proceso",
+   "link_fieldname": "parent_proceso"
   }
  ],
- "modified": "2026-10-13 19:41:02.168540",
+ "modified": "2026-10-14 20:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Procesos",
  "name": "Proceso",

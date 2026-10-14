@@ -368,6 +368,31 @@ def crear_proceso(codigo=None, prefijo=PREFIJO, **overrides):
     return _ensure_named("Proceso", codigo, vals)
 
 
+def datos_ficha_completa(proceso, **extra):
+    """Campos de una Ficha de Caracterización que cumple ISO 9001 §4.4.1 (ver `faltantes()`).
+
+    Deja al proceso con responsable y crea un indicador de proceso propio: una ficha
+    solo puede pasar a revisión o publicarse completa.
+    """
+    frappe.db.set_value("Proceso", proceso, "responsable", "Administrator")
+    indicador = crear_indicador(categoria="Proceso").name
+    vals = {
+        "doctype": "Ficha Caracterizacion Proceso",
+        "proceso": proceso,
+        "version": "1.0",
+        "objetivo": "Objetivo de prueba",
+        "alcance": "Alcance de prueba",
+        "recursos": "Recursos de prueba",
+        "entradas": [{"proveedor": "Usuario", "insumo": "Solicitud"}],
+        "salidas": [{"entregable": "Respuesta", "cliente": "Usuario"}],
+        "actividades": [{"descripcion": "Atender la solicitud", "orden": 1}],
+        "indicadores": [{"indicador": indicador}],
+        "riesgos": [{"riesgo_identificado": "Retraso", "accion_mitigacion": "Seguimiento"}],
+    }
+    vals.update(extra)
+    return vals
+
+
 def crear_documento_controlado(proceso=None, tipo_documento="Procedimiento",
                                titulo=None, prefijo=PREFIJO, **overrides):
     """Documento Controlado. El `codigo` [PROC]-[SIGLA]-[NNN] lo autogenera el

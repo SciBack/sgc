@@ -52,13 +52,10 @@ class IntegrationTestPortalPublico(IntegrationTestCase):
 		frappe.db.commit()
 
 	def _ficha(self, estado="Publicado"):
-		doc = frappe.get_doc({
-			"doctype": "Ficha Caracterizacion Proceso",
-			"proceso": factories.crear_proceso().name,
-			"version": "1.0",
-			"objetivo": "Probar el contrato del portal.",
-			"estado": "Borrador",
-		}).insert(ignore_permissions=True)
+		doc = frappe.get_doc(factories.datos_ficha_completa(
+			factories.crear_proceso().name, objetivo="Probar el contrato del portal.", estado="Borrador",
+			entradas=[],
+		)).insert(ignore_permissions=True)
 		self.fichas.append(doc.name)
 		doc.append("registros", {"registro": "Bitácora", "responsable": frappe.session.user,
 		                         "frecuencia_revision": "Mensual"})

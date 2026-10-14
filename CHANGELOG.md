@@ -9,6 +9,20 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.4.0] - 2026-10-14
+
+**Requiere migrar:** sí. Las fichas existentes reciben, una vez, lo que el sistema ya sabe de su
+proceso (filas nuevas; no se quita nada).
+
+### Cambiado
+- La ficha de caracterización recoge sola lo que ya cuelga de su proceso: procedimientos,
+  documentos, riesgos y subprocesos. No hay que volver a teclearlo, y nunca se quita lo escrito a
+  mano. El proceso enseña además sus riesgos y subprocesos en «Conexiones».
+- Una ficha no puede pasar a revisión, aprobarse ni publicarse incompleta: exige objetivo,
+  alcance, recursos, responsable del proceso, entradas, salidas, al menos una actividad, un
+  indicador y un riesgo (ISO 9001 §4.4.1), y dice qué falta.
+- El sistema sella quién la mandó a revisión, quién la aprobó y la fecha de emisión al publicarla.
+
 ## [1.3.0] - 2026-10-14
 
 **Requiere migrar:** sí. Sin cambios en los datos ni en los permisos.

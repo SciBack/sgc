@@ -98,13 +98,9 @@ class IntegrationTestFichaPDF(IntegrationTestCase):
 
 	def _ficha_publicada(self):
 		proceso = factories.crear_proceso().name
-		ficha = frappe.get_doc({
-			"doctype": "Ficha Caracterizacion Proceso",
-			"proceso": proceso,
-			"version": "1.0",
-			"objetivo": "Probar la pregeneración del PDF.",
-			"estado": "Borrador",
-		}).insert(ignore_permissions=True)
+		ficha = frappe.get_doc(factories.datos_ficha_completa(
+			proceso, objetivo="Probar la pregeneración del PDF.", estado="Borrador",
+		)).insert(ignore_permissions=True)
 		self.fichas.append(ficha.name)
 		return ficha
 
