@@ -12,10 +12,10 @@
  "event": "Value Change",
  "idx": 0,
  "is_standard": 1,
- "message": "{% set que_hacer = {\"Ejecutada\": \"Emita el informe de auditor\u00eda.\", \"Informe emitido\": \"Revise el informe y cierre la auditor\u00eda.\"} %}<p>La auditor\u00eda <b>{{ doc.name }}</b>{% if doc.titulo %} \u2014 {{ doc.titulo }}{% endif %} pas\u00f3 al estado <b>{{ doc.estado }}</b>.</p>{% if que_hacer.get(doc.estado) %}<p>{{ que_hacer.get(doc.estado) }}</p>{% endif %}<p><a href=\"{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}\">Abrir en el SGC</a></p>",
- "message_type": "Markdown",
+ "message": "{% set que_hacer = {\"Ejecutada\": \"Emita el informe de auditoría.\", \"Informe emitido\": \"Revise el informe y cierre la auditoría.\"} %}<p>La auditoría <b>{{ doc.name }}</b>{% if doc.titulo %} — {{ doc.titulo }}{% endif %} pasó al estado <b>{{ doc.estado }}</b>.</p>{% if que_hacer.get(doc.estado) %}<p>{{ que_hacer.get(doc.estado) }}</p>{% endif %}<p><a href=\"{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}\">Abrir en el SGC</a></p>",
+ "message_type": "HTML",
  "minutes_offset": 0,
- "modified": "2026-10-13 19:41:03.945220",
+ "modified": "2026-10-14 13:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Auditoria",
  "name": "SGC - Auditoria cambia de estado",
@@ -37,6 +37,6 @@
  ],
  "send_system_notification": 1,
  "send_to_all_assignees": 0,
- "subject": "Auditor\u00eda {{ doc.name }}: {{ doc.estado }}",
+ "subject": "Auditoría {{ doc.name }}: {{ doc.estado }}",
  "value_changed": "estado"
 }

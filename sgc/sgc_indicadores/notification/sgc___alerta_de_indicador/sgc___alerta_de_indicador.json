@@ -13,10 +13,10 @@
  "event": "New",
  "idx": 0,
  "is_standard": 1,
- "message": "<p><b>{{ doc.tipo }}</b> en el indicador <b>{{ doc.indicador }}</b>{% if doc.periodo_academico %}, periodo {{ doc.periodo_academico }}{% endif %}.</p>{% if doc.meta is not none and doc.valor_medido is not none %}<p>Valor medido: {{ doc.valor_medido }} \u00b7 meta: {{ doc.meta }}.</p>{% endif %}{% if doc.mensaje %}<p>{{ doc.mensaje }}</p>{% endif %}<p><a href=\"{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}\">Abrir en el SGC</a></p>",
- "message_type": "Markdown",
+ "message": "<p><b>{{ doc.tipo }}</b> en el indicador <b>{{ doc.indicador }}</b>{% if doc.periodo_academico %}, periodo {{ doc.periodo_academico }}{% endif %}.</p>{% if doc.meta is not none and doc.valor_medido is not none %}<p>Valor medido: {{ doc.valor_medido }} · meta: {{ doc.meta }}.</p>{% endif %}{% if doc.mensaje %}<p>{{ doc.mensaje }}</p>{% endif %}<p><a href=\"{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}\">Abrir en el SGC</a></p>",
+ "message_type": "HTML",
  "minutes_offset": 0,
- "modified": "2026-10-13 19:41:03.772983",
+ "modified": "2026-10-14 13:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Indicadores",
  "name": "SGC - Alerta de indicador",
@@ -33,5 +33,5 @@
  ],
  "send_system_notification": 1,
  "send_to_all_assignees": 0,
- "subject": "Alerta de indicador ({{ doc.severidad }}): {{ doc.tipo }} \u2014 {{ doc.indicador }}"
+ "subject": "Alerta de indicador ({{ doc.severidad }}): {{ doc.tipo }} — {{ doc.indicador }}"
 }

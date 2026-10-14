@@ -12,10 +12,10 @@
  "event": "Value Change",
  "idx": 0,
  "is_standard": 1,
- "message": "{% set que_hacer = {\"En ejecucion\": \"Ejec\u00fatela antes de su fecha de compromiso.\", \"Ejecutada\": \"Verifique si fue eficaz.\", \"Verificada no eficaz\": \"Se verific\u00f3 como no eficaz: habr\u00e1 que retomarla.\"} %}<p>La acci\u00f3n de mejora <b>{{ doc.name }}</b> pas\u00f3 al estado <b>{{ doc.estado }}</b>.</p>{% if que_hacer.get(doc.estado) %}<p>{{ que_hacer.get(doc.estado) }}</p>{% endif %}<p><a href=\"{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}\">Abrir en el SGC</a></p>",
- "message_type": "Markdown",
+ "message": "{% set que_hacer = {\"En ejecucion\": \"Ejecútela antes de su fecha de compromiso.\", \"Ejecutada\": \"Verifique si fue eficaz.\", \"Verificada no eficaz\": \"Se verificó como no eficaz: habrá que retomarla.\"} %}<p>La acción de mejora <b>{{ doc.name }}</b> pasó al estado <b>{{ doc.estado }}</b>.</p>{% if que_hacer.get(doc.estado) %}<p>{{ que_hacer.get(doc.estado) }}</p>{% endif %}<p><a href=\"{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}\">Abrir en el SGC</a></p>",
+ "message_type": "HTML",
  "minutes_offset": 0,
- "modified": "2026-10-13 19:41:03.968295",
+ "modified": "2026-10-14 13:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "SGC - Accion de mejora cambia de estado",
@@ -45,6 +45,6 @@
  ],
  "send_system_notification": 1,
  "send_to_all_assignees": 0,
- "subject": "Acci\u00f3n de mejora {{ doc.name }}: {{ doc.estado }}",
+ "subject": "Acción de mejora {{ doc.name }}: {{ doc.estado }}",
  "value_changed": "estado"
 }

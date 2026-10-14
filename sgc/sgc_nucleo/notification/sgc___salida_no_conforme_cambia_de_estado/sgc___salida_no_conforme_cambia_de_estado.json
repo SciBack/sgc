@@ -12,10 +12,10 @@
  "event": "Value Change",
  "idx": 0,
  "is_standard": 1,
- "message": "{% set que_hacer = {\"En tratamiento\": \"Tr\u00e1tela y registre la decisi\u00f3n y las acciones tomadas.\", \"Tratada\": \"Verifique el resultado del tratamiento.\", \"Cerrada\": \"Se cerr\u00f3 tras verificar el tratamiento.\"} %}<p>La salida no conforme <b>{{ doc.name }}</b>{% if doc.titulo %} \u2014 {{ doc.titulo }}{% endif %} pas\u00f3 al estado <b>{{ doc.estado }}</b>.</p>{% if que_hacer.get(doc.estado) %}<p>{{ que_hacer.get(doc.estado) }}</p>{% endif %}<p><a href=\"{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}\">Abrir en el SGC</a></p>",
- "message_type": "Markdown",
+ "message": "{% set que_hacer = {\"En tratamiento\": \"Trátela y registre la decisión y las acciones tomadas.\", \"Tratada\": \"Verifique el resultado del tratamiento.\", \"Cerrada\": \"Se cerró tras verificar el tratamiento.\"} %}<p>La salida no conforme <b>{{ doc.name }}</b>{% if doc.titulo %} — {{ doc.titulo }}{% endif %} pasó al estado <b>{{ doc.estado }}</b>.</p>{% if que_hacer.get(doc.estado) %}<p>{{ que_hacer.get(doc.estado) }}</p>{% endif %}<p><a href=\"{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}\">Abrir en el SGC</a></p>",
+ "message_type": "HTML",
  "minutes_offset": 0,
- "modified": "2026-10-13 19:41:03.902185",
+ "modified": "2026-10-14 13:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "SGC - Salida No Conforme cambia de estado",
@@ -28,7 +28,7 @@
   },
   {
    "condition": "doc.estado == \"En tratamiento\" and not doc.responsable",
-   "receiver_by_role": "Due\u00f1o de Proceso"
+   "receiver_by_role": "Dueño de Proceso"
   },
   {
    "condition": "doc.estado == \"Tratada\"",

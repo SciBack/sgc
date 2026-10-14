@@ -14,10 +14,10 @@
  "from_attach_field": "archivo",
  "idx": 0,
  "is_standard": 1,
- "message": "<p>Se public\u00f3 el documento controlado <b>{{ doc.name }}</b> \u2014 {{ doc.titulo }}{% if doc.version %}, versi\u00f3n {{ doc.version }}{% endif %}.</p><p>Desde hoy es la versi\u00f3n vigente. {% if doc.solo_consulta %}Es de solo consulta: se lee en el SGC y no va adjunto.{% elif doc.archivo %}Va adjunto.{% endif %}</p>{% if doc.url_externa %}<p>Documento externo: <a href=\"{{ doc.url_externa }}\">{{ doc.url_externa }}</a></p>{% endif %}<p><a href=\"{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}\">Abrir en el SGC</a></p>",
- "message_type": "Markdown",
+ "message": "<p>Se publicó el documento controlado <b>{{ doc.name }}</b> — {{ doc.titulo }}{% if doc.version %}, versión {{ doc.version }}{% endif %}.</p><p>Desde hoy es la versión vigente. {% if doc.solo_consulta %}Es de solo consulta: se lee en el SGC y no va adjunto.{% elif doc.archivo %}Va adjunto.{% endif %}</p>{% if doc.url_externa %}<p>Documento externo: <a href=\"{{ doc.url_externa }}\">{{ doc.url_externa }}</a></p>{% endif %}<p><a href=\"{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}\">Abrir en el SGC</a></p>",
+ "message_type": "HTML",
  "minutes_offset": 0,
- "modified": "2026-10-13 19:41:04.019774",
+ "modified": "2026-10-14 13:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Documental",
  "name": "SGC - Documento Controlado publicado",
@@ -45,6 +45,6 @@
  ],
  "send_system_notification": 1,
  "send_to_all_assignees": 0,
- "subject": "Documento publicado: {{ doc.name }} \u2014 {{ doc.titulo }}",
+ "subject": "Documento publicado: {{ doc.name }} — {{ doc.titulo }}",
  "value_changed": "estado"
 }

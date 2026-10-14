@@ -14,10 +14,10 @@
  "event": "Days Before",
  "idx": 0,
  "is_standard": 1,
- "message": "<p>La acci\u00f3n de mejora <b>{{ doc.name }}</b> tiene fecha de compromiso (ETA) el <b>{{ doc.fecha_compromiso }}</b>.</p><p>Estado actual: {{ doc.estado }}. Ejecute o actualice la acci\u00f3n para no incumplir el plan de mejora.</p>",
- "message_type": "Markdown",
+ "message": "<p>La acción de mejora <b>{{ doc.name }}</b> tiene fecha de compromiso (ETA) el <b>{{ doc.fecha_compromiso }}</b>.</p><p>Estado actual: {{ doc.estado }}. Ejecute o actualice la acción para no incumplir el plan de mejora.</p>",
+ "message_type": "HTML",
  "minutes_offset": 0,
- "modified": "2026-10-13 19:41:04.122319",
+ "modified": "2026-10-14 13:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "SGC - Accion de mejora por vencer",
@@ -33,5 +33,5 @@
  ],
  "send_system_notification": 1,
  "send_to_all_assignees": 0,
- "subject": "Acci\u00f3n de mejora {{ doc.name }} vence (ETA) el {{ doc.fecha_compromiso }}"
+ "subject": "Acción de mejora {{ doc.name }} vence (ETA) el {{ doc.fecha_compromiso }}"
 }

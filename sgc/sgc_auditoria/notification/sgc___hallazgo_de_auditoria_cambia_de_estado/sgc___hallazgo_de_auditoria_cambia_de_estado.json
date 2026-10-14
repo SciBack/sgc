@@ -12,10 +12,10 @@
  "event": "Value Change",
  "idx": 0,
  "is_standard": 1,
- "message": "{% set que_hacer = {\"Escalado a NC\": \"Se escal\u00f3 a una no conformidad: gesti\u00f3nela desde all\u00ed.\"} %}<p>El hallazgo de auditor\u00eda <b>{{ doc.name }}</b> pas\u00f3 al estado <b>{{ doc.estado }}</b>.</p>{% if que_hacer.get(doc.estado) %}<p>{{ que_hacer.get(doc.estado) }}</p>{% endif %}<p><a href=\"{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}\">Abrir en el SGC</a></p>",
- "message_type": "Markdown",
+ "message": "{% set que_hacer = {\"Escalado a NC\": \"Se escaló a una no conformidad: gestiónela desde allí.\"} %}<p>El hallazgo de auditoría <b>{{ doc.name }}</b> pasó al estado <b>{{ doc.estado }}</b>.</p>{% if que_hacer.get(doc.estado) %}<p>{{ que_hacer.get(doc.estado) }}</p>{% endif %}<p><a href=\"{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}\">Abrir en el SGC</a></p>",
+ "message_type": "HTML",
  "minutes_offset": 0,
- "modified": "2026-10-13 19:41:03.924463",
+ "modified": "2026-10-14 13:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Auditoria",
  "name": "SGC - Hallazgo de auditoria cambia de estado",
@@ -33,6 +33,6 @@
  ],
  "send_system_notification": 1,
  "send_to_all_assignees": 0,
- "subject": "Hallazgo de auditor\u00eda {{ doc.name }}: {{ doc.estado }}",
+ "subject": "Hallazgo de auditoría {{ doc.name }}: {{ doc.estado }}",
  "value_changed": "estado"
 }
