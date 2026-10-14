@@ -19,20 +19,53 @@ APP = RAIZ / "sgc"
 MARCAS = re.compile(r"upeu|universidad peruana uni[oó]n|juliaca|tarapoto", re.IGNORECASE)
 
 
+# Lo único que puede viajar como fixture: configuración del producto, igual en todo sitio.
+FIXTURES_DE_CONFIGURACION = {
+	"Role", "Role Profile", "Workflow", "Workflow State", "Workflow Action Master", "Custom DocPerm",
+}
+
+
 def _fixtures_declarados():
+	"""Lee `fixtures` de hooks.py sin Frappe, sustituyendo las constantes de módulo que use."""
 	arbol = ast.parse((APP / "hooks.py").read_text(encoding="utf-8"))
+	constantes = {}
+
+	class _Sustituir(ast.NodeTransformer):
+		def visit_Name(self, nodo):
+			if nodo.id in constantes:
+				return ast.parse(repr(constantes[nodo.id]), mode="eval").body
+			return nodo
+
 	for nodo in arbol.body:
-		if isinstance(nodo, ast.Assign) and any(getattr(t, "id", None) == "fixtures" for t in nodo.targets):
-			return ast.literal_eval(nodo.value)
+		if not isinstance(nodo, ast.Assign):
+			continue
+		try:
+			valor = ast.literal_eval(_Sustituir().visit(nodo.value))
+		except (ValueError, SyntaxError, TypeError):
+			continue
+		for destino in nodo.targets:
+			if getattr(destino, "id", None) == "fixtures":
+				return valor
+			if isinstance(destino, ast.Name):
+				constantes[destino.id] = valor
 	return []
 
 
 class TestSinDatosDeCliente(unittest.TestCase):
 	def test_no_hay_fixtures_de_datos(self):
-		"""Un fixture se importa en CADA sitio en cada migrate: solo valdría para datos universales."""
-		self.assertEqual(_fixtures_declarados(), [])
-		ficheros = list((APP / "fixtures").glob("*.json")) if (APP / "fixtures").exists() else []
-		self.assertEqual([f.name for f in ficheros], [])
+		"""Un fixture se importa en CADA sitio en cada migrate: solo vale para configuración universal."""
+		declarados = _fixtures_declarados()
+		self.assertTrue(declarados, "hooks.py declara los fixtures de configuración")
+		tipos = {f["dt"] if isinstance(f, dict) else f for f in declarados}
+		self.assertEqual(tipos - FIXTURES_DE_CONFIGURACION, set())
+		esperados = {re.sub(r"[^a-z]+", "_", t.lower()).strip("_") + ".json" for t in tipos}
+		ficheros = {f.name for f in (APP / "fixtures").glob("*.json")}
+		self.assertEqual(ficheros - esperados, set(), "un fichero en fixtures/ que hooks.py no declara")
+
+	def test_los_fixtures_no_nombran_a_una_institucion(self):
+		for ruta in sorted((APP / "fixtures").glob("*.json")):
+			with self.subTest(fixture=ruta.name):
+				self.assertIsNone(MARCAS.search(ruta.read_text(encoding="utf-8")))
 
 	def test_las_pantallas_e_informes_no_nombran_a_una_institucion(self):
 		hallazgos = []
