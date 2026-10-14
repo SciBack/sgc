@@ -18,7 +18,6 @@ import frappe
 from frappe.tests import IntegrationTestCase
 
 from sgc import dashboards, escritorio
-from sgc.setup import f4_workflow_mejora as f4
 from sgc.tests import factories
 
 MAKE = "frappe.core.doctype.communication.email._make"
@@ -78,7 +77,7 @@ class IntegrationTestPotencialNoConformidad(_Base):
 class IntegrationTestDifusionDelPlan(_Base):
     def setUp(self):
         super().setUp()
-        self._sin_workflow("Plan Mejora", f4.WF_PLAN["name"])
+        self._sin_workflow("Plan Mejora", "Plan de Mejora SGC")
 
     def _aprobar(self, plan):
         plan.estado = "En ejecucion"

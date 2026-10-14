@@ -1,0 +1,34 @@
+{
+ "attach_files": "",
+ "attach_print": 0,
+ "channel": "Email",
+ "condition_type": "Python",
+ "creation": "2026-09-27 14:19:43.771892",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Evento Riesgo",
+ "enabled": 1,
+ "event": "Value Change",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "<p>El evento de riesgo que reportó, <b>{{ doc.name }}</b> — {{ doc.titulo }}, pasó al estado <b>{{ doc.estado }}</b>.</p>{% if doc.estado == \"Confirmado\" %}<p>Calidad lo confirmó y abrió la no conformidad {{ doc.no_conformidad or '' }} para analizar sus causas y definir el plan de acción.</p>{% endif %}{% if doc.estado == \"Descartado\" %}<p>Motivo: {{ doc.motivo_descarte }}</p>{% endif %}<p><a href=\"{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}\">Abrir en el SGC</a></p>",
+ "message_type": "HTML",
+ "minutes_offset": 0,
+ "modified": "2026-10-14 13:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Riesgos",
+ "name": "SGC - Evento de riesgo decidido",
+ "notification_type": "Alert",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "condition": "doc.estado in (\"Confirmado\", \"Descartado\")",
+   "receiver_by_document_field": "reportado_por"
+  }
+ ],
+ "send_system_notification": 1,
+ "send_to_all_assignees": 0,
+ "subject": "Evento de riesgo {{ doc.name }}: {{ doc.estado }}",
+ "value_changed": "estado"
+}

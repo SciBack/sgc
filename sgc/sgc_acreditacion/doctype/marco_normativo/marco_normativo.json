@@ -22,11 +22,11 @@
  ],
  "fields": [
   {
-   "description": "CONEAU-PROG-2025, CBC-SUNEDU-2026, ISO-21001…",
+   "description": "CONEAU-PROG-2025, CBC-SUNEDU-2026, ISO-21001\u2026",
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Código",
+   "label": "C\u00f3digo",
    "reqd": 1,
    "unique": 1
   },
@@ -46,20 +46,20 @@
    "options": "SINEACE\nSUNEDU\nISO\nINTERNACIONAL"
   },
   {
+   "description": "Licenciamiento = permiso para operar (Sunedu). Acreditaci\u00f3n = sello de calidad (Sineace/Coneau), por programa o institucional.",
    "fieldname": "alcance",
    "fieldtype": "Select",
-   "label": "Alcance",
-   "options": "\nLicenciamiento\nAcreditación de programa\nAcreditación institucional\nGestión interna",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "description": "Licenciamiento = permiso para operar (Sunedu). Acreditación = sello de calidad (Sineace/Coneau), por programa o institucional."
+   "label": "Alcance",
+   "options": "\nLicenciamiento\nAcreditaci\u00f3n de programa\nAcreditaci\u00f3n institucional\nGesti\u00f3n interna"
   },
   {
-   "description": "2025, 2026 — permite convivencia de versiones",
+   "description": "2025, 2026 \u2014 permite convivencia de versiones",
    "fieldname": "version",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Versión"
+   "label": "Versi\u00f3n"
   },
   {
    "fieldname": "vigente_desde",
@@ -82,7 +82,7 @@
   {
    "fieldname": "escala_valoracion",
    "fieldtype": "Link",
-   "label": "Escala de valoración",
+   "label": "Escala de valoraci\u00f3n",
    "options": "Escala Valoracion"
   },
   {
@@ -107,20 +107,76 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-12 20:28:02.000000",
+ "modified": "2026-10-13 19:41:01.134132",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Marco Normativo",
  "owner": "Administrator",
  "permissions": [
   {
+   "export": 1,
+   "read": 1,
+   "role": "Decano/Director (lectura)"
+  },
+  {
    "create": 1,
-   "delete": 1,
+   "export": 1,
+   "read": 1,
+   "role": "Analista de Calidad (DPGC)",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Coordinador de Calidad de Facultad"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Responsable de Calidad de Programa"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Miembro de Comit\u00e9 de Calidad"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Due\u00f1o de Proceso"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Data Steward"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Auditor Interno"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Rectorado/VR (lectura)"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Responsable de Sede"
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "role": "DPGC",
+   "write": 1
+  },
+  {
    "email": 1,
    "export": 1,
    "print": 1,
    "read": 1,
-   "report": 1,
    "role": "System Manager",
    "share": 1,
    "write": 1
@@ -128,10 +184,10 @@
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
+ "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
  "title_field": "nombre",
- "show_title_field_in_link": 1,
  "track_changes": 1
 }

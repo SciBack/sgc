@@ -1,0 +1,37 @@
+{
+ "attach_files": "",
+ "attach_print": 0,
+ "channel": "Email",
+ "condition": "doc.estado != \"Verificada eficaz\"",
+ "condition_type": "Python",
+ "creation": "2026-07-15 12:15:18.505225",
+ "date_changed": "fecha_compromiso",
+ "days_in_advance": 7,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Accion Mejora",
+ "enabled": 1,
+ "event": "Days Before",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "<p>La acción de mejora <b>{{ doc.name }}</b> tiene fecha de compromiso (ETA) el <b>{{ doc.fecha_compromiso }}</b>.</p><p>Estado actual: {{ doc.estado }}. Ejecute o actualice la acción para no incumplir el plan de mejora.</p>",
+ "message_type": "HTML",
+ "minutes_offset": 0,
+ "modified": "2026-10-14 13:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "SGC - Accion de mejora por vencer",
+ "notification_type": "Alert",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_role": "DPGC"
+  },
+  {
+   "receiver_by_document_field": "responsable"
+  }
+ ],
+ "send_system_notification": 1,
+ "send_to_all_assignees": 0,
+ "subject": "Acción de mejora {{ doc.name }} vence (ETA) el {{ doc.fecha_compromiso }}"
+}

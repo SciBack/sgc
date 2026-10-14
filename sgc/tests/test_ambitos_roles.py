@@ -26,7 +26,7 @@ import frappe
 from frappe.permissions import add_permission, update_permission_property
 from frappe.tests import IntegrationTestCase
 
-from sgc.setup import f3b_rbac
+from sgc import estandar
 from sgc.tests import factories
 
 PREFIJO = "TAMB"
@@ -43,7 +43,8 @@ class IntegrationTestRoleProfiles(IntegrationTestCase):
 
     def test_los_role_profiles_canonicos_existen_con_sus_roles(self):
         """Cada Role Profile declarado agrupa exactamente los roles de su spec."""
-        for nombre, roles_esperados in f3b_rbac.ROLE_PROFILES.items():
+        for nombre, perfil in estandar.perfiles().items():
+            roles_esperados = [r["role"] for r in perfil.get("roles", [])]
             self.assertTrue(
                 frappe.db.exists("Role Profile", nombre),
                 f"falta el Role Profile «{nombre}»",
@@ -61,7 +62,7 @@ class IntegrationTestRoleProfiles(IntegrationTestCase):
         Colapsarlos elimina el control interno más básico: quien gobierna el
         contenido de calidad no debe poder tocar la plataforma.
         """
-        roles = f3b_rbac.ROLE_PROFILES["Administrador SGC"]
+        roles = [r["role"] for r in estandar.perfiles()["Administrador SGC"].get("roles", [])]
         self.assertNotIn("System Manager", roles)
 
 

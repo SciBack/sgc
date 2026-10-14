@@ -36,4 +36,4 @@ Tiene desk_access=0; no debe entrar al Desk ni recibir capacidades CRUD generale
 
 ## Fuente verificable
 
-Catálogo y matriz RBAC en sgc/setup/f3b_rbac.py; las transiciones específicas se detallan en las páginas de [flujos](../../flujos/).
+Catálogo de roles en `sgc/fixtures/role.json` y permisos en el JSON de cada DocType; las transiciones específicas se detallan en las páginas de [flujos](../../flujos/).

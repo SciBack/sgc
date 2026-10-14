@@ -21,7 +21,7 @@ Convenciones:
   - `Autoevaluacion` tiene Workflow activo; se desactiva en setUp (las factories
     lo requieren para insertar sin disparar WorkflowPermissionError).
   - Se otorga lectura (DocPerm) a los roles de prueba en setUp para no depender
-    del orden de ejecución de `f3b_rbac`. `permission_query_conditions` solo
+    del orden en que se aplican los permisos estándar. `permission_query_conditions` solo
     filtra a quien YA tiene acceso al DocType.
 """
 import frappe
@@ -100,7 +100,7 @@ class IntegrationTestPermissions(IntegrationTestCase):
         self.plan_a = self._crear_plan(f"{self.PREFIJO}-PLAN-A", self.ae_a)
         self.plan_b = self._crear_plan(f"{self.PREFIJO}-PLAN-B", self.ae_b)
 
-        # Otorgar lectura a los roles de prueba (independiente de f3b_rbac).
+        # Otorgar lectura a los roles de prueba (independiente de los permisos estándar).
         for dt in DOCTYPES_ACOTADOS:
             self._ensure_lectura(ROL_ACOTADO, dt)
             self._ensure_lectura(ROL_EXENTO, dt)

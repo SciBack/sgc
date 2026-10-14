@@ -28,9 +28,6 @@ from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, nowdate
 
 from sgc import escritorio
-from sgc.setup import f3b_rbac
-from sgc.setup import f15_notificaciones_workflow as f15
-from sgc.setup import f25_workflow_evento_riesgo as f25
 from sgc.sgc_riesgos.doctype.evento_riesgo.evento_riesgo import ORIGEN_NC
 from sgc.tests import factories
 
@@ -57,11 +54,7 @@ class _Base(IntegrationTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        # Lo que el despliegue deja puesto; los tres pasos son idempotentes.
-        f3b_rbac._ensure_roles()
-        f3b_rbac.aplicar_colaboradores()
-        f25.run()
-        f15.run()
+        # Roles, permisos, workflow y avisos los trae la app como estándar (1.2.0).
         frappe.flags.in_patch = False
         frappe.clear_cache()
 
@@ -82,7 +75,7 @@ class _Base(IntegrationTestCase):
         el siguiente test de la clase se quedaría sin workflow."""
         factories.desactivar_workflow(DOCTYPE)
         self.addCleanup(frappe.clear_cache, doctype=DOCTYPE)
-        self.addCleanup(frappe.db.set_value, "Workflow", f25.WF_EVENTO["name"], "is_active", 1)
+        self.addCleanup(frappe.db.set_value, "Workflow", "Evento Riesgo SGC", "is_active", 1)
 
     def _como(self, usuario):
         frappe.set_user(usuario)

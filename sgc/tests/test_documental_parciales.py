@@ -21,8 +21,6 @@ from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, add_years, getdate, nowdate
 
 from sgc import tareas
-from sgc.setup import f5_workflow_documental as f5
-from sgc.setup import f15_notificaciones_workflow as f15
 from sgc.sgc_documental.doctype.documento_controlado.documento_controlado import (
     DIAS_TAREA_REVISION,
     tareas_revision_diaria,
@@ -53,8 +51,6 @@ class _Base(IntegrationTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        f5.run()
-        f15.run()
         frappe.flags.in_patch = False
 
     def setUp(self):
@@ -74,7 +70,7 @@ class _Base(IntegrationTestCase):
     def _sin_workflow(self):
         factories.desactivar_workflow(DT)
         self.addCleanup(frappe.clear_cache, doctype=DT)
-        self.addCleanup(frappe.db.set_value, "Workflow", f5.WF_DOCUMENTO["name"], "is_active", 1)
+        self.addCleanup(frappe.db.set_value, "Workflow", "Documento Controlado SGC", "is_active", 1)
 
     def _documento(self, **extra):
         return factories.crear_documento_controlado(proceso=self.proceso, elaborado_por=ELABORA, **extra)

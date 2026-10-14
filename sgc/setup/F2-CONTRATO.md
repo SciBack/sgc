@@ -1,5 +1,8 @@
 # F2 · Contrato — profundizar la autoevaluación (rama de agosto)
 
+> **Documento histórico.** Desde la 1.2.0 los campos están en el JSON de cada DocType y los
+> workflows en `sgc/fixtures/workflow.json`; `f2_fields.py` y `f2_workflow.py` ya no existen.
+
 > **Objetivo F2:** que la autoevaluación de Enfermería contra **CONEAU Programas 2025** funcione end-to-end sobre el esqueleto F1: cargar el marco desde YAML, valorar criterios, **agregar a nivel de estándar NL/L/LP** (el sistema PROPONE, el humano CONFIRMA), proponer vigencia, y disparar el flujo CAPA (hallazgo→no conformidad→plan). Evidencias con filestore local (MinIO es swap de backend en despliegue).
 >
 > Base: los 66 DocTypes F1 ya existen (ver `F1-CONTRATO.md`). La lógica va en los **controladores** `sgc/sgc/<modulo>/doctype/<name>/<name>.py` y en módulos nuevos `sgc/sgc/scoring.py` / `sgc/sgc/capa.py`. YAML fuente: el modelo de acreditación vigente del cliente (p. ej. CONEAU Programas 2025), extraído de la normativa oficial.

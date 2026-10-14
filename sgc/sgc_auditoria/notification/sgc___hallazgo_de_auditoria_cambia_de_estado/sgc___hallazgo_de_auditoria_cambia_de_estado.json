@@ -1,0 +1,38 @@
+{
+ "attach_files": "",
+ "attach_print": 0,
+ "channel": "Email",
+ "condition_type": "Python",
+ "creation": "2026-09-24 07:30:03.425110",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Hallazgo Auditoria",
+ "enabled": 1,
+ "event": "Value Change",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "{% set que_hacer = {\"Escalado a NC\": \"Se escaló a una no conformidad: gestiónela desde allí.\"} %}<p>El hallazgo de auditoría <b>{{ doc.name }}</b> pasó al estado <b>{{ doc.estado }}</b>.</p>{% if que_hacer.get(doc.estado) %}<p>{{ que_hacer.get(doc.estado) }}</p>{% endif %}<p><a href=\"{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}\">Abrir en el SGC</a></p>",
+ "message_type": "HTML",
+ "minutes_offset": 0,
+ "modified": "2026-10-14 13:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Auditoria",
+ "name": "SGC - Hallazgo de auditoria cambia de estado",
+ "notification_type": "Alert",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "condition": "doc.estado == \"Escalado a NC\"",
+   "receiver_by_role": "DPGC"
+  },
+  {
+   "condition": "doc.estado in (\"Abierto\", \"Cerrado\")",
+   "receiver_by_role": "Auditor Interno"
+  }
+ ],
+ "send_system_notification": 1,
+ "send_to_all_assignees": 0,
+ "subject": "Hallazgo de auditoría {{ doc.name }}: {{ doc.estado }}",
+ "value_changed": "estado"
+}

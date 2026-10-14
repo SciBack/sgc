@@ -15,7 +15,7 @@ El controlador (`aplicacion_instrumento.py`) aplica:
 Además prueba la tabulación agregada (`.tabular()` / `tabular_aplicacion`):
 promedio simple, promedio ponderado por n, y desglose por dimensión.
 
-Aplicacion Instrumento tiene Workflow (f9_workflow_encuestas): se desactiva en
+Aplicacion Instrumento tiene Workflow («Aplicacion Instrumento SGC», sgc/fixtures/workflow.json): se desactiva en
 setUp para poder crear la aplicación directamente en el estado que cada test
 necesita, sin transicionar. Las validaciones del CONTROLADOR siguen corriendo.
 
@@ -210,7 +210,7 @@ class IntegrationTestAplicacionInstrumento(IntegrationTestCase):
 # Puente Encuestas -> Indicadores disparado por el CIERRE real del workflow
 # ==========================================================================
 # Acciones del Workflow "Aplicacion Instrumento SGC" en orden hasta "Cerrada"
-# (ver sgc/setup/f9_workflow_encuestas.py WF_APLICACION["transitions"]).
+# (ver el workflow «Aplicacion Instrumento SGC» de sgc/fixtures/workflow.json).
 _CADENA_CIERRE = ("Iniciar campo", "Cerrar aplicacion")
 
 

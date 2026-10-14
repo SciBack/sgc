@@ -25,7 +25,7 @@ Reglas de datos (verificadas contra los .json reales del app):
   (es Trazabilidad + Evidencia + Documento Controlado), así que no ramifica por snapshot.
 
 Inmutabilidad (Fase 3+4, fusionadas): `Autoevaluacion` es `is_submittable=1`; el workflow
-nativo (`sgc.setup.f2_workflow.WF_AUTOEVAL`) dispara el submit automático (docstatus 0->1)
+nativo («Autoevaluacion SGC», fixture) dispara el submit automático (docstatus 0->1)
 al llegar a "Cerrada". Justo antes de ese submit, otro módulo congela un snapshot INMUTABLE
 del árbol del marco en `Autoevaluacion.marco_snapshot` (fieldtype JSON). Mientras la
 Autoevaluación esté en curso (docstatus=0) este módulo sigue leyendo Marco Normativo/

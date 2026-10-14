@@ -1,0 +1,34 @@
+{
+ "attach_files": "",
+ "attach_print": 0,
+ "channel": "Email",
+ "condition": "doc.estado == \"Aprobado\"",
+ "condition_type": "Python",
+ "creation": "2026-07-19 10:29:26.831410",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Informe Cumplimiento",
+ "enabled": 1,
+ "event": "Value Change",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "<p>El Informe de Cumplimiento <b>{{ doc.name }}</b> del año <b>{{ doc.anio }}</b> fue <b>Aprobado</b>.</p><p>Semáforo: {{ doc.semaforo }}. Ya puede presentarse a SUNEDU.</p>",
+ "message_type": "HTML",
+ "minutes_offset": 0,
+ "modified": "2026-10-14 13:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Acreditacion",
+ "name": "SGC - Informe Cumplimiento aprobado",
+ "notification_type": "Alert",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_role": "Autoridad Aprobadora"
+  }
+ ],
+ "send_system_notification": 1,
+ "send_to_all_assignees": 0,
+ "subject": "Informe de Cumplimiento {{ doc.name }} ({{ doc.anio }}) fue Aprobado",
+ "value_changed": "estado"
+}

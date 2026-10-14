@@ -1,0 +1,37 @@
+{
+ "attach_files": "",
+ "attach_print": 0,
+ "channel": "Email",
+ "condition": "doc.estado != \"Obsoleto\"",
+ "condition_type": "Python",
+ "creation": "2026-07-15 12:15:18.419148",
+ "date_changed": "fecha_proxima_revision",
+ "days_in_advance": 15,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Documento Controlado",
+ "enabled": 1,
+ "event": "Days Before",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "<p>El documento controlado <b>{{ doc.name }}</b> ({{ doc.get(\"titulo\") or doc.tipo_documento }}) tiene su <b>próxima revisión programada</b> para el <b>{{ doc.fecha_proxima_revision }}</b>.</p><p>Estado actual: {{ doc.estado }}. Coordine la revisión antes de esa fecha para mantener vigente la Lista Maestra de Documentos.</p>",
+ "message_type": "HTML",
+ "minutes_offset": 0,
+ "modified": "2026-10-14 13:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Documental",
+ "name": "SGC - Documento por revisar",
+ "notification_type": "Alert",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_role": "DPGC"
+  },
+  {
+   "receiver_by_document_field": "elaborado_por"
+  }
+ ],
+ "send_system_notification": 1,
+ "send_to_all_assignees": 0,
+ "subject": "Documento controlado {{ doc.name }} debe revisarse el {{ doc.fecha_proxima_revision }}"
+}

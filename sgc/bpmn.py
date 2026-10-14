@@ -8,7 +8,7 @@ gestión por procesos, y el motor de workflow del framework habla otro idioma
 (estados, acciones, roles). Este módulo traduce de aquel a este.
 
 **Traduce, no reimplementa.** La fuente de verdad sigue siendo la definición del
-workflow en `sgc/setup/f*_workflow*.py`; el BPMN es una vista derivada. Si el
+workflow en `sgc/fixtures/workflow.json`; el BPMN es una vista derivada. Si el
 diagrama y el código discrepan, el que está mal es el diagrama, y se arregla
 regenerándolo.
 
@@ -454,95 +454,36 @@ def documentacion_de(document_type):
 
 
 def specs_de_workflows():
-    """Descubre las definiciones de workflow declaradas en `sgc/setup/`.
+    """Las definiciones de workflow del SGC, leídas de `sgc/fixtures/workflow.json`.
 
-    Una definición es cualquier diccionario de nivel de módulo que tenga
-    `document_type`, `states` y `transitions`. Se descubren en vez de listarse a
-    mano para que un workflow nuevo entre solo: una lista fija se queda corta en
-    silencio, que es justo como trece de ellos llevaban sin documentar.
+    Desde la 1.2.0 los workflows son un fixture que Frappe importa en cada `migrate`; es la
+    misma fuente que usa el sitio, así que el BPMN no puede describir otro circuito. Se lee el
+    JSON sin importar `frappe`, para que el generador y su control funcionen fuera de un bench.
 
-    Devuelve [(nombre_modulo, spec)], sin duplicados por DocType.
+    Devuelve [(nombre_workflow, spec)], sin duplicados por DocType, con los estados como
+    (estado, doc_status, rol que edita) y las transiciones como
+    (desde, acción, hacia, rol, autoaprobación).
     """
-    import importlib
+    import json
     import pathlib
 
-    aqui = pathlib.Path(__file__).parent / "setup"
+    fixture = pathlib.Path(__file__).parent / "fixtures" / "workflow.json"
     vistos, encontradas = set(), []
-    for archivo in sorted(aqui.glob("f*workflow*.py")):
-        specs = None
-        try:
-            mod = importlib.import_module(f"sgc.setup.{archivo.stem}")
-            specs = [
-                getattr(mod, n) for n in dir(mod)
-                if _es_spec(getattr(mod, n))
-            ]
-        except Exception:
-            # Los módulos de setup importan `frappe`, así que fuera de un bench
-            # no se pueden importar. Antes eso bastaba para que la exportación
-            # devolviera CERO diagramas -- el generador solo funcionaba dentro
-            # del servidor, y por eso era tan fácil olvidarse de regenerar (ya
-            # pasó: se creó el workflow f16 y su .bpmn no existió hasta que
-            # alguien preguntó por él). Los specs son diccionarios literales, así
-            # que se pueden leer del código fuente sin ejecutarlo.
-            specs = _specs_por_ast(archivo)
-            if specs is None:
-                print(f"  [SKIP] no se pudo leer {archivo.name}")
-                continue
-        for valor in specs:
-            if valor["document_type"] in vistos:
-                continue
-            vistos.add(valor["document_type"])
-            encontradas.append((archivo.stem, valor))
+    for wf in json.loads(fixture.read_text(encoding="utf-8")):
+        if wf["document_type"] in vistos:
+            continue
+        vistos.add(wf["document_type"])
+        spec = {
+            "name": wf["name"],
+            "document_type": wf["document_type"],
+            "states": [(e["state"], e.get("doc_status") or "0", e.get("allow_edit")) for e in wf["states"]],
+            "transitions": [
+                (t["state"], t["action"], t["next_state"], t["allowed"], int(t.get("allow_self_approval") or 0))
+                for t in wf["transitions"]
+            ],
+        }
+        encontradas.append((wf["name"], spec))
     return encontradas
-
-
-def _es_spec(valor):
-    return (isinstance(valor, dict) and "document_type" in valor
-            and "states" in valor and "transitions" in valor)
-
-
-def _specs_por_ast(archivo):
-    """Lee los specs de un módulo de setup SIN ejecutarlo.
-
-    Solo acepta literales (`ast.literal_eval`), admitiendo como literal una
-    constante de módulo ya asignada a un literal. Si alguien construyera un spec
-    con código —una comprensión, una llamada— no se descubriría, y el control de
-    inventario (`deploy/check_bpmn.py`) lo cantaría como «Sin workflow de origen»
-    solo si su .bpmn existe; por eso un workflow nuevo se escribe con literales.
-    """
-    import ast
-
-    try:
-        arbol = ast.parse(archivo.read_text(encoding="utf-8"))
-    except SyntaxError:
-        return None
-    # Las constantes de nivel de módulo (`DPGC = "DPGC"`, `ROLES = [...]`) se
-    # recuerdan y se sustituyen en los specs que las usan. Sin esto, un spec que
-    # escribe `DPGC` en vez de `"DPGC"` no era literal, se descartaba EN SILENCIO
-    # y su diagrama nunca existía: así se perdieron los de f23, f24 y f25, y el
-    # control de concordancia del CI daba OK con tres procesos sin dibujar.
-    constantes = {}
-
-    class _Sustituir(ast.NodeTransformer):
-        def visit_Name(self, nodo):
-            if nodo.id in constantes:
-                return ast.parse(repr(constantes[nodo.id]), mode="eval").body
-            return nodo
-
-    hallados = []
-    for nodo in arbol.body:
-        if not isinstance(nodo, ast.Assign):
-            continue
-        try:
-            valor = ast.literal_eval(_Sustituir().visit(nodo.value))
-        except (ValueError, SyntaxError, TypeError):
-            continue
-        for destino in nodo.targets:
-            if isinstance(destino, ast.Name):
-                constantes[destino.id] = valor
-        if _es_spec(valor):
-            hallados.append(valor)
-    return hallados
 
 
 # Orden en que se recorre el sistema. No es alfabético ni caprichoso: sigue las

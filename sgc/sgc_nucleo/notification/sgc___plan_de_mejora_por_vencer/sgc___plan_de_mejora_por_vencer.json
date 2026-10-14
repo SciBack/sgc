@@ -1,0 +1,37 @@
+{
+ "attach_files": "",
+ "attach_print": 0,
+ "channel": "Email",
+ "condition": "doc.estado != \"Cerrado\"",
+ "condition_type": "Python",
+ "creation": "2026-07-15 12:15:18.527707",
+ "date_changed": "fecha_compromiso",
+ "days_in_advance": 7,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Plan Mejora",
+ "enabled": 1,
+ "event": "Days Before",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "<p>El plan de mejora <b>{{ doc.name }}</b> tiene fecha compromiso el <b>{{ doc.fecha_compromiso }}</b>.</p><p>Estado actual: {{ doc.estado }} · Semáforo: {{ doc.semaforo }}. Revise el avance de sus acciones antes del vencimiento.</p>",
+ "message_type": "HTML",
+ "minutes_offset": 0,
+ "modified": "2026-10-14 13:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "SGC - Plan de mejora por vencer",
+ "notification_type": "Alert",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_role": "DPGC"
+  },
+  {
+   "receiver_by_document_field": "responsable"
+  }
+ ],
+ "send_system_notification": 1,
+ "send_to_all_assignees": 0,
+ "subject": "Plan de mejora {{ doc.name }} vence su compromiso el {{ doc.fecha_compromiso }}"
+}

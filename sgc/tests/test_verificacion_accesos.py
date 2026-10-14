@@ -16,7 +16,6 @@ instancia real, no la aritmética de una lista.
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from sgc.setup import f3b_rbac
 from sgc.verificacion import AVISO, BLOQUEANTE, accesos, verificar
 
 ROL_CON_DESK = "Decano/Director (lectura)"   # el catálogo lo declara con desk_access=1
@@ -29,7 +28,6 @@ class IntegrationTestVerificacionAccesos(IntegrationTestCase):
         # está divergente, Frappe marca Website User al insertar la cuenta y el
         # test mediría el estado del sitio en vez del comportamiento. (Pasó en el
         # lab, que tenía los 13 roles a desk_access=0 — justo lo que esto detecta.)
-        f3b_rbac._ensure_roles()
         frappe.db.commit()
         self._usuarios = []
 
@@ -85,7 +83,7 @@ class IntegrationTestVerificacionAccesos(IntegrationTestCase):
 
         h = self._hallazgo("acceso-denegado")
 
-        self.assertIn("f3b_rbac", h.remedio or "", "sin remedio, el aviso no acciona nada")
+        self.assertIn("migrar", h.remedio or "", "sin remedio, el aviso no acciona nada")
 
     # --- la bomba de relojería ---------------------------------------------
 

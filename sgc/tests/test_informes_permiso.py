@@ -12,7 +12,7 @@ que no fuera System Manager. Nadie lo vio porque se probaron como administrador.
 Por eso este test **ejecuta** cada informe como un usuario con UN solo rol de
 lectura, en vez de preguntar a `has_permission`.
 
-Depende de que el RBAC (`f3b_rbac`) esté aplicado en el sitio, como en el CI y en
+Depende de que los permisos estándar del SGC estén en el sitio, como en el CI y en
 producción (corre en `after_migrate`).
 """
 
@@ -20,7 +20,7 @@ import frappe
 from frappe.desk.query_report import run
 from frappe.tests import IntegrationTestCase
 
-from sgc.setup.f3b_rbac import doctypes_con_informe
+from sgc.estandar import doctypes_con_informe
 
 USUARIO = "sgc-prueba-informes-dpgc@example.com"
 ROL = "DPGC"
@@ -49,12 +49,13 @@ class IntegrationTestInformesPermiso(IntegrationTestCase):
     def test_hay_informes_y_todos_tienen_permiso_report_para_la_dpgc(self):
         informes = self._informes()
         self.assertGreaterEqual(len(informes), 6)
-        self.assertEqual({i.ref_doctype for i in informes} - doctypes_con_informe(), set())
+        self.assertEqual({i.ref_doctype for i in informes} - set(doctypes_con_informe()), set())
         for i in informes:
-            self.assertEqual(
-                frappe.db.get_value("Custom DocPerm",
-                                    {"parent": i.ref_doctype, "role": ROL, "permlevel": 0}, "report"),
-                1, f"{ROL} sin «report» en {i.ref_doctype}: no puede abrir {i.name}",
+            # Lo efectivo: los Custom DocPerm si el DocType tiene alguno, si no los estándar.
+            filas = [p for p in frappe.get_meta(i.ref_doctype).permissions
+                     if p.role == ROL and not p.permlevel]
+            self.assertTrue(
+                any(p.report for p in filas), f"{ROL} sin «report» en {i.ref_doctype}: no puede abrir {i.name}"
             )
 
     def test_la_dpgc_ejecuta_cada_informe(self):

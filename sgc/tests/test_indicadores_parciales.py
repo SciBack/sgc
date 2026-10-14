@@ -20,8 +20,6 @@ from frappe.tests import IntegrationTestCase
 
 from sgc import tareas
 from sgc.ingesta import _escritura
-from sgc.setup import f7_notificaciones as f7
-from sgc.setup import f15_notificaciones_workflow as f15
 from sgc.sgc_indicadores.report.indicadores_por_familia import indicadores_por_familia as informe
 from sgc.tests import factories
 
@@ -158,8 +156,6 @@ class IntegrationTestAvisosDeIndicadores(_Base):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        f7.run()
-        f15.run()
         frappe.flags.in_patch = False
 
     def _para(self, regla, doc):

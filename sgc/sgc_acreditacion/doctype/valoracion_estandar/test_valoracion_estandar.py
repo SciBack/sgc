@@ -15,7 +15,7 @@ EXTRA_TEST_RECORD_DEPENDENCIES = []  # eg. ["User"]
 IGNORE_TEST_RECORD_DEPENDENCIES = []  # eg. ["User"]
 
 # Acciones del Workflow "Autoevaluacion SGC" en orden, hasta "Cerrada"
-# (ver sgc/setup/f2_workflow.py WF_AUTOEVAL["transitions"]). Duplicado a
+# (ver el workflow «Autoevaluacion SGC» de sgc/fixtures/workflow.json). Duplicado a
 # propósito respecto a `test_valoracion_criterio.py`: cada test file vive en
 # el alcance de este agente, sin tocar `sgc/tests/factories.py`.
 _CADENA_CIERRE = ("Iniciar evaluacion", "Enviar a revision", "Consolidar", "Cerrar")
@@ -113,7 +113,7 @@ class IntegrationTestValoracionEstandar(IntegrationTestCase):
 		con `ignore_permissions=True`, pero el doc igual pasa por `validate()`
 		(el guard no distingue el origen del save). Decisión de diseño: la
 		confirmación humana del nivel oficial debe ocurrir ANTES de "Cerrar"
-		(en el estado "Consolidada" -- ver `sgc/setup/f2_workflow.py`), nunca
+		(en el estado "Consolidada" -- ver el workflow «Autoevaluacion SGC», `sgc/fixtures/workflow.json`), nunca
 		después; que quede bloqueada tras el cierre es correcto, no una regresión.
 		"""
 		from sgc import confirmacion

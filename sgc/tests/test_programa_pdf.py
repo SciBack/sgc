@@ -21,14 +21,13 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.www.printview import get_html_and_style
 
-from sgc.setup import f22_programa_pdf
+from sgc import estandar
 
-PF = f22_programa_pdf.PRINT_FORMAT_NAME
+PF = "Plan Anual de Auditoria"
 
 
 class IntegrationTestProgramaPdf(IntegrationTestCase):
     def setUp(self):
-        f22_programa_pdf.run()
         self._creados = []
 
     def tearDown(self):
@@ -126,19 +125,15 @@ class IntegrationTestProgramaPdf(IntegrationTestCase):
 
     def test_el_html_del_modulo_no_nombra_a_ninguna_institucion(self):
         # Mismo contrato que #73: la identidad sale de site_config.
-        self.assertNotIn("UNIVERSIDAD PERUANA", f22_programa_pdf.HTML.upper())
-        self.assertNotIn("membrete-upeu", f22_programa_pdf.HTML)
+        html = estandar.formatos()[PF]["html"]
+        self.assertNotIn("UNIVERSIDAD PERUANA", html.upper())
+        self.assertNotIn("membrete-upeu", html)
+        self.assertIn("sgc_identidad()", html)
 
     def test_el_formato_queda_por_defecto_en_el_doctype(self):
         # Quien pulse Imprimir debe obtener el plan, no el volcado de campos.
-        self.assertEqual(
-            frappe.db.get_value("DocType", "Programa Auditoria", "default_print_format"),
-            PF,
-        )
+        # Como en Customize Form: un Property Setter que trae la app (sgc_auditoria/custom).
+        self.assertEqual(frappe.get_meta("Programa Auditoria").default_print_format, PF)
 
-    def test_es_idempotente(self):
-        primera = f22_programa_pdf.run()
-        segunda = f22_programa_pdf.run()
-
-        self.assertEqual(primera["print_format"], segunda["print_format"])
-        self.assertEqual(segunda["accion"], "actualizado")
+    def test_es_un_formato_estandar(self):
+        self.assertEqual(frappe.db.get_value("Print Format", PF, "standard"), "Yes")

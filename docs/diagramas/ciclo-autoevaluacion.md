@@ -11,7 +11,7 @@ El proceso central del SGC: cómo una autoevaluación pasa de creada a cerrada, 
 cada paso y en qué momento entra el dato que viene de fuera.
 
 **No es un diagrama aspiracional.** Los estados, las transiciones y los roles que aparecen son
-los que están implementados: salen de `sgc/setup/f2_workflow.py`, y cualquier discrepancia
+los que están implementados: salen de `sgc/fixtures/workflow.json`, y cualquier discrepancia
 entre el diagrama y ese archivo es un error del diagrama.
 
 ## Los cinco carriles
@@ -65,10 +65,10 @@ grep -c "Syntax Error" ciclo-autoevaluacion.svg   # debe dar 0
 
 | Elemento del diagrama | Dónde vive |
 |---|---|
-| Estados y transiciones | `sgc/setup/f2_workflow.py` (`WF_AUTOEVAL`) |
+| Estados y transiciones | `sgc/fixtures/workflow.json` («Autoevaluacion SGC») |
 | Nivel propuesto NL/L/LP | `sgc/scoring.py` |
 | Nivel oficial en permlevel 1 | `sgc/setup/f3b_rbac.py` (`PERMLEVEL1`) |
 | Congelado del marco | `Autoevaluacion.before_submit` y `scoring.construir_snapshot` |
 | Evidencia ↔ criterio (N:M) | DocType `Trazabilidad` |
 | Indicadores del conector externo | `sgc/indicadores_acreditacion.py` |
-| Ciclo CAPA | `sgc/setup/f2_workflow.py` (`WF_NC`) y `sgc/capa.py` |
+| Ciclo CAPA | `sgc/fixtures/workflow.json` («No Conformidad SGC») y `sgc/capa.py` |

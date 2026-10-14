@@ -35,12 +35,12 @@
    "reqd": 1
   },
   {
+   "description": "Código con el que el ente rector identifica al programa. Cuando el programa se oferta en varias modalidades, aquí va el de la oferta principal; el detalle completo va en la tabla de códigos.",
    "fieldname": "codigo_oficial",
    "fieldtype": "Data",
-   "label": "Código oficial",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "description": "Código con el que el ente rector identifica al programa. Cuando el programa se oferta en varias modalidades, aquí va el de la oferta principal; el detalle completo va en la tabla de códigos."
+   "label": "Código oficial"
   },
   {
    "fieldname": "facultad",
@@ -62,13 +62,13 @@
    "options": "pregrado\nposgrado"
   },
   {
+   "description": "Campo de educación ISCED-F 2013 (UNESCO) del programa, del tesauro institucional.",
    "fieldname": "isced",
    "fieldtype": "Link",
+   "in_standard_filter": 1,
    "label": "Campo ISCED-F 2013",
-   "options": "Termino Tesauro",
    "link_filters": "[[\"Termino Tesauro\",\"esquema\",\"=\",\"ISCED-F 2013\"]]",
-   "description": "Campo de educación ISCED-F 2013 (UNESCO) del programa, del tesauro institucional.",
-   "in_standard_filter": 1
+   "options": "Termino Tesauro"
   },
   {
    "default": "activo",
@@ -78,23 +78,23 @@
    "options": "activo\ninactivo"
   },
   {
+   "collapsible": 1,
    "fieldname": "sec_codigos",
    "fieldtype": "Section Break",
-   "label": "Códigos oficiales",
-   "collapsible": 1
+   "label": "Códigos oficiales"
   },
   {
+   "description": "Un programa puede tener un código distinto por cada modalidad en que se oferta. Todos identifican al mismo programa.",
    "fieldname": "codigos_oficiales",
    "fieldtype": "Table",
    "label": "Códigos por modalidad",
-   "options": "Codigo Oficial Programa",
-   "description": "Un programa puede tener un código distinto por cada modalidad en que se oferta. Todos identifican al mismo programa."
+   "options": "Codigo Oficial Programa"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-01 21:00:00.000000",
+ "modified": "2026-10-14 13:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Estructura",
  "name": "Programa",
@@ -102,12 +102,68 @@
  "permissions": [
   {
    "create": 1,
-   "delete": 1,
+   "export": 1,
+   "read": 1,
+   "role": "DPGC",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Analista de Calidad (DPGC)",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Coordinador de Calidad de Facultad"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Responsable de Calidad de Programa"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Miembro de Comité de Calidad"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Dueño de Proceso"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Data Steward"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Auditor Interno"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Rectorado/VR (lectura)"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Responsable de Sede"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Decano/Director (lectura)"
+  },
+  {
+   "create": 1,
    "email": 1,
    "export": 1,
    "print": 1,
    "read": 1,
-   "report": 1,
    "role": "System Manager",
    "share": 1,
    "write": 1
@@ -115,10 +171,10 @@
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
+ "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
  "title_field": "nombre",
- "show_title_field_in_link": 1,
  "track_changes": 1
 }

@@ -1,0 +1,1 @@
+<p>El Informe de Cumplimiento <b>{{ doc.name }}</b> del año <b>{{ doc.anio }}</b> fue <b>Presentado a SUNEDU</b>{% if doc.fecha_presentacion %} el {{ doc.fecha_presentacion }}{% endif %}.</p><p>El acto formal externo ya se ejecutó; el ciclo del diagnóstico anual queda cerrado.</p>

@@ -3,7 +3,7 @@
 
 """Alta de institución en un comando (#49): `sgc.setup.alta_institucion`.
 
-El arranque común (los 29 pasos del despliegue, que confirman cada uno) y la escritura del
+El arranque común (los pasos del despliegue, que confirman cada uno) y la escritura del
 `site_config.json` se sustituyen por dobles: lo que se prueba aquí es el ORDEN, la validación
 previa y la parada en un paso que falla; cada paso real tiene sus propios tests. La estructura
 sí se importa de verdad, dentro de un savepoint que se deshace, sobre un sitio sin estructura.
@@ -161,11 +161,11 @@ class IntegrationTestAlta(_Base):
 
     def test_un_paso_que_falla_detiene_el_alta_y_lo_nombra(self):
         def _falla():
-            raise alta.PasoFallido("arranque común, paso f3b_rbac: fallo simulado")
+            raise alta.PasoFallido("arranque común, paso f3b_sso: fallo simulado")
 
         with self._entorno(arranque=_falla), self.assertRaises(alta.PasoFallido) as e:
             alta.alta(self._escribir_perfil(_perfil()))
-        self.assertIn("f3b_rbac", str(e.exception))
+        self.assertIn("f3b_sso", str(e.exception))
         self.assertEqual(frappe.db.count("Unidad Organica"), 0)  # la estructura no llegó a importarse
 
     def test_el_comando_termina_con_codigo_1_si_no_puede_empezar(self):
@@ -176,10 +176,10 @@ class IntegrationTestAlta(_Base):
 
     def test_el_comando_dice_en_que_paso_se_detuvo(self):
         def _falla():
-            raise alta.PasoFallido("arranque común, paso f5_workflow_documental: fallo simulado")
+            raise alta.PasoFallido("arranque común, paso marcos_normativos: fallo simulado")
 
         with self._entorno(arranque=_falla) as salida, self.assertRaises(SystemExit) as fin:
             alta.run(self._escribir_perfil(_perfil()))
         self.assertEqual(fin.exception.code, 1)
-        self.assertIn("DETENIDA en arranque común, paso f5_workflow_documental", salida.getvalue())
+        self.assertIn("DETENIDA en arranque común, paso marcos_normativos", salida.getvalue())
         self.assertNotIn(ENTORNO["SGC_PRUEBA_SECRETO"], salida.getvalue())

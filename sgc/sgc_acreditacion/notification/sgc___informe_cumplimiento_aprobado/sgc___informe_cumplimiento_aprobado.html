@@ -1,0 +1,1 @@
+<p>El Informe de Cumplimiento <b>{{ doc.name }}</b> del año <b>{{ doc.anio }}</b> fue <b>Aprobado</b>.</p><p>Semáforo: {{ doc.semaforo }}. Ya puede presentarse a SUNEDU.</p>

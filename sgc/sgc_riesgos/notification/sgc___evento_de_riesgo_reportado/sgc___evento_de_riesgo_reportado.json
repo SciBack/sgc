@@ -1,0 +1,32 @@
+{
+ "attach_files": "",
+ "attach_print": 0,
+ "channel": "Email",
+ "condition_type": "Python",
+ "creation": "2026-09-27 14:19:43.766056",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Evento Riesgo",
+ "enabled": 1,
+ "event": "New",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "<p>Se reportó el evento de riesgo <b>{{ doc.name }}</b> — {{ doc.titulo }} ({{ frappe.utils.formatdate(doc.fecha_evento) }}).</p><p>Tómelo en evaluación y decida si se confirma, lo que abre la no conformidad para analizar sus causas y definir el plan de acción, o se descarta.</p><p><a href=\"{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}\">Abrir en el SGC</a></p>",
+ "message_type": "HTML",
+ "minutes_offset": 0,
+ "modified": "2026-10-14 13:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Riesgos",
+ "name": "SGC - Evento de riesgo reportado",
+ "notification_type": "Alert",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_role": "DPGC"
+  }
+ ],
+ "send_system_notification": 1,
+ "send_to_all_assignees": 0,
+ "subject": "Evento de riesgo reportado: {{ doc.titulo }}"
+}

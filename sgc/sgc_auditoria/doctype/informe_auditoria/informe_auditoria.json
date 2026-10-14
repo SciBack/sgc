@@ -48,12 +48,12 @@
    "reqd": 1
   },
   {
+   "default": "Borrador",
    "fieldname": "estado",
    "fieldtype": "Select",
-   "label": "Estado",
-   "default": "Borrador",
    "in_list_view": 1,
    "in_standard_filter": 1,
+   "label": "Estado",
    "options": "Borrador\nEn revision\nAprobado\nDistribuido"
   },
   {
@@ -94,12 +94,12 @@
    "read_only": 1
   },
   {
+   "description": "Lo sella el sistema al enviar el informe a revisi\u00f3n.",
    "fieldname": "emitido_por",
    "fieldtype": "Link",
    "label": "Emitido por",
    "options": "User",
-   "read_only": 1,
-   "description": "Lo sella el sistema al enviar el informe a revisi\u00f3n."
+   "read_only": 1
   },
   {
    "fieldname": "pdf",
@@ -119,18 +119,18 @@
    "label": "Revisi\u00f3n y aprobaci\u00f3n (ISO 19011 \u00a76.5)"
   },
   {
+   "description": "Obligatorias al devolver el informe a borrador: qu\u00e9 hay que corregir.",
    "fieldname": "observaciones_revision",
    "fieldtype": "Small Text",
-   "label": "Observaciones de la revisi\u00f3n",
-   "description": "Obligatorias al devolver el informe a borrador: qu\u00e9 hay que corregir."
+   "label": "Observaciones de la revisi\u00f3n"
   },
   {
+   "description": "Lo sella el sistema al aprobar. No puede ser quien lo emiti\u00f3 ni del equipo auditor.",
    "fieldname": "aprobado_por",
    "fieldtype": "Link",
    "label": "Aprobado por",
    "options": "User",
-   "read_only": 1,
-   "description": "Lo sella el sistema al aprobar. No puede ser quien lo emiti\u00f3 ni del equipo auditor."
+   "read_only": 1
   },
   {
    "fieldname": "fecha_aprobacion",
@@ -143,10 +143,10 @@
    "fieldtype": "Column Break"
   },
   {
+   "description": "A qui\u00e9n se distribuye el informe (ISO 19011 \u00a76.5.2). Obligatorio para distribuir.",
    "fieldname": "destinatarios",
    "fieldtype": "Small Text",
-   "label": "Destinatarios",
-   "description": "A qui\u00e9n se distribuye el informe (ISO 19011 \u00a76.5.2). Obligatorio para distribuir."
+   "label": "Destinatarios"
   },
   {
    "fieldname": "distribuido_por",
@@ -162,33 +162,88 @@
    "read_only": 1
   },
   {
+   "description": "Acciones de mejora de las no conformidades que salieron de esta auditor\u00eda.",
    "fieldname": "n_acciones_mejora",
    "fieldtype": "Int",
    "label": "N.\u00ba acciones de mejora",
-   "read_only": 1,
-   "description": "Acciones de mejora de las no conformidades que salieron de esta auditor\u00eda."
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-27 17:00:00.000000",
+ "modified": "2026-10-13 19:41:00.491313",
  "modified_by": "Administrator",
  "module": "SGC Auditoria",
  "name": "Informe Auditoria",
  "owner": "Administrator",
  "permissions": [
   {
+   "export": 1,
+   "read": 1,
+   "role": "DPGC",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Analista de Calidad (DPGC)",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Coordinador de Calidad de Facultad"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Responsable de Calidad de Programa"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Miembro de Comit\u00e9 de Calidad"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Due\u00f1o de Proceso"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Data Steward"
+  },
+  {
    "create": 1,
-   "delete": 1,
+   "export": 1,
+   "read": 1,
+   "role": "Auditor Interno",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Rectorado/VR (lectura)"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Responsable de Sede"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Decano/Director (lectura)"
+  },
+  {
    "email": 1,
    "export": 1,
    "print": 1,
    "read": 1,
-   "report": 1,
    "role": "System Manager",
-   "share": 1,
-   "write": 1
+   "share": 1
   }
  ],
  "row_format": "Dynamic",

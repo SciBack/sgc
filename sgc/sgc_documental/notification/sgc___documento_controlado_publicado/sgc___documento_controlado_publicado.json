@@ -1,0 +1,50 @@
+{
+ "attach_files": "From Field",
+ "attach_print": 0,
+ "channel": "Email",
+ "condition": "doc.estado == \"Publicado\"",
+ "condition_type": "Python",
+ "creation": "2026-09-24 07:30:03.360055",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Documento Controlado",
+ "enabled": 1,
+ "event": "Value Change",
+ "from_attach_field": "archivo",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "<p>Se publicó el documento controlado <b>{{ doc.name }}</b> — {{ doc.titulo }}{% if doc.version %}, versión {{ doc.version }}{% endif %}.</p><p>Desde hoy es la versión vigente. {% if doc.solo_consulta %}Es de solo consulta: se lee en el SGC y no va adjunto.{% elif doc.archivo %}Va adjunto.{% endif %}</p>{% if doc.url_externa %}<p>Documento externo: <a href=\"{{ doc.url_externa }}\">{{ doc.url_externa }}</a></p>{% endif %}<p><a href=\"{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}\">Abrir en el SGC</a></p>",
+ "message_type": "HTML",
+ "minutes_offset": 0,
+ "modified": "2026-10-14 13:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Documental",
+ "name": "SGC - Documento Controlado publicado",
+ "notification_type": "Alert",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_document_field": "elaborado_por"
+  },
+  {
+   "receiver_by_document_field": "revisado_por"
+  },
+  {
+   "receiver_by_document_field": "aprobado_por"
+  },
+  {
+   "receiver_by_role": "DPGC"
+  },
+  {
+   "receiver_by_document_field": "dueno_proceso"
+  },
+  {
+   "receiver_by_document_field": "usuario,difundir_a"
+  }
+ ],
+ "send_system_notification": 1,
+ "send_to_all_assignees": 0,
+ "subject": "Documento publicado: {{ doc.name }} — {{ doc.titulo }}",
+ "value_changed": "estado"
+}

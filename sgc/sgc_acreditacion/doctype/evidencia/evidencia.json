@@ -39,7 +39,7 @@
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "C\u00f3digo",
+   "label": "Código",
    "reqd": 1,
    "unique": 1
   },
@@ -47,13 +47,13 @@
    "fieldname": "titulo",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "T\u00edtulo",
+   "label": "Título",
    "reqd": 1
   },
   {
    "fieldname": "descripcion",
    "fieldtype": "Text",
-   "label": "Descripci\u00f3n"
+   "label": "Descripción"
   },
   {
    "default": "Documento",
@@ -81,7 +81,7 @@
   {
    "fieldname": "sec_clasificacion",
    "fieldtype": "Section Break",
-   "label": "Clasificaci\u00f3n"
+   "label": "Clasificación"
   },
   {
    "fieldname": "documento_controlado",
@@ -100,23 +100,23 @@
    "fieldname": "periodo_academico",
    "fieldtype": "Link",
    "in_standard_filter": 1,
-   "label": "Periodo acad\u00e9mico",
+   "label": "Periodo académico",
    "options": "Periodo Academico"
   },
   {
    "fieldname": "unidad_organica",
    "fieldtype": "Link",
-   "label": "Unidad org\u00e1nica",
+   "label": "Unidad orgánica",
    "options": "Unidad Organica"
   },
   {
+   "description": "Tema del tesauro institucional que clasifica la evidencia (lenguaje controlado, VocBench).",
    "fieldname": "tema",
    "fieldtype": "Link",
+   "in_standard_filter": 1,
    "label": "Tema",
-   "options": "Termino Tesauro",
    "link_filters": "[[\"Termino Tesauro\",\"esquema\",\"=\",\"Temas\"]]",
-   "description": "Tema del tesauro institucional que clasifica la evidencia (lenguaje controlado, VocBench).",
-   "in_standard_filter": 1
+   "options": "Termino Tesauro"
   },
   {
    "fieldname": "col_clasificacion",
@@ -156,7 +156,7 @@
   {
    "fieldname": "tamano",
    "fieldtype": "Int",
-   "label": "Tama\u00f1o (bytes)",
+   "label": "Tamaño (bytes)",
    "read_only": 1
   },
   {
@@ -182,7 +182,7 @@
    "collapsible": 1,
    "fieldname": "sec_legado",
    "fieldtype": "Section Break",
-   "label": "Legado \u2014 solo lectura"
+   "label": "Legado — solo lectura"
   },
   {
    "description": "Campo legado (puntero a MinIO). El archivo ahora vive en el campo Archivo.",
@@ -215,7 +215,7 @@
    "link_fieldname": "evidencia"
   }
  ],
- "modified": "2026-10-12 20:28:02.000000",
+ "modified": "2026-10-14 13:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Evidencia",
@@ -223,24 +223,86 @@
  "permissions": [
   {
    "create": 1,
-   "delete": 1,
+   "export": 1,
+   "read": 1,
+   "role": "DPGC",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "role": "Analista de Calidad (DPGC)",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Coordinador de Calidad de Facultad",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "role": "Responsable de Calidad de Programa",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "role": "Miembro de Comité de Calidad",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "role": "Dueño de Proceso",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Data Steward"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Auditor Interno"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Rectorado/VR (lectura)"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Responsable de Sede"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Decano/Director (lectura)"
+  },
+  {
    "email": 1,
    "export": 1,
    "print": 1,
    "read": 1,
-   "report": 1,
    "role": "System Manager",
-   "share": 1,
-   "write": 1
+   "share": 1
   }
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
  "search_fields": "titulo,codigo",
+ "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
  "title_field": "titulo",
- "show_title_field_in_link": 1,
  "track_changes": 1
 }

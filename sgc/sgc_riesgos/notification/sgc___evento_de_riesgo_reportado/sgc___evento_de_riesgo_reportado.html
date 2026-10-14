@@ -1,0 +1,1 @@
+<p>Se reportó el evento de riesgo <b>{{ doc.name }}</b> — {{ doc.titulo }} ({{ frappe.utils.formatdate(doc.fecha_evento) }}).</p><p>Tómelo en evaluación y decida si se confirma, lo que abre la no conformidad para analizar sus causas y definir el plan de acción, o se descarta.</p><p><a href="{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}">Abrir en el SGC</a></p>

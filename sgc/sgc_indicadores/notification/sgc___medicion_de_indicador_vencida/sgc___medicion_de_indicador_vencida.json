@@ -1,0 +1,36 @@
+{
+ "attach_files": "",
+ "attach_print": 0,
+ "channel": "Email",
+ "condition_type": "Python",
+ "creation": "2026-09-27 16:08:07.681943",
+ "date_changed": "proxima_medicion",
+ "days_in_advance": 1,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Ficha Indicador",
+ "enabled": 1,
+ "event": "Days After",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "<p>La medición del indicador <b>{{ doc.indicador or doc.name }}</b> estaba prevista para el <b>{{ doc.proxima_medicion }}</b> y no se ha registrado.</p><p>Registre el valor del periodo o explique el retraso.</p>",
+ "message_type": "HTML",
+ "minutes_offset": 0,
+ "modified": "2026-10-14 13:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Indicadores",
+ "name": "SGC - Medicion de indicador vencida",
+ "notification_type": "Alert",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_document_field": "responsable"
+  },
+  {
+   "receiver_by_role": "DPGC"
+  }
+ ],
+ "send_system_notification": 1,
+ "send_to_all_assignees": 0,
+ "subject": "Medición vencida: {{ doc.indicador or doc.name }} (prevista el {{ doc.proxima_medicion }})"
+}

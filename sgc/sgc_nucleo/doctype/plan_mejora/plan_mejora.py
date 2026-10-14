@@ -6,7 +6,7 @@ ISO 9001:2015 §10.2 exige, ante una no conformidad, evaluar la necesidad de
 acciones, implementarlas y **revisar la eficacia** de las tomadas. El plan es el
 contenedor de esas acciones y de sus compromisos de fecha; su ciclo de vida lo
 gobierna el Select `estado` (Borrador -> En ejecucion -> Cerrado, workflow
-"Plan de Mejora SGC" de f4_workflow_mejora).
+"Plan de Mejora SGC", en sgc/fixtures/workflow.json).
 
 Las dos transiciones que este controlador vigila son las dos que el diagrama
 marca como control (`autoaprobacion=0`): aprobar y cerrar. Ambas dejan firma

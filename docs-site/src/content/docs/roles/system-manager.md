@@ -38,4 +38,4 @@ No sustituye roles funcionales en decisiones de calidad; varios DocTypes se mant
 
 ## Fuente verificable
 
-Catálogo y matriz RBAC en sgc/setup/f3b_rbac.py; las transiciones específicas se detallan en las páginas de [flujos](../../flujos/).
+Catálogo de roles en `sgc/fixtures/role.json` y permisos en el JSON de cada DocType; las transiciones específicas se detallan en las páginas de [flujos](../../flujos/).

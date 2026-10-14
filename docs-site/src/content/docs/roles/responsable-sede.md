@@ -36,4 +36,4 @@ El catálogo de código marca el alcance como parcial y menciona un ajuste pendi
 
 ## Fuente verificable
 
-Catálogo y matriz RBAC en sgc/setup/f3b_rbac.py; las transiciones específicas se detallan en las páginas de [flujos](../../flujos/).
+Catálogo de roles en `sgc/fixtures/role.json` y permisos en el JSON de cada DocType; las transiciones específicas se detallan en las páginas de [flujos](../../flujos/).

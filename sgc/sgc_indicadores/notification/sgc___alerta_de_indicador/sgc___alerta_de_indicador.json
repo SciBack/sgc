@@ -1,0 +1,37 @@
+{
+ "attach_files": "",
+ "attach_print": 0,
+ "channel": "Email",
+ "condition": "doc.estado == \"Abierta\"",
+ "condition_type": "Python",
+ "creation": "2026-09-27 16:08:08.330148",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Alerta Indicador",
+ "enabled": 1,
+ "event": "New",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "<p><b>{{ doc.tipo }}</b> en el indicador <b>{{ doc.indicador }}</b>{% if doc.periodo_academico %}, periodo {{ doc.periodo_academico }}{% endif %}.</p>{% if doc.meta is not none and doc.valor_medido is not none %}<p>Valor medido: {{ doc.valor_medido }} · meta: {{ doc.meta }}.</p>{% endif %}{% if doc.mensaje %}<p>{{ doc.mensaje }}</p>{% endif %}<p><a href=\"{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}\">Abrir en el SGC</a></p>",
+ "message_type": "HTML",
+ "minutes_offset": 0,
+ "modified": "2026-10-14 13:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Indicadores",
+ "name": "SGC - Alerta de indicador",
+ "notification_type": "Alert",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_document_field": "responsable"
+  },
+  {
+   "condition": "not doc.responsable",
+   "receiver_by_role": "DPGC"
+  }
+ ],
+ "send_system_notification": 1,
+ "send_to_all_assignees": 0,
+ "subject": "Alerta de indicador ({{ doc.severidad }}): {{ doc.tipo }} — {{ doc.indicador }}"
+}

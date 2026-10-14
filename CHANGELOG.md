@@ -4,10 +4,35 @@ Qué cambia en cada versión del SGC **para quien lo usa y para quien lo adminis
 El criterio de numeración está en [`docs/desarrollo/versionado.md`](docs/desarrollo/versionado.md).
 
 Cada entrada dice si la versión **requiere migrar** (`bench --site <sitio> migrate`). En este
-producto la respuesta casi siempre es sí: el despliegue aplica permisos, flujos y avisos en cada
-migración, y saltársela deja la instancia a medias aunque el sitio responda.
+producto la respuesta casi siempre es sí: Frappe aplica en la migración los permisos, flujos y
+avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio responda.
 
 ## [Sin publicar]
+
+## [1.2.0] - 2026-10-14
+
+**Requiere migrar:** sí. Sin cambios en los datos de calidad ni en lo que cada persona puede
+hacer: los permisos efectivos quedan iguales.
+
+### Cambiado
+- Termina el paso a lo nativo de Frappe que empezó la 1.1.0. Lo que antes creaban 29 pasos en
+  cada despliegue ahora son documentos estándar de la app, que el `migrate` de Frappe sincroniza:
+  - los **permisos** van en cada DocType, en lugar de reescribirse como personalizados;
+  - los **roles**, sus perfiles y los **18 flujos de aprobación** (con sus estados y acciones)
+    son fixtures;
+  - los **20 avisos** y los **5 formatos de impresión** son ficheros estándar de cada módulo.
+- Los formatos de impresión leen el nombre y el logotipo de la institución al imprimir, desde
+  su `site_config`; cambiar la identidad ya no exige volver a desplegar.
+- El despliegue solo ejecuta lo que depende de cada institución: marcos normativos, identidad,
+  inicio de sesión institucional y la recolocación de indicadores mal etiquetados por el
+  conector externo. Instalar una instancia nueva tarda segundos.
+
+### Para quien administra
+- La migración quita los permisos personalizados que coinciden con los estándar. Si una
+  institución cambió permisos a mano (Role Permission Manager), se conservan y la migración lo
+  avisa.
+- Un cambio hecho a mano en un rol, flujo, aviso o formato del SGC se sustituye en la siguiente
+  migración por lo que trae la app, como ya pasaba antes.
 
 ## [1.1.0] - 2026-10-13
 

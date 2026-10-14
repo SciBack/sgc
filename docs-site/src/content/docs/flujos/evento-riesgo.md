@@ -75,4 +75,4 @@ Los avisos (a la DPGC al reportarse y a quien reportó al decidirse) salen segú
 
 ## Fuente en código
 
-`sgc/sgc_riesgos/doctype/evento_riesgo/` (controlador y formulario), `sgc/setup/f25_workflow_evento_riesgo.py` (workflow), `COLABORADORES` en `sgc/setup/f3b_rbac.py` (permiso del colaborador) y las reglas «SGC - Evento de riesgo …» en `sgc/setup/f15_notificaciones_workflow.py`.
+`sgc/sgc_riesgos/doctype/evento_riesgo/` (controlador y formulario), el workflow «Evento Riesgo SGC» en `sgc/fixtures/workflow.json`, el permiso del colaborador en el JSON del DocType y las reglas «SGC - Evento de riesgo …» en `sgc/setup/f15_notificaciones_workflow.py`.

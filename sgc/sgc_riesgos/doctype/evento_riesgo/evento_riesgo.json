@@ -32,42 +32,42 @@
  ],
  "fields": [
   {
+   "description": "En una línea. Ej.: «Caída del servidor de matrícula durante el primer día».",
    "fieldname": "titulo",
    "fieldtype": "Data",
-   "label": "Qué pasó",
-   "reqd": 1,
    "in_list_view": 1,
-   "description": "En una línea. Ej.: «Caída del servidor de matrícula durante el primer día»."
+   "label": "Qué pasó",
+   "reqd": 1
   },
   {
+   "default": "Today",
    "fieldname": "fecha_evento",
    "fieldtype": "Date",
+   "in_list_view": 1,
    "label": "Fecha del evento",
-   "reqd": 1,
-   "default": "Today",
-   "in_list_view": 1
+   "reqd": 1
   },
   {
    "fieldname": "column_break_reporte",
    "fieldtype": "Column Break"
   },
   {
+   "default": "Reportado",
    "fieldname": "estado",
    "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Estado",
    "options": "Reportado\nEn evaluacion\nConfirmado\nDescartado",
-   "default": "Reportado",
-   "read_only": 1,
-   "in_list_view": 1,
-   "in_standard_filter": 1
+   "read_only": 1
   },
   {
    "fieldname": "reportado_por",
    "fieldtype": "Link",
+   "in_standard_filter": 1,
    "label": "Reportado por",
    "options": "User",
-   "read_only": 1,
-   "in_standard_filter": 1
+   "read_only": 1
   },
   {
    "fieldname": "fecha_reporte",
@@ -81,12 +81,12 @@
    "label": "Dónde ocurrió"
   },
   {
+   "description": "El proceso del mapa en el que ocurrió, si lo sabe.",
    "fieldname": "proceso",
    "fieldtype": "Link",
-   "label": "Proceso",
-   "options": "Proceso",
    "in_standard_filter": 1,
-   "description": "El proceso del mapa en el que ocurrió, si lo sabe."
+   "label": "Proceso",
+   "options": "Proceso"
   },
   {
    "fieldname": "column_break_ambito",
@@ -104,11 +104,11 @@
    "label": "Descripción del evento"
   },
   {
+   "description": "Los hechos: qué pasó, cuándo y a quién afectó.",
    "fieldname": "descripcion",
    "fieldtype": "Text",
    "label": "Qué ocurrió",
-   "reqd": 1,
-   "description": "Los hechos: qué pasó, cuándo y a quién afectó."
+   "reqd": 1
   },
   {
    "fieldname": "consecuencias",
@@ -116,10 +116,10 @@
    "label": "Consecuencias observadas"
   },
   {
+   "description": "Lo que ya se hizo para contener el efecto, si se hizo algo.",
    "fieldname": "acciones_inmediatas",
    "fieldtype": "Small Text",
-   "label": "Acciones inmediatas",
-   "description": "Lo que ya se hizo para contener el efecto, si se hizo algo."
+   "label": "Acciones inmediatas"
   },
   {
    "fieldname": "evidencia",
@@ -127,31 +127,31 @@
    "label": "Evidencia"
   },
   {
+   "depends_on": "eval:doc.estado != 'Reportado'",
    "fieldname": "section_break_evaluacion",
    "fieldtype": "Section Break",
-   "label": "Evaluación de Calidad",
-   "depends_on": "eval:doc.estado != 'Reportado'"
+   "label": "Evaluación de Calidad"
   },
   {
+   "description": "Lo asigna Calidad al evaluar el evento. Si el proceso quedó vacío, se toma el del riesgo.",
    "fieldname": "riesgo",
    "fieldtype": "Link",
    "label": "Riesgo del registro",
-   "options": "Riesgo",
-   "description": "Lo asigna Calidad al evaluar el evento. Si el proceso quedó vacío, se toma el del riesgo."
+   "options": "Riesgo"
   },
   {
+   "default": "No conformidad mayor",
+   "description": "Con qué gravedad se abre la no conformidad al confirmar el evento.",
    "fieldname": "tipo_nc",
    "fieldtype": "Select",
    "label": "Tipo de no conformidad",
-   "options": "No conformidad mayor\nNo conformidad menor",
-   "default": "No conformidad mayor",
-   "description": "Con qué gravedad se abre la no conformidad al confirmar el evento."
+   "options": "No conformidad mayor\nNo conformidad menor"
   },
   {
+   "description": "Obligatorio para descartar: quien reportó lo recibe.",
    "fieldname": "motivo_descarte",
    "fieldtype": "Small Text",
-   "label": "Motivo del descarte",
-   "description": "Obligatorio para descartar: quien reportó lo recibe."
+   "label": "Motivo del descarte"
   },
   {
    "fieldname": "column_break_evaluacion",
@@ -171,17 +171,17 @@
    "read_only": 1
   },
   {
+   "description": "Donde se hace el análisis de causas y el plan de acción.",
    "fieldname": "no_conformidad",
    "fieldtype": "Link",
    "label": "No conformidad",
    "options": "No Conformidad",
-   "read_only": 1,
-   "description": "Donde se hace el análisis de causas y el plan de acción."
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-09-27 15:00:00.000000",
+ "modified": "2026-10-13 19:40:59.555135",
  "modified_by": "Administrator",
  "module": "SGC Riesgos",
  "name": "Evento Riesgo",
@@ -190,14 +190,44 @@
  "permissions": [
   {
    "create": 1,
-   "delete": 1,
-   "email": 1,
    "export": 1,
-   "print": 1,
    "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
+   "role": "DPGC",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "role": "Analista de Calidad (DPGC)",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Dueño de Proceso"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Auditor Interno"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Rectorado/VR (lectura)"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "System Manager"
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "if_owner": 1,
+   "read": 1,
+   "role": "Desk User",
    "write": 1
   }
  ],

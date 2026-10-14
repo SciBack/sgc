@@ -1,0 +1,1 @@
+<p>La medición del indicador <b>{{ doc.indicador or doc.name }}</b> estaba prevista para el <b>{{ doc.proxima_medicion }}</b> y no se ha registrado.</p><p>Registre el valor del periodo o explique el retraso.</p>

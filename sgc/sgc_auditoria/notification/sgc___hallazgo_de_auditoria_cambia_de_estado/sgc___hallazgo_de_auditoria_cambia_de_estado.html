@@ -1,0 +1,1 @@
+{% set que_hacer = {"Escalado a NC": "Se escaló a una no conformidad: gestiónela desde allí."} %}<p>El hallazgo de auditoría <b>{{ doc.name }}</b> pasó al estado <b>{{ doc.estado }}</b>.</p>{% if que_hacer.get(doc.estado) %}<p>{{ que_hacer.get(doc.estado) }}</p>{% endif %}<p><a href="{{ frappe.utils.get_url_to_form(doc.doctype, doc.name) }}">Abrir en el SGC</a></p>

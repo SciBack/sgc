@@ -22,7 +22,8 @@
   "vigencia_propuesta",
   "avance_pct",
   "seccion_snapshot",
-  "marco_snapshot"
+  "marco_snapshot",
+  "amended_from"
  ],
  "fields": [
   {
@@ -124,44 +125,108 @@
    "label": "Snapshot del marco (al cerrar)"
   },
   {
-   "description": "Copia inmutable del árbol del marco normativo (elementos + niveles de escala) tomada justo antes del submit (paso a docstatus=1, estado \"Cerrada\"). El motor de scoring (sgc.scoring) la usa en vez de consultar Elemento Marco en vivo, para que el resultado calculado no cambie si el marco se edita después del cierre. La escribe `Autoevaluacion.before_submit`.",
+   "description": "Copia inmutable del \u00e1rbol del marco normativo (elementos + niveles de escala) tomada justo antes del submit (paso a docstatus=1, estado \"Cerrada\"). El motor de scoring (sgc.scoring) la usa en vez de consultar Elemento Marco en vivo, para que el resultado calculado no cambie si el marco se edita despu\u00e9s del cierre. La escribe `Autoevaluacion.before_submit`.",
    "fieldname": "marco_snapshot",
    "fieldtype": "JSON",
    "label": "Snapshot del marco (al cerrar)",
    "no_copy": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Autoevaluacion",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-10-12 20:28:02.000000",
+ "modified": "2026-10-13 19:40:58.652559",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Autoevaluacion",
  "owner": "Administrator",
  "permissions": [
   {
+   "cancel": 1,
    "create": 1,
-   "delete": 1,
+   "export": 1,
+   "read": 1,
+   "role": "DPGC",
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "role": "Analista de Calidad (DPGC)",
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "role": "Coordinador de Calidad de Facultad",
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "role": "Responsable de Calidad de Programa",
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Miembro de Comit\u00e9 de Calidad"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Auditor Interno"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Rectorado/VR (lectura)"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Responsable de Sede"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Decano/Director (lectura)"
+  },
+  {
    "email": 1,
    "export": 1,
    "print": 1,
    "read": 1,
-   "report": 1,
    "role": "System Manager",
-   "share": 1,
-   "write": 1
+   "share": 1
   }
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
  "search_fields": "titulo,marco_normativo,programa_sede",
+ "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
  "title_field": "titulo",
- "show_title_field_in_link": 1,
  "track_changes": 1
 }

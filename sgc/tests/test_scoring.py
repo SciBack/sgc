@@ -38,7 +38,7 @@ from sgc import scoring
 from sgc.tests import factories
 
 # Acciones del Workflow "Autoevaluacion SGC" en orden, hasta "Cerrada"
-# (ver sgc/setup/f2_workflow.py WF_AUTOEVAL["transitions"]). "Cerrada" mapea a
+# (ver el workflow «Autoevaluacion SGC» de sgc/fixtures/workflow.json). "Cerrada" mapea a
 # doc_status="1" -> la transición "Cerrar" dispara el submit nativo de Frappe.
 _CADENA_CIERRE = ("Iniciar evaluacion", "Enviar a revision", "Consolidar", "Cerrar")
 

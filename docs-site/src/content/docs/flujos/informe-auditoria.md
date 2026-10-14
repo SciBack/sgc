@@ -58,4 +58,4 @@ Auditoría (el informe consolida sus hallazgos y su cierre lo exige aprobado), h
 
 ## Fuente en código
 
-`sgc/sgc_auditoria/doctype/informe_auditoria/` (controlador) y `sgc/setup/f24_workflow_informe_auditoria.py` (workflow).
+`sgc/sgc_auditoria/doctype/informe_auditoria/` (controlador) y el workflow «Informe Auditoria SGC» en `sgc/fixtures/workflow.json`.

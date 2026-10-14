@@ -60,4 +60,4 @@ Los avisos de cambio de estado requieren scheduler y servidor de correo configur
 
 ## Fuente en código
 
-`sgc/setup/f16_workflow_hallazgo_auditoria.py` y el controlador `HallazgoAuditoria`. No se documentan estados adicionales a los definidos por el workflow actual.
+el workflow «Hallazgo Auditoria SGC» (`sgc/fixtures/workflow.json`) y el controlador `HallazgoAuditoria`. No se documentan estados adicionales a los definidos por el workflow actual.

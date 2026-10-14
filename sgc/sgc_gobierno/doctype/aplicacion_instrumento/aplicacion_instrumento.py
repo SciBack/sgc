@@ -8,7 +8,7 @@ ciclo de campo de la encuesta mediante el Select `estado`:
 
     Planificada -> En campo -> Cerrada
 
-y por eso lleva Workflow nativo (`sgc/setup/f9_workflow_encuestas.py`). Las
+y por eso lleva Workflow nativo («Aplicacion Instrumento SGC», `sgc/fixtures/workflow.json`). Las
 validaciones son INCREMENTALES por etapa (mismo patrón que No Conformidad, M05):
 cada estado exige, de forma acumulativa, lo que esa etapa requiere.
 

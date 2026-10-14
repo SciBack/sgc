@@ -59,7 +59,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-04 17:29:31.847114",
+ "modified": "2026-10-13 19:41:01.758662",
  "modified_by": "Administrator",
  "module": "SGC Estructura",
  "name": "Periodo Academico",
@@ -67,12 +67,67 @@
  "permissions": [
   {
    "create": 1,
-   "delete": 1,
+   "export": 1,
+   "read": 1,
+   "role": "DPGC",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Analista de Calidad (DPGC)"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Coordinador de Calidad de Facultad"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Responsable de Calidad de Programa"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Miembro de Comit\u00e9 de Calidad"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Due\u00f1o de Proceso"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Data Steward"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Auditor Interno"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Rectorado/VR (lectura)"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Responsable de Sede"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Decano/Director (lectura)"
+  },
+  {
+   "create": 1,
    "email": 1,
    "export": 1,
    "print": 1,
    "read": 1,
-   "report": 1,
    "role": "System Manager",
    "share": 1,
    "write": 1

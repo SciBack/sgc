@@ -1,34 +1,21 @@
 # Copyright (c) 2026, SciBack and Contributors
 # See license.txt
 
-"""Tests de `sgc.setup.f15_notificaciones_workflow` — notificaciones en
-transiciones REALES del workflow de Informe Cumplimiento (M17 fase 2).
+"""Avisos en las transiciones REALES del workflow de Informe Cumplimiento (M17 fase 2).
 
-Cubre que `run()`:
-- Crea las 2 `Notification` declarativas ("... aprobado" / "... presentado a
-  SUNEDU"), `event="Value Change"` sobre `estado`, canal Email con campana,
-  attach_print=0. Las reglas de los demás DocTypes las prueba
+Desde la 1.2.0 las reglas son Notification estándar (ficheros del módulo), no las crea f15:
+- Las 2 reglas («... aprobado» / «... presentado a SUNEDU»), `event="Value Change"` sobre
+  `estado`, canal Email con campana, attach_print=0. Las de los demás DocTypes las prueba
   `test_notificaciones_transicion.py`.
-- Es idempotente.
-- Dispara DE VERDAD al transicionar el doc vía `.save()` (Borrador -> En
-  revisión -> Aprobado -> Presentado a SUNEDU, la cadena real del workflow de
-  f11) -- crea una fila en `Notification Log` para el usuario con el rol
-  destinatario. Y NO dispara en un `save()` que no cambia `estado`.
-
-Gotcha (ver f7_notificaciones.py / f11_workflow_cumplimiento.py): sus `run()`
-dejan `frappe.flags.in_patch = True` sin resetear -- necesario para que el
-propio upsert de configuración no dispare notificaciones a medio construir.
-Si no se apaga antes de transicionar el doc de prueba, `Document.run_notifications()`
-hace no-op silencioso (ver `frappe.model.document.Document.run_notifications`)
-y el test "pasaría" sin haber probado nada. Por eso el setUp llama a `f15.run()`
-y EXPLÍCITAMENTE apaga el flag después, antes de cualquier `.save()` de prueba.
+- Disparan DE VERDAD al transicionar el doc vía `.save()` (Borrador -> En revisión -> Aprobado
+  -> Presentado a SUNEDU) y crean una fila en `Notification Log` para el usuario con el rol
+  destinatario. Y NO disparan en un `save()` que no cambia `estado`.
 """
 from unittest.mock import patch
 
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from sgc.setup import f15_notificaciones_workflow as f15
 from sgc.tests import factories
 
 PREFIJO = "TEST-M17W"
@@ -43,12 +30,7 @@ class IntegrationTestNotificacionesWorkflow(IntegrationTestCase):
         self._user_prev = frappe.session.user
         frappe.set_user("Administrator")
 
-        # Idempotente: deja las 2 Notification registradas aunque el site de
-        # test no haya pasado (todavía) por `bench migrate` (after_migrate).
-        f15.run()
-        # Ver docstring del módulo: f15.run() (como f7/f11) deja in_patch=True;
-        # apagarlo es lo que permite que las transiciones de abajo disparen
-        # la Notification de verdad en vez de un no-op silencioso.
+        # Con in_patch, Document.run_notifications() no hace nada: el test pasaría sin probar.
         frappe.flags.in_patch = False
 
         arbol = factories.crear_marco_prueba(
@@ -82,10 +64,8 @@ class IntegrationTestNotificacionesWorkflow(IntegrationTestCase):
         """Crea un Informe Cumplimiento con sus CBC evaluadas (Cumple), en
         Borrador -- listo para recorrer la cadena real del workflow.
 
-        `setUp()` llama `f15.run()`, que comitea (necesario en producción)
-        -- eso rompe el rollback automático de este test y deja el informe
-        permanentemente en BD. Sin este guard, una corrida posterior acumula
-        residuo del año que este test usa.
+        Si algo comitea durante el test, el informe queda en BD; sin este guard,
+        una corrida posterior acumularía residuo del año que este test usa.
 
         Se busca POR AÑO y no por un nombre construido a mano: el autoname
         lleva correlativo (`IAC-{anio}-{###}`) desde que un informe observado
@@ -123,9 +103,9 @@ class IntegrationTestNotificacionesWorkflow(IntegrationTestCase):
             },
         )
 
-    # ------------------------------------------------------------ run() declarativo
+    # ------------------------------------------------------------ las reglas
 
-    def test_run_crea_las_dos_reglas(self):
+    def test_las_dos_reglas_estan(self):
         notifs = frappe.get_all(
             "Notification",
             filters={"name": ["like", "SGC - Informe Cumplimiento%"]},
@@ -142,14 +122,6 @@ class IntegrationTestNotificacionesWorkflow(IntegrationTestCase):
             self.assertEqual(n["channel"], "Email")
             self.assertEqual(n["attach_print"], 0)
             self.assertEqual(n["enabled"], 1)
-
-    def test_run_es_idempotente(self):
-        f15.run()
-        frappe.flags.in_patch = False
-        notifs = frappe.get_all(
-            "Notification", filters={"name": ["like", "SGC - Informe Cumplimiento%"]}
-        )
-        self.assertEqual(len(notifs), 2)
 
     # ------------------------------------------------------------ dispara en transición real
 

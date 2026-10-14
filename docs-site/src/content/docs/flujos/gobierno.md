@@ -51,5 +51,5 @@ Correo de convocatoria requiere configuración SMTP/scheduler.
 
 ## Fuente en código
 
-sgc/setup/f1_gobierno.py. El comportamiento descrito debe revisarse de nuevo si estas fuentes cambian.
+los DocTypes del módulo de gobierno (`sgc/sgc_gobierno/doctype/`). El comportamiento descrito debe revisarse de nuevo si estas fuentes cambian.
 

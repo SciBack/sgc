@@ -144,5 +144,5 @@ SMTP, workers y scheduler son obligatorios; usar buzones de prueba.
 
 ## Fuente en código
 
-sgc/setup/f7_notificaciones.py, f15_notificaciones_workflow.py, sgc/correo.py (ensayo, lista blanca, correo de la campana y comprobación de destinatarios) y sgc/tareas.py (tareas del responsable). El comportamiento descrito debe revisarse de nuevo si estas fuentes cambian.
+los avisos estándar en `sgc/<módulo>/notification/`, sgc/correo.py (ensayo, lista blanca, correo de la campana y comprobación de destinatarios) y sgc/tareas.py (tareas del responsable). El comportamiento descrito debe revisarse de nuevo si estas fuentes cambian.
 

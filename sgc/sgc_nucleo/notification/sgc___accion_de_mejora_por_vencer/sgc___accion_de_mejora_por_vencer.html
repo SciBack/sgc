@@ -1,0 +1,1 @@
+<p>La acción de mejora <b>{{ doc.name }}</b> tiene fecha de compromiso (ETA) el <b>{{ doc.fecha_compromiso }}</b>.</p><p>Estado actual: {{ doc.estado }}. Ejecute o actualice la acción para no incumplir el plan de mejora.</p>

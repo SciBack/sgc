@@ -18,7 +18,7 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, today
 
-from sgc.setup.f3b_rbac import MATRIZ
+from sgc import estandar
 from sgc.tests import factories
 from sgc.verificacion import AVISO, BLOQUEANTE, INFO, despliegue, run, verificar
 
@@ -132,22 +132,25 @@ class IntegrationTestProcesos(_ConSavepoint):
 class IntegrationTestDespliegue(_ConSavepoint):
     def _quitar_permisos(self, doctypes):
         for dt in doctypes:
-            frappe.db.delete("Custom DocPerm", {"parent": dt, "role": ["in", list(MATRIZ[dt])]})
+            roles = [p["role"] for p in estandar.permisos()[dt]]
+            frappe.db.delete("Custom DocPerm", {"parent": dt, "role": ["in", roles]})
+            frappe.db.delete("DocPerm", {"parent": dt, "role": ["in", roles]})
 
     def test_con_la_matriz_aplicada_no_hay_hallazgos(self):
         self.assertEqual(self._codigos("permisos_aplicados"), set())
 
     def test_sin_ningun_permiso_del_sgc_es_bloqueante(self):
-        self._quitar_permisos([dt for dt in MATRIZ if frappe.db.exists("DocType", dt)])
+        self._quitar_permisos([dt for dt in estandar.permisos() if frappe.db.exists("DocType", dt)])
         self.assertEqual(self._hallazgos("permisos_aplicados")["rbac-no-aplicado"].nivel, BLOQUEANTE)
 
     def test_un_doctype_sin_permisos_se_nombra(self):
         self._quitar_permisos(["Proceso"])
         h = self._hallazgos("permisos_aplicados")["rbac-incompleto"]
-        self.assertEqual((h.nivel, h.detalle), (AVISO, ["Proceso"]))
+        self.assertEqual(h.nivel, AVISO)
+        self.assertEqual([linea.split(":")[0] for linea in h.detalle], ["Proceso"])
 
-    def test_los_workflows_se_leen_de_los_pasos_del_despliegue(self):
-        nombres = {s["name"] for s in despliegue._workflows_declarados()}
+    def test_los_workflows_se_leen_del_fixture(self):
+        nombres = set(estandar.workflows())
         self.assertIn("Autoevaluacion SGC", nombres)
         self.assertGreaterEqual(len(nombres), 15)
 
@@ -161,7 +164,7 @@ class IntegrationTestDespliegue(_ConSavepoint):
         self.assertTrue(any(linea.startswith("Autoevaluacion SGC") for linea in h.detalle))
 
     def test_sin_ningun_workflow_es_bloqueante(self):
-        frappe.db.delete("Workflow", {"name": ["in", [s["name"] for s in despliegue._workflows_declarados()]]})
+        frappe.db.delete("Workflow", {"name": ["in", list(estandar.workflows())]})
         self.assertEqual(self._hallazgos("workflows_aplicados")["workflows-no-aplicados"].nivel, BLOQUEANTE)
 
 

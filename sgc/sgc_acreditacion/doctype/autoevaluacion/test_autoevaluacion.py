@@ -3,7 +3,7 @@
 """Submit nativo (is_submittable) + captura del marco_snapshot al Cerrar.
 
 `Autoevaluacion` tiene Workflow ACTIVO ("Autoevaluacion SGC", ver
-`sgc/setup/f2_workflow.py`) y su estado final "Cerrada" mapea a
+el workflow «Autoevaluacion SGC», `sgc/fixtures/workflow.json`) y su estado final "Cerrada" mapea a
 `doc_status="1"` -- la transición "Cerrar" dispara el submit NATIVO de Frappe
 (docstatus 0->1) vía `frappe.model.workflow.apply_workflow`. Estos tests
 recorren la cadena REAL de transiciones (NO `desactivar_workflow` -- eso
@@ -24,7 +24,7 @@ EXTRA_TEST_RECORD_DEPENDENCIES = []  # eg. ["User"]
 IGNORE_TEST_RECORD_DEPENDENCIES = []  # eg. ["User"]
 
 # Acciones del Workflow "Autoevaluacion SGC" en orden, hasta "Cerrada"
-# (ver sgc/setup/f2_workflow.py WF_AUTOEVAL["transitions"]).
+# (ver el workflow «Autoevaluacion SGC» de sgc/fixtures/workflow.json).
 _CADENA_CIERRE = ("Iniciar evaluacion", "Enviar a revision", "Consolidar", "Cerrar")
 
 
