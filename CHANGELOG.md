@@ -9,6 +9,16 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.1] - 2026-10-15
+
+**Requiere migrar:** sí (menú y Elemento Marco). Sin cambios en los datos.
+
+### Añadido
+- Menú de Acreditación: **«Condiciones básicas de calidad (CBC)»**, la lista de las condiciones
+  del marco de licenciamiento con su unidad responsable. Desde cada condición, «Estructura» en
+  Conexiones baja a sus componentes y de ahí a sus indicadores.
+- La lista de elementos de un marco muestra la unidad responsable.
+
 ## [1.7.0] - 2026-10-14
 
 **Requiere migrar:** sí. Campos nuevos en Elemento Marco y un informe nuevo. El marco del IAC se
