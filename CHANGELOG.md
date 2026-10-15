@@ -18,6 +18,10 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
   del marco de licenciamiento con su unidad responsable. Desde cada condición, «Estructura» en
   Conexiones baja a sus componentes y de ahí a sus indicadores.
 - La lista de elementos de un marco muestra la unidad responsable.
+- Manual: **«Manual del módulo de Procesos»** (entrar, mapa, crear y editar, procedimientos y BPMN,
+  ficha de caracterización, bitácora, portal) y **«Manual de Acreditación y Licenciamiento»**
+  (CBC con responsables, preparación del IAC/MIAC, autoevaluación, evidencias). Autoevaluación y
+  primeros pasos explican las valoraciones que se crean solas al iniciar.
 
 ## [1.7.0] - 2026-10-14
 
