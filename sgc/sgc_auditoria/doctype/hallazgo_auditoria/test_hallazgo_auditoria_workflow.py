@@ -95,7 +95,7 @@ class IntegrationTestHallazgoAuditoriaWorkflow(IntegrationTestCase):
         reasignar `estado` con un `save()` a secas —eso vale para los 15
         workflows del sistema, no solo para este—; lo que impide es ejecutar la
         transición sin el rol. La regla «no se edita el estado directamente para
-        saltar el workflow» está documentada en `docs-site/.../conceptos.md`
+        saltar el workflow» está documentada en `docs/pruebas/conceptos.md`
         como regla de uso, y el control efectivo son los permisos de campo y las
         transiciones.
         """

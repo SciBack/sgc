@@ -6,20 +6,20 @@ for (const viewport of [{ name: 'desktop', width: 1440, height: 1000 }, { name: 
       await page.setViewportSize(viewport);
       await page.goto('./');
       await page.evaluate((value) => document.documentElement.dataset.theme = value, theme);
-      await expect(page).toHaveTitle(/Manual funcional del SGC/);
+      await expect(page).toHaveTitle(/Manual del SGC/);
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       expect(overflow).toBeLessThanOrEqual(1);
-      await expect(page.getByRole('link', { name: /Preparar las pruebas/i }).first()).toBeVisible();
+      await expect(page.getByRole('link', { name: /Primeros pasos/i }).first()).toBeVisible();
       if (viewport.name === 'mobile') {
-        await page.goto('proposito/');
+        await page.goto('primeros-pasos/');
         await expect(page.getByRole('button', { name: /menu/i })).toBeVisible();
       }
     });
   }
 }
 
-test('rol, flujo largo y búsqueda cargan', async ({ page }) => {
-  for (const route of ['roles/dpgc/', 'flujos/documento-controlado/', 'checklist-regresion/']) {
+test('perfiles, manual largo y búsqueda cargan', async ({ page }) => {
+  for (const route of ['perfiles/', 'procesos/', 'acreditacion/autoevaluacion/']) {
     await page.goto(route);
     await expect(page.locator('main h1')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);

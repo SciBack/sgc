@@ -9,6 +9,19 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.2] - 2026-10-15
+
+**Requiere migrar:** no hace falta (la aplicación no cambia; solo el manual).
+
+### Cambiado
+- **El manual publicado es solo de usuario.** Se ordena como el menú del SGC: Inicio, Primeros
+  pasos, Qué hace cada perfil y un manual por área (Procesos, Documentos, Acreditación y
+  licenciamiento, Mejora continua, Configuración). De 89 páginas pasa a 13.
+- El manual dice a qué versión corresponde: «Manual del SGC 1.7.2» en el encabezado.
+- Las guías de prueba (preparación, recorrido E2E, una por rol, un guion por flujo, regresión) pasan a
+  `docs/pruebas/` y la documentación técnica (arquitectura, instalación, alta de institución,
+  módulos, RBAC) a `docs/`. Siguen en el repo y la verificación de cobertura sigue vigilándolas.
+
 ## [1.7.1] - 2026-10-15
 
 **Requiere migrar:** sí (menú y Elemento Marco). Sin cambios en los datos.

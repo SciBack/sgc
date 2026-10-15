@@ -4,7 +4,7 @@ import { pathToFileURL } from 'node:url';
 
 const RULES = [
   ['posible DNI', /(?<!\d)\d{8}(?!\d)/g],
-  ['correo personal', /\b[A-Z0-9._%+-]+@(?!example\.invalid\b)[A-Z0-9.-]+\.[A-Z]{2,}\b/gi],
+  ['correo personal', /\b[A-Z0-9._%+-]+@(?!example\.invalid\b|sgc\.local\b)[A-Z0-9.-]+\.[A-Z]{2,}\b/gi],
   ['secreto', /(?:password|passwd|token|authorization|secret)\s*[:=]\s*["']?[A-Za-z0-9_\-/.]{8,}/gi],
   ['cookie de sesión', /\bsid=[A-Za-z0-9%._-]+/gi],
 ];
@@ -35,7 +35,7 @@ export async function verifyPrivacy(dirs) {
 
 async function main() {
   const dirs = process.argv.slice(2).map((dir) => path.resolve(dir));
-  const errors = await verifyPrivacy(dirs.length ? dirs : [path.resolve('src/content/docs'), path.resolve('dist')]);
+  const errors = await verifyPrivacy(dirs.length ? dirs : [path.resolve('src/content/docs'), path.resolve('../docs/pruebas'), path.resolve('dist')]);
   if (errors.length) { console.error(errors.join('\n')); process.exitCode = 1; }
   else console.log('Privacidad: no se detectaron datos o secretos prohibidos.');
 }

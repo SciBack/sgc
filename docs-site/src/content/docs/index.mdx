@@ -1,41 +1,45 @@
 ---
-title: Manual funcional del SGC
-description: Prueba el Sistema de Gestión de la Calidad con roles, estados y resultados verificables.
+title: Inicio
+description: Manual de usuario del Sistema de Gestión de la Calidad, para usarlo por su cuenta.
 template: splash
 hero:
-  tagline: Guía funcional para conocer el sistema, recorrerlo de punta a punta y ejecutar una regresión con evidencia útil.
+  title: Manual del SGC
+  tagline: Cómo usar el Sistema de Gestión de la Calidad, paso a paso y según su rol.
   actions:
-    - text: Preparar las pruebas
-      link: ./preparacion-pruebas/
+    - text: Primeros pasos
+      link: ./primeros-pasos/
       icon: right-arrow
-    - text: Recorrido E2E
-      link: ./recorrido-e2e/
+    - text: Qué hace cada perfil
+      link: ./perfiles/
       icon: open-book
       variant: minimal
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-Este manual describe únicamente comportamientos respaldados por el código vigente de SGC. Cuando
-una función depende de cuentas, catálogos, correo, scheduler o integraciones externas, la página lo
-señala como precondición operativa.
+Este manual corresponde a la versión del sistema que figura en el encabezado. Si una pantalla no
+se parece a lo que describe, puede que su institución use otra versión: consulte con la dirección
+de calidad.
 
 <CardGrid>
-  <Card title="Entender el sistema" icon="information">
-    Revisa el [propósito y mapa](./proposito/) y los [conceptos y reglas](./conceptos/).
+  <Card title="Procesos" icon="seti:folder">
+    El mapa de procesos, los procedimientos con su diagrama y las fichas de caracterización.
+    [Ir al manual](./procesos/).
   </Card>
-  <Card title="Probar como cada rol" icon="approve-check">
-    Usa las 14 [guías independientes por rol](./roles/) y respeta la segregación de funciones.
+  <Card title="Documentos" icon="document">
+    Elaborar, revisar, aprobar y publicar documentos controlados.
+    [Ir al manual](./documentos/).
   </Card>
-  <Card title="Ejecutar flujos" icon="rocket">
-    Cada [flujo funcional](./flujos/) incluye precondiciones, pasos, estados, casos negativos y evidencia.
+  <Card title="Acreditación y licenciamiento" icon="approve-check">
+    Condiciones básicas de calidad, el informe anual, la autoevaluación y las evidencias.
+    [Ir al manual](./acreditacion/).
   </Card>
-  <Card title="Cerrar la regresión" icon="document">
-    Completa el [checklist](./checklist-regresion/) y [reporta hallazgos](./reportar-hallazgo/).
+  <Card title="Mejora continua" icon="rocket">
+    No conformidades, análisis de causas, planes y acciones de mejora.
+    [Ir al manual](./mejora-continua/).
+  </Card>
+  <Card title="Configuración" icon="setting">
+    Mover, renombrar y reenlazar registros sin depender de soporte técnico.
+    [Ir al manual](./configuracion/autogestion/).
   </Card>
 </CardGrid>
-
-:::caution[Acceso protegido]
-El manual usa la misma sesión institucional que SGC. No compartas capturas con nombres, DNI,
-correos personales, cookies ni datos reales de producción.
-:::

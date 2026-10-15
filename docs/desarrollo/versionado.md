@@ -26,6 +26,18 @@ Las tres tienen que coincidir. `deploy/check_version.py` lo comprueba: en cada P
 válida y con entrada en el CHANGELOG) y al publicar un tag (además, que el tag coincida). Si no
 coinciden, la publicación falla.
 
+## El manual de usuario va con la versión
+
+El manual (`docs-site/`) vive en este mismo repo, así que el manual del tag `vX.Y.Z` **es** el
+manual del SGC X.Y.Z. Su título lo lee de `sgc/__init__.py`: «Manual del SGC X.Y.Z».
+
+- Un cambio que altera lo que ve el usuario corrige su página del manual **en la misma PR**.
+- Cada institución publica el manual del **mismo tag** que corre en su producción. En el overlay
+  de despliegue el tag se fija en un solo sitio y la publicación se niega si no coincide con la
+  versión de la imagen en marcha.
+- Las versiones anteriores del manual quedan en sus tags; no hay selector de versiones porque
+  cada institución usa una sola.
+
 ## Cómo se escribe el CHANGELOG
 
 Para la persona de calidad o de sistemas que lo lee, no para quien programa:

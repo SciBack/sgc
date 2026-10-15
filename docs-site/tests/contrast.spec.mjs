@@ -9,7 +9,7 @@ for (const theme of ['light', 'dark']) {
   test(`contraste WCAG AA en tema ${theme}`, async ({ page }) => {
     await page.emulateMedia({ colorScheme: theme });
     await page.addInitScript((value) => localStorage.setItem('starlight-theme', value), theme);
-    await page.goto('./flujos/documento-controlado/');
+    await page.goto('./procesos/');
 
     // Si el tema no se aplicó, el test falla por eso y lo dice: no mide una mezcla en silencio.
     await expect(page.locator('html')).toHaveAttribute('data-theme', theme);

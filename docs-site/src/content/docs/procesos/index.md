@@ -2,7 +2,7 @@
 title: Manual del módulo de Procesos
 description: Entrar al sistema, recorrer el mapa de procesos, y crear, editar y publicar procesos, procedimientos, diagramas BPMN y fichas de caracterización.
 sidebar:
-  order: 2
+  order: 1
 ---
 
 Este manual es para quien mantiene los procesos de la institución: la dirección de calidad y los
@@ -37,7 +37,7 @@ Menú izquierdo → **Procesos**. Tiene estas entradas:
 | **Mapa de procesos** | Todos los procesos: macroprocesos, procesos y subprocesos |
 | **Procedimientos** | Los procedimientos de cada proceso, con su diagrama |
 | **Fichas de caracterización** | Una ficha por proceso: objetivo, alcance, entradas, salidas, indicadores… |
-| **Mapa institucional** | La imagen aprobada del mapa (ver [Mapa institucional](../mapa-institucional/)) |
+| **Mapa institucional** | La imagen aprobada del mapa (ver [Mapa institucional](./mapa-institucional/)) |
 | **Interacciones entre procesos** | Qué entrega un proceso a otro |
 
 ### Ver el mapa como árbol
@@ -68,7 +68,7 @@ Al abrir un proceso ve:
   dirección de calidad, su analista y el dueño del proceso.
 - **No se borra.** Un proceso que deja de existir pasa a **Obsoleto**. Así su historia, sus
   procedimientos y sus evidencias siguen consultables. Para moverlo de sitio o cambiarle el código,
-  vea [Autogestión](../autogestion/).
+  vea [Autogestión](../configuracion/autogestion/).
 
 ## 4. Procedimientos
 

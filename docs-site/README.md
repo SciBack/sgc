@@ -1,49 +1,49 @@
-# Starlight Starter Kit: Basics
+# Manual de usuario del SGC
 
-[![Built with Starlight](https://astro.badg.es/v2/built-with-starlight/tiny.svg)](https://starlight.astro.build)
+Sitio Astro + Starlight con el **manual de usuario**: lo que necesita quien usa el SGC para
+trabajar por su cuenta. Nada más. Las guías de prueba viven en [`docs/pruebas/`](../docs/pruebas/)
+y la documentación técnica en [`docs/`](../docs/); no se publican aquí.
 
-```
-npm create astro@latest -- --template starlight
-```
+## Estructura
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro + Starlight project, you'll see the following folders and files:
+El menú sigue las áreas del menú del SGC, con los mismos nombres:
 
 ```
-.
-├── public/
-├── src/
-│   ├── assets/
-│   ├── content/
-│   │   └── docs/
-│   └── content.config.ts
-├── astro.config.mjs
-├── package.json
-└── tsconfig.json
+src/content/docs/
+├── index.mdx            Inicio
+├── primeros-pasos.md    Por dónde empezar, según el rol
+├── perfiles.md          Qué hace cada perfil en cada flujo
+├── procesos/            Un directorio por área del SGC.
+├── documentos/          index.md es la página principal del área (sidebar.order: 1);
+├── acreditacion/        el resto aparece solo en el menú, en orden alfabético
+├── mejora-continua/     o según su sidebar.order.
+└── configuracion/
 ```
 
-Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
+Un área nueva se registra una vez en el `sidebar` de `astro.config.mjs`. Una página nueva dentro de
+un área existente no necesita tocar la configuración.
 
-Images can be added to `src/assets/` and embedded in Markdown with a relative link.
+## Versión
 
-Static assets, like favicons, can be placed in the `public/` directory.
+El manual describe **una** versión del SGC: la del código con el que se construye. El título del
+sitio la lee de `sgc/__init__.py` («Manual del SGC 1.7.2»). Por eso, cuando un cambio altera lo
+que ve el usuario, su página del manual se corrige **en la misma PR**. Detalle en
+[`docs/desarrollo/versionado.md`](../docs/desarrollo/versionado.md).
 
-## 🧞 Commands
+## Reglas al escribir
 
-All commands are run from the root of the project, from a terminal:
+- El repo es público: nada de una institución concreta (dominios, nombres, sedes). Lo propio de
+  una institución va en su overlay.
+- Enlaces entre páginas, relativos (`../acreditacion/`): el sitio se publica en dos bases.
+- Frontmatter con `title` y `description`.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## Comandos
 
-## 👀 Want to learn more?
+Las dos variables son obligatorias; cambian solo la marca y la base del sitio.
 
-Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+```bash
+npm ci
+export DOCS_SITE=https://calidad.example.edu DOCS_BASE=/manual
+npm run dev        # http://localhost:4321/manual/
+npm run verify     # config, cobertura, check, build, enlaces, privacidad, contraste, visual
+```

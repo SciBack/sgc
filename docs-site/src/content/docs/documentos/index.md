@@ -1,6 +1,8 @@
 ---
 title: Control documental
 description: Ciclo de vida de un Documento Controlado (ISO 21001 §7.5).
+sidebar:
+  order: 1
 ---
 
 Implementa ISO 21001 §7.5 (información documentada) sobre el DocType **Documento
