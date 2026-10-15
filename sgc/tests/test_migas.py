@@ -75,11 +75,13 @@ class IntegrationTestMigas(IntegrationTestCase):
         self.assertEqual(frappe.db.get_value("Workspace", escritorio.INICIO, "standard"), 1)
 
     def test_ninguna_pantalla_esta_en_dos_menus(self):
+        """Una pantalla vive en UN área (su miga). Dos accesos dentro del mismo menú, por ejemplo una
+        lista filtrada, no rompen eso."""
         donde = {}
         for modulo, menu in escritorio.menus().items():
             for _etiqueta, tipo, destino in escritorio.destinos(menu):
                 if tipo in ("DocType", "Report"):
-                    donde.setdefault(destino, []).append(modulo)
+                    donde.setdefault(destino, set()).add(modulo)
         self.assertEqual({d: m for d, m in donde.items() if len(m) > 1}, {})
 
     def test_no_queda_codigo_que_parchee_el_desk(self):

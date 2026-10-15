@@ -35,7 +35,8 @@ class IntegrationTestModulosPorArea(IntegrationTestCase):
 			self.assertEqual(frappe.db.get_value(tipo, destino, "module"), modulo, f"{destino} en {modulo}")
 
 	def test_cada_pantalla_esta_en_un_menu_y_solo_en_uno(self):
-		en_menus = [destino for _m, _e, destino in _destinos()]
+		# Un menú por pantalla; dos accesos dentro del MISMO menú (una lista filtrada) no cuentan doble.
+		en_menus = [destino for _m, destino in {(m, d) for m, _e, d in _destinos()}]
 		self.assertEqual(sorted({x for x in en_menus if en_menus.count(x) > 1}), [])
 		modulos = frappe.get_module_list("sgc")
 		pantallas = set(frappe.get_all("DocType", filters={"module": ["in", modulos], "istable": 0}, pluck="name"))

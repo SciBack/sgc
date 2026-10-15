@@ -14,8 +14,13 @@ motor (`scoring.py`) nunca escribe el campo oficial.
 
 ## Paso 1 — Valorar los criterios
 
-Para cada criterio normativo de un estándar, el comité registra en **Valoracion
-Criterio** su juicio (`cumple`):
+Al pulsar *Iniciar evaluacion*, el sistema crea **una Valoracion Criterio Pendiente por
+cada criterio valorable del marco** (53 en CONEAU 2025). No hay que crearlas a mano. Cada una
+muestra **qué exige el criterio** y admite un **responsable**: quien lo prepara, que recibe la
+tarea en sus pendientes hasta que el criterio queda valorado. Un criterio no puede valorarse dos
+veces en la misma autoevaluación, y la autoevaluación lista sus valoraciones en Conexiones.
+
+Para cada criterio, el comité registra en su **Valoracion Criterio** el juicio (`cumple`):
 
 - `Cumple`
 - `Cumple parcial`

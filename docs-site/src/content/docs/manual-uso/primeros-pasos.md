@@ -26,7 +26,9 @@ no existe, créala en el menú **Acreditación → Autoevaluación → Nueva** (
 y marco normativo).
 
 **Tu recorrido:**
-1. Abre tu autoevaluación y pulsa *Iniciar evaluación*.
+1. Abre tu autoevaluación y pulsa *Iniciar evaluación*. El sistema crea una valoración
+   Pendiente por cada criterio del marco; asigna un **responsable** a cada una para repartir el
+   trabajo (le llega como tarea).
 2. Por cada criterio del marco:
    - Sube su respaldo en **Acreditación → Evidencia** (un archivo o un enlace).
    - **Vincula** esa evidencia al criterio (trazabilidad), desde la propia ficha de la evidencia.

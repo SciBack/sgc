@@ -109,7 +109,8 @@
    "fieldtype": "Link",
    "in_standard_filter": 1,
    "label": "Unidad responsable",
-   "options": "Unidad Organica"
+   "options": "Unidad Organica",
+   "in_list_view": 1
   },
   {
    "description": "Otras unidades que aportan evidencias, una por línea.",
@@ -179,6 +180,11 @@
  "is_tree": 1,
  "links": [
   {
+   "group": "Estructura",
+   "link_doctype": "Elemento Marco",
+   "link_fieldname": "parent_elemento_marco"
+  },
+  {
    "group": "Valoración",
    "link_doctype": "Valoracion Criterio",
    "link_fieldname": "criterio"
@@ -224,7 +230,7 @@
    "link_fieldname": "elemento_marco"
   }
  ],
- "modified": "2026-10-14 23:45:00.000000",
+ "modified": "2026-10-15 08:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Elemento Marco",
