@@ -1,7 +1,8 @@
 import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 
-const root = path.resolve('src/content/docs');
+// Las guías de prueba por rol y flujo viven en docs/pruebas/: no son manual de usuario.
+const root = path.resolve('../docs/pruebas');
 const coverage = JSON.parse(await readFile('src/data/coverage.json', 'utf8'));
 const missing = [];
 for (const item of [...coverage.roles, ...coverage.flows]) {

@@ -19,4 +19,4 @@ trata (planes y acciones de mejora). El módulo conserva el nombre técnico `sgc
 | **Accion Mejora** | Una acción concreta dentro de un Plan de Mejora (`Correctiva` / `Preventiva` / `Mejora`), con `avance_pct`, `fecha_compromiso` y semáforo. |
 
 La cadena completa Hallazgo → No Conformidad → Plan → Acción se documenta en
-[Manual de uso · No conformidades y mejora](../../manual-uso/no-conformidades-mejora/).
+[Manual de uso · No conformidades y mejora](../../../docs-site/src/content/docs/mejora-continua/index.md).

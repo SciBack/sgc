@@ -86,8 +86,7 @@ Tabla 10 (criterios de excelencia): **16 puntos en el modelo de programas y 20 e
 institucional**. Hoy nadie calcula `Autoevaluacion.puntaje_excelencia` y los criterios
 de la Tabla 10 no están cargados como elementos del marco, así que el techo real del
 motor son **6 años**. La opción existe en el campo oficial porque la norma la
-contempla, no porque el motor la proponga — ver
-[Acreditación y licenciamiento](../../modulos/acreditacion/).
+contempla, no porque el motor la proponga.
 :::
 
 ## Paso 5 — Generar el informe
@@ -106,4 +105,4 @@ trazabilidad](../evidencias-trazabilidad/).
 
 Cuando `Valoracion Criterio.cumple` es `No cumple` o `Cumple parcial`, ese juicio
 puede escalar a la cadena de mejora continua — ver
-[No conformidades y mejora](../no-conformidades-mejora/).
+[No conformidades y mejora](../../mejora-continua/).

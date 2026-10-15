@@ -40,7 +40,7 @@ jobs:
           cache-dependency-path: docs-site/package-lock.json
       - run: npm ci
       - run: npm run verify
-      - run: docker build -t sgc-manual:${{ github.sha }} .
+      - run: docker build --build-context sgc=../sgc -t sgc-manual:${{ github.sha }} .
 
   # Publica el mismo docs-site/, pero con la marca y base del sitio PÚBLICO
   # (agnóstico, sin auth) en GitHub Pages — build institucional de "verify"

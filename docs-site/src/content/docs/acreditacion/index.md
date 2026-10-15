@@ -2,7 +2,7 @@
 title: Manual de Acreditación y Licenciamiento
 description: Las condiciones básicas de calidad con su responsable, la preparación del Informe Anual de Cumplimiento (MIAC), la autoevaluación de programas y el repositorio de evidencias.
 sidebar:
-  order: 3
+  order: 1
 ---
 
 El área **Acreditación y licenciamiento** reúne todo lo que la universidad tiene que demostrar
@@ -54,7 +54,7 @@ Licenciamiento. Al abrir una se ve:
 3. Revisa su avance en **Preparación de evidencias**, filtrando por su unidad.
 
 **El diagnóstico anual** (estado de cada CBC, semáforo y PDF para Sunedu) se hace en **Informe de
-cumplimiento**. Paso a paso, en [Diagnóstico de CBC](../diagnostico-cbc/).
+cumplimiento**. Paso a paso, en [Diagnóstico de CBC](./diagnostico-cbc/).
 
 Si una responsabilidad aparece como «Responsable general (sin unidad en el SGC): …», esa área
 todavía no existe en la estructura del sistema. Lo resuelve la dirección de calidad: crea la
@@ -96,7 +96,7 @@ no reemplaza esa plataforma.
    impide consolidar.
 5. La dirección de calidad confirma los niveles, *Consolida* y *Cierra*.
 
-El detalle de los niveles y la vigencia está en [Autoevaluación](../autoevaluacion/).
+El detalle de los niveles y la vigencia está en [Autoevaluación](./autoevaluacion/).
 
 ## 4. Las evidencias
 
@@ -109,7 +109,7 @@ El detalle de los niveles y la vigencia está en [Autoevaluación](../autoevalua
   repetidos y los archivos que no son documentos.
 - Las evidencias nacen **Pendientes**. Validarlas es tarea de la dirección de calidad.
 
-Más detalle en [Evidencias y trazabilidad](../evidencias-trazabilidad/).
+Más detalle en [Evidencias y trazabilidad](./evidencias-trazabilidad/).
 
 ## Quién puede qué
 

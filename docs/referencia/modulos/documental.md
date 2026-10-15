@@ -13,4 +13,4 @@ sidebar:
 | **Carpeta Documental** | Árbol de carpetas para organizar la documentación como decida la institución, además del proceso y el tema. |
 | **Cambio Documento** | Tabla hija: historial de cambios de versión de un Documento Controlado (motivo, versión anterior/nueva). |
 
-Ver [Manual de uso · Control documental](../../manual-uso/control-documental/).
+Ver [Manual de uso · Control documental](../../../docs-site/src/content/docs/documentos/index.md).

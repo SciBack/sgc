@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import { readFileSync } from 'node:fs';
 
 const site = process.env.DOCS_SITE;
 if (!site) throw new Error('DOCS_SITE es obligatorio (ej. https://calidad.upeu.edu.pe)');
@@ -10,6 +11,12 @@ if (siteUrl.protocol !== 'https:') throw new Error('DOCS_SITE debe usar HTTPS');
 const rawBase = process.env.DOCS_BASE || '/manual';
 const base = `/${rawBase.replace(/^\/+|\/+$/g, '')}`;
 
+// El manual describe UNA versión del SGC: la del código con el que se construye. Se lee de la
+// única fuente (`sgc/__init__.py`), que viaja junto a `docs-site/` en el repo y en la imagen.
+const versionFile = new URL('../sgc/__init__.py', import.meta.url);
+const sgcVersion = readFileSync(versionFile, 'utf8').match(/__version__\s*=\s*"([^"]+)"/)?.[1];
+if (!sgcVersion) throw new Error('No se encontró __version__ en sgc/__init__.py');
+
 export default defineConfig({
   site: siteUrl.origin,
   base,
@@ -17,8 +24,8 @@ export default defineConfig({
   trailingSlash: 'always',
   integrations: [
     starlight({
-      title: 'Manual funcional SGC',
-      description: 'Guía funcional verificable del Sistema de Gestión de la Calidad.',
+      title: `Manual del SGC ${sgcVersion}`,
+      description: 'Manual de usuario del Sistema de Gestión de la Calidad.',
       pagefind: true,
       tableOfContents: false,
       lastUpdated: true,
@@ -26,28 +33,14 @@ export default defineConfig({
       components: { Head: './src/components/Head.astro' },
       sidebar: [
         { label: 'Inicio', link: '/' },
-        { label: 'Propósito y mapa', link: '/proposito/' },
-        { label: 'Roles y permisos', items: [{ autogenerate: { directory: 'roles' } }] },
-        { label: 'Conceptos y reglas', link: '/conceptos/' },
-        { label: 'Preparar pruebas', link: '/preparacion-pruebas/' },
-        { label: 'Recorrido E2E', link: '/recorrido-e2e/' },
-        { label: 'Flujos funcionales', items: [{ autogenerate: { directory: 'flujos' } }] },
-        { label: 'Manual de uso', items: [{ autogenerate: { directory: 'manual-uso' } }] },
-        { label: 'Regresión', link: '/checklist-regresion/' },
-        { label: 'Reportar hallazgos', link: '/reportar-hallazgo/' },
-        { label: 'Administración', link: '/administracion/' },
-        { label: 'Reportes y auditoría', link: '/reportes-auditoria/' },
-        { label: 'Referencia técnica existente', collapsed: true, items: [
-          { label: 'Arquitectura', link: '/arquitectura/' },
-          { label: 'Instalación', link: '/instalacion/' },
-          { label: 'Alta de una institución', link: '/alta-de-institucion/' },
-          { label: 'Estado del producto', link: '/roadmap/' },
-          { label: 'Biblioteca Frappe v16', link: '/referencias/frappe/' },
-          { label: 'Módulos', items: [{ autogenerate: { directory: 'modulos' } }] },
-          { label: 'Desarrollo', items: [
-            { label: 'RBAC', link: '/desarrollo/rbac/' },
-            { label: 'Pruebas', link: '/desarrollo/tests/' },
-          ] },
+        { label: 'Primeros pasos', link: '/primeros-pasos/' },
+        { label: 'Qué hace cada perfil', link: '/perfiles/' },
+        { label: 'Manual por área', items: [
+          { label: 'Procesos', items: [{ autogenerate: { directory: 'procesos' } }] },
+          { label: 'Documentos', items: [{ autogenerate: { directory: 'documentos' } }] },
+          { label: 'Acreditación y licenciamiento', items: [{ autogenerate: { directory: 'acreditacion' } }] },
+          { label: 'Mejora continua', items: [{ autogenerate: { directory: 'mejora-continua' } }] },
+          { label: 'Configuración', items: [{ autogenerate: { directory: 'configuracion' } }] },
         ] },
       ],
     }),

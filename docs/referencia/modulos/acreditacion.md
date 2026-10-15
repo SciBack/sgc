@@ -13,11 +13,11 @@ anual de condiciones básicas de calidad de la SUNEDU y las obligaciones con cad
 
 | DocType | Rol |
 |---|---|
-| **Autoevaluacion** | El proceso de autoevaluación de un programa contra un marco normativo de acreditación (abrirla con un marco de licenciamiento se rechaza — ver `sgc/marcos.py`). Campos clave: `marco_normativo`, `programa_sede`, `avance_pct` (read-only, % de criterios valorados), `vigencia_propuesta` (read-only, propuesta del motor), `resultado_vigencia` (oficial, lo fija [confirmacion.py](../../manual-uso/autoevaluacion/)). |
+| **Autoevaluacion** | El proceso de autoevaluación de un programa contra un marco normativo de acreditación (abrirla con un marco de licenciamiento se rechaza — ver `sgc/marcos.py`). Campos clave: `marco_normativo`, `programa_sede`, `avance_pct` (read-only, % de criterios valorados), `vigencia_propuesta` (read-only, propuesta del motor), `resultado_vigencia` (oficial, lo fija [confirmacion.py](../../../docs-site/src/content/docs/acreditacion/autoevaluacion.md)). |
 | **Valoracion Criterio** | El juicio del comité sobre un criterio normativo puntual: `cumple` (`Cumple` / `Cumple parcial` / `No cumple` / `No aplica`) + `observacion`. Dispara el recálculo del estándar padre (`on_update`). |
 | **Valoracion Estandar** | El nivel de un estándar (agregado de sus criterios) para una autoevaluación. `nivel_propuesto` lo escribe el motor (`scoring.py`); `nivel` (permlevel 1, oficial) solo lo escribe el humano vía `confirmacion.confirmar_nivel`. |
 
-Ver el flujo completo en [Manual de uso · Autoevaluación](../../manual-uso/autoevaluacion/).
+Ver el flujo completo en [Manual de uso · Autoevaluación](../../../docs-site/src/content/docs/acreditacion/autoevaluacion.md).
 
 :::note[Vigencia: cuatro tramos en la norma, tres en el sistema]
 `resultado_vigencia` aplica la Tabla 9 de los modelos de acreditación del Coneau
@@ -46,7 +46,7 @@ años.
 | **Evidencia Enlace** | Child table de un solo campo (Link a Evidencia) usada como picklist rápido (Table MultiSelect) en `Cumplimiento CBC` y `Hallazgo Auditoria`. Al guardar cualquiera de esos dos documentos, se auto-sincroniza con Trazabilidad (una fila por cada combinación evidencia/destino que aún no exista, marcada `origen=Auto-sincronizado`) — así lo capturado por el picklist queda igual de visible para el informe oficial que un vínculo creado a mano. |
 | **Trazabilidad** | El vínculo N:M real entre una Evidencia y un criterio normativo (`Elemento Marco`) o un proceso, con `tipo_vinculo` (Cumple/Soporta/Parcial) y `origen` (Directo/Propagado por crosswalk/Auto-sincronizado). Es lo que el informe de acreditación consume para citar evidencias. |
 
-Ver [Manual de uso · Evidencias y trazabilidad](../../manual-uso/evidencias-trazabilidad/).
+Ver [Manual de uso · Evidencias y trazabilidad](../../../docs-site/src/content/docs/acreditacion/evidencias-trazabilidad.md).
 
 ## Marco normativo
 
@@ -83,7 +83,7 @@ SUNEDU para verificar el cumplimiento continuo de las condiciones.
 | **Cumplimiento CBC** | Tabla hija: el juicio de cumplimiento de UNA Condición Básica de Calidad (child de `Informe Cumplimiento`). |
 | **Informe Cumplimiento** | El diagnóstico anual de las 8 CBC (`IAC-{año}`, autoname único por año). Al guardarse, auto-puebla las 8 condiciones si la tabla está vacía; consolida conteos y **semáforo** (Rojo si alguna no cumple / Ámbar si parcial / Verde si todas cumplen); exige justificación en toda CBC parcial o no cumplida; bloquea el estado "Presentado a SUNEDU" si queda alguna CBC sin evaluar. Genera el informe PDF (`Diagnostico CBC SUNEDU`). |
 
-Ver [Manual de uso · Diagnóstico CBC](../../manual-uso/diagnostico-cbc/).
+Ver [Manual de uso · Diagnóstico CBC](../../../docs-site/src/content/docs/acreditacion/diagnostico-cbc.md).
 
 ## Obligaciones ante entes externos
 

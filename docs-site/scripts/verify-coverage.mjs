@@ -25,7 +25,7 @@ export async function validateCoverage(coverage, { repoRoot, requirePages = fals
       for (const source of item?.sources ?? []) {
         if (!(await exists(path.join(root, source)))) errors.push(`${item?.id}: fuente inexistente ${source}`);
       }
-      if (requirePages && !(await exists(path.join(root, 'docs-site/src/content/docs', item.page)))) {
+      if (requirePages && !(await exists(path.join(root, 'docs/pruebas', item.page)))) {
         errors.push(`${item?.id}: página inexistente ${item.page}`);
       }
     }
