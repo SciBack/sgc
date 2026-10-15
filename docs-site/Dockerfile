@@ -3,6 +3,8 @@ WORKDIR /src
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
+# El título lleva la versión del SGC (astro.config lee ../sgc/__init__.py): contexto «sgc» = ../sgc.
+COPY --from=sgc __init__.py /sgc/__init__.py
 ARG DOCS_SITE=https://calidad.upeu.edu.pe
 ARG DOCS_BASE=/manual
 RUN DOCS_SITE="$DOCS_SITE" DOCS_BASE="$DOCS_BASE" npm run build
