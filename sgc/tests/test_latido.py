@@ -132,3 +132,66 @@ class IntegrationTestAvisoLatido(IntegrationTestCase):
                 latido.estado()
         finally:
             frappe.set_user("Administrator")
+
+
+class IntegrationTestSchedulerApagado(IntegrationTestCase):
+    """Qué cuenta como scheduler apagado: lo desactivado o pausado a propósito, no el mantenimiento.
+
+    `actualizar.sh` verifica la instancia con el sitio todavía en mantenimiento;
+    contarlo como apagado daba un «scheduler-parado» falso en cada despliegue.
+    `enable_scheduler` se fija con un doble porque en el CI y en el lab suele
+    estar a 0, y eso ya daría apagado por sí solo.
+    """
+
+    @staticmethod
+    def _instancia(enable_scheduler=1, **conf):
+        """Fija el estado del scheduler; el resto de System Settings sigue siendo el real."""
+        real = frappe.get_system_settings
+        limpio = {"maintenance_mode": 0, "pause_scheduler": 0, "disable_scheduler": 0}
+        return (
+            patch.dict(frappe.local.conf, {**limpio, **conf}),
+            patch.object(
+                frappe,
+                "get_system_settings",
+                side_effect=lambda clave: enable_scheduler if clave == "enable_scheduler" else real(clave),
+            ),
+        )
+
+    def _apagado(self, enable_scheduler=1, **conf):
+        conf_parche, ajustes_parche = self._instancia(enable_scheduler, **conf)
+        with conf_parche, ajustes_parche:
+            return latido._scheduler_apagado()
+
+    def test_en_mantenimiento_no_cuenta_como_apagado(self):
+        self.assertFalse(self._apagado(maintenance_mode=1))
+
+    def test_activo_no_cuenta_como_apagado(self):
+        self.assertFalse(self._apagado())
+
+    def test_desactivado_en_system_settings(self):
+        self.assertTrue(self._apagado(enable_scheduler=0))
+
+    def test_desactivado_en_site_config(self):
+        self.assertTrue(self._apagado(disable_scheduler=1))
+
+    def test_en_pausa(self):
+        self.assertTrue(self._apagado(pause_scheduler=1))
+
+    def test_la_verificacion_en_mantenimiento_no_da_scheduler_parado(self):
+        """Lo que pasa en el paso 8/8 de actualizar.sh: mantenimiento puesto, tareas al día."""
+        tipos = _tipos_del_app()
+        try:
+            frappe.db.delete("Scheduled Job Log", {"scheduled_job_type": ["in", tipos]})
+            for tipo in tipos:
+                frappe.get_doc(doctype="Scheduled Job Log", scheduled_job_type=tipo, status="Complete").insert(
+                    ignore_permissions=True
+                )
+            conf_parche, ajustes_parche = self._instancia(maintenance_mode=1)
+            with conf_parche, ajustes_parche:
+                resultado = latido.comprobar()
+                codigos = [h.codigo for h in verificar()]
+            self.assertFalse(resultado["scheduler_apagado"])
+            self.assertFalse(resultado["alerta"])
+            self.assertNotIn("scheduler-parado", codigos)
+        finally:
+            frappe.db.rollback()
