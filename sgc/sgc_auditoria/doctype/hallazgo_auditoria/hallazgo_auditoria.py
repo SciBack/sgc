@@ -46,6 +46,8 @@ class HallazgoAuditoria(Document):
             self.codigo = self._generar_codigo()
 
     def validate(self):
+        self._escalar_al_entrar_en_escalado()
+
         # Coherencia del estado con el escalamiento: si ya hay una No Conformidad
         # ligada, el hallazgo está escalado.
         if self.no_conformidad:
@@ -93,8 +95,8 @@ class HallazgoAuditoria(Document):
         if self.estado == "Escalado a NC" and not self.no_conformidad:
             frappe.throw(
                 _("Para marcar el hallazgo como «Escalado a NC» tiene que existir "
-                  "la No Conformidad. Use la acción de escalamiento, que la crea "
-                  "y deja el vínculo."),
+                  "la No Conformidad. Escale desde «Abierto» con «Escalar a NC», "
+                  "que la crea y deja el vínculo."),
                 title=_("Escalamiento sin no conformidad"),
             )
 
@@ -192,6 +194,50 @@ class HallazgoAuditoria(Document):
         if self.no_conformidad:
             return self.no_conformidad
 
+        self.no_conformidad = self._crear_no_conformidad()
+        self.genera_nc = 1
+        self.save(ignore_permissions=True)
+
+        # El estado se mueve por el motor de workflow, no asignándolo: así el
+        # escalamiento queda en el historial como la transición que es. `validate`
+        # ya lo habría puesto en "Escalado a NC" al ver la NC ligada, así que solo
+        # se aplica si el motor aún lo ve en "Abierto".
+        if frappe.db.get_value(self.doctype, self.name, "estado") == "Abierto":
+            from frappe.model.workflow import apply_workflow
+
+            apply_workflow(frappe.get_doc(self.doctype, self.name), "Escalar a NC")
+            self.reload()
+
+        return self.no_conformidad
+
+    def _escalar_al_entrar_en_escalado(self):
+        """La acción «Escalar a NC» del flujo crea la no conformidad.
+
+        Hasta la 1.7.2 el botón del flujo solo cambiaba el estado, y
+        `_validar_escalamiento_real` lo rechazaba —con razón: no había NC— con un
+        mensaje que mandaba a una «acción de escalamiento» que no tenía botón. El
+        auditor no tenía forma de escalar desde la pantalla.
+
+        Entrar en «Escalado a NC» desde «Abierto» es, por definición, escalar: se
+        crea aquí la NC con la misma lógica que `escalar_a_no_conformidad()`. Va en
+        `validate` (no en `on_update`, como el riesgo materializado) porque el resto
+        de `validate` —trazabilidad, cierre— necesita ver ya la NC ligada; si algo
+        falla después, la transacción de la petición se deshace entera.
+
+        Cualquier otra llegada a «Escalado a NC» sin NC (p. ej. «Reabrir escalado»
+        de un hallazgo que nunca escaló) sigue rechazada por el guard.
+        """
+        if self.estado != "Escalado a NC" or self.no_conformidad or self.is_new():
+            return
+        anterior = self.get_doc_before_save()
+        if not anterior or anterior.estado != "Abierto":
+            return
+
+        self.no_conformidad = self._crear_no_conformidad()
+        self.genera_nc = 1
+
+    def _crear_no_conformidad(self):
+        """Crea la `No Conformidad` (origen Auditoria) de este hallazgo y devuelve su name."""
         tipo_nc = TIPO_A_NC.get(self.tipo)
         if not tipo_nc:
             frappe.throw(
@@ -217,19 +263,5 @@ class HallazgoAuditoria(Document):
             "requiere_analisis_causa": 1 if tipo_nc == "No conformidad mayor" else 0,
             "fecha_deteccion": nowdate(),
         }).insert(ignore_permissions=True)
-
-        self.no_conformidad = nc.name
-        self.genera_nc = 1
-        self.save(ignore_permissions=True)
-
-        # El estado se mueve por el motor de workflow, no asignándolo: así el
-        # escalamiento queda en el historial como la transición que es. `validate`
-        # ya lo habría puesto en "Escalado a NC" al ver la NC ligada, así que solo
-        # se aplica si el motor aún lo ve en "Abierto".
-        if frappe.db.get_value(self.doctype, self.name, "estado") == "Abierto":
-            from frappe.model.workflow import apply_workflow
-
-            apply_workflow(frappe.get_doc(self.doctype, self.name), "Escalar a NC")
-            self.reload()
 
         return nc.name
