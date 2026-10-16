@@ -123,10 +123,19 @@ def umbral_horas():
 
 
 def _scheduler_apagado():
-	"""¿Frappe tiene el scheduler desactivado a propósito? (System Settings o site_config)."""
-	from frappe.utils.scheduler import is_scheduler_inactive
+	"""¿Frappe tiene el scheduler desactivado a propósito? (System Settings o site_config).
 
-	return is_scheduler_inactive(verbose=False)
+	No se usa `is_scheduler_inactive`, que cuenta también el modo mantenimiento
+	(frappe/utils/scheduler.py:150): `actualizar.sh` verifica la instancia antes de
+	quitar el mantenimiento, y así cada despliegue salía con un «scheduler-parado»
+	falso. El mantenimiento es pasajero y no es un scheduler apagado; si el sitio
+	se quedara en mantenimiento días, las tareas se atrasarían y el aviso saltaría
+	igual por el desfase. La pausa (`bench scheduler pause`) sí cuenta: solo se pone
+	a mano y no se ve en ninguna otra parte.
+	"""
+	from frappe.utils.scheduler import is_scheduler_disabled
+
+	return bool(frappe.conf.pause_scheduler) or is_scheduler_disabled(verbose=False)
 
 
 def _tareas():
