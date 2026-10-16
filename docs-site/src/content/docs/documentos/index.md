@@ -89,6 +89,10 @@ Al publicarse, el documento:
 4. Siga el mismo flujo de aprobación. Al publicarse, el cambio queda en el **Historial de
    cambios** de la ficha.
 
+La versión nueva es el **mismo documento** vuelto a borrador: mientras no se publique otra vez, deja
+de mostrarse en el portal público. Prepare el cambio antes de abrir la versión, para que ese hueco
+dure lo mínimo.
+
 ## 6. Mantenerlo vigente
 
 **Quince días antes** de la fecha de próxima revisión, el dueño del proceso (o, si no lo hay,
