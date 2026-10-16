@@ -1,174 +1,115 @@
 ---
-title: Flujos de tarea por perfil
-description: Qué hace cada rol del SGC, paso a paso — quién ejecuta, quién revisa y quién aprueba en cada flujo.
+title: Qué hace cada perfil
+description: Qué botones son de cada rol del SGC, en qué área, y dónde está el detalle de cada flujo.
 sidebar:
   order: 2
 ---
 
-El SGC separa dos responsabilidades a propósito: **el programa ejecuta** (valora, trata,
-ejecuta) y **la DPGC revisa, aprueba y cierra**. Esta separación es la que da garantía de
-calidad — quien hace el trabajo no es quien lo da por bueno. Esta página resume, para cada
-perfil, cuál es su trabajo día a día.
+El SGC separa dos responsabilidades a propósito: **quien hace el trabajo no es quien lo da por
+bueno**. Los programas, los dueños de proceso y los auditores ejecutan; la dirección de calidad y
+la alta dirección revisan, aprueban y cierran. Esta página dice, para cada perfil, qué botones son
+suyos y en qué manual está el detalle.
 
-:::note[Los flujos son workflows reales]
-Los pasos con nombre en *cursiva* (p. ej. *Enviar a revisión*) son transiciones de workflow
-configuradas en el sistema. Solo el rol indicado puede ejecutarlas, y solo desde el estado
-correcto. No es una convención de papel: el sistema lo hace cumplir.
+:::note[Los botones son reglas, no costumbre]
+Los pasos en *cursiva* (por ejemplo, *Enviar a revisión*) son transiciones configuradas en el
+sistema. Solo el rol indicado las ve, y solo desde el estado correcto. Además, en los pasos de
+control **nadie se aprueba a sí mismo**: quien creó un registro no puede aprobarlo, verificarlo ni
+cerrarlo, aunque tenga el rol.
 :::
 
-## Los perfiles y su trabajo
+## Responsable de Calidad de Programa
 
-### Responsable de Calidad de Programa — *el comité del programa*
-Es el motor operativo — el comité de calidad de un programa académico. **Ejecuta** el trabajo de
-calidad de su programa:
+El comité de calidad de un programa. **Ejecuta** el trabajo de calidad de su programa.
 
-- **Autoevaluación:** crea la autoevaluación del programa → *Iniciar evaluación* → valora los
-  criterios, sube evidencias y las vincula (trazabilidad), confirma los niveles → *Enviar a
-  revisión* a la DPGC.
-- **No conformidades:** *Analizar causa* → *Tratar* → *Enviar a verificación*.
-- **Acciones de mejora:** *Iniciar* → *Marcar ejecutada*.
+| Área | Sus botones |
+|---|---|
+| [Acreditación](../acreditacion/) | Autoevaluación: *Iniciar evaluacion*, *Enviar a revision*. Evidencia: *Subsanar* |
+| [Mejora continua](../mejora-continua/) | Hallazgo: *Tratar*, *Enviar a verificacion*. No conformidad: *Analizar causa*, *Tratar*, *Enviar a verificacion*. Acción de mejora: *Iniciar*, *Marcar ejecutada* |
+| [Dirección](../direccion/) | Aplicación de encuesta: *Iniciar campo* |
 
-Junto con la DPGC, es uno de los dos roles que pueden **fijar el nivel oficial** de acreditación
-(el resto solo lo ve).
+Junto con la dirección de calidad, es uno de los dos roles que pueden **fijar el nivel oficial**
+de acreditación; el resto solo lo ve.
 
-### DPGC — *la dirección de gestión de la calidad*
-Es la oficina central, dueña del SGC institucional. **Revisa, aprueba y cierra** lo que los
-programas ejecutan:
+## DPGC — la dirección de gestión de la calidad
 
-- **Autoevaluación:** *Consolidar* (o *Devolver a evaluación*) → *Cerrar*.
-- **No conformidades:** *Cerrar eficaz* / *Cerrar no eficaz* / *Reabrir tratamiento*.
-- **Planes de mejora:** *Aprobar y ejecutar* → *Cerrar plan*; verifica cada acción como
-  *eficaz* / *no eficaz*.
-- **Documentos:** *Aprobar* / *Observar* / *Derogar*.
+La oficina dueña del sistema de calidad. **Revisa, aprueba y cierra** lo que ejecutan los demás.
 
-### Analista de Calidad (DPGC)
-Staff operativo de la DPGC. Apoya en el mismo eje: prepara, consolida y da seguimiento, bajo la
-dirección de la DPGC.
+| Área | Sus botones |
+|---|---|
+| [Procesos](../procesos/) | Procedimiento y ficha: *Aprobar*, *Publicar*, *Devolver a borrador*, *Nueva version*, *Derogar* |
+| [Documentos](../documentos/) | *Aprobar*, *Observar*, *Nueva version*, *Derogar* |
+| [Acreditación](../acreditacion/) | Autoevaluación: *Devolver a evaluacion*, *Consolidar*, *Cerrar*. Informe de cumplimiento: *Enviar a revision*, *Aprobar*, *Observar* |
+| [Mejora continua](../mejora-continua/) | Hallazgo y no conformidad: cerrar eficaz o no eficaz, reabrir. Salida no conforme: tratar, *Verificar*, *Cerrar*. Plan: *Aprobar y ejecutar*, *Cerrar plan*. Acción: *Verificar eficaz* o *no eficaz*, *Reabrir* |
+| [Auditoría](../auditoria/) | Programa: *Aprobar programa*, *Cerrar programa*. Auditoría: *Cerrar auditoria*, *Reabrir*. Hallazgo: *Cerrar*, *Reabrir*, *Reabrir escalado*. Informe: *Aprobar*, *Devolver a borrador*, *Distribuir* |
+| [Riesgos](../riesgos/) | Evento: *Evaluar*, *Confirmar*, *Descartar*. Riesgo: *Cerrar*, *Materializar*. Tratamiento: *Verificar*, *Verificar no eficaz* |
+| [Dirección](../direccion/) | Revisión por la dirección: *Realizar revision*, *Devolver a planificada*, *Reabrir revision*. Aplicación de encuesta: *Cerrar aplicacion*, *Devolver a planificada* |
 
-### Dueño de Proceso
-Responsable de un proceso del mapa institucional. En el **control documental** redacta y mantiene
-los documentos de su proceso: crea el documento (Borrador) → *Enviar a revisión*; si la DPGC lo
-observa, *Corregir* y reenviar.
+## Analista de Calidad (DPGC)
 
-### Autoridad Aprobadora
-La autoridad que da el visto final a un documento (p. ej. Rector o Decano). **Publica** el
-documento una vez aprobado (*Publicar*: Aprobado → Publicado).
+Personal de la dirección de calidad. Prepara, registra, consolida y da seguimiento, pero **no
+ejecuta los cierres ni las aprobaciones**. Su único botón de flujo es en las evidencias:
+*Validar* y *Observar*.
 
-### Auditor Interno
-Aseguramiento independiente. Planifica y ejecuta el **programa de auditorías** y cada
-**auditoría**, registra sus hallazgos y emite el informe — dos workflows completos (ver
-abajo). No valora autoevaluaciones ni cierra planes: su función es constatar, no ejecutar
-ni aprobar. El cierre de la auditoría lo hace la DPGC, no el propio auditor.
+## Dueño de Proceso
 
-### Miembro de Comité de Calidad
-Integrante del comité de un programa. Colabora con el Responsable de Calidad de Programa en la
-valoración y la carga de evidencias.
+Responde de su proceso: documentos, procedimientos, ficha, riesgos y lo que se entrega mal.
 
-### Coordinador de Calidad de Facultad · Responsable de Sede
-Coordinación territorial y de facultad: visibilidad y articulación entre los programas de su
-ámbito y la DPGC.
+| Área | Sus botones |
+|---|---|
+| [Procesos](../procesos/) | Procedimiento y ficha: *Enviar a revision*, *Nueva version* |
+| [Documentos](../documentos/) | *Enviar a revision*, *Corregir*, *Nueva version* |
+| [Acreditación](../acreditacion/) | Evidencia: *Subsanar* |
+| [Mejora continua](../mejora-continua/) | Salida no conforme: *Iniciar tratamiento*, *Registrar tratamiento* |
+| [Riesgos](../riesgos/) | Riesgo: *Evaluar*, *Iniciar tratamiento*, *Monitorear*. Tratamiento: *Iniciar*, *Marcar implementado* |
 
-## Los flujos completos
+## Autoridad Aprobadora
 
-Cada flujo es una máquina de estados; la tabla indica **quién** ejecuta cada paso.
+La autoridad que da el visto final (por ejemplo, el rector o un decano): *Publicar* un documento
+ya aprobado y *Presentar a SUNEDU* el informe de cumplimiento.
 
-### Autoevaluación de acreditación
-| Desde | Acción | Hacia | Rol |
-|---|---|---|---|
-| Planificada | Iniciar evaluación | En curso | Responsable de Calidad de Programa |
-| En curso | Enviar a revisión | En revisión | Responsable de Calidad de Programa |
-| En revisión | Devolver a evaluación | En curso | DPGC |
-| En revisión | Consolidar | Consolidada | DPGC |
-| Consolidada | Cerrar | Cerrada | DPGC |
+## Auditor Interno
 
-### No conformidad (CAPA)
-| Desde | Acción | Hacia | Rol |
-|---|---|---|---|
-| Abierta | Analizar causa | En análisis | Responsable de Calidad de Programa |
-| En análisis | Tratar | En tratamiento | Responsable de Calidad de Programa |
-| En tratamiento | Enviar a verificación | En verificación | Responsable de Calidad de Programa |
-| En verificación | Cerrar eficaz | Cerrada eficaz | DPGC |
-| En verificación | Cerrar no eficaz | Cerrada no eficaz | DPGC |
-| En verificación | Reabrir tratamiento | En tratamiento | DPGC |
+Aseguramiento independiente: constata, no ejecuta ni aprueba. Crea el programa y cada auditoría,
+completa las listas de verificación y registra los hallazgos. Ver el [manual de
+Auditoría](../auditoria/).
 
-### Plan de mejora
-| Desde | Acción | Hacia | Rol |
-|---|---|---|---|
-| Borrador | Aprobar y ejecutar | En ejecución | DPGC |
-| En ejecución | Devolver a borrador | Borrador | DPGC |
-| En ejecución | Cerrar plan | Cerrado | DPGC |
+| Registro | Sus botones |
+|---|---|
+| Programa de auditoría | *Iniciar ejecucion* |
+| Auditoría | *Iniciar auditoria*, *Marcar ejecutada*, *Emitir informe*, *Devolver a ejecucion* |
+| Hallazgo de auditoría | *Escalar a NC* |
+| Informe de auditoría | *Enviar a revision* |
 
-### Acción de mejora
-| Desde | Acción | Hacia | Rol |
-|---|---|---|---|
-| Planificada | Iniciar | En ejecución | Responsable de Calidad de Programa |
-| En ejecución | Marcar ejecutada | Ejecutada | Responsable de Calidad de Programa |
-| Ejecutada | Verificar eficaz | Verificada eficaz | DPGC |
-| Ejecutada | Verificar no eficaz | Verificada no eficaz | DPGC |
-| Verificada no eficaz | Reabrir | En ejecución | DPGC |
+## Rectorado / Vicerrectorados
 
-### Control documental
-| Desde | Acción | Hacia | Rol |
-|---|---|---|---|
-| Borrador | Enviar a revisión | En revisión | Dueño de Proceso |
-| En revisión | Observar | Observado | DPGC |
-| En revisión | Aprobar | Aprobado | DPGC |
-| Observado | Corregir | Borrador | Dueño de Proceso |
-| Aprobado | Observar | Observado | DPGC |
-| Aprobado | Publicar | Publicado | Autoridad Aprobadora |
-| Publicado | Derogar | Obsoleto | DPGC |
-| Publicado | *(automático)* Otro documento lo reemplaza | Obsoleto | Sistema |
+Consultan todo el sistema y tienen **un acto propio**: *Cerrar revision*, en la revisión por la
+dirección. Es el momento en que la alta dirección firma que conoce el estado del sistema. Ver el
+[manual de Dirección](../direccion/).
 
-Un documento publicado llega a Obsoleto por dos caminos: DPGC lo deroga a mano, o el
-sistema lo obsoleta solo en cuanto se publica el documento que lo reemplaza
-(`reemplaza_a`) — nadie ejecuta esa segunda transición, no es una tarea de ningún rol.
+## Data Steward (quien administra los datos)
 
-### Programa de Auditoría
-| Desde | Acción | Hacia | Rol |
-|---|---|---|---|
-| Borrador | Aprobar programa | Aprobado | DPGC |
-| Aprobado | Iniciar ejecución | En ejecución | Auditor Interno |
-| Aprobado | Devolver a borrador | Borrador | DPGC |
-| En ejecución | Cerrar programa | Cerrado | DPGC |
+Mantiene los indicadores y sus fichas, registra mediciones y carga los resultados de las
+encuestas. No tiene botones de flujo: su trabajo es de registro. Ver el [manual de
+Indicadores](../indicadores/).
 
-### Auditoría
-| Desde | Acción | Hacia | Rol |
-|---|---|---|---|
-| Planificada | Iniciar auditoría | En ejecución | Auditor Interno |
-| En ejecución | Marcar ejecutada | Ejecutada | Auditor Interno |
-| Ejecutada | Emitir informe | Informe emitido | Auditor Interno |
-| Ejecutada | Devolver a ejecución | En ejecución | Auditor Interno |
-| Informe emitido | Cerrar auditoría | Cerrada | DPGC |
-| Informe emitido | Reabrir | Ejecutada | DPGC |
+## Miembro de Comité de Calidad
 
-El cierre lo hace la DPGC, no el propio auditor — es el punto de independencia de
-auditoría (ISO 19011): si una misma persona tuviera ambos roles, no podría cerrar su
-propia auditoría.
+Colabora con el Responsable de Calidad de Programa en la carga de evidencias y la valoración, y
+registra las reuniones y acuerdos del comité. Puede registrar hallazgos y salidas no conformes.
 
-### Aplicación de Instrumento (M12, encuestas)
-| Desde | Acción | Hacia | Rol |
-|---|---|---|---|
-| Planificada | Iniciar campo | En campo | Responsable de Calidad de Programa |
-| En campo | Devolver a planificada | Planificada | DPGC |
-| En campo | Cerrar aplicación | Cerrada | DPGC |
+## Colaborador
 
-### Revisión por la Dirección
-| Desde | Acción | Hacia | Rol |
-|---|---|---|---|
-| Planificada | Realizar revisión | Realizada | DPGC |
-| Realizada | Devolver a planificada | Planificada | DPGC |
-| Realizada | Cerrar revisión | Cerrada | DPGC |
-| Cerrada | Reabrir revisión | Realizada | DPGC |
+Cualquier persona de la institución con cuenta en el sistema. Su acción es **reportar un evento de
+riesgo** desde Inicio, y ve solo lo que reportó. Ver el [manual de Riesgos](../riesgos/).
 
-Las 4 transiciones las gobierna en exclusiva la DPGC (preside la revisión por la
-dirección, ISO 9001 §9.3) — es la única excepción del sistema donde la autoaprobación
-queda permitida a propósito, documentada como riesgo residual.
+## Coordinador de Calidad de Facultad · Responsable de Sede
 
-## Quién puede crear cada cosa
+Coordinación de facultad y de sede: visibilidad y articulación entre los programas de su ámbito y
+la dirección de calidad. El coordinador puede registrar hallazgos y salidas no conformes.
 
-Los permisos de creación no dependen del workflow sino del RBAC. En resumen:
+## Perfiles de consulta
 
-- **Los datos de calidad los crean los roles funcionales**, no un administrador. Un *System
-  Manager* tiene, a propósito, solo lectura sobre los DocTypes de negocio.
-- El **nivel oficial de acreditación** (permlevel 1) solo lo escriben **DPGC** y **Responsable
-  de Calidad de Programa**; los demás roles pueden verlo pero no cambiarlo.
+**Decano/Director (lectura)** y los **lectores externos** consultan sin modificar nada. El
+**administrador técnico** (System Manager) configura el sistema y programa los avisos de
+mantenimiento, pero a propósito **solo puede leer** los registros de calidad: los datos los crean
+los roles funcionales, no un administrador.

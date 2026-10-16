@@ -33,5 +33,13 @@ class Hallazgo(Document):
     def escalar_a_no_conformidad(self):
         """Wrapper whitelisted sobre `sgc.capa.escalar_a_no_conformidad` — expone
         a la UI/API la lógica ya implementada y probada en `capa.py`. Devuelve
-        el name de la No Conformidad (idempotente, ver `capa.py`)."""
+        el name de la No Conformidad (idempotente, ver `capa.py`).
+
+        Exige permiso para CREAR una No Conformidad. Frappe solo pide lectura del
+        hallazgo para llamar a un método del documento (`handler.run_doc_method`
+        hace `get_doc(check_permission=True)`, que comprueba «read»), y `capa`
+        inserta la NC con `ignore_permissions`: sin esta línea, cualquiera que
+        pudiera leer el hallazgo abriría una no conformidad. Misma regla que
+        `SalidaNoConforme.escalar_a_no_conformidad`."""
+        frappe.has_permission("No Conformidad", "create", throw=True)
         return _escalar(self.name).name

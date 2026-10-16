@@ -10,68 +10,89 @@ depende de **tu rol**. Busca el tuyo abajo: te dice por dónde empezar, qué hac
 en qué punto termina tu parte del trabajo.
 
 :::tip[Cómo te mueves por el sistema]
-- **Inicio** te resume lo que necesita tu atención y las autoevaluaciones en marcha.
-- El **menú de la izquierda** agrupa todo por áreas (Acreditación, Mejora continua, Gestión
-  documental, Procesos…).
-- Cada registro tiene un **estado**; los botones de acción (p. ej. *Enviar a revisión*) mueven
-  ese estado. Solo verás los botones que tu rol puede ejecutar.
+- **Inicio** reúne lo tuyo: **Lo que te toca**, **Esperan mi decisión**, **Mis tareas** y el
+  **Estado del sistema**.
+- El **menú de la izquierda** agrupa todo por áreas: Procesos, Documentos, Indicadores,
+  Acreditación y licenciamiento, Mejora continua, Auditoría, Riesgos, Dirección y partes
+  interesadas, y Configuración. Cada área tiene su portada con lo pendiente.
+- Cada registro tiene un **estado**; los botones de acción (por ejemplo, *Enviar a revisión*)
+  mueven ese estado. Solo verás los botones que tu rol puede ejecutar.
 :::
+
+## Cualquier persona: reportar algo que pasó
+
+Si ocurrió algo que puede afectar a la institución (una caída de un servicio, un plazo
+incumplido, una pérdida de datos), pulsa **Reportar evento de riesgo** en Inicio. No hace falta
+tener otro rol. Verás solo lo que tú reportaste, y la dirección de calidad te avisará si lo
+confirma o por qué lo descarta. Detalle en el [manual de Riesgos](../riesgos/).
 
 ## Soy Responsable de Calidad de Programa (comité del programa)
 
 Eres el motor: llevas la autoevaluación de tu programa de principio a fin.
 
-**Tu punto de partida:** en **Inicio**, tu autoevaluación aparece en "Autoevaluaciones". Si aún
-no existe, créala en el menú **Acreditación → Autoevaluación → Nueva** (eliges programa, periodo
-y marco normativo).
+**Tu punto de partida:** en **Inicio**, *Lo que te toca*. Si tu autoevaluación aún no existe,
+créala con **Nueva autoevaluación**, en la portada de **Acreditación y licenciamiento** (eliges
+programa, periodo y marco normativo).
 
 **Tu recorrido:**
 1. Abre tu autoevaluación y pulsa *Iniciar evaluación*. El sistema crea una valoración
-   Pendiente por cada criterio del marco; asigna un **responsable** a cada una para repartir el
+   pendiente por cada criterio del marco; asigna un **responsable** a cada una para repartir el
    trabajo (le llega como tarea).
 2. Por cada criterio del marco:
-   - Sube su respaldo en **Acreditación → Evidencia** (un archivo o un enlace).
-   - **Vincula** esa evidencia al criterio (trazabilidad), desde la propia ficha de la evidencia.
-   - **Valora** el criterio (cumple / no cumple / no aplica) viendo sus evidencias.
+   - Sube su respaldo en **Acreditación y licenciamiento → Evidencias** (un archivo o un enlace).
+   - **Vincula** esa evidencia al criterio, desde la propia ficha de la evidencia.
+   - **Valora** el criterio viendo sus evidencias.
 3. Cuando tengas todos los criterios valorados, **confirma los niveles** propuestos.
 4. Pulsa *Enviar a revisión*.
 
-**Dónde termina tu parte:** al *Enviar a revisión*. A partir de ahí la DPGC consolida y cierra.
+**Dónde termina tu parte:** al *Enviar a revisión*. A partir de ahí la dirección de calidad
+consolida y cierra.
 
-> Si en el camino detectas una brecha, se abre una **No conformidad**: tú la analizas, la tratas
-> y la envías a verificación (ver *Soy DPGC* para el cierre).
+> Si en el camino detectas una brecha, registra un **hallazgo** y, si el sistema falla, escálalo a
+> **no conformidad**: tú la analizas, la tratas y la envías a verificación. Ver el [manual de
+> Mejora continua](../mejora-continua/).
 
 ## Soy DPGC (dirección de gestión de la calidad)
 
-Tú no ejecutas la valoración: la **revisas, apruebas y cierras**.
+Tú no ejecutas el trabajo de los programas: lo **revisas, apruebas y cierras**.
 
-**Tu punto de partida:** en **Inicio**, el panel **"Requiere atención"** (no conformidades
-abiertas, planes en riesgo, documentos por revisar) y las autoevaluaciones que los programas te
-enviaron a revisión.
+**Tu punto de partida:** en **Inicio**, *Esperan mi decisión*: todo lo que está detenido hasta que
+tú actúes.
 
-**Tu recorrido:**
-- **Autoevaluaciones:** revisa la que te enviaron → *Consolidar* (o *Devolver a evaluación* si
-  falta algo) → *Cerrar*.
-- **No conformidades:** cuando el programa la envía a verificación → *Cerrar eficaz* / *Cerrar no
-  eficaz* / *Reabrir tratamiento*.
-- **Planes de mejora:** *Aprobar y ejecutar* y, al final, *Cerrar plan*; verifica cada acción como
-  *eficaz* o *no eficaz*.
-- **Documentos:** aprueba u observa los que llegan a revisión; deroga los que quedan obsoletos.
+**Tu recorrido, según lo que llegue:**
+- **Autoevaluaciones:** *Consolidar* (o *Devolver a evaluación* si falta algo) → *Cerrar*.
+- **Documentos, procedimientos y fichas:** aprobar u observar, publicar los procedimientos y
+  fichas, y derogar lo que queda obsoleto.
+- **Mejora continua:** cerrar hallazgos y no conformidades, verificar salidas no conformes,
+  aprobar y cerrar planes, y verificar cada acción.
+- **Auditoría:** aprobar y cerrar el programa, cerrar cada auditoría, aprobar y distribuir el
+  informe, cerrar los hallazgos.
+- **Riesgos:** evaluar, confirmar o descartar los eventos reportados; verificar tratamientos;
+  cerrar o materializar riesgos.
+- **Dirección:** realizar la revisión por la dirección y cerrar las aplicaciones de encuestas.
 
-**Dónde termina tu parte:** al *Consolidar*/*Cerrar* cada expediente.
+**Dónde termina tu parte:** al cerrar cada expediente. El sistema impide que cierres lo que tú
+mismo creaste o trataste: eso lo hace otra persona de la dirección de calidad.
 
 ## Soy Dueño de Proceso
 
-Tu trabajo es el **control documental** de tu proceso.
+Respondes de **tu proceso**: sus documentos, sus procedimientos, su ficha y sus riesgos.
 
-**Tu punto de partida:** menú **Gestión documental → Documento Controlado → Nuevo**.
+**Tu punto de partida:** en **Inicio**, *Lo que te toca*, y en **Procesos**, *Procesos a cargo*.
 
 **Tu recorrido:**
-1. Redacta el documento (nace en *Borrador*) y adjunta el archivo (PDF).
-2. Pulsa *Enviar a revisión*.
-3. Si la DPGC lo *observa*, corrígelo y vuelve a enviarlo.
+1. **Documentos:** **Documentos → Nuevo documento**, adjunta el archivo y pulsa *Enviar a
+   revisión*. Si la dirección de calidad lo *observa*, corrígelo y reenvíalo. Ver el [manual de
+   Documentos](../documentos/).
+2. **Procedimientos y ficha de caracterización:** los elaboras y los envías a revisión. Ver el
+   [manual de Procesos](../procesos/).
+3. **Riesgos:** registras los de tu proceso, los evalúas y los tratas. Ver el [manual de
+   Riesgos](../riesgos/).
+4. **Salidas no conformes:** cuando algo de tu proceso se entregó mal, lo tratas.
 
-**Dónde termina tu parte:** al enviarlo a revisión. La DPGC lo aprueba y la autoridad lo publica.
+**Dónde termina tu parte:** al enviar a revisión o al marcar implementado. La aprobación, la
+verificación y el cierre son de la dirección de calidad; la publicación de documentos, de la
+autoridad aprobadora.
 
 ## Soy Auditor Interno
 
@@ -79,24 +100,32 @@ Tu función es de **aseguramiento**: constatas, no ejecutas ni cierras.
 
 **Tu punto de partida:** el área de **Auditoría** del menú.
 
-**Tu recorrido:** registra tus **hallazgos de auditoría** (de programa, de ejecución o de
-informe). Un hallazgo puede escalar a una no conformidad, que tratará el programa responsable.
+**Tu recorrido:** creas el programa anual y cada auditoría, completas la lista de verificación,
+generas los hallazgos, escalas a no conformidad los que lo requieren y redactas el informe. Ver el
+[manual de Auditoría](../auditoria/).
 
-**Dónde termina tu parte:** al dejar registrado el hallazgo. El tratamiento y el cierre son de
-otros roles.
+**Dónde termina tu parte:** al enviar el informe a revisión. La aprobación del informe y el cierre
+son de la dirección de calidad.
+
+## Soy quien administra los datos (Data Steward)
+
+Mantienes el catálogo de **indicadores** y sus fichas, registras mediciones y cargas los
+resultados de las encuestas. Ver el [manual de Indicadores](../indicadores/).
 
 ## Soy Miembro de Comité de Calidad
 
-Apoyas al **Responsable de Calidad de Programa**: sobre todo en cargar evidencias y valorar
-criterios. Tu recorrido es el mismo de esa sección, en modo colaboración.
+Apoyas al Responsable de Calidad de Programa, sobre todo en cargar evidencias y valorar criterios,
+y registras las **reuniones** y **acuerdos** del comité.
 
-## Soy Autoridad Aprobadora / Coordinador de Facultad / Responsable de Sede
+## Soy Autoridad Aprobadora · Rectorado · Coordinación
 
-- **Autoridad Aprobadora:** tu acción puntual es *Publicar* un documento ya aprobado por la DPGC.
-- **Coordinador de Facultad · Responsable de Sede:** tu rol es de coordinación y visibilidad
-  entre los programas de tu ámbito y la DPGC.
+- **Autoridad Aprobadora:** tu acción puntual es *Publicar* un documento ya aprobado por la
+  dirección de calidad, y *Presentar a SUNEDU* el informe de cumplimiento.
+- **Rectorado:** *cierras la revisión por la dirección*. Ver el [manual de
+  Dirección](../direccion/).
+- **Coordinador de Facultad · Responsable de Sede:** tu rol es de coordinación y visibilidad entre
+  los programas de tu ámbito y la dirección de calidad.
 
 ---
 
-¿Quieres el detalle completo de cada flujo (todos los estados y quién ejecuta cada paso)? Está en
-[Flujos de tarea por perfil](../perfiles/).
+¿Quieres ver de un vistazo qué botones son de cada rol? Está en [Qué hace cada perfil](../perfiles/).

@@ -48,13 +48,56 @@ class IntegrationTestHallazgoAuditoriaWorkflow(IntegrationTestCase):
                             update_modified=False)
         return frappe.get_doc("Hallazgo Auditoria", doc.name)
 
-    def test_escalado_a_nc_exige_la_no_conformidad(self):
-        """Declarar el escalamiento sin la NC deja el enlace M05↔M06 en falso."""
+    def test_entrar_en_escalado_desde_abierto_crea_la_nc(self):
+        """El enlace M05↔M06 nunca queda en falso: llegar a «Escalado a NC» la crea.
+
+        Hasta la 1.7.2 esto se rechazaba, y era justo lo que hace el botón
+        «Escalar a NC» del flujo: el auditor no podía escalar desde la pantalla.
+        """
         doc = self._hallazgo()
 
         doc.estado = "Escalado a NC"
+        doc.save(ignore_permissions=True)
+
+        self.assertTrue(doc.no_conformidad)
+        self.assertTrue(frappe.db.exists("No Conformidad", doc.no_conformidad))
+        self.assertEqual(doc.genera_nc, 1)
+
+    def test_la_accion_del_flujo_escala_de_verdad(self):
+        """El botón «Escalar a NC» crea la NC con los datos del hallazgo."""
+        doc = self._hallazgo(tipo="No conformidad mayor", descripcion="Falta el registro de calibración.")
+
+        apply_workflow(doc, "Escalar a NC")
+
+        doc = frappe.get_doc("Hallazgo Auditoria", doc.name)
+        self.assertEqual(doc.estado, "Escalado a NC")
+        nc = frappe.get_doc("No Conformidad", doc.no_conformidad)
+        self.assertEqual(nc.tipo, "No conformidad mayor")
+        self.assertEqual(nc.origen_doctype, "Auditoria")
+        self.assertEqual(nc.origen_id, self.auditoria)
+        self.assertEqual(nc.descripcion, "Falta el registro de calibración.")
+        self.assertEqual(nc.requiere_analisis_causa, 1)
+        # Y el método público, llamado después, no duplica: devuelve la misma.
+        self.assertEqual(doc.escalar_a_no_conformidad(), nc.name)
+
+    def test_la_accion_del_flujo_no_escala_una_fortaleza(self):
+        """Una fortaleza no es una no conformidad: el mensaje lo dice."""
+        doc = self._hallazgo(tipo="Fortaleza")
+
         with self.assertRaises(frappe.ValidationError) as ctx:
-            doc.save(ignore_permissions=True)
+            apply_workflow(doc, "Escalar a NC")
+
+        self.assertIn("no constituye una no conformidad", str(ctx.exception))
+        self.assertFalse(frappe.db.get_value("Hallazgo Auditoria", doc.name, "no_conformidad"))
+
+    def test_escalado_sin_nc_por_otra_via_sigue_rechazado(self):
+        """«Reabrir escalado» de un hallazgo que nunca escaló no inventa la NC."""
+        doc = self._hallazgo_de_otro(tipo="Observacion")
+        apply_workflow(doc, "Cerrar")
+
+        doc = frappe.get_doc("Hallazgo Auditoria", doc.name)
+        with self.assertRaises(frappe.ValidationError) as ctx:
+            apply_workflow(doc, "Reabrir escalado")
 
         self.assertIn("no conformidad", str(ctx.exception).lower())
 
