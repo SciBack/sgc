@@ -9,6 +9,27 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.3] - 2026-10-16
+
+**Requiere migrar:** sí, como en toda actualización: la migración limpia la caché y el formulario
+del hallazgo carga su botón nuevo. Sin cambios de esquema ni de datos.
+
+### Corregido
+- **Escalar un hallazgo de auditoría a no conformidad desde la pantalla.** El botón «Escalar a NC»
+  del flujo daba error y mandaba a una acción que no existía en pantalla, así que el auditor no
+  podía escalar. Ahora crea la no conformidad con los datos del hallazgo y deja los dos enlazados.
+- **Escalar un hallazgo de autoevaluación.** La función existía pero no tenía botón. Ahora el
+  formulario muestra «Escalar a no conformidad» en debilidades y oportunidades de mejora, solo a
+  quien puede crear no conformidades: hasta ahora bastaba con poder leer el hallazgo.
+
+### Cambiado
+- **El manual cubre las nueve áreas del menú.** Manuales nuevos de Indicadores, Auditoría, Riesgos
+  y Dirección y partes interesadas; Documentos y Mejora continua, reescritos para el usuario (eran
+  anteriores a la 1.5.0 y estaban escritos para desarrolladores).
+- «Primeros pasos» y «Qué hace cada perfil», al día con la 1.7.2: perfiles decía que la dirección de
+  calidad cierra la revisión por la dirección, y la cierra el rectorado.
+- Primer tutorial: «Publicar una ficha de caracterización».
+
 ## [1.7.2] - 2026-10-15
 
 **Requiere migrar:** no hace falta (la aplicación no cambia; solo el manual).
