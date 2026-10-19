@@ -50,7 +50,17 @@ app_include_js = [
 # Canal de soporte (#56): «Reportar un problema» en el menú de Ayuda, SOLO si hay un
 # helpdesk configurado (`condition` se evalúa en el navegador contra el boot).
 extend_bootinfo = ["sgc.soporte.boot"]
+# El manual de usuario se sirve en /manual detrás de la sesión del SGC
+# (`sgc.manual_auth`). Un Route que empieza por «/» y no por «/desk» lo abre el
+# navegador en la misma pestaña. Una instancia sin manual lo oculta en Navbar
+# Settings (casilla «Oculto»): el migrate respeta lo que ya existe.
 standard_help_items = [
+	{
+		"item_label": "Manual de usuario",
+		"item_type": "Route",
+		"route": "/manual/",
+		"is_standard": 1,
+	},
 	{
 		"item_label": "Reportar un problema",
 		"item_type": "Action",
