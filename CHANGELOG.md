@@ -9,6 +9,22 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.4] - 2026-10-19
+
+**Requiere migrar:** sí: la migración añade el enlace nuevo al menú Ayuda (Navbar Settings).
+Sin cambios de esquema ni de datos.
+
+### Añadido
+- **«Manual de usuario» en el menú Ayuda.** Lleva al manual en `/manual/`, en la misma pestaña;
+  quien no tenga sesión pasa por el login y vuelve al manual. Una instancia que no publique el
+  manual puede ocultarlo con la casilla «Oculto» de Navbar Settings: el migrate no lo vuelve a
+  mostrar.
+
+### Corregido
+- **El aviso «scheduler-parado» ya no salta en cada actualización.** La comprobación corría con el
+  sitio en modo mantenimiento y lo contaba como scheduler apagado. Ahora el mantenimiento no
+  cuenta; un sitio que se quede días en mantenimiento sigue avisando por el desfase de las tareas.
+
 ## [1.7.3] - 2026-10-16
 
 **Requiere migrar:** sí, como en toda actualización: la migración limpia la caché y el formulario
