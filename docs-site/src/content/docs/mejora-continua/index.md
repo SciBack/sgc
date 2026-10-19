@@ -19,6 +19,8 @@ alguien diga que está hecho: se cierra con evidencia y lo cierra otra persona.
 
 Menú izquierdo → **Mejora continua**. Tiene estas entradas:
 
+![Portada del área de Mejora continua](captura:mejora-portada)
+
 | Entrada | Qué es |
 |---|---|
 | **Portada del área** | Lo abierto, lo vencido y lo que espera verificación, con sus cifras |
@@ -96,6 +98,8 @@ pulse **Escalar a no conformidad**, elija si es mayor o menor, y las dos quedan 
 salida no conforme, un hallazgo de auditoría o un riesgo que se materializa. Tipos: **no
 conformidad mayor**, **menor**, **potencial no conformidad** (todavía no incumple, pero va a
 incumplir si no se actúa), **observación** y **oportunidad de mejora**.
+
+![Formulario de una no conformidad nueva](captura:mejora-nc-nueva)
 
 | Estado | Quién actúa | Botón | Qué exige para pasar |
 |---|---|---|---|

@@ -19,6 +19,10 @@ en qué punto termina tu parte del trabajo.
   mueven ese estado. Solo verás los botones que tu rol puede ejecutar.
 :::
 
+![La portada del SGC: lo que te toca en todas las áreas](captura:inicio-portada)
+
+![El menú Ayuda lleva a este manual](captura:ayuda-manual)
+
 ## Cualquier persona: reportar algo que pasó
 
 Si ocurrió algo que puede afectar a la institución (una caída de un servicio, un plazo

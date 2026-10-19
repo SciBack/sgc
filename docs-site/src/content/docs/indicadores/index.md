@@ -20,6 +20,8 @@ falso es peor que un hueco.
 
 Menú izquierdo → **Indicadores**. Tiene estas entradas:
 
+![Portada del área de Indicadores](captura:indicadores-portada)
+
 | Entrada | Qué es |
 |---|---|
 | **Portada del área** | Lo que toca medir, las alertas abiertas y las mediciones en rojo |
@@ -41,6 +43,8 @@ su analista y quien administra los datos.
 ## 3. La ficha del indicador
 
 La ficha dice **cómo** se mide. **Fichas de indicador → + Agregar**, y complete:
+
+![Ficha de un indicador](captura:indicadores-ficha)
 
 | Grupo | Campos |
 |---|---|
@@ -71,6 +75,8 @@ cada una. Cada área aparece una vez y los pesos tienen que sumar **100 %**; si 
 deja guardar y dice cuánto suman.
 
 ## 4. Registrar una medición
+
+![Una medición con su semáforo calculado](captura:indicadores-medicion)
 
 1. **Mediciones → + Agregar**, o **Registrar medición** en la portada.
 2. Indique el **indicador**, el **periodo académico** y, si aplica, el programa y sede o la unidad.

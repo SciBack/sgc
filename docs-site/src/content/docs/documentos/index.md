@@ -20,6 +20,8 @@ aprobó.
 
 Menú izquierdo → **Documentos**. Tiene estas entradas:
 
+![Portada del área de Documentos](captura:documentos-portada)
+
 | Entrada | Qué es |
 |---|---|
 | **Portada del área** | Atajos a lo pendiente: borradores, documentos de sus procesos, en revisión, por publicar y publicados |
@@ -28,6 +30,8 @@ Menú izquierdo → **Documentos**. Tiene estas entradas:
 | **Accesos a documentos** | Quién consultó o descargó cada documento (solo dirección de calidad) |
 
 ## 2. Crear un documento
+
+![Formulario de un documento controlado](captura:documentos-documento)
 
 1. **Documentos controlados → + Agregar**, o **Nuevo documento** en la portada del área.
 2. Complete:
@@ -143,6 +147,8 @@ hacerlo la dirección de calidad, su analista y el dueño del proceso.
 
 La lista maestra de documentos (código, título, tipo, versión, estado, próxima revisión y
 proceso) se saca desde la propia lista:
+
+![La lista de documentos controlados con su estado](captura:documentos-lista)
 
 1. En **Documentos controlados**, cambie la vista a **Reporte** con el selector de vistas, arriba
    a la derecha.

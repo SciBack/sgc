@@ -24,6 +24,8 @@ En este sistema **el código de un documento es su identidad**. Un proceso cuyo 
 `S04.04` se llama literalmente `S04.04` por dentro, y todo lo que lo referencia apunta a ese
 código. No hay un identificador oculto detrás.
 
+![Portada del área de Configuración](captura:configuracion-portada)
+
 Esto tiene una consecuencia práctica que conviene entender antes de tocar nada: **cambiar el
 código es renombrar el documento**. No es editar una etiqueta.
 

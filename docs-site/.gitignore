@@ -19,3 +19,6 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+
+# Capturas de pantalla: las pone cada institución al construir su manual (remark-capturas).
+public/capturas/

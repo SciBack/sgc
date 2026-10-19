@@ -25,8 +25,9 @@
     "canary:contrast": "node scripts/run-canary.mjs contrast",
     "canary:cache-base": "node scripts/run-canary.mjs cache-base",
     "verify:canaries": "npm run canary:links && npm run canary:coverage && npm run canary:privacy && npm run canary:contrast && npm run canary:cache-base",
-    "verify": "npm run verify:config && npm run test:coverage && node scripts/verify-coverage.mjs --require-pages && npm run check && npm run build && npm run verify:links && npm run verify:privacy && npm run verify:orphans && npm run verify:dist && npm run verify:cache && npm run verify:canaries && npm run verify:contrast && npm run verify:visual",
-    "verify:docker": "docker build --build-context sgc=../sgc -t sgc-manual:verify ."
+    "verify": "npm run verify:config && npm run test:capturas && npm run test:coverage && node scripts/verify-coverage.mjs --require-pages && npm run check && npm run build && npm run verify:links && npm run verify:privacy && npm run verify:orphans && npm run verify:dist && npm run verify:cache && npm run verify:canaries && npm run verify:contrast && npm run verify:visual",
+    "verify:docker": "docker build --build-context sgc=../sgc -t sgc-manual:verify .",
+    "test:capturas": "node --test tests/remark-capturas.test.mjs"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.41.3",

@@ -30,6 +30,21 @@ sitio la lee de `sgc/__init__.py` («Manual del SGC 1.7.2»). Por eso, cuando un
 que ve el usuario, su página del manual se corrige **en la misma PR**. Detalle en
 [`docs/desarrollo/versionado.md`](../docs/desarrollo/versionado.md).
 
+## Capturas de pantalla
+
+Una captura del SGC en marcha enseña la marca, los procesos y las personas de una institución,
+así que **este repositorio no guarda ninguna**. Las páginas solo las nombran:
+
+```md
+![Portada del área de Procesos](captura:procesos-portada)
+```
+
+`src/plugins/remark-capturas.mjs` busca `public/capturas/<id>.webp|png|jpg` al compilar: si está,
+pinta la imagen; si no, quita la referencia sin dejar hueco. El manual público sale sin capturas.
+Cada institución pone las suyas al construir su manual (en UPeU, `upeu-ops`
+`services/sgc/manual/capturas/`, que su Dockerfile copia a `public/capturas/`). `public/capturas/`
+está en `.gitignore`. El id es kebab-case y el texto alternativo es obligatorio: sin él no compila.
+
 ## Reglas al escribir
 
 - El repo es público: nada de una institución concreta (dominios, nombres, sedes). Lo propio de

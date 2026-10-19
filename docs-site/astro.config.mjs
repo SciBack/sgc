@@ -2,6 +2,8 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import remarkCapturas from './src/plugins/remark-capturas.mjs';
 
 const site = process.env.DOCS_SITE;
 if (!site) throw new Error('DOCS_SITE es obligatorio (ej. https://calidad.upeu.edu.pe)');
@@ -22,6 +24,10 @@ export default defineConfig({
   base,
   output: 'static',
   trailingSlash: 'always',
+  // Las capturas las pone cada institución en public/capturas/ (ver el plugin).
+  markdown: {
+    remarkPlugins: [[remarkCapturas, { dir: fileURLToPath(new URL('./public/capturas/', import.meta.url)), base }]],
+  },
   integrations: [
     starlight({
       title: `Manual del SGC ${sgcVersion}`,

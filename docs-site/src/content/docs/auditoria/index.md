@@ -19,6 +19,8 @@ no hace falta vigilarlo.
 
 Menú izquierdo → **Auditoría**. Tiene estas entradas:
 
+![Portada del área de Auditoría](captura:auditoria-portada)
+
 | Entrada | Qué es |
 |---|---|
 | **Portada del área** | Programas por aprobar, auditorías en ejecución, informes por aprobar y hallazgos abiertos |
@@ -43,6 +45,8 @@ El programa se imprime como **Plan Anual de Auditoría** desde el menú **Imprim
 ## 3. La auditoría
 
 **Crear:** **Auditorías → + Agregar**, o **Nueva auditoría** en la portada.
+
+![Formulario de una auditoría nueva](captura:auditoria-nueva)
 
 | Estado | Quién actúa | Botón | Qué exige |
 |---|---|---|---|

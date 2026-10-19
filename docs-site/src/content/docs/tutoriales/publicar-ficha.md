@@ -38,6 +38,8 @@ del proceso no llegan a nadie.
 
 ## Paso 2. Crear la ficha (dueño del proceso)
 
+![Una ficha de caracterización en borrador](captura:procesos-ficha)
+
 1. **Procesos → Fichas de caracterización → + Agregar**.
 2. Elija el **proceso** y pulse **Guardar**.
 3. Al guardar, la ficha **trae sola** lo que el sistema ya sabe del proceso: sus procedimientos, sus

@@ -20,6 +20,8 @@ de la institución firma que conoce el estado del sistema.
 
 Menú izquierdo → **Dirección y partes interesadas**. Tiene estas entradas:
 
+![Portada del área de Dirección y partes interesadas](captura:direccion-portada)
+
 | Entrada | Qué es |
 |---|---|
 | **Portada del área** | Acuerdos y acuerdos vencidos, objetivos, encuestas en campo y revisiones abiertas |
@@ -148,6 +150,8 @@ está instalado?** Mide en vivo los criterios de una puesta en marcha: el diagn�
 básicas con su PDF, documentos que pasaron el flujo completo, una autoevaluación cerrada, evidencias
 clasificadas, indicadores con medición, acciones de mejora en seguimiento, la revisión de seguridad
 y las personas que usan el sistema, cada uno contra su meta.
+
+![Informe de implantación del SGC](captura:direccion-implantacion)
 
 Son recuentos: dice cuántos hay, no qué dice cada registro.
 

@@ -20,6 +20,8 @@ muestra **qué exige el criterio** y admite un **responsable**: quien lo prepara
 tarea en sus pendientes hasta que el criterio queda valorado. Un criterio no puede valorarse dos
 veces en la misma autoevaluación, y la autoevaluación lista sus valoraciones en Conexiones.
 
+![Una autoevaluación planificada](captura:acreditacion-autoevaluacion)
+
 Para cada criterio, el comité registra en su **Valoracion Criterio** el juicio (`cumple`):
 
 - `Cumple`
