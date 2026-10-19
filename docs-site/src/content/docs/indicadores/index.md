@@ -18,7 +18,12 @@ falso es peor que un hueco.
 
 ## 1. El área de Indicadores
 
-Menú izquierdo → **Indicadores**. Tiene estas entradas:
+**Cómo entrar:** arriba a la izquierda, pulse el nombre del área en la que está (el que lleva
+la flecha ⌄) → **Módulos** → **Indicadores**.
+
+![Menú «Módulos» con Indicadores resaltado](captura:navegacion-indicadores)
+
+Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
 
 ![Portada del área de Indicadores](captura:indicadores-portada)
 

@@ -18,7 +18,12 @@ que la institución se entere a tiempo.
 
 ## 1. El área de Riesgos
 
-Menú izquierdo → **Riesgos**. Tiene estas entradas:
+**Cómo entrar:** arriba a la izquierda, pulse el nombre del área en la que está (el que lleva
+la flecha ⌄) → **Módulos** → **Riesgos**.
+
+![Menú «Módulos» con Riesgos resaltado](captura:navegacion-riesgos)
+
+Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
 
 ![Portada del área de Riesgos](captura:riesgos-portada)
 

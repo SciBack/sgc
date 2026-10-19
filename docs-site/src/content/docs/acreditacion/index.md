@@ -24,6 +24,13 @@ para la acreditación.
 
 ## El menú del área
 
+**Cómo entrar:** arriba a la izquierda, pulse el nombre del área en la que está (el que lleva
+la flecha ⌄) → **Módulos** → **Acreditación y licenciamiento**.
+
+![Menú «Módulos» con Acreditación y licenciamiento resaltado](captura:navegacion-acreditacion)
+
+Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
+
 ![Portada del área de Acreditación y licenciamiento](captura:acreditacion-portada)
 
 | Entrada | Para qué |

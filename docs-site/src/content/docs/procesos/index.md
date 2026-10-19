@@ -24,12 +24,17 @@ público de procesos: ya no hay que pedirle a nadie que lo copie a otra web.
 3. Si no recuerda la contraseña de su correo, la recupera la mesa de ayuda, no el sistema de
    calidad.
 
-Al entrar ve **Inicio**: lo que le toca a usted (tareas, decisiones pendientes, borradores) y el
-menú de la izquierda con las áreas.
+Al entrar ve **Inicio**: lo que le toca a usted (tareas, decisiones pendientes, borradores) y, a la
+izquierda, el menú del área en la que está.
 
 ## 2. El área de Procesos
 
-Menú izquierdo → **Procesos**. Tiene estas entradas:
+**Cómo entrar:** arriba a la izquierda, pulse el nombre del área en la que está (el que lleva
+la flecha ⌄) → **Módulos** → **Procesos**.
+
+![Menú «Módulos» con Procesos resaltado](captura:navegacion-procesos)
+
+Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
 
 ![Portada del área de Procesos](captura:procesos-portada)
 

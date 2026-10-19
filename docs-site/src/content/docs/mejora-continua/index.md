@@ -17,7 +17,12 @@ alguien diga que está hecho: se cierra con evidencia y lo cierra otra persona.
 
 ## 1. El área de Mejora continua
 
-Menú izquierdo → **Mejora continua**. Tiene estas entradas:
+**Cómo entrar:** arriba a la izquierda, pulse el nombre del área en la que está (el que lleva
+la flecha ⌄) → **Módulos** → **Mejora continua**.
+
+![Menú «Módulos» con Mejora continua resaltado](captura:navegacion-mejora-continua)
+
+Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
 
 ![Portada del área de Mejora continua](captura:mejora-portada)
 

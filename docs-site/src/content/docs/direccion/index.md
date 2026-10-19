@@ -18,7 +18,12 @@ de la institución firma que conoce el estado del sistema.
 
 ## 1. El área de Dirección y partes interesadas
 
-Menú izquierdo → **Dirección y partes interesadas**. Tiene estas entradas:
+**Cómo entrar:** arriba a la izquierda, pulse el nombre del área en la que está (el que lleva
+la flecha ⌄) → **Módulos** → **Dirección y partes interesadas**.
+
+![Menú «Módulos» con Dirección y partes interesadas resaltado](captura:navegacion-direccion)
+
+Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
 
 ![Portada del área de Dirección y partes interesadas](captura:direccion-portada)
 

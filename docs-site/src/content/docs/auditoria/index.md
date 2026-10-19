@@ -17,7 +17,12 @@ no hace falta vigilarlo.
 
 ## 1. El área de Auditoría
 
-Menú izquierdo → **Auditoría**. Tiene estas entradas:
+**Cómo entrar:** arriba a la izquierda, pulse el nombre del área en la que está (el que lleva
+la flecha ⌄) → **Módulos** → **Auditoría**.
+
+![Menú «Módulos» con Auditoría resaltado](captura:navegacion-auditoria)
+
+Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
 
 ![Portada del área de Auditoría](captura:auditoria-portada)
 
