@@ -18,7 +18,14 @@ de la institución firma que conoce el estado del sistema.
 
 ## 1. El área de Dirección y partes interesadas
 
-Menú izquierdo → **Dirección y partes interesadas**. Tiene estas entradas:
+**Cómo entrar:** arriba a la izquierda, pulse el nombre del área en la que está (el que lleva
+la flecha ⌄) → **Módulos** → **Dirección y partes interesadas**.
+
+![Menú «Módulos» con Dirección y partes interesadas resaltado](captura:navegacion-direccion)
+
+Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
+
+![Portada del área de Dirección y partes interesadas](captura:direccion-portada)
 
 | Entrada | Qué es |
 |---|---|
@@ -148,6 +155,8 @@ está instalado?** Mide en vivo los criterios de una puesta en marcha: el diagn�
 básicas con su PDF, documentos que pasaron el flujo completo, una autoevaluación cerrada, evidencias
 clasificadas, indicadores con medición, acciones de mejora en seguimiento, la revisión de seguridad
 y las personas que usan el sistema, cada uno contra su meta.
+
+![Informe de implantación del SGC](captura:direccion-implantacion)
 
 Son recuentos: dice cuántos hay, no qué dice cada registro.
 

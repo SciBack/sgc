@@ -17,7 +17,14 @@ alguien diga que está hecho: se cierra con evidencia y lo cierra otra persona.
 
 ## 1. El área de Mejora continua
 
-Menú izquierdo → **Mejora continua**. Tiene estas entradas:
+**Cómo entrar:** arriba a la izquierda, pulse el nombre del área en la que está (el que lleva
+la flecha ⌄) → **Módulos** → **Mejora continua**.
+
+![Menú «Módulos» con Mejora continua resaltado](captura:navegacion-mejora-continua)
+
+Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
+
+![Portada del área de Mejora continua](captura:mejora-portada)
 
 | Entrada | Qué es |
 |---|---|
@@ -96,6 +103,8 @@ pulse **Escalar a no conformidad**, elija si es mayor o menor, y las dos quedan 
 salida no conforme, un hallazgo de auditoría o un riesgo que se materializa. Tipos: **no
 conformidad mayor**, **menor**, **potencial no conformidad** (todavía no incumple, pero va a
 incumplir si no se actúa), **observación** y **oportunidad de mejora**.
+
+![Formulario de una no conformidad nueva](captura:mejora-nc-nueva)
 
 | Estado | Quién actúa | Botón | Qué exige para pasar |
 |---|---|---|---|

@@ -24,6 +24,13 @@ En este sistema **el código de un documento es su identidad**. Un proceso cuyo 
 `S04.04` se llama literalmente `S04.04` por dentro, y todo lo que lo referencia apunta a ese
 código. No hay un identificador oculto detrás.
 
+**Cómo entrar:** arriba a la izquierda, pulse el nombre del área en la que está (el que lleva
+la flecha ⌄) → **Módulos** → **Configuración**.
+
+![Menú «Módulos» con Configuración resaltado](captura:navegacion-configuracion)
+
+![Portada del área de Configuración](captura:configuracion-portada)
+
 Esto tiene una consecuencia práctica que conviene entender antes de tocar nada: **cambiar el
 código es renombrar el documento**. No es editar una etiqueta.
 

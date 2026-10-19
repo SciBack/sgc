@@ -18,7 +18,14 @@ aprobó.
 
 ## 1. El área de Documentos
 
-Menú izquierdo → **Documentos**. Tiene estas entradas:
+**Cómo entrar:** arriba a la izquierda, pulse el nombre del área en la que está (el que lleva
+la flecha ⌄) → **Módulos** → **Documentos**.
+
+![Menú «Módulos» con Documentos resaltado](captura:navegacion-documentos)
+
+Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
+
+![Portada del área de Documentos](captura:documentos-portada)
 
 | Entrada | Qué es |
 |---|---|
@@ -28,6 +35,8 @@ Menú izquierdo → **Documentos**. Tiene estas entradas:
 | **Accesos a documentos** | Quién consultó o descargó cada documento (solo dirección de calidad) |
 
 ## 2. Crear un documento
+
+![Formulario de un documento controlado](captura:documentos-documento)
 
 1. **Documentos controlados → + Agregar**, o **Nuevo documento** en la portada del área.
 2. Complete:
@@ -143,6 +152,8 @@ hacerlo la dirección de calidad, su analista y el dueño del proceso.
 
 La lista maestra de documentos (código, título, tipo, versión, estado, próxima revisión y
 proceso) se saca desde la propia lista:
+
+![La lista de documentos controlados con su estado](captura:documentos-lista)
 
 1. En **Documentos controlados**, cambie la vista a **Reporte** con el selector de vistas, arriba
    a la derecha.

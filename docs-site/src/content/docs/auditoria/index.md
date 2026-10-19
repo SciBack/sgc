@@ -17,7 +17,14 @@ no hace falta vigilarlo.
 
 ## 1. El área de Auditoría
 
-Menú izquierdo → **Auditoría**. Tiene estas entradas:
+**Cómo entrar:** arriba a la izquierda, pulse el nombre del área en la que está (el que lleva
+la flecha ⌄) → **Módulos** → **Auditoría**.
+
+![Menú «Módulos» con Auditoría resaltado](captura:navegacion-auditoria)
+
+Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
+
+![Portada del área de Auditoría](captura:auditoria-portada)
 
 | Entrada | Qué es |
 |---|---|
@@ -43,6 +50,8 @@ El programa se imprime como **Plan Anual de Auditoría** desde el menú **Imprim
 ## 3. La auditoría
 
 **Crear:** **Auditorías → + Agregar**, o **Nueva auditoría** en la portada.
+
+![Formulario de una auditoría nueva](captura:auditoria-nueva)
 
 | Estado | Quién actúa | Botón | Qué exige |
 |---|---|---|---|

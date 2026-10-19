@@ -18,7 +18,14 @@ falso es peor que un hueco.
 
 ## 1. El área de Indicadores
 
-Menú izquierdo → **Indicadores**. Tiene estas entradas:
+**Cómo entrar:** arriba a la izquierda, pulse el nombre del área en la que está (el que lleva
+la flecha ⌄) → **Módulos** → **Indicadores**.
+
+![Menú «Módulos» con Indicadores resaltado](captura:navegacion-indicadores)
+
+Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
+
+![Portada del área de Indicadores](captura:indicadores-portada)
 
 | Entrada | Qué es |
 |---|---|
@@ -41,6 +48,8 @@ su analista y quien administra los datos.
 ## 3. La ficha del indicador
 
 La ficha dice **cómo** se mide. **Fichas de indicador → + Agregar**, y complete:
+
+![Ficha de un indicador](captura:indicadores-ficha)
 
 | Grupo | Campos |
 |---|---|
@@ -71,6 +80,8 @@ cada una. Cada área aparece una vez y los pesos tienen que sumar **100 %**; si 
 deja guardar y dice cuánto suman.
 
 ## 4. Registrar una medición
+
+![Una medición con su semáforo calculado](captura:indicadores-medicion)
 
 1. **Mediciones → + Agregar**, o **Registrar medición** en la portada.
 2. Indique el **indicador**, el **periodo académico** y, si aplica, el programa y sede o la unidad.

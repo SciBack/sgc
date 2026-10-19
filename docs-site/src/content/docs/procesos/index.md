@@ -24,12 +24,19 @@ público de procesos: ya no hay que pedirle a nadie que lo copie a otra web.
 3. Si no recuerda la contraseña de su correo, la recupera la mesa de ayuda, no el sistema de
    calidad.
 
-Al entrar ve **Inicio**: lo que le toca a usted (tareas, decisiones pendientes, borradores) y el
-menú de la izquierda con las áreas.
+Al entrar ve **Inicio**: lo que le toca a usted (tareas, decisiones pendientes, borradores) y, a la
+izquierda, el menú del área en la que está.
 
 ## 2. El área de Procesos
 
-Menú izquierdo → **Procesos**. Tiene estas entradas:
+**Cómo entrar:** arriba a la izquierda, pulse el nombre del área en la que está (el que lleva
+la flecha ⌄) → **Módulos** → **Procesos**.
+
+![Menú «Módulos» con Procesos resaltado](captura:navegacion-procesos)
+
+Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
+
+![Portada del área de Procesos](captura:procesos-portada)
 
 | Entrada | Qué es |
 |---|---|
@@ -46,9 +53,13 @@ En **Mapa de procesos**, cambie la vista a **Árbol** con el selector de vistas,
 derecha. Se despliegan los niveles: macroproceso → proceso → subproceso. Haga clic en cualquiera
 para abrirlo.
 
+![El mapa de procesos en vista de árbol](captura:procesos-arbol)
+
 ## 3. Un proceso
 
 Al abrir un proceso ve:
+
+![Un proceso con sus conexiones a fichas, procedimientos, documentos e indicadores](captura:procesos-proceso)
 
 - **Código y denominación.** Salen del mapa oficial de la institución: no se inventan.
 - **Nivel BPM** (macroproceso, proceso o subproceso), **Nivel** (estratégico, clave o soporte) y
@@ -74,6 +85,8 @@ Al abrir un proceso ve:
 
 Un procedimiento es la secuencia de tareas de un proceso. Lo elabora el dueño del proceso y lo
 aprueba la dirección de calidad.
+
+![Un procedimiento publicado con su diagrama de flujo](captura:procesos-procedimiento)
 
 **Crear:** **Procedimientos → + Agregar**. Indique el código según la codificación de la
 institución, el título y el **proceso** al que pertenece. Adjunte el documento si existe.
@@ -104,6 +117,8 @@ devuelve a borrador con la versión siguiente.
 ## 5. La ficha de caracterización
 
 Hay una ficha por proceso. Recoge lo que la norma ISO 9001 (§4.4.1) pide de un proceso.
+
+![Una ficha de caracterización en borrador](captura:procesos-ficha)
 
 1. **Crear:** **Fichas de caracterización → + Agregar**, elija el proceso y guarde.
 2. **Lo que se completa solo:** al guardar, la ficha trae lo que el sistema ya sabe del proceso:

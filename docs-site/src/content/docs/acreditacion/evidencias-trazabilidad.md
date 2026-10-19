@@ -7,6 +7,8 @@ description: Cómo cargar evidencias y vincularlas a criterios o procesos vía T
 
 Una **Evidencia** puede ser:
 
+![Formulario de una evidencia nueva](captura:acreditacion-evidencia-nueva)
+
 - Un **archivo** adjunto (hasta 50 MB) — el sistema autocompleta mime, tamaño y hash
   desde el `File` subido.
 - Un **enlace** (`enlace_url`), cuando la evidencia vive fuera del sistema.
@@ -44,6 +46,8 @@ siendo una decisión de la persona que revisa.
 Cada elemento de un marco normativo (un criterio, una condición básica o una pantalla del MIAC)
 puede tener una **unidad responsable**, sus **unidades de apoyo** y la **evidencia requerida**. Se
 completan en la ficha del elemento (Acreditación y licenciamiento → Estándares y criterios).
+
+![Informe de preparación de evidencias del IAC](captura:acreditacion-preparacion-evidencias)
 
 El informe **Preparación de evidencias (IAC)** lista, para el marco que elija, cada elemento con
 su responsable, cuántas evidencias tiene vinculadas, cuántas están validadas y el avance por eje.

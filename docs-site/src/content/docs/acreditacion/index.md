@@ -24,6 +24,15 @@ para la acreditación.
 
 ## El menú del área
 
+**Cómo entrar:** arriba a la izquierda, pulse el nombre del área en la que está (el que lleva
+la flecha ⌄) → **Módulos** → **Acreditación y licenciamiento**.
+
+![Menú «Módulos» con Acreditación y licenciamiento resaltado](captura:navegacion-acreditacion)
+
+Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
+
+![Portada del área de Acreditación y licenciamiento](captura:acreditacion-portada)
+
 | Entrada | Para qué |
 |---|---|
 | **Condiciones básicas de calidad (CBC)** | Las 8 condiciones, cada una con su unidad responsable |
@@ -39,6 +48,8 @@ para la acreditación.
 
 **Condiciones básicas de calidad (CBC)** abre la lista de las 8 condiciones del Modelo de
 Licenciamiento. Al abrir una se ve:
+
+![Las ocho condiciones básicas de calidad con su unidad responsable](captura:acreditacion-cbc)
 
 - **Unidad responsable**: el vicerrectorado o área que responde por la condición todo el año.
 - **Unidades de apoyo**: las áreas corresponsables.
@@ -67,6 +78,8 @@ con los datos del año anterior. La plataforma se ordena en **ejes temáticos �
 [P] o formatos [F]**. El SGC trae esa misma estructura como el marco **«Ejes Temáticos de
 Autoevaluación del IAC (MIAC)»**: 8 ejes, 48 pantallas y 12 formatos.
 
+![Informe de preparación de evidencias del IAC](captura:acreditacion-preparacion-evidencias)
+
 **Cómo prepararlo durante el año:**
 
 1. Abra **Preparación de evidencias** y elija el marco del IAC. Verá cada pantalla y formato con
@@ -86,6 +99,8 @@ Las preguntas concretas de cada pantalla solo se ven dentro del MIAC. El SGC pre
 no reemplaza esa plataforma.
 
 ## 3. La autoevaluación de un programa (CONEAU)
+
+![Una autoevaluación planificada](captura:acreditacion-autoevaluacion)
 
 1. **Autoevaluaciones → + Agregar** (o abra la ya planificada). Elija programa, periodo y marco.
 2. Pulse **Iniciar evaluacion**. El sistema crea una **valoración pendiente por cada criterio** del

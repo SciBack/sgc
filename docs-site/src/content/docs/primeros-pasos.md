@@ -12,12 +12,21 @@ en qué punto termina tu parte del trabajo.
 :::tip[Cómo te mueves por el sistema]
 - **Inicio** reúne lo tuyo: **Lo que te toca**, **Esperan mi decisión**, **Mis tareas** y el
   **Estado del sistema**.
-- El **menú de la izquierda** agrupa todo por áreas: Procesos, Documentos, Indicadores,
-  Acreditación y licenciamiento, Mejora continua, Auditoría, Riesgos, Dirección y partes
-  interesadas, y Configuración. Cada área tiene su portada con lo pendiente.
+- El sistema se divide en **áreas**: Procesos, Documentos, Indicadores, Acreditación y
+  licenciamiento, Mejora continua, Auditoría, Riesgos, Dirección y partes interesadas, y
+  Configuración. Cada área tiene su portada con lo pendiente.
+- **Para cambiar de área:** arriba a la izquierda, pulse el nombre del área en la que está (el que
+  lleva la flecha ⌄) → **Módulos** → el área. El **menú de la izquierda** muestra las entradas del
+  área en la que está.
 - Cada registro tiene un **estado**; los botones de acción (por ejemplo, *Enviar a revisión*)
   mueven ese estado. Solo verás los botones que tu rol puede ejecutar.
 :::
+
+![La portada del SGC: lo que te toca en todas las áreas](captura:inicio-portada)
+
+![El menú «Módulos» lleva a cada área](captura:navegacion-modulos)
+
+![El menú Ayuda lleva a este manual](captura:ayuda-manual)
 
 ## Cualquier persona: reportar algo que pasó
 
