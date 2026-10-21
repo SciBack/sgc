@@ -8,22 +8,39 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "tab_proceso",
+  "sec_identificacion",
   "codigo",
-  "nivel_bpm",
   "proceso",
+  "nivel_bpm",
+  "col_identificacion",
+  "estado",
   "nivel",
   "subsistema",
+  "sec_responsables",
   "propietario_unidad",
+  "col_responsables",
   "responsable",
-  "estado",
-  "orden",
-  "is_group",
+  "sec_mapa",
   "parent_proceso",
+  "is_group",
+  "col_mapa",
+  "orden",
   "lft",
   "rgt",
-  "old_parent"
+  "old_parent",
+  "tab_conexiones"
  ],
  "fields": [
+  {
+   "fieldname": "tab_proceso",
+   "fieldtype": "Tab Break",
+   "label": "Proceso"
+  },
+  {
+   "fieldname": "sec_identificacion",
+   "fieldtype": "Section Break"
+  },
   {
    "description": "PK natural: E01…E04 · C01…C13 · S01…S05",
    "fieldname": "codigo",
@@ -32,6 +49,13 @@
    "label": "Código",
    "reqd": 1,
    "unique": 1
+  },
+  {
+   "description": "Denominación oficial (PENDIENTE Mapa v8.0 para los 22)",
+   "fieldname": "proceso",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Denominación del proceso"
   },
   {
    "description": "Nivel BPM derivado automáticamente del árbol (profundidad + is_group). N0 Macroproceso · N1 Proceso · N2 Subproceso. No editar a mano: se recalcula al guardar.",
@@ -45,11 +69,17 @@
    "read_only": 1
   },
   {
-   "description": "Denominación oficial (PENDIENTE Mapa v8.0 para los 22)",
-   "fieldname": "proceso",
-   "fieldtype": "Data",
+   "fieldname": "col_identificacion",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Borrador",
+   "fieldname": "estado",
+   "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "Denominación del proceso"
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Borrador\nVigente\nObsoleto"
   },
   {
    "fieldname": "nivel",
@@ -65,12 +95,21 @@
    "label": "Subsistema"
   },
   {
+   "fieldname": "sec_responsables",
+   "fieldtype": "Section Break",
+   "label": "Responsables"
+  },
+  {
    "fieldname": "propietario_unidad",
    "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Propietario (área)",
    "options": "Unidad Organica"
+  },
+  {
+   "fieldname": "col_responsables",
+   "fieldtype": "Column Break"
   },
   {
    "fieldname": "responsable",
@@ -81,18 +120,15 @@
    "options": "User"
   },
   {
-   "default": "Borrador",
-   "fieldname": "estado",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Estado",
-   "options": "Borrador\nVigente\nObsoleto"
+   "fieldname": "sec_mapa",
+   "fieldtype": "Section Break",
+   "label": "Lugar en el mapa"
   },
   {
-   "fieldname": "orden",
-   "fieldtype": "Int",
-   "label": "Orden"
+   "fieldname": "parent_proceso",
+   "fieldtype": "Link",
+   "label": "Proceso padre",
+   "options": "Proceso"
   },
   {
    "default": "0",
@@ -101,10 +137,13 @@
    "label": "Es grupo (macroproceso)"
   },
   {
-   "fieldname": "parent_proceso",
-   "fieldtype": "Link",
-   "label": "Proceso padre",
-   "options": "Proceso"
+   "fieldname": "col_mapa",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "orden",
+   "fieldtype": "Int",
+   "label": "Orden"
   },
   {
    "fieldname": "lft",
@@ -128,6 +167,12 @@
    "hidden": 1,
    "label": "Old Parent",
    "options": "Proceso"
+  },
+  {
+   "fieldname": "tab_conexiones",
+   "fieldtype": "Tab Break",
+   "label": "Conexiones",
+   "show_dashboard": 1
   }
  ],
  "force_re_route_to_default_view": 0,
@@ -206,7 +251,7 @@
    "link_fieldname": "proceso"
   }
  ],
- "modified": "2026-10-14 23:00:00.000000",
+ "modified": "2026-10-21 17:18:56.000000",
  "modified_by": "Administrator",
  "module": "SGC Procesos",
  "name": "Proceso",

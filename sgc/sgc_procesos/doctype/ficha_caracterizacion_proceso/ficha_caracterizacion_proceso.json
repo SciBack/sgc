@@ -8,34 +8,52 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "tab_ficha",
+  "sec_identificacion",
   "proceso",
   "version",
-  "fecha_emision",
+  "col_identificacion",
   "estado",
+  "fecha_emision",
   "sec_plan",
   "objetivo",
   "alcance",
+  "col_plan",
   "requisitos_aplicables",
   "recursos",
+  "sec_diagrama",
+  "visor_bpmn",
+  "tab_sipoc",
   "sec_entradas",
   "entradas",
   "actividades",
   "salidas",
-  "sec_diagrama",
-  "visor_bpmn",
+  "tab_verificar",
   "sec_verificar",
   "indicadores",
   "registros",
   "riesgos",
   "documentos_asociados",
+  "tab_control",
   "sec_control",
   "elaborado_por",
   "revisado_por",
+  "col_control",
   "aprobado_por",
   "resolucion_aprobacion",
+  "sec_cambios",
   "control_cambios"
  ],
  "fields": [
+  {
+   "fieldname": "tab_ficha",
+   "fieldtype": "Tab Break",
+   "label": "Ficha"
+  },
+  {
+   "fieldname": "sec_identificacion",
+   "fieldtype": "Section Break"
+  },
   {
    "fieldname": "proceso",
    "fieldtype": "Link",
@@ -52,9 +70,8 @@
    "label": "Versión"
   },
   {
-   "fieldname": "fecha_emision",
-   "fieldtype": "Date",
-   "label": "Fecha de emisión"
+   "fieldname": "col_identificacion",
+   "fieldtype": "Column Break"
   },
   {
    "default": "Borrador",
@@ -65,6 +82,11 @@
    "label": "Estado",
    "options": "Borrador\nEn revisión\nAprobado\nPublicado\nObsoleto",
    "read_only": 1
+  },
+  {
+   "fieldname": "fecha_emision",
+   "fieldtype": "Date",
+   "label": "Fecha de emisión"
   },
   {
    "fieldname": "sec_plan",
@@ -82,6 +104,10 @@
    "label": "Alcance"
   },
   {
+   "fieldname": "col_plan",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "requisitos_aplicables",
    "fieldtype": "Small Text",
    "label": "Requisitos aplicables"
@@ -90,6 +116,23 @@
    "fieldname": "recursos",
    "fieldtype": "Small Text",
    "label": "Recursos"
+  },
+  {
+   "fieldname": "sec_diagrama",
+   "fieldtype": "Section Break",
+   "label": "Diagrama BPMN"
+  },
+  {
+   "description": "Se dibujan los BPMN adjuntos. Solo lectura: para modificarlos, «Editar BPMN».",
+   "fieldname": "visor_bpmn",
+   "fieldtype": "HTML",
+   "label": "Diagrama del proceso",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tab_sipoc",
+   "fieldtype": "Tab Break",
+   "label": "SIPOC"
   },
   {
    "fieldname": "sec_entradas",
@@ -115,16 +158,9 @@
    "options": "Salida Proceso"
   },
   {
-   "fieldname": "sec_diagrama",
-   "fieldtype": "Section Break",
-   "label": "Diagrama BPMN"
-  },
-  {
-   "description": "Se dibujan los BPMN adjuntos. Solo lectura: para modificarlos, «Editar BPMN».",
-   "fieldname": "visor_bpmn",
-   "fieldtype": "HTML",
-   "label": "Diagrama del proceso",
-   "read_only": 1
+   "fieldname": "tab_verificar",
+   "fieldtype": "Tab Break",
+   "label": "Verificar y actuar"
   },
   {
    "fieldname": "sec_verificar",
@@ -156,6 +192,11 @@
    "options": "Doc Proceso Link"
   },
   {
+   "fieldname": "tab_control",
+   "fieldtype": "Tab Break",
+   "label": "Emisión y cambios"
+  },
+  {
    "fieldname": "sec_control",
    "fieldtype": "Section Break",
    "label": "Control de emisión y cambios"
@@ -173,6 +214,10 @@
    "options": "User"
   },
   {
+   "fieldname": "col_control",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "aprobado_por",
    "fieldtype": "Link",
    "label": "Aprobado por",
@@ -184,6 +229,11 @@
    "label": "Resolución N°"
   },
   {
+   "fieldname": "sec_cambios",
+   "fieldtype": "Section Break",
+   "label": "Control de cambios"
+  },
+  {
    "fieldname": "control_cambios",
    "fieldtype": "Table",
    "label": "Control de cambios",
@@ -193,7 +243,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-14 23:00:00.000000",
+ "modified": "2026-10-21 17:18:56.000000",
  "modified_by": "Administrator",
  "module": "SGC Procesos",
  "name": "Ficha Caracterizacion Proceso",

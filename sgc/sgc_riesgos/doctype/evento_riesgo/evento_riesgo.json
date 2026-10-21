@@ -6,6 +6,8 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "tab_reporte",
+  "sec_identificacion",
   "titulo",
   "fecha_evento",
   "column_break_reporte",
@@ -21,6 +23,7 @@
   "consecuencias",
   "acciones_inmediatas",
   "evidencia",
+  "tab_evaluacion",
   "section_break_evaluacion",
   "riesgo",
   "tipo_nc",
@@ -31,6 +34,15 @@
   "no_conformidad"
  ],
  "fields": [
+  {
+   "fieldname": "tab_reporte",
+   "fieldtype": "Tab Break",
+   "label": "Reporte"
+  },
+  {
+   "fieldname": "sec_identificacion",
+   "fieldtype": "Section Break"
+  },
   {
    "description": "En una línea. Ej.: «Caída del servidor de matrícula durante el primer día».",
    "fieldname": "titulo",
@@ -128,6 +140,11 @@
    "label": "Evidencia"
   },
   {
+   "fieldname": "tab_evaluacion",
+   "fieldtype": "Tab Break",
+   "label": "Evaluación de Calidad"
+  },
+  {
    "depends_on": "eval:doc.estado != 'Reportado'",
    "fieldname": "section_break_evaluacion",
    "fieldtype": "Section Break",
@@ -182,7 +199,7 @@
  ],
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-14 21:00:00.000000",
+ "modified": "2026-10-21 17:18:56.000000",
  "modified_by": "Administrator",
  "module": "SGC Riesgos",
  "name": "Evento Riesgo",

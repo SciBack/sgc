@@ -7,21 +7,43 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "tab_revision",
+  "sec_identificacion",
   "codigo",
   "titulo",
-  "periodo_academico",
-  "unidad_organica",
   "fecha",
+  "col_identificacion",
+  "estado",
   "comite",
   "reunion",
+  "sec_ambito",
+  "periodo_academico",
+  "col_ambito",
+  "unidad_organica",
+  "tab_entradas",
+  "sec_entradas",
   "entradas",
+  "tab_salidas",
+  "sec_salidas",
   "salidas",
-  "estado",
+  "tab_cierre",
+  "sec_cierre",
   "pdf",
+  "col_cierre",
   "cerrada_por",
-  "fecha_cierre"
+  "fecha_cierre",
+  "tab_conexiones"
  ],
  "fields": [
+  {
+   "fieldname": "tab_revision",
+   "fieldtype": "Tab Break",
+   "label": "Revisión"
+  },
+  {
+   "fieldname": "sec_identificacion",
+   "fieldtype": "Section Break"
+  },
   {
    "fieldname": "codigo",
    "fieldtype": "Data",
@@ -38,25 +60,25 @@
    "reqd": 1
   },
   {
-   "fieldname": "periodo_academico",
-   "fieldtype": "Link",
-   "in_standard_filter": 1,
-   "label": "Periodo académico",
-   "options": "Periodo Academico"
-  },
-  {
-   "description": "Alcance (universidad / sede / facultad)",
-   "fieldname": "unidad_organica",
-   "fieldtype": "Link",
-   "in_standard_filter": 1,
-   "label": "Unidad orgánica",
-   "options": "Unidad Organica"
-  },
-  {
    "fieldname": "fecha",
    "fieldtype": "Date",
    "in_list_view": 1,
    "label": "Fecha"
+  },
+  {
+   "fieldname": "col_identificacion",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Planificada",
+   "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Planificada\nRealizada\nCerrada",
+   "read_only": 1
   },
   {
    "description": "Usualmente el Comité de Calidad la ejecuta (rama 7)",
@@ -73,10 +95,54 @@
    "options": "Reunion"
   },
   {
+   "fieldname": "sec_ambito",
+   "fieldtype": "Section Break",
+   "label": "Ámbito"
+  },
+  {
+   "fieldname": "periodo_academico",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Periodo académico",
+   "options": "Periodo Academico"
+  },
+  {
+   "fieldname": "col_ambito",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Alcance (universidad / sede / facultad)",
+   "fieldname": "unidad_organica",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Unidad orgánica",
+   "options": "Unidad Organica"
+  },
+  {
+   "fieldname": "tab_entradas",
+   "fieldtype": "Tab Break",
+   "label": "Entradas"
+  },
+  {
+   "fieldname": "sec_entradas",
+   "fieldtype": "Section Break",
+   "label": "Entradas (ISO 9001 §9.3.2)"
+  },
+  {
    "fieldname": "entradas",
    "fieldtype": "Table",
    "label": "Entradas (§9.3.2)",
    "options": "Entrada Revision"
+  },
+  {
+   "fieldname": "tab_salidas",
+   "fieldtype": "Tab Break",
+   "label": "Salidas"
+  },
+  {
+   "fieldname": "sec_salidas",
+   "fieldtype": "Section Break",
+   "label": "Salidas (ISO 9001 §9.3.3)"
   },
   {
    "fieldname": "salidas",
@@ -85,20 +151,23 @@
    "options": "Salida Revision"
   },
   {
-   "default": "Planificada",
-   "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
-   "fieldname": "estado",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Estado",
-   "options": "Planificada\nRealizada\nCerrada",
-   "read_only": 1
+   "fieldname": "tab_cierre",
+   "fieldtype": "Tab Break",
+   "label": "Cierre"
+  },
+  {
+   "fieldname": "sec_cierre",
+   "fieldtype": "Section Break",
+   "label": "Cierre"
   },
   {
    "fieldname": "pdf",
    "fieldtype": "Attach",
    "label": "PDF (acta/informe)"
+  },
+  {
+   "fieldname": "col_cierre",
+   "fieldtype": "Column Break"
   },
   {
    "description": "Lo sella el sistema al cerrar: quién de la alta dirección ejerció el cierre (§9.3.3)",
@@ -113,6 +182,12 @@
    "fieldtype": "Date",
    "label": "Fecha de cierre",
    "read_only": 1
+  },
+  {
+   "fieldname": "tab_conexiones",
+   "fieldtype": "Tab Break",
+   "label": "Conexiones",
+   "show_dashboard": 1
   }
  ],
  "grid_page_length": 50,
@@ -124,7 +199,7 @@
    "link_fieldname": "presentado_en"
   }
  ],
- "modified": "2026-10-14 23:00:00.000000",
+ "modified": "2026-10-21 17:18:56.000000",
  "modified_by": "Administrator",
  "module": "SGC Gobierno",
  "name": "Revision Direccion",

@@ -6,6 +6,8 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "tab_deteccion",
+  "sec_identificacion",
   "titulo",
   "estado",
   "origen",
@@ -21,6 +23,7 @@
   "section_break_descripcion",
   "descripcion",
   "requisito_incumplido",
+  "tab_tratamiento",
   "section_break_tratamiento",
   "responsable",
   "decision",
@@ -30,6 +33,7 @@
   "autorizado_por",
   "fecha_tratamiento",
   "evidencia_tratamiento",
+  "tab_verificacion",
   "section_break_verificacion",
   "verificacion_conformidad",
   "observaciones_verificacion",
@@ -42,6 +46,15 @@
   "accion_mejora"
  ],
  "fields": [
+  {
+   "fieldname": "tab_deteccion",
+   "fieldtype": "Tab Break",
+   "label": "Detección"
+  },
+  {
+   "fieldname": "sec_identificacion",
+   "fieldtype": "Section Break"
+  },
   {
    "description": "Qué salió mal, en una línea. Ej.: «Actas de notas del curso X con promedios mal calculados».",
    "fieldname": "titulo",
@@ -143,6 +156,11 @@
    "reqd": 1
   },
   {
+   "fieldname": "tab_tratamiento",
+   "fieldtype": "Tab Break",
+   "label": "Tratamiento"
+  },
+  {
    "fieldname": "section_break_tratamiento",
    "fieldtype": "Section Break",
    "label": "Tratamiento (ISO 9001 §8.7.1)"
@@ -202,6 +220,11 @@
    "fieldtype": "Link",
    "label": "Evidencia del tratamiento",
    "options": "Evidencia"
+  },
+  {
+   "fieldname": "tab_verificacion",
+   "fieldtype": "Tab Break",
+   "label": "Verificación y cierre"
   },
   {
    "fieldname": "section_break_verificacion",
@@ -264,7 +287,7 @@
  ],
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-14 23:00:00.000000",
+ "modified": "2026-10-21 17:18:56.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "Salida No Conforme",

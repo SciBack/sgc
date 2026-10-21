@@ -7,24 +7,46 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "tab_plan",
+  "sec_identificacion",
   "codigo",
   "titulo",
+  "responsable",
+  "col_identificacion",
+  "estado",
+  "semaforo",
+  "avance_pct",
+  "sec_origen",
   "origen_doctype",
   "origen_id",
+  "col_origen",
   "autoevaluacion",
+  "sec_ambito",
   "unidad_organica",
+  "col_ambito",
   "periodo_academico",
-  "estado",
-  "responsable",
-  "avance_pct",
-  "semaforo",
+  "tab_aprobacion",
+  "sec_aprobacion",
   "fecha_compromiso",
   "aprobado_por",
+  "col_aprobacion",
   "fecha_aprobacion",
+  "sec_cierre",
   "cerrado_por",
-  "fecha_cierre"
+  "col_cierre",
+  "fecha_cierre",
+  "tab_conexiones"
  ],
  "fields": [
+  {
+   "fieldname": "tab_plan",
+   "fieldtype": "Tab Break",
+   "label": "Plan"
+  },
+  {
+   "fieldname": "sec_identificacion",
+   "fieldtype": "Section Break"
+  },
   {
    "fieldname": "codigo",
    "fieldtype": "Data",
@@ -40,35 +62,15 @@
    "label": "Título"
   },
   {
-   "fieldname": "origen_doctype",
+   "fieldname": "responsable",
    "fieldtype": "Link",
-   "label": "Tipo de documento origen",
-   "options": "DocType"
+   "label": "Responsable",
+   "options": "User",
+   "in_standard_filter": 1
   },
   {
-   "fieldname": "origen_id",
-   "fieldtype": "Dynamic Link",
-   "label": "Documento origen",
-   "options": "origen_doctype"
-  },
-  {
-   "fieldname": "autoevaluacion",
-   "fieldtype": "Link",
-   "in_standard_filter": 1,
-   "label": "Autoevaluación",
-   "options": "Autoevaluacion"
-  },
-  {
-   "fieldname": "unidad_organica",
-   "fieldtype": "Link",
-   "label": "Unidad orgánica",
-   "options": "Unidad Organica"
-  },
-  {
-   "fieldname": "periodo_academico",
-   "fieldtype": "Link",
-   "label": "Periodo académico",
-   "options": "Periodo Academico"
+   "fieldname": "col_identificacion",
+   "fieldtype": "Column Break"
   },
   {
    "default": "Borrador",
@@ -82,11 +84,13 @@
    "read_only": 1
   },
   {
-   "fieldname": "responsable",
-   "fieldtype": "Link",
-   "label": "Responsable",
-   "options": "User",
-   "in_standard_filter": 1
+   "default": "Verde",
+   "fieldname": "semaforo",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Semáforo",
+   "options": "Verde\nAmbar\nRojo",
+   "read_only": 1
   },
   {
    "description": "Promedio del avance de las acciones de mejora (calculado).",
@@ -97,13 +101,63 @@
    "read_only": 1
   },
   {
-   "default": "Verde",
-   "fieldname": "semaforo",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Semáforo",
-   "options": "Verde\nAmbar\nRojo",
-   "read_only": 1
+   "fieldname": "sec_origen",
+   "fieldtype": "Section Break",
+   "label": "Origen"
+  },
+  {
+   "fieldname": "origen_doctype",
+   "fieldtype": "Link",
+   "label": "Tipo de documento origen",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "origen_id",
+   "fieldtype": "Dynamic Link",
+   "label": "Documento origen",
+   "options": "origen_doctype"
+  },
+  {
+   "fieldname": "col_origen",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "autoevaluacion",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Autoevaluación",
+   "options": "Autoevaluacion"
+  },
+  {
+   "fieldname": "sec_ambito",
+   "fieldtype": "Section Break",
+   "label": "Ámbito"
+  },
+  {
+   "fieldname": "unidad_organica",
+   "fieldtype": "Link",
+   "label": "Unidad orgánica",
+   "options": "Unidad Organica"
+  },
+  {
+   "fieldname": "col_ambito",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "periodo_academico",
+   "fieldtype": "Link",
+   "label": "Periodo académico",
+   "options": "Periodo Academico"
+  },
+  {
+   "fieldname": "tab_aprobacion",
+   "fieldtype": "Tab Break",
+   "label": "Aprobación y cierre"
+  },
+  {
+   "fieldname": "sec_aprobacion",
+   "fieldtype": "Section Break",
+   "label": "Aprobación"
   },
   {
    "description": "Fecha de compromiso más tardía entre las acciones (calculado).",
@@ -120,10 +174,19 @@
    "read_only": 1
   },
   {
+   "fieldname": "col_aprobacion",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "fecha_aprobacion",
    "fieldtype": "Date",
    "label": "Fecha de aprobación",
    "read_only": 1
+  },
+  {
+   "fieldname": "sec_cierre",
+   "fieldtype": "Section Break",
+   "label": "Cierre"
   },
   {
    "fieldname": "cerrado_por",
@@ -133,10 +196,20 @@
    "read_only": 1
   },
   {
+   "fieldname": "col_cierre",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "fecha_cierre",
    "fieldtype": "Date",
    "label": "Fecha de cierre",
    "read_only": 1
+  },
+  {
+   "fieldname": "tab_conexiones",
+   "fieldtype": "Tab Break",
+   "label": "Conexiones",
+   "show_dashboard": 1
   }
  ],
  "grid_page_length": 50,
@@ -153,7 +226,7 @@
    "link_fieldname": "plan_mejora"
   }
  ],
- "modified": "2026-10-14 23:00:00.000000",
+ "modified": "2026-10-21 17:18:56.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "Plan Mejora",

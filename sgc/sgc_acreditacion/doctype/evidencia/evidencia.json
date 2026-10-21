@@ -7,34 +7,51 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "tab_evidencia",
+  "sec_identificacion",
   "codigo",
   "titulo",
-  "descripcion",
   "tipo",
+  "col_identificacion",
+  "estado",
+  "vigencia_desde",
+  "vigencia_hasta",
+  "sec_contenido",
+  "descripcion",
   "archivo",
   "enlace_url",
+  "tab_clasificacion",
   "sec_clasificacion",
   "documento_controlado",
   "programa_sede",
   "periodo_academico",
+  "col_clasificacion",
   "unidad_organica",
   "tema",
-  "col_clasificacion",
-  "estado",
-  "vigencia_desde",
-  "vigencia_hasta",
+  "tab_tecnico",
   "sec_meta",
   "mime",
   "tamano",
   "hash_sha256",
+  "col_meta",
   "cargado_por",
   "fecha_carga",
   "sec_legado",
   "almacenamiento_uri",
   "origen_doctype",
-  "origen_id"
+  "origen_id",
+  "tab_conexiones"
  ],
  "fields": [
+  {
+   "fieldname": "tab_evidencia",
+   "fieldtype": "Tab Break",
+   "label": "Evidencia"
+  },
+  {
+   "fieldname": "sec_identificacion",
+   "fieldtype": "Section Break"
+  },
   {
    "fieldname": "codigo",
    "fieldtype": "Data",
@@ -51,17 +68,47 @@
    "reqd": 1
   },
   {
-   "fieldname": "descripcion",
-   "fieldtype": "Text",
-   "label": "Descripción"
-  },
-  {
    "default": "Documento",
    "fieldname": "tipo",
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Tipo",
    "options": "Documento\nEnlace\nRegistro\nDataset\nActa"
+  },
+  {
+   "fieldname": "col_identificacion",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Pendiente",
+   "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Pendiente\nValida\nObservada\nSubsanada\nVencida",
+   "read_only": 1
+  },
+  {
+   "fieldname": "vigencia_desde",
+   "fieldtype": "Date",
+   "label": "Vigencia desde"
+  },
+  {
+   "fieldname": "vigencia_hasta",
+   "fieldtype": "Date",
+   "label": "Vigencia hasta"
+  },
+  {
+   "fieldname": "sec_contenido",
+   "fieldtype": "Section Break",
+   "label": "Contenido"
+  },
+  {
+   "fieldname": "descripcion",
+   "fieldtype": "Text",
+   "label": "Descripción"
   },
   {
    "depends_on": "eval:doc.tipo != 'Enlace'",
@@ -77,6 +124,11 @@
    "fieldtype": "Data",
    "label": "Enlace (URL)",
    "options": "URL"
+  },
+  {
+   "fieldname": "tab_clasificacion",
+   "fieldtype": "Tab Break",
+   "label": "Clasificación"
   },
   {
    "fieldname": "sec_clasificacion",
@@ -104,6 +156,10 @@
    "options": "Periodo Academico"
   },
   {
+   "fieldname": "col_clasificacion",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "unidad_organica",
    "fieldtype": "Link",
    "label": "Unidad orgánica",
@@ -119,32 +175,12 @@
    "options": "Termino Tesauro"
   },
   {
-   "fieldname": "col_clasificacion",
-   "fieldtype": "Column Break"
+   "fieldname": "tab_tecnico",
+   "fieldtype": "Tab Break",
+   "label": "Datos técnicos"
   },
   {
-   "default": "Pendiente",
-   "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
-   "fieldname": "estado",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Estado",
-   "options": "Pendiente\nValida\nObservada\nSubsanada\nVencida",
-   "read_only": 1
-  },
-  {
-   "fieldname": "vigencia_desde",
-   "fieldtype": "Date",
-   "label": "Vigencia desde"
-  },
-  {
-   "fieldname": "vigencia_hasta",
-   "fieldtype": "Date",
-   "label": "Vigencia hasta"
-  },
-  {
-   "collapsible": 1,
+   "collapsible": 0,
    "fieldname": "sec_meta",
    "fieldtype": "Section Break",
    "label": "Metadatos del archivo"
@@ -166,6 +202,10 @@
    "fieldtype": "Data",
    "label": "Hash SHA-256",
    "read_only": 1
+  },
+  {
+   "fieldname": "col_meta",
+   "fieldtype": "Column Break"
   },
   {
    "fieldname": "cargado_por",
@@ -206,6 +246,12 @@
    "label": "Origen",
    "options": "origen_doctype",
    "read_only": 1
+  },
+  {
+   "fieldname": "tab_conexiones",
+   "fieldtype": "Tab Break",
+   "label": "Conexiones",
+   "show_dashboard": 1
   }
  ],
  "grid_page_length": 50,
@@ -242,7 +288,7 @@
    "link_fieldname": "evidencia"
   }
  ],
- "modified": "2026-10-14 23:00:00.000000",
+ "modified": "2026-10-21 17:18:56.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Evidencia",
