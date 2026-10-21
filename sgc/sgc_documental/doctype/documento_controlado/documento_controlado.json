@@ -22,14 +22,15 @@
   "archivo",
   "col_archivo",
   "solo_consulta",
-  "sec_vista",
-  "visor_documento",
   "sec_ubicacion",
   "proceso",
   "carpeta",
   "col_ubicacion",
   "tema",
   "reemplaza_a",
+  "tab_vista",
+  "sec_visor",
+  "visor_documento",
   "tab_aprobacion",
   "sec_responsables",
   "elaborado_por",
@@ -158,17 +159,6 @@
    "label": "Solo consulta en pantalla"
   },
   {
-   "fieldname": "sec_vista",
-   "fieldtype": "Section Break",
-   "label": "Vista previa",
-   "collapsible": 1
-  },
-  {
-   "fieldname": "visor_documento",
-   "fieldtype": "HTML",
-   "label": "Vista previa"
-  },
-  {
    "fieldname": "sec_ubicacion",
    "fieldtype": "Section Break",
    "label": "Dónde se ubica"
@@ -208,9 +198,23 @@
    "options": "Documento Controlado"
   },
   {
+   "fieldname": "tab_vista",
+   "fieldtype": "Tab Break",
+   "label": "Vista previa"
+  },
+  {
+   "fieldname": "sec_visor",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "visor_documento",
+   "fieldtype": "HTML",
+   "label": "Vista previa"
+  },
+  {
    "fieldname": "tab_aprobacion",
    "fieldtype": "Tab Break",
-   "label": "Elaboración y aprobación"
+   "label": "Aprobación"
   },
   {
    "fieldname": "sec_responsables",
@@ -315,7 +319,7 @@
   {
    "fieldname": "tab_relaciones",
    "fieldtype": "Tab Break",
-   "label": "Relaciones y difusión"
+   "label": "Relaciones"
   },
   {
    "collapsible": 0,
@@ -372,7 +376,7 @@
    "link_fieldname": "documento_controlado"
   }
  ],
- "modified": "2026-10-21 16:47:36.000000",
+ "modified": "2026-10-21 16:54:47.000000",
  "modified_by": "Administrator",
  "module": "SGC Documental",
  "name": "Documento Controlado",
