@@ -7,38 +7,62 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "tab_documento",
+  "sec_identificacion",
   "codigo",
   "titulo",
   "tipo_documento",
-  "version",
-  "archivo",
-  "visor_documento",
   "url_externa",
-  "solo_consulta",
-  "proceso",
-  "tema",
-  "carpeta",
+  "col_identificacion",
   "estado",
-  "elaborado_por",
-  "revisado_por",
-  "aprobado_por",
+  "version",
   "fecha_publicacion",
   "fecha_proxima_revision",
+  "sec_archivo",
+  "archivo",
+  "col_archivo",
+  "solo_consulta",
+  "sec_vista",
+  "visor_documento",
+  "sec_ubicacion",
+  "proceso",
+  "carpeta",
+  "col_ubicacion",
+  "tema",
   "reemplaza_a",
-  "descripcion_cambio",
-  "historial_cambios",
-  "sec_relaciones",
-  "documentos_relacionados",
+  "tab_aprobacion",
+  "sec_responsables",
+  "elaborado_por",
+  "revisado_por",
+  "col_responsables",
+  "aprobado_por",
   "dueno_proceso",
-  "difundir_a",
   "sec_revision",
   "observacion",
   "observaciones_revision",
+  "tab_versiones",
+  "sec_version",
+  "descripcion_cambio",
+  "historial_cambios",
   "seccion_legado",
   "almacenamiento_uri",
-  "mayan_document_id"
+  "mayan_document_id",
+  "tab_relaciones",
+  "sec_relaciones",
+  "documentos_relacionados",
+  "difundir_a",
+  "tab_conexiones"
  ],
  "fields": [
+  {
+   "fieldname": "tab_documento",
+   "fieldtype": "Tab Break",
+   "label": "Documento"
+  },
+  {
+   "fieldname": "sec_identificacion",
+   "fieldtype": "Section Break"
+  },
   {
    "description": "Se genera solo al guardar: PROCESO-SIGLA-NNN (p. ej. S04.01-PR-001). Escríbelo solo si el documento ya tiene un código asignado.",
    "fieldname": "codigo",
@@ -56,15 +80,6 @@
    "reqd": 1
   },
   {
-   "default": "1",
-   "description": "Número entero. Sube de uno en uno con cada aprobación: una versión solo existe cuando se aprueba, así que no hay medias versiones.",
-   "fieldname": "version",
-   "fieldtype": "Int",
-   "in_list_view": 1,
-   "label": "Versión",
-   "non_negative": 1
-  },
-  {
    "description": "Tipo documental. Determina el prefijo del código SGC.",
    "fieldname": "tipo_documento",
    "fieldtype": "Select",
@@ -73,17 +88,6 @@
    "label": "Tipo de documento",
    "options": "\nManual\nPolítica\nProcedimiento\nInstructivo\nGuía\nFormato\nPlan\nInforme\nDocumentación externa",
    "reqd": 1
-  },
-  {
-   "description": "Archivo del documento (PDF). Obligatorio para publicar.",
-   "fieldname": "archivo",
-   "fieldtype": "Attach",
-   "label": "Archivo"
-  },
-  {
-   "fieldname": "visor_documento",
-   "fieldtype": "HTML",
-   "label": "Vista previa"
   },
   {
    "depends_on": "eval:doc.tipo_documento==\"Documentación externa\"",
@@ -95,11 +99,34 @@
    "options": "URL"
   },
   {
-   "default": "0",
-   "description": "Quien solo puede leerlo lo ve en el visor y no lo descarga; lo descarga quien puede editarlo. Es un control disuasorio: quien ve el contenido puede capturarlo. Exige un archivo privado en PDF o imagen.",
-   "fieldname": "solo_consulta",
-   "fieldtype": "Check",
-   "label": "Solo consulta en pantalla"
+   "fieldname": "col_identificacion",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Borrador",
+   "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Borrador\nEn revision\nAprobado\nPublicado\nObsoleto\nObservado",
+   "read_only": 1
+  },
+  {
+   "default": "1",
+   "description": "Número entero. Sube de uno en uno con cada aprobación: una versión solo existe cuando se aprueba, así que no hay medias versiones.",
+   "fieldname": "version",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Versión",
+   "non_negative": 1
+  },
+  {
+   "description": "Se fija sola al publicar. Solo se rellena a mano si el documento se publicó en una fecha distinta de hoy.",
+   "fieldname": "fecha_publicacion",
+   "fieldtype": "Date",
+   "label": "Fecha de publicación"
   },
   {
    "description": "Se recalcula al publicar: la norma exige revisión al menos anual.",
@@ -107,6 +134,149 @@
    "fieldtype": "Date",
    "label": "Próxima revisión",
    "read_only": 1
+  },
+  {
+   "fieldname": "sec_archivo",
+   "fieldtype": "Section Break",
+   "label": "Archivo"
+  },
+  {
+   "description": "Archivo del documento (PDF). Obligatorio para publicar.",
+   "fieldname": "archivo",
+   "fieldtype": "Attach",
+   "label": "Archivo"
+  },
+  {
+   "fieldname": "col_archivo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "description": "Quien solo puede leerlo lo ve en el visor y no lo descarga; lo descarga quien puede editarlo. Es un control disuasorio: quien ve el contenido puede capturarlo. Exige un archivo privado en PDF o imagen.",
+   "fieldname": "solo_consulta",
+   "fieldtype": "Check",
+   "label": "Solo consulta en pantalla"
+  },
+  {
+   "fieldname": "sec_vista",
+   "fieldtype": "Section Break",
+   "label": "Vista previa",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "visor_documento",
+   "fieldtype": "HTML",
+   "label": "Vista previa"
+  },
+  {
+   "fieldname": "sec_ubicacion",
+   "fieldtype": "Section Break",
+   "label": "Dónde se ubica"
+  },
+  {
+   "fieldname": "proceso",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Proceso",
+   "options": "Proceso"
+  },
+  {
+   "description": "Dónde se organiza el documento, además del proceso y el tema.",
+   "fieldname": "carpeta",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Carpeta",
+   "options": "Carpeta Documental"
+  },
+  {
+   "fieldname": "col_ubicacion",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Tema del tesauro institucional que clasifica el documento (lenguaje controlado, VocBench).",
+   "fieldname": "tema",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Tema",
+   "link_filters": "[[\"Termino Tesauro\",\"esquema\",\"=\",\"Temas\"]]",
+   "options": "Termino Tesauro"
+  },
+  {
+   "fieldname": "reemplaza_a",
+   "fieldtype": "Link",
+   "label": "Reemplaza a",
+   "options": "Documento Controlado"
+  },
+  {
+   "fieldname": "tab_aprobacion",
+   "fieldtype": "Tab Break",
+   "label": "Elaboración y aprobación"
+  },
+  {
+   "fieldname": "sec_responsables",
+   "fieldtype": "Section Break",
+   "label": "Responsables"
+  },
+  {
+   "fieldname": "elaborado_por",
+   "fieldtype": "Link",
+   "label": "Elaborado por",
+   "options": "User"
+  },
+  {
+   "fieldname": "revisado_por",
+   "fieldtype": "Link",
+   "label": "Revisado por",
+   "options": "User"
+  },
+  {
+   "fieldname": "col_responsables",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "aprobado_por",
+   "fieldtype": "Link",
+   "label": "Aprobado por",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "description": "Recibe el aviso cuando se publica una versión nueva.",
+   "fetch_from": "proceso.responsable",
+   "fieldname": "dueno_proceso",
+   "fieldtype": "Link",
+   "label": "Dueño del proceso",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "collapsible": 0,
+   "fieldname": "sec_revision",
+   "fieldtype": "Section Break",
+   "label": "Observaciones de revisión"
+  },
+  {
+   "description": "Obligatoria para observar el documento. Queda en el registro de abajo con quién y cuándo.",
+   "fieldname": "observacion",
+   "fieldtype": "Small Text",
+   "label": "Observación del revisor"
+  },
+  {
+   "fieldname": "observaciones_revision",
+   "fieldtype": "Table",
+   "label": "Registro de observaciones",
+   "options": "Observacion Revision",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tab_versiones",
+   "fieldtype": "Tab Break",
+   "label": "Versiones"
+  },
+  {
+   "fieldname": "sec_version",
+   "fieldtype": "Section Break",
+   "label": "Cambio de versión"
   },
   {
    "depends_on": "eval:doc.__islocal != 1",
@@ -143,73 +313,12 @@
    "read_only": 1
   },
   {
-   "fieldname": "proceso",
-   "fieldtype": "Link",
-   "in_standard_filter": 1,
-   "label": "Proceso",
-   "options": "Proceso"
+   "fieldname": "tab_relaciones",
+   "fieldtype": "Tab Break",
+   "label": "Relaciones y difusión"
   },
   {
-   "description": "Tema del tesauro institucional que clasifica el documento (lenguaje controlado, VocBench).",
-   "fieldname": "tema",
-   "fieldtype": "Link",
-   "in_standard_filter": 1,
-   "label": "Tema",
-   "link_filters": "[[\"Termino Tesauro\",\"esquema\",\"=\",\"Temas\"]]",
-   "options": "Termino Tesauro"
-  },
-  {
-   "default": "Borrador",
-   "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
-   "fieldname": "estado",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Estado",
-   "options": "Borrador\nEn revision\nAprobado\nPublicado\nObsoleto\nObservado",
-   "read_only": 1
-  },
-  {
-   "fieldname": "elaborado_por",
-   "fieldtype": "Link",
-   "label": "Elaborado por",
-   "options": "User"
-  },
-  {
-   "fieldname": "revisado_por",
-   "fieldtype": "Link",
-   "label": "Revisado por",
-   "options": "User"
-  },
-  {
-   "fieldname": "aprobado_por",
-   "fieldtype": "Link",
-   "label": "Aprobado por",
-   "options": "User",
-   "read_only": 1
-  },
-  {
-   "description": "Se fija sola al publicar. Solo se rellena a mano si el documento se publicó en una fecha distinta de hoy.",
-   "fieldname": "fecha_publicacion",
-   "fieldtype": "Date",
-   "label": "Fecha de publicación"
-  },
-  {
-   "fieldname": "reemplaza_a",
-   "fieldtype": "Link",
-   "label": "Reemplaza a",
-   "options": "Documento Controlado"
-  },
-  {
-   "description": "Dónde se organiza el documento, además del proceso y el tema.",
-   "fieldname": "carpeta",
-   "fieldtype": "Link",
-   "in_standard_filter": 1,
-   "label": "Carpeta",
-   "options": "Carpeta Documental"
-  },
-  {
-   "collapsible": 1,
+   "collapsible": 0,
    "fieldname": "sec_relaciones",
    "fieldtype": "Section Break",
    "label": "Relaciones y difusión"
@@ -221,15 +330,6 @@
    "options": "Documento Relacionado"
   },
   {
-   "description": "Recibe el aviso cuando se publica una versión nueva.",
-   "fetch_from": "proceso.responsable",
-   "fieldname": "dueno_proceso",
-   "fieldtype": "Link",
-   "label": "Dueño del proceso",
-   "options": "User",
-   "read_only": 1
-  },
-  {
    "description": "Personas del proceso a las que afecta el documento: reciben el aviso de publicación.",
    "fieldname": "difundir_a",
    "fieldtype": "Table MultiSelect",
@@ -237,23 +337,10 @@
    "options": "Documento Difusion"
   },
   {
-   "collapsible": 1,
-   "fieldname": "sec_revision",
-   "fieldtype": "Section Break",
-   "label": "Observaciones de revisión"
-  },
-  {
-   "description": "Obligatoria para observar el documento. Queda en el registro de abajo con quién y cuándo.",
-   "fieldname": "observacion",
-   "fieldtype": "Small Text",
-   "label": "Observación del revisor"
-  },
-  {
-   "fieldname": "observaciones_revision",
-   "fieldtype": "Table",
-   "label": "Registro de observaciones",
-   "options": "Observacion Revision",
-   "read_only": 1
+   "fieldname": "tab_conexiones",
+   "fieldtype": "Tab Break",
+   "label": "Conexiones",
+   "show_dashboard": 1
   }
  ],
  "grid_page_length": 50,
@@ -285,7 +372,7 @@
    "link_fieldname": "documento_controlado"
   }
  ],
- "modified": "2026-10-14 23:00:00.000000",
+ "modified": "2026-10-21 16:47:36.000000",
  "modified_by": "Administrator",
  "module": "SGC Documental",
  "name": "Documento Controlado",

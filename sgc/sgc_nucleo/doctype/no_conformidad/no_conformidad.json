@@ -7,50 +7,66 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "tab_deteccion",
+  "sec_identificacion",
   "titulo",
-  "origen_doctype",
-  "origen_id",
   "origen_tipo",
   "tipo",
+  "col_identificacion",
+  "estado",
+  "severidad",
+  "fecha_deteccion",
+  "sec_hallazgo",
   "descripcion",
   "requisito_incumplido",
+  "sec_donde",
   "unidad_organica",
   "proceso",
+  "col_donde",
   "programa_sede",
   "criterio",
-  "severidad",
-  "requiere_analisis_causa",
-  "analisis_causa",
-  "metodologia",
-  "causas",
+  "sec_origen",
+  "origen_doctype",
+  "col_origen",
+  "origen_id",
+  "tab_analisis",
+  "sec_contencion",
   "correccion_inmediata",
-  "plan_mejora",
-  "estado",
+  "sec_analisis",
+  "requiere_analisis_causa",
+  "col_analisis",
+  "metodologia",
+  "sec_causas",
+  "causas",
+  "analisis_causa",
+  "tab_tratamiento",
+  "sec_tratamiento",
   "responsable",
-  "fecha_deteccion",
+  "plan_mejora",
+  "col_tratamiento",
   "fecha_compromiso",
+  "sec_cierre",
   "evidencia_cierre",
-  "verificada_por"
+  "col_cierre",
+  "verificada_por",
+  "tab_conexiones"
  ],
  "fields": [
+  {
+   "fieldname": "tab_deteccion",
+   "fieldtype": "Tab Break",
+   "label": "Detección"
+  },
+  {
+   "fieldname": "sec_identificacion",
+   "fieldtype": "Section Break"
+  },
   {
    "fieldname": "titulo",
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Título",
    "reqd": 1
-  },
-  {
-   "fieldname": "origen_doctype",
-   "fieldtype": "Link",
-   "label": "Tipo de documento origen",
-   "options": "DocType"
-  },
-  {
-   "fieldname": "origen_id",
-   "fieldtype": "Dynamic Link",
-   "label": "Documento origen",
-   "options": "origen_doctype"
   },
   {
    "fieldname": "origen_tipo",
@@ -68,6 +84,38 @@
    "options": "No conformidad mayor\nNo conformidad menor\nPotencial no conformidad\nObservacion\nOportunidad de mejora"
   },
   {
+   "fieldname": "col_identificacion",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Abierta",
+   "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Abierta\nEn analisis\nEn tratamiento\nEn verificacion\nCerrada eficaz\nCerrada no eficaz",
+   "read_only": 1
+  },
+  {
+   "fieldname": "severidad",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Severidad",
+   "options": "Critica\nAlta\nMedia\nBaja"
+  },
+  {
+   "fieldname": "fecha_deteccion",
+   "fieldtype": "Date",
+   "label": "Fecha de detección"
+  },
+  {
+   "fieldname": "sec_hallazgo",
+   "fieldtype": "Section Break",
+   "label": "Qué se detectó"
+  },
+  {
    "fieldname": "descripcion",
    "fieldtype": "Text",
    "label": "Descripción"
@@ -76,6 +124,11 @@
    "fieldname": "requisito_incumplido",
    "fieldtype": "Small Text",
    "label": "Requisito incumplido"
+  },
+  {
+   "fieldname": "sec_donde",
+   "fieldtype": "Section Break",
+   "label": "Dónde ocurrió"
   },
   {
    "fieldname": "unidad_organica",
@@ -88,6 +141,10 @@
    "fieldtype": "Link",
    "label": "Proceso",
    "options": "Proceso"
+  },
+  {
+   "fieldname": "col_donde",
+   "fieldtype": "Column Break"
   },
   {
    "fieldname": "programa_sede",
@@ -103,11 +160,46 @@
    "options": "Elemento Marco"
   },
   {
-   "fieldname": "severidad",
-   "fieldtype": "Select",
-   "in_standard_filter": 1,
-   "label": "Severidad",
-   "options": "Critica\nAlta\nMedia\nBaja"
+   "fieldname": "sec_origen",
+   "fieldtype": "Section Break",
+   "label": "Documento que la originó",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "origen_doctype",
+   "fieldtype": "Link",
+   "label": "Tipo de documento origen",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "col_origen",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "origen_id",
+   "fieldtype": "Dynamic Link",
+   "label": "Documento origen",
+   "options": "origen_doctype"
+  },
+  {
+   "fieldname": "tab_analisis",
+   "fieldtype": "Tab Break",
+   "label": "Análisis de causa"
+  },
+  {
+   "fieldname": "sec_contencion",
+   "fieldtype": "Section Break",
+   "label": "Contención"
+  },
+  {
+   "fieldname": "correccion_inmediata",
+   "fieldtype": "Text",
+   "label": "Corrección inmediata (contención)"
+  },
+  {
+   "fieldname": "sec_analisis",
+   "fieldtype": "Section Break",
+   "label": "Análisis"
   },
   {
    "default": "0",
@@ -116,9 +208,8 @@
    "label": "Requiere análisis de causa"
   },
   {
-   "fieldname": "analisis_causa",
-   "fieldtype": "Text",
-   "label": "Análisis de causa raíz"
+   "fieldname": "col_analisis",
+   "fieldtype": "Column Break"
   },
   {
    "depends_on": "eval:doc.requiere_analisis_causa",
@@ -129,6 +220,10 @@
    "options": "\nCinco porqués\nEspina de pescado (Ishikawa)\nPareto\nLluvia de ideas\nOtra"
   },
   {
+   "fieldname": "sec_causas",
+   "fieldtype": "Section Break"
+  },
+  {
    "depends_on": "eval:doc.requiere_analisis_causa",
    "description": "Al menos una causa, y al menos una marcada como raíz, para pasar a tratamiento.",
    "fieldname": "causas",
@@ -137,26 +232,19 @@
    "options": "Causa Identificada"
   },
   {
-   "fieldname": "correccion_inmediata",
+   "fieldname": "analisis_causa",
    "fieldtype": "Text",
-   "label": "Corrección inmediata (contención)"
+   "label": "Análisis de causa raíz"
   },
   {
-   "fieldname": "plan_mejora",
-   "fieldtype": "Link",
-   "label": "Plan de mejora",
-   "options": "Plan Mejora"
+   "fieldname": "tab_tratamiento",
+   "fieldtype": "Tab Break",
+   "label": "Tratamiento y cierre"
   },
   {
-   "default": "Abierta",
-   "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
-   "fieldname": "estado",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Estado",
-   "options": "Abierta\nEn analisis\nEn tratamiento\nEn verificacion\nCerrada eficaz\nCerrada no eficaz",
-   "read_only": 1
+   "fieldname": "sec_tratamiento",
+   "fieldtype": "Section Break",
+   "label": "Tratamiento"
   },
   {
    "fieldname": "responsable",
@@ -166,14 +254,24 @@
    "in_standard_filter": 1
   },
   {
-   "fieldname": "fecha_deteccion",
-   "fieldtype": "Date",
-   "label": "Fecha de detección"
+   "fieldname": "plan_mejora",
+   "fieldtype": "Link",
+   "label": "Plan de mejora",
+   "options": "Plan Mejora"
+  },
+  {
+   "fieldname": "col_tratamiento",
+   "fieldtype": "Column Break"
   },
   {
    "fieldname": "fecha_compromiso",
    "fieldtype": "Date",
    "label": "Fecha de compromiso (ETA)"
+  },
+  {
+   "fieldname": "sec_cierre",
+   "fieldtype": "Section Break",
+   "label": "Cierre"
   },
   {
    "fieldname": "evidencia_cierre",
@@ -182,11 +280,21 @@
    "options": "Evidencia"
   },
   {
+   "fieldname": "col_cierre",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "verificada_por",
    "fieldtype": "Link",
    "label": "Verificada por",
    "options": "User",
    "read_only": 1
+  },
+  {
+   "fieldname": "tab_conexiones",
+   "fieldtype": "Tab Break",
+   "label": "Conexiones",
+   "show_dashboard": 1
   }
  ],
  "grid_page_length": 50,
@@ -223,7 +331,7 @@
    "link_fieldname": "no_conformidad"
   }
  ],
- "modified": "2026-10-14 23:00:00.000000",
+ "modified": "2026-10-21 16:47:36.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "No Conformidad",
