@@ -23,20 +23,16 @@ frappe.ui.form.on("Ficha Indicador", {
 		if (frm.is_new()) return;
 		const pintar = (etiqueta, color) => frm.dashboard.add_indicator(etiqueta, color);
 		if (!frm.doc.indicador) return;
+		// Un indicador se mide por programa, sede o periodo: no hay «una» última medición.
+		// Lo que resume su estado es cuántas mediciones están en verde y cuántas en rojo.
 		const del_indicador = { indicador: frm.doc.indicador };
 		Promise.all([
-			frappe.db.get_list("Valor Indicador", {
-				filters: del_indicador, fields: ["valor_num", "valor_texto", "semaforo"],
-				order_by: "fecha desc", limit: 1,
-			}),
 			frappe.db.count("Valor Indicador", { filters: del_indicador }),
+			frappe.db.count("Valor Indicador", { filters: { ...del_indicador, semaforo: "Verde" } }),
 			frappe.db.count("Valor Indicador", { filters: { ...del_indicador, semaforo: "Rojo" } }),
-		]).then(([ultima, total, en_rojo]) => {
-			const u = ultima[0];
-			const colores = { Verde: "green", Ambar: "orange", Rojo: "red" };
-			pintar(u ? __("Última medición: {0}", [u.valor_texto || u.valor_num]) : __("Sin mediciones"),
-				u ? colores[u.semaforo] || "gray" : "gray");
+		]).then(([total, en_verde, en_rojo]) => {
 			pintar(__("Mediciones: {0}", [total]), total ? "blue" : "gray");
+			pintar(__("En verde: {0}", [en_verde]), en_verde ? "green" : "gray");
 			pintar(__("En rojo: {0}", [en_rojo]), en_rojo ? "red" : "green");
 		});
 	},

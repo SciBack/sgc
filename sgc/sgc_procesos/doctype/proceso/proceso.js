@@ -31,17 +31,23 @@ frappe.ui.form.on("Proceso", {
 			frappe.db.count("Procedimiento", { filters: de_este }),
 			frappe.db.count("Documento Controlado", { filters: de_este }),
 			frappe.db.count("Documento Controlado", { filters: { ...de_este, estado: "Publicado" } }),
+			frappe.db.count("Indicador", { filters: de_este }),
 			frappe.db.count("No Conformidad", {
 				filters: { ...de_este, estado: ["not in", ["Cerrada eficaz", "Cerrada no eficaz"]] },
 			}),
 			frappe.db.count("Riesgo", { filters: de_este }),
-		]).then(([procedimientos, documentos, publicados, nc_abiertas, riesgos]) => {
-			pintar(__("Responsable: {0}", [frm.doc.responsable ? frappe.user.full_name(frm.doc.responsable) : __("sin asignar")]),
-				frm.doc.responsable ? "green" : "red");
+		]).then(([procedimientos, documentos, publicados, indicadores, nc_abiertas, riesgos]) => {
+			const responsable = frm.doc.responsable
+				? frappe.user.full_name(frm.doc.responsable)
+				: __("sin asignar");
+			pintar(__("Responsable: {0}", [responsable]), frm.doc.responsable ? "green" : "red");
 			pintar(__("Procedimientos: {0}", [procedimientos]), procedimientos ? "blue" : "gray");
-			pintar(__("Documentos publicados: {0} de {1}", [publicados, documentos]),
-				documentos && publicados === documentos ? "green" : documentos ? "orange" : "gray");
-			pintar(__("No conformidades abiertas: {0}", [nc_abiertas]), nc_abiertas ? "red" : "green");
+			pintar(
+				__("Documentos publicados: {0}/{1}", [publicados, documentos]),
+				documentos && publicados === documentos ? "green" : documentos ? "orange" : "gray"
+			);
+			pintar(__("Indicadores: {0}", [indicadores]), indicadores ? "blue" : "gray");
+			pintar(__("NC abiertas: {0}", [nc_abiertas]), nc_abiertas ? "red" : "green");
 			pintar(__("Riesgos: {0}", [riesgos]), riesgos ? "blue" : "gray");
 		});
 	},

@@ -30,7 +30,7 @@ frappe.ui.form.on("Auditoria", {
 			frappe.db.count("Hallazgo Auditoria", { filters: { auditoria: frm.doc.name } }),
 			frappe.db.count("Hallazgo Auditoria", { filters: { auditoria: frm.doc.name, estado: "Abierto" } }),
 		]).then(([hallazgos, abiertos]) => {
-			pintar(__("Actividades hechas: {0} de {1}", [hechas, actividades.length]),
+			pintar(__("Actividades hechas: {0}/{1}", [hechas, actividades.length]),
 				actividades.length && hechas === actividades.length ? "green" : "blue");
 			pintar(__("Hallazgos: {0}", [hallazgos]), hallazgos ? "blue" : "gray");
 			pintar(__("Hallazgos abiertos: {0}", [abiertos]), abiertos ? "orange" : "green");

@@ -30,7 +30,7 @@ frappe.ui.form.on("Autoevaluacion", {
 			frappe.db.count("Valoracion Criterio", { filters: { ...de_esta, cumple: "No cumple" } }),
 			frappe.db.count("Hallazgo", { filters: de_esta }),
 		]).then(([criterios, valorados, no_cumple, hallazgos]) => {
-			pintar(__("Criterios valorados: {0} de {1}", [valorados, criterios]),
+			pintar(__("Criterios valorados: {0}/{1}", [valorados, criterios]),
 				criterios && valorados === criterios ? "green" : criterios ? "orange" : "gray");
 			pintar(__("No cumple: {0}", [no_cumple]), no_cumple ? "red" : "green");
 			pintar(__("Hallazgos: {0}", [hallazgos]), hallazgos ? "blue" : "gray");

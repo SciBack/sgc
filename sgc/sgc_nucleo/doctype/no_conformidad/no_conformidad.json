@@ -250,8 +250,7 @@
    "fieldtype": "Link",
    "label": "Responsable",
    "options": "User",
-   "in_standard_filter": 1,
-   "in_list_view": 1
+   "in_standard_filter": 1
   },
   {
    "fieldname": "plan_mejora",
@@ -332,7 +331,7 @@
    "link_fieldname": "no_conformidad"
   }
  ],
- "modified": "2026-10-22 08:53:33.000000",
+ "modified": "2026-10-22 09:54:31.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "No Conformidad",

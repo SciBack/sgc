@@ -58,8 +58,7 @@
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Tipo",
-   "options": "Correctiva\nPreventiva\nMejora",
-   "in_list_view": 1
+   "options": "Correctiva\nPreventiva\nMejora"
   },
   {
    "fieldname": "responsable",
@@ -224,7 +223,7 @@
    "link_fieldname": "accion_mejora"
   }
  ],
- "modified": "2026-10-22 08:53:33.000000",
+ "modified": "2026-10-22 09:54:31.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "Accion Mejora",

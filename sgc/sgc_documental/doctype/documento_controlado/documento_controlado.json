@@ -117,9 +117,9 @@
    "description": "Número entero. Sube de uno en uno con cada aprobación: una versión solo existe cuando se aprueba, así que no hay medias versiones.",
    "fieldname": "version",
    "fieldtype": "Int",
-   "in_list_view": 1,
    "label": "Versión",
-   "non_negative": 1
+   "non_negative": 1,
+   "in_list_view": 1
   },
   {
    "description": "Se fija sola al publicar. Solo se rellena a mano si el documento se publicó en una fecha distinta de hoy.",
@@ -166,8 +166,7 @@
    "fieldtype": "Link",
    "in_standard_filter": 1,
    "label": "Proceso",
-   "options": "Proceso",
-   "in_list_view": 1
+   "options": "Proceso"
   },
   {
    "description": "Dónde se organiza el documento, además del proceso y el tema.",
@@ -375,7 +374,7 @@
    "link_fieldname": "documento_controlado"
   }
  ],
- "modified": "2026-10-22 08:53:33.000000",
+ "modified": "2026-10-22 09:56:22.000000",
  "modified_by": "Administrator",
  "module": "SGC Documental",
  "name": "Documento Controlado",

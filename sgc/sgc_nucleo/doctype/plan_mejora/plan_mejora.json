@@ -50,7 +50,6 @@
   {
    "fieldname": "codigo",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "Código",
    "reqd": 1,
    "unique": 1
@@ -225,7 +224,7 @@
    "link_fieldname": "plan_mejora"
   }
  ],
- "modified": "2026-10-22 08:56:31.000000",
+ "modified": "2026-10-22 09:54:31.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "Plan Mejora",
