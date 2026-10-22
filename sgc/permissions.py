@@ -1,26 +1,34 @@
 # Copyright (c) 2026, SciBack and contributors
 # For license information, please see license.txt
-"""M07 — Visibilidad por programa (opt-in, seguro).
+"""M07 — Visibilidad por programa y por sede (opt-in, seguro).
 
-Mecanismo que acota lo que ve un usuario a SU Programa Sede **solo si** se le
-asignó una `User Permission` sobre `Programa Sede`. Quien NO tenga esa User
-Permission —o tenga un rol exento— ve TODO. Es *opt-in*: mientras el orquestador
-no siembre ninguna User Permission, el mecanismo queda INACTIVO (todos ven todo).
+Mecanismo que acota lo que ve un usuario a SUS Programa Sede **solo si** se le
+asignó una `User Permission`, de una de dos formas:
+
+  - sobre `Programa Sede` (un programa concreto), o
+  - sobre su **sede**: `Unidad Organica` de tipo Sede (Lima, Juliaca, Tarapoto).
+    Equivale a todos los Programa Sede de esa sede, también los que se creen
+    después. `asignar_sede` la crea aplicable SOLO a `Programa Sede`: así lo
+    institucional (lo que no es de un programa) lo sigue viendo. Una User
+    Permission de sede «para todos los DocTypes» (ver `otorgar_ambito`) acota
+    además, de forma nativa, todo lo que enlace una unidad fuera de su subárbol:
+    sirve donde las unidades cuelgan de su sede, no donde las sedes son hojas.
+
+Quien NO tenga ninguna de las dos —o tenga un rol exento— ve TODO. Es *opt-in*:
+sin User Permission sembrada, el mecanismo queda INACTIVO (todos ven todo).
 
 Dos ejes (patrón Frappe):
   1. `permission_query_conditions` -> filtra los LISTADOS (SQL WHERE inyectado).
   2. `has_permission`               -> filtra el acceso a UN documento (get_doc).
 Ambos registrados en hooks.py por DocType.
 
-Regla de exención (decisión de negocio, defaults delegados por Alberto):
-  EXENTOS (ven todo):  DPGC, "Analista de Calidad (DPGC)", "Auditor Interno",
-                       System Manager, Administrator, y CUALQUIERA sin User
-                       Permission de Programa Sede.
-  ACOTADOS:            "Responsable de Calidad de Programa" y
-                       "Miembro de Comité de Calidad" (cuando tienen la User
-                       Permission). En realidad se acota a *cualquier* usuario
-                       con la User Permission que no sea exento — el rol acotado
-                       es solo quien la recibe en el onboarding.
+Regla de exención (decisión de Alberto, 22-oct-2026: «la sede manda»):
+  EXENTOS (ven todo):  DPGC, System Manager, Administrator, y CUALQUIERA sin
+                       User Permission de programa ni de sede.
+  ACOTADOS:            cualquier otro usuario con esa User Permission, también
+                       un "Analista de Calidad (DPGC)" o un "Auditor Interno":
+                       asignarle una sede es decir a propósito que trabaja solo
+                       en ella (p.ej. Planificación Tarapoto).
 
 DocTypes acotados (derivación de programa NO AMBIGUA):
   - Autoevaluacion       -> campo directo `programa_sede`.
@@ -29,6 +37,8 @@ DocTypes acotados (derivación de programa NO AMBIGUA):
   - Valoracion Criterio  -> vía padre `autoevaluacion` -> Autoevaluacion.programa_sede.
   - Valoracion Estandar  -> vía padre `autoevaluacion` -> Autoevaluacion.programa_sede.
   - Plan Mejora          -> vía `autoevaluacion` -> Autoevaluacion.programa_sede.
+  - Salida No Conforme, Valor Indicador, Alerta Indicador, Auditoria, Comite
+                         -> campo directo `programa_sede`.
 
 DocTypes deliberadamente NO acotados (ver notas al pie del archivo):
   - Accion Mejora  -> derivación AMBIGUA (plan_mejora / hallazgo / no_conformidad,
@@ -47,14 +57,27 @@ import frappe
 # Configuración
 # ---------------------------------------------------------------------------
 DOCTYPE_PROGRAMA = "Programa Sede"
+# Las sedes son unidades orgánicas de tipo «Sede» (Programa Sede.sede las enlaza).
+DOCTYPE_SEDE = "Unidad Organica"
+TIPO_SEDE = "Sede"
 
-# Roles que SIEMPRE ven todo (ignoran cualquier User Permission de Programa Sede).
+# Roles que SIEMPRE ven todo (ignoran cualquier User Permission de programa o sede).
 ROLES_EXENTOS = frozenset({
     "DPGC",
-    "Analista de Calidad (DPGC)",
-    "Auditor Interno",
     "System Manager",
 })
+
+# DocTypes con el Programa Sede en un campo directo `programa_sede`.
+DOCTYPES_CAMPO_DIRECTO = (
+    "Autoevaluacion",
+    "Hallazgo",
+    "No Conformidad",
+    "Salida No Conforme",
+    "Valor Indicador",
+    "Alerta Indicador",
+    "Auditoria",
+    "Comite",
+)
 
 
 # ---------------------------------------------------------------------------
@@ -68,15 +91,37 @@ def es_exento(user=None):
     return bool(ROLES_EXENTOS.intersection(frappe.get_roles(user)))
 
 
+def es_sede(unidad):
+    """True si `unidad` es una Unidad Organica de tipo Sede."""
+    return bool(unidad) and frappe.db.get_value(DOCTYPE_SEDE, unidad, "tipo") == TIPO_SEDE
+
+
+def sedes_asignadas(user=None):
+    """Sedes (Unidad Organica de tipo Sede) asignadas a `user` por User Permission."""
+    user = user or frappe.session.user
+    unidades = frappe.get_all(
+        "User Permission",
+        filters={"user": user, "allow": DOCTYPE_SEDE},
+        pluck="for_value",
+    )
+    if not unidades:
+        return []
+    return frappe.get_all(
+        DOCTYPE_SEDE, filters={"name": ["in", unidades], "tipo": TIPO_SEDE}, pluck="name"
+    )
+
+
 def programas_permitidos(user=None):
     """Lista de `Programa Sede` a los que el usuario está acotado, o `None` si NO
     está acotado (ve todo).
 
     Devuelve `None` (sin restricción) cuando:
       - el usuario es exento por rol (o Administrator), o
-      - no tiene NINGUNA User Permission sobre Programa Sede (opt-in).
+      - no tiene User Permission ni sobre Programa Sede ni sobre una sede (opt-in).
 
-    Devuelve una lista de names de Programa Sede cuando sí está acotado.
+    Devuelve los names de Programa Sede cuando sí está acotado: los asignados uno
+    a uno más todos los de sus sedes. Puede ser una lista vacía (una sede sin
+    programas todavía): entonces solo ve lo que no es de ningún programa.
 
     `frappe.get_all` ignora permisos por diseño, así que consultar aquí las User
     Permission no recursa sobre estos mismos hooks.
@@ -84,14 +129,19 @@ def programas_permitidos(user=None):
     user = user or frappe.session.user
     if es_exento(user):
         return None
-    programas = frappe.get_all(
+    programas = set(frappe.get_all(
         "User Permission",
         filters={"user": user, "allow": DOCTYPE_PROGRAMA},
         pluck="for_value",
-    )
-    if not programas:
+    ))
+    sedes = sedes_asignadas(user)
+    if not programas and not sedes:
         return None  # opt-in: sin User Permission => sin restricción
-    return programas
+    if sedes:
+        programas.update(frappe.get_all(
+            DOCTYPE_PROGRAMA, filters={"sede": ["in", sedes]}, pluck="name"
+        ))
+    return sorted(programas)
 
 
 # ---------------------------------------------------------------------------
@@ -100,6 +150,14 @@ def programas_permitidos(user=None):
 def _in_list(programas):
     """'PS-A', 'PS-B'  (ya escapado) para un IN (...)."""
     return ", ".join(frappe.db.escape(p) for p in programas)
+
+
+def _sin_programa_o_en(columna, programas):
+    """`columna` vacía o dentro de `programas`. Con la lista vacía, solo vacía:
+    un `in ()` es un error de sintaxis en SQL."""
+    if not programas:
+        return f"{columna} is null"
+    return f"({columna} is null or {columna} in ({_in_list(programas)}))"
 
 
 def _cond_directo(doctype, user, campo="programa_sede"):
@@ -111,8 +169,7 @@ def _cond_directo(doctype, user, campo="programa_sede"):
     programas = programas_permitidos(user)
     if programas is None:
         return ""  # sin restricción
-    tbl = f"`tab{doctype}`"
-    return f"({tbl}.`{campo}` is null or {tbl}.`{campo}` in ({_in_list(programas)}))"
+    return _sin_programa_o_en(f"`tab{doctype}`.`{campo}`", programas)
 
 
 def _cond_via_autoevaluacion(doctype, user, campo="autoevaluacion",
@@ -129,8 +186,7 @@ def _cond_via_autoevaluacion(doctype, user, campo="autoevaluacion",
     tbl = f"`tab{doctype}`"
     sub = (
         "select name from `tabAutoevaluacion` "
-        f"where `tabAutoevaluacion`.programa_sede is null "
-        f"or `tabAutoevaluacion`.programa_sede in ({_in_list(programas)})"
+        f"where {_sin_programa_o_en('`tabAutoevaluacion`.programa_sede', programas)}"
     )
     cond = f"{tbl}.`{campo}` in ({sub})"
     if padre_opcional:
@@ -149,6 +205,26 @@ def pqc_hallazgo(user):
 
 def pqc_no_conformidad(user):
     return _cond_directo("No Conformidad", user)
+
+
+def pqc_salida_no_conforme(user):
+    return _cond_directo("Salida No Conforme", user)
+
+
+def pqc_valor_indicador(user):
+    return _cond_directo("Valor Indicador", user)
+
+
+def pqc_alerta_indicador(user):
+    return _cond_directo("Alerta Indicador", user)
+
+
+def pqc_auditoria(user):
+    return _cond_directo("Auditoria", user)
+
+
+def pqc_comite(user):
+    return _cond_directo("Comite", user)
 
 
 def pqc_valoracion_criterio(user):
@@ -171,7 +247,7 @@ def pqc_plan_mejora(user):
 def _programa_del_doc(doc):
     """Programa Sede derivado del documento, o None si no es atribuible."""
     dt = doc.doctype
-    if dt in ("Autoevaluacion", "Hallazgo", "No Conformidad"):
+    if dt in DOCTYPES_CAMPO_DIRECTO:
         return doc.get("programa_sede")
     if dt in ("Valoracion Criterio", "Valoracion Estandar", "Plan Mejora"):
         ae = doc.get("autoevaluacion")
@@ -217,10 +293,10 @@ def has_permission(doc, ptype=None, user=None):
 # DocTypes con Link DIRECTO a Programa Sede que SÍ queremos acotar. La User
 # Permission se crea con apply_to_all_doctypes=0 + applicable_for = SOLO estos,
 # para que el mecanismo NATIVO de Frappe no acote de rebote otros direct-linkers
-# (Evidencia, Comite, Auditoria, Aplicacion Instrumento, Valor Indicador), que
-# deben quedar compartidos. Los derivados por padre (Valoracion*, Plan Mejora)
-# ya los cubren las get_permission_query_conditions de arriba.
-DOCTYPES_ACOTADOS_DIRECTOS = ("Autoevaluacion", "Hallazgo", "No Conformidad")
+# (Evidencia, Aplicacion Instrumento, Carga Evidencias), que deben quedar
+# compartidos. Los derivados por padre (Valoracion*, Plan Mejora) ya los cubren
+# las get_permission_query_conditions de arriba.
+DOCTYPES_ACOTADOS_DIRECTOS = DOCTYPES_CAMPO_DIRECTO
 
 
 @frappe.whitelist()
@@ -255,6 +331,34 @@ def otorgar_programa(user, programa_sede):
         up.insert(ignore_permissions=True)
         creadas += 1
     return {"user": user, "programa_sede": programa_sede, "user_permissions_creadas": creadas}
+
+
+@frappe.whitelist()
+def asignar_sede(user, sede):
+    """Acota a `user` a los programas de `sede` (Lima, Juliaca, Tarapoto…).
+
+    Crea (idempotente) UNA User Permission sobre la sede, aplicable solo a
+    Programa Sede. Frappe filtra entonces por sí solo la lista y los desplegables
+    de Programa Sede, y `programas_permitidos` deriva de ella todos los programas
+    de la sede para el resto. Lo que no es de ningún programa lo sigue viendo.
+
+    Desde el Desk es lo mismo que crear la User Permission a mano: Permitir
+    «Unidad Organica», Valor la sede, sin «Aplicar a todos los tipos de
+    documento» y Aplicable a «Programa Sede».
+
+        bench --site <site> execute sgc.permissions.asignar_sede \\
+            --kwargs '{"user":"persona@example.org","sede":"SEDE-X"}'
+    """
+    frappe.only_for(("DPGC", "System Manager"))
+    if not es_sede(sede):
+        frappe.throw(f"«{sede}» no es una unidad orgánica de tipo {TIPO_SEDE}.")
+    filtros = {"user": user, "allow": DOCTYPE_SEDE, "for_value": sede, "applicable_for": DOCTYPE_PROGRAMA}
+    if frappe.db.exists("User Permission", filtros):
+        return {"user": user, "sede": sede, "creada": False}
+    up = frappe.get_doc({"doctype": "User Permission", **filtros, "apply_to_all_doctypes": 0})
+    up.flags.ignore_permissions = True
+    up.insert(ignore_permissions=True)
+    return {"user": user, "sede": sede, "creada": True}
 
 
 # Dimensiones de ámbito que el framework resuelve por sí solo. Son DocTypes
