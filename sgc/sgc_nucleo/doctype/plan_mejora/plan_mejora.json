@@ -25,6 +25,7 @@
   "unidad_organica",
   "col_ambito",
   "periodo_academico",
+  "tab_conexiones",
   "tab_aprobacion",
   "sec_aprobacion",
   "fecha_compromiso",
@@ -34,8 +35,7 @@
   "sec_cierre",
   "cerrado_por",
   "col_cierre",
-  "fecha_cierre",
-  "tab_conexiones"
+  "fecha_cierre"
  ],
  "fields": [
   {
@@ -50,7 +50,6 @@
   {
    "fieldname": "codigo",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "Código",
    "reqd": 1,
    "unique": 1
@@ -58,7 +57,6 @@
   {
    "fieldname": "titulo",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "Título"
   },
   {
@@ -66,7 +64,8 @@
    "fieldtype": "Link",
    "label": "Responsable",
    "options": "User",
-   "in_standard_filter": 1
+   "in_standard_filter": 1,
+   "in_list_view": 1
   },
   {
    "fieldname": "col_identificacion",
@@ -77,7 +76,6 @@
    "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
    "fieldname": "estado",
    "fieldtype": "Select",
-   "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Estado",
    "options": "Borrador\nEn ejecucion\nCerrado",
@@ -150,6 +148,12 @@
    "options": "Periodo Academico"
   },
   {
+   "fieldname": "tab_conexiones",
+   "fieldtype": "Tab Break",
+   "label": "Resumen",
+   "show_dashboard": 1
+  },
+  {
    "fieldname": "tab_aprobacion",
    "fieldtype": "Tab Break",
    "label": "Aprobación y cierre"
@@ -204,12 +208,6 @@
    "fieldtype": "Date",
    "label": "Fecha de cierre",
    "read_only": 1
-  },
-  {
-   "fieldname": "tab_conexiones",
-   "fieldtype": "Tab Break",
-   "label": "Conexiones",
-   "show_dashboard": 1
   }
  ],
  "grid_page_length": 50,
@@ -226,7 +224,7 @@
    "link_fieldname": "plan_mejora"
   }
  ],
- "modified": "2026-10-21 17:18:56.000000",
+ "modified": "2026-10-22 09:54:31.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "Plan Mejora",

@@ -52,7 +52,6 @@
   {
    "fieldname": "codigo",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "Código",
    "reqd": 1,
    "unique": 1
@@ -63,7 +62,8 @@
    "in_standard_filter": 1,
    "label": "Auditoría",
    "options": "Auditoria",
-   "reqd": 1
+   "reqd": 1,
+   "in_list_view": 1
   },
   {
    "fieldname": "col_identificacion",
@@ -74,7 +74,6 @@
    "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
    "fieldname": "estado",
    "fieldtype": "Select",
-   "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Estado",
    "options": "Borrador\nEn revision\nAprobado\nDistribuido",
@@ -224,7 +223,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-21 17:18:56.000000",
+ "modified": "2026-10-22 08:53:33.000000",
  "modified_by": "Administrator",
  "module": "SGC Auditoria",
  "name": "Informe Auditoria",
@@ -303,5 +302,7 @@
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
- "track_changes": 1
+ "track_changes": 1,
+ "title_field": "codigo",
+ "show_title_field_in_link": 0
 }

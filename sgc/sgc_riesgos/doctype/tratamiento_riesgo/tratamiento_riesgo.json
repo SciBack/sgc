@@ -37,7 +37,6 @@
   {
    "fieldname": "riesgo",
    "fieldtype": "Link",
-   "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Riesgo",
    "options": "Riesgo",
@@ -56,7 +55,8 @@
    "fieldtype": "Link",
    "label": "Responsable",
    "options": "User",
-   "in_standard_filter": 1
+   "in_standard_filter": 1,
+   "in_list_view": 1
   },
   {
    "fieldname": "col_identificacion",
@@ -67,7 +67,6 @@
    "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
    "fieldname": "estado",
    "fieldtype": "Select",
-   "in_list_view": 1,
    "label": "Estado",
    "options": "Planificado\nEn ejecucion\nImplementado\nVerificado",
    "read_only": 1,
@@ -76,7 +75,8 @@
   {
    "fieldname": "fecha_compromiso",
    "fieldtype": "Date",
-   "label": "Fecha compromiso"
+   "label": "Fecha compromiso",
+   "in_list_view": 1
   },
   {
    "fieldname": "sec_descripcion",
@@ -166,7 +166,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-21 17:18:56.000000",
+ "modified": "2026-10-22 09:54:31.000000",
  "modified_by": "Administrator",
  "module": "SGC Riesgos",
  "name": "Tratamiento Riesgo",
@@ -247,5 +247,7 @@
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
- "track_changes": 1
+ "track_changes": 1,
+ "title_field": "riesgo",
+ "show_title_field_in_link": 0
 }

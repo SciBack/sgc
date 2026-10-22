@@ -9,6 +9,31 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.6] - 2026-10-22
+
+**Requiere migrar:** sí: la migración aplica los colores de los estados (fixtures), las columnas de
+las listas y la maquetación. Sin cambios de esquema ni de datos.
+
+### Cambiado
+- **Cada estado con su color.** Los 50 estados de los flujos salían todos en azul. Ahora: gris,
+  todavía sin empezar o ya sin vigencia; celeste, en marcha; naranja, espera que alguien actúe
+  (revisar, verificar, atender); verde, terminado bien; rojo, terminado mal o un riesgo que se
+  materializó. Se ve en las listas y junto al título de cada registro.
+- **Listas más limpias.** Desaparece la columna «Estado» repetida (el color ya lo dice) y cada
+  lista enseña como mucho tres columnas que sirven. Las mediciones se colorean por su semáforo y
+  las alertas de indicador por su estado.
+- **Pestaña «Resumen»** en Proceso, Plan de mejora, Autoevaluación y Auditoría: la que se llamaba
+  «Conexiones» pasa a segundo lugar y lleva arriba las cifras del registro.
+
+### Añadido
+- **Botón «Crear ▾»** con el paso siguiente ya enlazado: desde un proceso, su ficha,
+  procedimiento, documento, indicador o riesgo; desde una no conformidad, la acción o el plan de
+  mejora; desde una auditoría, la lista de verificación, el hallazgo o el informe; y otros.
+- **Cifras del registro dentro del formulario:** en Proceso (responsable, procedimientos,
+  documentos publicados, indicadores, NC abiertas, riesgos), Plan de mejora (avance y acciones),
+  Autoevaluación (criterios valorados, no cumple, hallazgos), Auditoría (actividades y hallazgos) y
+  Ficha de indicador (mediciones, en verde y en rojo).
+
 ## [1.7.5] - 2026-10-21
 
 **Requiere migrar:** sí: la migración aplica la maquetación nueva de los formularios. Sin cambios de

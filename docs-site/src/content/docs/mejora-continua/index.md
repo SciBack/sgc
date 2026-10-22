@@ -140,7 +140,7 @@ Un plan agrupa las acciones que resuelven uno o varios problemas.
 1. **Crear:** **Planes de mejora → + Agregar**. Indique título, el documento de origen y el
    **responsable**.
 2. **Enlazarlo a la no conformidad:** en la no conformidad, campo **Plan de mejora**.
-3. **Añadir las acciones** desde la pestaña **Conexiones** del plan (ver la sección 7).
+3. **Añadir las acciones** con **Crear ▾ → Acción de mejora**, en el propio plan (ver la sección 7).
 4. **Aprobar y ejecutar:** lo hace la dirección de calidad, y no puede aprobarlo quien lo creó.
    Exige responsable y al menos una acción. Al aprobarlo, el plan **se envía por correo** a su
    responsable y al de cada acción, con la tabla de qué, quién y para cuándo.
@@ -151,7 +151,8 @@ Un plan agrupa las acciones que resuelven uno o varios problemas.
 
 ## 7. Acciones de mejora
 
-1. **Crear:** desde el plan, en la pestaña **Conexiones**, **+** junto a *Acciones de mejora*. Indique la
+1. **Crear:** desde el plan, con **Crear ▾ → Acción de mejora** (o el **+** de *Acciones de mejora* en
+   su pestaña **Resumen**). Indique la
    descripción, el **tipo** (correctiva, preventiva o de mejora), el **responsable** y la **fecha
    de compromiso**.
 2. **Qué causa ataca:** si la acción nace de una no conformidad, pulse **Elegir causa** y escoja
