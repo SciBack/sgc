@@ -18,7 +18,8 @@ Al pulsar *Iniciar evaluacion*, el sistema crea **una Valoracion Criterio Pendie
 cada criterio valorable del marco** (53 en CONEAU 2025). No hay que crearlas a mano. Cada una
 muestra **qué exige el criterio** y admite un **responsable**: quien lo prepara, que recibe la
 tarea en sus pendientes hasta que el criterio queda valorado. Un criterio no puede valorarse dos
-veces en la misma autoevaluación, y la autoevaluación lista sus valoraciones en Conexiones.
+veces en la misma autoevaluación, y la autoevaluación lista sus valoraciones en su pestaña **Resumen**, con cuántos criterios
+llevan valorados y cuántos no cumplen.
 
 ![Una autoevaluación planificada](captura:acreditacion-autoevaluacion)
 

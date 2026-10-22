@@ -57,7 +57,6 @@
   {
    "fieldname": "proceso",
    "fieldtype": "Link",
-   "in_list_view": 1,
    "label": "Proceso",
    "options": "Proceso",
    "reqd": 1,
@@ -86,7 +85,8 @@
   {
    "fieldname": "fecha_emision",
    "fieldtype": "Date",
-   "label": "Fecha de emisión"
+   "label": "Fecha de emisión",
+   "in_list_view": 1
   },
   {
    "fieldname": "sec_plan",
@@ -243,7 +243,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-21 17:18:56.000000",
+ "modified": "2026-10-22 08:53:33.000000",
  "modified_by": "Administrator",
  "module": "SGC Procesos",
  "name": "Ficha Caracterizacion Proceso",

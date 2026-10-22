@@ -20,6 +20,12 @@ en qué punto termina tu parte del trabajo.
   área en la que está.
 - Cada registro tiene un **estado**; los botones de acción (por ejemplo, *Enviar a revisión*)
   mueven ese estado. Solo verás los botones que tu rol puede ejecutar.
+- **El color del estado dice cómo va:** gris, todavía sin empezar o ya sin vigencia; celeste, en
+  marcha; naranja, espera que alguien actúe (revisar, verificar, atender); verde, terminado bien;
+  rojo, terminado mal (por ejemplo, *Cerrada no eficaz*) o un riesgo que se materializó.
+- **Crear ▾**, arriba en el formulario, crea el paso siguiente ya enlazado: una acción de mejora
+  desde una no conformidad, un hallazgo desde una auditoría, una medición desde la ficha del
+  indicador. La pestaña **Resumen** reúne las cifras del registro y lo que cuelga de él.
 :::
 
 ![La portada del SGC: lo que te toca en todas las áreas](captura:inicio-portada)

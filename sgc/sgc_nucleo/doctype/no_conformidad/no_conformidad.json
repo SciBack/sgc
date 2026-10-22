@@ -64,7 +64,6 @@
   {
    "fieldname": "titulo",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "Título",
    "reqd": 1
   },
@@ -92,7 +91,6 @@
    "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
    "fieldname": "estado",
    "fieldtype": "Select",
-   "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Estado",
    "options": "Abierta\nEn analisis\nEn tratamiento\nEn verificacion\nCerrada eficaz\nCerrada no eficaz",
@@ -140,7 +138,8 @@
    "fieldname": "proceso",
    "fieldtype": "Link",
    "label": "Proceso",
-   "options": "Proceso"
+   "options": "Proceso",
+   "in_list_view": 1
   },
   {
    "fieldname": "col_donde",
@@ -251,7 +250,8 @@
    "fieldtype": "Link",
    "label": "Responsable",
    "options": "User",
-   "in_standard_filter": 1
+   "in_standard_filter": 1,
+   "in_list_view": 1
   },
   {
    "fieldname": "plan_mejora",
@@ -266,7 +266,8 @@
   {
    "fieldname": "fecha_compromiso",
    "fieldtype": "Date",
-   "label": "Fecha de compromiso (ETA)"
+   "label": "Fecha de compromiso (ETA)",
+   "in_list_view": 1
   },
   {
    "fieldname": "sec_cierre",
@@ -331,7 +332,7 @@
    "link_fieldname": "no_conformidad"
   }
  ],
- "modified": "2026-10-21 16:47:36.000000",
+ "modified": "2026-10-22 08:53:33.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "No Conformidad",

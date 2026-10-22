@@ -67,7 +67,8 @@ Al abrir un proceso ve:
 - **Propietario (área)** y **Responsable (dueño de proceso)**. Rellene el responsable: sin él, los
   avisos del proceso no llegan a nadie.
 - **Estado**: *Borrador*, *Vigente* u *Obsoleto*. Solo los vigentes salen en el portal público.
-- **Conexiones**, en su propia pestaña: todo lo que cuelga del proceso. Sus fichas, procedimientos, documentos,
+- **Resumen**, en su propia pestaña: arriba las cifras del proceso (responsable, procedimientos,
+  documentos publicados, no conformidades abiertas, riesgos) y debajo todo lo que cuelga de él. Sus fichas, procedimientos, documentos,
   indicadores, riesgos, no conformidades, auditorías y evidencias, cada grupo con su contador y un
   **+** para crear uno nuevo ya enlazado.
 

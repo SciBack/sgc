@@ -26,7 +26,6 @@
   {
    "fieldname": "titulo",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "Título",
    "reqd": 1
   },
@@ -62,7 +61,8 @@
    "fieldname": "proceso",
    "fieldtype": "Link",
    "label": "Proceso",
-   "options": "Proceso"
+   "options": "Proceso",
+   "in_list_view": 1
   },
   {
    "description": "si el riesgo amenaza un estándar/condición (p. ej. una CBC)",
@@ -109,7 +109,6 @@
    "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
    "fieldname": "estado",
    "fieldtype": "Select",
-   "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Estado",
    "options": "Identificado\nEvaluado\nEn tratamiento\nMonitoreado\nCerrado\nMaterializado",
@@ -135,7 +134,7 @@
    "link_fieldname": "riesgo"
   }
  ],
- "modified": "2026-10-14 23:00:00.000000",
+ "modified": "2026-10-22 08:53:33.000000",
  "modified_by": "Administrator",
  "module": "SGC Riesgos",
  "name": "Riesgo",

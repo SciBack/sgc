@@ -23,6 +23,7 @@
   "col_responsable",
   "fecha_inicio",
   "fecha_cierre",
+  "tab_conexiones",
   "tab_resultado",
   "sec_resultado",
   "avance_pct",
@@ -32,8 +33,7 @@
   "puntaje_excelencia",
   "seccion_snapshot",
   "marco_snapshot",
-  "amended_from",
-  "tab_conexiones"
+  "amended_from"
  ],
  "fields": [
   {
@@ -56,7 +56,6 @@
   {
    "fieldname": "titulo",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "Título"
   },
   {
@@ -76,7 +75,6 @@
    "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
    "fieldname": "estado",
    "fieldtype": "Select",
-   "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Estado",
    "options": "Planificada\nEn curso\nEn revision\nConsolidada\nCerrada",
@@ -87,7 +85,8 @@
    "fieldtype": "Link",
    "in_standard_filter": 1,
    "label": "Programa-Sede",
-   "options": "Programa Sede"
+   "options": "Programa Sede",
+   "in_list_view": 1
   },
   {
    "fieldname": "periodo_academico",
@@ -133,6 +132,12 @@
    "label": "Fecha de cierre"
   },
   {
+   "fieldname": "tab_conexiones",
+   "fieldtype": "Tab Break",
+   "label": "Resumen",
+   "show_dashboard": 1
+  },
+  {
    "fieldname": "tab_resultado",
    "fieldtype": "Tab Break",
    "label": "Resultado"
@@ -147,7 +152,8 @@
    "fieldname": "avance_pct",
    "fieldtype": "Percent",
    "label": "Avance (%)",
-   "read_only": 1
+   "read_only": 1,
+   "in_list_view": 1
   },
   {
    "description": "Propuesta por el motor sobre los niveles CONFIRMADOS de los 10 estándares (Tabla 9). El `resultado_vigencia` oficial lo fija el humano.",
@@ -195,12 +201,6 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
-  },
-  {
-   "fieldname": "tab_conexiones",
-   "fieldtype": "Tab Break",
-   "label": "Conexiones",
-   "show_dashboard": 1
   }
  ],
  "grid_page_length": 50,
@@ -238,7 +238,7 @@
    "link_fieldname": "autoevaluacion"
   }
  ],
- "modified": "2026-10-21 17:18:56.000000",
+ "modified": "2026-10-22 08:56:31.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Autoevaluacion",

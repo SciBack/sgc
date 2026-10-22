@@ -24,6 +24,7 @@
   "sec_objetivo",
   "objetivo",
   "alcance",
+  "tab_conexiones",
   "tab_criterios",
   "sec_criterios",
   "criterios",
@@ -35,8 +36,7 @@
   "fecha_inicio",
   "fecha_fin",
   "sec_actividades",
-  "actividades",
-  "tab_conexiones"
+  "actividades"
  ],
  "fields": [
   {
@@ -51,7 +51,6 @@
   {
    "fieldname": "titulo",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "Título",
    "reqd": 1
   },
@@ -79,7 +78,6 @@
    "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
    "fieldname": "estado",
    "fieldtype": "Select",
-   "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Estado",
    "options": "Planificada\nEn ejecucion\nEjecutada\nInforme emitido\nCerrada",
@@ -107,7 +105,8 @@
    "fieldname": "proceso",
    "fieldtype": "Link",
    "label": "Proceso",
-   "options": "Proceso"
+   "options": "Proceso",
+   "in_list_view": 1
   },
   {
    "fieldname": "col_ambito",
@@ -143,6 +142,12 @@
    "label": "Alcance"
   },
   {
+   "fieldname": "tab_conexiones",
+   "fieldtype": "Tab Break",
+   "label": "Resumen",
+   "show_dashboard": 1
+  },
+  {
    "fieldname": "tab_criterios",
    "fieldtype": "Tab Break",
    "label": "Criterios y equipo"
@@ -176,7 +181,8 @@
   {
    "fieldname": "fecha_plan",
    "fieldtype": "Date",
-   "label": "Fecha planificada"
+   "label": "Fecha planificada",
+   "in_list_view": 1
   },
   {
    "fieldname": "col_fechas",
@@ -203,12 +209,6 @@
    "fieldtype": "Table",
    "label": "Plan de actividades",
    "options": "Actividad Auditoria"
-  },
-  {
-   "fieldname": "tab_conexiones",
-   "fieldtype": "Tab Break",
-   "label": "Conexiones",
-   "show_dashboard": 1
   }
  ],
  "grid_page_length": 50,
@@ -230,7 +230,7 @@
    "link_fieldname": "auditoria"
   }
  ],
- "modified": "2026-10-21 17:18:56.000000",
+ "modified": "2026-10-22 08:56:31.000000",
  "modified_by": "Administrator",
  "module": "SGC Auditoria",
  "name": "Auditoria",

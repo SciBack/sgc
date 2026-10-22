@@ -171,7 +171,7 @@
   {
    "fieldname": "tab_conexiones",
    "fieldtype": "Tab Break",
-   "label": "Conexiones",
+   "label": "Resumen",
    "show_dashboard": 1
   }
  ],
@@ -251,7 +251,7 @@
    "link_fieldname": "proceso"
   }
  ],
- "modified": "2026-10-21 17:18:56.000000",
+ "modified": "2026-10-22 08:56:31.000000",
  "modified_by": "Administrator",
  "module": "SGC Procesos",
  "name": "Proceso",
