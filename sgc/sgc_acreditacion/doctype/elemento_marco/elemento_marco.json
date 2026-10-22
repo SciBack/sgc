@@ -7,30 +7,46 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "tab_elemento",
+  "sec_identificacion",
   "codigo",
-  "denominacion",
   "marco_normativo",
-  "nivel",
   "tipo",
-  "texto_oficial",
+  "col_identificacion",
+  "nivel",
   "orden",
   "peso",
   "es_valorable",
+  "sec_texto",
+  "denominacion",
+  "texto_oficial",
   "nota_normativa",
+  "tab_responsable",
   "responsable_sb",
   "unidad_responsable",
   "unidades_apoyo",
   "col_resp",
   "evidencia_requerida",
+  "tab_estructura",
   "estructura_sb",
-  "atributos",
-  "is_group",
   "parent_elemento_marco",
+  "is_group",
+  "atributos",
   "lft",
   "rgt",
-  "old_parent"
+  "old_parent",
+  "tab_conexiones"
  ],
  "fields": [
+  {
+   "fieldname": "tab_elemento",
+   "fieldtype": "Tab Break",
+   "label": "Elemento"
+  },
+  {
+   "fieldname": "sec_identificacion",
+   "fieldtype": "Section Break"
+  },
   {
    "description": "E1, 1.1, CBC-I, CBC-I.2 — código oficial",
    "fieldname": "codigo",
@@ -41,24 +57,12 @@
    "unique": 1
   },
   {
-   "fieldname": "denominacion",
-   "fieldtype": "Small Text",
-   "in_list_view": 1,
-   "label": "Denominación"
-  },
-  {
    "fieldname": "marco_normativo",
    "fieldtype": "Link",
    "in_standard_filter": 1,
    "label": "Marco normativo",
    "options": "Marco Normativo",
    "reqd": 1
-  },
-  {
-   "description": "Nombre del nivel (Estándar, Criterio…); denormalizado de Nivel Marco",
-   "fieldname": "nivel",
-   "fieldtype": "Data",
-   "label": "Nivel"
   },
   {
    "fieldname": "tipo",
@@ -68,10 +72,14 @@
    "options": "Dimension\nFactor\nEstandar\nCriterio\nCondicion\nComponente\nIndicador"
   },
   {
-   "description": "Descripción literal (del description del YAML)",
-   "fieldname": "texto_oficial",
-   "fieldtype": "Text",
-   "label": "Texto oficial"
+   "fieldname": "col_identificacion",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Nombre del nivel (Estándar, Criterio…); denormalizado de Nivel Marco",
+   "fieldname": "nivel",
+   "fieldtype": "Data",
+   "label": "Nivel"
   },
   {
    "fieldname": "orden",
@@ -92,10 +100,32 @@
    "label": "Es valorable"
   },
   {
+   "fieldname": "sec_texto",
+   "fieldtype": "Section Break",
+   "label": "Texto"
+  },
+  {
+   "fieldname": "denominacion",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Denominación"
+  },
+  {
+   "description": "Descripción literal (del description del YAML)",
+   "fieldname": "texto_oficial",
+   "fieldtype": "Text",
+   "label": "Texto oficial"
+  },
+  {
    "description": "Fuente + página (del annotation del YAML)",
    "fieldname": "nota_normativa",
    "fieldtype": "Text",
    "label": "Nota normativa"
+  },
+  {
+   "fieldname": "tab_responsable",
+   "fieldtype": "Tab Break",
+   "label": "Responsable y evidencias"
   },
   {
    "collapsible": 0,
@@ -129,15 +159,20 @@
    "label": "Evidencia requerida"
   },
   {
+   "fieldname": "tab_estructura",
+   "fieldtype": "Tab Break",
+   "label": "Estructura"
+  },
+  {
    "fieldname": "estructura_sb",
    "fieldtype": "Section Break",
    "label": "Estructura"
   },
   {
-   "description": "Lo variable por marco (obligatoriedad, glosa, referencia legal)",
-   "fieldname": "atributos",
-   "fieldtype": "JSON",
-   "label": "Atributos"
+   "fieldname": "parent_elemento_marco",
+   "fieldtype": "Link",
+   "label": "Elemento padre",
+   "options": "Elemento Marco"
   },
   {
    "default": "0",
@@ -146,10 +181,10 @@
    "label": "Es grupo"
   },
   {
-   "fieldname": "parent_elemento_marco",
-   "fieldtype": "Link",
-   "label": "Elemento padre",
-   "options": "Elemento Marco"
+   "description": "Lo variable por marco (obligatoriedad, glosa, referencia legal)",
+   "fieldname": "atributos",
+   "fieldtype": "JSON",
+   "label": "Atributos"
   },
   {
    "fieldname": "lft",
@@ -173,6 +208,12 @@
    "hidden": 1,
    "label": "Old Parent",
    "options": "Elemento Marco"
+  },
+  {
+   "fieldname": "tab_conexiones",
+   "fieldtype": "Tab Break",
+   "label": "Conexiones",
+   "show_dashboard": 1
   }
  ],
  "grid_page_length": 50,
@@ -230,7 +271,7 @@
    "link_fieldname": "elemento_marco"
   }
  ],
- "modified": "2026-10-15 08:00:00.000000",
+ "modified": "2026-10-21 17:18:56.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Elemento Marco",

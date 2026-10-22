@@ -7,26 +7,45 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "tab_informe",
+  "sec_identificacion",
   "anio",
   "marco_normativo",
   "unidad_organica",
-  "autoevaluacion",
-  "obligacion_ente",
+  "col_identificacion",
   "estado",
+  "obligacion_ente",
+  "autoevaluacion",
   "informe_anterior",
+  "tab_diagnostico",
   "sec_diagnostico",
   "semaforo",
   "n_cumple",
   "col_diag",
   "n_parcial",
   "n_no_cumple",
+  "sec_condiciones",
   "condiciones",
   "riesgos_detectados",
+  "tab_presentacion",
+  "sec_resumen",
   "resumen",
+  "sec_presentacion",
   "fecha_presentacion",
-  "pdf"
+  "col_presentacion",
+  "pdf",
+  "tab_conexiones"
  ],
  "fields": [
+  {
+   "fieldname": "tab_informe",
+   "fieldtype": "Tab Break",
+   "label": "Informe"
+  },
+  {
+   "fieldname": "sec_identificacion",
+   "fieldtype": "Section Break"
+  },
   {
    "fieldname": "anio",
    "fieldtype": "Int",
@@ -50,18 +69,8 @@
    "options": "Unidad Organica"
   },
   {
-   "description": "El IAC puede apoyarse en una Autoevaluación contra el marco CBC (A2)",
-   "fieldname": "autoevaluacion",
-   "fieldtype": "Link",
-   "label": "Autoevaluación de apoyo",
-   "options": "Autoevaluacion"
-  },
-  {
-   "description": "La obligación 'IAC' que este informe cumple (B2)",
-   "fieldname": "obligacion_ente",
-   "fieldtype": "Link",
-   "label": "Obligación al ente",
-   "options": "Obligacion Ente"
+   "fieldname": "col_identificacion",
+   "fieldtype": "Column Break"
   },
   {
    "default": "Borrador",
@@ -74,11 +83,30 @@
    "read_only": 1
   },
   {
+   "description": "La obligación 'IAC' que este informe cumple (B2)",
+   "fieldname": "obligacion_ente",
+   "fieldtype": "Link",
+   "label": "Obligación al ente",
+   "options": "Obligacion Ente"
+  },
+  {
+   "description": "El IAC puede apoyarse en una Autoevaluación contra el marco CBC (A2)",
+   "fieldname": "autoevaluacion",
+   "fieldtype": "Link",
+   "label": "Autoevaluación de apoyo",
+   "options": "Autoevaluacion"
+  },
+  {
    "description": "Si SUNEDU observó un informe ya presentado, el informe corregido apunta aquí al que reemplaza.",
    "fieldname": "informe_anterior",
    "fieldtype": "Link",
    "label": "Reemplaza al informe",
    "options": "Informe Cumplimiento"
+  },
+  {
+   "fieldname": "tab_diagnostico",
+   "fieldtype": "Tab Break",
+   "label": "Diagnóstico"
   },
   {
    "fieldname": "sec_diagnostico",
@@ -117,6 +145,11 @@
    "read_only": 1
   },
   {
+   "fieldname": "sec_condiciones",
+   "fieldtype": "Section Break",
+   "label": "Condiciones"
+  },
+  {
    "description": "Se autocompletan las 8 CBC del marco al guardar si está vacío.",
    "fieldname": "condiciones",
    "fieldtype": "Table",
@@ -130,9 +163,24 @@
    "options": "Riesgo Enlace"
   },
   {
+   "fieldname": "tab_presentacion",
+   "fieldtype": "Tab Break",
+   "label": "Presentación"
+  },
+  {
+   "fieldname": "sec_resumen",
+   "fieldtype": "Section Break",
+   "label": "Resumen y declaración"
+  },
+  {
    "fieldname": "resumen",
    "fieldtype": "Text Editor",
    "label": "Resumen / declaración jurada"
+  },
+  {
+   "fieldname": "sec_presentacion",
+   "fieldtype": "Section Break",
+   "label": "Presentación al ente"
   },
   {
    "fieldname": "fecha_presentacion",
@@ -140,9 +188,19 @@
    "label": "Fecha de presentación"
   },
   {
+   "fieldname": "col_presentacion",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "pdf",
    "fieldtype": "Attach",
    "label": "Informe (PDF)"
+  },
+  {
+   "fieldname": "tab_conexiones",
+   "fieldtype": "Tab Break",
+   "label": "Conexiones",
+   "show_dashboard": 1
   }
  ],
  "grid_page_length": 50,
@@ -154,7 +212,7 @@
    "link_fieldname": "informe_cumplimiento"
   }
  ],
- "modified": "2026-10-14 23:00:00.000000",
+ "modified": "2026-10-21 17:18:56.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Informe Cumplimiento",

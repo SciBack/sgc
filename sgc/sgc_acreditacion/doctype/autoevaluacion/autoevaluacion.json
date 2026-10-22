@@ -7,25 +7,44 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "tab_autoevaluacion",
+  "sec_identificacion",
   "codigo",
   "titulo",
   "marco_normativo",
+  "col_identificacion",
+  "estado",
   "programa_sede",
   "periodo_academico",
+  "sec_alcance",
   "alcance",
-  "estado",
-  "resultado_vigencia",
-  "puntaje_excelencia",
+  "sec_responsable",
   "responsable",
+  "col_responsable",
   "fecha_inicio",
   "fecha_cierre",
-  "vigencia_propuesta",
+  "tab_resultado",
+  "sec_resultado",
   "avance_pct",
+  "vigencia_propuesta",
+  "col_resultado",
+  "resultado_vigencia",
+  "puntaje_excelencia",
   "seccion_snapshot",
   "marco_snapshot",
-  "amended_from"
+  "amended_from",
+  "tab_conexiones"
  ],
  "fields": [
+  {
+   "fieldname": "tab_autoevaluacion",
+   "fieldtype": "Tab Break",
+   "label": "Autoevaluación"
+  },
+  {
+   "fieldname": "sec_identificacion",
+   "fieldtype": "Section Break"
+  },
   {
    "fieldname": "codigo",
    "fieldtype": "Data",
@@ -49,6 +68,21 @@
    "reqd": 1
   },
   {
+   "fieldname": "col_identificacion",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Planificada",
+   "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Planificada\nEn curso\nEn revision\nConsolidada\nCerrada",
+   "read_only": 1
+  },
+  {
    "fieldname": "programa_sede",
    "fieldtype": "Link",
    "in_standard_filter": 1,
@@ -63,31 +97,19 @@
    "options": "Periodo Academico"
   },
   {
+   "fieldname": "sec_alcance",
+   "fieldtype": "Section Break",
+   "label": "Alcance"
+  },
+  {
    "fieldname": "alcance",
    "fieldtype": "Text",
    "label": "Alcance"
   },
   {
-   "default": "Planificada",
-   "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
-   "fieldname": "estado",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Estado",
-   "options": "Planificada\nEn curso\nEn revision\nConsolidada\nCerrada",
-   "read_only": 1
-  },
-  {
-   "fieldname": "resultado_vigencia",
-   "fieldtype": "Select",
-   "label": "Resultado de vigencia",
-   "options": "\nEn proceso\nAcreditado 3 años\nAcreditado 6 años\nAcreditado 8 años"
-  },
-  {
-   "fieldname": "puntaje_excelencia",
-   "fieldtype": "Int",
-   "label": "Puntaje de excelencia"
+   "fieldname": "sec_responsable",
+   "fieldtype": "Section Break",
+   "label": "Responsable y fechas"
   },
   {
    "fieldname": "responsable",
@@ -95,6 +117,10 @@
    "label": "Responsable",
    "options": "User",
    "in_standard_filter": 1
+  },
+  {
+   "fieldname": "col_responsable",
+   "fieldtype": "Column Break"
   },
   {
    "fieldname": "fecha_inicio",
@@ -107,6 +133,23 @@
    "label": "Fecha de cierre"
   },
   {
+   "fieldname": "tab_resultado",
+   "fieldtype": "Tab Break",
+   "label": "Resultado"
+  },
+  {
+   "fieldname": "sec_resultado",
+   "fieldtype": "Section Break",
+   "label": "Resultado"
+  },
+  {
+   "description": "% de criterios valorados sobre el total de criterios del marco.",
+   "fieldname": "avance_pct",
+   "fieldtype": "Percent",
+   "label": "Avance (%)",
+   "read_only": 1
+  },
+  {
    "description": "Propuesta por el motor sobre los niveles CONFIRMADOS de los 10 estándares (Tabla 9). El `resultado_vigencia` oficial lo fija el humano.",
    "fieldname": "vigencia_propuesta",
    "fieldtype": "Select",
@@ -115,11 +158,19 @@
    "read_only": 1
   },
   {
-   "description": "% de criterios valorados sobre el total de criterios del marco.",
-   "fieldname": "avance_pct",
-   "fieldtype": "Percent",
-   "label": "Avance (%)",
-   "read_only": 1
+   "fieldname": "col_resultado",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "resultado_vigencia",
+   "fieldtype": "Select",
+   "label": "Resultado de vigencia",
+   "options": "\nEn proceso\nAcreditado 3 años\nAcreditado 6 años\nAcreditado 8 años"
+  },
+  {
+   "fieldname": "puntaje_excelencia",
+   "fieldtype": "Int",
+   "label": "Puntaje de excelencia"
   },
   {
    "collapsible": 1,
@@ -144,6 +195,12 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "tab_conexiones",
+   "fieldtype": "Tab Break",
+   "label": "Conexiones",
+   "show_dashboard": 1
   }
  ],
  "grid_page_length": 50,
@@ -181,7 +238,7 @@
    "link_fieldname": "autoevaluacion"
   }
  ],
- "modified": "2026-10-14 23:00:00.000000",
+ "modified": "2026-10-21 17:18:56.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Autoevaluacion",

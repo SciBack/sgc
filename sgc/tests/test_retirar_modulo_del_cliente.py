@@ -10,10 +10,14 @@ MODULO = parche.MODULO
 
 class IntegrationTestRetirarModuloDelCliente(IntegrationTestCase):
 	def _crear_modulo(self):
+		# `custom: 1`: con developer_mode (el del CI), un Module Def estándar se escribe en
+		# `sgc/modules.txt` al guardarse (module_def.py:40) y la línea se queda ahí si el
+		# módulo no se borra con su doc. Entonces `test_modulos_por_area` ve «SGC UPeU» como
+		# un área más y falla según el orden de los tests. El parche no mira `custom`.
 		if not frappe.db.exists("Module Def", MODULO):
-			frappe.get_doc({"doctype": "Module Def", "module_name": MODULO, "app_name": "sgc"}).insert(
-				ignore_permissions=True
-			)
+			frappe.get_doc(
+				{"doctype": "Module Def", "module_name": MODULO, "app_name": "sgc", "custom": 1}
+			).insert(ignore_permissions=True)
 
 	def test_el_canonico_no_declara_el_modulo(self):
 		self.assertNotIn(MODULO, frappe.get_module_list("sgc"))

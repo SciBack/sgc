@@ -7,31 +7,46 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "programa_auditoria",
+  "tab_auditoria",
+  "sec_identificacion",
   "titulo",
+  "programa_auditoria",
   "tipo",
+  "col_identificacion",
+  "estado",
+  "informe",
+  "sec_ambito",
   "unidad_organica",
   "proceso",
+  "col_ambito",
   "programa_sede",
   "periodo_academico",
+  "sec_objetivo",
   "objetivo",
   "alcance",
+  "tab_criterios",
+  "sec_criterios",
   "criterios",
   "equipo",
+  "tab_plan",
+  "sec_fechas",
   "fecha_plan",
+  "col_fechas",
   "fecha_inicio",
   "fecha_fin",
+  "sec_actividades",
   "actividades",
-  "estado",
-  "informe"
+  "tab_conexiones"
  ],
  "fields": [
   {
-   "fieldname": "programa_auditoria",
-   "fieldtype": "Link",
-   "in_standard_filter": 1,
-   "label": "Programa de auditoría",
-   "options": "Programa Auditoria"
+   "fieldname": "tab_auditoria",
+   "fieldtype": "Tab Break",
+   "label": "Auditoría"
+  },
+  {
+   "fieldname": "sec_identificacion",
+   "fieldtype": "Section Break"
   },
   {
    "fieldname": "titulo",
@@ -39,6 +54,13 @@
    "in_list_view": 1,
    "label": "Título",
    "reqd": 1
+  },
+  {
+   "fieldname": "programa_auditoria",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Programa de auditoría",
+   "options": "Programa Auditoria"
   },
   {
    "fieldname": "tipo",
@@ -49,75 +71,8 @@
    "options": "Interna\nExterna (certificacion)\nDe seguimiento"
   },
   {
-   "fieldname": "unidad_organica",
-   "fieldtype": "Link",
-   "in_standard_filter": 1,
-   "label": "Unidad orgánica",
-   "options": "Unidad Organica"
-  },
-  {
-   "fieldname": "proceso",
-   "fieldtype": "Link",
-   "label": "Proceso",
-   "options": "Proceso"
-  },
-  {
-   "fieldname": "programa_sede",
-   "fieldtype": "Link",
-   "in_standard_filter": 1,
-   "label": "Programa-Sede",
-   "options": "Programa Sede"
-  },
-  {
-   "fieldname": "periodo_academico",
-   "fieldtype": "Link",
-   "in_standard_filter": 1,
-   "label": "Periodo académico",
-   "options": "Periodo Academico"
-  },
-  {
-   "fieldname": "objetivo",
-   "fieldtype": "Small Text",
-   "label": "Objetivo"
-  },
-  {
-   "fieldname": "alcance",
-   "fieldtype": "Text",
-   "label": "Alcance"
-  },
-  {
-   "fieldname": "criterios",
-   "fieldtype": "Table",
-   "label": "Criterios",
-   "options": "Criterio Auditoria"
-  },
-  {
-   "fieldname": "equipo",
-   "fieldtype": "Table",
-   "label": "Equipo auditor",
-   "options": "Equipo Auditoria"
-  },
-  {
-   "fieldname": "fecha_plan",
-   "fieldtype": "Date",
-   "label": "Fecha planificada"
-  },
-  {
-   "fieldname": "fecha_inicio",
-   "fieldtype": "Date",
-   "label": "Fecha de inicio"
-  },
-  {
-   "fieldname": "fecha_fin",
-   "fieldtype": "Date",
-   "label": "Fecha de fin"
-  },
-  {
-   "description": "Qué se hace cada día y quién. Cada responsable recibe una tarea en su lista de pendientes con la próxima actividad; se cierra cuando todas las suyas están realizadas.",
-   "fieldname": "actividades",
-   "fieldtype": "Table",
-   "label": "Plan de actividades",
-   "options": "Actividad Auditoria"
+   "fieldname": "col_identificacion",
+   "fieldtype": "Column Break"
   },
   {
    "default": "Planificada",
@@ -135,6 +90,125 @@
    "fieldtype": "Link",
    "label": "Informe de auditoría",
    "options": "Informe Auditoria"
+  },
+  {
+   "fieldname": "sec_ambito",
+   "fieldtype": "Section Break",
+   "label": "Qué se audita"
+  },
+  {
+   "fieldname": "unidad_organica",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Unidad orgánica",
+   "options": "Unidad Organica"
+  },
+  {
+   "fieldname": "proceso",
+   "fieldtype": "Link",
+   "label": "Proceso",
+   "options": "Proceso"
+  },
+  {
+   "fieldname": "col_ambito",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "programa_sede",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Programa-Sede",
+   "options": "Programa Sede"
+  },
+  {
+   "fieldname": "periodo_academico",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Periodo académico",
+   "options": "Periodo Academico"
+  },
+  {
+   "fieldname": "sec_objetivo",
+   "fieldtype": "Section Break",
+   "label": "Objetivo y alcance"
+  },
+  {
+   "fieldname": "objetivo",
+   "fieldtype": "Small Text",
+   "label": "Objetivo"
+  },
+  {
+   "fieldname": "alcance",
+   "fieldtype": "Text",
+   "label": "Alcance"
+  },
+  {
+   "fieldname": "tab_criterios",
+   "fieldtype": "Tab Break",
+   "label": "Criterios y equipo"
+  },
+  {
+   "fieldname": "sec_criterios",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "criterios",
+   "fieldtype": "Table",
+   "label": "Criterios",
+   "options": "Criterio Auditoria"
+  },
+  {
+   "fieldname": "equipo",
+   "fieldtype": "Table",
+   "label": "Equipo auditor",
+   "options": "Equipo Auditoria"
+  },
+  {
+   "fieldname": "tab_plan",
+   "fieldtype": "Tab Break",
+   "label": "Plan"
+  },
+  {
+   "fieldname": "sec_fechas",
+   "fieldtype": "Section Break",
+   "label": "Fechas"
+  },
+  {
+   "fieldname": "fecha_plan",
+   "fieldtype": "Date",
+   "label": "Fecha planificada"
+  },
+  {
+   "fieldname": "col_fechas",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fecha_inicio",
+   "fieldtype": "Date",
+   "label": "Fecha de inicio"
+  },
+  {
+   "fieldname": "fecha_fin",
+   "fieldtype": "Date",
+   "label": "Fecha de fin"
+  },
+  {
+   "fieldname": "sec_actividades",
+   "fieldtype": "Section Break",
+   "label": "Plan de actividades"
+  },
+  {
+   "description": "Qué se hace cada día y quién. Cada responsable recibe una tarea en su lista de pendientes con la próxima actividad; se cierra cuando todas las suyas están realizadas.",
+   "fieldname": "actividades",
+   "fieldtype": "Table",
+   "label": "Plan de actividades",
+   "options": "Actividad Auditoria"
+  },
+  {
+   "fieldname": "tab_conexiones",
+   "fieldtype": "Tab Break",
+   "label": "Conexiones",
+   "show_dashboard": 1
   }
  ],
  "grid_page_length": 50,
@@ -156,7 +230,7 @@
    "link_fieldname": "auditoria"
   }
  ],
- "modified": "2026-10-14 23:00:00.000000",
+ "modified": "2026-10-21 17:18:56.000000",
  "modified_by": "Administrator",
  "module": "SGC Auditoria",
  "name": "Auditoria",

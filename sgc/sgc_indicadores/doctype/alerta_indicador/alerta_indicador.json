@@ -5,28 +5,37 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "sec_identificacion",
   "codigo",
   "indicador",
   "valor_indicador",
+  "col_identificacion",
   "tipo",
   "severidad",
   "sec_ambito",
   "periodo_academico",
   "programa_sede",
+  "col_ambito",
   "unidad_organica",
   "sec_detalle",
   "valor_medido",
   "meta",
+  "col_detalle",
   "mensaje",
   "sec_atencion",
   "responsable",
+  "accion_mejora",
+  "col_atencion",
   "estado",
   "fecha_deteccion",
   "fecha_cierre",
-  "justificacion_descarte",
-  "accion_mejora"
+  "justificacion_descarte"
  ],
  "fields": [
+  {
+   "fieldname": "sec_identificacion",
+   "fieldtype": "Section Break"
+  },
   {
    "fieldname": "codigo",
    "label": "Código",
@@ -50,6 +59,10 @@
    "fieldtype": "Link",
    "options": "Valor Indicador",
    "description": "La medición que disparó la alerta, cuando la hubo."
+  },
+  {
+   "fieldname": "col_identificacion",
+   "fieldtype": "Column Break"
   },
   {
    "fieldname": "tipo",
@@ -86,6 +99,10 @@
    "options": "Programa Sede"
   },
   {
+   "fieldname": "col_ambito",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "unidad_organica",
    "label": "Unidad orgánica",
    "fieldtype": "Link",
@@ -109,6 +126,10 @@
    "read_only": 1
   },
   {
+   "fieldname": "col_detalle",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "mensaje",
    "label": "Mensaje",
    "fieldtype": "Small Text",
@@ -126,6 +147,17 @@
    "options": "User",
    "description": "A quién le toca. Sale del responsable del indicador si no se indica.",
    "in_standard_filter": 1
+  },
+  {
+   "fieldname": "accion_mejora",
+   "label": "Acción de mejora",
+   "fieldtype": "Link",
+   "options": "Accion Mejora",
+   "description": "Si la alerta derivó en una acción, queda enlazada aquí."
+  },
+  {
+   "fieldname": "col_atencion",
+   "fieldtype": "Column Break"
   },
   {
    "fieldname": "estado",
@@ -157,18 +189,11 @@
    "fieldtype": "Small Text",
    "depends_on": "eval:doc.estado=='Descartada'",
    "description": "Descartar una alerta sin decir por qué deja un hueco en la evidencia."
-  },
-  {
-   "fieldname": "accion_mejora",
-   "label": "Acción de mejora",
-   "fieldtype": "Link",
-   "options": "Accion Mejora",
-   "description": "Si la alerta derivó en una acción, queda enlazada aquí."
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-14 23:00:00.000000",
+ "modified": "2026-10-21 17:18:56.000000",
  "modified_by": "Administrator",
  "module": "SGC Indicadores",
  "name": "Alerta Indicador",

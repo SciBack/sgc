@@ -7,24 +7,45 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "tab_accion",
+  "sec_identificacion",
   "codigo",
+  "tipo",
+  "responsable",
+  "col_identificacion",
+  "estado",
+  "avance_pct",
+  "sec_descripcion",
+  "descripcion",
+  "sec_origen",
   "plan_mejora",
   "hallazgo",
+  "col_origen",
   "no_conformidad",
   "causa",
   "causa_descripcion",
   "criterio",
-  "descripcion",
-  "tipo",
-  "responsable",
+  "tab_plazos",
+  "sec_plazos",
   "fecha_inicio",
+  "col_plazos",
   "fecha_compromiso",
-  "avance_pct",
-  "estado",
+  "sec_cierre",
   "evidencia_cierre",
-  "verificada_por"
+  "col_cierre",
+  "verificada_por",
+  "tab_conexiones"
  ],
  "fields": [
+  {
+   "fieldname": "tab_accion",
+   "fieldtype": "Tab Break",
+   "label": "Acción"
+  },
+  {
+   "fieldname": "sec_identificacion",
+   "fieldtype": "Section Break"
+  },
   {
    "fieldname": "codigo",
    "fieldtype": "Data",
@@ -32,6 +53,55 @@
    "label": "Código",
    "reqd": 1,
    "unique": 1
+  },
+  {
+   "fieldname": "tipo",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Tipo",
+   "options": "Correctiva\nPreventiva\nMejora"
+  },
+  {
+   "fieldname": "responsable",
+   "fieldtype": "Link",
+   "label": "Responsable",
+   "options": "User",
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "col_identificacion",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Planificada",
+   "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Planificada\nEn ejecucion\nEjecutada\nVerificada eficaz\nVerificada no eficaz",
+   "read_only": 1
+  },
+  {
+   "fieldname": "avance_pct",
+   "fieldtype": "Int",
+   "label": "Avance (%)"
+  },
+  {
+   "fieldname": "sec_descripcion",
+   "fieldtype": "Section Break",
+   "label": "Qué se hará"
+  },
+  {
+   "fieldname": "descripcion",
+   "fieldtype": "Text",
+   "label": "Descripción"
+  },
+  {
+   "fieldname": "sec_origen",
+   "fieldtype": "Section Break",
+   "label": "De dónde viene"
   },
   {
    "fieldname": "plan_mejora",
@@ -46,6 +116,10 @@
    "in_standard_filter": 1,
    "label": "Hallazgo",
    "options": "Hallazgo"
+  },
+  {
+   "fieldname": "col_origen",
+   "fieldtype": "Column Break"
   },
   {
    "fieldname": "no_conformidad",
@@ -77,23 +151,14 @@
    "options": "Elemento Marco"
   },
   {
-   "fieldname": "descripcion",
-   "fieldtype": "Text",
-   "label": "Descripción"
+   "fieldname": "tab_plazos",
+   "fieldtype": "Tab Break",
+   "label": "Plazos y cierre"
   },
   {
-   "fieldname": "tipo",
-   "fieldtype": "Select",
-   "in_standard_filter": 1,
-   "label": "Tipo",
-   "options": "Correctiva\nPreventiva\nMejora"
-  },
-  {
-   "fieldname": "responsable",
-   "fieldtype": "Link",
-   "label": "Responsable",
-   "options": "User",
-   "in_standard_filter": 1
+   "fieldname": "sec_plazos",
+   "fieldtype": "Section Break",
+   "label": "Plazos"
   },
   {
    "fieldname": "fecha_inicio",
@@ -101,25 +166,18 @@
    "label": "Fecha de inicio"
   },
   {
+   "fieldname": "col_plazos",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "fecha_compromiso",
    "fieldtype": "Date",
    "label": "Fecha de compromiso (ETA)"
   },
   {
-   "fieldname": "avance_pct",
-   "fieldtype": "Int",
-   "label": "Avance (%)"
-  },
-  {
-   "default": "Planificada",
-   "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
-   "fieldname": "estado",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Estado",
-   "options": "Planificada\nEn ejecucion\nEjecutada\nVerificada eficaz\nVerificada no eficaz",
-   "read_only": 1
+   "fieldname": "sec_cierre",
+   "fieldtype": "Section Break",
+   "label": "Cierre"
   },
   {
    "fieldname": "evidencia_cierre",
@@ -128,11 +186,21 @@
    "options": "Evidencia"
   },
   {
+   "fieldname": "col_cierre",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "verificada_por",
    "fieldtype": "Link",
    "label": "Verificada por",
    "options": "User",
    "read_only": 1
+  },
+  {
+   "fieldname": "tab_conexiones",
+   "fieldtype": "Tab Break",
+   "label": "Conexiones",
+   "show_dashboard": 1
   }
  ],
  "grid_page_length": 50,
@@ -154,7 +222,7 @@
    "link_fieldname": "accion_mejora"
   }
  ],
- "modified": "2026-10-14 23:00:00.000000",
+ "modified": "2026-10-21 17:18:56.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "Accion Mejora",

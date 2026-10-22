@@ -7,12 +7,15 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "sec_identificacion",
   "riesgo",
   "estrategia",
-  "descripcion",
   "responsable",
-  "fecha_compromiso",
+  "col_identificacion",
   "estado",
+  "fecha_compromiso",
+  "sec_descripcion",
+  "descripcion",
   "sb_ejecucion",
   "implementado_por",
   "fecha_implementacion",
@@ -23,9 +26,14 @@
   "nivel_residual",
   "sb_costura",
   "accion_mejora",
+  "col_costura",
   "evidencia"
  ],
  "fields": [
+  {
+   "fieldname": "sec_identificacion",
+   "fieldtype": "Section Break"
+  },
   {
    "fieldname": "riesgo",
    "fieldtype": "Link",
@@ -44,12 +52,6 @@
    "options": "Evitar\nReducir\nTransferir\nAceptar"
   },
   {
-   "description": "control/plan de tratamiento",
-   "fieldname": "descripcion",
-   "fieldtype": "Text",
-   "label": "Descripción"
-  },
-  {
    "fieldname": "responsable",
    "fieldtype": "Link",
    "label": "Responsable",
@@ -57,9 +59,8 @@
    "in_standard_filter": 1
   },
   {
-   "fieldname": "fecha_compromiso",
-   "fieldtype": "Date",
-   "label": "Fecha compromiso"
+   "fieldname": "col_identificacion",
+   "fieldtype": "Column Break"
   },
   {
    "default": "Planificado",
@@ -71,6 +72,22 @@
    "options": "Planificado\nEn ejecucion\nImplementado\nVerificado",
    "read_only": 1,
    "in_standard_filter": 1
+  },
+  {
+   "fieldname": "fecha_compromiso",
+   "fieldtype": "Date",
+   "label": "Fecha compromiso"
+  },
+  {
+   "fieldname": "sec_descripcion",
+   "fieldtype": "Section Break",
+   "label": "Qué se hará"
+  },
+  {
+   "description": "control/plan de tratamiento",
+   "fieldname": "descripcion",
+   "fieldtype": "Text",
+   "label": "Descripción"
   },
   {
    "fieldname": "sb_ejecucion",
@@ -135,6 +152,10 @@
    "options": "Accion Mejora"
   },
   {
+   "fieldname": "col_costura",
+   "fieldtype": "Column Break"
+  },
+  {
    "description": "prueba de implementación del control",
    "fieldname": "evidencia",
    "fieldtype": "Link",
@@ -145,7 +166,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-14 23:00:00.000000",
+ "modified": "2026-10-21 17:18:56.000000",
  "modified_by": "Administrator",
  "module": "SGC Riesgos",
  "name": "Tratamiento Riesgo",
