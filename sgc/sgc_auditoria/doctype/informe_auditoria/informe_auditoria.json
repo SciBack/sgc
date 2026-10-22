@@ -7,20 +7,29 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "tab_informe",
+  "sec_identificacion",
   "codigo",
   "auditoria",
+  "col_identificacion",
   "estado",
+  "fecha_emision",
+  "emitido_por",
+  "sec_contenido",
   "resumen_ejecutivo",
   "conclusiones",
+  "sec_resultados",
   "n_nc_mayores",
   "n_nc_menores",
+  "col_resultados",
   "n_observaciones",
   "n_om",
   "n_acciones_mejora",
-  "fecha_emision",
-  "emitido_por",
+  "sec_archivo",
   "pdf",
+  "col_archivo",
   "presentado_en",
+  "tab_aprobacion",
   "section_break_aprobacion",
   "observaciones_revision",
   "aprobado_por",
@@ -31,6 +40,15 @@
   "fecha_distribucion"
  ],
  "fields": [
+  {
+   "fieldname": "tab_informe",
+   "fieldtype": "Tab Break",
+   "label": "Informe"
+  },
+  {
+   "fieldname": "sec_identificacion",
+   "fieldtype": "Section Break"
+  },
   {
    "fieldname": "codigo",
    "fieldtype": "Data",
@@ -48,6 +66,10 @@
    "reqd": 1
   },
   {
+   "fieldname": "col_identificacion",
+   "fieldtype": "Column Break"
+  },
+  {
    "default": "Borrador",
    "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
    "fieldname": "estado",
@@ -57,36 +79,6 @@
    "label": "Estado",
    "options": "Borrador\nEn revision\nAprobado\nDistribuido",
    "read_only": 1
-  },
-  {
-   "fieldname": "resumen_ejecutivo",
-   "fieldtype": "Text Editor",
-   "label": "Resumen ejecutivo"
-  },
-  {
-   "fieldname": "conclusiones",
-   "fieldtype": "Text",
-   "label": "Conclusiones"
-  },
-  {
-   "fieldname": "n_nc_mayores",
-   "fieldtype": "Int",
-   "label": "N.º NC mayores"
-  },
-  {
-   "fieldname": "n_nc_menores",
-   "fieldtype": "Int",
-   "label": "N.º NC menores"
-  },
-  {
-   "fieldname": "n_observaciones",
-   "fieldtype": "Int",
-   "label": "N.º observaciones"
-  },
-  {
-   "fieldname": "n_om",
-   "fieldtype": "Int",
-   "label": "N.º oportunidades de mejora"
   },
   {
    "fieldname": "fecha_emision",
@@ -104,9 +96,69 @@
    "read_only": 1
   },
   {
+   "fieldname": "sec_contenido",
+   "fieldtype": "Section Break",
+   "label": "Contenido"
+  },
+  {
+   "fieldname": "resumen_ejecutivo",
+   "fieldtype": "Text Editor",
+   "label": "Resumen ejecutivo"
+  },
+  {
+   "fieldname": "conclusiones",
+   "fieldtype": "Text",
+   "label": "Conclusiones"
+  },
+  {
+   "fieldname": "sec_resultados",
+   "fieldtype": "Section Break",
+   "label": "Resultados"
+  },
+  {
+   "fieldname": "n_nc_mayores",
+   "fieldtype": "Int",
+   "label": "N.º NC mayores"
+  },
+  {
+   "fieldname": "n_nc_menores",
+   "fieldtype": "Int",
+   "label": "N.º NC menores"
+  },
+  {
+   "fieldname": "col_resultados",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "n_observaciones",
+   "fieldtype": "Int",
+   "label": "N.º observaciones"
+  },
+  {
+   "fieldname": "n_om",
+   "fieldtype": "Int",
+   "label": "N.º oportunidades de mejora"
+  },
+  {
+   "description": "Acciones de mejora de las no conformidades que salieron de esta auditoría.",
+   "fieldname": "n_acciones_mejora",
+   "fieldtype": "Int",
+   "label": "N.º acciones de mejora",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sec_archivo",
+   "fieldtype": "Section Break",
+   "label": "Archivo"
+  },
+  {
    "fieldname": "pdf",
    "fieldtype": "Attach",
    "label": "PDF"
+  },
+  {
+   "fieldname": "col_archivo",
+   "fieldtype": "Column Break"
   },
   {
    "description": "Insumo de §9.3 — cierra el ciclo con la rama 4",
@@ -114,6 +166,11 @@
    "fieldtype": "Link",
    "label": "Presentado en (Revisión Dirección)",
    "options": "Revision Direccion"
+  },
+  {
+   "fieldname": "tab_aprobacion",
+   "fieldtype": "Tab Break",
+   "label": "Aprobación y distribución"
   },
   {
    "fieldname": "section_break_aprobacion",
@@ -162,19 +219,12 @@
    "fieldtype": "Date",
    "label": "Fecha de distribución",
    "read_only": 1
-  },
-  {
-   "description": "Acciones de mejora de las no conformidades que salieron de esta auditoría.",
-   "fieldname": "n_acciones_mejora",
-   "fieldtype": "Int",
-   "label": "N.º acciones de mejora",
-   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-14 21:00:00.000000",
+ "modified": "2026-10-21 17:18:56.000000",
  "modified_by": "Administrator",
  "module": "SGC Auditoria",
  "name": "Informe Auditoria",

@@ -7,23 +7,41 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "tab_hallazgo",
+  "sec_identificacion",
   "codigo",
   "tipo",
   "origen",
+  "col_identificacion",
+  "estado",
+  "severidad",
+  "fecha",
+  "sec_descripcion",
+  "descripcion",
+  "sec_donde",
+  "proceso",
+  "unidad_organica",
+  "col_donde",
+  "programa_sede",
   "criterio",
   "autoevaluacion",
-  "proceso",
-  "descripcion",
-  "unidad_organica",
-  "programa_sede",
-  "severidad",
+  "sec_seguimiento",
+  "detectado_por",
+  "col_seguimiento",
   "no_conformidad",
   "escalado_a_nc",
-  "estado",
-  "detectado_por",
-  "fecha"
+  "tab_conexiones"
  ],
  "fields": [
+  {
+   "fieldname": "tab_hallazgo",
+   "fieldtype": "Tab Break",
+   "label": "Hallazgo"
+  },
+  {
+   "fieldname": "sec_identificacion",
+   "fieldtype": "Section Break"
+  },
   {
    "fieldname": "codigo",
    "fieldtype": "Data",
@@ -48,6 +66,70 @@
    "options": "Autoevaluacion\nAuditoria\nSupervision"
   },
   {
+   "fieldname": "col_identificacion",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Abierto",
+   "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Abierto\nEn tratamiento\nVerificacion\nCerrado eficaz\nCerrado no eficaz",
+   "read_only": 1
+  },
+  {
+   "fieldname": "severidad",
+   "fieldtype": "Select",
+   "label": "Severidad",
+   "options": "\nCritica\nAlta\nMedia\nBaja"
+  },
+  {
+   "fieldname": "fecha",
+   "fieldtype": "Date",
+   "label": "Fecha"
+  },
+  {
+   "fieldname": "sec_descripcion",
+   "fieldtype": "Section Break",
+   "label": "Qué se encontró"
+  },
+  {
+   "fieldname": "descripcion",
+   "fieldtype": "Text",
+   "label": "Descripción"
+  },
+  {
+   "fieldname": "sec_donde",
+   "fieldtype": "Section Break",
+   "label": "Dónde"
+  },
+  {
+   "fieldname": "proceso",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Proceso",
+   "options": "Proceso"
+  },
+  {
+   "fieldname": "unidad_organica",
+   "fieldtype": "Link",
+   "label": "Unidad orgánica",
+   "options": "Unidad Organica"
+  },
+  {
+   "fieldname": "col_donde",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "programa_sede",
+   "fieldtype": "Link",
+   "label": "Programa-Sede",
+   "options": "Programa Sede"
+  },
+  {
    "fieldname": "criterio",
    "fieldtype": "Link",
    "in_standard_filter": 1,
@@ -62,34 +144,19 @@
    "options": "Autoevaluacion"
   },
   {
-   "fieldname": "proceso",
+   "fieldname": "sec_seguimiento",
+   "fieldtype": "Section Break",
+   "label": "Seguimiento"
+  },
+  {
+   "fieldname": "detectado_por",
    "fieldtype": "Link",
-   "in_standard_filter": 1,
-   "label": "Proceso",
-   "options": "Proceso"
+   "label": "Detectado por",
+   "options": "User"
   },
   {
-   "fieldname": "descripcion",
-   "fieldtype": "Text",
-   "label": "Descripción"
-  },
-  {
-   "fieldname": "unidad_organica",
-   "fieldtype": "Link",
-   "label": "Unidad orgánica",
-   "options": "Unidad Organica"
-  },
-  {
-   "fieldname": "programa_sede",
-   "fieldtype": "Link",
-   "label": "Programa-Sede",
-   "options": "Programa Sede"
-  },
-  {
-   "fieldname": "severidad",
-   "fieldtype": "Select",
-   "label": "Severidad",
-   "options": "\nCritica\nAlta\nMedia\nBaja"
+   "fieldname": "col_seguimiento",
+   "fieldtype": "Column Break"
   },
   {
    "fieldname": "no_conformidad",
@@ -104,26 +171,10 @@
    "label": "Escalado a NC"
   },
   {
-   "default": "Abierto",
-   "description": "Lo cambia el flujo de aprobación: usa el menú «Acciones».",
-   "fieldname": "estado",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Estado",
-   "options": "Abierto\nEn tratamiento\nVerificacion\nCerrado eficaz\nCerrado no eficaz",
-   "read_only": 1
-  },
-  {
-   "fieldname": "detectado_por",
-   "fieldtype": "Link",
-   "label": "Detectado por",
-   "options": "User"
-  },
-  {
-   "fieldname": "fecha",
-   "fieldtype": "Date",
-   "label": "Fecha"
+   "fieldname": "tab_conexiones",
+   "fieldtype": "Tab Break",
+   "label": "Conexiones",
+   "show_dashboard": 1
   }
  ],
  "grid_page_length": 50,
@@ -135,7 +186,7 @@
    "link_fieldname": "hallazgo"
   }
  ],
- "modified": "2026-10-14 23:00:00.000000",
+ "modified": "2026-10-21 17:18:56.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "Hallazgo",

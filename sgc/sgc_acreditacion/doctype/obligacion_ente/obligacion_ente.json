@@ -7,9 +7,14 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "tab_obligacion",
+  "sec_identificacion",
   "codigo",
   "nombre",
+  "col_identificacion",
   "ente_externo",
+  "activa",
+  "sec_descripcion",
   "descripcion",
   "sb_periodicidad",
   "periodicidad",
@@ -22,10 +27,20 @@
   "sb_resp",
   "responsable",
   "unidad_organica",
+  "col_resp",
   "documento_controlado",
-  "activa"
+  "tab_conexiones"
  ],
  "fields": [
+  {
+   "fieldname": "tab_obligacion",
+   "fieldtype": "Tab Break",
+   "label": "Obligación"
+  },
+  {
+   "fieldname": "sec_identificacion",
+   "fieldtype": "Section Break"
+  },
   {
    "fieldname": "codigo",
    "fieldtype": "Data",
@@ -43,6 +58,10 @@
    "reqd": 1
   },
   {
+   "fieldname": "col_identificacion",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "ente_externo",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -50,6 +69,17 @@
    "label": "Ente externo",
    "options": "Ente Externo",
    "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "activa",
+   "fieldtype": "Check",
+   "label": "Activa"
+  },
+  {
+   "fieldname": "sec_descripcion",
+   "fieldtype": "Section Break",
+   "label": "Descripción"
   },
   {
    "description": "qué se entrega",
@@ -127,6 +157,10 @@
    "options": "Unidad Organica"
   },
   {
+   "fieldname": "col_resp",
+   "fieldtype": "Column Break"
+  },
+  {
    "description": "plantilla/instructivo",
    "fieldname": "documento_controlado",
    "fieldtype": "Link",
@@ -134,10 +168,10 @@
    "options": "Documento Controlado"
   },
   {
-   "default": "1",
-   "fieldname": "activa",
-   "fieldtype": "Check",
-   "label": "Activa"
+   "fieldname": "tab_conexiones",
+   "fieldtype": "Tab Break",
+   "label": "Conexiones",
+   "show_dashboard": 1
   }
  ],
  "grid_page_length": 50,
@@ -154,7 +188,7 @@
    "link_fieldname": "obligacion_ente"
   }
  ],
- "modified": "2026-10-14 23:00:00.000000",
+ "modified": "2026-10-21 17:18:56.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Obligacion Ente",

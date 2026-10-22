@@ -9,6 +9,28 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.5] - 2026-10-21
+
+**Requiere migrar:** sí: la migración aplica la maquetación nueva de los formularios. Sin cambios de
+esquema ni de datos: los campos son los mismos y conservan su nombre y su contenido.
+
+### Cambiado
+- **Formularios en pestañas y secciones.** Los 21 formularios con más campos dejan de ser una sola
+  columna: cada uno se reparte en pestañas por momento del trabajo (por ejemplo, en la no
+  conformidad: Detección · Análisis de causa · Tratamiento y cierre), en secciones con título y en
+  dos columnas. Donde el formulario tiene documentos relacionados, se ven en la última pestaña,
+  **Conexiones**, en lugar de ocupar la parte de arriba. Afecta a: No conformidad, Documento
+  controlado (con la vista previa del PDF en su propia pestaña), Proceso, Ficha de
+  caracterización, Ficha de indicador, Medición, Alerta de indicador, Evidencia, Autoevaluación,
+  Informe de cumplimiento, Elemento del marco, Obligación ante ente, Hallazgo, Salida no conforme,
+  Plan de mejora, Acción de mejora, Auditoría, Informe de auditoría, Evento de riesgo, Tratamiento
+  de riesgo y Revisión por la dirección.
+
+### Añadido
+- **Capturas de pantalla en el manual que aporta cada institución.** Las páginas nombran la
+  captura (`captura:<id>`) y se pinta solo si la institución la pone al construir su manual; el
+  manual público no lleva imágenes de ninguna institución.
+
 ## [1.7.4] - 2026-10-19
 
 **Requiere migrar:** sí: la migración añade el enlace nuevo al menú Ayuda (Navbar Settings).

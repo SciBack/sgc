@@ -7,34 +7,57 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "tab_medicion",
+  "sec_identificacion",
   "indicador",
-  "autoevaluacion",
   "periodo_academico",
   "programa_sede",
+  "col_identificacion",
   "unidad_organica",
+  "autoevaluacion",
+  "sec_valor",
   "valor_num",
-  "semaforo",
-  "sec_analisis",
-  "analisis",
-  "analizado_por",
-  "fecha_analisis",
   "valor_texto",
   "calculado",
-  "fuente",
+  "col_valor",
+  "semaforo",
+  "estado_medicion",
+  "unidad_medicion",
+  "sec_registro",
   "fecha",
   "registrado_por",
+  "col_registro",
+  "fuente",
+  "tab_analisis",
+  "sec_analisis",
+  "analisis",
+  "col_analisis",
+  "analizado_por",
+  "fecha_analisis",
+  "tab_ingesta",
+  "sec_ingesta",
   "fuente_dato",
-  "ingesta_clave",
   "lote_ingesta",
-  "datos_ingesta",
+  "ingesta_clave",
+  "col_ingesta",
   "cobertura_pct",
-  "unidad_medicion",
   "formula_version",
   "corte_inicio",
   "corte_fin",
-  "estado_medicion"
+  "sec_contrato",
+  "datos_ingesta",
+  "tab_conexiones"
  ],
  "fields": [
+  {
+   "fieldname": "tab_medicion",
+   "fieldtype": "Tab Break",
+   "label": "Medición"
+  },
+  {
+   "fieldname": "sec_identificacion",
+   "fieldtype": "Section Break"
+  },
   {
    "fieldname": "indicador",
    "fieldtype": "Link",
@@ -43,12 +66,6 @@
    "label": "Indicador",
    "options": "Indicador",
    "reqd": 1
-  },
-  {
-   "fieldname": "autoevaluacion",
-   "fieldtype": "Link",
-   "label": "Autoevaluación",
-   "options": "Autoevaluacion"
   },
   {
    "fieldname": "periodo_academico",
@@ -65,10 +82,25 @@
    "options": "Programa Sede"
   },
   {
+   "fieldname": "col_identificacion",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "unidad_organica",
    "fieldtype": "Link",
    "label": "Unidad orgánica",
    "options": "Unidad Organica"
+  },
+  {
+   "fieldname": "autoevaluacion",
+   "fieldtype": "Link",
+   "label": "Autoevaluación",
+   "options": "Autoevaluacion"
+  },
+  {
+   "fieldname": "sec_valor",
+   "fieldtype": "Section Break",
+   "label": "Valor"
   },
   {
    "fieldname": "valor_num",
@@ -88,9 +120,35 @@
    "label": "Calculado"
   },
   {
-   "fieldname": "fuente",
+   "fieldname": "col_valor",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Calculado al guardar contra la meta de la ficha. Vacío si el indicador no tiene meta declarada: no se inventa un color.",
+   "fieldname": "semaforo",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Semáforo",
+   "options": "\nVerde\nAmbar\nRojo",
+   "read_only": 1
+  },
+  {
+   "fieldname": "estado_medicion",
+   "fieldtype": "Select",
+   "label": "Estado de medición",
+   "options": "\nProvisional\nValidado",
+   "read_only": 1
+  },
+  {
+   "fieldname": "unidad_medicion",
    "fieldtype": "Data",
-   "label": "Fuente del dato"
+   "label": "Unidad de medición",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sec_registro",
+   "fieldtype": "Section Break",
+   "label": "Registro"
   },
   {
    "fieldname": "fecha",
@@ -104,10 +162,69 @@
    "options": "User"
   },
   {
+   "fieldname": "col_registro",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fuente",
+   "fieldtype": "Data",
+   "label": "Fuente del dato"
+  },
+  {
+   "fieldname": "tab_analisis",
+   "fieldtype": "Tab Break",
+   "label": "Análisis"
+  },
+  {
+   "fieldname": "sec_analisis",
+   "fieldtype": "Section Break",
+   "label": "Análisis del periodo"
+  },
+  {
+   "description": "Qué explica el resultado de este periodo y qué se hará. Se puede escribir aunque la medición venga de la ingesta.",
+   "fieldname": "analisis",
+   "fieldtype": "Text",
+   "label": "Análisis"
+  },
+  {
+   "fieldname": "col_analisis",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "analizado_por",
+   "fieldtype": "Link",
+   "label": "Analizado por",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "fecha_analisis",
+   "fieldtype": "Datetime",
+   "label": "Fecha del análisis",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tab_ingesta",
+   "fieldtype": "Tab Break",
+   "label": "Ingesta"
+  },
+  {
+   "fieldname": "sec_ingesta",
+   "fieldtype": "Section Break",
+   "label": "Lote y corte"
+  },
+  {
    "fieldname": "fuente_dato",
    "fieldtype": "Link",
    "label": "Fuente registrada",
    "options": "Fuente Dato",
+   "read_only": 1
+  },
+  {
+   "fieldname": "lote_ingesta",
+   "fieldtype": "Link",
+   "label": "Último lote",
+   "options": "Lote Ingesta",
    "read_only": 1
   },
   {
@@ -118,28 +235,13 @@
    "unique": 1
   },
   {
-   "fieldname": "lote_ingesta",
-   "fieldtype": "Link",
-   "label": "Último lote",
-   "options": "Lote Ingesta",
-   "read_only": 1
-  },
-  {
-   "fieldname": "datos_ingesta",
-   "fieldtype": "Long Text",
-   "label": "Contrato de medición",
-   "read_only": 1
+   "fieldname": "col_ingesta",
+   "fieldtype": "Column Break"
   },
   {
    "fieldname": "cobertura_pct",
    "fieldtype": "Float",
    "label": "Cobertura de ingesta (%)",
-   "read_only": 1
-  },
-  {
-   "fieldname": "unidad_medicion",
-   "fieldtype": "Data",
-   "label": "Unidad de medición",
    "read_only": 1
   },
   {
@@ -161,44 +263,22 @@
    "read_only": 1
   },
   {
-   "fieldname": "estado_medicion",
-   "fieldtype": "Select",
-   "label": "Estado de medición",
-   "options": "\nProvisional\nValidado",
-   "read_only": 1
-  },
-  {
-   "description": "Calculado al guardar contra la meta de la ficha. Vacío si el indicador no tiene meta declarada: no se inventa un color.",
-   "fieldname": "semaforo",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Semáforo",
-   "options": "\nVerde\nAmbar\nRojo",
-   "read_only": 1
-  },
-  {
-   "fieldname": "sec_analisis",
+   "fieldname": "sec_contrato",
    "fieldtype": "Section Break",
-   "label": "Análisis del periodo"
+   "label": "Contrato de medición",
+   "collapsible": 1
   },
   {
-   "description": "Qué explica el resultado de este periodo y qué se hará. Se puede escribir aunque la medición venga de la ingesta.",
-   "fieldname": "analisis",
-   "fieldtype": "Text",
-   "label": "Análisis"
-  },
-  {
-   "fieldname": "analizado_por",
-   "fieldtype": "Link",
-   "label": "Analizado por",
-   "options": "User",
+   "fieldname": "datos_ingesta",
+   "fieldtype": "Long Text",
+   "label": "Contrato de medición",
    "read_only": 1
   },
   {
-   "fieldname": "fecha_analisis",
-   "fieldtype": "Datetime",
-   "label": "Fecha del análisis",
-   "read_only": 1
+   "fieldname": "tab_conexiones",
+   "fieldtype": "Tab Break",
+   "label": "Conexiones",
+   "show_dashboard": 1
   }
  ],
  "grid_page_length": 50,
@@ -215,7 +295,7 @@
    "link_fieldname": "valor_indicador"
   }
  ],
- "modified": "2026-10-14 23:00:00.000000",
+ "modified": "2026-10-21 17:18:56.000000",
  "modified_by": "Administrator",
  "module": "SGC Indicadores",
  "name": "Valor Indicador",

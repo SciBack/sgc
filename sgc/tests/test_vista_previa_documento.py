@@ -21,10 +21,18 @@ class TestVistaPreviaDocumento(FrappeTestCase):
         self.assertIn("visor_documento", campos)
         self.assertEqual(campos["visor_documento"].fieldtype, "HTML")
 
-        orden = [f.fieldname for f in frappe.get_meta("Documento Controlado").fields]
+        # Desde la 1.7.5 el formulario va en pestañas: la vista previa tiene la suya, y es la
+        # siguiente a la del adjunto. Sigue leyéndose junto al adjunto, no al final.
+        pestana = {}
+        actual = None
+        for f in frappe.get_meta("Documento Controlado").fields:
+            if f.fieldtype == "Tab Break":
+                actual = f.fieldname
+            pestana[f.fieldname] = actual
+        pestanas = list(dict.fromkeys(v for v in pestana.values() if v))
         self.assertEqual(
-            orden.index("visor_documento"),
-            orden.index("archivo") + 1,
+            pestanas.index(pestana["visor_documento"]),
+            pestanas.index(pestana["archivo"]) + 1,
             "la vista previa se lee junto al adjunto, no al final del formulario",
         )
 

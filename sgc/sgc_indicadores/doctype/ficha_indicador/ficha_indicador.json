@@ -6,37 +6,63 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "tab_definicion",
+  "sec_identificacion",
   "indicador",
   "elemento_marco",
-  "objetivo",
+  "col_identificacion",
   "alcance",
   "tipo_valor",
+  "sentido",
+  "sec_objetivo",
+  "objetivo",
+  "interpretacion",
+  "notas",
+  "tab_calculo",
+  "sec_formula",
   "formula",
+  "sec_partes",
   "numerador",
-  "denominador",
-  "variables",
   "unidad",
+  "col_partes",
+  "denominador",
+  "sec_variables",
+  "variables",
+  "sec_meta",
   "linea_base",
   "valor_referencial",
-  "sentido",
-  "modo_evaluacion",
   "margen_error",
-  "regla_evolucion",
-  "interpretacion",
-  "frecuencia",
+  "col_meta",
+  "modo_evaluacion",
   "ventana_periodos",
-  "fuente_dato",
+  "regla_evolucion",
+  "tab_medicion",
+  "sec_quien",
   "responsable",
+  "frecuencia",
+  "fuente_dato",
+  "col_quien",
   "proxima_medicion",
   "dias_aviso",
   "fecha_aviso_medicion",
   "exige_analisis",
-  "participacion_areas",
-  "notas",
+  "sec_origen_dato",
   "dominio_dato",
-  "fuente_autoritativa"
+  "col_origen_dato",
+  "fuente_autoritativa",
+  "sec_participacion",
+  "participacion_areas"
  ],
  "fields": [
+  {
+   "fieldname": "tab_definicion",
+   "fieldtype": "Tab Break",
+   "label": "Definición"
+  },
+  {
+   "fieldname": "sec_identificacion",
+   "fieldtype": "Section Break"
+  },
   {
    "description": "Ficha 1:1 con Indicador (o con ElementoMarco-indicador en CBC)",
    "fieldname": "indicador",
@@ -54,10 +80,8 @@
    "options": "Elemento Marco"
   },
   {
-   "description": "OBJETIVO DE MEDICIÓN: …",
-   "fieldname": "objetivo",
-   "fieldtype": "Text",
-   "label": "Objetivo"
+   "fieldname": "col_identificacion",
+   "fieldtype": "Column Break"
   },
   {
    "description": "Nivel al que aplica: Institucional, Campus, Facultad, Escuela, Área o Proceso (plantilla oficial de Calidad)",
@@ -73,10 +97,54 @@
    "options": "porcentaje\nnumerico\nratio\nbooleano\nescala_satisfaccion\ntexto"
   },
   {
+   "default": "Mayor es mejor",
+   "description": "En una tasa de graduación más es mejor; en una de deserción, al revés. Sin declararlo, el semáforo saldría invertido en la mitad del catálogo.",
+   "fieldname": "sentido",
+   "fieldtype": "Select",
+   "label": "Sentido",
+   "options": "Mayor es mejor\nMenor es mejor"
+  },
+  {
+   "fieldname": "sec_objetivo",
+   "fieldtype": "Section Break",
+   "label": "Para qué se mide"
+  },
+  {
+   "description": "OBJETIVO DE MEDICIÓN: …",
+   "fieldname": "objetivo",
+   "fieldtype": "Text",
+   "label": "Objetivo"
+  },
+  {
+   "fieldname": "interpretacion",
+   "fieldtype": "Text",
+   "label": "Interpretación"
+  },
+  {
+   "description": "Condiciones muestrales (≥70% de matriculados)",
+   "fieldname": "notas",
+   "fieldtype": "Text",
+   "label": "Notas"
+  },
+  {
+   "fieldname": "tab_calculo",
+   "fieldtype": "Tab Break",
+   "label": "Cálculo y meta"
+  },
+  {
+   "fieldname": "sec_formula",
+   "fieldtype": "Section Break",
+   "label": "Fórmula"
+  },
+  {
    "description": "FORMA DE CÁLCULO: (EPSC/EPR)×100",
    "fieldname": "formula",
    "fieldtype": "Text",
    "label": "Fórmula"
+  },
+  {
+   "fieldname": "sec_partes",
+   "fieldtype": "Section Break"
   },
   {
    "description": "Dato alcanzado o casos favorables (solo indicadores tipo Porcentaje — plantilla oficial de Calidad). Para fórmulas con más de 2 variables, usar el campo Variables.",
@@ -85,10 +153,26 @@
    "label": "Numerador"
   },
   {
+   "description": "%, ratio, n.º",
+   "fieldname": "unidad",
+   "fieldtype": "Small Text",
+   "label": "Unidad"
+  },
+  {
+   "fieldname": "col_partes",
+   "fieldtype": "Column Break"
+  },
+  {
    "description": "Total de referencia (solo indicadores tipo Porcentaje — plantilla oficial de Calidad). Para fórmulas con más de 2 variables, usar el campo Variables.",
    "fieldname": "denominador",
    "fieldtype": "Small Text",
    "label": "Denominador"
+  },
+  {
+   "fieldname": "sec_variables",
+   "fieldtype": "Section Break",
+   "label": "Variables",
+   "collapsible": 1
   },
   {
    "description": "VARIABLES: EPSC=…, EPR=… (fórmulas de más de 2 variables; para Porcentaje simple usar Numerador/Denominador)",
@@ -97,10 +181,9 @@
    "label": "Variables"
   },
   {
-   "description": "%, ratio, n.º",
-   "fieldname": "unidad",
-   "fieldtype": "Small Text",
-   "label": "Unidad"
+   "fieldname": "sec_meta",
+   "fieldtype": "Section Break",
+   "label": "Meta y evaluación"
   },
   {
    "description": "Resultado histórico o inicial del indicador, antes del periodo de medición actual (plantilla oficial de Calidad)",
@@ -122,6 +205,25 @@
    "label": "Margen de error"
   },
   {
+   "fieldname": "col_meta",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Umbral fijo",
+   "description": "Umbral fijo compara contra el valor referencial. Evolución compara contra el periodo anterior (sustituye y explicita a 'Regla de evolución').",
+   "fieldname": "modo_evaluacion",
+   "fieldtype": "Select",
+   "label": "Modo de evaluación",
+   "options": "Umbral fijo\nEvolucion respecto al periodo anterior"
+  },
+  {
+   "default": "1",
+   "description": "Cuántos periodos hacia atrás consolida el indicador. Un indicador de egresados puede necesitar cinco años; uno de matrícula, uno.",
+   "fieldname": "ventana_periodos",
+   "fieldtype": "Int",
+   "label": "Ventana (periodos)"
+  },
+  {
    "default": "0",
    "description": "Si aplica evolución positiva n-1→n como aceptable",
    "fieldname": "regla_evolucion",
@@ -129,9 +231,23 @@
    "label": "Regla de evolución"
   },
   {
-   "fieldname": "interpretacion",
-   "fieldtype": "Text",
-   "label": "Interpretación"
+   "fieldname": "tab_medicion",
+   "fieldtype": "Tab Break",
+   "label": "Medición"
+  },
+  {
+   "fieldname": "sec_quien",
+   "fieldtype": "Section Break",
+   "label": "Quién y cuándo mide"
+  },
+  {
+   "description": "Responsable del indicador (data steward)",
+   "fieldname": "responsable",
+   "fieldtype": "Link",
+   "label": "Responsable",
+   "options": "User",
+   "in_standard_filter": 1,
+   "in_list_view": 1
   },
   {
    "description": "Mensual/trimestral: indicadores institucionales (plantilla oficial de Calidad). Anual/semestral/por_promocion: indicadores CONEAU ya cargados.",
@@ -148,13 +264,8 @@
    "label": "Fuente de dato"
   },
   {
-   "description": "Responsable del indicador (data steward)",
-   "fieldname": "responsable",
-   "fieldtype": "Link",
-   "label": "Responsable",
-   "options": "User",
-   "in_standard_filter": 1,
-   "in_list_view": 1
+   "fieldname": "col_quien",
+   "fieldtype": "Column Break"
   },
   {
    "description": "Avanza sola al registrar un valor, según la frecuencia. Se puede fijar a mano.",
@@ -178,10 +289,16 @@
    "read_only": 1
   },
   {
-   "description": "Condiciones muestrales (≥70% de matriculados)",
-   "fieldname": "notas",
-   "fieldtype": "Text",
-   "label": "Notas"
+   "default": "0",
+   "description": "Cada valor de cada periodo tiene que llevar su análisis. Lo tecleado no se guarda sin él; lo que llega por ingesta deja una tarea de análisis al responsable.",
+   "fieldname": "exige_analisis",
+   "fieldtype": "Check",
+   "label": "Exigir el análisis de cada medición"
+  },
+  {
+   "fieldname": "sec_origen_dato",
+   "fieldtype": "Section Break",
+   "label": "Origen del dato"
   },
   {
    "description": "Dominio del dato (contrato de datos: matrícula, egresados…)",
@@ -192,40 +309,19 @@
    "options": "D1\nD2\nD3\nD4\nD5\nD6\nD7\nD8"
   },
   {
+   "fieldname": "col_origen_dato",
+   "fieldtype": "Column Break"
+  },
+  {
    "description": "Sistema fuente de verdad (Oracle LAMB, Koha…)",
    "fieldname": "fuente_autoritativa",
    "fieldtype": "Small Text",
    "label": "Fuente autoritativa"
   },
   {
-   "default": "Mayor es mejor",
-   "description": "En una tasa de graduación más es mejor; en una de deserción, al revés. Sin declararlo, el semáforo saldría invertido en la mitad del catálogo.",
-   "fieldname": "sentido",
-   "fieldtype": "Select",
-   "label": "Sentido",
-   "options": "Mayor es mejor\nMenor es mejor"
-  },
-  {
-   "default": "Umbral fijo",
-   "description": "Umbral fijo compara contra el valor referencial. Evolución compara contra el periodo anterior (sustituye y explicita a 'Regla de evolución').",
-   "fieldname": "modo_evaluacion",
-   "fieldtype": "Select",
-   "label": "Modo de evaluación",
-   "options": "Umbral fijo\nEvolucion respecto al periodo anterior"
-  },
-  {
-   "default": "1",
-   "description": "Cuántos periodos hacia atrás consolida el indicador. Un indicador de egresados puede necesitar cinco años; uno de matrícula, uno.",
-   "fieldname": "ventana_periodos",
-   "fieldtype": "Int",
-   "label": "Ventana (periodos)"
-  },
-  {
-   "default": "0",
-   "description": "Cada valor de cada periodo tiene que llevar su análisis. Lo tecleado no se guarda sin él; lo que llega por ingesta deja una tarea de análisis al responsable.",
-   "fieldname": "exige_analisis",
-   "fieldtype": "Check",
-   "label": "Exigir el análisis de cada medición"
+   "fieldname": "sec_participacion",
+   "fieldtype": "Section Break",
+   "label": "Participación de las áreas"
   },
   {
    "description": "Cuánto aporta cada área al indicador. Si se indica, los pesos suman 100 %.",
@@ -238,7 +334,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-14 23:00:00.000000",
+ "modified": "2026-10-21 17:18:56.000000",
  "modified_by": "Administrator",
  "module": "SGC Indicadores",
  "name": "Ficha Indicador",
