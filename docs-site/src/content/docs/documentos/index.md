@@ -48,7 +48,7 @@ Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
 3. **Guardar.** Si no escribió un código, el sistema lo genera: `PROCESO-SIGLA-NNN`, con un
    correlativo que no se repite aunque se retire un documento intermedio.
 
-Al guardar, la ficha muestra la **vista previa** del archivo, para revisarlo sin descargarlo.
+Al guardar, la pestaña **Vista previa** muestra el archivo, para revisarlo sin descargarlo.
 
 ### Documentación externa
 

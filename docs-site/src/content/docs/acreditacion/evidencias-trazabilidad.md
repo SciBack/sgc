@@ -72,8 +72,8 @@ Cada Trazabilidad registra:
   marcos normativos distintos).
 - `vigencia`: una evidencia vencida se marca automáticamente.
 
-Se crea/gestiona desde la ficha de la Evidencia (bloque de conexiones — "Document
-Links" de Frappe), no como un campo de tabla hija.
+Se crea y gestiona desde la ficha de la Evidencia, en su pestaña **Conexiones**, no como un
+campo de tabla hija.
 
 ## Consultar evidencias desde un criterio
 
