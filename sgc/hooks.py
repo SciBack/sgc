@@ -352,14 +352,19 @@ after_migrate = "sgc.setup.f_deploy_run_all.run"
 # -----------
 # Permissions evaluated in scripted ways
 #
-# M07 — Visibilidad por programa (opt-in, seguro). Ver sgc/permissions.py.
-# Acota SOLO a usuarios con User Permission sobre "Programa Sede" y sin rol
-# exento. Sin User Permission sembrada, el mecanismo queda INACTIVO (todos ven
-# todo). Solo se acotan DocTypes con derivación de programa NO ambigua.
+# M07 — Visibilidad por programa y por sede (opt-in, seguro). Ver sgc/permissions.py.
+# Acota SOLO a usuarios con User Permission sobre "Programa Sede" o sobre su sede
+# y sin rol exento. Sin User Permission sembrada, el mecanismo queda INACTIVO
+# (todos ven todo). Solo se acotan DocTypes con derivación de programa NO ambigua.
 permission_query_conditions = {
 	"Autoevaluacion": "sgc.permissions.pqc_autoevaluacion",
 	"Hallazgo": "sgc.permissions.pqc_hallazgo",
 	"No Conformidad": "sgc.permissions.pqc_no_conformidad",
+	"Salida No Conforme": "sgc.permissions.pqc_salida_no_conforme",
+	"Valor Indicador": "sgc.permissions.pqc_valor_indicador",
+	"Alerta Indicador": "sgc.permissions.pqc_alerta_indicador",
+	"Auditoria": "sgc.permissions.pqc_auditoria",
+	"Comite": "sgc.permissions.pqc_comite",
 	"Valoracion Criterio": "sgc.permissions.pqc_valoracion_criterio",
 	"Valoracion Estandar": "sgc.permissions.pqc_valoracion_estandar",
 	"Plan Mejora": "sgc.permissions.pqc_plan_mejora",
@@ -369,6 +374,11 @@ has_permission = {
 	"Autoevaluacion": "sgc.permissions.has_permission",
 	"Hallazgo": "sgc.permissions.has_permission",
 	"No Conformidad": "sgc.permissions.has_permission",
+	"Salida No Conforme": "sgc.permissions.has_permission",
+	"Valor Indicador": "sgc.permissions.has_permission",
+	"Alerta Indicador": "sgc.permissions.has_permission",
+	"Auditoria": "sgc.permissions.has_permission",
+	"Comite": "sgc.permissions.has_permission",
 	"Valoracion Criterio": "sgc.permissions.has_permission",
 	"Valoracion Estandar": "sgc.permissions.has_permission",
 	"Plan Mejora": "sgc.permissions.has_permission",

@@ -107,6 +107,26 @@ riesgo** desde Inicio, y ve solo lo que reportó. Ver el [manual de Riesgos](../
 Coordinación de facultad y de sede: visibilidad y articulación entre los programas de su ámbito y
 la dirección de calidad. El coordinador puede registrar hallazgos y salidas no conformes.
 
+## Ver solo una sede
+
+A quien trabaja en una sede (por ejemplo, Planificación de Tarapoto) se le asigna esa sede, y
+desde entonces ve **solo lo de los programas de su sede**: autoevaluaciones y sus valoraciones,
+planes de mejora, hallazgos, no conformidades, salidas no conformes, mediciones y alertas de
+indicadores, auditorías y comités. Lo que no es de ningún programa (procesos, documentos,
+condiciones básicas, todo lo institucional) lo sigue viendo. La sede manda sobre el perfil: un
+analista de calidad con sede también queda acotado. Solo la dirección de calidad (DPGC) y el
+administrador técnico ven siempre todo.
+
+Cómo se asigna (lo hace la DPGC):
+
+1. Busque **Permiso de Usuario** en la barra de búsqueda y pulse **+ Agregar**.
+2. **Usuario:** la persona. **Permitir:** *Unidad Organica*. **Por valor:** su sede.
+3. Desmarque **Aplicar a todos los tipos de documentos** y en **Aplicable para** elija
+   *Programa Sede*. Si no, el sistema le escondería también lo institucional.
+4. Guarde. Quien no tiene ninguna sede asignada ve todas.
+
+Los programas que se creen después en esa sede entran solos en lo que ve.
+
 ## Perfiles de consulta
 
 **Decano/Director (lectura)** y los **lectores externos** consultan sin modificar nada. El

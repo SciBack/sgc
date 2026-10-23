@@ -9,6 +9,29 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.7] - 2026-10-22
+
+**Requiere migrar:** sí: la migración aplica el cambio de *Programa Sede* (la escuela deja de
+contar para los permisos). Sin cambios de datos.
+
+### Añadido
+- **Ver solo una sede.** A quien se le asigna una sede (Lima, Juliaca, Tarapoto) ve solo lo de los
+  programas de esa sede: autoevaluaciones y sus valoraciones, planes de mejora, hallazgos, no
+  conformidades, salidas no conformes, mediciones y alertas de indicador, auditorías y comités.
+  Lo que no es de ningún programa (procesos, documentos, condiciones básicas) lo sigue viendo. Los
+  programas que se creen después en esa sede entran solos. Se asigna desde **Permiso de Usuario**
+  (ver el manual: *Qué hace cada perfil → Ver solo una sede*) o con
+  `sgc.permissions.asignar_sede`.
+
+### Cambiado
+- **La sede manda sobre el perfil.** Un analista de calidad o un auditor con sede o programa
+  asignado queda acotado; antes los veía todos. Solo la DPGC y el administrador técnico ven
+  siempre todo. Quien no tiene sede ni programa asignado sigue viendo todo, como hasta ahora.
+
+### Para administradores
+- Varios informes consultan sin permisos de fila (Preparación de evidencias, Implantación del SGC,
+  Indicadores de acreditación): una persona con sede sigue viendo ahí todas las sedes.
+
 ## [1.7.6] - 2026-10-22
 
 **Requiere migrar:** sí: la migración aplica los colores de los estados (fixtures), las columnas de
