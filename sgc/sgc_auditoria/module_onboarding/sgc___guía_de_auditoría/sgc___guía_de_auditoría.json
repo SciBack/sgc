@@ -1,0 +1,36 @@
+{
+ "allow_roles": [
+  {
+   "role": "DPGC"
+  },
+  {
+   "role": "Analista de Calidad (DPGC)"
+  },
+  {
+   "role": "Auditor Interno"
+  }
+ ],
+ "creation": "2026-10-28 12:00:00.000000",
+ "docstatus": 0,
+ "doctype": "Module Onboarding",
+ "idx": 0,
+ "is_complete": 0,
+ "modified": "2026-10-28 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Auditoria",
+ "name": "SGC - Guía de Auditoría",
+ "owner": "Administrator",
+ "steps": [
+  {
+   "is_optional": 0,
+   "step": "SGC - Crear programa de auditoría"
+  },
+  {
+   "is_optional": 0,
+   "step": "SGC - Calendario de auditorías"
+  }
+ ],
+ "subtitle": "Primeros pasos",
+ "success_message": "Listo: el área ya está en marcha.",
+ "title": "Planifica las auditorías internas"
+}

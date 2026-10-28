@@ -75,6 +75,7 @@
    "options": "Autoevaluacion\nAuditoria\nQueja/Reclamo\nIndicador fuera de meta\nRevision por direccion\nRiesgo materializado\nEvento de riesgo\nIncumplimiento a ente\nProceso\nSalida no conforme\nOtra"
   },
   {
+   "allow_in_quick_entry": 1,
    "fieldname": "tipo",
    "fieldtype": "Select",
    "in_list_view": 1,
@@ -97,6 +98,7 @@
    "read_only": 1
   },
   {
+   "allow_in_quick_entry": 1,
    "fieldname": "severidad",
    "fieldtype": "Select",
    "in_standard_filter": 1,
@@ -104,6 +106,7 @@
    "options": "Critica\nAlta\nMedia\nBaja"
   },
   {
+   "allow_in_quick_entry": 1,
    "fieldname": "fecha_deteccion",
    "fieldtype": "Date",
    "label": "Fecha de detección"
@@ -114,6 +117,7 @@
    "label": "Qué se detectó"
   },
   {
+   "allow_in_quick_entry": 1,
    "fieldname": "descripcion",
    "fieldtype": "Text",
    "label": "Descripción"
@@ -135,11 +139,12 @@
    "options": "Unidad Organica"
   },
   {
+   "allow_in_quick_entry": 1,
    "fieldname": "proceso",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Proceso",
-   "options": "Proceso",
-   "in_list_view": 1
+   "options": "Proceso"
   },
   {
    "fieldname": "col_donde",
@@ -159,10 +164,10 @@
    "options": "Elemento Marco"
   },
   {
+   "collapsible": 1,
    "fieldname": "sec_origen",
    "fieldtype": "Section Break",
-   "label": "Documento que la originó",
-   "collapsible": 1
+   "label": "Documento que la originó"
   },
   {
    "fieldname": "origen_doctype",
@@ -248,9 +253,9 @@
   {
    "fieldname": "responsable",
    "fieldtype": "Link",
+   "in_standard_filter": 1,
    "label": "Responsable",
-   "options": "User",
-   "in_standard_filter": 1
+   "options": "User"
   },
   {
    "fieldname": "plan_mejora",
@@ -265,8 +270,8 @@
   {
    "fieldname": "fecha_compromiso",
    "fieldtype": "Date",
-   "label": "Fecha de compromiso (ETA)",
-   "in_list_view": 1
+   "in_list_view": 1,
+   "label": "Fecha de compromiso (ETA)"
   },
   {
    "fieldname": "sec_cierre",
@@ -331,7 +336,7 @@
    "link_fieldname": "no_conformidad"
   }
  ],
- "modified": "2026-10-22 09:54:31.000000",
+ "modified": "2026-10-28 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "No Conformidad",
@@ -409,6 +414,7 @@
    "share": 1
   }
  ],
+ "quick_entry": 1,
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
  "search_fields": "titulo,origen_tipo",

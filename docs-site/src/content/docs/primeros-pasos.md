@@ -26,6 +26,16 @@ en qué punto termina tu parte del trabajo.
 - **Crear ▾**, arriba en el formulario, crea el paso siguiente ya enlazado: una acción de mejora
   desde una no conformidad, un hallazgo desde una auditoría, una medición desde la ficha del
   indicador. La pestaña **Resumen** reúne las cifras del registro y lo que cuelga de él.
+- **Primeros pasos de cada área:** la portada de Procesos, Documentos, Acreditación, Mejora
+  continua, Indicadores y Auditoría muestra una guía con lo primero que hay que hacer. Cada paso
+  lleva a la pantalla o abre el formulario, y queda marcado al hacerlo. La marca vale para toda la
+  institución: lo que hace una persona lo da por hecho para las demás.
+- **Calendario y Gantt:** las auditorías, las no conformidades, las reuniones y las revisiones de
+  documentos se pueden ver en un calendario, y las acciones y los planes de mejora también en un
+  diagrama de Gantt con su avance. En la lista, pulse el selector de vista (junto al título) →
+  **Calendario** o **Gantt**.
+- **Alta rápida:** al crear una no conformidad, una salida no conforme o un evento de riesgo se abre
+  un diálogo corto con lo imprescindible. **Editar formulario completo** abre el resto.
 :::
 
 ![La portada del SGC: lo que te toca en todas las áreas](captura:inicio-portada)

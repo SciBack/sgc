@@ -80,3 +80,10 @@ Carga Evidencias,Carga de evidencias
 Carga Evidencias Fila,Archivo de la carga
 Implantacion del SGC,Implantación del SGC
 Preparacion de Evidencias,Preparación de evidencias
+{0} of {1} steps done,{0} de {1} pasos hechos
+{0} of {1} done · {2} skipped,{0} de {1} hechos · {2} omitidos
+Done: {0},Hecho: {0}
+Optional,Opcional
+You're all set.,Todo listo.
+Submit it to finish this step.,Envíalo para terminar este paso.
+Play video,Ver vídeo

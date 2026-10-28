@@ -27,9 +27,9 @@ TRAS_MIGRAR = {"sgc.setup.f_deploy_run_all.run"}
 CONFIGURACION = (
 	"Workspace", "Workflow", "Workflow State", "Workflow Action Master", "Notification",
 	"Print Format", "Role", "Role Profile", "Custom DocPerm", "Number Card", "Dashboard Chart",
-	"Sidebar", "Workspace Sidebar", "Custom Field", "Property Setter",
+	"Sidebar", "Workspace Sidebar", "Custom Field", "Property Setter", "Module Onboarding", "Onboarding Step",
 )
-BLOQUES_NATIVOS = {"header", "paragraph", "shortcut", "quick_list", "number_card", "chart", "card", "spacer"}
+BLOQUES_NATIVOS = {"header", "paragraph", "shortcut", "quick_list", "number_card", "chart", "card", "spacer", "onboarding"}
 
 
 def _hooks():
