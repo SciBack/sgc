@@ -23,7 +23,7 @@ aprobó. Un cuadro aprobado es un documento, no una vista.
 
 ## Cargar una versión
 
-1. Ir a **Configuración → Mapa institucional** y pulsar **+ Agregar**.
+1. En el **Mapa de procesos**, menú **⋯ → Versiones del mapa institucional**, y pulsar **+ Agregar**.
 2. Rellenar la **versión** (es el identificador: `v8.0`, `2026-01`, lo que use la
    institución) y adjuntar la **imagen**.
 3. Anotar **fecha de aprobación**, **aprobado por** y **resolución**. En

@@ -154,6 +154,16 @@
 				label: __("Mapa institucional"),
 				action: mostrar_mapa_institucional,
 			},
+			// Las versiones del cuadro aprobado (cargar una nueva, consultar las obsoletas) no tienen
+			// entrada propia en el menú del área: se abren desde aquí.
+			{
+				label: __("Versiones del mapa institucional"),
+				action() {
+					frappe.set_route("List", "Mapa Procesos");
+				},
+				// treeview.js evalúa la condición de menu_items como TEXTO (eval).
+				condition: 'frappe.model.can_read("Mapa Procesos")',
+			},
 		],
 		toolbar: [
 			{

@@ -32,11 +32,11 @@ Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
 | **Portada del área** | Riesgos, tratamientos, eventos por evaluar, riesgos altos tras tratamiento y tratamientos vencidos |
 | **Riesgos** | El registro de riesgos de la institución |
 | **Eventos de riesgo** | Lo que ya ocurrió y alguien reportó |
+| **Matrices de riesgo** | Las escalas de probabilidad e impacto y sus umbrales |
 | **Matriz de riesgos (informe)** | Cada riesgo con su nivel antes y después del tratamiento |
 
 Las **evaluaciones** y los **tratamientos** de un riesgo se abren desde él (**Crear ▾** y
-**Resumen**). Las **matrices de riesgo**, que fijan las escalas de probabilidad e impacto, están en
-Configuración.
+**Resumen**).
 
 ## 2. Reportar un evento (cualquier persona)
 

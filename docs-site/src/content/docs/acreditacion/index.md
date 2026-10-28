@@ -42,11 +42,10 @@ Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
 | **Preparación de evidencias (CBC e IAC)** | Qué elemento tiene ya con qué sustentarse, quién responde y qué falta |
 | **Informe de cumplimiento (SUNEDU)** | El diagnóstico anual de las 8 CBC, con su PDF |
 | **Marcos normativos** | Los modelos cargados (CBC, CONEAU, IAC…); sus estándares, criterios e indicadores se abren desde cada marco |
-| **Obligaciones ante entes** | Qué se entrega a quién y cuándo; las entregas se abren desde cada obligación |
+| **Entes externos / Obligaciones ante entes** | Qué se entrega a quién y cuándo; las entregas se abren desde cada obligación |
 
 Lo que vive dentro de otro registro se abre desde él: las **valoraciones** de criterios y de
-estándares, desde su autoevaluación; las **entregas**, desde su obligación. Los **entes externos** y
-las **escalas de valoración** están en Configuración.
+estándares, desde su autoevaluación; las **entregas**, desde su obligación.
 
 ## 1. Las condiciones básicas de calidad (CBC)
 

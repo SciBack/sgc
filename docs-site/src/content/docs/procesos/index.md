@@ -58,7 +58,8 @@ Al pulsar un nodo aparecen las acciones de lo que es:
 | Procedimiento | **Abrir**, **Editar diagrama** |
 
 Solo salen las que su perfil puede hacer. El cuadro aprobado del mapa se abre desde el menú **⋯ →
-Mapa institucional** del árbol (ver [Mapa institucional](./mapa-institucional/)).
+Mapa institucional** del árbol, y sus versiones desde **⋯ → Versiones del mapa institucional** (ver
+[Mapa institucional](./mapa-institucional/)).
 
 Si prefiere una tabla, el selector de vistas (arriba a la derecha) cambia a **Lista**. Allí el
 color de cada fila dice el estado del proceso, y la lista se puede agrupar por nivel.
