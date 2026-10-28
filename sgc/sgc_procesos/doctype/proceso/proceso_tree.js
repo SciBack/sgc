@@ -96,6 +96,55 @@
 		);
 	}
 
+	// Nodo de un proceso real (N0-N2), no una familia ni un procedimiento o una tarea.
+	function es_proceso(node) {
+		return !node.is_root && node.data.doctype === "Proceso" && ["N0", "N1", "N2"].includes(node.data.node_type);
+	}
+
+	function es_procedimiento(node) {
+		return !node.is_root && node.data.node_type === "N3" && Boolean(node.data.docname);
+	}
+
+	const COLOR_ESTADO = Object.freeze({
+		Vigente: "green",
+		Publicado: "green",
+		Aprobado: "green",
+		"En revisión": "orange",
+		Borrador: "gray",
+		Obsoleto: "gray",
+	});
+
+	function pildora(texto, color) {
+		return `<span class="indicator-pill ${color || "gray"}">${escape(__(texto))}</span>`;
+	}
+
+	// Lo que hace falta para trabajar cada nodo, a la derecha, como el saldo de cada cuenta en el
+	// árbol del plan de cuentas de ERPNext (account_tree.js): estado, responsable, ficha y
+	// procedimientos. Lo que falta sale en rojo para que se vea sin abrir nada.
+	function datos_de_trabajo(data) {
+		const partes = [];
+		if (data.estado) partes.push(pildora(data.estado, COLOR_ESTADO[data.estado]));
+		if (data.doctype === "Proceso") {
+			partes.push(
+				data.responsable
+					? `<span class="text-muted">${escape(data.responsable_nombre || data.responsable)}</span>`
+					: `<span class="text-danger">${escape(__("Sin responsable"))}</span>`
+			);
+			partes.push(
+				data.ficha
+					? `<span class="text-muted">${escape(__("Ficha"))}: ${escape(__(data.ficha_estado || ""))}</span>`
+					: `<span class="text-muted">${escape(__("Sin ficha"))}</span>`
+			);
+			if (data.procedimientos) {
+				partes.push(
+					`<span class="text-muted">${escape(__("{0} proced.", [data.procedimientos]))}</span>`
+				);
+			}
+		}
+		if (!partes.length) return "";
+		return `<span class="pull-right small" style="display:flex;gap:0.75rem;align-items:center">${partes.join("")}</span>`;
+	}
+
 	frappe.treeview_settings["Proceso"] = {
 		title: __("Mapa de procesos"),
 		get_tree_nodes: "sgc.sgc_procesos.doctype.proceso.proceso_tree.get_children",
@@ -116,6 +165,47 @@
 					const { doctype, docname } = node.data;
 					if (!DOCTYPES_ABRIBLES.includes(doctype) || !docname) return;
 					frappe.set_route("Form", doctype, docname);
+				},
+			},
+			// La ficha es una por proceso: se abre si existe y, si no, se crea ya enlazada.
+			{
+				label: __("Ficha"),
+				condition(node) {
+					return es_proceso(node) && (Boolean(node.data.ficha) || frappe.model.can_create("Ficha Caracterizacion Proceso"));
+				},
+				click(node) {
+					if (node.data.ficha) {
+						frappe.set_route("Form", "Ficha Caracterizacion Proceso", node.data.ficha);
+					} else {
+						frappe.new_doc("Ficha Caracterizacion Proceso", { proceso: node.data.docname });
+					}
+				},
+			},
+			{
+				label: __("Nuevo subproceso"),
+				condition(node) {
+					return es_proceso(node) && node.data.node_type !== "N2" && frappe.model.can_create("Proceso");
+				},
+				click(node) {
+					frappe.new_doc("Proceso", { parent_proceso: node.data.docname });
+				},
+			},
+			{
+				label: __("Nuevo procedimiento"),
+				condition(node) {
+					return es_proceso(node) && frappe.model.can_create("Procedimiento");
+				},
+				click(node) {
+					frappe.new_doc("Procedimiento", { proceso: node.data.docname });
+				},
+			},
+			{
+				label: __("Editar diagrama"),
+				condition(node) {
+					return es_procedimiento(node) && frappe.model.can_write("Procedimiento");
+				},
+				click(node) {
+					frappe.set_route("bpmn-editor", "Procedimiento", node.data.docname);
 				},
 			},
 		],
@@ -142,7 +232,7 @@
 				? `<span class="indicator-pill ${nivel.color}">${nivel.label}</span>`
 				: "";
 
-			return `${badge} <span class="text-muted">${identificador}</span> <span>${titulo}</span>`;
+			return `${badge} <span class="text-muted">${identificador}</span> <span>${titulo}</span>${datos_de_trabajo(data)}`;
 		},
 	};
 })();

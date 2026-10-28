@@ -40,18 +40,28 @@ Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
 
 | Entrada | Qué es |
 |---|---|
-| **Portada del área** | Lo pendiente del área y sus cifras |
-| **Mapa de procesos** | Todos los procesos: macroprocesos, procesos y subprocesos |
-| **Procedimientos** | Los procedimientos de cada proceso, con su diagrama |
-| **Fichas de caracterización** | Una ficha por proceso: objetivo, alcance, entradas, salidas, indicadores… |
-| **Mapa institucional** | La imagen aprobada del mapa (ver [Mapa institucional](./mapa-institucional/)) |
-| **Interacciones entre procesos** | Qué entrega un proceso a otro |
+| **Portada del área** | Lo pendiente del área: fichas en revisión, procedimientos por aprobar, procesos sin responsable |
+| **Mapa de procesos** | Todo el área en un solo sitio: los procesos, sus procedimientos y sus fichas |
 
-### Ver el mapa como árbol
+### El mapa de procesos: todo desde un solo sitio
 
-En **Mapa de procesos**, cambie la vista a **Árbol** con el selector de vistas, arriba a la
-derecha. Se despliegan los niveles: macroproceso → proceso → subproceso. Haga clic en cualquiera
-para abrirlo.
+**Mapa de procesos** abre un árbol con todos los niveles: macroproceso → proceso → subproceso →
+procedimiento → tareas de su diagrama. A la derecha de cada proceso se ve lo que hace falta para
+trabajarlo: su **estado**, su **responsable** (*Sin responsable* en rojo si falta), su **ficha** y
+en qué estado está, y cuántos **procedimientos** tiene.
+
+Al pulsar un nodo aparecen las acciones de lo que es:
+
+| En un… | Acciones |
+|---|---|
+| Proceso | **Abrir**, **Ficha** (la abre o, si no tiene, la crea ya enlazada), **Nuevo subproceso**, **Nuevo procedimiento** |
+| Procedimiento | **Abrir**, **Editar diagrama** |
+
+Solo salen las que su perfil puede hacer. El cuadro aprobado del mapa se abre desde el menú **⋯ →
+Mapa institucional** del árbol (ver [Mapa institucional](./mapa-institucional/)).
+
+Si prefiere una tabla, el selector de vistas (arriba a la derecha) cambia a **Lista**. Allí el
+color de cada fila dice el estado del proceso, y la lista se puede agrupar por nivel.
 
 ![El mapa de procesos en vista de árbol](captura:procesos-arbol)
 
@@ -67,10 +77,13 @@ Al abrir un proceso ve:
 - **Propietario (área)** y **Responsable (dueño de proceso)**. Rellene el responsable: sin él, los
   avisos del proceso no llegan a nadie.
 - **Estado**: *Borrador*, *Vigente* u *Obsoleto*. Solo los vigentes salen en el portal público.
-- **Resumen**, en su propia pestaña: arriba las cifras del proceso (responsable, procedimientos,
-  documentos publicados, no conformidades abiertas, riesgos) y debajo todo lo que cuelga de él. Sus fichas, procedimientos, documentos,
-  indicadores, riesgos, no conformidades, auditorías y evidencias, cada grupo con su contador y un
+- **Resumen**, en su propia pestaña: arriba las cifras del proceso (responsable, ficha,
+  procedimientos, documentos publicados, no conformidades abiertas, riesgos) y debajo todo lo que
+  cuelga de él: su ficha, procedimientos, documentos, indicadores, riesgos, no conformidades,
+  auditorías, evidencias y las interacciones con otros procesos, cada grupo con su contador y un
   **+** para crear uno nuevo ya enlazado.
+- El botón **Ficha de caracterización**, arriba, abre la ficha del proceso. Si todavía no tiene, está
+  en **Crear ▾** y nace ya enlazada.
 
 ### Crear, editar y retirar
 
@@ -89,8 +102,9 @@ aprueba la dirección de calidad.
 
 ![Un procedimiento publicado con su diagrama de flujo](captura:procesos-procedimiento)
 
-**Crear:** **Procedimientos → + Agregar**. Indique el código según la codificación de la
-institución, el título y el **proceso** al que pertenece. Adjunte el documento si existe.
+**Crear:** en el **Mapa de procesos**, pulse el proceso y luego **Nuevo procedimiento** (o, desde
+el proceso abierto, **Crear ▾ → Procedimiento**). El procedimiento nace enlazado a su proceso: indique
+el código según la codificación de la institución y el título. Adjunte el documento si existe.
 
 **El diagrama (BPMN):**
 
@@ -121,7 +135,9 @@ Hay una ficha por proceso. Recoge lo que la norma ISO 9001 (§4.4.1) pide de un 
 
 ![Una ficha de caracterización en borrador](captura:procesos-ficha)
 
-1. **Crear:** **Fichas de caracterización → + Agregar**, elija el proceso y guarde.
+1. **Crear:** en el **Mapa de procesos**, pulse el proceso y luego **Ficha**. Si el proceso ya
+   tiene ficha, la abre; si no, la crea ya enlazada. Desde el proceso abierto, el botón **Ficha de
+   caracterización** hace lo mismo.
 2. **Lo que se completa solo:** al guardar, la ficha trae lo que el sistema ya sabe del proceso:
    sus **procedimientos**, **documentos**, **riesgos** y **subprocesos**. No hay que teclearlos.
 3. **Lo que se completa a mano:** objetivo, alcance, requisitos aplicables, recursos, entradas,

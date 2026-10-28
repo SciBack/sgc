@@ -45,7 +45,7 @@ siendo una decisión de la persona que revisa.
 
 Cada elemento de un marco normativo (un criterio, una condición básica o una pantalla del MIAC)
 puede tener una **unidad responsable**, sus **unidades de apoyo** y la **evidencia requerida**. Se
-completan en la ficha del elemento (Acreditación y licenciamiento → Estándares y criterios).
+completan en la ficha del elemento (Acreditación y licenciamiento → Marcos normativos → el marco → sus elementos, en **Resumen**).
 
 ![Informe de preparación de evidencias del IAC](captura:acreditacion-preparacion-evidencias)
 

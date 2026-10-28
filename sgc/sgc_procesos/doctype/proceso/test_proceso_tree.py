@@ -179,6 +179,12 @@ class IntegrationTestProcesoTree(IntegrationTestCase):
 		"file_name",
 		"bpmn_id",
 		"total",
+		"estado",
+		"responsable",
+		"responsable_nombre",
+		"ficha",
+		"ficha_estado",
+		"procedimientos",
 	}
 
 	def setUp(self):
@@ -331,7 +337,9 @@ class IntegrationTestProcesoTree(IntegrationTestCase):
 
 		# Umbral, no medición exacta: lo que se vigila es que el coste NO crezca con
 		# el número de procesos. Con 22 raíces, un N+1 se dispararía muy por encima.
-		with self.assertQueryCount(10):
+		# Desde la 1.7.11 cada nivel trae además, EN LOTE, responsables, fichas y
+		# número de procedimientos: tres consultas más, constantes.
+		with self.assertQueryCount(13):
 			hijos = proceso_tree.get_children("Proceso", familia["value"])
 
 		self.assertTrue(raices_fixture.issubset({nodo["docname"] for nodo in hijos}))
