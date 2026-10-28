@@ -9,6 +9,10 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.10] - 2026-10-28
+
+**Requiere migrar:** sí, como toda versión. Sin cambios de esquema ni de datos.
+
 ### Añadido
 - **La verificación de instancia avisa si el servidor MCP de Frappe está encendido**
   (`servidor-mcp-encendido`), con cómo apagarlo.
