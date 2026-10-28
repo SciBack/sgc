@@ -9,6 +9,22 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.9] - 2026-10-28
+
+**Requiere migrar:** sí: es una actualización de Frappe (16.52.0 → 16.53.0) y la migración aplica
+sus cambios. El SGC no cambia.
+
+### Cambiado
+- **Frappe 16.53.0.** Lo que se nota al usar el sistema: «Buscar» y «Notificación» pasan de la barra
+  lateral a la barra superior; las listas se pueden agrupar por uno o más campos con recuentos y
+  totales; las pestañas «Conexiones» cuentan bien cuando un mismo tipo de documento aparece dos
+  veces. Además actualiza las librerías de autenticación (PyJWT, oauthlib) por fallos de seguridad
+  conocidos.
+
+### Para administradores
+- Frappe 16.53 trae un servidor MCP para herramientas de IA (System Settings → «AI Agents»). Se
+  comprueba que queda apagado tras actualizar.
+
 ## [1.7.8] - 2026-10-28
 
 **Requiere migrar:** sí: la migración carga las guías de arranque, activa el alta rápida y añade
