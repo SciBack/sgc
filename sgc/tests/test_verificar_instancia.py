@@ -189,6 +189,16 @@ class IntegrationTestMarcos(_ConSavepoint):
         self.assertIn(marco, h.detalle)
 
 
+class IntegrationTestGuiasDeArranque(_ConSavepoint):
+    def test_sin_incorporacion_las_guias_no_se_ven_y_se_informa(self):
+        frappe.db.set_single_value("System Settings", "enable_onboarding", 0)
+        self.assertEqual(self._hallazgos("guias_de_arranque_visibles")["guias-de-arranque-ocultas"].nivel, INFO)
+
+    def test_con_incorporacion_no_hay_hallazgo(self):
+        frappe.db.set_single_value("System Settings", "enable_onboarding", 1)
+        self.assertEqual(self._hallazgos("guias_de_arranque_visibles"), {})
+
+
 class IntegrationTestIdentidad(_ConSavepoint):
     def _con_conf(self, **conf):
         claves = ("sgc_app_name", "sgc_institucion", "sgc_logo")

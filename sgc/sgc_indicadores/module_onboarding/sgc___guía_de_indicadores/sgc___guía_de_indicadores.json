@@ -1,0 +1,39 @@
+{
+ "allow_roles": [
+  {
+   "role": "DPGC"
+  },
+  {
+   "role": "Analista de Calidad (DPGC)"
+  },
+  {
+   "role": "Data Steward"
+  },
+  {
+   "role": "Dueño de Proceso"
+  }
+ ],
+ "creation": "2026-10-28 12:00:00.000000",
+ "docstatus": 0,
+ "doctype": "Module Onboarding",
+ "idx": 0,
+ "is_complete": 0,
+ "modified": "2026-10-28 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Indicadores",
+ "name": "SGC - Guía de Indicadores",
+ "owner": "Administrator",
+ "steps": [
+  {
+   "is_optional": 0,
+   "step": "SGC - Responsable de cada indicador"
+  },
+  {
+   "is_optional": 0,
+   "step": "SGC - Registrar medición"
+  }
+ ],
+ "subtitle": "Primeros pasos",
+ "success_message": "Listo: el área ya está en marcha.",
+ "title": "Pon a medir los indicadores"
+}

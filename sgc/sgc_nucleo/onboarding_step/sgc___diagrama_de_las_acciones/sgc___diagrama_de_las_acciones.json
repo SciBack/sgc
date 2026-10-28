@@ -1,0 +1,23 @@
+{
+ "action": "Go to Page",
+ "action_label": "Ver diagrama",
+ "callback_message": "Vuelve a la portada del área para continuar con la guía.",
+ "callback_title": "Sigue cuando quieras",
+ "creation": "2026-10-28 12:00:00.000000",
+ "description": "Cada acción va de su inicio a su fecha comprometida, con el avance pintado en la barra.",
+ "docstatus": 0,
+ "doctype": "Onboarding Step",
+ "idx": 3,
+ "is_complete": 0,
+ "is_single": 0,
+ "is_skipped": 0,
+ "modified": "2026-10-28 12:00:00.000000",
+ "modified_by": "Administrator",
+ "name": "SGC - Diagrama de las acciones",
+ "owner": "Administrator",
+ "path": "/desk/accion-mejora/view/gantt",
+ "show_form_tour": 0,
+ "show_full_form": 0,
+ "title": "Sigue las acciones en el diagrama de Gantt",
+ "validate_action": 0
+}

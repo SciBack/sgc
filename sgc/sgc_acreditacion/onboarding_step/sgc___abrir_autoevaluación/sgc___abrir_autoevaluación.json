@@ -1,0 +1,23 @@
+{
+ "action": "Go to Page",
+ "action_label": "Ver autoevaluaciones",
+ "callback_message": "Vuelve a la portada del área para continuar con la guía.",
+ "callback_title": "Sigue cuando quieras",
+ "creation": "2026-10-28 12:00:00.000000",
+ "description": "Al iniciarla, cada criterio del modelo queda pendiente de valorar, con su responsable y su tarea.",
+ "docstatus": 0,
+ "doctype": "Onboarding Step",
+ "idx": 3,
+ "is_complete": 0,
+ "is_single": 0,
+ "is_skipped": 0,
+ "modified": "2026-10-28 12:00:00.000000",
+ "modified_by": "Administrator",
+ "name": "SGC - Abrir autoevaluación",
+ "owner": "Administrator",
+ "path": "/desk/autoevaluacion",
+ "show_form_tour": 0,
+ "show_full_form": 0,
+ "title": "Empieza una autoevaluación",
+ "validate_action": 0
+}

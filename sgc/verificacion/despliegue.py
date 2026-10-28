@@ -12,7 +12,7 @@ en algunos DocTypes, alguien concreto no puede trabajar: AVISO. Igual con los wo
 import frappe
 
 from sgc import estandar
-from sgc.verificacion import AVISO, BLOQUEANTE, Hallazgo
+from sgc.verificacion import AVISO, BLOQUEANTE, INFO, Hallazgo
 
 REMEDIO_MIGRATE = "Volver a migrar (`bench --site <sitio> migrate`): Frappe los aplica desde la app."
 
@@ -88,4 +88,22 @@ def workflows_aplicados():
     ]
 
 
-CHEQUEOS = [permisos_aplicados, workflows_aplicados]
+def guias_de_arranque_visibles():
+    """Las guías de arranque de cada área (1.7.8) solo se ven con `enable_onboarding`.
+
+    Frappe lo pone a 1 en el asistente de instalación (`setup_wizard.py`); un sitio creado sin
+    asistente lo tiene a 0 y la guía no sale en ninguna portada (`desktop.py`, `get_onboarding_doc`).
+    """
+    if frappe.db.get_single_value("System Settings", "enable_onboarding"):
+        return []
+    return [
+        Hallazgo(
+            INFO,
+            "guias-de-arranque-ocultas",
+            "Las guías de arranque de las áreas no se muestran.",
+            remedio="Activar «Habilitar incorporación» en System Settings (`enable_onboarding`).",
+        )
+    ]
+
+
+CHEQUEOS = [permisos_aplicados, workflows_aplicados, guias_de_arranque_visibles]
