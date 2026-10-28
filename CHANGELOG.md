@@ -9,6 +9,10 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+### Añadido
+- **La verificación de instancia avisa si el servidor MCP de Frappe está encendido**
+  (`servidor-mcp-encendido`), con cómo apagarlo.
+
 ## [1.7.9] - 2026-10-28
 
 **Requiere migrar:** sí: es una actualización de Frappe (16.52.0 → 16.53.0) y la migración aplica
@@ -22,8 +26,10 @@ sus cambios. El SGC no cambia.
   conocidos.
 
 ### Para administradores
-- Frappe 16.53 trae un servidor MCP para herramientas de IA (System Settings → «AI Agents»). Se
-  comprueba que queda apagado tras actualizar.
+- Frappe 16.53 trae un servidor MCP para herramientas de IA (System Settings → «AI Agents»), y
+  **viene encendido**: actúa con los permisos de cualquier sesión o token de API. Si la institución
+  no lo ha decidido, hay que apagarlo (`enable_mcp`). *(Corregido: esta nota decía que quedaba
+  apagado.)*
 
 ## [1.7.8] - 2026-10-28
 

@@ -106,4 +106,32 @@ def guias_de_arranque_visibles():
     ]
 
 
-CHEQUEOS = [permisos_aplicados, workflows_aplicados, guias_de_arranque_visibles]
+def servidor_mcp_apagado():
+    """Frappe 16.53 trae un servidor MCP para herramientas de IA, ENCENDIDO por defecto.
+
+    Escucha en `/api/v2/mcp` y actúa con los permisos de quien se conecta, por sesión o por token
+    (`frappe/mcp/__init__.py`: `handle`). Sin autenticación responde 401, pero cualquier token de API
+    —también uno de servicio con System Manager— basta para que una herramienta de IA lea y
+    modifique documentos. Es una puerta nueva que la institución tiene que decidir abrir: AVISO.
+    """
+    if not frappe.get_meta("System Settings").has_field("enable_mcp"):
+        return []  # Frappe anterior a 16.53: no existe
+    if (frappe.conf or {}).get("disable_mcp_server") or not frappe.db.get_single_value("System Settings", "enable_mcp"):
+        return []
+    return [
+        Hallazgo(
+            AVISO,
+            "servidor-mcp-encendido",
+            "El servidor MCP de Frappe está encendido: una herramienta de IA puede leer y modificar "
+            "documentos con cualquier sesión o token de API.",
+            remedio=(
+                "Si la institución no lo ha decidido, apagarlo: System Settings → «AI Agents» → "
+                "desmarcar MCP (`enable_mcp`), o `disable_mcp_server: 1` en `site_config.json`. "
+                "Desde consola, con `frappe.db.set_single_value`: guardar System Settings con el 2FA "
+                "recién activado marca también el rol «All»."
+            ),
+        )
+    ]
+
+
+CHEQUEOS = [permisos_aplicados, workflows_aplicados, guias_de_arranque_visibles, servidor_mcp_apagado]
