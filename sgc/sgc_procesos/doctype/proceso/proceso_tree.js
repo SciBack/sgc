@@ -118,7 +118,7 @@
 		return `<span class="indicator-pill ${color || "gray"}">${escape(__(texto))}</span>`;
 	}
 
-	// Lo que hace falta para trabajar cada nodo, a la derecha, como el saldo de cada cuenta en el
+	// Lo que hace falta para trabajar cada nodo, junto a su nombre, como el saldo de cada cuenta en el
 	// árbol del plan de cuentas de ERPNext (account_tree.js): estado, responsable, ficha y
 	// procedimientos. Lo que falta sale en rojo para que se vea sin abrir nada.
 	function datos_de_trabajo(data) {
@@ -142,7 +142,7 @@
 			}
 		}
 		if (!partes.length) return "";
-		return `<span class="pull-right small" style="display:flex;gap:0.75rem;align-items:center">${partes.join("")}</span>`;
+		return `<span class="small" style="display:inline-flex;gap:0.75rem;align-items:center;margin-left:1rem">${partes.join("")}</span>`;
 	}
 
 	frappe.treeview_settings["Proceso"] = {
