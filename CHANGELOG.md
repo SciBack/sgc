@@ -9,6 +9,28 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.8] - 2026-10-28
+
+**Requiere migrar:** sí: la migración carga las guías de arranque, activa el alta rápida y añade
+las traducciones. Sin cambios de datos.
+
+### Añadido
+- **Primeros pasos de cada área.** Las portadas de Procesos, Documentos, Acreditación, Mejora
+  continua, Indicadores y Auditoría muestran una guía con lo primero que hay que hacer: asignar el
+  responsable de cada proceso, publicar los documentos en borrador, registrar una no conformidad,
+  crear el programa anual de auditoría… Cada paso lleva a la pantalla o abre el formulario y queda
+  marcado para toda la institución.
+- **Calendario y Gantt.** Las auditorías, las no conformidades, las reuniones y las revisiones de
+  documentos se ven en un calendario; las acciones y los planes de mejora, también en un diagrama de
+  Gantt con su avance.
+- **Alta rápida.** Crear una no conformidad, una salida no conforme o un evento de riesgo abre un
+  diálogo corto con lo imprescindible.
+
+### Para administradores
+- Las guías solo se ven con **«Habilitar incorporación»** (System Settings `enable_onboarding`).
+  El asistente de instalación lo activa; un sitio creado sin él lo tiene apagado, y la verificación
+  de instancia lo avisa (`guias-de-arranque-ocultas`).
+
 ## [1.7.7] - 2026-10-22
 
 **Requiere migrar:** sí: la migración aplica el cambio de *Programa Sede* (la escuela deja de
