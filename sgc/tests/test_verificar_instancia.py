@@ -199,6 +199,21 @@ class IntegrationTestGuiasDeArranque(_ConSavepoint):
         self.assertEqual(self._hallazgos("guias_de_arranque_visibles"), {})
 
 
+class IntegrationTestServidorMcp(_ConSavepoint):
+    def setUp(self):
+        super().setUp()
+        if not frappe.get_meta("System Settings").has_field("enable_mcp"):
+            self.skipTest("Frappe sin servidor MCP (anterior a 16.53)")
+
+    def test_encendido_avisa(self):
+        frappe.db.set_single_value("System Settings", "enable_mcp", 1)
+        self.assertEqual(self._hallazgos("servidor_mcp_apagado")["servidor-mcp-encendido"].nivel, AVISO)
+
+    def test_apagado_no_avisa(self):
+        frappe.db.set_single_value("System Settings", "enable_mcp", 0)
+        self.assertEqual(self._hallazgos("servidor_mcp_apagado"), {})
+
+
 class IntegrationTestIdentidad(_ConSavepoint):
     def _con_conf(self, **conf):
         claves = ("sgc_app_name", "sgc_institucion", "sgc_logo")
