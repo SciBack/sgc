@@ -80,10 +80,10 @@ class TestGuiasDeArranque(unittest.TestCase):
 					self.assertIn(paso["reference_document"], self.doctypes)
 				else:
 					self.assertEqual(paso["action"], "Go to Page")
-					m = re.match(r"^/desk/([a-z\-]+)(/view/(calendar|gantt))?(\?.*)?$", paso["path"])
+					m = re.match(r"^/desk/([a-z\-]+)(/view/(calendar|gantt|list))?(\?.*)?$", paso["path"])
 					self.assertIsNotNone(m, paso["path"])
 					self.assertIn(m.group(1), slugs, paso["path"])
-					if m.group(3):
+					if m.group(3) in ("calendar", "gantt"):
 						self.assertTrue((APP.glob(f"*/doctype/{m.group(1).replace('-', '_')}/*_calendar.js")), paso["path"])
 
 

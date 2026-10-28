@@ -15,7 +15,7 @@
  "modified_by": "Administrator",
  "name": "SGC - Responsable de cada proceso",
  "owner": "Administrator",
- "path": "/desk/proceso?estado=Vigente",
+ "path": "/desk/proceso/view/list?estado=Vigente",
  "show_form_tour": 0,
  "show_full_form": 0,
  "title": "Asigna el responsable de cada proceso",
