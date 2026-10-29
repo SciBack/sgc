@@ -60,6 +60,7 @@
    "description": "Nivel BPM derivado automáticamente del árbol (profundidad + is_group). N0 Macroproceso · N1 Proceso · N2 Subproceso. No editar a mano: se recalcula al guardar.",
    "fieldname": "nivel_bpm",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Nivel BPM",
    "no_copy": 1,
@@ -74,7 +75,6 @@
    "default": "Borrador",
    "fieldname": "estado",
    "fieldtype": "Select",
-   "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Estado",
    "options": "Borrador\nVigente\nObsoleto"
@@ -245,9 +245,19 @@
    "group": "Acreditación",
    "link_doctype": "Trazabilidad",
    "link_fieldname": "proceso"
+  },
+  {
+   "group": "Caracterización",
+   "link_doctype": "Interaccion Proceso",
+   "link_fieldname": "proceso_origen"
+  },
+  {
+   "group": "Caracterización",
+   "link_doctype": "Interaccion Proceso",
+   "link_fieldname": "proceso_destino"
   }
  ],
- "modified": "2026-10-22 09:54:43.000000",
+ "modified": "2026-10-29 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Procesos",
  "name": "Proceso",
@@ -332,11 +342,11 @@
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
+ "search_fields": "proceso",
  "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
  "title_field": "proceso",
- "track_changes": 1,
- "search_fields": "proceso"
+ "track_changes": 1
 }

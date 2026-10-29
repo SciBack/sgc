@@ -33,9 +33,10 @@ Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
 | **Riesgos** | El registro de riesgos de la institución |
 | **Eventos de riesgo** | Lo que ya ocurrió y alguien reportó |
 | **Matrices de riesgo** | Las escalas de probabilidad e impacto y sus umbrales |
-| **Evaluaciones de riesgo** | Cada medición de probabilidad e impacto de un riesgo |
-| **Tratamientos de riesgo** | Los controles para reducir cada riesgo |
 | **Matriz de riesgos (informe)** | Cada riesgo con su nivel antes y después del tratamiento |
+
+Las **evaluaciones** y los **tratamientos** de un riesgo se abren desde él (**Crear ▾** y
+**Resumen**).
 
 ## 2. Reportar un evento (cualquier persona)
 

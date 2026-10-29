@@ -32,9 +32,10 @@ Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
 | **Programas de auditoría** | El plan anual: qué se audita y cuándo |
 | **Auditorías** | Cada auditoría, con su equipo, criterios y plan de actividades |
 | **Listas de verificación** | Los puntos a comprobar en cada auditoría, y las plantillas reutilizables |
-| **Hallazgos de auditoría** | Lo que encontró cada auditoría |
-| **Informes de auditoría** | El informe de cada auditoría, con su aprobación |
 | **Resultados de auditoría** | Los hallazgos de todas las auditorías, filtrables |
+
+Los **hallazgos** y el **informe** de cada auditoría se abren desde ella: **Crear ▾** para
+registrarlos y la pestaña **Resumen** para verlos.
 
 ## 2. El programa anual
 
@@ -97,7 +98,7 @@ Cuando la auditoría se cierra, su lista queda bloqueada.
 
 ## 5. Los hallazgos de auditoría
 
-Se crean con **Generar hallazgos** desde la lista, o a mano en **Hallazgos de auditoría → + Agregar**.
+Se crean con **Generar hallazgos** desde la lista, o a mano desde la auditoría: **Crear ▾ → Hallazgo de auditoría**.
 Cada uno pertenece a una auditoría y tiene un **tipo**: no conformidad mayor o menor, observación,
 oportunidad de mejora, conformidad o fortaleza.
 

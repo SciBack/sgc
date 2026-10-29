@@ -7,7 +7,25 @@ from sgc import escritorio
 from sgc.patches import modulos_por_area
 
 # Pantallas que no van en ningún menú, a conciencia: se gestionan desde otra.
-FUERA_DE_MENUS = {"Trazabilidad"}
+# Pantallas que viven dentro de otro registro y se abren desde él (Conexiones y «Crear ▾»), no
+# desde el menú: en el menú van los puntos de entrada y las colas de trabajo (1.7.11).
+FUERA_DE_MENUS = {
+	"Trazabilidad",
+	"Procedimiento",  # desde el árbol de procesos y desde su proceso
+	"Ficha Caracterizacion Proceso",  # una por proceso: desde el árbol y desde su proceso
+	"Interaccion Proceso",  # desde su proceso
+	"Mapa Procesos",  # desde el árbol: ⋯ → Mapa institucional / Versiones del mapa institucional
+	"Valoracion Criterio",  # desde su autoevaluación
+	"Valoracion Estandar",  # desde su autoevaluación
+	"Entrega Obligacion",  # desde su obligación
+	"Hallazgo Auditoria",  # desde su auditoría
+	"Informe Auditoria",  # desde su auditoría
+	"Acuerdo",  # desde su reunión
+	"Aplicacion Instrumento",  # desde su instrumento
+	"Resultado Instrumento",  # desde su aplicación
+	"Evaluacion Riesgo",  # desde su riesgo
+	"Tratamiento Riesgo",  # desde su riesgo
+}
 
 
 def _destinos(tipos=("DocType", "Report")):

@@ -8,7 +8,6 @@ frappe.ui.form.on("Proceso", {
 	refresh(frm) {
 		if (frm.is_new()) return;
 		[
-			["Ficha Caracterizacion Proceso", __("Ficha de caracterización"), { proceso: frm.doc.name }],
 			["Procedimiento", __("Procedimiento"), { proceso: frm.doc.name }],
 			["Documento Controlado", __("Documento controlado"), { proceso: frm.doc.name }],
 			["Indicador", __("Indicador"), { proceso: frm.doc.name }],
@@ -17,6 +16,35 @@ frappe.ui.form.on("Proceso", {
 			if (!frappe.model.can_create(doctype)) return;
 			frm.add_custom_button(etiqueta, () => frappe.new_doc(doctype, valores), __("Crear"));
 		});
+	},
+});
+
+// La ficha de caracterización es UNA por proceso (`proceso` es único en la ficha): un botón la abre
+// si existe y la crea ya enlazada si no, para no tener que buscarla en otra lista.
+frappe.ui.form.on("Proceso", {
+	refresh(frm) {
+		if (frm.is_new()) return;
+		frappe.db
+			.get_value("Ficha Caracterizacion Proceso", { proceso: frm.doc.name }, ["name", "estado"])
+			.then(({ message }) => {
+				const ficha = message && message.name ? message : null;
+				if (ficha) {
+					frm.add_custom_button(__("Ficha de caracterización"), () =>
+						frappe.set_route("Form", "Ficha Caracterizacion Proceso", ficha.name)
+					);
+					frm.dashboard.add_indicator(
+						__("Ficha: {0}", [__(ficha.estado)]),
+						ficha.estado === "Publicado" ? "green" : "orange"
+					);
+				} else {
+					if (frappe.model.can_create("Ficha Caracterizacion Proceso")) {
+						frm.add_custom_button(__("Ficha de caracterización"), () =>
+							frappe.new_doc("Ficha Caracterizacion Proceso", { proceso: frm.doc.name })
+						, __("Crear"));
+					}
+					frm.dashboard.add_indicator(__("Sin ficha"), "red");
+				}
+			});
 	},
 });
 

@@ -36,12 +36,12 @@ Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
 | **Implantación del SGC** | Si el sistema se está usando de verdad |
 | **Comités** | Los comités de calidad y sus miembros |
 | **Reuniones** | Las sesiones de cada comité, con su acta |
-| **Acuerdos** | Lo que se decidió en cada reunión, con responsable y plazo |
 | **Comunicados** | Avisos por correo a los usuarios del sistema |
 | **Grupos de interés** | Estudiantes, egresados, empleadores y demás partes interesadas |
 | **Instrumentos (encuestas)** | Las encuestas, focus group y entrevistas |
-| **Aplicaciones de encuestas** | Cada vez que se aplica un instrumento |
-| **Resultados de encuestas** | Los resultados tabulados de cada aplicación |
+
+Lo que vive dentro de otro registro se abre desde él: los **acuerdos**, desde su reunión; las
+**aplicaciones** de una encuesta, desde su instrumento; y los **resultados**, desde cada aplicación.
 
 ## 2. Política y objetivos de calidad
 

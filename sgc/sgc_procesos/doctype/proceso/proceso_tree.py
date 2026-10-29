@@ -100,7 +100,8 @@ def _nodos_raiz(frappe) -> list[dict[str, Any]]:
 	sueltos = [row for row in raices if row.nivel not in VALORES_FAMILIA]
 	if sueltos:
 		expandibles = _procesos_con_hijos_visibles(frappe, [row.name for row in sueltos])
-		nodos.extend(_nodo_proceso(row, row.name in expandibles) for row in sueltos)
+		datos = _datos_de_trabajo(frappe, sueltos)
+		nodos.extend(_nodo_proceso(row, row.name in expandibles, datos) for row in sueltos)
 	return nodos
 
 
@@ -112,7 +113,8 @@ def _hijos_de_familia(frappe, slug: str) -> list[dict[str, Any]]:
 		frappe, {"parent_proceso": ["is", "not set"], "nivel": valor}
 	)
 	expandibles = _procesos_con_hijos_visibles(frappe, [row.name for row in filas])
-	return [_nodo_proceso(row, row.name in expandibles) for row in filas]
+	datos = _datos_de_trabajo(frappe, filas)
+	return [_nodo_proceso(row, row.name in expandibles, datos) for row in filas]
 
 
 def _hijos_de_proceso(frappe, name: str) -> list[dict[str, Any]]:
@@ -122,7 +124,8 @@ def _hijos_de_proceso(frappe, name: str) -> list[dict[str, Any]]:
 	expandibles = _procesos_con_hijos_visibles(frappe, [row.name for row in hijos])
 	tareas = _tareas_por_procedimiento(frappe, procedimientos)
 
-	nodos = [_nodo_proceso(row, row.name in expandibles) for row in hijos]
+	datos = _datos_de_trabajo(frappe, hijos)
+	nodos = [_nodo_proceso(row, row.name in expandibles, datos) for row in hijos]
 	nodos.extend(
 		_nodo_procedimiento(row, bool(tareas.get(row.name))) for row in procedimientos
 	)
@@ -229,6 +232,52 @@ def _filtrar_permiso_documental(frappe, doctype: str, rows: Iterable[Any]) -> li
 	return visibles
 
 
+def _datos_de_trabajo(frappe, procesos: list[Any]) -> dict[str, dict[str, Any]]:
+	"""Lo que hace falta para trabajar cada proceso desde el árbol, en TRES consultas por nivel.
+
+	Nombre del responsable, ficha de caracterización (una por proceso: `proceso` es único en la
+	ficha) y cuántos procedimientos tiene. En lote, no por nodo: un N+1 aquí multiplicaría las
+	consultas por los procesos de cada nivel. Fichas y procedimientos se leen con permisos, igual
+	que el resto del árbol, para que quien no puede verlos no descubra que existen.
+	"""
+	nombres = [row.name for row in procesos]
+	if not nombres:
+		return {}
+	responsables = {row.responsable for row in procesos if row.get("responsable")}
+	nombre_de = (
+		dict(frappe.get_all("User", filters={"name": ["in", list(responsables)]}, fields=["name", "full_name"], as_list=True))
+		if responsables
+		else {}
+	)
+	fichas = {}
+	if frappe.permissions.has_permission("Ficha Caracterizacion Proceso", ptype="read", print_logs=False):
+		for ficha in frappe.get_list(
+			"Ficha Caracterizacion Proceso",
+			filters={"proceso": ["in", nombres]},
+			fields=["name", "proceso", "estado"],
+			limit=0,
+		):
+			fichas[ficha.proceso] = ficha
+	procedimientos = {}
+	if frappe.permissions.has_permission("Procedimiento", ptype="read", print_logs=False):
+		for proceso in frappe.get_list(
+			"Procedimiento",
+			filters={"proceso": ["in", nombres]},
+			pluck="proceso",
+			limit=0,
+		):
+			procedimientos[proceso] = procedimientos.get(proceso, 0) + 1
+	return {
+		row.name: {
+			"responsable_nombre": nombre_de.get(row.get("responsable")) or row.get("responsable"),
+			"ficha": fichas[row.name].name if row.name in fichas else None,
+			"ficha_estado": fichas[row.name].estado if row.name in fichas else None,
+			"procedimientos": procedimientos.get(row.name, 0),
+		}
+		for row in procesos
+	}
+
+
 def _tareas_por_procedimiento(frappe, procedimientos: Iterable[Any]) -> dict[str, list[dict[str, str]]]:
 	procedimientos = [
 		row
@@ -332,8 +381,9 @@ def _nodo_familia(slug: str, etiqueta: str, total: int) -> dict[str, Any]:
 	)
 
 
-def _nodo_proceso(row, expandable: bool) -> dict[str, Any]:
+def _nodo_proceso(row, expandable: bool, datos: dict[str, dict[str, Any]] | None = None) -> dict[str, Any]:
 	niveles = {"Macroproceso": "N0", "Proceso": "N1", "Subproceso": "N2"}
+	trabajo = (datos or {}).get(row.name, {})
 	return _payload_nodo(
 		value=f"proceso:{row.name}",
 		title=row.proceso or row.name,
@@ -341,6 +391,9 @@ def _nodo_proceso(row, expandable: bool) -> dict[str, Any]:
 		node_type=niveles.get(row.nivel_bpm, "N1"),
 		doctype="Proceso",
 		docname=row.name,
+		estado=row.get("estado"),
+		responsable=row.get("responsable"),
+		**trabajo,
 	)
 
 
@@ -352,6 +405,7 @@ def _nodo_procedimiento(row, expandable: bool) -> dict[str, Any]:
 		node_type="N3",
 		doctype="Procedimiento",
 		docname=row.name,
+		estado=row.get("estado"),
 	)
 
 
@@ -380,6 +434,12 @@ def _payload_nodo(
 	file_name: str | None = None,
 	bpmn_id: str | None = None,
 	total: int | None = None,
+	estado: str | None = None,
+	responsable: str | None = None,
+	responsable_nombre: str | None = None,
+	ficha: str | None = None,
+	ficha_estado: str | None = None,
+	procedimientos: int | None = None,
 ) -> dict[str, Any]:
 	return {
 		"value": value,
@@ -391,6 +451,12 @@ def _payload_nodo(
 		"file_name": file_name,
 		"bpmn_id": bpmn_id,
 		"total": total,
+		"estado": estado,
+		"responsable": responsable,
+		"responsable_nombre": responsable_nombre,
+		"ficha": ficha,
+		"ficha_estado": ficha_estado,
+		"procedimientos": procedimientos,
 	}
 
 
