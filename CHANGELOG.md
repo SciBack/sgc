@@ -26,8 +26,8 @@ la lista y el formulario de Proceso.
 - **La lista de procesos** muestra estado con color, código, nivel BPM y responsable, sin la columna
   del identificador interno.
 - **Menús sin redundancia (80 → 65 entradas).** En el menú quedan los puntos de entrada y las colas
-  de trabajo; lo que vive dentro de otro registro se abre desde él. Procesos queda con «Mapa de
-  procesos» y «Lista de procesos»; salen de su menú las valoraciones de criterios y estándares, las
+  de trabajo; lo que vive dentro de otro registro se abre desde él. Procesos queda con la portada
+  y «Mapa de procesos»; salen de su menú las valoraciones de criterios y estándares, las
   entregas de obligaciones, los hallazgos e informes de auditoría, los acuerdos, las aplicaciones y
   resultados de encuestas, y las evaluaciones y tratamientos de riesgo (se abren desde su
   autoevaluación, auditoría, reunión, encuesta o riesgo).
