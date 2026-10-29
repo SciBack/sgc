@@ -9,6 +9,30 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.11] - 2026-10-28
+
+**Requiere migrar:** sí, como toda versión. Sin cambios de datos; cambian los menús de las áreas,
+la lista y el formulario de Proceso.
+
+### Cambiado
+- **Procesos se trabaja desde un solo sitio: el mapa de procesos.** Cada nodo del árbol muestra su
+  estado, su responsable (o «Sin responsable»), el estado de su ficha (o «Sin ficha») y cuántos
+  procedimientos tiene. El menú «⋯» de cada nodo abre el proceso, abre o crea su ficha de
+  caracterización, crea un subproceso o un procedimiento y abre el editor del diagrama de un
+  procedimiento. Las versiones del mapa institucional se abren desde el menú del árbol.
+- **El formulario de Proceso lleva a su ficha:** botón «Ficha de caracterización» si existe (o
+  «Crear → Ficha de caracterización» si no) e indicador con su estado. Las interacciones con otros
+  procesos salen en «Conexiones».
+- **La lista de procesos** muestra estado con color, código, nivel BPM y responsable, sin la columna
+  del identificador interno.
+- **Menús sin redundancia (80 → 65 entradas).** En el menú quedan los puntos de entrada y las colas
+  de trabajo; lo que vive dentro de otro registro se abre desde él. Procesos queda con «Mapa de
+  procesos» y «Lista de procesos»; salen de su menú las valoraciones de criterios y estándares, las
+  entregas de obligaciones, los hallazgos e informes de auditoría, los acuerdos, las aplicaciones y
+  resultados de encuestas, y las evaluaciones y tratamientos de riesgo (se abren desde su
+  autoevaluación, auditoría, reunión, encuesta o riesgo).
+- **Manual** al día: Procesos, Acreditación, Auditoría, Dirección, Riesgos y el tutorial de la ficha.
+
 ## [1.7.10] - 2026-10-28
 
 **Requiere migrar:** sí, como toda versión. Sin cambios de esquema ni de datos.
