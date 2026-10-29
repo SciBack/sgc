@@ -44,13 +44,29 @@ class TestConfiguracionTree(unittest.TestCase):
 		self.assertIn("disable_add_node: true", self.javascript)
 
 	def test_toolbar_reemplazado_solo_abre_documentos_reales(self):
-		self.assertIn("toolbar: [", self.javascript)
+		# La lista propia sustituye a la de Frappe (sin extend_toolbar): no hay Add Child,
+		# Rename ni Delete sobre nodos que pueden ser familias, procedimientos o tareas.
+		self.assertIn("const ACCIONES = [", self.javascript)
+		self.assertIn("toolbar: ACCIONES,", self.javascript)
+		self.assertNotIn("extend_toolbar", self.javascript)
 		self.assertIn('label: __("Abrir")', self.javascript)
 		self.assertIn("node.data.doctype", self.javascript)
 		self.assertIn("node.data.docname", self.javascript)
 		self.assertIn('frappe.set_route("Form", doctype, docname)', self.javascript)
 		for accion_nativa in ("Add Child", "Rename", "Delete"):
 			self.assertNotIn(accion_nativa, self.javascript)
+
+	def test_las_acciones_del_nodo_salen_con_nombre_en_la_cabecera(self):
+		# El «⋯» de la fila pasaba desapercibido: el nodo pulsado muestra sus acciones arriba.
+		self.assertIn("onload: crear_botones_de_nodo,", self.javascript)
+		self.assertIn("click: mostrar_botones_de_nodo,", self.javascript)
+		self.assertIn("page.add_inner_button(accion.label", self.javascript)
+		# Actúan sobre el nodo seleccionado al pulsar: add_inner_button reutiliza el botón por
+		# etiqueta con el clic con el que nació.
+		self.assertIn("tree.get_selected_node()", self.javascript)
+		# Vaciar la zona de botones borraría también el selector «Vista en árbol».
+		self.assertNotIn("clear_inner_toolbar", self.javascript)
+		self.assertNotIn("clear_custom_actions", self.javascript)
 
 	def test_etiqueta_escapa_datos_dinamicos_y_muestra_niveles_n0_n4(self):
 		self.assertIn("get_label(node)", self.javascript)
