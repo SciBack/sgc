@@ -145,6 +145,106 @@
 		return `<span class="small" style="display:inline-flex;gap:0.75rem;align-items:center;margin-left:1rem">${partes.join("")}</span>`;
 	}
 
+	// Las acciones sobre un nodo. Salen en tres sitios, todos nativos del árbol de Frappe:
+	// - como botones con su nombre en la cabecera, para el nodo pulsado (ver abajo);
+	// - las de uso diario, `inline` con icono, como botones propios junto a la fila al pasar el
+	//   ratón (tree.js, make_row_actions);
+	// - las demás en el «⋯» de la fila y en el clic derecho sobre ella.
+	// Antes solo estaban en el «⋯», que es pequeño y pasaba desapercibido.
+	const ACCIONES = [
+		{
+			label: __("Abrir"),
+			icon: "pencil",
+			inline: true,
+			condition(node) {
+				return puede_abrir_nodo(node);
+			},
+			click(node) {
+				const { doctype, docname } = node.data;
+				if (!DOCTYPES_ABRIBLES.includes(doctype) || !docname) return;
+				frappe.set_route("Form", doctype, docname);
+			},
+		},
+		// La ficha es una por proceso: se abre si existe y, si no, se crea ya enlazada.
+		{
+			label: __("Ficha de caracterización"),
+			icon: "clipboard-list",
+			inline: true,
+			condition(node) {
+				return es_proceso(node) && (Boolean(node.data.ficha) || frappe.model.can_create("Ficha Caracterizacion Proceso"));
+			},
+			click(node) {
+				if (node.data.ficha) {
+					frappe.set_route("Form", "Ficha Caracterizacion Proceso", node.data.ficha);
+				} else {
+					frappe.new_doc("Ficha Caracterizacion Proceso", { proceso: node.data.docname });
+				}
+			},
+		},
+		{
+			label: __("Nuevo subproceso"),
+			icon: "folder-plus",
+			condition(node) {
+				return es_proceso(node) && node.data.node_type !== "N2" && frappe.model.can_create("Proceso");
+			},
+			click(node) {
+				frappe.new_doc("Proceso", { parent_proceso: node.data.docname });
+			},
+		},
+		{
+			label: __("Nuevo procedimiento"),
+			icon: "file-plus",
+			condition(node) {
+				return es_proceso(node) && frappe.model.can_create("Procedimiento");
+			},
+			click(node) {
+				frappe.new_doc("Procedimiento", { proceso: node.data.docname });
+			},
+		},
+		{
+			label: __("Editar diagrama"),
+			icon: "workflow",
+			inline: true,
+			condition(node) {
+				return es_procedimiento(node) && frappe.model.can_write("Procedimiento");
+			},
+			click(node) {
+				frappe.set_route("bpmn-editor", "Procedimiento", node.data.docname);
+			},
+		},
+	];
+
+	// Los botones con nombre de la cabecera, como los del plan de cuentas de ERPNext (account_tree.js
+	// los añade con page.add_inner_button en onload). Se crean UNA vez: add_inner_button reutiliza el
+	// botón —y su entrada en el menú de móvil— por etiqueta, con el clic con el que nació. Por eso cada
+	// uno actúa sobre el nodo seleccionado en el momento de pulsarlo, y al cambiar de nodo solo se
+	// muestran los que le aplican.
+	const botones_de_nodo = [];
+
+	function crear_botones_de_nodo(treeview) {
+		botones_de_nodo.length = 0;
+		ACCIONES.forEach((accion) => {
+			const $boton = treeview.page.add_inner_button(accion.label, () => {
+				const node = treeview.tree && treeview.tree.get_selected_node();
+				if (!node || !aplica(accion, node)) {
+					frappe.show_alert({ message: __("Pulse primero un proceso del mapa"), indicator: "orange" });
+					return;
+				}
+				accion.click(node);
+			});
+			$boton.hide();
+			botones_de_nodo.push({ accion, $boton });
+		});
+	}
+
+	function aplica(accion, node) {
+		return !node.is_root && (!accion.condition || accion.condition(node));
+	}
+
+	function mostrar_botones_de_nodo(node) {
+		botones_de_nodo.forEach(({ accion, $boton }) => $boton.toggle(Boolean(node) && aplica(accion, node)));
+	}
+
 	frappe.treeview_settings["Proceso"] = {
 		title: __("Mapa de procesos"),
 		get_tree_nodes: "sgc.sgc_procesos.doctype.proceso.proceso_tree.get_children",
@@ -165,60 +265,9 @@
 				condition: 'frappe.model.can_read("Mapa Procesos")',
 			},
 		],
-		toolbar: [
-			{
-				label: __("Abrir"),
-				condition(node) {
-					return puede_abrir_nodo(node);
-				},
-				click(node) {
-					const { doctype, docname } = node.data;
-					if (!DOCTYPES_ABRIBLES.includes(doctype) || !docname) return;
-					frappe.set_route("Form", doctype, docname);
-				},
-			},
-			// La ficha es una por proceso: se abre si existe y, si no, se crea ya enlazada.
-			{
-				label: __("Ficha"),
-				condition(node) {
-					return es_proceso(node) && (Boolean(node.data.ficha) || frappe.model.can_create("Ficha Caracterizacion Proceso"));
-				},
-				click(node) {
-					if (node.data.ficha) {
-						frappe.set_route("Form", "Ficha Caracterizacion Proceso", node.data.ficha);
-					} else {
-						frappe.new_doc("Ficha Caracterizacion Proceso", { proceso: node.data.docname });
-					}
-				},
-			},
-			{
-				label: __("Nuevo subproceso"),
-				condition(node) {
-					return es_proceso(node) && node.data.node_type !== "N2" && frappe.model.can_create("Proceso");
-				},
-				click(node) {
-					frappe.new_doc("Proceso", { parent_proceso: node.data.docname });
-				},
-			},
-			{
-				label: __("Nuevo procedimiento"),
-				condition(node) {
-					return es_proceso(node) && frappe.model.can_create("Procedimiento");
-				},
-				click(node) {
-					frappe.new_doc("Procedimiento", { proceso: node.data.docname });
-				},
-			},
-			{
-				label: __("Editar diagrama"),
-				condition(node) {
-					return es_procedimiento(node) && frappe.model.can_write("Procedimiento");
-				},
-				click(node) {
-					frappe.set_route("bpmn-editor", "Procedimiento", node.data.docname);
-				},
-			},
-		],
+		toolbar: ACCIONES,
+		onload: crear_botones_de_nodo,
+		click: mostrar_botones_de_nodo,
 		get_label(node) {
 			if (node.is_root) return escape(__("Mapa de procesos"));
 

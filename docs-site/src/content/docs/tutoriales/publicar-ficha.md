@@ -40,7 +40,7 @@ del proceso no llegan a nadie.
 
 ![Una ficha de caracterización en borrador](captura:procesos-ficha)
 
-1. **Procesos → Mapa de procesos**, pulse el proceso y luego **Ficha** (si ya tiene ficha, la abre).
+1. **Procesos → Mapa de procesos**, pulse el proceso y luego **Ficha de caracterización** en la cabecera (si ya tiene ficha, la abre).
 2. El **proceso** ya viene puesto: pulse **Guardar**.
 3. Al guardar, la ficha **trae sola** lo que el sistema ya sabe del proceso: sus procedimientos, sus
    documentos, sus riesgos y sus subprocesos. Compruebe que aparecen; si falta alguno, es que no

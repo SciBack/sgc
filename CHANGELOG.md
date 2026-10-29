@@ -9,6 +9,18 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.12] - 2026-10-29
+
+**Requiere migrar:** sí, como toda versión. Sin cambios de esquema ni de datos; solo cambia el
+mapa de procesos.
+
+### Cambiado
+- **Las acciones del mapa de procesos se ven sin buscarlas.** Al pulsar un proceso, la cabecera
+  muestra sus acciones con su nombre: «Abrir», «Ficha de caracterización», «Nuevo subproceso» y
+  «Nuevo procedimiento» (en un procedimiento, «Abrir» y «Editar diagrama»). Al pasar el ratón por
+  una fila salen además botones con icono para abrirlo, su ficha o su diagrama, y el «⋯» y el clic
+  derecho siguen ofreciendo las de crear. Antes solo estaban en el «⋯», que pasaba desapercibido.
+
 ## [1.7.11] - 2026-10-28
 
 **Requiere migrar:** sí, como toda versión. Sin cambios de datos; cambian los menús de las áreas,
