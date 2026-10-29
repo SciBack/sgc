@@ -50,14 +50,16 @@ procedimiento → tareas de su diagrama. A la derecha de cada proceso se ve lo q
 trabajarlo: su **estado**, su **responsable** (*Sin responsable* en rojo si falta), su **ficha** y
 en qué estado está, y cuántos **procedimientos** tiene.
 
-Al pulsar un nodo aparecen las acciones de lo que es:
+Al pulsar un nodo, sus acciones aparecen arriba, en la cabecera, con su nombre:
 
 | En un… | Acciones |
 |---|---|
-| Proceso | **Abrir**, **Ficha** (la abre o, si no tiene, la crea ya enlazada), **Nuevo subproceso**, **Nuevo procedimiento** |
+| Proceso | **Abrir**, **Ficha de caracterización** (la abre o, si no tiene, la crea ya enlazada), **Nuevo subproceso**, **Nuevo procedimiento** |
 | Procedimiento | **Abrir**, **Editar diagrama** |
 
-Solo salen las que su perfil puede hacer. El cuadro aprobado del mapa se abre desde el menú **⋯ →
+También hay atajos en la propia fila: al pasar el ratón salen botones con icono para abrirlo, su
+ficha o su diagrama, y el **⋯** (o el clic derecho sobre la fila) ofrece las de crear. Solo salen
+las acciones que su perfil puede hacer. El cuadro aprobado del mapa se abre desde el menú **⋯ →
 Mapa institucional** del árbol, y sus versiones desde **⋯ → Versiones del mapa institucional** (ver
 [Mapa institucional](./mapa-institucional/)).
 
@@ -103,7 +105,7 @@ aprueba la dirección de calidad.
 
 ![Un procedimiento publicado con su diagrama de flujo](captura:procesos-procedimiento)
 
-**Crear:** en el **Mapa de procesos**, pulse el proceso y luego **Nuevo procedimiento** (o, desde
+**Crear:** en el **Mapa de procesos**, pulse el proceso y luego **Nuevo procedimiento** en la cabecera (o, desde
 el proceso abierto, **Crear ▾ → Procedimiento**). El procedimiento nace enlazado a su proceso: indique
 el código según la codificación de la institución y el título. Adjunte el documento si existe.
 
@@ -136,7 +138,7 @@ Hay una ficha por proceso. Recoge lo que la norma ISO 9001 (§4.4.1) pide de un 
 
 ![Una ficha de caracterización en borrador](captura:procesos-ficha)
 
-1. **Crear:** en el **Mapa de procesos**, pulse el proceso y luego **Ficha**. Si el proceso ya
+1. **Crear:** en el **Mapa de procesos**, pulse el proceso y luego **Ficha de caracterización** en la cabecera. Si el proceso ya
    tiene ficha, la abre; si no, la crea ya enlazada. Desde el proceso abierto, el botón **Ficha de
    caracterización** hace lo mismo.
 2. **Lo que se completa solo:** al guardar, la ficha trae lo que el sistema ya sabe del proceso:
