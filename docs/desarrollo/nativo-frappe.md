@@ -27,6 +27,12 @@ Las portadas solo usan bloques nativos de Workspace: `header`, `paragraph`, `sho
 `stats_filter`, que admite `frappe.session.user` para «lo mío»), `quick_list`, `number_card`,
 `chart`, `card` y `spacer`. **No** `custom_block`: es HTML y JS propios metidos en la portada.
 
+**Al cambiar un fichero estándar, sube su `modified`.** El `migrate` solo reimporta una portada,
+un menú, una guía, una cifra o un gráfico si el `modified` del fichero es posterior al de la base;
+si no, lo salta en silencio. Pasó en la 1.7.13: los DocTypes y los filtros nuevos entraron, pero
+6 portadas y 3 menús siguieron como antes en producción, con el filtro que contaba fichas sin fecha
+incluido. Se arregló en la 1.7.14 subiendo la fecha.
+
 ## Qué no se hace
 
 - Sobrescribir clases de Frappe (`override_doctype_class`) ni sus métodos de API
