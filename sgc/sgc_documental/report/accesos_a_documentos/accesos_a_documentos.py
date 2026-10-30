@@ -19,15 +19,20 @@ expone nada que esos roles no puedan ver ya en los documentos.
 """
 import frappe
 from frappe import _
+from frappe.utils import add_days, getdate
 
-from sgc.documentos import DOCTYPE
+from sgc.documentos import CONSULTA, DESCARGA, DOCTYPE
 
 FICHERO = "Fichero (enlace directo)"
+# Hasta este tramo el gráfico va por días (con los días sin accesos a cero); más largo, por meses.
+DIAS_MAXIMOS_POR_DIA = 92
+COLOR_ACCESO = {CONSULTA: "#5e64ff", DESCARGA: "#ffa00a", FICHERO: "#c0c6cc"}
 
 
 def execute(filters=None):
 	filters = frappe._dict(filters or {})
-	return _columnas(), _filas(filters)
+	data = _filas(filters)
+	return _columnas(), data, None, _grafico(data), _resumen(data)
 
 
 def _columnas():
@@ -111,3 +116,46 @@ def _titulos(nombres):
 			DOCTYPE, filters={"name": ["in", list(nombres)]}, fields=["name", "titulo"], as_list=True, limit=0
 		)
 	)
+
+
+def _grafico(data):
+	"""Accesos en el tiempo, una línea por tipo de acceso, de las mismas filas que la tabla."""
+	if not data:
+		return None
+	dias = sorted({getdate(f["fecha"]) for f in data})
+	por_dia = (dias[-1] - dias[0]).days <= DIAS_MAXIMOS_POR_DIA
+	# Los tramos sin accesos cuentan como 0: sin ellos la línea uniría puntos lejanos.
+	if por_dia:
+		etiquetas = [str(getdate(add_days(dias[0], n))) for n in range((dias[-1] - dias[0]).days + 1)]
+	else:
+		primero, ultimo = dias[0].year * 12 + dias[0].month - 1, dias[-1].year * 12 + dias[-1].month - 1
+		etiquetas = [f"{m // 12:04d}-{m % 12 + 1:02d}" for m in range(primero, ultimo + 1)]
+
+	def tramo(fila):
+		fecha = str(getdate(fila["fecha"]))
+		return fecha if por_dia else fecha[:7]
+
+	accesos = [a for a in (CONSULTA, DESCARGA, FICHERO) if any(f["acceso"] == a for f in data)]
+	accesos += sorted({f["acceso"] for f in data} - set(accesos) - {None})
+	datasets = []
+	for acceso in accesos:
+		cuenta = dict.fromkeys(etiquetas, 0)
+		for f in data:
+			if f["acceso"] == acceso:
+				cuenta[tramo(f)] += 1
+		datasets.append({"name": _(acceso), "values": [cuenta[e] for e in etiquetas]})
+	return {
+		"data": {"labels": etiquetas, "datasets": datasets},
+		"type": "line",
+		"colors": [COLOR_ACCESO.get(a, "#7cd6fd") for a in accesos],
+		"lineOptions": {"regionFill": 1},
+	}
+
+
+def _resumen(data):
+	return [
+		{"label": _("Accesos"), "value": len(data), "datatype": "Int"},
+		{"label": _("Consultas"), "value": sum(1 for f in data if f["acceso"] == CONSULTA), "datatype": "Int"},
+		{"label": _("Descargas"), "value": sum(1 for f in data if f["acceso"] == DESCARGA), "datatype": "Int"},
+		{"label": _("Usuarios distintos"), "value": len({f["usuario"] for f in data}), "datatype": "Int"},
+	]

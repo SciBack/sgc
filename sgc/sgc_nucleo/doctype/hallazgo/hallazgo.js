@@ -51,3 +51,27 @@ frappe.ui.form.on("Hallazgo", {
 		});
 	},
 });
+
+// El criterio incumplido, solo del marco de la autoevaluación: en el desplegable salían los
+// elementos de los 10 marcos mezclados. Si el hallazgo no viene de una autoevaluación, no se filtra.
+(() => {
+	function leer_marco(frm) {
+		frm.marco_de_autoevaluacion = null;
+		if (!frm.doc.autoevaluacion) return;
+		frappe.db.get_value("Autoevaluacion", frm.doc.autoevaluacion, "marco_normativo").then((r) => {
+			frm.marco_de_autoevaluacion = (r.message && r.message.marco_normativo) || null;
+		});
+	}
+
+	frappe.ui.form.on("Hallazgo", {
+		setup(frm) {
+			frm.set_query("criterio", () =>
+				frm.marco_de_autoevaluacion
+					? { filters: { marco_normativo: frm.marco_de_autoevaluacion } }
+					: {}
+			);
+		},
+		refresh: leer_marco,
+		autoevaluacion: leer_marco,
+	});
+})();

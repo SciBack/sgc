@@ -1,0 +1,47 @@
+[
+ {
+  "block_modules": [
+   {
+    "module": "Automation"
+   },
+   {
+    "module": "Build"
+   },
+   {
+    "module": "Contacts"
+   },
+   {
+    "module": "Data"
+   },
+   {
+    "module": "Email"
+   },
+   {
+    "module": "Geo"
+   },
+   {
+    "module": "Integrations"
+   },
+   {
+    "module": "Printing"
+   },
+   {
+    "module": "System"
+   },
+   {
+    "module": "Users"
+   },
+   {
+    "module": "Website"
+   },
+   {
+    "module": "Workflow"
+   }
+  ],
+  "docstatus": 0,
+  "doctype": "Module Profile",
+  "modified": "2026-10-29 12:00:00.000000",
+  "module_profile_name": "Usuario del SGC",
+  "name": "Usuario del SGC"
+ }
+]

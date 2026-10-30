@@ -220,6 +220,10 @@ fixtures = [
 		"Verificada no eficaz",
 		"Verificado",
 	]]]},
+	# Quien trabaja en el SGC no necesita los módulos propios de Frappe (Build, Users, Contacts…):
+	# Frappe los enseña a quien puede leer algún DocType suyo. El perfil solo los quita del menú y
+	# del escritorio; los permisos no cambian. Cada instancia lo asigna a sus usuarios.
+	{"dt": "Module Profile", "filters": [["name", "in", ["Usuario del SGC"]]]},
 	{"dt": "Workflow Action Master", "filters": [["name", "in", [
 		"Analizar causa",
 		"Aprobar",

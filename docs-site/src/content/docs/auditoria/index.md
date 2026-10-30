@@ -147,7 +147,8 @@ todavía no pasaron a mejora continua: lo primero que revisar antes de cerrar.
 | Crear el programa | — | Sí |
 | Aprobar el programa | Sí, si no lo creó | — |
 | Iniciar la ejecución del programa | — | Sí |
-| Crear, iniciar y ejecutar una auditoría | — | Sí |
+| Crear una auditoría | Sí | Sí |
+| Iniciar y ejecutar una auditoría | — | Sí |
 | Cerrar la auditoría y el programa | Sí, si no los creó | — |
 | Mantener plantillas de listas | Sí | — |
 | Completar listas y generar hallazgos | — | Sí |

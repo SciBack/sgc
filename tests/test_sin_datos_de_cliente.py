@@ -22,6 +22,7 @@ MARCAS = re.compile(r"upeu|universidad peruana uni[oó]n|juliaca|tarapoto", re.I
 # Lo único que puede viajar como fixture: configuración del producto, igual en todo sitio.
 FIXTURES_DE_CONFIGURACION = {
 	"Role", "Role Profile", "Workflow", "Workflow State", "Workflow Action Master", "Custom DocPerm",
+	"Module Profile",
 }
 
 

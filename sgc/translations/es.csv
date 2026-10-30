@@ -32,7 +32,7 @@ Lista Verificacion,Lista de verificación
 Lote Ingesta,Lote de ingesta
 Mapa Procesos,Mapa institucional
 Marco Normativo,Marco normativo
-Matriz Riesgo,Matriz de riesgo
+Matriz Riesgo,Escala de riesgo
 No Conformidad,No conformidad
 Objetivo Calidad,Objetivo de calidad
 Obligacion Ente,Obligación ante ente
@@ -51,7 +51,7 @@ Tablero Indicadores,Tablero de indicadores
 Termino Tesauro,Término del tesauro
 Tratamiento Riesgo,Tratamiento de riesgo
 Unidad Organica,Unidad orgánica
-Valor Indicador,Valor de indicador
+Valor Indicador,Medición de indicador
 Valoracion Criterio,Valoración de criterio
 Valoracion Estandar,Valoración de estándar
 Accesos a Documentos,Accesos a documentos
@@ -59,11 +59,11 @@ Indicadores de Acreditacion,Indicadores de acreditación
 Matriz de Riesgos,Matriz de riesgos
 Mejoramiento Continuo,Mejoramiento continuo
 Resultados de Auditoria,Resultados de auditoría
-Salidas No Conformes,Salidas no conformes
+Salidas No Conformes,Resumen de salidas no conformes
 Evento Riesgo,Evento de riesgo
 Configuracion Soporte,Configuración de soporte
 Carpeta Documental,Carpeta documental
-Indicadores por Familia,Indicadores por familia
+Indicadores por Familia,Indicadores agrupados
 Sign In,Iniciar sesión
 Welcome! Please sign in to continue.,¡Bienvenido! Inicie sesión para continuar.
 Forgot password?,¿Olvidó su contraseña?
@@ -87,3 +87,8 @@ Optional,Opcional
 You're all set.,Todo listo.
 Submit it to finish this step.,Envíalo para terminar este paso.
 Play video,Ver vídeo
+Default Layout,Vista por defecto
+Global Layouts,Vistas de la institución
+Your Layouts,Tus vistas
+Create Layout,Crear vista
+Manage Layouts,Gestionar vistas

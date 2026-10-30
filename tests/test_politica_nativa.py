@@ -28,6 +28,7 @@ CONFIGURACION = (
 	"Workspace", "Workflow", "Workflow State", "Workflow Action Master", "Notification",
 	"Print Format", "Role", "Role Profile", "Custom DocPerm", "Number Card", "Dashboard Chart",
 	"Sidebar", "Workspace Sidebar", "Custom Field", "Property Setter", "Module Onboarding", "Onboarding Step",
+	"List Filter",
 )
 BLOQUES_NATIVOS = {"header", "paragraph", "shortcut", "quick_list", "number_card", "chart", "card", "spacer", "onboarding"}
 
@@ -114,6 +115,20 @@ class TestPoliticaNativa(unittest.TestCase):
 					continue  # DocType de Frappe
 				with self.subTest(doctype=nombre, enlace=enlace["link_doctype"]):
 					campo = next((f for f in destino["fields"] if f["fieldname"] == enlace["link_fieldname"]), None)
+					if campo is None:
+						# El campo puede vivir en una tabla hija del destino: Frappe lo busca ahí si el
+						# padre no lo tiene (`frappe/desk/notifications.py`, get_child_doctypes_with_field).
+						# Tiene que haber UNA sola tabla hija con él, o el recuento se reparte.
+						hijas = [
+							doctypes[f["options"]]
+							for f in destino["fields"]
+							if f["fieldtype"] == "Table" and f.get("options") in doctypes
+						]
+						con_campo = [
+							c for h in hijas for c in h["fields"] if c["fieldname"] == enlace["link_fieldname"]
+						]
+						self.assertEqual(len(con_campo), 1)
+						campo = con_campo[0]
 					self.assertIsNotNone(campo)
 					self.assertIn(campo["fieldtype"], ("Link", "Dynamic Link"))
 					if campo["fieldtype"] == "Link":

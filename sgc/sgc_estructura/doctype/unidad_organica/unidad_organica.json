@@ -7,6 +7,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "tab_unidad",
   "codigo",
   "nombre",
   "tipo",
@@ -16,9 +17,15 @@
   "parent_unidad_organica",
   "lft",
   "rgt",
-  "old_parent"
+  "old_parent",
+  "tab_conexiones"
  ],
  "fields": [
+  {
+   "fieldname": "tab_unidad",
+   "fieldtype": "Tab Break",
+   "label": "Unidad"
+  },
   {
    "fieldname": "codigo",
    "fieldtype": "Data",
@@ -90,12 +97,109 @@
    "hidden": 1,
    "label": "Old Parent",
    "options": "Unidad Organica"
+  },
+  {
+   "fieldname": "tab_conexiones",
+   "fieldtype": "Tab Break",
+   "label": "Conexiones",
+   "show_dashboard": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_tree": 1,
- "links": [],
+ "links": [
+  {
+   "group": "Procesos",
+   "link_doctype": "Proceso",
+   "link_fieldname": "propietario_unidad"
+  },
+  {
+   "group": "Mejora continua",
+   "link_doctype": "No Conformidad",
+   "link_fieldname": "unidad_organica"
+  },
+  {
+   "group": "Mejora continua",
+   "link_doctype": "Hallazgo",
+   "link_fieldname": "unidad_organica"
+  },
+  {
+   "group": "Mejora continua",
+   "link_doctype": "Plan Mejora",
+   "link_fieldname": "unidad_organica"
+  },
+  {
+   "group": "Mejora continua",
+   "link_doctype": "Salida No Conforme",
+   "link_fieldname": "unidad_organica"
+  },
+  {
+   "group": "Riesgos",
+   "link_doctype": "Riesgo",
+   "link_fieldname": "unidad_organica"
+  },
+  {
+   "group": "Riesgos",
+   "link_doctype": "Evento Riesgo",
+   "link_fieldname": "unidad_organica"
+  },
+  {
+   "group": "Auditoría",
+   "link_doctype": "Auditoria",
+   "link_fieldname": "unidad_organica"
+  },
+  {
+   "group": "Auditoría",
+   "link_doctype": "Hallazgo Auditoria",
+   "link_fieldname": "unidad_organica"
+  },
+  {
+   "group": "Acreditación",
+   "link_doctype": "Evidencia",
+   "link_fieldname": "unidad_organica"
+  },
+  {
+   "group": "Acreditación",
+   "link_doctype": "Elemento Marco",
+   "link_fieldname": "unidad_responsable"
+  },
+  {
+   "group": "Acreditación",
+   "link_doctype": "Obligacion Ente",
+   "link_fieldname": "unidad_organica"
+  },
+  {
+   "group": "Indicadores",
+   "link_doctype": "Valor Indicador",
+   "link_fieldname": "unidad_organica"
+  },
+  {
+   "group": "Indicadores",
+   "link_doctype": "Alerta Indicador",
+   "link_fieldname": "unidad_organica"
+  },
+  {
+   "group": "Dirección",
+   "link_doctype": "Comite",
+   "link_fieldname": "unidad_organica"
+  },
+  {
+   "group": "Dirección",
+   "link_doctype": "Objetivo Calidad",
+   "link_fieldname": "unidad_organica"
+  },
+  {
+   "group": "Dirección",
+   "link_doctype": "Revision Direccion",
+   "link_fieldname": "unidad_organica"
+  },
+  {
+   "group": "Estructura",
+   "link_doctype": "Programa Sede",
+   "link_fieldname": "sede"
+  }
+ ],
  "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Estructura",

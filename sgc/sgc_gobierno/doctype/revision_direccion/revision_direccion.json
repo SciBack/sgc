@@ -75,6 +75,7 @@
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Estado",
+   "no_copy": 1,
    "options": "Planificada\nRealizada\nCerrada",
    "read_only": 1
   },
@@ -172,6 +173,7 @@
    "fieldname": "cerrada_por",
    "fieldtype": "Link",
    "label": "Cerrada por",
+   "no_copy": 1,
    "options": "User",
    "read_only": 1
   },
@@ -179,6 +181,7 @@
    "fieldname": "fecha_cierre",
    "fieldtype": "Date",
    "label": "Fecha de cierre",
+   "no_copy": 1,
    "read_only": 1
   },
   {

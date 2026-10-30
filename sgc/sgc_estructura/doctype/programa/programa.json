@@ -52,7 +52,8 @@
    "fieldname": "escuela",
    "fieldtype": "Link",
    "label": "Escuela",
-   "options": "Unidad Organica"
+   "options": "Unidad Organica",
+   "link_filters": "[[\"Unidad Organica\", \"tipo\", \"=\", \"Escuela\"]]"
   },
   {
    "fieldname": "nivel",

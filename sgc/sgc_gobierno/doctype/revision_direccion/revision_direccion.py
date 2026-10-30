@@ -51,6 +51,18 @@ SALIDAS_REQUERIDAS = (
     "Necesidad de recursos",
 )
 
+# «Obtener entradas de…»: de qué registros del SGC se puede traer una entrada del §9.3.2 y en qué
+# inciso entra cada uno. La fila queda enlazada a su fuente (`fuente_doctype`/`fuente_id`), que es
+# la evidencia que exige `_validar_entradas`.
+FUENTES_DE_ENTRADA = {
+    "Revision Direccion": "Estado de acciones de revisiones previas",  # §9.3.2 a)
+    "No Conformidad": "Desempeno y eficacia del SGC",                  # §9.3.2 c)
+    "Informe Auditoria": "Desempeno y eficacia del SGC",
+    "Valor Indicador": "Desempeno y eficacia del SGC",
+    "Resultado Instrumento": "Desempeno y eficacia del SGC",
+    "Evaluacion Riesgo": "Eficacia de acciones frente a riesgos",       # §9.3.2 e)
+}
+
 # Consolidación §9.3.2 -> §9.3.3: qué tipos de ENTRADA alimentan cada tipo de
 # SALIDA obligatoria (valores reales de los Select `tipo_entrada`/`tipo_salida`).
 CONSOLIDACION = {
@@ -280,3 +292,45 @@ class RevisionDireccion(Document):
             self.save()
 
         return creadas
+
+    # ------------------------------------------------------- obtener entradas
+    @frappe.whitelist()
+    def agregar_entradas(self, fuente_doctype, nombres):
+        """Añade como entradas del §9.3.2 los registros elegidos en «Obtener entradas de…».
+
+        Cada registro entra en el inciso que le corresponde (`FUENTES_DE_ENTRADA`), enlazado a su
+        fuente y con un resumen de partida que la dirección puede ampliar. Lee con `get_list`, así
+        que solo trae lo que quien llama puede ver (también por sede), y escribe con sus permisos,
+        igual que `consolidar_salidas`. No repite una fuente que ya esté. Devuelve cuántas añadió.
+        """
+        self.check_permission("write")
+        if fuente_doctype not in FUENTES_DE_ENTRADA:
+            frappe.throw(_("No se pueden traer entradas de {0}.").format(_(fuente_doctype)))
+
+        nombres = frappe.parse_json(nombres) if isinstance(nombres, str) else nombres
+        nombres = [n for n in (nombres or []) if n != self.name or fuente_doctype != self.doctype]
+        if not nombres:
+            return 0
+
+        titulo = frappe.get_meta(fuente_doctype).title_field
+        campos = ["name"] + ([titulo] if titulo else [])
+        registros = frappe.get_list(fuente_doctype, filters={"name": ["in", nombres]}, fields=campos)
+
+        ya = {(f.fuente_doctype, f.fuente_id) for f in self.entradas}
+        agregadas = 0
+        for r in registros:
+            if (fuente_doctype, r.name) in ya:
+                continue
+            texto = r.get(titulo) if titulo else None
+            resumen = f"{_(fuente_doctype)} {r.name}" + (f": {texto}" if texto and texto != r.name else "")
+            self.append("entradas", {
+                "tipo_entrada": FUENTES_DE_ENTRADA[fuente_doctype],
+                "fuente_doctype": fuente_doctype,
+                "fuente_id": r.name,
+                "resumen": resumen,
+            })
+            agregadas += 1
+
+        if agregadas:
+            self.save()
+        return agregadas

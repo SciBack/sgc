@@ -393,7 +393,7 @@ class IntegrationTestInformeSalidasNoConformes(_Base):
         frappe.set_user("Administrator")
         self._salida(fecha_deteccion="2026-02-11")
 
-        columnas, filas = informe.execute({"proceso": self.proceso, "detalle": 1})
+        columnas, filas, *_ = informe.execute({"proceso": self.proceso, "detalle": 1})
         nombres = [c["fieldname"] for c in columnas]
         for campo in ("detectado_por", "responsable", "autorizado_por", "verificado_por",
                       "proceso", "fecha_deteccion"):

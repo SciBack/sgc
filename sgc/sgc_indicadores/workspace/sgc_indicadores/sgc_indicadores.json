@@ -44,7 +44,7 @@
    "format": "{}",
    "label": "Por medir",
    "link_to": "Ficha Indicador",
-   "stats_filter": "[[\"Ficha Indicador\",\"responsable\",\"=\",frappe.session.user],[\"Ficha Indicador\",\"proxima_medicion\",\"<=\",frappe.datetime.get_today()]]",
+   "stats_filter": "[[\"Ficha Indicador\",\"responsable\",\"=\",frappe.session.user],[\"Ficha Indicador\",\"proxima_medicion\",\"between\",[\"1900-01-01\",frappe.datetime.get_today()]]]",
    "type": "DocType"
   },
   {

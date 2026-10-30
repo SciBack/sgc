@@ -66,3 +66,35 @@ class IntegrationTestBuscar(IntegrationTestCase):
 
     def test_respeta_el_limite(self):
         self.assertLessEqual(len(enlaces("Proceso", "", "name", 0, 3, None)), 3)
+
+    # ------------------------------------------------------------------
+    # Los filtros del desplegable (`set_query`, `link_filters`) se aplican. Sin esto,
+    # el campo «sede» de una unidad ofrecía las 64 unidades en vez de las 3 sedes.
+    def test_aplica_filtros_en_diccionario(self):
+        filas = enlaces("Proceso", f"gestion{self.sufijo}", "name", 0, 20, {"name": "NO-EXISTE"})
+        self.assertEqual(filas, ())
+        filas = enlaces("Proceso", f"gestion{self.sufijo}", "name", 0, 20, {"name": self.proceso.name})
+        self.assertEqual(self._codigos(filas), [self.proceso.name])
+
+    def test_aplica_filtros_en_lista(self):
+        filas = enlaces(
+            "Proceso", f"gestion{self.sufijo}", "name", 0, 20, [["Proceso", "name", "!=", self.proceso.name]]
+        )
+        self.assertNotIn(self.proceso.name, self._codigos(filas))
+
+    def test_filtro_like_no_rompe_los_parametros(self):
+        """Un `%` del filtro no puede confundirse con los parámetros `%(txt)s`."""
+        filas = enlaces(
+            "Proceso", f"gestion{self.sufijo}", "name", 0, 20, {"proceso": ["like", f"%{self.sufijo}%"]}
+        )
+        self.assertIn(self.proceso.name, self._codigos(filas))
+
+    def test_filtros_en_texto_json(self):
+        """El navegador manda los filtros como texto JSON."""
+        filas = enlaces("Proceso", f"gestion{self.sufijo}", "name", 0, 20, '{"name": "NO-EXISTE"}')
+        self.assertEqual(filas, ())
+
+    def test_devuelve_diccionarios_si_se_piden(self):
+        """El diálogo «Obtener de…» (MultiSelectDialog) pide `as_dict` y lee `name`."""
+        filas = enlaces("Proceso", f"gestion{self.sufijo}", "name", 0, 20, None, as_dict=1)
+        self.assertEqual([f["name"] for f in filas], [self.proceso.name])

@@ -254,7 +254,7 @@ class IntegrationTestCopiasControladas(IntegrationTestCase):
         make_access_log(doctype="File", document=fichero.name, file_type="pdf")
         frappe.set_user("Administrator")
 
-        _, filas = informe.execute({"documento": doc.name})
+        _, filas, *_ = informe.execute({"documento": doc.name})
         vistos = sorted((f["usuario"], f["acceso"]) for f in filas)
         self.assertEqual(
             vistos,

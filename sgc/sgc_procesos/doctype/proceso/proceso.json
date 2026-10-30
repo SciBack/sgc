@@ -51,7 +51,7 @@
    "unique": 1
   },
   {
-   "description": "Denominación oficial (PENDIENTE Mapa v8.0 para los 22)",
+   "description": "Denominación oficial, como figura en el mapa de procesos de la institución",
    "fieldname": "proceso",
    "fieldtype": "Data",
    "label": "Denominación del proceso"
@@ -89,7 +89,8 @@
   {
    "fieldname": "subsistema",
    "fieldtype": "Data",
-   "label": "Subsistema"
+   "label": "Subsistema",
+   "hidden": 1
   },
   {
    "fieldname": "sec_responsables",
@@ -124,13 +125,14 @@
    "fieldname": "parent_proceso",
    "fieldtype": "Link",
    "label": "Proceso padre",
-   "options": "Proceso"
+   "options": "Proceso",
+   "link_filters": "[[\"Proceso\", \"nivel_bpm\", \"in\", [\"Macroproceso\", \"Proceso\"]]]"
   },
   {
    "default": "0",
    "fieldname": "is_group",
    "fieldtype": "Check",
-   "label": "Es grupo (macroproceso)"
+   "label": "Tiene subprocesos"
   },
   {
    "fieldname": "col_mapa",

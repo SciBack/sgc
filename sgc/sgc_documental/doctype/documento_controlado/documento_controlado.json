@@ -109,6 +109,7 @@
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Estado",
+   "no_copy": 1,
    "options": "Borrador\nEn revision\nAprobado\nPublicado\nObsoleto\nObservado",
    "read_only": 1
   },
@@ -125,7 +126,8 @@
    "description": "Se fija sola al publicar. Solo se rellena a mano si el documento se publicó en una fecha distinta de hoy.",
    "fieldname": "fecha_publicacion",
    "fieldtype": "Date",
-   "label": "Fecha de publicación"
+   "label": "Fecha de publicación",
+   "no_copy": 1
   },
   {
    "description": "Se recalcula al publicar: la norma exige revisión al menos anual.",
@@ -223,12 +225,14 @@
    "fieldname": "elaborado_por",
    "fieldtype": "Link",
    "label": "Elaborado por",
+   "no_copy": 1,
    "options": "User"
   },
   {
    "fieldname": "revisado_por",
    "fieldtype": "Link",
    "label": "Revisado por",
+   "no_copy": 1,
    "options": "User"
   },
   {
@@ -239,6 +243,7 @@
    "fieldname": "aprobado_por",
    "fieldtype": "Link",
    "label": "Aprobado por",
+   "no_copy": 1,
    "options": "User",
    "read_only": 1
   },

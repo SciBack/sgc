@@ -9,6 +9,56 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.13] - 2026-10-29
+
+**Requiere migrar:** sí, como toda versión. Sin cambios de datos. Cambian permisos (la DPGC crea
+auditorías, reuniones, acuerdos y planes de mejora), Conexiones, filtros y menús, y entra un perfil
+de módulos que cada instancia asigna a sus usuarios.
+
+### Corregido
+- **Los desplegables no filtraban.** El buscador del SGC (con o sin tildes) ignoraba los filtros, así
+  que el campo «sede» de una unidad ofrecía las 64 unidades en vez de las 3 sedes, y lo mismo en todo
+  desplegable de los 37 tipos de documento que lo usan. Ahora aplica los filtros y devuelve también
+  diccionarios cuando se los piden (el diálogo «Obtener de…»).
+- **«Por medir» contaba las fichas sin fecha.** Un filtro `<= hoy` cuenta los vacíos como vencidos:
+  las 94 fichas de indicador sin próxima medición salían todas como pendientes. Igual «Entregas
+  vencidas». Ahora usan un rango de fechas, y un test impide volver a escribirlo así.
+- **«Consolidar salidas» de la Revisión por la Dirección no tenía botón.** Ahora lo tiene.
+- **Duplicar un documento copiaba su estado y sus firmas** (aprobado por, verificado por…) en los 20
+  tipos con flujo de aprobación; la copia nacía «Publicada». Ya no se copian: nace en el estado inicial.
+- **Atajos y guías que el rol no podía usar:** la DPGC ahora puede crear auditorías, reuniones,
+  acuerdos y planes de mejora, que sus portadas ya le ofrecían; los pasos de guía que algún rol no
+  puede hacer llevan a la lista en vez de abrir un formulario que daría «Sin permiso».
+
+### Añadido
+- **«Obtener entradas de…»** en la Revisión por la Dirección: trae no conformidades, informes de
+  auditoría aprobados, mediciones, resultados de encuestas, evaluaciones de riesgo o la revisión
+  anterior como entradas del §9.3.2, en su inciso y enlazadas a su origen. En el Plan de Mejora,
+  **«Obtener de → Hallazgos de la autoevaluación»** crea una acción por cada debilidad u oportunidad.
+- **Desplegables por contexto:** el criterio de una autoevaluación o de su hallazgo, solo de su marco;
+  el procedimiento de una actividad, solo del proceso de la ficha; el padre de un elemento, del mismo
+  marco; el proceso padre, entre macroprocesos y procesos; sede y escuela, por tipo de unidad.
+- **Vistas guardadas para toda la institución:** «Vencen en 7 días» y «Por verificar» (acciones),
+  «Abiertas» y «En verificación» (no conformidades), «Revisión en 30 días» (documentos), «Abiertos»
+  (hallazgos de auditoría) y «Materializados» (riesgos). El menú de vistas, que Frappe trae en
+  inglés, sale en español.
+- **Gráfico y resumen** en Matriz de riesgos, Resultados de auditoría, Mejoramiento continuo,
+  Salidas no conformes, Accesos a documentos e Indicadores de acreditación.
+- **Conexiones** en Unidad orgánica (procesos, no conformidades, riesgos, auditorías, evidencias,
+  indicadores, comités…), Periodo académico, Procedimiento, Informe de auditoría y Hallazgo de auditoría.
+- **Perfil de módulos «Usuario del SGC»**, que quita del menú los módulos propios de Frappe (Build,
+  Users, Contacts…) sin tocar permisos.
+
+### Cambiado
+- **Nombres coherentes:** tildes («Hallazgos de auditoría abiertos»), atajos «Nueva/Nuevo X» en Mejora
+  continua, informes sin prefijos dispares («Mejoramiento continuo», «Resumen de salidas no
+  conformes», «Matriz de riesgos»), «Escalas de riesgo» para la configuración de matrices,
+  «Medición de indicador» como nombre de la pantalla a la que lleva «Mediciones», «Indicadores
+  agrupados», «Tiene subprocesos» en vez de «Es grupo (macroproceso)».
+- La escuela de un programa por sede toma la del programa si se deja vacía; fuera el texto caducado
+  bajo la denominación del proceso y el campo «Subsistema», vacío en todos.
+- **Manual** al día: permisos, Revisión por la Dirección, Plan de Mejora, vistas guardadas y nombres.
+
 ## [1.7.12] - 2026-10-29
 
 **Requiere migrar:** sí, como toda versión. Sin cambios de esquema ni de datos; solo cambia el

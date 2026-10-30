@@ -83,9 +83,45 @@ class IntegrationTestReportes(IntegrationTestCase):
     def test_execute_devuelve_columnas_y_filas_sin_filtros(self):
         """Con la base como esté: no debe reventar por falta de filtros."""
         for modulo in MODULOS_INFORME:
-            columnas, filas = modulo.execute()
+            columnas, filas, _mensaje, grafico, resumen = modulo.execute()
             self.assertIsInstance(columnas, list)
             self.assertIsInstance(filas, list)
+            # El resumen siempre llega (el Desk solo lo repinta si viene); el gráfico, solo con filas.
+            self.assertIsInstance(resumen, list)
+            if not filas:
+                self.assertIsNone(grafico)
+
+    def test_grafico_y_resumen_salen_de_las_filas(self):
+        """Sin consultas nuevas: cuentan lo que la tabla enseña, y sin filas no hay gráfico."""
+        for modulo in MODULOS_INFORME:
+            self.assertIsNone(modulo._grafico([]), modulo.__name__)
+
+        riesgos = [
+            {"nivel_inherente": "Extremo", "nivel_residual": "Moderado", "efecto": "Bajó 2 nivel(es)"},
+            {"nivel_inherente": "Alto", "nivel_residual": "—", "efecto": "SIN TRATAMIENTO"},
+            {"nivel_inherente": "Alto", "nivel_residual": "Alto", "efecto": "NO BAJÓ"},
+        ]
+        grafico = r_rie._grafico(riesgos)
+        self.assertEqual(grafico["data"]["datasets"][0]["values"], [0, 0, 2, 1])
+        self.assertEqual(grafico["data"]["datasets"][1]["values"], [0, 1, 1, 0])
+        self.assertEqual([c["value"] for c in r_rie._resumen(riesgos)], [3, 2, 1, 1])
+
+        hallazgos = [
+            {"tipo": "Observacion", "escalo": "—", "estado": "Abierto"},
+            {"tipo": "No conformidad mayor", "escalo": "PENDIENTE", "estado": "Abierto"},
+            {"tipo": "No conformidad menor", "escalo": "NC-1", "estado": "Escalado a NC"},
+        ]
+        grafico = r_aud._grafico(hallazgos)
+        self.assertEqual(grafico["data"]["labels"][0], "No conformidad mayor", "de más a menos grave")
+        self.assertEqual([c["value"] for c in r_aud._resumen(hallazgos)], [3, 2, 1, 2])
+
+        acciones = [
+            {"estado": "En ejecucion", "dias_retraso": 4, "responsable": "a@b.c", "fecha_compromiso": "2026-01-01"},
+            {"estado": "Planificada", "dias_retraso": None, "responsable": None, "fecha_compromiso": None},
+        ]
+        grafico = r_mej._grafico(acciones)
+        self.assertEqual(grafico["data"]["labels"], ["Planificada", "En ejecucion"], "orden del flujo")
+        self.assertEqual([c["value"] for c in r_mej._resumen(acciones)], [2, 1, 1, 1])
 
     # --- la lógica de lectura ----------------------------------------------
 
