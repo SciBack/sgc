@@ -9,6 +9,17 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.14] - 2026-10-30
+
+**Requiere migrar:** sí. Sin cambios de datos ni de esquema.
+
+### Corregido
+- **Seis portadas y tres menús no se actualizaron con la 1.7.13**: el `migrate` solo reimporta un
+  fichero estándar si su `modified` es posterior, y no se subió. Entran ahora el filtro de «Por medir»
+  y «Entregas vencidas» que ya no cuenta fichas sin fecha, los atajos «Nueva/Nuevo X», «Hallazgos de
+  auditoría abiertos», «{} publicados» y los nombres nuevos de los menús de Mejora continua,
+  Indicadores y Riesgos.
+
 ## [1.7.13] - 2026-10-29
 
 **Requiere migrar:** sí, como toda versión. Sin cambios de datos. Cambian permisos (la DPGC crea
