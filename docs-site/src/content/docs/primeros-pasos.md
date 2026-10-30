@@ -36,8 +36,8 @@ en qué punto termina tu parte del trabajo.
   **Calendario** o **Gantt**.
 - **Alta rápida:** al crear una no conformidad, una salida no conforme o un evento de riesgo se abre
   un diálogo corto con lo imprescindible. **Editar formulario completo** abre el resto.
-- **Vistas guardadas:** en algunas listas, el selector que dice **Vista por defecto** ofrece vistas
-  ya preparadas para toda la institución: *Vencen en 7 días* y *Por verificar* en las acciones de
+- **Vistas guardadas:** en algunas listas, el selector de vista (junto al título) → **Vista de
+  Lista ›** ofrece, bajo *Vistas de la institución*, vistas ya preparadas: *Vencen en 7 días* y *Por verificar* en las acciones de
   mejora, *Abiertas* y *En verificación* en las no conformidades, *Revisión en 30 días* en los
   documentos, *Abiertos* en los hallazgos de auditoría y *Materializados* en los riesgos.
 - **Los desplegables solo ofrecen lo que encaja:** el criterio de una autoevaluación sale solo de
