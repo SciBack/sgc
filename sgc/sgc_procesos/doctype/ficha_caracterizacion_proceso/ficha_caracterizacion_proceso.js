@@ -2,6 +2,12 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Ficha Caracterizacion Proceso", {
+	setup(frm) {
+		// El procedimiento de cada actividad, solo entre los del proceso de la ficha.
+		frm.set_query("procedimiento", "actividades", () =>
+			frm.doc.proceso ? { filters: { proceso: frm.doc.proceso } } : {}
+		);
+	},
 	refresh(frm) {
 		if (frm.is_new()) return;
 

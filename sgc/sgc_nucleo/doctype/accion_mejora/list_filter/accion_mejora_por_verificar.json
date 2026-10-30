@@ -1,0 +1,20 @@
+{
+ "creation": "2026-10-29 12:00:00.000000",
+ "docstatus": 0,
+ "doctype": "List Filter",
+ "filter_name": "Por verificar",
+ "filters": "[[\"Accion Mejora\", \"estado\", \"=\", \"Ejecutada\"]]",
+ "for_user": "",
+ "idx": 0,
+ "is_standard": 1,
+ "layout_order": 2,
+ "modified": "2026-10-29 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "Accion Mejora-Por verificar",
+ "owner": "Administrator",
+ "reference_doctype": "Accion Mejora",
+ "route_signature": "estado=Ejecutada",
+ "sort_field": "modified",
+ "sort_order": "asc"
+}

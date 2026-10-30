@@ -31,7 +31,7 @@
 						message: __(
 							"Todavía no hay ninguna versión del cuadro marcada como vigente. Se carga en {0}.",
 							[
-								`<a href="/app/mapa-procesos">${escape(
+								`<a href="/desk/mapa-procesos">${escape(
 									__("Mapa Procesos")
 								)}</a>`,
 							]

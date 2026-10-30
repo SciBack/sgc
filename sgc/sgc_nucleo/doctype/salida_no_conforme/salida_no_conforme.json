@@ -69,6 +69,7 @@
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Estado",
+   "no_copy": 1,
    "options": "Detectada\nEn tratamiento\nTratada\nVerificada\nCerrada",
    "read_only": 1
   },
@@ -205,6 +206,7 @@
    "fieldname": "autorizado_por",
    "fieldtype": "Link",
    "label": "Decidido por",
+   "no_copy": 1,
    "options": "User",
    "read_only": 1
   },
@@ -212,6 +214,7 @@
    "fieldname": "fecha_tratamiento",
    "fieldtype": "Date",
    "label": "Fecha del tratamiento",
+   "no_copy": 1,
    "read_only": 1
   },
   {
@@ -252,6 +255,7 @@
    "fieldname": "verificado_por",
    "fieldtype": "Link",
    "label": "Verificado por",
+   "no_copy": 1,
    "options": "User",
    "read_only": 1
   },
@@ -259,6 +263,7 @@
    "fieldname": "fecha_verificacion",
    "fieldtype": "Date",
    "label": "Fecha de verificación",
+   "no_copy": 1,
    "read_only": 1
   },
   {
@@ -271,6 +276,7 @@
    "fieldname": "no_conformidad",
    "fieldtype": "Link",
    "label": "No conformidad del sistema",
+   "no_copy": 1,
    "options": "No Conformidad",
    "read_only": 1
   },

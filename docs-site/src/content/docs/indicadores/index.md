@@ -36,7 +36,7 @@ Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
 | **Tableros de indicadores** | Grupos de indicadores pensados para un público concreto |
 | **Alertas de indicador** | Avisos sobre mediciones que necesitan atención |
 | **Indicadores de acreditación** | Los indicadores de un marco normativo y su cumplimiento |
-| **Indicadores por familia** | El estado agrupado por categoría, marco o proceso |
+| **Indicadores agrupados** | El estado agrupado por categoría, marco o proceso |
 
 ## 2. El indicador
 
@@ -147,7 +147,7 @@ no se usa. Los crea la dirección de calidad.
 - **Indicadores de acreditación:** cada medición con su valor, la meta y si cumple, por programa y
   sede y periodo, con el total de los que cumplen y no cumplen. Se filtra por fuente, periodo,
   programa e indicador, y puede mostrar **solo los incumplidos**.
-- **Indicadores por familia:** agrupa por **categoría**, **marco normativo** o **proceso**. Para
+- **Indicadores agrupados:** agrupa por **categoría**, **marco normativo** o **proceso**. Para
   cada grupo dice cuántos indicadores tiene, cuántos tienen medición, cómo está la última (verde,
   ámbar o rojo) y el porcentaje en verde, con un gráfico. Se puede limitar a un periodo
   académico.

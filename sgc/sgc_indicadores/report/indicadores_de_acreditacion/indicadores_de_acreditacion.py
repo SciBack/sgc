@@ -89,7 +89,7 @@ def execute(filters=None):
 		_columnas(),
 		filas,
 		_aviso_de_otras_fuentes(fuente, condiciones),
-		None,
+		_grafico(filas),
 		_resumen(filas),
 		# Sumar porcentajes de programas distintos daría una cifra que no existe.
 		True,
@@ -143,6 +143,36 @@ def _aviso_de_otras_fuentes(fuente, condiciones):
 		" no se muestran ({2}). No se mezclan: cada productor aplica sus propias reglas de cálculo,"
 		" así que sumarlos daría una cifra que no existe en ninguno."
 	).format(fuente, sum(otras.values()), detalle)
+
+
+def _grafico(filas):
+	"""Por indicador, cuántas mediciones cumplen, no cumplen o quedan sin juicio.
+
+	Sale de las filas ya filtradas (fuente, periodo, programa, «solo los que no cumplen»)
+	y en su mismo orden por código. «Sin juicio» va aparte: que el productor no se
+	pronuncie no es un incumplimiento.
+	"""
+	if not filas:
+		return None
+	sin_indicador = _("(sin indicador)")
+	indicadores = list(dict.fromkeys(f["indicador"] or sin_indicador for f in filas))
+	cuenta = {i: {"si": 0, "no": 0, "sin": 0} for i in indicadores}
+	for f in filas:
+		clave = {_("Sí"): "si", _("No"): "no"}.get(f["cumple"], "sin")
+		cuenta[f["indicador"] or sin_indicador][clave] += 1
+	return {
+		"data": {
+			"labels": indicadores,
+			"datasets": [
+				{"name": _("Cumplen"), "values": [cuenta[i]["si"] for i in indicadores]},
+				{"name": _("No cumplen"), "values": [cuenta[i]["no"] for i in indicadores]},
+				{"name": _("Sin juicio del productor"), "values": [cuenta[i]["sin"] for i in indicadores]},
+			],
+		},
+		"type": "bar",
+		"barOptions": {"stacked": 1},
+		"colors": ["#29cd42", "#e24c4c", "#c0c6cc"],
+	}
 
 
 def _resumen(filas):

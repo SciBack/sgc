@@ -34,8 +34,8 @@ Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
 | **Salidas no conformes** | Un servicio o producto concreto que se entregó mal |
 | **Planes de mejora** | El conjunto de acciones para resolver uno o varios problemas |
 | **Acciones de mejora** | Cada tarea concreta del plan, con responsable y fecha |
-| **Informe de mejoramiento continuo** | El estado de toda la cadena |
-| **Informe de salidas no conformes** | Las salidas registradas y cómo se trataron |
+| **Mejoramiento continuo** | El estado de toda la cadena |
+| **Resumen de salidas no conformes** | Las salidas registradas y cómo se trataron |
 
 ## 2. Qué registrar en cada caso
 
@@ -141,6 +141,8 @@ Un plan agrupa las acciones que resuelven uno o varios problemas.
    **responsable**.
 2. **Enlazarlo a la no conformidad:** en la no conformidad, campo **Plan de mejora**.
 3. **Añadir las acciones** con **Crear ▾ → Acción de mejora**, en el propio plan (ver la sección 7).
+   Si el plan responde a una autoevaluación, **Obtener de ▾ → Hallazgos de la autoevaluación**
+   crea una acción por cada debilidad u oportunidad de mejora que elija, ya enlazada al hallazgo.
 4. **Aprobar y ejecutar:** lo hace la dirección de calidad, y no puede aprobarlo quien lo creó.
    Exige responsable y al menos una acción. Al aprobarlo, el plan **se envía por correo** a su
    responsable y al de cada acción, con la tabla de qué, quién y para cuándo.
@@ -167,9 +169,9 @@ Una vez verificada como eficaz, la evidencia ya no se puede quitar.
 
 ## 8. Los informes
 
-- **Informe de mejoramiento continuo:** el estado de la cadena completa, de los hallazgos a las
+- **Mejoramiento continuo:** el estado de la cadena completa, de los hallazgos a las
   acciones.
-- **Informe de salidas no conformes:** las salidas registradas, su decisión y su verificación. En
+- **Resumen de salidas no conformes:** las salidas registradas, su decisión y su verificación. En
   modo **Detalle** muestra también quién intervino en cada paso.
 
 ## Quién puede qué
@@ -183,7 +185,8 @@ Una vez verificada como eficaz, la evidencia ya no se puede quitar.
 | Registrar una no conformidad | Sí | Sí | — | Sí |
 | Analizar y tratar una no conformidad | — | Sí | — | — |
 | Cerrar una no conformidad | Sí, si no la trató | — | — | — |
-| Crear un plan o una acción | — | Sí | Sí | — |
+| Crear un plan | Sí | Sí | Sí | — |
+| Crear una acción | — | Sí | Sí | — |
 | Aprobar y cerrar un plan | Sí, si no lo creó | — | — | — |
 | Iniciar y ejecutar una acción | — | Sí | — | — |
 | Verificar una acción | Sí | — | — | — |

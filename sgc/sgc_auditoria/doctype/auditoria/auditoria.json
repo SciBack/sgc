@@ -80,6 +80,7 @@
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Estado",
+   "no_copy": 1,
    "options": "Planificada\nEn ejecucion\nEjecutada\nInforme emitido\nCerrada",
    "read_only": 1
   },
@@ -238,6 +239,7 @@
  "owner": "Administrator",
  "permissions": [
   {
+   "create": 1,
    "export": 1,
    "read": 1,
    "role": "DPGC",

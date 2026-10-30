@@ -26,13 +26,23 @@ from sgc.reportes import aplicar_opcionales, consultar
 
 SIN_DECIDIR = "Sin decidir"
 CERRADA = "Cerrada"
+# Orden del gráfico: el del flujo (campo `estado` de Salida No Conforme).
+ORDEN_ESTADOS = ("Detectada", "En tratamiento", "Tratada", "Verificada", "Cerrada")
+COLOR_ESTADO = {
+    "Detectada": "#e24c4c", "En tratamiento": "#5e64ff", "Tratada": "#ffa00a",
+    "Verificada": "#98d85b", "Cerrada": "#29cd42",
+}
+SIN_ESTADO = "(sin estado)"
 
 
 def execute(filters=None):
+    """Gráfico y resumen salen de las mismas salidas que la tabla, en los dos modos."""
     filters = filters or {}
     if filters.get("detalle"):
-        return columnas_detalle(), filas_detalle(filters)
-    return columnas(), filas(filters)
+        registros = filas_detalle(filters)
+        return columnas_detalle(), registros, None, _grafico(registros), _resumen(registros)
+    registros = _registros(filters)
+    return columnas(), _agrupar(registros), None, _grafico(registros), _resumen(registros)
 
 
 def columnas_detalle():
@@ -92,12 +102,19 @@ def _filtros(filters):
     return filtros
 
 
-def filas(filters):
-    registros = consultar(
+def _registros(filters):
+    return consultar(
         "Salida No Conforme",
         _filtros(filters),
         ["name", "proceso", "decision", "estado", "cantidad_afectada", "no_conformidad"],
     )
+
+
+def filas(filters):
+    return _agrupar(_registros(filters))
+
+
+def _agrupar(registros):
     grupos = {}
     for r in registros:
         clave = (r.proceso, r.decision or SIN_DECIDIR)
@@ -116,3 +133,36 @@ def filas(filters):
 
     # Primero los procesos con más salidas: es donde hay que mirar.
     return sorted(grupos.values(), key=lambda g: (-g["salidas"], g["proceso"] or "", g["decision"]))
+
+
+def _grafico(registros):
+    """Salidas por estado. Recibe las salidas sueltas, no los grupos proceso-decisión."""
+    if not registros:
+        return None
+    cuenta = {}
+    for r in registros:
+        estado = r.get("estado") or SIN_ESTADO
+        cuenta[estado] = cuenta.get(estado, 0) + 1
+    estados = [e for e in ORDEN_ESTADOS if e in cuenta] + sorted(e for e in cuenta if e not in ORDEN_ESTADOS)
+    return {
+        "data": {
+            "labels": [_(e) for e in estados],
+            "datasets": [{"name": _("Salidas"), "values": [cuenta[e] for e in estados]}],
+        },
+        "type": "donut",
+        "colors": [COLOR_ESTADO.get(e, "#c0c6cc") for e in estados],
+    }
+
+
+def _resumen(registros):
+    abiertas = sum(1 for r in registros if r.get("estado") != CERRADA)
+    sin_decidir = sum(1 for r in registros if (r.get("decision") or SIN_DECIDIR) == SIN_DECIDIR)
+    escaladas = sum(1 for r in registros if r.get("no_conformidad"))
+    return [
+        {"label": _("Salidas no conformes"), "value": len(registros), "datatype": "Int"},
+        {"label": _("Abiertas"), "value": abiertas, "datatype": "Int",
+         "indicator": "Blue" if abiertas else "Green"},
+        {"label": _("Sin decidir"), "value": sin_decidir, "datatype": "Int",
+         "indicator": "Red" if sin_decidir else "Green"},
+        {"label": _("Escaladas a no conformidad"), "value": escaladas, "datatype": "Int"},
+    ]

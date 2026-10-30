@@ -27,6 +27,10 @@ from sgc.naming import codigo_anual
 # sirvió.
 ACCION_CONCLUIDA_EFICAZ = "Verificada eficaz"
 
+# «Obtener de → Hallazgos de la autoevaluación»: qué hallazgos dan acción y de qué tipo. Una
+# fortaleza no pide acción.
+TIPO_ACCION_POR_HALLAZGO = {"Debilidad": "Correctiva", "Oportunidad de mejora": "Mejora"}
+
 
 class PlanMejora(Document):
     def before_insert(self):
@@ -292,3 +296,40 @@ class PlanMejora(Document):
             if a.fecha_compromiso and getdate(a.fecha_compromiso) <= limite_ambar:
                 return "Ambar"
         return "Verde"
+
+    @frappe.whitelist()
+    def acciones_desde_hallazgos(self, nombres):
+        """Crea una acción de mejora del plan por cada hallazgo elegido en «Obtener de…».
+
+        Cada acción nace enlazada al plan y al hallazgo, con su descripción y su criterio; el
+        responsable y la fecha los pone después quien la planifica. Solo hallazgos que piden acción
+        (debilidades y oportunidades de mejora) y, si el plan es de una autoevaluación, solo los de
+        ella. Lee con `get_list` y crea con los permisos de quien llama. No repite un hallazgo que
+        ya tenga acción en el plan. Devuelve cuántas creó.
+        """
+        self.check_permission("write")
+        nombres = frappe.parse_json(nombres) if isinstance(nombres, str) else nombres
+        if not nombres:
+            return 0
+
+        filtros = {"name": ["in", nombres], "tipo": ["in", list(TIPO_ACCION_POR_HALLAZGO)]}
+        if self.autoevaluacion:
+            filtros["autoevaluacion"] = self.autoevaluacion
+        hallazgos = frappe.get_list("Hallazgo", filters=filtros, fields=["name", "tipo", "descripcion", "criterio"])
+
+        ya = set(frappe.get_all("Accion Mejora", filters={"plan_mejora": self.name}, pluck="hallazgo"))
+        creadas = 0
+        for h in hallazgos:
+            if h.name in ya:
+                continue
+            frappe.get_doc({
+                "doctype": "Accion Mejora",
+                "plan_mejora": self.name,
+                "hallazgo": h.name,
+                "tipo": TIPO_ACCION_POR_HALLAZGO[h.tipo],
+                "descripcion": h.descripcion,
+                "criterio": h.criterio,
+            }).insert()
+            creadas += 1
+        return creadas
+

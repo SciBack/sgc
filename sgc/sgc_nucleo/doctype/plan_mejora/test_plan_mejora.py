@@ -315,3 +315,53 @@ class IntegrationTestPlanMejora(IntegrationTestCase):
         self._pasar_a(plan, "Cerrado")
         self.assertEqual(self._plan_val(plan, "estado"), "Cerrado")
         self.assertEqual(self._plan_val(plan, "avance_pct"), 100)
+
+
+class IntegrationTestPlanAccionesDesdeHallazgos(IntegrationTestCase):
+    """«Obtener de → Hallazgos»: una acción por debilidad u oportunidad, sin repetir."""
+
+    def setUp(self):
+        factories.desactivar_workflow("Plan Mejora")
+        factories.desactivar_workflow("Accion Mejora")
+        self.plan = frappe.get_doc({
+            "doctype": "Plan Mejora",
+            "codigo": f"TEST-PLAN-H-{next(_seq)}",
+            "titulo": "Plan desde hallazgos",
+            "estado": "Borrador",
+        }).insert(ignore_permissions=True)
+
+    def _hallazgo(self, tipo):
+        return frappe.get_doc({
+            "doctype": "Hallazgo",
+            "codigo": f"TEST-HALL-{next(_seq)}",
+            "tipo": tipo,
+            "origen": "Supervision",
+            "descripcion": f"{tipo} de prueba",
+            "estado": "Abierto",
+            "fecha": nowdate(),
+        }).insert(ignore_permissions=True)
+
+    def test_crea_una_accion_por_hallazgo_que_pide_accion(self):
+        debilidad = self._hallazgo("Debilidad")
+        oportunidad = self._hallazgo("Oportunidad de mejora")
+        fortaleza = self._hallazgo("Fortaleza")
+
+        creadas = self.plan.acciones_desde_hallazgos([debilidad.name, oportunidad.name, fortaleza.name])
+
+        self.assertEqual(creadas, 2)
+        acciones = {
+            a.hallazgo: a
+            for a in frappe.get_all(
+                "Accion Mejora", filters={"plan_mejora": self.plan.name}, fields=["hallazgo", "tipo", "descripcion"]
+            )
+        }
+        self.assertEqual(set(acciones), {debilidad.name, oportunidad.name})
+        self.assertEqual(acciones[debilidad.name].tipo, "Correctiva")
+        self.assertEqual(acciones[oportunidad.name].tipo, "Mejora")
+        self.assertEqual(acciones[debilidad.name].descripcion, "Debilidad de prueba")
+
+    def test_no_repite_un_hallazgo_que_ya_tiene_accion(self):
+        debilidad = self._hallazgo("Debilidad")
+        self.assertEqual(self.plan.acciones_desde_hallazgos([debilidad.name]), 1)
+        self.assertEqual(self.plan.acciones_desde_hallazgos(f'["{debilidad.name}"]'), 0)
+        self.assertEqual(frappe.db.count("Accion Mejora", {"plan_mejora": self.plan.name}), 1)

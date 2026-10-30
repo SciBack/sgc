@@ -111,6 +111,7 @@
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Estado",
+   "no_copy": 1,
    "options": "Identificado\nEvaluado\nEn tratamiento\nMonitoreado\nCerrado\nMaterializado",
    "read_only": 1
   }

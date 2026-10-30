@@ -58,7 +58,58 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
+ "links": [
+  {
+   "group": "Acreditación",
+   "link_doctype": "Autoevaluacion",
+   "link_fieldname": "periodo_academico"
+  },
+  {
+   "group": "Acreditación",
+   "link_doctype": "Evidencia",
+   "link_fieldname": "periodo_academico"
+  },
+  {
+   "group": "Mejora continua",
+   "link_doctype": "Plan Mejora",
+   "link_fieldname": "periodo_academico"
+  },
+  {
+   "group": "Auditoría",
+   "link_doctype": "Programa Auditoria",
+   "link_fieldname": "periodo_academico"
+  },
+  {
+   "group": "Auditoría",
+   "link_doctype": "Auditoria",
+   "link_fieldname": "periodo_academico"
+  },
+  {
+   "group": "Indicadores",
+   "link_doctype": "Valor Indicador",
+   "link_fieldname": "periodo_academico"
+  },
+  {
+   "group": "Indicadores",
+   "link_doctype": "Alerta Indicador",
+   "link_fieldname": "periodo_academico"
+  },
+  {
+   "group": "Dirección",
+   "link_doctype": "Revision Direccion",
+   "link_fieldname": "periodo_academico"
+  },
+  {
+   "group": "Dirección",
+   "link_doctype": "Objetivo Calidad",
+   "link_fieldname": "periodo_academico"
+  },
+  {
+   "group": "Dirección",
+   "link_doctype": "Aplicacion Instrumento",
+   "link_fieldname": "periodo_academico"
+  }
+ ],
  "modified": "2026-10-14 23:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Estructura",

@@ -264,6 +264,42 @@ class IntegrationTestRevisionDireccion(IntegrationTestCase):
         frappe.set_user(self._usuario_previo)
         self.assertEqual(len(frappe.get_doc("Revision Direccion", doc.name).salidas), 0)
 
+    # ------------------------------------------------------- obtener entradas
+    def test_agregar_entradas_trae_la_revision_anterior_enlazada(self):
+        """«Obtener entradas de → Revisión anterior»: entra en el inciso a) con su fuente."""
+        anterior = self._crear(con_entradas=False)
+        doc = self._crear(con_entradas=False)
+
+        self.assertEqual(doc.agregar_entradas("Revision Direccion", [anterior.name]), 1)
+
+        fila = doc.entradas[0]
+        self.assertEqual(fila.tipo_entrada, "Estado de acciones de revisiones previas")
+        self.assertEqual((fila.fuente_doctype, fila.fuente_id), ("Revision Direccion", anterior.name))
+        self.assertIn(anterior.name, fila.resumen)
+
+    def test_agregar_entradas_no_repite_ni_se_trae_a_si_misma(self):
+        anterior = self._crear(con_entradas=False)
+        doc = self._crear(con_entradas=False)
+        self.assertEqual(doc.agregar_entradas("Revision Direccion", [anterior.name, doc.name]), 1)
+        # Segunda pasada (y la lista en texto, como la manda el navegador): nada nuevo.
+        self.assertEqual(doc.agregar_entradas("Revision Direccion", f'["{anterior.name}"]'), 0)
+        self.assertEqual(len(doc.entradas), 1)
+
+    def test_agregar_entradas_solo_de_las_fuentes_previstas(self):
+        doc = self._crear(con_entradas=False)
+        with self.assertRaises(frappe.ValidationError):
+            doc.agregar_entradas("User", ["Administrator"])
+
+    def test_agregar_entradas_exige_permiso_de_escritura(self):
+        anterior = self._crear(con_entradas=False)
+        doc = self._crear(con_entradas=False)
+        lector = self._usuario_solo_lectura()
+
+        frappe.set_user(lector)
+        solo_lectura = frappe.get_doc("Revision Direccion", doc.name)
+        with self.assertRaises(frappe.PermissionError):
+            solo_lectura.agregar_entradas("Revision Direccion", [anterior.name])
+
     def _usuario_solo_lectura(self):
         """Usuario con lectura —y solo lectura— sobre Revision Direccion."""
         if not frappe.db.exists("Role", ROL_LECTOR):

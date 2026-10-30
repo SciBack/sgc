@@ -87,7 +87,7 @@
    "color": "Green",
    "doc_view": "",
    "doctype": "Workspace Shortcut",
-   "format": "{} vigentes",
+   "format": "{} publicados",
    "label": "Publicados",
    "link_to": "Documento Controlado",
    "stats_filter": "[[\"Documento Controlado\",\"estado\",\"=\",\"Publicado\"]]",

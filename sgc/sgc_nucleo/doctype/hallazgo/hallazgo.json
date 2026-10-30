@@ -75,6 +75,7 @@
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Estado",
+   "no_copy": 1,
    "options": "Abierto\nEn tratamiento\nVerificacion\nCerrado eficaz\nCerrado no eficaz",
    "read_only": 1
   },
@@ -162,6 +163,7 @@
    "fieldname": "no_conformidad",
    "fieldtype": "Link",
    "label": "No conformidad",
+   "no_copy": 1,
    "options": "No Conformidad"
   },
   {

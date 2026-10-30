@@ -79,6 +79,7 @@
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Estado",
+   "no_copy": 1,
    "options": "Planificada\nEn ejecucion\nEjecutada\nVerificada eficaz\nVerificada no eficaz",
    "read_only": 1
   },
@@ -194,6 +195,7 @@
    "fieldname": "verificada_por",
    "fieldtype": "Link",
    "label": "Verificada por",
+   "no_copy": 1,
    "options": "User",
    "read_only": 1
   },

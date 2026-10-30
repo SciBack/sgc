@@ -31,6 +31,13 @@ from frappe import _
 from sgc.reportes import aplicar_opcionales, consultar, dias_de_retraso
 
 ESTADOS_CERRADOS = ("Verificada eficaz", "Verificada no eficaz")
+# Orden del gráfico: el del flujo de la acción (campo `estado` de Accion Mejora).
+ORDEN_ESTADOS = ("Planificada", "En ejecucion", "Ejecutada", "Verificada eficaz", "Verificada no eficaz")
+COLOR_ESTADO = {
+    "Planificada": "#c0c6cc", "En ejecucion": "#5e64ff", "Ejecutada": "#ffa00a",
+    "Verificada eficaz": "#29cd42", "Verificada no eficaz": "#e24c4c",
+}
+SIN_ESTADO = "(sin estado)"
 
 CAMPOS = [
     "name", "codigo", "descripcion", "tipo", "estado", "responsable",
@@ -41,7 +48,8 @@ CAMPOS = [
 
 def execute(filters=None):
     filters = filters or {}
-    return columnas(), filas(filters)
+    data = filas(filters)
+    return columnas(), data, None, _grafico(data), _resumen(data)
 
 
 def columnas():
@@ -115,3 +123,42 @@ def filas(filters):
             title=_("Acciones invisibles al control"),
         )
     return salida
+
+
+def _grafico(data):
+    """Acciones por estado, de las mismas filas que la tabla.
+
+    Con «Solo pendientes» (por defecto) salen solo los estados abiertos; quitándolo
+    se ve también cómo acabaron las verificadas.
+    """
+    if not data:
+        return None
+    cuenta = {}
+    for f in data:
+        estado = f.get("estado") or SIN_ESTADO
+        cuenta[estado] = cuenta.get(estado, 0) + 1
+    estados = [e for e in ORDEN_ESTADOS if e in cuenta] + sorted(e for e in cuenta if e not in ORDEN_ESTADOS)
+    return {
+        "data": {
+            "labels": [_(e) for e in estados],
+            "datasets": [{"name": _("Acciones"), "values": [cuenta[e] for e in estados]}],
+        },
+        "type": "donut",
+        "colors": [COLOR_ESTADO.get(e, "#c0c6cc") for e in estados],
+    }
+
+
+def _resumen(data):
+    """Lo que se pierde solo: lo vencido, lo que no tiene dueño y lo que no tiene plazo."""
+    con_retraso = sum(1 for f in data if f.get("dias_retraso"))
+    sin_responsable = sum(1 for f in data if not f.get("responsable"))
+    sin_plazo = sum(1 for f in data if not f.get("fecha_compromiso"))
+    return [
+        {"label": _("Acciones"), "value": len(data), "datatype": "Int"},
+        {"label": _("Con retraso"), "value": con_retraso, "datatype": "Int",
+         "indicator": "Red" if con_retraso else "Green"},
+        {"label": _("Sin responsable"), "value": sin_responsable, "datatype": "Int",
+         "indicator": "Red" if sin_responsable else "Green"},
+        {"label": _("Sin fecha de compromiso"), "value": sin_plazo, "datatype": "Int",
+         "indicator": "Red" if sin_plazo else "Green"},
+    ]

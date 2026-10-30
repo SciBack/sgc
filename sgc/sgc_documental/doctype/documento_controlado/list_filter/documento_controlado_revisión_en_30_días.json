@@ -1,0 +1,20 @@
+{
+ "creation": "2026-10-29 12:00:00.000000",
+ "docstatus": 0,
+ "doctype": "List Filter",
+ "filter_name": "Revisi\u00f3n en 30 d\u00edas",
+ "filters": "[[\"Documento Controlado\", \"estado\", \"=\", \"Publicado\"], [\"Documento Controlado\", \"fecha_proxima_revision\", \"Timespan\", \"next 30 days\"]]",
+ "for_user": "",
+ "idx": 0,
+ "is_standard": 1,
+ "layout_order": 1,
+ "modified": "2026-10-29 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Documental",
+ "name": "Documento Controlado-Revisi\u00f3n en 30 d\u00edas",
+ "owner": "Administrator",
+ "reference_doctype": "Documento Controlado",
+ "route_signature": "estado=Publicado&fecha_proxima_revision=[\"Timespan\",\"next 30 days\"]",
+ "sort_field": "fecha_proxima_revision",
+ "sort_order": "asc"
+}

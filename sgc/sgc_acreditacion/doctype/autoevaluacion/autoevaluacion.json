@@ -77,6 +77,7 @@
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Estado",
+   "no_copy": 1,
    "options": "Planificada\nEn curso\nEn revision\nConsolidada\nCerrada",
    "read_only": 1
   },
@@ -129,7 +130,8 @@
   {
    "fieldname": "fecha_cierre",
    "fieldtype": "Date",
-   "label": "Fecha de cierre"
+   "label": "Fecha de cierre",
+   "no_copy": 1
   },
   {
    "fieldname": "tab_conexiones",

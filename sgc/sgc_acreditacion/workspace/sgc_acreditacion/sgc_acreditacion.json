@@ -80,7 +80,7 @@
    "format": "{} vencidas",
    "label": "Entregas vencidas",
    "link_to": "Entrega Obligacion",
-   "stats_filter": "[[\"Entrega Obligacion\",\"fecha_limite\",\"<\",frappe.datetime.get_today()],[\"Entrega Obligacion\",\"estado\",\"in\",[\"Pendiente\", \"En preparacion\", \"Observada\"]]]",
+   "stats_filter": "[[\"Entrega Obligacion\",\"fecha_limite\",\"between\",[\"1900-01-01\",frappe.datetime.add_days(frappe.datetime.get_today(), -1)]],[\"Entrega Obligacion\",\"estado\",\"in\",[\"Pendiente\", \"En preparacion\", \"Observada\"]]]",
    "type": "DocType"
   },
   {

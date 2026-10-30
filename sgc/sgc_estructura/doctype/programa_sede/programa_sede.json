@@ -41,15 +41,19 @@
    "in_standard_filter": 1,
    "label": "Sede",
    "options": "Unidad Organica",
-   "reqd": 1
+   "reqd": 1,
+   "link_filters": "[[\"Unidad Organica\", \"tipo\", \"=\", \"Sede\"]]"
   },
   {
-   "description": "Dirección de Escuela Profesional de esa sede",
+   "description": "Dirección de Escuela Profesional de esa sede. Si se deja vacía, toma la del programa.",
    "fieldname": "escuela",
    "fieldtype": "Link",
    "ignore_user_permissions": 1,
    "label": "Escuela",
-   "options": "Unidad Organica"
+   "options": "Unidad Organica",
+   "fetch_from": "programa.escuela",
+   "fetch_if_empty": 1,
+   "link_filters": "[[\"Unidad Organica\", \"tipo\", \"=\", \"Escuela\"]]"
   },
   {
    "fieldname": "licencia",

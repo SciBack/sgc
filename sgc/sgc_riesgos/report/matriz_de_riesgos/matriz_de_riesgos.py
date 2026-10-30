@@ -40,7 +40,8 @@ CAMPOS_RIESGO = [
 
 def execute(filters=None):
     filters = filters or {}
-    return columnas(), filas(filters)
+    data = filas(filters)
+    return columnas(), data, None, _grafico(data), _resumen(data)
 
 
 def columnas():
@@ -127,3 +128,46 @@ def filas(filters):
             "propietario": r.get("propietario"),
         })
     return salida
+
+
+def _grafico(data):
+    """Cuántos riesgos hay en cada nivel antes y después de tratarlos.
+
+    Sale de las mismas filas que la tabla: con «Solo Alto y Extremo» o un proceso
+    elegido, el gráfico cuenta lo mismo que se ve. Los riesgos sin evaluar («—»)
+    no tienen nivel y no se pintan.
+    """
+    if not data:
+        return None
+    inherente = [sum(1 for f in data if f["nivel_inherente"] == n) for n in ORDEN_NIVEL]
+    residual = [sum(1 for f in data if f["nivel_residual"] == n) for n in ORDEN_NIVEL]
+    if not any(inherente) and not any(residual):
+        return None
+    return {
+        "data": {
+            "labels": [_(n) for n in ORDEN_NIVEL],
+            "datasets": [
+                {"name": _("Inherente"), "values": inherente},
+                {"name": _("Residual"), "values": residual},
+            ],
+        },
+        "type": "bar",
+        "colors": ["#ffa00a", "#5e64ff"],
+    }
+
+
+def _resumen(data):
+    """Las dos señales del informe, contadas: riesgo alto sin tratar y tratamiento inútil."""
+    sin_tratamiento = sum(1 for f in data if f["efecto"] == _("SIN TRATAMIENTO"))
+    no_bajo = sum(1 for f in data if f["efecto"] == _("NO BAJÓ"))
+    altos = sum(1 for f in data if f["nivel_residual"] in NIVELES_ALTOS
+                or (f["nivel_residual"] == "—" and f["nivel_inherente"] in NIVELES_ALTOS))
+    return [
+        {"label": _("Riesgos"), "value": len(data), "datatype": "Int"},
+        {"label": _("En Alto o Extremo hoy"), "value": altos, "datatype": "Int",
+         "indicator": "Red" if altos else "Green"},
+        {"label": _("Altos sin tratamiento"), "value": sin_tratamiento, "datatype": "Int",
+         "indicator": "Red" if sin_tratamiento else "Green"},
+        {"label": _("Tratamiento que no bajó el nivel"), "value": no_bajo, "datatype": "Int",
+         "indicator": "Red" if no_bajo else "Green"},
+    ]

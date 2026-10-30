@@ -18,6 +18,7 @@ dentro. Desde la 1.2.0 la configuración es nativa, y la 16.52 entró cambiando 
 | Avisos | Notification estándar en `sgc/<módulo>/notification/`, mensaje en `.html` (`message_type: HTML`) |
 | Formatos de impresión | Print Format estándar; la identidad se lee al imprimir (`sgc_identidad()`) |
 | Portadas, menús, cifras, gráficos | Workspace, Sidebar, Number Card y Dashboard Chart estándar en su módulo |
+| Filtros guardados de una lista | List Filter estándar (`is_standard: 1`) en `sgc/<módulo>/doctype/<doctype>/list_filter/<nombre>.json` |
 | Ajustes sobre DocTypes de Frappe | Property Setter / Custom Field en `sgc/<módulo>/custom/<doctype>.json` |
 | Reaccionar a algo | `doc_events`, `scheduler_events`, controladores del propio DocType |
 | Arreglos de datos de una vez | `patches.txt` (ojo: en un sitio nuevo no corren) |
@@ -53,8 +54,8 @@ motivo. Lo que no está en la lista no entra.
 
 - aparece una sobrescritura, un JS global o un `after_migrate` fuera de la lista de arriba;
 - el código de la app (fuera de pruebas y parches) crea Workspace, Workflow, Notification,
-  Print Format, Role, Custom DocPerm, Number Card, Dashboard Chart, Sidebar, Custom Field o
-  Property Setter;
+  Print Format, Role, Custom DocPerm, Number Card, Dashboard Chart, Sidebar, Custom Field,
+  Property Setter o List Filter;
 - una portada usa un bloque que no es nativo.
 
 Ampliar la deuda exige cambiar esa prueba y este documento en el mismo PR, con el motivo.

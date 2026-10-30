@@ -25,7 +25,7 @@ está instalada— y cubre lo que se usa en castellano.
 """
 
 import frappe
-from frappe.desk.reportview import get_match_cond
+from frappe.desk.reportview import get_filters_cond, get_match_cond
 
 # Las vocales acentuadas del castellano más la diéresis y la eñe. La `ñ` se
 # normaliza a `n` a propósito: quien escribe «diseno» buscando «diseño» merece
@@ -40,11 +40,13 @@ def _sin_tildes(expresion: str) -> str:
 
 
 @frappe.whitelist()
-def enlaces(doctype, txt, searchfield, start, page_len, filters):
+def enlaces(doctype, txt, searchfield, start, page_len, filters, as_dict=False):
 	"""Link query insensible a tildes, mayúsculas y posición.
 
 	Busca en el `name` y en el campo de título del DocType. Devuelve la tupla
-	(name, título) que espera el buscador de Frappe.
+	(name, título) que espera el buscador de Frappe, o diccionarios si lo pide con
+	`as_dict` (el diálogo «Obtener de…», `MultiSelectDialog`, lo hace: sin aceptar el
+	argumento, `frappe.call` lo descarta y el diálogo recibe tuplas que no sabe pintar).
 	"""
 	meta = frappe.get_meta(doctype)
 	titulo = meta.title_field if meta.title_field else "name"
@@ -57,6 +59,13 @@ def enlaces(doctype, txt, searchfield, start, page_len, filters):
 		condiciones.append(f"{_sin_tildes(f'`tab{doctype}`.`{titulo}`')} like {texto}")
 		campos.append(f"`tab{doctype}`.`{titulo}`")
 
+	# Los filtros del desplegable (`set_query`, `link_filters`) llegan aquí y hay que
+	# aplicarlos: una standard_query que los ignora anula todos los filtros de los
+	# DocTypes que la usan (pasó con la sede de una unidad: 64 opciones en vez de 3).
+	# Mismo patrón que las consultas de ERPNext (`erpnext/controllers/queries.py`).
+	# Los `%` se doblan porque la consulta lleva parámetros `%(txt)s`.
+	filtros = get_filters_cond(doctype, filters, []).replace("%", "%%")
+
 	# `limit n offset m`, no `limit m, n`: eso último es sintaxis de MySQL y
 	# PostgreSQL la rechaza. Y sin `locate()` para priorizar coincidencias al
 	# principio, porque el traductor de Frappe a PostgreSQL la convierte mal
@@ -68,6 +77,7 @@ def enlaces(doctype, txt, searchfield, start, page_len, filters):
 		select {campos}
 		from `tab{doctype}`
 		where ({condiciones})
+			{filtros}
 			{match}
 		order by {orden}
 		limit %(page_len)s offset %(start)s
@@ -75,6 +85,7 @@ def enlaces(doctype, txt, searchfield, start, page_len, filters):
 			campos=", ".join(campos),
 			doctype=doctype,
 			condiciones=" or ".join(condiciones),
+			filtros=filtros,
 			match=get_match_cond(doctype),
 			orden=f"`tab{doctype}`.`{titulo}`" if titulo != "name" else f"`tab{doctype}`.name",
 		),
@@ -83,4 +94,5 @@ def enlaces(doctype, txt, searchfield, start, page_len, filters):
 			"start": frappe.utils.cint(start),
 			"page_len": frappe.utils.cint(page_len),
 		},
+		as_dict=frappe.utils.cint(as_dict),
 	)

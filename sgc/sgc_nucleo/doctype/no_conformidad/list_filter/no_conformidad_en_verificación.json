@@ -1,0 +1,20 @@
+{
+ "creation": "2026-10-29 12:00:00.000000",
+ "docstatus": 0,
+ "doctype": "List Filter",
+ "filter_name": "En verificaci\u00f3n",
+ "filters": "[[\"No Conformidad\", \"estado\", \"=\", \"En verificacion\"]]",
+ "for_user": "",
+ "idx": 0,
+ "is_standard": 1,
+ "layout_order": 2,
+ "modified": "2026-10-29 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "No Conformidad-En verificaci\u00f3n",
+ "owner": "Administrator",
+ "reference_doctype": "No Conformidad",
+ "route_signature": "estado=En verificacion",
+ "sort_field": "modified",
+ "sort_order": "asc"
+}

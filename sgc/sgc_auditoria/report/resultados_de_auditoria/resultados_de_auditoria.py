@@ -33,11 +33,18 @@ CAMPOS = [
 ]
 
 TIPOS_QUE_DEBEN_ESCALAR = ("No conformidad mayor", "No conformidad menor")
+# Orden del gráfico: el del campo `tipo` de Hallazgo Auditoria, de más a menos grave.
+ORDEN_TIPOS = (
+    "No conformidad mayor", "No conformidad menor", "Observacion",
+    "Oportunidad de mejora", "Conformidad", "Fortaleza",
+)
+SIN_TIPO = "(sin tipo)"
 
 
 def execute(filters=None):
     filters = filters or {}
-    return columnas(), filas(filters)
+    data = filas(filters)
+    return columnas(), data, None, _grafico(data), _resumen(data)
 
 
 def columnas():
@@ -91,3 +98,37 @@ def filas(filters):
         "escalo": _escalo(h),
         "estado": h.get("estado"),
     } for h in hallazgos]
+
+
+def _grafico(data):
+    """Hallazgos por tipo, de las mismas filas que la tabla (respeta los filtros)."""
+    if not data:
+        return None
+    cuenta = {}
+    for f in data:
+        tipo = f.get("tipo") or SIN_TIPO
+        cuenta[tipo] = cuenta.get(tipo, 0) + 1
+    tipos = [t for t in ORDEN_TIPOS if t in cuenta] + sorted(t for t in cuenta if t not in ORDEN_TIPOS)
+    return {
+        "data": {
+            "labels": [_(t) for t in tipos],
+            "datasets": [{"name": _("Hallazgos"), "values": [cuenta[t] for t in tipos]}],
+        },
+        "type": "bar",
+        "colors": ["#5e64ff"],
+    }
+
+
+def _resumen(data):
+    """Cuántos hay, cuántos son no conformidades y cuántas se quedaron sin tratar."""
+    no_conformidades = sum(1 for f in data if f.get("tipo") in TIPOS_QUE_DEBEN_ESCALAR)
+    sin_escalar = sum(1 for f in data if f.get("escalo") == _("PENDIENTE"))
+    abiertos = sum(1 for f in data if f.get("estado") == "Abierto")
+    return [
+        {"label": _("Hallazgos"), "value": len(data), "datatype": "Int"},
+        {"label": _("No conformidades"), "value": no_conformidades, "datatype": "Int"},
+        {"label": _("No conformidades sin escalar"), "value": sin_escalar, "datatype": "Int",
+         "indicator": "Red" if sin_escalar else "Green"},
+        {"label": _("Abiertos"), "value": abiertos, "datatype": "Int",
+         "indicator": "Blue" if abiertos else "Green"},
+    ]

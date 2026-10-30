@@ -79,6 +79,7 @@
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Estado",
+   "no_copy": 1,
    "options": "Borrador\nEn revisión\nAprobado\nPublicado\nObsoleto",
    "read_only": 1
   },
@@ -86,7 +87,8 @@
    "fieldname": "fecha_emision",
    "fieldtype": "Date",
    "label": "Fecha de emisión",
-   "in_list_view": 1
+   "in_list_view": 1,
+   "no_copy": 1
   },
   {
    "fieldname": "sec_plan",
@@ -205,12 +207,14 @@
    "fieldname": "elaborado_por",
    "fieldtype": "Link",
    "label": "Elaborado por",
+   "no_copy": 1,
    "options": "User"
   },
   {
    "fieldname": "revisado_por",
    "fieldtype": "Link",
    "label": "Revisado por",
+   "no_copy": 1,
    "options": "User"
   },
   {
@@ -221,6 +225,7 @@
    "fieldname": "aprobado_por",
    "fieldtype": "Link",
    "label": "Aprobado por",
+   "no_copy": 1,
    "options": "User"
   },
   {

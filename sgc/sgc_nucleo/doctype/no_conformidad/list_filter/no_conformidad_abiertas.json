@@ -1,0 +1,20 @@
+{
+ "creation": "2026-10-29 12:00:00.000000",
+ "docstatus": 0,
+ "doctype": "List Filter",
+ "filter_name": "Abiertas",
+ "filters": "[[\"No Conformidad\", \"estado\", \"in\", [\"Abierta\", \"En analisis\", \"En tratamiento\", \"En verificacion\"]]]",
+ "for_user": "",
+ "idx": 0,
+ "is_standard": 1,
+ "layout_order": 1,
+ "modified": "2026-10-29 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "No Conformidad-Abiertas",
+ "owner": "Administrator",
+ "reference_doctype": "No Conformidad",
+ "route_signature": "estado=[\"in\",[\"Abierta\",\"En analisis\",\"En tratamiento\",\"En verificacion\"]]",
+ "sort_field": "fecha_compromiso",
+ "sort_order": "asc"
+}

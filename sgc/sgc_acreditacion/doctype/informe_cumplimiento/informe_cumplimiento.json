@@ -78,6 +78,7 @@
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Estado",
+   "no_copy": 1,
    "options": "Borrador\nEn revisión\nAprobado\nPresentado a SUNEDU",
    "read_only": 1
   },

@@ -80,10 +80,19 @@ Cada entrada lleva su **resumen** y, si quiere, el registro del sistema que la s
 alguna no hay nada que reportar, regístrela diciéndolo**: no se puede dejar en blanco. Si falta
 alguna, el sistema dice cuáles.
 
+**Traer lo que ya está en el sistema:** el botón **Obtener entradas de ▾** abre una lista para elegir
+no conformidades, informes de auditoría aprobados, mediciones de indicador, resultados de
+encuestas, evaluaciones de riesgo o la revisión anterior. Cada registro elegido entra como
+entrada, en el inciso que le corresponde y enlazado a su origen; el resumen se puede ampliar. Si un
+registro ya estaba, no se repite.
+
 ### Las salidas (ISO 9001 §9.3.3)
 
 Lo que decidió la revisión: **oportunidades de mejora**, **cambios en el sistema** o **necesidades
 de recursos**, cada una con su descripción y su responsable.
+
+El botón **Consolidar salidas** añade las salidas obligatorias que falten, con una descripción de
+partida armada con los resúmenes de las entradas. Solo falta revisarlas y ponerles responsable.
 
 ### El cierre
 
@@ -168,7 +177,7 @@ Son recuentos: dice cuántos hay, no qué dice cada registro.
 | Preparar y realizar la revisión por la dirección | Sí | — | — | — |
 | Cerrar la revisión por la dirección | — | Sí | — | — |
 | Dar de alta comités | Sí | — | — | — |
-| Registrar reuniones y acuerdos | — | — | Sí | Sí |
+| Registrar reuniones y acuerdos | Sí | — | Sí | Sí |
 | Definir grupos de interés e instrumentos | Sí | — | — | — |
 | Iniciar una aplicación de encuesta | — | — | Sí | — |
 | Cerrar una aplicación de encuesta | Sí, si no la creó | — | — | — |

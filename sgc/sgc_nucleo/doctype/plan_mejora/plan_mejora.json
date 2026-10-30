@@ -78,6 +78,7 @@
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Estado",
+   "no_copy": 1,
    "options": "Borrador\nEn ejecucion\nCerrado",
    "read_only": 1
   },
@@ -174,6 +175,7 @@
    "fieldname": "aprobado_por",
    "fieldtype": "Link",
    "label": "Aprobado por",
+   "no_copy": 1,
    "options": "User",
    "read_only": 1
   },
@@ -185,6 +187,7 @@
    "fieldname": "fecha_aprobacion",
    "fieldtype": "Date",
    "label": "Fecha de aprobación",
+   "no_copy": 1,
    "read_only": 1
   },
   {
@@ -196,6 +199,7 @@
    "fieldname": "cerrado_por",
    "fieldtype": "Link",
    "label": "Cerrado por",
+   "no_copy": 1,
    "options": "User",
    "read_only": 1
   },
@@ -207,6 +211,7 @@
    "fieldname": "fecha_cierre",
    "fieldtype": "Date",
    "label": "Fecha de cierre",
+   "no_copy": 1,
    "read_only": 1
   }
  ],
@@ -231,6 +236,7 @@
  "owner": "Administrator",
  "permissions": [
   {
+   "create": 1,
    "export": 1,
    "read": 1,
    "role": "DPGC",

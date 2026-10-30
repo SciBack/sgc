@@ -32,8 +32,8 @@ Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
 | **Portada del área** | Riesgos, tratamientos, eventos por evaluar, riesgos altos tras tratamiento y tratamientos vencidos |
 | **Riesgos** | El registro de riesgos de la institución |
 | **Eventos de riesgo** | Lo que ya ocurrió y alguien reportó |
-| **Matrices de riesgo** | Las escalas de probabilidad e impacto y sus umbrales |
-| **Matriz de riesgos (informe)** | Cada riesgo con su nivel antes y después del tratamiento |
+| **Escalas de riesgo** | Las escalas de probabilidad e impacto y sus umbrales |
+| **Matriz de riesgos** | Cada riesgo con su nivel antes y después del tratamiento |
 
 Las **evaluaciones** y los **tratamientos** de un riesgo se abren desde él (**Crear ▾** y
 **Resumen**).
@@ -124,9 +124,9 @@ Desde el riesgo, añada un **tratamiento de riesgo**:
 - Al verificarlo se registra el **resultado** y el **nivel residual**.
 - Un riesgo cerrado o materializado no admite tratamientos nuevos.
 
-## 7. Las matrices de riesgo
+## 7. Las escalas de riesgo
 
-Cada matriz define los **niveles de probabilidad**, los **niveles de impacto** y los **umbrales**
+Cada escala define los **niveles de probabilidad**, los **niveles de impacto** y los **umbrales**
 que separan bajo, moderado, alto y extremo. Las mantiene la dirección de calidad; los riesgos se
 evalúan con la que tengan asignada.
 
@@ -153,4 +153,4 @@ Es la foto que se lleva a la revisión por la dirección.
 | Iniciar e implementar un tratamiento | — | Sí | — |
 | Verificar un tratamiento | Sí, si no lo implementó | — | — |
 | Cerrar o materializar un riesgo | Sí, si no es su propietario | — | — |
-| Mantener las matrices | Sí | — | — |
+| Mantener las escalas | Sí | — | — |
