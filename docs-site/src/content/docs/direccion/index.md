@@ -143,7 +143,7 @@ la creó.
 Un comunicado avisa por correo a los usuarios de los **roles** que elija: de una **nueva
 funcionalidad**, de un **mantenimiento programado** o de un aviso general.
 
-1. **Comunicados → + Agregar**, o **Nuevo comunicado** en la portada.
+1. **Comunicados → + Agregar**.
 2. Escriba el **asunto**, elija el **tipo** y los **roles destinatarios**, y redacte el **mensaje**.
 3. Para un mantenimiento, indique el **inicio** y el **fin previsto**.
 4. Pulse **Enviar comunicado**.

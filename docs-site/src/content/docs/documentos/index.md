@@ -38,7 +38,7 @@ Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
 
 ![Formulario de un documento controlado](captura:documentos-documento)
 
-1. **Documentos controlados → + Agregar**, o **Nuevo documento** en la portada del área.
+1. **Documentos controlados → + Agregar**.
 2. Complete:
    - **Título** y **Tipo de documento** (obligatorios): manual, política, procedimiento,
      instructivo, guía, formato, plan, informe o documentación externa.

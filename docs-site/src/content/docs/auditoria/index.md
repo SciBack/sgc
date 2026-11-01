@@ -50,7 +50,7 @@ El programa se imprime como **Plan Anual de Auditoría** desde el menú **Imprim
 
 ## 3. La auditoría
 
-**Crear:** **Auditorías → + Agregar**, o **Nueva auditoría** en la portada.
+**Crear:** **Auditorías → + Agregar**.
 
 ![Formulario de una auditoría nueva](captura:auditoria-nueva)
 

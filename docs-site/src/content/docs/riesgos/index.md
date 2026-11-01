@@ -68,7 +68,7 @@ la dirección de calidad, los dueños de proceso, los auditores y el rectorado.
 
 ## 3. Registrar un riesgo
 
-**Riesgos → + Agregar**, o **Nuevo riesgo** en la portada. Lo hacen el dueño de proceso o la
+**Riesgos → + Agregar**. Lo hacen el dueño de proceso o la
 dirección de calidad. Complete el **título**, la **descripción**, la **categoría** (estratégico,
 operacional, de cumplimiento, financiero o reputacional), el **proceso** y la unidad, la **causa**,
 la **consecuencia**, el **propietario** del riesgo y la **matriz** con que se evalúa.

@@ -83,7 +83,7 @@ deja guardar y dice cuánto suman.
 
 ![Una medición con su semáforo calculado](captura:indicadores-medicion)
 
-1. **Mediciones → + Agregar**, o **Registrar medición** en la portada.
+1. **Mediciones → + Agregar**.
 2. Indique el **indicador**, el **periodo académico** y, si aplica, el programa y sede o la unidad.
 3. Escriba el **valor** (numérico o en texto) y la **fecha**.
 4. Si la ficha lo exige, escriba el **análisis**: qué explica el resultado y qué se hará.
