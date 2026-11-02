@@ -9,6 +9,27 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.16] - 2026-11-02
+
+**Requiere migrar:** sí. Añade campos a No conformidad, Acción de mejora, Plan de mejora y
+Tratamiento de riesgo, y un parche que calcula su estado del plazo. Sin cambios de permisos.
+
+### Nuevo
+- **Estado del plazo guardado.** No conformidades, acciones y planes de mejora y tratamientos de
+  riesgo guardan su **estado del plazo** (*Sin plazo, En plazo, Por vencer, Vencido, Cerrado en plazo,
+  Cerrado fuera de plazo*), sus **días de retraso** y su **fecha de cierre**, que pone el sistema al
+  cerrar. Hasta ahora «vencido» solo se calculaba al vuelo y, al cerrar, se perdía si se había cerrado
+  a tiempo. Una tarea diaria refresca lo abierto sin tocar la fecha de modificación. Los estados de
+  cierre son los mismos con los que cuentan las cifras: una acción, hasta que se verifica; un
+  tratamiento, hasta que se implementa. El patrón viene del SLA de Frappe Helpdesk.
+- **% cerradas en plazo** de no conformidades y de acciones de mejora en la portada de Mejora
+  continua (ISO 9001 §9.3.2 c, §10.2). Sin nada cerrado muestra «N/A», no 0 %.
+- **El historial de la no conformidad trae lo que pasa en lo relacionado:** altas, cambios de estado y
+  comentarios de sus acciones de mejora, hallazgos, salidas no conformes, eventos de riesgo y entregas.
+  El del plan de mejora trae sus acciones y no conformidades, y el de la auditoría sus hallazgos,
+  listas de verificación e informe. Usa el hook nativo `additional_timeline_content`, respeta permisos
+  y sede, y escapa lo que escribe la gente. El patrón viene de Frappe CRM.
+
 ## [1.7.15] - 2026-11-01
 
 **Requiere migrar:** sí. Sin cambios de datos, de esquema ni de permisos.

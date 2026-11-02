@@ -26,6 +26,8 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import nowdate
 
+from sgc import plazos
+
 # Orden del ciclo de vida (coincide con el Workflow "Tratamiento Riesgo SGC").
 # Se usa para exigir de forma INCREMENTAL lo que cada etapa requiere, igual que
 # en No Conformidad (M05) y Programa Auditoria (M06).
@@ -47,6 +49,7 @@ class TratamientoRiesgo(Document):
         self._sellar_implementacion()
         self._sellar_verificacion()
         self._validar_requisitos_por_estado()
+        plazos.aplicar(self)
 
     # ---------------------------------------------------------------- helpers
     def _estado_anterior(self):

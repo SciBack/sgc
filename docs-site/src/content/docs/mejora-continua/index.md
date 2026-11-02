@@ -167,6 +167,24 @@ Un plan agrupa las acciones que resuelven uno o varios problemas.
 
 Una vez verificada como eficaz, la evidencia ya no se puede quitar.
 
+### El plazo y la actividad de lo relacionado
+
+No conformidades, planes y acciones llevan tres datos que pone el sistema:
+
+- **Estado del plazo:** *En plazo*, *Por vencer* (faltan 7 días o menos), *Vencido*, *Cerrado en
+  plazo* o *Cerrado fuera de plazo*; *Sin plazo* si no tiene fecha de compromiso. Se recalcula
+  cada día y se puede usar como filtro en la lista.
+- **Días de retraso:** hasta hoy si sigue abierto, hasta el cierre si ya se cerró.
+- **Fecha de cierre:** el día en que se cerró (en una acción, el día en que se verificó).
+
+La portada muestra el **porcentaje de no conformidades y de acciones cerradas en plazo**, que es el
+dato que pide la revisión por la dirección sobre la eficacia de las acciones.
+
+El **historial** de una no conformidad, al pie del formulario, incluye también lo que pasa en sus
+acciones de mejora, hallazgos, salidas no conformes y eventos de riesgo: quién las creó, a qué estado
+pasaron y qué se comentó. El de un plan incluye sus acciones y sus no conformidades, y el de una
+auditoría sus hallazgos, listas de verificación e informe. Solo aparece lo que usted puede ver.
+
 ## 8. Los informes
 
 - **Mejoramiento continuo:** el estado de la cadena completa, de los hallazgos a las

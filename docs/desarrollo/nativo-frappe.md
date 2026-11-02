@@ -21,6 +21,7 @@ dentro. Desde la 1.2.0 la configuración es nativa, y la 16.52 entró cambiando 
 | Filtros guardados de una lista | List Filter estándar (`is_standard: 1`) en `sgc/<módulo>/doctype/<doctype>/list_filter/<nombre>.json` |
 | Ajustes sobre DocTypes de Frappe | Property Setter / Custom Field en `sgc/<módulo>/custom/<doctype>.json` |
 | Reaccionar a algo | `doc_events`, `scheduler_events`, controladores del propio DocType |
+| Añadir entradas al timeline de un formulario | Hook `additional_timeline_content`, por DocType (nunca `"*"`); el contenido se escapa en el servidor (`sgc/actividad.py`) |
 | Arreglos de datos de una vez | `patches.txt` (ojo: en un sitio nuevo no corren) |
 
 Las portadas solo usan bloques nativos de Workspace: `header`, `paragraph`, `shortcut` (con

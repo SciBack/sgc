@@ -29,6 +29,8 @@
   "tab_aprobacion",
   "sec_aprobacion",
   "fecha_compromiso",
+  "estado_plazo",
+  "dias_retraso",
   "aprobado_por",
   "col_aprobacion",
   "fecha_aprobacion",
@@ -172,6 +174,25 @@
    "read_only": 1
   },
   {
+   "default": "Sin plazo",
+   "description": "Lo calcula el sistema con la fecha de compromiso. «Por vencer»: faltan 7 días o menos.",
+   "fieldname": "estado_plazo",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Estado del plazo",
+   "no_copy": 1,
+   "options": "Sin plazo\nEn plazo\nPor vencer\nVencido\nCerrado en plazo\nCerrado fuera de plazo",
+   "read_only": 1
+  },
+  {
+   "description": "Días pasados de la fecha de compromiso: hasta hoy si sigue abierto, hasta el cierre si ya se cerró.",
+   "fieldname": "dias_retraso",
+   "fieldtype": "Int",
+   "label": "Días de retraso",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
    "fieldname": "aprobado_por",
    "fieldtype": "Link",
    "label": "Aprobado por",
@@ -229,7 +250,7 @@
    "link_fieldname": "plan_mejora"
   }
  ],
- "modified": "2026-10-22 09:54:31.000000",
+ "modified": "2026-11-02 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "Plan Mejora",

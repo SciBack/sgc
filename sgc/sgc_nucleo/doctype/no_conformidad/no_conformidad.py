@@ -6,6 +6,8 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import nowdate
 
+from sgc import plazos
+
 # Qué exige cada metodología a cada causa para que el análisis diga algo (#34).
 DATO_POR_METODOLOGIA = {
     "Cinco porqués": ("nivel", "el nivel en la cadena de porqués"),
@@ -63,6 +65,8 @@ class NoConformidad(Document):
         # ver `_sellar_verificacion`.
         if self.estado in ("Cerrada eficaz", "Cerrada no eficaz") and not self.evidencia_cierre:
             frappe.throw(_("Adjunta la evidencia de cierre para cerrar la NC."))
+
+        plazos.aplicar(self)
 
     def _validar_analisis_estructurado(self, nivel):
         """ISO 9001 §10.2.1 b: determinar las causas, con método, antes de tratar (#34).

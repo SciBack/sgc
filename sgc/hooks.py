@@ -510,8 +510,18 @@ scheduler_events = {
 	"daily": [
 		"sgc.tasks.marcar_evidencias_vencidas",
 		"sgc.tasks.marcar_acuerdos_vencidos",
+		"sgc.plazos.recalcular_abiertos",
 		"sgc.sgc_documental.doctype.documento_controlado.documento_controlado.tareas_revision_diaria",
 	],
+}
+
+# Actividad de los registros relacionados en el timeline del formulario (`sgc/actividad.py`).
+# Hook nativo de Frappe (`frappe/desk/form/load.py::get_additional_timeline_content`).
+# Por DocType y nunca con "*": corre cada vez que se abre un formulario.
+additional_timeline_content = {
+	"No Conformidad": ["sgc.actividad.timeline"],
+	"Plan Mejora": ["sgc.actividad.timeline"],
+	"Auditoria": ["sgc.actividad.timeline"],
 }
 
 # Testing
