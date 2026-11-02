@@ -33,7 +33,7 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import formatdate, getdate, nowdate
 
-from sgc import tareas
+from sgc import competencias, tareas
 from sgc.sgc_auditoria.doctype.informe_auditoria.informe_auditoria import informe_aprobado
 
 # Orden del ciclo de vida (coincide con el Workflow "Auditoria SGC").
@@ -114,6 +114,10 @@ class Auditoria(Document):
         )
 
     # ------------------------------------------------------------ validaciones
+    def _estado_anterior(self):
+        anterior = None if self.is_new() else self.get_doc_before_save()
+        return anterior.estado if anterior else None
+
     def _validar_requisitos_por_estado(self):
         nivel = ORDEN.get(self.estado, 0)
 
@@ -134,6 +138,13 @@ class Auditoria(Document):
                     _("El equipo auditor debe tener al menos un miembro independiente "
                       "del área auditada (evidencia de independencia).")
                 )
+            # Competencia del equipo (ISO 19011 §7): solo al ENTRAR en ejecución, para no bloquear
+            # una auditoría en curso si después vence una calificación.
+            if self.estado == "En ejecucion" and self._estado_anterior() != "En ejecucion":
+                faltan = competencias.sin_calificacion(self.equipo)
+                if faltan:
+                    frappe.throw(competencias.mensaje_sin_calificacion(faltan),
+                                 title=_("Equipo auditor sin calificar"))
             if not self.fecha_inicio:
                 self.fecha_inicio = nowdate()
 

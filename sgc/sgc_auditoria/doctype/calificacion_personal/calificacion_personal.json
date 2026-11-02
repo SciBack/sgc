@@ -1,0 +1,197 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "format:CAL-{YYYY}-{#####}",
+ "creation": "2026-11-03 18:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "usuario",
+  "nombre_persona",
+  "competencia",
+  "habilita_rol",
+  "col_1",
+  "estado",
+  "fecha_otorgamiento",
+  "vence",
+  "sec_sustento",
+  "base",
+  "sustento",
+  "evidencia",
+  "sec_firma",
+  "otorgada_por",
+  "col_2",
+  "revocada",
+  "motivo_revocacion",
+  "revocada_por"
+ ],
+ "fields": [
+  {
+   "fieldname": "usuario",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Persona",
+   "options": "User",
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "fetch_from": "usuario.full_name",
+   "fieldname": "nombre_persona",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Nombre",
+   "read_only": 1
+  },
+  {
+   "fieldname": "competencia",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Competencia",
+   "options": "Competencia",
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "fetch_from": "competencia.habilita_rol",
+   "fieldname": "habilita_rol",
+   "fieldtype": "Data",
+   "label": "Habilita para",
+   "read_only": 1
+  },
+  {
+   "fieldname": "col_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Vigente",
+   "description": "Lo calcula el sistema con la fecha de vencimiento; se revoca abajo.",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Vigente\nVencida\nRevocada",
+   "read_only": 1
+  },
+  {
+   "default": "Today",
+   "fieldname": "fecha_otorgamiento",
+   "fieldtype": "Date",
+   "label": "Fecha de otorgamiento",
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "description": "Según la vigencia de la competencia.",
+   "fieldname": "vence",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Vence",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sec_sustento",
+   "fieldtype": "Section Break",
+   "label": "Sustento"
+  },
+  {
+   "fieldname": "base",
+   "fieldtype": "Select",
+   "label": "Base de la calificación",
+   "options": "Formación\nEvaluación\nExperiencia",
+   "reqd": 1
+  },
+  {
+   "description": "Qué curso, evaluación o experiencia lo acredita.",
+   "fieldname": "sustento",
+   "fieldtype": "Small Text",
+   "label": "Sustento",
+   "reqd": 1
+  },
+  {
+   "fieldname": "evidencia",
+   "fieldtype": "Attach",
+   "label": "Evidencia"
+  },
+  {
+   "fieldname": "sec_firma",
+   "fieldtype": "Section Break",
+   "label": "Firma"
+  },
+  {
+   "description": "La pone el sistema: quien registra la calificación.",
+   "fieldname": "otorgada_por",
+   "fieldtype": "Link",
+   "label": "Otorgada por",
+   "no_copy": 1,
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "col_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "revocada",
+   "fieldtype": "Check",
+   "label": "Revocada",
+   "no_copy": 1
+  },
+  {
+   "depends_on": "eval:doc.revocada",
+   "fieldname": "motivo_revocacion",
+   "fieldtype": "Small Text",
+   "label": "Motivo de la revocación",
+   "no_copy": 1
+  },
+  {
+   "fieldname": "revocada_por",
+   "fieldtype": "Link",
+   "label": "Revocada por",
+   "no_copy": 1,
+   "options": "User",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-11-03 18:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Auditoria",
+ "name": "Calificacion Personal",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "DPGC",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Analista de Calidad (DPGC)"
+  },
+  {
+   "read": 1,
+   "role": "Auditor Interno"
+  },
+  {
+   "read": 1,
+   "role": "System Manager"
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "usuario,competencia",
+ "show_title_field_in_link": 1,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "nombre_persona",
+ "track_changes": 1
+}

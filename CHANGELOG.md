@@ -9,6 +9,21 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.18] - 2026-11-03
+
+**Requiere migrar:** sí. Dos DocTypes nuevos (Competencia y Calificación del personal). Sin cambios
+de datos.
+
+### Nuevo
+- **Competencias y calificación de auditores** (ISO 9001 §7.2, ISO 19011 §7). **Competencias** dice qué
+  se exige, cuánto dura y qué rol del equipo auditor habilita; **Calificaciones del personal** registra
+  quién la tiene, con su base, sustento y evidencia. Quién la otorga y quién la revoca lo sella el
+  sistema, nadie se califica a sí mismo, y pasa sola a «Vencida» al llegar su fecha. **Una auditoría no
+  inicia la ejecución** si alguien del equipo tiene un rol que una competencia activa habilita y no está
+  calificado; los roles que ninguna competencia habilita no se exigen, así que nada cambia hasta que la
+  institución defina sus competencias. Hasta ahora la idoneidad del equipo solo constaba en un check que
+  marcaba el propio interesado. El patrón viene de Frappe LMS.
+
 ## [1.7.17] - 2026-11-03
 
 **Requiere migrar:** sí. Dos DocTypes nuevos (Acuse Lectura y Pregunta Acuse) y campos nuevos en
