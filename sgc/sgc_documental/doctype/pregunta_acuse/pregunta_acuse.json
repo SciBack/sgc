@@ -1,0 +1,79 @@
+{
+ "actions": [],
+ "creation": "2026-11-03 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "pregunta",
+  "opcion_a",
+  "opcion_b",
+  "opcion_c",
+  "opcion_d",
+  "correcta"
+ ],
+ "fields": [
+  {
+   "columns": 4,
+   "fieldname": "pregunta",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Pregunta",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "opcion_a",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Opción A",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "opcion_b",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Opción B",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "opcion_c",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Opción C"
+  },
+  {
+   "columns": 1,
+   "fieldname": "opcion_d",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Opción D"
+  },
+  {
+   "columns": 1,
+   "description": "Solo la ven quienes pueden editar el documento: no viaja al navegador de quien acusa lectura.",
+   "fieldname": "correcta",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Respuesta correcta",
+   "options": "\nA\nB\nC\nD",
+   "permlevel": 1,
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-11-03 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Documental",
+ "name": "Pregunta Acuse",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

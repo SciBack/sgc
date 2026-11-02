@@ -22,7 +22,7 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import add_days, add_years, getdate, now_datetime, nowdate
 
-from sgc import documentos, tareas
+from sgc import acuses, documentos, tareas
 from sgc.naming import siguiente_correlativo
 
 # Días antes de que venza la vigencia en que el responsable recibe la tarea de
@@ -88,6 +88,8 @@ class DocumentoControlado(Document):
 	def onload(self):
 		# El formulario decide con esto si ofrece descargar o solo el visor (#36).
 		self.set_onload("puede_descargar", documentos.puede_descargar(self))
+		# Si quien abre el documento tiene que confirmar su lectura, el formulario lo lleva a su acuse.
+		self.set_onload("acuse_pendiente", acuses.pendiente_de(self))
 
 	def validate(self):
 		self._validar_transicion()
@@ -101,12 +103,15 @@ class DocumentoControlado(Document):
 		self._validar_solo_consulta()
 		self._validar_requisitos_por_estado()
 		self._validar_descripcion_cambio()
+		self._validar_acuse()
 
 	def on_update(self):
 		# La publicacion tiene efectos sobre OTROS documentos (obsoletar al que
 		# reemplaza), por eso vive aqui y no en validate().
-		if self.estado == "Publicado" and self._estado_anterior() != "Publicado":
+		anterior = self._estado_anterior()
+		if self.estado == "Publicado" and anterior != "Publicado":
 			self._al_publicar()
+		acuses.al_cambiar_estado(self, anterior)
 		sincronizar_tarea_revision(self)
 
 	# ---------------------------------------------------------------- helpers
@@ -349,6 +354,17 @@ class DocumentoControlado(Document):
 				),
 				title=_("Descripción del cambio obligatoria"),
 			)
+
+	def _validar_acuse(self):
+		"""Preguntas de comprensión bien formadas, y a quién pedir el acuse antes de publicar."""
+		for fila in self.preguntas_acuse or []:
+			if not fila.correcta or not fila.get(f"opcion_{fila.correcta.lower()}"):
+				frappe.throw(_("Pregunta {0}: la respuesta correcta tiene que ser una de las opciones escritas.")
+							 .format(fila.idx), title=_("Pregunta de comprensión"))
+		if (self.requiere_acuse and self.estado == "Publicado" and self._estado_anterior() != "Publicado"
+				and not acuses.destinatarios(self)):
+			frappe.throw(_("Pide acuse de lectura pero no hay a quién: indique personas en «Difundir también a» "
+						   "o el responsable del proceso."), title=_("Acuse de lectura"))
 
 	# -------------------------------------------------------------- publicacion
 

@@ -9,6 +9,22 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.17] - 2026-11-03
+
+**Requiere migrar:** sí. Dos DocTypes nuevos (Acuse Lectura y Pregunta Acuse) y campos nuevos en
+Documento Controlado. Sin cambios de datos.
+
+### Nuevo
+- **Acuse de lectura de documentos** (ISO 9001 §7.3 y §7.4). Un documento puede **pedir acuse de
+  lectura**: al publicarse, cada persona de «Difundir también a» y el dueño del proceso reciben un acuse
+  pendiente con su tarea (15 días), y lo confirman declarando que lo leyeron. Si el documento trae
+  **preguntas de comprensión**, las responden y el servidor califica contra una nota mínima; la
+  respuesta correcta tiene `permlevel` 1 y no llega al navegador de quien acusa. **Acuses de lectura**
+  (menú de Documentos) es la matriz persona × versión, con la vista «Pendientes»; «Lecturas por
+  confirmar» en Inicio y en la portada de Documentos. Una versión nueva vuelve a pedirlo y deja sin
+  efecto los pendientes de la anterior. Nadie crea ni edita un acuse a mano. El patrón de calificar en
+  el servidor viene de Frappe LMS.
+
 ## [1.7.16] - 2026-11-02
 
 **Requiere migrar:** sí. Añade campos a No conformidad, Acción de mejora, Plan de mejora y

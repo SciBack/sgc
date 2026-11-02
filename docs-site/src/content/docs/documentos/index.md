@@ -31,6 +31,7 @@ Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
 |---|---|
 | **Portada del área** | Atajos a lo pendiente: borradores, documentos de sus procesos, en revisión, por publicar y publicados |
 | **Documentos controlados** | Todos los documentos, con su estado y versión |
+| **Acuses de lectura** | Quién confirmó haber leído cada versión de un documento y quién lo tiene pendiente |
 | **Carpetas documentales** | El árbol de carpetas en que la institución ordena sus documentos |
 | **Accesos a documentos** | Quién consultó o descargó cada documento (solo dirección de calidad) |
 
@@ -87,6 +88,24 @@ Al publicarse, el documento:
   el cambio). El aviso lleva el archivo adjunto, salvo que el documento sea de solo consulta;
 - si en **Reemplaza a** indicó otro documento, ese anterior pasa solo a **Obsoleto**. No hay que
   derogarlo a mano.
+
+### Pedir acuse de lectura
+
+Para tener constancia de que la gente leyó un documento —la política de calidad, un procedimiento
+nuevo—, marque **Pedir acuse de lectura** en la pestaña **Toma de conocimiento** antes de publicarlo.
+
+- Al publicarse, cada persona de **Difundir también a** y el dueño del proceso reciben una **tarea**:
+  confirmar la lectura en 15 días. Si no hay nadie a quien pedírselo, el sistema no deja publicar.
+- La persona abre su tarea (o el documento, que le muestra **Confirmar lectura**) y declara que lo
+  leyó y entendió.
+- Si añade **preguntas de comprensión** (de dos a cuatro opciones y la correcta), quien confirma
+  las responde y el sistema califica: hace falta la **nota mínima** (80 % por defecto). Si no llega,
+  puede volver a leer e intentarlo; se cuentan los intentos. La respuesta correcta solo la ven
+  quienes pueden editar el documento.
+- **Acuses de lectura** es la matriz: quién confirmó cada versión, cuándo y con qué nota, y quién la
+  tiene **pendiente** (vista guardada «Pendientes»).
+- Una **versión nueva** vuelve a pedir el acuse; los que quedaron pendientes de la anterior pasan a
+  *Sin efecto*. Lo ya confirmado se conserva.
 
 ## 5. Cambiar un documento publicado
 

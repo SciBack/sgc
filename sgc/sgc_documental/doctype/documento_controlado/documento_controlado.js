@@ -29,6 +29,7 @@ frappe.ui.form.on("Documento Controlado", {
 		// Enviar por correo lo publicado (#92): ver sgc/public/js/envio_correo.js.
 		frappe.require("/assets/sgc/js/envio_correo.js", () => sgc.envio.boton(frm));
 		sgc.documento.boton_revision(frm);
+		sgc.documento.boton_acuse(frm);
 	},
 	before_workflow_action(frm) {
 		// Observar exige la observación del revisor. `apply_workflow` recarga el
@@ -172,4 +173,13 @@ sgc.documento.boton_revision = function (frm) {
 			__("Registrar")
 		);
 	});
+};
+
+// Acuse de lectura (ver sgc/acuses.py): quien tiene que confirmar la lectura va a su acuse.
+sgc.documento.boton_acuse = function (frm) {
+	const pendiente = (frm.doc.__onload || {}).acuse_pendiente;
+	if (!pendiente) return;
+	frm.add_custom_button(__("Confirmar lectura"), () =>
+		frappe.set_route("Form", "Acuse Lectura", pendiente)
+	).addClass("btn-primary");
 };
