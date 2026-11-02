@@ -62,7 +62,7 @@ confirma o por qué lo descarta. Detalle en el [manual de Riesgos](../riesgos/).
 Eres el motor: llevas la autoevaluación de tu programa de principio a fin.
 
 **Tu punto de partida:** en **Inicio**, *Lo que te toca*. Si tu autoevaluación aún no existe,
-créala con **Nueva autoevaluación**, en la portada de **Acreditación y licenciamiento** (eliges
+créala con **Autoevaluaciones → + Agregar**, en **Acreditación y licenciamiento** (eliges
 programa, periodo y marco normativo).
 
 **Tu recorrido:**
@@ -112,7 +112,7 @@ Respondes de **tu proceso**: sus documentos, sus procedimientos, su ficha y sus 
 **Tu punto de partida:** en **Inicio**, *Lo que te toca*, y en **Procesos**, *Procesos a cargo*.
 
 **Tu recorrido:**
-1. **Documentos:** **Documentos → Nuevo documento**, adjunta el archivo y pulsa *Enviar a
+1. **Documentos:** **Documentos controlados → + Agregar**, adjunta el archivo y pulsa *Enviar a
    revisión*. Si la dirección de calidad lo *observa*, corrígelo y reenvíalo. Ver el [manual de
    Documentos](../documentos/).
 2. **Procedimientos y ficha de caracterización:** los elaboras y los envías a revisión. Ver el

@@ -28,7 +28,7 @@ comprueba al enviarla a revisión:
 |---|---|
 | Un **responsable** en el proceso | En el proceso: **Procesos → Mapa de procesos**, campo *Responsable (dueño de proceso)* |
 | Al menos un **procedimiento** | **Procesos → Procedimientos**, con el proceso indicado. La ficha lo trae sola |
-| Al menos un **riesgo** | **Riesgos → Nuevo riesgo**, con el proceso indicado. La ficha lo trae sola |
+| Al menos un **riesgo** | **Riesgos → + Agregar**, con el proceso indicado. La ficha lo trae sola |
 | Al menos un **indicador** | En la ficha. Debe ser un indicador de desempeño del proceso |
 | El **objetivo**, el **alcance** y los **recursos** | En la ficha |
 | Al menos una **entrada** y una **salida** | En la ficha |

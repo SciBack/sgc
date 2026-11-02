@@ -9,6 +9,20 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.15] - 2026-11-01
+
+**Requiere migrar:** sí. Sin cambios de datos, de esquema ni de permisos.
+
+### Corregido
+- **Las portadas ofrecían «Nuevo X» a quien no puede crear X.** Frappe enseña un atajo a cualquiera
+  que pueda leer el registro, y el de alta abría el formulario sin mirar el permiso de crear: un
+  analista veía «Nueva reunión» o «Nuevo riesgo», y un dueño de proceso «Nueva no conformidad»,
+  «Nuevo hallazgo» o «Nuevo comunicado», y al usarlos recibía un error. Salen los diez atajos de
+  alta de las portadas (autoevaluación, auditoría, documento, reunión, comunicado, medición, no
+  conformidad, salida no conforme, hallazgo y riesgo). Se crea desde la lista con **+ Agregar**, que
+  solo ve quien puede crear. Queda **Reportar evento de riesgo**, que puede usar cualquier usuario.
+  Un test impide que vuelva a entrar un atajo de alta que no pueda usar todo el mundo.
+
 ## [1.7.14] - 2026-10-30
 
 **Requiere migrar:** sí. Sin cambios de datos ni de esquema.

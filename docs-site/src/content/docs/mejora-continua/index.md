@@ -52,7 +52,7 @@ Todos esos caminos terminan, cuando hace falta, en una **No conformidad**, y des
 
 ## 3. Hallazgos
 
-**Registrar:** **Hallazgos → + Agregar**, o **Hallazgo** en la portada. Indique el **tipo**
+**Registrar:** **Hallazgos → + Agregar**. Indique el **tipo**
 (fortaleza, debilidad u oportunidad de mejora), el **origen**, el **criterio** del marco al que
 se refiere, la **autoevaluación** si viene de una, la **descripción** y la **severidad**. El código
 se genera solo.
