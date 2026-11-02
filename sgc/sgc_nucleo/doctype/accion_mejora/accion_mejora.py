@@ -6,7 +6,7 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import strip_html
 
-from sgc import tareas
+from sgc import plazos, tareas
 from sgc.naming import codigo_anual
 
 # Avance implícito por estado: los estados terminales fijan el %. En "En ejecucion"
@@ -41,6 +41,7 @@ class AccionMejora(Document):
         self._exigir_lo_de_cada_etapa(anterior)
         self._sellar_verificacion(anterior)
         self._fijar_avance(anterior)
+        plazos.aplicar(self)
 
     def _validar_causa(self):
         """La causa que ataca la acción es una de SU no conformidad (#34).

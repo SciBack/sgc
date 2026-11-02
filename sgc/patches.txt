@@ -24,3 +24,5 @@ sgc.patches.app_por_defecto
 sgc.patches.permisos_a_estandar
 sgc.patches.datos_nivel_bpm
 sgc.patches.fichas_completar_desde_el_sistema
+# 1.7.16: estado del plazo y fecha de cierre de los registros que ya existían.
+sgc.patches.plazos_registros_existentes

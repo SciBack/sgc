@@ -142,3 +142,30 @@ def incidencias_abiertas():
     if frappe.db.exists("DocType", "Evento Riesgo"):
         total += _contar("Evento Riesgo", [["estado", "in", EVENTO_ABIERTO]])
     return total
+
+
+def _pct_en_plazo(doctype):
+    """Porcentaje de los cerrados que se cerraron en plazo (ver `sgc/plazos.py`).
+
+    Los cerrados sin fecha de compromiso no cuentan: no tenían plazo que cumplir. Sin
+    ningún cerrado devuelve `None`, que la tarjeta muestra como «N/A»: un 0 % diría que
+    todo se cerró tarde.
+    """
+    # Import local: `plazos` importa de este módulo los estados de cierre.
+    from sgc.plazos import CERRADO_EN_PLAZO, CERRADO_FUERA
+
+    en_plazo = _contar(doctype, [["estado_plazo", "=", CERRADO_EN_PLAZO]])
+    total = en_plazo + _contar(doctype, [["estado_plazo", "=", CERRADO_FUERA]])
+    return {"value": round(100 * en_plazo / total, 1) if total else None, "fieldtype": "Percent"}
+
+
+@frappe.whitelist()
+def nc_cerradas_en_plazo():
+    """No conformidades cerradas dentro de su fecha de compromiso (ISO 9001 §10.2)."""
+    return _pct_en_plazo("No Conformidad")
+
+
+@frappe.whitelist()
+def acciones_cerradas_en_plazo():
+    """Acciones de mejora verificadas dentro de su fecha de compromiso."""
+    return _pct_en_plazo("Accion Mejora")

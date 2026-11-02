@@ -123,6 +123,8 @@ Desde el riesgo, añada un **tratamiento de riesgo**:
   ejecución.
 - Al verificarlo se registra el **resultado** y el **nivel residual**.
 - Un riesgo cerrado o materializado no admite tratamientos nuevos.
+- El tratamiento lleva su **estado del plazo**, sus **días de retraso** y su **fecha de cierre** (el día en
+  que se implementó), que pone el sistema igual que en las acciones de mejora.
 
 ## 7. Las escalas de riesgo
 

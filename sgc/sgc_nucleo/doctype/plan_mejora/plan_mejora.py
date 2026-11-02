@@ -19,6 +19,7 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import add_days, getdate, nowdate
 
+from sgc import plazos
 from sgc.naming import codigo_anual
 
 # Estado final de una acción que SÍ acredita mejora: ejecutada y verificada
@@ -53,6 +54,8 @@ class PlanMejora(Document):
         self._validar_cierre()
         # Recalcula en memoria; el save del propio plan persiste los campos.
         self.recalcular_avance(save=False)
+        # Después de recalcular: la fecha de compromiso del plan sale de sus acciones.
+        plazos.aplicar(self)
 
     # ------------------------------------------------------------------ firmas
     def _sellar_firmas(self):
