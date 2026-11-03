@@ -1,0 +1,20 @@
+{
+ "creation": "2026-11-03 12:00:00.000000",
+ "docstatus": 0,
+ "doctype": "List Filter",
+ "filter_name": "Pendientes",
+ "filters": "[[\"Acuse Lectura\", \"estado\", \"=\", \"Pendiente\"]]",
+ "for_user": "",
+ "idx": 0,
+ "is_standard": 1,
+ "layout_order": 1,
+ "modified": "2026-11-03 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Documental",
+ "name": "Acuse Lectura-Pendientes",
+ "owner": "Administrator",
+ "reference_doctype": "Acuse Lectura",
+ "route_signature": "estado=Pendiente",
+ "sort_field": "creation",
+ "sort_order": "asc"
+}

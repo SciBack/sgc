@@ -52,6 +52,11 @@
   "sec_relaciones",
   "documentos_relacionados",
   "difundir_a",
+  "tab_acuse",
+  "sec_acuse",
+  "requiere_acuse",
+  "nota_minima_acuse",
+  "preguntas_acuse",
   "tab_conexiones"
  ],
  "fields": [
@@ -344,6 +349,37 @@
    "options": "Documento Difusion"
   },
   {
+   "fieldname": "tab_acuse",
+   "fieldtype": "Tab Break",
+   "label": "Toma de conocimiento"
+  },
+  {
+   "fieldname": "sec_acuse",
+   "fieldtype": "Section Break"
+  },
+  {
+   "description": "Al publicarse, cada persona de «Difundir también a» y el dueño del proceso deben confirmar que lo leyeron. Cada versión nueva se vuelve a pedir.",
+   "fieldname": "requiere_acuse",
+   "fieldtype": "Check",
+   "label": "Pedir acuse de lectura"
+  },
+  {
+   "default": "80",
+   "depends_on": "eval:doc.requiere_acuse",
+   "description": "Solo si hay preguntas de comprensión.",
+   "fieldname": "nota_minima_acuse",
+   "fieldtype": "Percent",
+   "label": "Nota mínima del cuestionario"
+  },
+  {
+   "depends_on": "eval:doc.requiere_acuse",
+   "description": "Si las hay, quien confirma la lectura las responde y el sistema califica. Sin preguntas basta con declarar que lo leyó.",
+   "fieldname": "preguntas_acuse",
+   "fieldtype": "Table",
+   "label": "Preguntas de comprensión (opcionales)",
+   "options": "Pregunta Acuse"
+  },
+  {
    "fieldname": "tab_conexiones",
    "fieldtype": "Tab Break",
    "label": "Conexiones",
@@ -379,7 +415,7 @@
    "link_fieldname": "documento_controlado"
   }
  ],
- "modified": "2026-10-22 09:56:22.000000",
+ "modified": "2026-11-03 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Documental",
  "name": "Documento Controlado",
@@ -472,6 +508,36 @@
    "export": 1,
    "read": 1,
    "report": 1,
+   "role": "Autoridad Aprobadora",
+   "write": 1
+  },
+  {
+   "permlevel": 1,
+   "read": 1,
+   "role": "DPGC",
+   "write": 1
+  },
+  {
+   "permlevel": 1,
+   "read": 1,
+   "role": "Analista de Calidad (DPGC)",
+   "write": 1
+  },
+  {
+   "permlevel": 1,
+   "read": 1,
+   "role": "Responsable de Calidad de Programa",
+   "write": 1
+  },
+  {
+   "permlevel": 1,
+   "read": 1,
+   "role": "Dueño de Proceso",
+   "write": 1
+  },
+  {
+   "permlevel": 1,
+   "read": 1,
    "role": "Autoridad Aprobadora",
    "write": 1
   }

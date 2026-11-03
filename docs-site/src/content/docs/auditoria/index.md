@@ -32,6 +32,8 @@ Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
 | **Programas de auditoría** | El plan anual: qué se audita y cuándo |
 | **Auditorías** | Cada auditoría, con su equipo, criterios y plan de actividades |
 | **Listas de verificación** | Los puntos a comprobar en cada auditoría, y las plantillas reutilizables |
+| **Competencias** | Lo que se exige para auditar (y para otras funciones), su vigencia y el rol del equipo que habilita |
+| **Calificaciones del personal** | Quién está calificado en cada competencia, hasta cuándo y con qué sustento |
 | **Resultados de auditoría** | Los hallazgos de todas las auditorías, filtrables |
 
 Los **hallazgos** y el **informe** de cada auditoría se abren desde ella: **Crear ▾** para
@@ -64,6 +66,25 @@ El programa se imprime como **Plan Anual de Auditoría** desde el menú **Imprim
 **El equipo tiene que ser independiente:** al menos un miembro debe ser ajeno al área auditada, y
 el **responsable del proceso auditado no puede formar parte** del equipo. Quien cierra la
 auditoría no puede ser quien la creó.
+
+### La competencia del equipo
+
+ISO 19011 pide que quien audita sea competente, y que eso se evalúe. El sistema lo controla así:
+
+1. **Competencias** (dirección de calidad): defina, por ejemplo, «Auditor interno ISO 9001», con los
+   **requisitos** (curso, horas, experiencia), la **vigencia** en meses y el **rol** del equipo que
+   habilita (*Auditor*, *Auditor lider*…).
+2. **Calificaciones del personal → + Agregar**: la persona, la competencia, la **base** (formación,
+   evaluación o experiencia), el **sustento** y la evidencia. El sistema registra quién la otorga y
+   calcula hasta cuándo vale. **Nadie se califica a sí mismo.** Para retirarla, marque **Revocada**
+   con el motivo.
+3. **Al iniciar la auditoría**, si una competencia activa habilita el rol de alguien del equipo, esa
+   persona necesita una calificación **vigente** para ese rol; si no, el sistema no deja iniciarla y
+   dice a quién le falta. Los roles que ninguna competencia habilita no se exigen, y una calificación
+   que vence con la auditoría ya en marcha no la detiene.
+
+Las calificaciones pasan solas a **Vencida** al llegar su fecha. La vista guardada **Vigentes** las
+ordena por vencimiento.
 
 ### El plan de actividades
 

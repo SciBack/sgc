@@ -1,0 +1,145 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "format:ACU-{YYYY}-{#####}",
+ "creation": "2026-11-03 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "documento",
+  "titulo_documento",
+  "version",
+  "col_1",
+  "usuario",
+  "estado",
+  "sec_resultado",
+  "declaracion",
+  "fecha_acuse",
+  "col_2",
+  "intentos",
+  "puntaje"
+ ],
+ "fields": [
+  {
+   "fieldname": "documento",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Documento",
+   "options": "Documento Controlado",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fetch_from": "documento.titulo",
+   "fieldname": "titulo_documento",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Título del documento",
+   "read_only": 1
+  },
+  {
+   "fieldname": "version",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Versión",
+   "read_only": 1
+  },
+  {
+   "fieldname": "col_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "usuario",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Persona",
+   "options": "User",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "default": "Pendiente",
+   "description": "«Sin efecto»: el documento volvió a borrador o se publicó una versión nueva antes de acusarlo.",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Estado",
+   "options": "Pendiente\nAcusado\nSin efecto",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sec_resultado",
+   "fieldtype": "Section Break",
+   "label": "Resultado"
+  },
+  {
+   "fieldname": "declaracion",
+   "fieldtype": "Check",
+   "label": "Declaró haber leído y entendido el documento",
+   "read_only": 1
+  },
+  {
+   "fieldname": "fecha_acuse",
+   "fieldtype": "Datetime",
+   "label": "Fecha del acuse",
+   "read_only": 1
+  },
+  {
+   "fieldname": "col_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "intentos",
+   "fieldtype": "Int",
+   "label": "Intentos",
+   "read_only": 1
+  },
+  {
+   "description": "Solo si el documento tiene preguntas de comprensión.",
+   "fieldname": "puntaje",
+   "fieldtype": "Percent",
+   "label": "Puntaje del cuestionario",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-11-03 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Documental",
+ "name": "Acuse Lectura",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "DPGC"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Analista de Calidad (DPGC)"
+  },
+  {
+   "read": 1,
+   "role": "System Manager"
+  },
+  {
+   "if_owner": 1,
+   "read": 1,
+   "role": "Desk User"
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "documento,usuario",
+ "show_title_field_in_link": 1,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "titulo_documento",
+ "track_changes": 1
+}

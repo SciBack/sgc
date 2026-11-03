@@ -511,6 +511,7 @@ scheduler_events = {
 		"sgc.tasks.marcar_evidencias_vencidas",
 		"sgc.tasks.marcar_acuerdos_vencidos",
 		"sgc.plazos.recalcular_abiertos",
+		"sgc.competencias.marcar_vencidas",
 		"sgc.sgc_documental.doctype.documento_controlado.documento_controlado.tareas_revision_diaria",
 	],
 }

@@ -1,0 +1,100 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "field:nombre",
+ "creation": "2026-11-03 18:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "nombre",
+  "habilita_rol",
+  "col_1",
+  "vigencia_meses",
+  "activa",
+  "sec_requisitos",
+  "requisitos"
+ ],
+ "fields": [
+  {
+   "fieldname": "nombre",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Nombre",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "description": "Si se indica, nadie entra con ese rol en una auditoría sin una calificación vigente de esta competencia.",
+   "fieldname": "habilita_rol",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Habilita para el rol del equipo auditor",
+   "options": "\nAuditor lider\nAuditor\nObservador\nExperto tecnico"
+  },
+  {
+   "fieldname": "col_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Vacío o 0: la calificación no vence.",
+   "fieldname": "vigencia_meses",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Vigencia (meses)"
+  },
+  {
+   "default": "1",
+   "description": "Una competencia inactiva no se exige.",
+   "fieldname": "activa",
+   "fieldtype": "Check",
+   "label": "Activa"
+  },
+  {
+   "fieldname": "sec_requisitos",
+   "fieldtype": "Section Break"
+  },
+  {
+   "description": "Qué formación, experiencia o evaluación se exige (ISO 19011 §7.2).",
+   "fieldname": "requisitos",
+   "fieldtype": "Small Text",
+   "label": "Requisitos"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-11-03 18:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Auditoria",
+ "name": "Competencia",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "read": 1,
+   "role": "DPGC",
+   "write": 1
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "role": "Analista de Calidad (DPGC)"
+  },
+  {
+   "read": 1,
+   "role": "Auditor Interno"
+  },
+  {
+   "read": 1,
+   "role": "System Manager"
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

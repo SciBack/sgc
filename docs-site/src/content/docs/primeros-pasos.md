@@ -12,6 +12,7 @@ en qué punto termina tu parte del trabajo.
 :::tip[Cómo te mueves por el sistema]
 - **Inicio** reúne lo tuyo: **Lo que te toca**, **Esperan mi decisión**, **Mis tareas** y el
   **Estado del sistema**.
+  Si te piden confirmar la lectura de un documento, aparece en **Lecturas por confirmar**.
 - El sistema se divide en **áreas**: Procesos, Documentos, Indicadores, Acreditación y
   licenciamiento, Mejora continua, Auditoría, Riesgos, Dirección y partes interesadas, y
   Configuración. Cada área tiene su portada con lo pendiente.
