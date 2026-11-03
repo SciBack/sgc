@@ -205,6 +205,12 @@ auditoría sus hallazgos, listas de verificación e informe. Solo aparece lo que
 
 - **Mejoramiento continuo:** el estado de la cadena completa, de los hallazgos a las
   acciones.
+- **Tiempos de tratamiento:** cuántos días pasan, en promedio, las no conformidades, acciones,
+  planes, salidas no conformes, eventos y tratamientos de riesgo, documentos y fichas en cada estado
+  de su flujo, y cuántos días tardan en cerrarse. Muestra dónde se atascan: elija el tipo de registro
+  y, si quiere, un rango de fechas de creación. **Están ahora** y **Días que llevan** son los que
+  siguen en ese estado. Se calcula con el historial de cambios, así que incluye lo anterior a esta
+  versión.
 - **Resumen de salidas no conformes:** las salidas registradas, su decisión y su verificación. En
   modo **Detalle** muestra también quién intervino en cada paso.
 
