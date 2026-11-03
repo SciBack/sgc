@@ -9,6 +9,19 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.20] - 2026-11-03
+
+**Requiere migrar:** sí. Un informe nuevo. Sin cambios de datos, esquema ni permisos.
+
+### Nuevo
+- **Informe «Tiempos de tratamiento»** (menú de Mejora continua; ISO 9001 §9.1.3 y §10.2): por estado
+  del flujo, cuántos registros pasaron por él, los días promedio y máximo, cuántos están ahora y cuánto
+  llevan, y los días promedio hasta el cierre, con gráfico. Sirve para no conformidades, acciones y
+  planes de mejora, salidas no conformes, eventos y tratamientos de riesgo, documentos y fichas. No
+  guarda nada nuevo: lee el historial de cambios (`Version`) que estos DocTypes ya llevan, así que
+  también cubre lo anterior. El patrón viene de Frappe CRM; aquí sin `Milestone Tracker`, porque el
+  historial ya está.
+
 ## [1.7.19] - 2026-11-03
 
 **Requiere migrar:** sí. DocType nuevo (Valoración de la atención), un formulario web estándar y dos
