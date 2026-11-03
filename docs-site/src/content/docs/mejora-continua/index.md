@@ -32,6 +32,7 @@ Se abre la portada del área, y el menú de la izquierda muestra sus entradas:
 | **Hallazgos** | Lo que encontró una autoevaluación o una supervisión |
 | **No conformidades** | Los incumplimientos del sistema de gestión, con su análisis de causa |
 | **Salidas no conformes** | Un servicio o producto concreto que se entregó mal |
+| **Valoraciones de la atención** | Lo que respondieron quienes reclamaron cuando se cerró su reclamo |
 | **Planes de mejora** | El conjunto de acciones para resolver uno o varios problemas |
 | **Acciones de mejora** | Cada tarea concreta del plan, con responsable y fecha |
 | **Mejoramiento continuo** | El estado de toda la cadena |
@@ -96,6 +97,21 @@ escriba a mano en esos campos no cuenta.
 
 **Escalar.** Si la salida no es un caso aislado (el mismo error se repite, el control no existía),
 pulse **Escalar a no conformidad**, elija si es mayor o menor, y las dos quedan enlazadas.
+
+### La valoración de quien reclamó
+
+Si el origen es **Reclamo de usuario**, anote en **Correo de quien reclamó** su dirección. Al
+**cerrar** la salida, el sistema le envía un enlace para que valore la atención (de una a cinco
+estrellas, si se resolvió su reclamo y un comentario). No necesita cuenta en el sistema: el enlace
+sirve **una sola vez** y caduca en **15 días**.
+
+- **Valoración solicitada** muestra cuándo se le pidió. Si el correo de la instancia está en modo de
+  ensayo o la dirección no está en la lista blanca, no se envía y el sistema lo avisa al cerrar.
+- Las respuestas están en **Valoraciones de la atención** (solo dirección de calidad), y su media en
+  la cifra **Satisfacción con la atención de reclamos** de la portada.
+- La revisión por la dirección puede traerlas con **Obtener entradas de → Valoraciones de
+  reclamantes**.
+- El enlace no queda en el historial de la salida, para que nadie más pueda usarlo.
 
 ## 5. No conformidades
 

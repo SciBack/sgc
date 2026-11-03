@@ -169,3 +169,17 @@ def nc_cerradas_en_plazo():
 def acciones_cerradas_en_plazo():
     """Acciones de mejora verificadas dentro de su fecha de compromiso."""
     return _pct_en_plazo("Accion Mejora")
+
+
+@frappe.whitelist()
+def satisfaccion_reclamos():
+    """Valoración media de la atención de reclamos (ISO 9001 §9.1.2), en porcentaje.
+
+    Un campo Rating se guarda como fracción de 0 a 1 (`rating.js`: estrellas / 5), así que la
+    media por 100 es el porcentaje. Sin valoraciones devuelve `None` («N/A»), no 0 %.
+    """
+    filas = frappe.get_list("Valoracion Atencion", fields=["valoracion"], limit=0)
+    if not filas:
+        return {"value": None, "fieldtype": "Percent"}
+    media = sum(float(f.valoracion or 0) for f in filas) / len(filas)
+    return {"value": round(100 * media, 1), "fieldtype": "Percent"}

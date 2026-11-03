@@ -9,6 +9,22 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.19] - 2026-11-03
+
+**Requiere migrar:** sí. DocType nuevo (Valoración de la atención), un formulario web estándar y dos
+campos en Salida No Conforme. Sin cambios de datos ni de permisos.
+
+### Nuevo
+- **Valoración de la atención por quien reclamó** (ISO 9001 §9.1.2). La salida no conforme que viene de
+  un reclamo guarda el correo de quien reclamó; al **cerrarse**, se le envía un enlace al formulario web
+  «valoracion-atencion» para valorar la atención (estrellas, si se resolvió y un comentario), sin cuenta.
+  La clave es la nativa de `Web Form Request`: un solo uso, caduca a los 15 días, y la salida la fija el
+  servidor en `doc_values`, no el formulario. El enlace no queda en el historial del documento, para que
+  nadie lo use por el reclamante. El correo pasa por el modo y la lista blanca de la instancia. Las
+  respuestas, en **Valoraciones de la atención** (menú de Mejora continua); su media, en la cifra
+  «Satisfacción con la atención de reclamos»; y la revisión por la dirección las trae como entrada de
+  §9.3.2 c). El patrón viene de Frappe Helpdesk. «Web Form» entra en la política nativa.
+
 ## [1.7.18] - 2026-11-03
 
 **Requiere migrar:** sí. Dos DocTypes nuevos (Competencia y Calificación del personal). Sin cambios

@@ -1,0 +1,107 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "format:VAL-{YYYY}-{#####}",
+ "creation": "2026-11-03 20:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "salida_no_conforme",
+  "titulo_reclamo",
+  "proceso",
+  "col_1",
+  "valoracion",
+  "resuelto",
+  "sec_comentario",
+  "comentario"
+ ],
+ "fields": [
+  {
+   "fieldname": "salida_no_conforme",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Salida no conforme",
+   "options": "Salida No Conforme",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "salida_no_conforme.titulo",
+   "fieldname": "titulo_reclamo",
+   "fieldtype": "Data",
+   "label": "Reclamo",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "salida_no_conforme.proceso",
+   "fieldname": "proceso",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Proceso",
+   "options": "Proceso",
+   "read_only": 1
+  },
+  {
+   "fieldname": "col_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "valoracion",
+   "fieldtype": "Rating",
+   "in_list_view": 1,
+   "label": "Valoración de la atención",
+   "reqd": 1
+  },
+  {
+   "fieldname": "resuelto",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "¿Se resolvió su reclamo?",
+   "options": "\nSí\nEn parte\nNo"
+  },
+  {
+   "fieldname": "sec_comentario",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "comentario",
+   "fieldtype": "Small Text",
+   "label": "Comentario"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-11-03 20:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Nucleo",
+ "name": "Valoracion Atencion",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "DPGC"
+  },
+  {
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Analista de Calidad (DPGC)"
+  },
+  {
+   "read": 1,
+   "role": "System Manager"
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "salida_no_conforme,proceso",
+ "show_title_field_in_link": 1,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "titulo_reclamo",
+ "track_changes": 1
+}

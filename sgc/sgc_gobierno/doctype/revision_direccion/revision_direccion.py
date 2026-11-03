@@ -60,6 +60,7 @@ FUENTES_DE_ENTRADA = {
     "Informe Auditoria": "Desempeno y eficacia del SGC",
     "Valor Indicador": "Desempeno y eficacia del SGC",
     "Resultado Instrumento": "Desempeno y eficacia del SGC",
+    "Valoracion Atencion": "Desempeno y eficacia del SGC",          # §9.3.2 c) 1)
     "Evaluacion Riesgo": "Eficacia de acciones frente a riesgos",       # §9.3.2 e)
 }
 

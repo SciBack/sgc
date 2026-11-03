@@ -21,6 +21,7 @@ dentro. Desde la 1.2.0 la configuración es nativa, y la 16.52 entró cambiando 
 | Filtros guardados de una lista | List Filter estándar (`is_standard: 1`) en `sgc/<módulo>/doctype/<doctype>/list_filter/<nombre>.json` |
 | Ajustes sobre DocTypes de Frappe | Property Setter / Custom Field en `sgc/<módulo>/custom/<doctype>.json` |
 | Reaccionar a algo | `doc_events`, `scheduler_events`, controladores del propio DocType |
+| Formularios para personas sin cuenta | Web Form estándar en `sgc/<módulo>/web_form/`, con `key_required` (la clave de `Web Form Request`: un solo uso y caducidad) y `doc_values` para lo que fija el servidor (`sgc/valoraciones.py`) |
 | Añadir entradas al timeline de un formulario | Hook `additional_timeline_content`, por DocType (nunca `"*"`); el contenido se escapa en el servidor (`sgc/actividad.py`) |
 | Arreglos de datos de una vez | `patches.txt` (ojo: en un sitio nuevo no corren) |
 

@@ -19,6 +19,7 @@
 		},
 		{ doctype: "Valor Indicador", label: __("Mediciones de indicador") },
 		{ doctype: "Resultado Instrumento", label: __("Resultados de encuestas") },
+		{ doctype: "Valoracion Atencion", label: __("Valoraciones de reclamantes") },
 		{ doctype: "Evaluacion Riesgo", label: __("Evaluaciones de riesgo") },
 		{ doctype: "Revision Direccion", label: __("Revisión anterior"), anterior: true },
 	];
