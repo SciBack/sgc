@@ -136,14 +136,17 @@ class IntegrationTestValoracionAtencion(IntegrationTestCase):
 			salida = self._cerrar(self._salida())
 		key = self._solicitud(salida).key
 		ruta = f"{valoraciones.FORMULARIO}/new"
+		anterior = getattr(frappe.local, "request", None)
+		# `set_user` vacía `form_dict` (frappe/__init__.py::set_user): la clave va después.
+		frappe.set_user("Guest")
 		frappe.local.request = Request(EnvironBuilder(path=f"/{ruta}", query_string={"web_form_request_key": key}).get_environ())
 		frappe.local.form_dict = frappe._dict(web_form_request_key=key)
-		frappe.set_user("Guest")
 		try:
 			respuesta = get_response(ruta)
 		finally:
+			# Sin devolver la petición, el limitador de `accept` se activa en los tests siguientes.
+			frappe.local.request = anterior
 			frappe.set_user(ADMIN)
-			frappe.local.form_dict = frappe._dict()
 		self.assertEqual(respuesta.status_code, 200)
 
 	def test_sin_clave_no_entra(self):
