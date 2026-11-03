@@ -16,6 +16,12 @@ momento más claro es cuando se cierra su reclamo, y hasta ahora el SGC no pregu
 - El envío pasa por `sgc.correo.enviar`, con el modo y la lista blanca de la instancia: si la
   lista blanca lo retiene, no se marca como solicitada y se avisa a quien cerró.
 
+⚠️ El formulario NO declara `condition_json`. Es un campo JSON, y en PostgreSQL Frappe lo devuelve
+ya convertido en lista; `as_dict()` rechaza la lista al renderizar la página y responde 417 «Se
+produjo un error al crear esta página» (`document.py::get_valid_dict`). Comprobado en producción
+con los formularios que trae Frappe: `request-data` («[]») falla y `request-for-account-deletion`
+(sin valor) carga.
+
 El patrón viene de Frappe Helpdesk (encuesta al cerrar el ticket), con la pieza nativa que
 Helpdesk reimplementa a mano: la clave de un solo uso de `Web Form Request`.
 """

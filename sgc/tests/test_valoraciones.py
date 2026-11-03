@@ -126,6 +126,26 @@ class IntegrationTestValoracionAtencion(IntegrationTestCase):
 		with self.assertRaises(frappe.exceptions.LinkExpired):
 			self._responder(key, valoracion=0.2, resuelto="No")
 
+	def test_la_pagina_del_formulario_se_ve_con_la_clave(self):
+		"""Renderiza la página como invitado: así se vio el 417 de `condition_json` en PostgreSQL."""
+		from frappe.website.serve import get_response
+		from werkzeug.test import EnvironBuilder
+		from werkzeug.wrappers import Request
+
+		with patch.object(valoraciones.correo, "enviar", return_value=ENVIADO):
+			salida = self._cerrar(self._salida())
+		key = self._solicitud(salida).key
+		ruta = f"{valoraciones.FORMULARIO}/new"
+		frappe.local.request = Request(EnvironBuilder(path=f"/{ruta}", query_string={"web_form_request_key": key}).get_environ())
+		frappe.local.form_dict = frappe._dict(web_form_request_key=key)
+		frappe.set_user("Guest")
+		try:
+			respuesta = get_response(ruta)
+		finally:
+			frappe.set_user(ADMIN)
+			frappe.local.form_dict = frappe._dict()
+		self.assertEqual(respuesta.status_code, 200)
+
 	def test_sin_clave_no_entra(self):
 		with self.assertRaises(frappe.PermissionError):
 			self._responder(None, valoracion=1, resuelto="Sí")
@@ -157,3 +177,5 @@ class IntegrationTestValoracionAtencion(IntegrationTestCase):
 		formulario = frappe.get_doc("Web Form", valoraciones.FORMULARIO)
 		self.assertEqual((formulario.key_required, formulario.login_required, formulario.published), (1, 0, 1))
 		self.assertNotIn("salida_no_conforme", [f.fieldname for f in formulario.web_form_fields])
+		# Con «[]», en PostgreSQL la página falla al renderizarse (ver sgc/valoraciones.py).
+		self.assertFalse(formulario.condition_json)
