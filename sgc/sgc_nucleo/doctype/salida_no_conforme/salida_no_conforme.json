@@ -21,6 +21,10 @@
   "column_break_ambito",
   "programa_sede",
   "section_break_descripcion",
+  "sec_reclamante",
+  "correo_reclamante",
+  "col_reclamante",
+  "valoracion_solicitada",
   "descripcion",
   "requisito_incumplido",
   "tab_tratamiento",
@@ -142,6 +146,31 @@
    "fieldname": "section_break_descripcion",
    "fieldtype": "Section Break",
    "label": "La no conformidad (ISO 9001 §8.7.2 a)"
+  },
+  {
+   "depends_on": "eval:doc.origen=='Reclamo de usuario'",
+   "fieldname": "sec_reclamante",
+   "fieldtype": "Section Break",
+   "label": "Quien reclamó"
+  },
+  {
+   "description": "Solo para pedirle, al cerrar, que valore la atención. Es un dato personal (Ley 29733): no se publica.",
+   "fieldname": "correo_reclamante",
+   "fieldtype": "Data",
+   "label": "Correo de quien reclamó",
+   "options": "Email"
+  },
+  {
+   "fieldname": "col_reclamante",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Cuándo se le envió el enlace para valorar la atención.",
+   "fieldname": "valoracion_solicitada",
+   "fieldtype": "Datetime",
+   "label": "Valoración solicitada",
+   "no_copy": 1,
+   "read_only": 1
   },
   {
    "fieldname": "descripcion",
@@ -292,8 +321,14 @@
   }
  ],
  "index_web_pages_for_search": 0,
- "links": [],
- "modified": "2026-10-28 12:00:00.000000",
+ "links": [
+  {
+   "group": "Reclamante",
+   "link_doctype": "Valoracion Atencion",
+   "link_fieldname": "salida_no_conforme"
+  }
+ ],
+ "modified": "2026-11-03 20:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "Salida No Conforme",

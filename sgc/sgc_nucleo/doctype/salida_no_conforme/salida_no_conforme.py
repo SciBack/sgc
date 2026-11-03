@@ -37,6 +37,8 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import cint, nowdate
 
+from sgc import valoraciones
+
 DOCTYPE = "Salida No Conforme"
 
 CONCESION = "Autorizar bajo concesion"
@@ -62,6 +64,11 @@ class SalidaNoConforme(Document):
         self._sellar_tratamiento()
         self._sellar_verificacion()
         self._validar_requisitos_por_estado()
+
+    def on_update(self):
+        # Al cerrarse un reclamo, se pide a quien reclamó que valore la atención (ISO 9001 §9.1.2).
+        if self._entra_en("Cerrada"):
+            valoraciones.pedir(self)
 
     # ---------------------------------------------------------------- helpers
     def _estado_anterior(self):
