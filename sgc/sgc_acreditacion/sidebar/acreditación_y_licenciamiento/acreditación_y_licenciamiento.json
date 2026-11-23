@@ -14,8 +14,8 @@
    "indent": 0,
    "is_default_module": 0,
    "keep_closed": 0,
-   "label": "Portada del área",
-   "link_to": "SGC Acreditacion",
+   "label": "Inicio",
+   "link_to": "SGC",
    "link_type": "Workspace",
    "open_in_new_tab": 1,
    "show_arrow": 0,
@@ -29,13 +29,28 @@
    "indent": 0,
    "is_default_module": 0,
    "keep_closed": 0,
+   "label": "Portada del área",
+   "link_to": "SGC Acreditacion",
+   "link_type": "Workspace",
+   "open_in_new_tab": 1,
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "added": 0,
+   "child": 0,
+   "collapsible": 1,
+   "filters": "[[\"Elemento Marco\", \"marco_normativo\", \"=\", \"CBC-SUNEDU-2026\"], [\"Elemento Marco\", \"tipo\", \"=\", \"Estandar\"]]",
+   "hidden": 0,
+   "indent": 0,
+   "is_default_module": 0,
+   "keep_closed": 0,
    "label": "Condiciones básicas de calidad (CBC)",
    "link_to": "Elemento Marco",
    "link_type": "DocType",
    "open_in_new_tab": 1,
    "show_arrow": 0,
-   "type": "Link",
-   "filters": "[[\"Elemento Marco\", \"marco_normativo\", \"=\", \"CBC-SUNEDU-2026\"], [\"Elemento Marco\", \"tipo\", \"=\", \"Estandar\"]]"
+   "type": "Link"
   },
   {
    "added": 0,
@@ -173,7 +188,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-10-29 12:00:00.000000",
+ "modified": "2026-11-23 20:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Acreditación y licenciamiento",
