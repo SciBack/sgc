@@ -9,6 +9,22 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.21] - 2026-11-23
+
+**Requiere migrar:** sí. Sube Frappe a **16.60.2** (trae una corrección de seguridad). Sin cambios de
+datos, esquema ni permisos del SGC.
+
+### Nuevo
+- **Entrar solo con la cuenta institucional** (`sgc_sso_solo: 1` en `site_config.json`): la pantalla de
+  inicio deja de pedir correo y contraseña y muestra solo el botón del proveedor de identidad. Es el
+  ajuste nativo de Frappe (`disable_user_pass_login`); los tokens de las integraciones siguen valiendo.
+  Con el SSO apagado nunca se quita la contraseña, y `0` la devuelve. Sin declarar, no se toca.
+- **Icono en el botón del SSO** (`sgc_sso_icono`: una ruta del sitio, p. ej. `/files/idp.svg`, o una URL
+  `https://`). Antes el despliegue lo dejaba siempre vacío.
+
+### Cambiado
+- Frappe 16.53.0 → **16.60.2**.
+
 ## [1.7.20] - 2026-11-03
 
 **Requiere migrar:** sí. Un informe nuevo. Sin cambios de datos, esquema ni permisos.

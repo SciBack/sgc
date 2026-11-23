@@ -20,6 +20,8 @@ institución viven en su capa (para el cliente alfa, en su repositorio de operac
 | `sgc_sso_etiqueta` | no | Texto del botón. Por defecto «Cuenta institucional». |
 | `sgc_sso_rutas` | no | `{"autorizacion", "token", "usuario"}` relativas al issuer. Por defecto las de un realm de Keycloak (`/protocol/openid-connect/{auth,token,userinfo}`). |
 | `sgc_sso_habilitado` | no | `1` por defecto; `0` deja el registro creado pero sin botón. |
+| `sgc_sso_icono` | no | Imagen del botón: ruta del sitio (`/files/idp.svg`) o URL `https://`. Sin ella, sin icono. |
+| `sgc_sso_solo` | no | `1` = solo se entra por SSO (`disable_user_pass_login` de System Settings: la pantalla deja de pedir contraseña y el API de contraseña la rechaza; los tokens siguen valiendo). `0` la devuelve. Sin declarar no se toca. Con el SSO apagado nunca se quita. **Vuelta atrás si el proveedor cae:** `bench --site <sitio> set-config sgc_sso_solo 0` y `bench --site <sitio> execute sgc.setup.f3b_sso.run`. |
 
 ```bash
 bench --site <sitio> set-config sgc_sso_issuer "https://<host-idp>/realms/<realm>"

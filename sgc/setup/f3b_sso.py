@@ -20,6 +20,14 @@ Claves (todas en `site_config.json` del sitio):
     sgc_sso_rutas          Opcional: {"autorizacion", "token", "usuario"} relativas al issuer.
                            Por defecto, las de un realm de Keycloak.
     sgc_sso_habilitado     Opcional, 1 por defecto. 0 deja el registro creado pero apagado.
+    sgc_sso_icono          Opcional: imagen del botón (ruta del sitio, p. ej. /files/idp.svg, o
+                           URL https://). Sin ella el botón va sin icono.
+    sgc_sso_solo           Opcional: 1 = solo se entra por SSO (System Settings
+                           `disable_user_pass_login`, nativo: el login deja de pedir correo y
+                           contraseña y el API de contraseña lo rechaza; los tokens siguen
+                           valiendo). 0 = vuelve la contraseña. Sin declarar, no se toca. Con el
+                           SSO apagado o mal configurado NUNCA se quita la contraseña: dejaría
+                           a todo el mundo fuera.
 
 Decisiones verificadas contra el código de Frappe v16:
 
@@ -89,6 +97,9 @@ def leer(conf):
     for clave, ruta in rutas.items():
         if not str(ruta).startswith("/"):
             raise ConfiguracionInvalida(f"sgc_sso_rutas.{clave} debe empezar por «/» (es «{ruta}»)")
+    icono = str(conf.get("sgc_sso_icono") or "").strip()
+    if icono and not (icono.startswith("/") or icono.startswith("https://")):
+        raise ConfiguracionInvalida(f"sgc_sso_icono debe ser una ruta del sitio o una URL https:// (es «{icono}»)")
     return {
         "issuer": issuer,
         "client_id": client_id,
@@ -97,6 +108,8 @@ def leer(conf):
         "etiqueta": str(conf.get("sgc_sso_etiqueta") or ETIQUETA_POR_DEFECTO).strip(),
         "rutas": rutas,
         "habilitado": 1 if conf.get("sgc_sso_habilitado", 1) else 0,
+        "icono": icono,
+        "solo": None if conf.get("sgc_sso_solo") is None else (1 if conf.get("sgc_sso_solo") else 0),
     }
 
 
@@ -112,9 +125,10 @@ def componer(cfg):
         "redirect_url": NATIVOS.get(cfg["proveedor"], RUTA_GENERICA.format(proveedor=cfg["proveedor"])),
         "auth_url_data": json.dumps({"response_type": "code", "scope": "openid email profile"}),
         "user_id_property": "sub",
-        # Sin icono: Frappe solo trata `icon` como clase de icono si el proveedor se llama «Custom»;
-        # con cualquier otro nombre lo pone como <img src=…> y el botón sale con una imagen rota.
-        "icon": "",
+        # Frappe solo trata `icon` como clase de icono si el proveedor se llama «Custom»; con
+        # cualquier otro nombre lo pone como <img src=…> (`www/login.py`). Por eso es una IMAGEN,
+        # y sin `sgc_sso_icono` va vacío (antes de 1.7.21 siempre vacío: imagen rota si no).
+        "icon": cfg.get("icono") or "",
         "client_id": cfg["client_id"],
         "enable_social_login": cfg["habilitado"],
     }
@@ -158,6 +172,24 @@ def aplicar(cfg):
     return doc.name, accion
 
 
+def aplicar_solo(cfg):
+    """Pone `disable_user_pass_login` según `sgc_sso_solo`. Devuelve el texto para el resumen."""
+    if cfg is None or cfg.get("solo") is None:
+        if cfg is None and frappe.db.get_single_value("System Settings", "disable_user_pass_login"):
+            return "⚠ la contraseña está desactivada SIN SSO configurado: nadie puede entrar por la web"
+        return ""
+    deseado = cfg["solo"]
+    if deseado and not cfg["habilitado"]:
+        deseado = 0
+        aviso = " (sgc_sso_solo=1 ignorado: el SSO está apagado y se quedaría todo el mundo fuera)"
+    else:
+        aviso = ""
+    actual = frappe.db.get_single_value("System Settings", "disable_user_pass_login") or 0
+    if int(actual) != deseado:
+        frappe.db.set_single_value("System Settings", "disable_user_pass_login", deseado)
+    return ("solo SSO (sin contraseña)" if deseado else "contraseña permitida") + aviso
+
+
 def _retirar_anterior(actual):
     """Si este paso gestionaba otro proveedor, lo elimina. Nunca toca uno creado a mano."""
     anterior = frappe.db.get_default(CLAVE_GESTIONADO)
@@ -175,8 +207,9 @@ def run():
         print(f"SSO: configuración inválida en site_config — {e}. No se toca nada.")
         return "invalida"
     if cfg is None:
+        aviso = aplicar_solo(None)
         print("SSO: no configurado (sin sgc_sso_issuer en site_config). Solo se entra con contraseña; "
-              "no se crea ni se toca ningún Social Login Key.")
+              "no se crea ni se toca ningún Social Login Key." + (f" {aviso}" if aviso else ""))
         return "sin-configurar"
     try:
         nombre, accion = aplicar(cfg)
@@ -185,9 +218,11 @@ def run():
         return "invalida"
     retirado = _retirar_anterior(nombre)
     frappe.db.set_default(CLAVE_GESTIONADO, nombre)
+    modo = aplicar_solo(cfg)
     frappe.db.commit()
     print(f"SSO {accion}: «{cfg['etiqueta']}» (registro «{nombre}», "
           f"{'activo' if cfg['habilitado'] else 'apagado'}) · issuer {cfg['issuer']} · "
           f"redirect_uri {frappe.utils.get_url(componer(cfg)['redirect_url'])}"
-          + (f" · retirado el anterior «{retirado}»" if retirado else ""))
+          + (f" · retirado el anterior «{retirado}»" if retirado else "")
+          + (f" · {modo}" if modo else ""))
     return accion
