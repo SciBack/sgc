@@ -25,6 +25,12 @@ datos, esquema ni permisos del SGC.
 ### Cambiado
 - Frappe 16.53.0 → **16.60.2**.
 
+### Corregido (lo trae Frappe 16.60)
+- **Guardar un diagrama BPMN ya no puede cambiar el de otro documento.** Frappe guarda una sola copia en
+  disco de dos adjuntos con el mismo contenido (el mismo diagrama en el procedimiento y en la ficha), y
+  el editor la reescribía para los dos. Desde 16.60 Frappe no reescribe un fichero compartido: el
+  adjunto se separa una vez, con un sufijo en el nombre, y desde ahí lo conserva.
+
 ## [1.7.20] - 2026-11-03
 
 **Requiere migrar:** sí. Un informe nuevo. Sin cambios de datos, esquema ni permisos.

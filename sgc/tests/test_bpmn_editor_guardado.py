@@ -97,12 +97,25 @@ class IntegrationTestGuardadoBPMN(IntegrationTestCase):
     def test_el_nombre_aguanta_aunque_otro_documento_tenga_uno_igual(self):
         # Es el caso real que destapó el bug: el mismo diagrama adjunto al
         # procedimiento y a la ficha del proceso.
+        #
+        # Al crearse, Frappe deduplica por contenido: el adjunto de `p` comparte el fichero
+        # en disco con el de `otro`. Desde Frappe 16.60 `save_file(overwrite=True)` NO
+        # reescribe un fichero que otro registro también usa (antes sí: guardar el diagrama
+        # de `p` cambiaba también el de `otro`). Entonces el adjunto se separa UNA vez con
+        # otro nombre, que Frappe le pone con sufijo, y desde ahí se queda fijo.
         otro = self._proceso()
         be.guardar_bpmn("Proceso", otro, NOMBRE, XML_A)
+        (f_otro,) = be.listar_bpmn("Proceso", otro)
+        antes = frappe.get_doc("File", f_otro["name"]).get_content()
         p = self._proceso()
         r1 = be.guardar_bpmn("Proceso", p, NOMBRE, XML_A)
         r2 = be.guardar_bpmn("Proceso", p, r1["file_name"], XML_B)
-        self.assertEqual(r1["file_name"], r2["file_name"], "la colisión con otro documento no debe renombrar nada")
+        r3 = be.guardar_bpmn("Proceso", p, r2["file_name"], XML_A)
+        self.assertTrue(be._mismo_diagrama(r1["file_name"], r2["file_name"]))
+        self.assertEqual(r2["file_name"], r3["file_name"], "separado del otro documento, el nombre ya no cambia")
+        self.assertEqual(len(be.listar_bpmn("Proceso", p)), 1, "renombrar no debe dejar dos adjuntos")
+        self.assertEqual(frappe.get_doc("File", f_otro["name"]).get_content(), antes,
+                         "guardar el diagrama de un documento no puede cambiar el de otro")
 
     def test_reconoce_el_adjunto_aunque_frappe_le_haya_puesto_sufijo(self):
         # Sin esto, el segundo guardado no reconoce su propio adjunto y crea otro.
