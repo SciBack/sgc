@@ -82,3 +82,43 @@ class IntegrationTestDocumentoControlado(IntegrationTestCase):
         # mensaje gane o pierda una tilde. Lo que se comprueba es QUÉ falta,
         # no cómo está redactado.
         self.assertIn("elabor", str(ctx.exception))
+
+
+class IntegrationTestRevisadoPorAlAprobar(IntegrationTestCase):
+    """«Revisado por» se rellena con quien aprueba si nadie indicó a otra persona."""
+
+    def setUp(self):
+        frappe.set_user("Administrator")
+        self.proceso = factories.crear_proceso().name
+
+    def _en_revision(self, **extra):
+        doc = factories.crear_documento_controlado(proceso=self.proceso)
+        doc.archivo = "/files/cualquiera.pdf"
+        doc.update(extra)
+        doc.save(ignore_permissions=True)
+        doc.estado = "En revision"
+        doc.save(ignore_permissions=True)
+        return doc
+
+    def _aprobar_como(self, doc, usuario):
+        frappe.set_user(usuario)
+        try:
+            doc = frappe.get_doc("Documento Controlado", doc.name)
+            doc.estado = "Aprobado"
+            doc.save(ignore_permissions=True)
+            return doc
+        finally:
+            frappe.set_user("Administrator")
+
+    def test_quien_aprueba_queda_como_revisor(self):
+        revisor = frappe.get_doc({"doctype": "User", "email": f"revisor-{frappe.generate_hash(length=6)}@example.com",
+                                  "first_name": "Revisor", "send_welcome_email": 0,
+                                  "roles": [{"role": "DPGC"}]}).insert(ignore_permissions=True).name
+        doc = self._aprobar_como(self._en_revision(), revisor)
+        self.assertEqual(doc.revisado_por, revisor)
+
+    def test_si_se_indico_otro_revisor_se_respeta(self):
+        doc = self._en_revision(revisado_por="Administrator")
+        doc.estado = "Aprobado"
+        doc.save(ignore_permissions=True)
+        self.assertEqual(doc.revisado_por, "Administrator")
