@@ -9,6 +9,16 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.22] - 2026-11-23
+
+**Requiere migrar:** sí. Solo cambian los menús (ficheros estándar `Sidebar`, con su `modified` al día para
+que el migrate los reimporte).
+
+### Nuevo
+- **«Inicio» en los 9 menús de área**: primera entrada de cada menú, lleva a la portada general del SGC
+  («Lo que te toca en todas las áreas»). Antes, una vez dentro de un área, no había forma de volver a ella
+  desde el menú.
+
 ## [1.7.21] - 2026-11-23
 
 **Requiere migrar:** sí. Sube Frappe a **16.60.2** (trae una corrección de seguridad). Sin cambios de
