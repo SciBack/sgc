@@ -138,6 +138,10 @@ def guardar_bpmn(doctype, docname, file_name, xml):
 		# `File.save_file(overwrite=True)` salta esa generación de nombre y sobrescribe
 		# el fichero en disco, que es justo lo que queremos: el adjunto conserva su
 		# nombre y su URL, y quien lo tuviera abierto no pierde la referencia.
+		# Excepción (Frappe ≥ 16.60): si OTRO registro comparte ese fichero en disco —al
+		# crearse, Frappe deduplica por contenido—, no lo reescribe en su sitio: escribe
+		# uno nuevo con sufijo. Así guardar un documento no cambia el diagrama de otro; el
+		# adjunto se separa una sola vez y desde ahí conserva el nombre.
 		f = documentos[0]
 		for sobrante in existentes[1:]:
 			frappe.delete_doc("File", sobrante, ignore_permissions=True, force=True)

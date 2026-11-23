@@ -43,9 +43,19 @@ class TestComposicion(IntegrationTestCase):
         self.assertEqual((campos["authorize_url"], campos["access_token_url"], campos["api_endpoint"]),
                          ("/oauth2/authorize", "/oauth2/token", "/oauth2/userinfo"))
 
+    def test_el_icono_es_opcional_y_va_al_registro(self):
+        self.assertEqual(f3b_sso.componer(f3b_sso.leer(_conf()))["icon"], "")
+        campos = f3b_sso.componer(f3b_sso.leer(_conf(sgc_sso_icono="/files/idp.svg")))
+        self.assertEqual(campos["icon"], "/files/idp.svg")
+
+    def test_solo_sso_sin_declarar_no_se_toca(self):
+        self.assertIsNone(f3b_sso.leer(_conf())["solo"])
+        self.assertEqual(f3b_sso.leer(_conf(sgc_sso_solo=1))["solo"], 1)
+        self.assertEqual(f3b_sso.leer(_conf(sgc_sso_solo=0))["solo"], 0)
+
     def test_la_configuracion_invalida_se_explica(self):
         for conf in (_conf(sgc_sso_issuer="http://inseguro.example.org"), _conf(sgc_sso_client_id=None),
-                     _conf(sgc_sso_proveedor="Con Mayúsculas")):
+                     _conf(sgc_sso_proveedor="Con Mayúsculas"), _conf(sgc_sso_icono="javascript:alert(1)")):
             with self.assertRaises(f3b_sso.ConfiguracionInvalida):
                 f3b_sso.leer(conf)
 
@@ -53,9 +63,11 @@ class TestComposicion(IntegrationTestCase):
 class IntegrationTestSsoDesdeSiteConfig(IntegrationTestCase):
     def setUp(self):
         self._gestionado = frappe.db.get_default(f3b_sso.CLAVE_GESTIONADO)
+        self._sin_contrasena = frappe.db.get_single_value("System Settings", "disable_user_pass_login") or 0
         self.addCleanup(self._limpiar)
 
     def _limpiar(self):
+        frappe.db.set_single_value("System Settings", "disable_user_pass_login", self._sin_contrasena)
         for nombre in ("sgc_prueba_a", "sgc_prueba_b", "sgc_prueba_manual"):
             if frappe.db.exists("Social Login Key", nombre):
                 frappe.delete_doc("Social Login Key", nombre, ignore_permissions=True, force=True)
@@ -125,3 +137,29 @@ class IntegrationTestSsoDesdeSiteConfig(IntegrationTestCase):
         self._run(_conf())
         self._run(_conf(sgc_sso_proveedor="sgc_prueba_b"))
         self.assertTrue(frappe.db.exists("Social Login Key", "sgc_prueba_manual"))
+
+    def _sin_contrasena_ahora(self):
+        return int(frappe.db.get_single_value("System Settings", "disable_user_pass_login") or 0)
+
+    def test_solo_sso_quita_la_contrasena_y_se_puede_devolver(self):
+        _, salida = self._run(_conf(sgc_sso_solo=1, sgc_sso_icono="/files/idp.svg"))
+        self.assertEqual(self._sin_contrasena_ahora(), 1)
+        self.assertIn("solo SSO", salida)
+        self.assertEqual(frappe.db.get_value("Social Login Key", "sgc_prueba_a", "icon"), "/files/idp.svg")
+        self._run(_conf(sgc_sso_solo=0))
+        self.assertEqual(self._sin_contrasena_ahora(), 0)
+
+    def test_sin_declarar_solo_se_respeta_lo_que_haya(self):
+        frappe.db.set_single_value("System Settings", "disable_user_pass_login", 1)
+        self._run(_conf())
+        self.assertEqual(self._sin_contrasena_ahora(), 1)
+
+    def test_con_el_sso_apagado_nunca_se_quita_la_contrasena(self):
+        _, salida = self._run(_conf(sgc_sso_solo=1, sgc_sso_habilitado=0))
+        self.assertEqual(self._sin_contrasena_ahora(), 0)
+        self.assertIn("se quedaría todo el mundo fuera", salida)
+
+    def test_sin_sso_y_sin_contrasena_avisa(self):
+        frappe.db.set_single_value("System Settings", "disable_user_pass_login", 1)
+        _, salida = self._run({})
+        self.assertIn("nadie puede entrar por la web", salida)

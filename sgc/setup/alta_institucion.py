@@ -44,7 +44,8 @@ from sgc.setup import f3b_sso, importador_estructura, marcos_normativos
 IDENTIDAD = {"nombre": "sgc_institucion", "sistema": "sgc_app_name", "logo": "sgc_logo",
              "favicon": "sgc_favicon", "copyright": "sgc_copyright"}
 SSO = {"issuer": "sgc_sso_issuer", "client_id": "sgc_sso_client_id", "proveedor": "sgc_sso_proveedor",
-       "etiqueta": "sgc_sso_etiqueta", "rutas": "sgc_sso_rutas", "habilitado": "sgc_sso_habilitado"}
+       "etiqueta": "sgc_sso_etiqueta", "rutas": "sgc_sso_rutas", "habilitado": "sgc_sso_habilitado",
+       "icono": "sgc_sso_icono", "solo": "sgc_sso_solo"}
 BLOQUES = {"institucion", "identidad_digital", "pais", "estructura"}
 
 
