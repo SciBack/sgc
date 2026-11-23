@@ -318,7 +318,12 @@ class DocumentoControlado(Document):
 				frappe.throw(_("Indique quién elaboró el documento antes de enviarlo a revisión."))
 
 		if self.estado == "Aprobado" and not self.revisado_por:
-			frappe.throw(_("Antes de aprobar, indique en «Revisado por» quién revisó el contenido y guarde; después apruebe."))
+			# Quien aprueba revisó el contenido, salvo que se haya indicado a otra persona antes de
+			# aprobar (el campo es una lista de usuarios). Así no hay que teclear el propio nombre.
+			if self.has_value_changed("estado") and frappe.session.user not in ("Guest", "Administrator"):
+				self.revisado_por = frappe.session.user
+			else:
+				frappe.throw(_("Antes de aprobar, indique en «Revisado por» quién revisó el contenido y guarde; después apruebe."))
 
 		if self.estado == "Publicado":
 			# Sin las firmas, la norma prohibe comunicar e implementar el documento.

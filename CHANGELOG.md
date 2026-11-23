@@ -9,6 +9,15 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.23] - 2026-11-23
+
+**Requiere migrar:** sí (versión de código; sin cambios de datos, esquema ni permisos).
+
+### Cambiado
+- **«Revisado por» se rellena solo al aprobar un documento**: si está vacío, queda quien aprueba. Antes había
+  que escribir el propio nombre y guardar antes de pulsar «Aprobar», o el sistema lo rechazaba. Si revisó otra
+  persona, se elige antes en «Revisado por» (lista de usuarios) y se respeta.
+
 ## [1.7.22] - 2026-11-23
 
 **Requiere migrar:** sí. Solo cambian los menús (ficheros estándar `Sidebar`, con su `modified` al día para
