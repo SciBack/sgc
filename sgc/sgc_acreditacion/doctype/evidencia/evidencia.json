@@ -53,11 +53,12 @@
    "fieldtype": "Section Break"
   },
   {
+   "description": "Se genera solo al guardar: EVD-AÑO-NNNN (p. ej. EVD-2026-0001). Escríbelo solo si ya tiene un código asignado.",
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Código",
-   "reqd": 1,
+   "reqd": 0,
    "unique": 1
   },
   {
@@ -70,10 +71,10 @@
    "default": "Documento",
    "fieldname": "tipo",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Tipo",
-   "options": "Documento\nEnlace\nRegistro\nDataset\nActa",
-   "in_list_view": 1
+   "options": "Documento\nEnlace\nRegistro\nDataset\nActa"
   },
   {
    "fieldname": "col_identificacion",
@@ -144,10 +145,10 @@
   {
    "fieldname": "programa_sede",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Programa-Sede",
-   "options": "Programa Sede",
-   "in_list_view": 1
+   "options": "Programa Sede"
   },
   {
    "fieldname": "periodo_academico",
@@ -291,7 +292,7 @@
    "link_fieldname": "evidencia"
   }
  ],
- "modified": "2026-10-22 08:53:33.000000",
+ "modified": "2026-11-24 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Evidencia",

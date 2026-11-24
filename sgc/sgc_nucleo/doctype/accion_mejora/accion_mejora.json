@@ -50,10 +50,11 @@
    "fieldtype": "Section Break"
   },
   {
+   "description": "Se genera solo al guardar: AM-AÑO-NNNN (p. ej. AM-2026-0001). Escríbelo solo si la acción ya tiene un código asignado.",
    "fieldname": "codigo",
    "fieldtype": "Data",
    "label": "Código",
-   "reqd": 1,
+   "reqd": 0,
    "unique": 1
   },
   {
@@ -64,12 +65,15 @@
    "options": "Correctiva\nPreventiva\nMejora"
   },
   {
+   "description": "Si la acción sale de una no conformidad, se toma su responsable; puedes cambiarlo.",
+   "fetch_from": "no_conformidad.responsable",
+   "fetch_if_empty": 1,
    "fieldname": "responsable",
    "fieldtype": "Link",
-   "label": "Responsable",
-   "options": "User",
+   "in_list_view": 1,
    "in_standard_filter": 1,
-   "in_list_view": 1
+   "label": "Responsable",
+   "options": "User"
   },
   {
    "fieldname": "col_identificacion",
@@ -89,8 +93,8 @@
   {
    "fieldname": "avance_pct",
    "fieldtype": "Int",
-   "label": "Avance (%)",
-   "in_list_view": 1
+   "in_list_view": 1,
+   "label": "Avance (%)"
   },
   {
    "fieldname": "sec_descripcion",
@@ -176,8 +180,8 @@
   {
    "fieldname": "fecha_compromiso",
    "fieldtype": "Date",
-   "label": "Fecha de compromiso (ETA)",
-   "in_list_view": 1
+   "in_list_view": 1,
+   "label": "Fecha de compromiso (ETA)"
   },
   {
    "default": "Sin plazo",
@@ -255,7 +259,7 @@
    "link_fieldname": "accion_mejora"
   }
  ],
- "modified": "2026-11-02 12:00:00.000000",
+ "modified": "2026-11-24 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "Accion Mejora",
@@ -343,10 +347,10 @@
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
+ "search_fields": "codigo",
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
  "title_field": "codigo",
- "track_changes": 1,
- "search_fields": "codigo"
+ "track_changes": 1
 }

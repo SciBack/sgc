@@ -21,11 +21,12 @@
  ],
  "fields": [
   {
+   "description": "Se genera solo al guardar: HAU-AÑO-NNNN (p. ej. HAU-2026-0001). Escríbelo solo si ya tiene un código asignado.",
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Código",
-   "reqd": 1,
+   "reqd": 0,
    "unique": 1
   },
   {
@@ -113,7 +114,7 @@
    "link_fieldname": "hallazgo"
   }
  ],
- "modified": "2026-10-14 21:00:00.000000",
+ "modified": "2026-11-24 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Auditoria",
  "name": "Hallazgo Auditoria",

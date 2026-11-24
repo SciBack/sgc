@@ -50,10 +50,11 @@
    "fieldtype": "Section Break"
   },
   {
+   "description": "Se genera solo al guardar: PM-AÑO-NNNN (p. ej. PM-2026-0001). Escríbelo solo si ya tiene un código asignado.",
    "fieldname": "codigo",
    "fieldtype": "Data",
    "label": "Código",
-   "reqd": 1,
+   "reqd": 0,
    "unique": 1
   },
   {
@@ -64,10 +65,10 @@
   {
    "fieldname": "responsable",
    "fieldtype": "Link",
-   "label": "Responsable",
-   "options": "User",
+   "in_list_view": 1,
    "in_standard_filter": 1,
-   "in_list_view": 1
+   "label": "Responsable",
+   "options": "User"
   },
   {
    "fieldname": "col_identificacion",
@@ -250,7 +251,7 @@
    "link_fieldname": "plan_mejora"
   }
  ],
- "modified": "2026-11-02 12:00:00.000000",
+ "modified": "2026-11-24 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Nucleo",
  "name": "Plan Mejora",
@@ -328,11 +329,11 @@
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
+ "search_fields": "titulo",
  "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
  "title_field": "titulo",
- "track_changes": 1,
- "search_fields": "titulo"
+ "track_changes": 1
 }

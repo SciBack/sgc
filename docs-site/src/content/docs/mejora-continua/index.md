@@ -124,7 +124,7 @@ incumplir si no se actúa), **observación** y **oportunidad de mejora**.
 
 | Estado | Quién actúa | Botón | Qué exige para pasar |
 |---|---|---|---|
-| Abierta | Responsable de calidad | *Analizar causa* | Un responsable |
+| Abierta | Responsable de calidad (la dirección de calidad y su analista también pueden corregirla) | *Analizar causa* | Un responsable |
 | En análisis | Responsable de calidad | *Tratar* | El análisis de causa, si lo requiere |
 | En tratamiento | Responsable de calidad | *Enviar a verificacion* | La fecha de compromiso, y un plan de mejora o una corrección inmediata |
 | En verificación | Dirección de calidad | *Cerrar eficaz*, *Cerrar no eficaz* o *Reabrir tratamiento* | La evidencia de cierre |
@@ -172,7 +172,8 @@ Un plan agrupa las acciones que resuelven uno o varios problemas.
 1. **Crear:** desde el plan, con **Crear ▾ → Acción de mejora** (o el **+** de *Acciones de mejora* en
    su pestaña **Resumen**). Indique la
    descripción, el **tipo** (correctiva, preventiva o de mejora), el **responsable** y la **fecha
-   de compromiso**.
+   de compromiso**. El **código** se genera solo, y si la acción sale de una no conformidad toma su
+   responsable (se puede cambiar).
 2. **Qué causa ataca:** si la acción nace de una no conformidad, pulse **Elegir causa** y escoja
    una de las causas de su análisis. Así se puede responder qué acción resuelve cada causa.
 3. **Iniciar:** exige responsable y fecha de compromiso. El responsable recibe una **tarea** en sus
@@ -230,7 +231,8 @@ auditoría sus hallazgos, listas de verificación e informe. Solo aparece lo que
 | Aprobar y cerrar un plan | Sí, si no lo creó | — | — | — |
 | Iniciar y ejecutar una acción | — | Sí | — | — |
 | Verificar una acción | Sí | — | — | — |
-| Borrar | Nadie: se cierra como eficaz o no eficaz | | | |
+| Borrar una no conformidad «Abierta» sin nada enlazado | Sí | — | — | — |
+| Borrar cualquier otro registro | Nadie: se cierra como eficaz o no eficaz | | | |
 
 El analista de la dirección de calidad puede registrar y editar como la dirección, pero no ejecuta
 los cierres ni las verificaciones.

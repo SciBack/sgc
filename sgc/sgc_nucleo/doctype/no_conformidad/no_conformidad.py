@@ -28,6 +28,18 @@ ORDEN = {
 
 
 class NoConformidad(Document):
+    def on_trash(self):
+        # Solo se borra una NC recién registrada (acta DPGC 23-nov-2026: una NC mal
+        # guardada no la podía corregir ni borrar nadie). Desde «En analisis» es un
+        # registro del SGC (ISO 9001 §10.2.2): se corrige o se cierra, no se borra.
+        # Si ya tiene una acción u otro registro enlazado, Frappe tampoco la deja borrar.
+        if (self.estado or "Abierta") != "Abierta":
+            frappe.throw(
+                _("Solo se puede borrar una no conformidad «Abierta». Esta está «{0}»: "
+                  "corrígela o ciérrala.").format(_(self.estado)),
+                title=_("No se puede borrar"),
+            )
+
     def validate(self):
         # Una NC mayor siempre exige análisis de causa raíz.
         if self.tipo == "No conformidad mayor":
