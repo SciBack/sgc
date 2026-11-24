@@ -20,11 +20,12 @@
  ],
  "fields": [
   {
+   "description": "Se genera solo al guardar: PGA-AÑO-NNNN (p. ej. PGA-2026-0001). Escríbelo solo si ya tiene un código asignado.",
    "fieldname": "codigo",
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Código",
-   "reqd": 1,
+   "reqd": 0,
    "unique": 1
   },
   {
@@ -56,9 +57,9 @@
    "description": "Jefe de Auditoría Interna",
    "fieldname": "responsable",
    "fieldtype": "Link",
+   "in_standard_filter": 1,
    "label": "Responsable",
-   "options": "User",
-   "in_standard_filter": 1
+   "options": "User"
   },
   {
    "default": "Borrador",
@@ -97,7 +98,7 @@
    "link_fieldname": "programa_auditoria"
   }
  ],
- "modified": "2026-10-14 23:00:00.000000",
+ "modified": "2026-11-24 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Auditoria",
  "name": "Programa Auditoria",
@@ -173,11 +174,11 @@
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
+ "search_fields": "titulo",
  "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
  "title_field": "titulo",
- "track_changes": 1,
- "search_fields": "titulo"
+ "track_changes": 1
 }

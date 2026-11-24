@@ -148,7 +148,7 @@
   "document_type": "No Conformidad",
   "enable_action_confirmation": 0,
   "is_active": 1,
-  "modified": "2026-10-13 19:39:57.550796",
+  "modified": "2026-11-24 12:00:00.000000",
   "name": "No Conformidad SGC",
   "override_status": 0,
   "send_email_alert": 0,
@@ -162,6 +162,34 @@
     "message": null,
     "next_action_email_template": null,
     "send_email": 1,
+    "state": "Abierta",
+    "update_field": null,
+    "update_value": null,
+    "workflow_builder_id": null
+   },
+   {
+    "allow_edit": "DPGC",
+    "avoid_status_override": 0,
+    "doc_status": "0",
+    "evaluate_as_expression": 0,
+    "is_optional_state": 0,
+    "message": null,
+    "next_action_email_template": null,
+    "send_email": 0,
+    "state": "Abierta",
+    "update_field": null,
+    "update_value": null,
+    "workflow_builder_id": null
+   },
+   {
+    "allow_edit": "Analista de Calidad (DPGC)",
+    "avoid_status_override": 0,
+    "doc_status": "0",
+    "evaluate_as_expression": 0,
+    "is_optional_state": 0,
+    "message": null,
+    "next_action_email_template": null,
+    "send_email": 0,
     "state": "Abierta",
     "update_field": null,
     "update_value": null,
@@ -2499,9 +2527,6 @@
   "name": "Ficha Caracterizacion SGC",
   "override_status": 0,
   "send_email_alert": 0,
-  "workflow_data": null,
-  "workflow_name": "Ficha Caracterizacion SGC",
-  "workflow_state_field": "estado",
   "states": [
    {
     "allow_edit": "Dueño de Proceso",
@@ -2663,7 +2688,10 @@
     "transition_tasks": null,
     "workflow_builder_id": null
    }
-  ]
+  ],
+  "workflow_data": null,
+  "workflow_name": "Ficha Caracterizacion SGC",
+  "workflow_state_field": "estado"
  },
  {
   "docstatus": 0,
@@ -2675,9 +2703,6 @@
   "name": "Procedimiento SGC",
   "override_status": 0,
   "send_email_alert": 0,
-  "workflow_data": null,
-  "workflow_name": "Procedimiento SGC",
-  "workflow_state_field": "estado",
   "states": [
    {
     "allow_edit": "Dueño de Proceso",
@@ -2839,6 +2864,9 @@
     "transition_tasks": null,
     "workflow_builder_id": null
    }
-  ]
+  ],
+  "workflow_data": null,
+  "workflow_name": "Procedimiento SGC",
+  "workflow_state_field": "estado"
  }
 ]

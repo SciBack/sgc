@@ -110,7 +110,10 @@ class TestCalendarios(unittest.TestCase):
 class TestAltaRapida(unittest.TestCase):
 	def test_las_altas_rapidas_caben_en_el_dialogo(self):
 		con_alta = {n: d for n, d in _doctypes().items() if d.get("quick_entry")}
-		self.assertTrue({"No Conformidad", "Evento Riesgo", "Salida No Conforme"} <= set(con_alta))
+		self.assertTrue({"Evento Riesgo", "Salida No Conforme"} <= set(con_alta))
+		# La NC se registra con el formulario completo (demo DPGC 23-nov-2026): por la ventana corta
+		# se guardaba sin «Requiere análisis de causa».
+		self.assertNotIn("No Conformidad", con_alta)
 		for nombre, doc in con_alta.items():
 			campos = [f for f in doc["fields"] if f.get("reqd") or f.get("allow_in_quick_entry")]
 			with self.subTest(doctype=nombre):

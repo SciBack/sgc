@@ -35,8 +35,9 @@ en qué punto termina tu parte del trabajo.
   documentos se pueden ver en un calendario, y las acciones y los planes de mejora también en un
   diagrama de Gantt con su avance. En la lista, pulse el selector de vista (junto al título) →
   **Calendario** o **Gantt**.
-- **Alta rápida:** al crear una no conformidad, una salida no conforme o un evento de riesgo se abre
-  un diálogo corto con lo imprescindible. **Editar formulario completo** abre el resto.
+- **Alta rápida:** al crear una salida no conforme o un evento de riesgo se abre un diálogo corto con
+  lo imprescindible. **Editar formulario completo** abre el resto. La no conformidad se registra
+  siempre con el formulario completo, para no saltarse *Requiere análisis de causa*.
 - **Vistas guardadas:** en algunas listas, el selector de vista (junto al título) → **Vista de
   Lista ›** ofrece, bajo *Vistas de la institución*, vistas ya preparadas: *Vencen en 7 días* y *Por verificar* en las acciones de
   mejora, *Abiertas* y *En verificación* en las no conformidades, *Revisión en 30 días* en los

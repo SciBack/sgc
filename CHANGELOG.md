@@ -9,6 +9,27 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.24] - 2026-11-24
+
+**Requiere migrar:** sí. Cambian el flujo de la no conformidad, permisos (borrar NC) y la definición de 8
+DocTypes, más una personalización estándar de `User`. Sin cambios de datos.
+
+Sale de la demo con la DPGC del 23-nov-2026.
+
+### Cambiado
+- **La no conformidad se registra con el formulario completo.** «+ Agregar» abría el alta rápida y la NC se
+  guardaba sin *Requiere análisis de causa*. Salida no conforme y evento de riesgo conservan el alta rápida.
+- **Una no conformidad «Abierta» la corrigen también la DPGC y su analista**, no solo el Responsable de
+  Calidad de Programa. Desde «En analisis» sigue siendo solo de él.
+- **Se puede borrar una no conformidad «Abierta»** (DPGC y analista) si no tiene nada enlazado. Desde «En
+  analisis» no se borra: se corrige o se cierra.
+- **El código ya no es obligatorio en el formulario** donde lo pone el sistema: acción y plan de mejora,
+  hallazgo, evidencia, programa, hallazgo e informe de auditoría. Antes el formulario lo exigía aunque el
+  servidor sabía generarlo.
+- **La acción de mejora creada desde una no conformidad toma su responsable** si no se indica otro.
+- **Los usuarios se ven por su nombre** en los campos que enlazan con un usuario («Responsable», «Aprobado
+  por»…), no por su correo. Personalización estándar de `User` (`show_title_field_in_link`).
+
 ## [1.7.23] - 2026-11-23
 
 **Requiere migrar:** sí (versión de código; sin cambios de datos, esquema ni permisos).
