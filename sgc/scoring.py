@@ -47,6 +47,57 @@ CON_DEBILIDAD = {"Cumple con debilidad", "Cumple parcial"}
 NIVELES_VALIDOS = {"NL", "L", "LP"}
 
 
+def umbrales():
+    """Umbrales de la valoración por evidencia, en % (`site_config`).
+
+    Por defecto, los de la matriz de autoevaluación de la institución piloto: ≥ 75 % logrado, > 25 % en
+    proceso. `sgc_umbral_evaluacion_externa` marca cuándo un programa puede pedir la evaluación externa.
+    """
+    conf = frappe.conf or {}
+    return {
+        "logrado": float(conf.get("sgc_umbral_logrado", 75)),
+        "en_proceso": float(conf.get("sgc_umbral_en_proceso", 25)),
+        "evaluacion_externa": float(conf.get("sgc_umbral_evaluacion_externa", 75)),
+    }
+
+
+def valoracion_por_avance(avance):
+    """% de avance → Logrado / En proceso / No logrado, con los umbrales de la instancia."""
+    u = umbrales()
+    avance = float(avance or 0)
+    if avance >= u["logrado"]:
+        return "Logrado"
+    if avance > u["en_proceso"]:
+        return "En proceso"
+    return "No logrado"
+
+
+def avance_por_evidencias(autoevaluacion, estandar=None):
+    """Promedio del % de sus evidencias, o None si la autoevaluación no se valora por evidencias.
+
+    Es la definición del tablero de la DPGC: cada evidencia aplicable pesa lo mismo, una pendiente
+    cuenta 0 y la que no aplica no cuenta. Con `estandar`, solo las de sus criterios.
+    """
+    condicion, valores = "", {"ae": autoevaluacion}
+    if estandar:
+        condicion = " and em.parent_elemento_marco = %(est)s"
+        valores["est"] = estandar
+    filas = frappe.db.sql(
+        f"""select ve.avance, ve.no_aplica
+        from `tabValoracion Evidencia` ve
+        join `tabValoracion Criterio` vc on vc.name = ve.parent and ve.parenttype = 'Valoracion Criterio'
+        join `tabElemento Marco` em on em.name = vc.criterio
+        where vc.autoevaluacion = %(ae)s{condicion}""",
+        valores, as_dict=True,
+    )
+    if not filas:
+        return None
+    aplicables = [f for f in filas if not cint(f.no_aplica)]
+    if not aplicables:
+        return 0.0
+    return round(sum(float(f.avance or 0) for f in aplicables) / len(aplicables), 2)
+
+
 def _sin_valorar(cumple):
     """True si el criterio NO tiene un juicio de cumplimiento real.
 
@@ -494,6 +545,12 @@ def _calcular_avance_pct(autoevaluacion, estandares=None):
     `estandares` se mantiene por compatibilidad de firma pero ya no se usa: el
     denominador es del marco completo, no de los estándares recorridos.
     """
+    # Si se valora por evidencias (el marco trae evidencias esperadas), el avance es el promedio del
+    # % de sus evidencias: lo que se ve mientras se trabaja, no solo los criterios ya cerrados.
+    por_evidencias = avance_por_evidencias(autoevaluacion)
+    if por_evidencias is not None:
+        return por_evidencias
+
     marco = _marco_de_autoevaluacion(autoevaluacion)
     criterios = _criterios_valorables_del_marco(marco, autoevaluacion=autoevaluacion)
     total = len(criterios)

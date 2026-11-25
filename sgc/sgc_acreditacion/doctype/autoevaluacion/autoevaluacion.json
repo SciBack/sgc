@@ -240,7 +240,7 @@
    "link_fieldname": "autoevaluacion"
   }
  ],
- "modified": "2026-10-22 08:56:31.000000",
+ "modified": "2026-11-25 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Autoevaluacion",
@@ -253,7 +253,8 @@
    "read": 1,
    "role": "DPGC",
    "submit": 1,
-   "write": 1
+   "write": 1,
+   "report": 1
   },
   {
    "create": 1,
@@ -261,7 +262,8 @@
    "read": 1,
    "role": "Analista de Calidad (DPGC)",
    "submit": 1,
-   "write": 1
+   "write": 1,
+   "report": 1
   },
   {
    "create": 1,
@@ -269,7 +271,8 @@
    "read": 1,
    "role": "Coordinador de Calidad de Facultad",
    "submit": 1,
-   "write": 1
+   "write": 1,
+   "report": 1
   },
   {
    "create": 1,
@@ -277,32 +280,38 @@
    "read": 1,
    "role": "Responsable de Calidad de Programa",
    "submit": 1,
-   "write": 1
+   "write": 1,
+   "report": 1
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Miembro de Comité de Calidad"
+   "role": "Miembro de Comité de Calidad",
+   "report": 1
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Auditor Interno"
+   "role": "Auditor Interno",
+   "report": 1
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Rectorado/VR (lectura)"
+   "role": "Rectorado/VR (lectura)",
+   "report": 1
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Responsable de Sede"
+   "role": "Responsable de Sede",
+   "report": 1
   },
   {
    "export": 1,
    "read": 1,
-   "role": "Decano/Director (lectura)"
+   "role": "Decano/Director (lectura)",
+   "report": 1
   },
   {
    "email": 1,
@@ -310,7 +319,8 @@
    "print": 1,
    "read": 1,
    "role": "System Manager",
-   "share": 1
+   "share": 1,
+   "report": 1
   }
  ],
  "row_format": "Dynamic",

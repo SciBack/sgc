@@ -1,0 +1,44 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-11-25 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "codigo",
+  "descripcion"
+ ],
+ "fields": [
+  {
+   "fieldname": "codigo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Código",
+   "reqd": 1,
+   "columns": 1,
+   "description": "Código de la evidencia en el modelo (p. ej. EV4)."
+  },
+  {
+   "fieldname": "descripcion",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Evidencia esperada",
+   "reqd": 1,
+   "columns": 6
+  }
+ ],
+ "grid_page_length": 50,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-11-25 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "SGC Acreditacion",
+ "name": "Evidencia Esperada",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "ASC",
+ "states": []
+}

@@ -33,6 +33,8 @@ class ValoracionCriterio(Document):
 			)
 
 		self._validar_unica()
+		self._traer_evidencias_esperadas()
+		self._valorar_por_evidencias()
 
 		# El estado operativo se deriva del juicio y nunca de una selección del
 		# navegador. Así una escritura genérica no puede declarar una valoración
@@ -56,6 +58,63 @@ class ValoracionCriterio(Document):
 		if otra:
 			frappe.throw(_("El criterio {0} ya tiene su valoración en esta autoevaluación: {1}.").format(
 				frappe.bold(self.criterio), frappe.get_desk_link("Valoracion Criterio", otra)))
+
+	# ------------------------------------------------------- por evidencias
+
+	def _traer_evidencias_esperadas(self):
+		"""Una fila por evidencia que el criterio pide (`Elemento Marco.evidencias_esperadas`).
+
+		Idempotente por código: añade las que falten (un marco al que se le cargan evidencias después
+		también llega a las autoevaluaciones en curso) y nunca borra una fila ya valorada.
+		"""
+		if not self.criterio:
+			return
+		esperadas = frappe.get_all(
+			"Evidencia Esperada",
+			filters={"parent": self.criterio, "parenttype": "Elemento Marco", "parentfield": "evidencias_esperadas"},
+			fields=["codigo", "descripcion"], order_by="idx asc",
+		)
+		ya = {fila.codigo for fila in self.get("evidencias_valoradas") or []}
+		for e in esperadas:
+			if e.codigo not in ya:
+				self.append("evidencias_valoradas", {"codigo": e.codigo, "descripcion": e.descripcion})
+
+	def _valorar_por_evidencias(self):
+		"""Cada evidencia se valora por su % y, con todas valoradas, el criterio se valora solo.
+
+		Regla de la matriz de autoevaluación de la institución piloto (25-nov-2026), umbrales en
+		`site_config` (`scoring.umbrales`): ≥ logrado → Logrado; > en proceso → En proceso; resto, No
+		logrado. Una fila está **pendiente** mientras su avance sea 0 sin «no aplica» ni brecha escrita:
+		Frappe guarda un % vacío como 0, y un 0 % real se registra explicando la brecha.
+
+		El criterio pasa a Cumple / Cumple parcial / No cumple con el promedio de sus evidencias (sin las
+		que no aplican), o a No aplica si ninguna aplica, para que el nivel del estándar, la vigencia y el
+		informe sigan funcionando igual. Sin evidencias esperadas, el juicio sigue siendo manual.
+		"""
+		filas = self.get("evidencias_valoradas") or []
+		if not filas:
+			return
+		from sgc.scoring import valoracion_por_avance
+
+		pendientes = 0
+		for fila in filas:
+			if fila.no_aplica:
+				fila.valoracion = "No aplica"
+			elif not fila.avance and not (fila.observacion or "").strip():
+				fila.valoracion = "Pendiente"
+				pendientes += 1
+			else:
+				fila.valoracion = valoracion_por_avance(fila.avance)
+
+		aplicables = [f for f in filas if not f.no_aplica]
+		self.avance_criterio = (sum(f.avance or 0 for f in aplicables) / len(aplicables)) if aplicables else 0
+		if pendientes:
+			self.cumple = ""
+		elif not aplicables:
+			self.cumple = "No aplica"
+		else:
+			self.cumple = {"Logrado": "Cumple", "En proceso": "Cumple parcial"}.get(
+				valoracion_por_avance(self.avance_criterio), "No cumple")
 
 	def _sincronizar_tarea(self):
 		"""El responsable del criterio tiene una tarea hasta que el criterio queda valorado (`sgc/tareas.py`)."""
@@ -91,6 +150,8 @@ class ValoracionCriterio(Document):
 		# `.get()`, no `.evidencia`: si el DocType aún no migró en el entorno
 		# (campo nuevo), el acceso por punto reventaría; así degrada a None.
 		sincronizar_evidencia_enlace(self.get("evidencia"), elemento_marco=self.criterio)
+		# Y la evidencia aportada en cada fila de «Evidencias esperadas»: mismo destino (el criterio).
+		sincronizar_evidencia_enlace(self.get("evidencias_valoradas"), elemento_marco=self.criterio)
 
 	def on_update(self):
 		"""Al valorar un criterio, recomputar el nivel propuesto de su estándar.

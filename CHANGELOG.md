@@ -9,6 +9,32 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.8.0] - 2026-11-25
+
+**Requiere migrar:** sí. Dos DocTypes nuevos (tablas hijas), campos nuevos en Elemento Marco y Valoración de
+criterio, permiso «report» en Autoevaluación, dos informes y una entrada de menú. Sin cambios de datos.
+
+Sale de la reunión del módulo de Acreditación con la dirección de calidad de la institución piloto (25-nov-2026):
+su autoevaluación vive en una hoja de cálculo por programa que valora **cada evidencia con un % de avance**, y
+su tablero en una herramienta externa. Esta versión lo trae al SGC.
+
+### Añadido
+- **Valoración por evidencia.** Un criterio puede tener sus **evidencias esperadas** (tabla en el elemento del
+  marco). La valoración del criterio las trae como filas: % de avance, evidencia aportada, responsable, plazo,
+  brecha y acción de mejora. Cada evidencia se valora sola (≥ 75 % logrado, > 25 % en proceso; umbrales en
+  `site_config`: `sgc_umbral_logrado`, `sgc_umbral_en_proceso`) y, con todas valoradas, el criterio pasa a
+  Cumple / Cumple parcial / No cumple. Una evidencia en 0 % sin brecha escrita cuenta como pendiente.
+- **Avance por evidencias:** si la autoevaluación se valora por evidencias, su avance es el promedio del % de
+  sus evidencias (la que no aplica no cuenta). Sin evidencias esperadas, todo sigue como antes.
+- **Tableros:** informe **«Avance de autoevaluaciones»** (menú del área; ranking con el umbral de la evaluación
+  externa, `sgc_umbral_evaluacion_externa`, 75 % por defecto) e informe **«Avance por estándar»** (botón en la
+  autoevaluación; semáforo por estándar, criterios por estado y cuánto falta para la evaluación externa).
+- La evidencia aportada en una fila entra en la **trazabilidad** del criterio, como la del selector.
+
+### Corregido
+- **Los roles que leen autoevaluaciones no podían abrir informes sobre ellas**: Autoevaluación no daba el
+  permiso «report».
+
 ## [1.7.25] - 2026-11-25
 
 **Requiere migrar:** sí. Cambia la definición de 2 DocTypes (columnas de lista). Sin cambios de datos.

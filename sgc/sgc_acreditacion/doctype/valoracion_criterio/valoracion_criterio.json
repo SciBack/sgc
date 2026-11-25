@@ -12,6 +12,10 @@
   "texto_criterio",
   "responsable",
   "cumple",
+  "sec_evidencias",
+  "evidencias_valoradas",
+  "avance_criterio",
+  "sec_juicio",
   "observacion",
   "estado",
   "valorado_por",
@@ -63,6 +67,28 @@
    "options": "Cumple\nCumple parcial\nNo cumple\nNo aplica"
   },
   {
+   "fieldname": "sec_evidencias",
+   "fieldtype": "Section Break",
+   "label": "Evidencias del criterio"
+  },
+  {
+   "fieldname": "evidencias_valoradas",
+   "fieldtype": "Table",
+   "label": "Evidencias esperadas",
+   "options": "Valoracion Evidencia",
+   "description": "Ponga el % de avance de cada evidencia (≥ 75 % logrado, > 25 % en proceso). Con todas valoradas, el sistema valora el criterio."
+  },
+  {
+   "fieldname": "avance_criterio",
+   "fieldtype": "Percent",
+   "label": "Avance del criterio",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sec_juicio",
+   "fieldtype": "Section Break"
+  },
+  {
    "fieldname": "observacion",
    "fieldtype": "Text",
    "label": "Observación"
@@ -110,7 +136,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-25 09:07:24.000000",
+ "modified": "2026-11-25 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Valoracion Criterio",
