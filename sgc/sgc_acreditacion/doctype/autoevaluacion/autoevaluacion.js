@@ -17,6 +17,17 @@ frappe.ui.form.on("Autoevaluacion", {
 	},
 });
 
+// Tablero de esta autoevaluación (informe «Avance por estándar»): % por estándar con semáforo y cuánto le
+// falta para la evaluación externa. Lo pidió la dirección de calidad (25-nov-2026): el Resumen «se ve plano».
+frappe.ui.form.on("Autoevaluacion", {
+	refresh(frm) {
+		if (frm.is_new() || frm.doc.estado === "Planificada") return;
+		frm.add_custom_button(__("Avance por estándar"), () =>
+			frappe.set_route("query-report", "Avance por Estandar", { autoevaluacion: frm.doc.name })
+		);
+	},
+});
+
 // Cifras del registro en la pestaña «Resumen» (frm.dashboard.add_indicator, como el panel del
 // cliente en ERPNext). Cuentan con frappe.db.count: cada usuario ve solo lo que puede leer.
 frappe.ui.form.on("Autoevaluacion", {

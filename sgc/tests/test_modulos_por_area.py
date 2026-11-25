@@ -17,6 +17,7 @@ FUERA_DE_MENUS = {
 	"Mapa Procesos",  # desde el árbol: ⋯ → Mapa institucional / Versiones del mapa institucional
 	"Valoracion Criterio",  # desde su autoevaluación
 	"Valoracion Estandar",  # desde su autoevaluación
+	"Avance por Estandar",  # informe de UNA autoevaluación: botón «Avance por estándar» en ella
 	"Entrega Obligacion",  # desde su obligación
 	"Hallazgo Auditoria",  # desde su auditoría
 	"Informe Auditoria",  # desde su auditoría

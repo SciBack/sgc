@@ -37,6 +37,32 @@ autoevaluación (criterios con juicio de cumplimiento sobre el total del modelo)
 La lista de valoraciones muestra la columna **Autoevaluación**: como se abre desde la pestaña
 **Resumen** y no está en el menú, esa columna dice de cuál son y lleva de vuelta a ella.
 
+### Si el modelo trae evidencias esperadas: se valora evidencia por evidencia
+
+Cuando los criterios del modelo tienen cargadas sus **evidencias esperadas** (en el criterio, tabla
+*Evidencias esperadas*), cada valoración de criterio las trae como filas y el juicio deja de ser manual:
+
+1. En cada evidencia se pone su **% de avance** y, si la tiene, la **evidencia aportada** (que queda en la
+   trazabilidad del criterio), el responsable, el plazo, la brecha observada y la acción de mejora propuesta.
+2. El sistema la valora: **≥ 75 %** Logrado, **más de 25 %** En proceso, el resto No logrado (umbrales de
+   cada institución). «No aplica» se marca aparte y no cuenta.
+3. Una evidencia sin avance, sin «no aplica» y sin brecha escrita está **Pendiente**. Para registrar un 0 %,
+   escriba la brecha: es lo que explica por qué no hay nada.
+4. Con todas las evidencias valoradas, el criterio pasa solo a **Cumple** (promedio ≥ 75 %), **Cumple
+   parcial** (más de 25 %) o **No cumple**; si ninguna aplica, a No aplica. Desde ahí todo sigue igual: nivel
+   del estándar, vigencia e informe.
+5. El **avance** de la autoevaluación es entonces el promedio del % de todas sus evidencias (una pendiente
+   cuenta 0).
+
+## Ver el avance: los tableros
+
+- **Avance de autoevaluaciones** (menú del área): todas las autoevaluaciones que usted puede ver, de mayor a
+  menor avance, con sus criterios logrados, en proceso y no logrados, y si ya alcanzan el umbral para pedir la
+  **evaluación externa** (75 % por defecto). Filtros por modelo, facultad, sede, programa y estado.
+- **Avance por estándar** (botón en la autoevaluación, cuando ya está iniciada): el % de cada estándar con su
+  semáforo, sus criterios por estado, el nivel propuesto y el confirmado, y cuántos puntos le faltan para la
+  evaluación externa.
+
 ## Paso 2 — El motor propone el nivel del estándar
 
 Regla (por estándar, sobre sus criterios hijos):

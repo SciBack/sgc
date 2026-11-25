@@ -27,6 +27,7 @@
   "unidades_apoyo",
   "col_resp",
   "evidencia_requerida",
+  "evidencias_esperadas",
   "tab_estructura",
   "estructura_sb",
   "parent_elemento_marco",
@@ -159,6 +160,13 @@
    "label": "Evidencia requerida"
   },
   {
+   "fieldname": "evidencias_esperadas",
+   "fieldtype": "Table",
+   "label": "Evidencias esperadas",
+   "options": "Evidencia Esperada",
+   "description": "Si el criterio las tiene, la autoevaluación lo valora evidencia por evidencia, con su % de avance."
+  },
+  {
    "fieldname": "tab_estructura",
    "fieldtype": "Tab Break",
    "label": "Estructura"
@@ -271,7 +279,7 @@
    "link_fieldname": "elemento_marco"
   }
  ],
- "modified": "2026-10-21 17:18:56.000000",
+ "modified": "2026-11-25 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Elemento Marco",
