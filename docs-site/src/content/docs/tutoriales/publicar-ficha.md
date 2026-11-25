@@ -19,6 +19,13 @@ más se olvidan no están en la ficha sino **fuera de ella**: el **responsable d
 menos un riesgo** registrado del proceso. Revíselos antes de empezar.
 :::
 
+## El flujo de un vistazo
+
+Cada caja es un botón de la ficha; cada franja, el perfil que puede pulsarlo. Los rombos son los
+estados en los que la ficha espera una decisión.
+
+![Flujo de la ficha de caracterización: el dueño del proceso la envía a revisión; la dirección de calidad la devuelve, la aprueba y la publica; una ficha publicada pasa a nueva versión o se deroga](../../../assets/bpmn/19-ficha-caracterizacion-proceso.svg)
+
 ## Paso 1. Comprobar lo que la ficha va a necesitar
 
 La norma ISO 9001 (§4.4.1) pide que la caracterización de un proceso tenga todo esto. El sistema lo
