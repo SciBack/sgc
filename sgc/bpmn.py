@@ -570,6 +570,15 @@ def layout_de(xml):
         r'\s+width="([\d.]+)"\s+height="([\d.]+)"')
     for m in patron.finditer(xml or ""):
         posiciones[m.group(1)] = tuple(float(v) for v in m.groups()[1:])
+    # Las flechas también: si alguien las ordenó a mano (Camunda), se conservan
+    # mientras sigan siendo válidas (ver `_ruta_valida`). Van con clave
+    # «ruta:<id del flujo>» para no mezclarse con las cajas.
+    bloque = re.compile(r'<bpmndi:BPMNEdge\b[^>]*bpmnElement="([^"]+)"[^>]*>(.*?)</bpmndi:BPMNEdge>', re.S)
+    punto = re.compile(r'<di:waypoint\s+x="([-\d.]+)"\s+y="([-\d.]+)"')
+    for m in bloque.finditer(xml or ""):
+        puntos = [(float(x), float(y)) for x, y in punto.findall(m.group(2))]
+        if len(puntos) >= 2:
+            posiciones[f"ruta:{m.group(1)}"] = tuple(puntos)
     return posiciones
 
 
@@ -634,6 +643,43 @@ def _id(prefijo, texto, usados=None):
 
 def _centro(x, y, ancho, alto):
     return x + ancho / 2, y + alto / 2
+
+
+def _segmento_libre(a, b, cajas):
+    """Segmento ortogonal que no entra en el interior de ninguna caja (bordes sí)."""
+    x1, y1 = a
+    x2, y2 = b
+    if x1 != x2 and y1 != y2:
+        return False
+    for x, y, w, h in cajas:
+        if x1 == x2:
+            if x < x1 < x + w and max(min(y1, y2), y) < min(max(y1, y2), y + h):
+                return False
+        elif y < y1 < y + h and max(min(x1, x2), x) < min(max(x1, x2), x + w):
+            return False
+    return True
+
+
+def _en_el_borde(punto, caja, tolerancia=1):
+    px, py = punto
+    x, y, w, h = caja
+    dentro = x - tolerancia <= px <= x + w + tolerancia and y - tolerancia <= py <= y + h + tolerancia
+    en_borde = (min(abs(px - x), abs(px - x - w)) <= tolerancia
+                or min(abs(py - y), abs(py - y - h)) <= tolerancia)
+    return dentro and en_borde
+
+
+def _ruta_valida(puntos, origen, destino, cajas):
+    """¿Se puede conservar una flecha dibujada a mano?
+
+    Sí, si sale del borde de su origen, llega al borde de su destino, va en
+    tramos horizontales y verticales, y no atraviesa ninguna caja (tampoco las
+    suyas). Es la misma regla que cumple `_ruta_flujo`; si el nodo se movió y la
+    flecha ya no le llega, se recalcula.
+    """
+    if len(puntos) < 2 or not _en_el_borde(puntos[0], origen) or not _en_el_borde(puntos[-1], destino):
+        return False
+    return all(_segmento_libre(a, b, cajas) for a, b in pairwise(puntos))
 
 
 def _ruta_flujo(origen, destino, cajas):
@@ -949,10 +995,25 @@ def _serializar(spec, carriles, nodos, flujos, layout_previo=None, mensajes=None
     layout_previo = layout_previo or {}
     mensajes = mensajes or []
 
+    # Bandas de los carriles: fijas, o las del fichero si alguien las agrandó a
+    # mano (para que quepan sus flechas) y siguen apiladas en el mismo orden.
+    fijas = {rol: (Y_ORIGEN + i * ALTO_CARRIL, ALTO_CARRIL) for i, rol in enumerate(carriles)}
+    guardadas_carril = [layout_previo.get(_id("Lane", rol)) for rol in carriles]
+    bandas_previas = None
+    if guardadas_carril and all(guardadas_carril):
+        y_esperada, ok = Y_ORIGEN, True
+        for caja in guardadas_carril:
+            ok = ok and abs(caja[1] - y_esperada) < 1 and caja[3] >= ALTO_TAREA + 20
+            y_esperada = caja[1] + caja[3]
+        if ok:
+            bandas_previas = {rol: (int(c[1]), int(c[3])) for rol, c in zip(carriles, guardadas_carril, strict=True)}
+
+    bandas = fijas
+
     def _cabe_en_su_carril(nodo, caja):
         _x, y, _w, alto = caja
-        base = Y_ORIGEN + nodo.fila * ALTO_CARRIL
-        return base <= y and y + alto <= base + ALTO_CARRIL
+        base, alto_banda = bandas[nodo.carril]
+        return base <= y and y + alto <= base + alto_banda
 
     def _se_pisan(a, b):
         ax, ay, aw, ah = a
@@ -970,17 +1031,30 @@ def _serializar(spec, carriles, nodos, flujos, layout_previo=None, mensajes=None
     # dos tareas dibujadas una encima de otra —pasó, y se conservaban tan
     # contentas porque cada una estaba «en su sitio»—.
     guardadas = [(n, layout_previo[n.id]) for n in nodos.values() if n.id in layout_previo]
-    # Si aparecen nodos nuevos, recalcular TODO: una posición calculada podría
-    # ocupar una caja previamente ajustada aunque las antiguas no se solapen.
-    layout_valido = len(guardadas) == len(nodos) and bool(guardadas) and all(
-        _cabe_en_su_carril(n, caja)
-        and (n.tipo not in _Nodo.TIPOS_TAREA
-             or (caja[2] >= ANCHO_TAREA and caja[3] >= ALTO_TAREA))
-        for n, caja in guardadas
-    ) and not any(
-        _se_pisan(guardadas[i][1], guardadas[j][1])
-        for i in range(len(guardadas)) for j in range(i + 1, len(guardadas))
-    )
+
+    def _layout_valido():
+        # Si aparecen nodos nuevos, recalcular TODO: una posición calculada podría
+        # ocupar una caja previamente ajustada aunque las antiguas no se solapen.
+        return len(guardadas) == len(nodos) and bool(guardadas) and all(
+            _cabe_en_su_carril(n, caja)
+            and (n.tipo not in _Nodo.TIPOS_TAREA
+                 or (caja[2] >= ANCHO_TAREA and caja[3] >= ALTO_TAREA))
+            for n, caja in guardadas
+        ) and not any(
+            _se_pisan(guardadas[i][1], guardadas[j][1])
+            for i in range(len(guardadas)) for j in range(i + 1, len(guardadas))
+        )
+
+    # Primero con los carriles del fichero; si no encaja, con los fijos. Los
+    # carriles a mano solo se quedan si TODO el dibujo cabe en ellos: una caja
+    # recalculada no sabe nada de una banda agrandada.
+    layout_valido = False
+    if bandas_previas:
+        bandas = bandas_previas
+        layout_valido = _layout_valido()
+    if not layout_valido:
+        bandas = fijas
+        layout_valido = _layout_valido()
 
     def geom(nodo):
         """Posición del nodo: la ajustada a mano si el layout guardado sigue valiendo.
@@ -1012,7 +1086,7 @@ def _serializar(spec, carriles, nodos, flujos, layout_previo=None, mensajes=None
     # regenerar sin ningún cambio de proceso ensuciaba igual los 14 ficheros y
     # hacía imposible comprobar si un diagrama está al día comparándolo.
     ancho_max = int(max((geom(n)[0] + geom(n)[2] for n in nodos.values()), default=800))
-    alto_pool = len(carriles) * ALTO_CARRIL
+    alto_pool = sum(alto for _y, alto in bandas.values())
     ancho_pool = ancho_max - X_ORIGEN + 80
 
     o = []
@@ -1122,12 +1196,12 @@ def _serializar(spec, carriles, nodos, flujos, layout_previo=None, mensajes=None
     a(f'      <bpmndi:BPMNShape id="Shape_{part_id}" bpmnElement="{part_id}" isHorizontal="true">')
     a(f'        <dc:Bounds x="{X_ORIGEN}" y="{Y_ORIGEN}" width="{ancho_pool}" height="{alto_pool}" />')
     a("      </bpmndi:BPMNShape>")
-    for i, rol in enumerate(carriles):
-        y = Y_ORIGEN + i * ALTO_CARRIL
+    for rol in carriles:
+        y, alto_banda = bandas[rol]
         a(f'      <bpmndi:BPMNShape id="Shape_{_id("Lane", rol)}" '
           f'bpmnElement="{_id("Lane", rol)}" isHorizontal="true">')
         a(f'        <dc:Bounds x="{X_ORIGEN + ANCHO_ETIQUETA}" y="{y}" '
-          f'width="{ancho_pool - ANCHO_ETIQUETA}" height="{ALTO_CARRIL}" />')
+          f'width="{ancho_pool - ANCHO_ETIQUETA}" height="{alto_banda}" />')
         a("      </bpmndi:BPMNShape>")
     for n in nodos.values():
         gx, gy, gw, gh = geom(n)
@@ -1163,9 +1237,14 @@ def _serializar(spec, carriles, nodos, flujos, layout_previo=None, mensajes=None
         a(f'        <di:waypoint x="{int(cx)}" y="{int(y_destino[hacia])}" />')
         a("      </bpmndi:BPMNEdge>")
 
+    cajas = [geom(n) for n in nodos.values()]
     for fid, src, tgt, _nombre, _ext in flujos:
-        ruta = _ruta_flujo(geom(nodos[src]), geom(nodos[tgt]),
-                           [geom(n) for n in nodos.values()])
+        a_mano = layout_previo.get(f"ruta:{fid}") if layout_valido else None
+        a_mano = [(int(x), int(y)) for x, y in a_mano] if a_mano else None
+        if a_mano and _ruta_valida(a_mano, geom(nodos[src]), geom(nodos[tgt]), cajas):
+            ruta = a_mano
+        else:
+            ruta = _ruta_flujo(geom(nodos[src]), geom(nodos[tgt]), cajas)
         a(f'      <bpmndi:BPMNEdge id="Edge_{fid}" bpmnElement="{fid}">')
         for x, y in ruta:
             a(f'        <di:waypoint x="{x}" y="{y}" />')

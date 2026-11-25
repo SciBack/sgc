@@ -16,8 +16,10 @@ auditoría.
 
 **El layout se respeta mientras siga siendo válido.** Si recolocas las cajas en
 Camunda, la siguiente regeneración conserva tus posiciones y solo actualiza la
-semántica. Lo que no sobrevive es mover *flechas*: esas salen del código.
-Las flechas de secuencia usan rutas ortogonales de borde a borde. Si la ruta
+semántica. **Las flechas también se conservan** (desde el 25-nov-2026) si
+siguen siendo válidas: salen del borde de su origen, llegan al borde de su
+destino, van en tramos horizontales y verticales y no atraviesan ninguna caja.
+Si no, se recalculan. Las flechas de secuencia usan rutas ortogonales de borde a borde. Si la ruta
 directa cruza una actividad, se desvía por una franja libre, sin mover las cajas.
 Las pruebas comprueban que ningún segmento atraviese el interior de un nodo,
 incluidos origen y destino, en los 15 diagramas. No garantizan separación entre

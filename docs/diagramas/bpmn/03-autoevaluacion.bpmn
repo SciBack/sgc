@@ -155,10 +155,10 @@ el cierre.</bpmn:text>
         <dc:Bounds x="1630" y="302" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
-        <dc:Bounds x="230" y="142" width="36" height="36" />
+        <dc:Bounds x="322" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Efecto_Cerrada__Congelar_marco_y_registrar_vigencia" bpmnElement="Efecto_Cerrada__Congelar_marco_y_registrar_vigencia">
-        <dc:Bounds x="1430" y="440" width="120" height="80" />
+        <dc:Bounds x="1430" y="460" width="120" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Shape_Control_1" bpmnElement="Control_1">
         <dc:Bounds x="200" y="640" width="420" height="104" />
@@ -173,7 +173,7 @@ el cierre.</bpmn:text>
         <dc:Bounds x="200" y="776" width="420" height="104" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Edge_Flow_inicio" bpmnElement="Flow_inicio">
-        <di:waypoint x="266" y="160" />
+        <di:waypoint x="358" y="160" />
         <di:waypoint x="430" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Planificada_Iniciar_evaluacion_hacia_En_curso" bpmnElement="Flow_Planificada_Iniciar_evaluacion_hacia_En_curso">
@@ -181,23 +181,24 @@ el cierre.</bpmn:text>
         <di:waypoint x="630" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_En_curso_Enviar_a_revision_hacia_En_revision" bpmnElement="Flow_En_curso_Enviar_a_revision_hacia_En_revision">
-        <di:waypoint x="750" y="160" />
-        <di:waypoint x="750" y="295" />
-        <di:waypoint x="855" y="295" />
+        <di:waypoint x="690" y="200" />
+        <di:waypoint x="690" y="320" />
+        <di:waypoint x="830" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_En_revision_Devolver_a_evaluacion" bpmnElement="Flow_gw_En_revision_Devolver_a_evaluacion">
         <di:waypoint x="880" y="320" />
         <di:waypoint x="1030" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_En_revision_Devolver_a_evaluacion_hacia_En_curso" bpmnElement="Flow_En_revision_Devolver_a_evaluacion_hacia_En_curso">
-        <di:waypoint x="1030" y="320" />
-        <di:waypoint x="1030" y="160" />
+        <di:waypoint x="1090" y="280" />
+        <di:waypoint x="1090" y="160" />
         <di:waypoint x="750" y="160" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_gw_En_revision_Consolidar" bpmnElement="Flow_gw_En_revision_Consolidar">
-        <di:waypoint x="855" y="295" />
-        <di:waypoint x="855" y="280" />
-        <di:waypoint x="1290" y="280" />
+        <di:waypoint x="855" y="345" />
+        <di:waypoint x="855" y="380" />
+        <di:waypoint x="1290" y="380" />
+        <di:waypoint x="1290" y="360" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_En_revision_Consolidar_hacia_Consolidada" bpmnElement="Flow_En_revision_Consolidar_hacia_Consolidada">
         <di:waypoint x="1350" y="320" />
@@ -205,12 +206,12 @@ el cierre.</bpmn:text>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_Consolidada_Cerrar_hacia_Cerrada" bpmnElement="Flow_Consolidada_Cerrar_hacia_Cerrada">
         <di:waypoint x="1490" y="360" />
-        <di:waypoint x="1490" y="440" />
+        <di:waypoint x="1490" y="460" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Edge_Flow_efecto_Cerrada" bpmnElement="Flow_efecto_Cerrada">
-        <di:waypoint x="1550" y="480" />
-        <di:waypoint x="1550" y="320" />
-        <di:waypoint x="1630" y="320" />
+        <di:waypoint x="1550" y="500" />
+        <di:waypoint x="1648" y="500" />
+        <di:waypoint x="1648" y="338" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
