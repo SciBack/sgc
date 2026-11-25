@@ -46,7 +46,7 @@ def execute(filters=None):
 		c = juicios.get(a.name, Counter())
 		avance = scoring._calcular_avance_pct(a.name) if a.estado != "Planificada" else 0.0
 		data.append({
-			"autoevaluacion": a.name, "programa": p.get("nombre") or a.programa_sede, "sede": p.get("sede"),
+			"autoevaluacion": a.name, "programa": p.get("nombre") or a.programa_sede or a.name, "sede": p.get("sede"),
 			"facultad": p.get("facultad"), "estado": a.estado, "avance": avance,
 			"logrados": c["logrados"], "en_proceso": c["en_proceso"], "no_logrados": c["no_logrados"],
 			"pendientes": c["pendientes"], "evaluacion_externa": _("Sí") if avance >= umbral else _("No"),
