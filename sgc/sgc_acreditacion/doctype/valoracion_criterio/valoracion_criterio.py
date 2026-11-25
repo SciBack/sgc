@@ -114,6 +114,12 @@ class ValoracionCriterio(Document):
 			return
 
 		# Import diferido para evitar ciclos en el arranque de Frappe.
-		from sgc.scoring import proponer_nivel_estandar
+		from sgc.scoring import _calcular_avance_pct, proponer_nivel_estandar
 
 		proponer_nivel_estandar(self.autoevaluacion, estandar)
+		# El avance se ve durante la autoevaluación, no solo al cerrarla: antes solo se
+		# recalculaba al confirmar todos los estándares y marcaba 0 % todo el proceso.
+		frappe.db.set_value(
+			"Autoevaluacion", self.autoevaluacion, "avance_pct",
+			_calcular_avance_pct(self.autoevaluacion), update_modified=False,
+		)

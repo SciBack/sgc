@@ -9,6 +9,23 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.7.25] - 2026-11-25
+
+**Requiere migrar:** sí. Cambia la definición de 2 DocTypes (columnas de lista). Sin cambios de datos.
+
+Sale de preparar la reunión del módulo de Acreditación con la DPGC (25-nov-2026).
+
+### Corregido
+- **El avance de la autoevaluación se ve mientras se valora.** Solo se calculaba al confirmar todos los
+  estándares, así que marcaba 0 % durante todo el proceso (5 de 53 criterios valorados → 0 %). Ahora se
+  recalcula cada vez que se guarda una valoración de criterio.
+
+### Cambiado
+- **Las listas de valoraciones de criterio y de estándar muestran la columna «Autoevaluación»**, con enlace
+  de vuelta. Se abren desde la pestaña «Resumen» de la autoevaluación y no están en el menú, y Frappe 16.60
+  ya no pinta la miga del registro de origen: sin la columna no se sabía de dónde salía la lista.
+- Manual: «No aplica» no cuenta para el avance (el manual decía lo contrario).
+
 ## [1.7.24] - 2026-11-24
 
 **Requiere migrar:** sí. Cambian el flujo de la no conformidad, permisos (borrar NC) y la definición de 8

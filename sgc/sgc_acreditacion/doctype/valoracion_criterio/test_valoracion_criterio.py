@@ -99,6 +99,32 @@ class IntegrationTestValoracionCriterio(IntegrationTestCase):
 			frappe.db.get_value("Valoracion Criterio", vc.name, "cumple"), "No cumple"
 		)
 
+	def test_valorar_un_criterio_actualiza_el_avance(self):
+		"""El avance se ve mientras se valora, no solo al cerrar (25-nov-2026: con 5 de 53
+		criterios valorados la autoevaluación marcaba 0 %)."""
+		prefijo = "TESTVCAV"
+		marco = factories.crear_marco_prueba(n_estandares=1, n_criterios=4, prefijo=prefijo)
+		ae = factories.crear_autoevaluacion(marco, prefijo=prefijo)
+		criterios = marco["criterios"][marco["estandares"][0]]
+
+		factories.valorar_criterio(ae, criterios[0], cumple="Cumple")
+		self.assertEqual(frappe.db.get_value("Autoevaluacion", ae.name, "avance_pct"), 25.0)
+
+		factories.valorar_criterio(ae, criterios[1], cumple="Cumple parcial")
+		self.assertEqual(frappe.db.get_value("Autoevaluacion", ae.name, "avance_pct"), 50.0)
+
+		# «No aplica» no es un juicio de cumplimiento: no suma (misma regla que el motor).
+		factories.valorar_criterio(ae, criterios[2], cumple="No aplica")
+		self.assertEqual(frappe.db.get_value("Autoevaluacion", ae.name, "avance_pct"), 50.0)
+
+	def test_la_lista_de_valoraciones_dice_de_que_autoevaluacion_son(self):
+		"""Las valoraciones se abren desde su autoevaluación y no están en el menú: la lista
+		tiene que mostrar a cuál pertenecen, con enlace de vuelta (Frappe 16.60 no pinta esa
+		miga: solo nombra la pantalla)."""
+		for doctype in ("Valoracion Criterio", "Valoracion Estandar"):
+			campo = frappe.get_meta(doctype).get_field("autoevaluacion")
+			self.assertTrue(campo.in_list_view, doctype)
+
 	def test_bloquea_edicion_de_valoracion_existente_tras_cierre(self):
 		"""Tras recorrer la cadena real hasta 'Cerrada' (docstatus=1), editar una
 		Valoracion Criterio ya existente de esa autoevaluacion lanza ValidationError."""
