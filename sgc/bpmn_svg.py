@@ -13,6 +13,7 @@ No depende de Frappe: se puede correr en cualquier máquina con Python 3.
 import sys
 import xml.etree.ElementTree as ET
 from html import escape
+from itertools import pairwise
 from pathlib import Path
 
 NS = {
@@ -120,6 +121,10 @@ def a_svg(xml_bytes):
 	ancho, alto = maxx - minx, maxy - miny
 
 	capas = {"pool": [], "carril": [], "flecha": [], "nodo": [], "nota": []}
+	segmentos = []
+	for borde in raiz.iter("{%s}BPMNEdge" % NS["bpmndi"]):
+		pts = [_mover_punto(float(p.get("x")), float(p.get("y")), movidos) for p in borde.findall("di:waypoint", NS)]
+		segmentos += list(pairwise(pts))
 	n_carril = 0
 
 	for eid, c in cajas.items():
@@ -158,7 +163,7 @@ def a_svg(xml_bytes):
 				f'<polygon points="{cx},{y} {x + w},{cy} {cx},{y + h} {x},{cy}" fill="{TAREA}" stroke="{TINTA}" stroke-width="1.5"/>'
 				f'<path d="M{cx - 8},{cy - 8} L{cx + 8},{cy + 8} M{cx + 8},{cy - 8} L{cx - 8},{cy + 8}" stroke="{TINTA}" stroke-width="2.5"/>'
 			)
-			capas["nodo"].append(_etiqueta_debajo(c, nombre))
+			capas["nodo"].append(_etiqueta_debajo(c, nombre, segmentos))
 		elif tipo.endswith("Event"):
 			r = w / 2
 			if tipo == "startEvent":
@@ -178,7 +183,7 @@ def a_svg(xml_bytes):
 			capas["nodo"].append(
 				f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="{TAREA}" stroke="{trazo}" stroke-width="{grosor}"/>' + doble + reloj
 			)
-			capas["nodo"].append(_etiqueta_debajo(c, nombre))
+			capas["nodo"].append(_etiqueta_debajo(c, nombre, segmentos))
 		elif tipo == "textAnnotation":
 			lineas = _partir(" ".join((nombre or "").split()), w - 8, 11)
 			capas["nota"].append(
@@ -252,13 +257,27 @@ def _mover_punto(x, y, movidos):
 	return (x, y)
 
 
-def _etiqueta_debajo(c, nombre):
+def _cruza(segmentos, x0, y0, x1, y1):
+	"""¿Algún tramo de flecha pasa por el rectángulo (x0, y0) a (x1, y1)?"""
+	for (ax, ay), (bx, by) in segmentos:
+		if max(ax, bx) >= x0 and min(ax, bx) <= x1 and max(ay, by) >= y0 and min(ay, by) <= y1:
+			return True
+	return False
+
+
+def _etiqueta_debajo(c, nombre, segmentos=()):
+	"""Nombre de un evento o rombo: debajo; encima si una flecha pasa por debajo."""
 	if not nombre:
 		return ""
 	if c["etiqueta"]:
 		lx, ly, lw, lh = c["etiqueta"]
 		return _texto(lx + lw / 2, ly + lh / 2, _partir(nombre, max(lw, 90), 11), 11, color=TENUE)
-	return _texto(c["x"] + c["w"] / 2, c["y"] + c["h"] + 14, _partir(nombre, 110, 11), 11, color=TENUE, centrado_v=False)
+	lineas = _partir(nombre, 110, 11)
+	cx, alto = c["x"] + c["w"] / 2, len(lineas) * 14
+	abajo = (cx - 45, c["y"] + c["h"] + 4, cx + 45, c["y"] + c["h"] + 8 + alto)
+	if _cruza(segmentos, *abajo) and not _cruza(segmentos, cx - 45, c["y"] - 8 - alto, cx + 45, c["y"] - 4):
+		return _texto(cx, c["y"] - 10 - (len(lineas) - 1) * 14, lineas, 11, color=TENUE, centrado_v=False)
+	return _texto(cx, c["y"] + c["h"] + 14, lineas, 11, color=TENUE, centrado_v=False)
 
 
 def exportar(origen, destino=None):
