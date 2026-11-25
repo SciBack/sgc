@@ -28,10 +28,14 @@ Para cada criterio, el comité registra en su **Valoracion Criterio** el juicio 
 - `Cumple`
 - `Cumple parcial`
 - `No cumple`
-- `No aplica` (cuenta como criterio revisado, no resta avance)
+- `No aplica` (queda revisado, pero no cuenta para el avance: con algún criterio en «No aplica» el avance no llega al 100 %)
 
 Cada vez que se guarda una Valoracion Criterio, el sistema recalcula automáticamente
-el `nivel_propuesto` del estándar al que pertenece ese criterio.
+el `nivel_propuesto` del estándar al que pertenece ese criterio y el **% de avance** de la
+autoevaluación (criterios con juicio de cumplimiento sobre el total del modelo).
+
+La lista de valoraciones muestra la columna **Autoevaluación**: como se abre desde la pestaña
+**Resumen** y no está en el menú, esa columna dice de cuál son y lleva de vuelta a ella.
 
 ## Paso 2 — El motor propone el nivel del estándar
 

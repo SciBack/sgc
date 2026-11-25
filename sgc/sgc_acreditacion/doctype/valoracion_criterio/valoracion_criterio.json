@@ -27,7 +27,8 @@
    "in_standard_filter": 1,
    "label": "Autoevaluación",
    "options": "Autoevaluacion",
-   "reqd": 1
+   "reqd": 1,
+   "in_list_view": 1
   },
   {
    "fieldname": "criterio",
@@ -109,7 +110,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-14 23:00:00.000000",
+ "modified": "2026-11-25 09:07:24.000000",
  "modified_by": "Administrator",
  "module": "SGC Acreditacion",
  "name": "Valoracion Criterio",
