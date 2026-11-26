@@ -14,7 +14,7 @@ frappe.query_reports["Avance por Estandar"] = {
 	formatter(value, row, column, data, default_formatter) {
 		value = default_formatter(value, row, column, data);
 		if (column.fieldname === "semaforo" && data) {
-			const color = { Logrado: "green", "En proceso": "orange", "No logrado": "red" }[data.semaforo];
+			const color = { Logrado: "green", "En proceso": "orange", "No logrado": "red", "Sin empezar": "gray" }[data.semaforo];
 			if (color) value = `<span class="indicator-pill ${color}">${value}</span>`;
 		}
 		return value;

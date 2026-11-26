@@ -238,6 +238,22 @@ class IntegrationTestValoracionCriterio(IntegrationTestCase):
 		self.assertEqual(fila["avance"], 100.0)
 		self.assertEqual(fila["logrados"], 1)
 
+	def test_un_estandar_sin_tocar_sale_sin_empezar_y_el_resumen_en_porcentaje(self):
+		"""1.8.1: un estándar que nadie ha mirado no es «No logrado» (rojo) sino «Sin empezar» (gris)."""
+		from sgc.sgc_acreditacion.report.avance_por_estandar import avance_por_estandar
+
+		marco = factories.crear_marco_prueba(n_estandares=2, n_criterios=1, prefijo="TESTVE7")
+		e1, e2 = marco["estandares"]
+		ae = factories.crear_autoevaluacion(marco, prefijo="TESTVE7")
+		frappe.db.set_value("Autoevaluacion", ae.name, "estado", "En curso")
+		factories.valorar_criterio(ae, marco["criterios"][e1][0], cumple="No cumple")
+
+		_c, filas, _m, _g, resumen = avance_por_estandar.execute({"autoevaluacion": ae.name})
+		por_estandar = {f["estandar"]: f["semaforo"] for f in filas}
+		self.assertEqual(por_estandar[e1], "No logrado")  # valorado y no cumple: rojo de verdad
+		self.assertEqual(por_estandar[e2], "Sin empezar")
+		self.assertEqual(resumen[0]["datatype"], "Percent")
+
 	def test_la_lista_de_valoraciones_dice_de_que_autoevaluacion_son(self):
 		"""Las valoraciones se abren desde su autoevaluación y no están en el menú: la lista
 		tiene que mostrar a cuál pertenecen, con enlace de vuelta (Frappe 16.60 no pinta esa
