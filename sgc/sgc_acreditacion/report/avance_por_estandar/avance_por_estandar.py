@@ -15,6 +15,7 @@ from frappe import _
 
 from sgc import scoring
 
+SIN_EMPEZAR = "Sin empezar"
 JUICIO = {"Cumple": "logrados", "Cumple parcial": "en_proceso", "No cumple": "no_logrados", "No aplica": "no_aplica"}
 
 
@@ -45,7 +46,7 @@ def execute(filters=None):
 		nivel = niveles.get(est.name) or {}
 		data.append({
 			"estandar": est.name, "denominacion": f"{(est.codigo or '').rsplit('-', 1)[-1]}. {est.denominacion}",
-			"avance": avance, "semaforo": scoring.valoracion_por_avance(avance), "criterios": len(criterios),
+			"avance": avance, "semaforo": _semaforo(avance, c, len(criterios)), "criterios": len(criterios),
 			"logrados": c["logrados"], "en_proceso": c["en_proceso"], "no_logrados": c["no_logrados"],
 			"pendientes": c["pendientes"], "nivel_propuesto": nivel.get("nivel_propuesto"),
 			"nivel": nivel.get("nivel") if nivel.get("confirmado") else None,
@@ -69,6 +70,16 @@ COLUMNAS = [
 ]
 
 
+def _semaforo(avance, juicios, n_criterios):
+	"""Logrado / En proceso / No logrado por el avance; «Sin empezar» si nada del estándar está valorado.
+
+	Un estándar sin tocar no está «no logrado»: aún no se ha mirado. En rojo asusta a quien empieza.
+	"""
+	if n_criterios and juicios["pendientes"] == n_criterios and not avance:
+		return SIN_EMPEZAR
+	return scoring.valoracion_por_avance(avance)
+
+
 def _grafico(data):
 	if not data:
 		return None
@@ -84,10 +95,11 @@ def _resumen(data, total):
 	color = {"Logrado": "Green", "En proceso": "Orange", "No logrado": "Red"}[scoring.valoracion_por_avance(total)]
 	falta = max(0.0, round(u["evaluacion_externa"] - total, 1))
 	suma = lambda clave: sum(f[clave] for f in data)  # noqa: E731
+	# «Percent» muestra solo los decimales que trae el número (formatters.js): redondear a uno basta.
 	return [
-		{"value": total, "label": _("Avance de la autoevaluación (%)"), "datatype": "Float", "indicator": color},
-		{"value": falta, "label": _("Le faltan para la evaluación externa (puntos)"), "datatype": "Float",
-		 "indicator": "Green" if not falta else "Orange"},
+		{"value": round(total, 1), "label": _("Avance de la autoevaluación"), "datatype": "Percent", "indicator": color},
+		{"value": falta, "label": _("Le falta para la evaluación externa ({0} %)").format(int(u["evaluacion_externa"])),
+		 "datatype": "Percent", "indicator": "Green" if not falta else "Orange"},
 		{"value": suma("logrados"), "label": _("Criterios logrados"), "datatype": "Int", "indicator": "Green"},
 		{"value": suma("en_proceso"), "label": _("En proceso"), "datatype": "Int", "indicator": "Orange"},
 		{"value": suma("no_logrados"), "label": _("No logrados"), "datatype": "Int", "indicator": "Red"},

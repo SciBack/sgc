@@ -113,7 +113,7 @@ def _resumen(data, umbral):
 	return [
 		{"value": len(data), "label": _("Autoevaluaciones"), "datatype": "Int"},
 		{"value": len(en_marcha), "label": _("Iniciadas"), "datatype": "Int", "indicator": "Blue"},
-		{"value": promedio, "label": _("Avance promedio de las iniciadas (%)"), "datatype": "Float",
+		{"value": promedio, "label": _("Avance promedio de las iniciadas"), "datatype": "Percent",
 		 "indicator": "Green" if promedio >= umbral else "Orange" if promedio > 25 else "Red"},
 		{"value": listas, "label": _("Listas para evaluación externa (≥ {0} %)").format(int(umbral)), "datatype": "Int",
 		 "indicator": "Green" if listas else "Gray"},

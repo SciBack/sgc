@@ -9,6 +9,16 @@ avisos que trae la app, y saltársela deja la instancia a medias aunque el sitio
 
 ## [Sin publicar]
 
+## [1.8.1] - 2026-11-25
+
+**Requiere migrar:** no (solo informes). Sin cambios de datos.
+
+### Cambiado
+- **«Avance por estándar»:** un estándar que nadie ha empezado sale **«Sin empezar»** en gris, no «No logrado» en
+  rojo. El rojo queda para lo valorado que no se logra.
+- **Las cifras de los tableros salen en %** con un decimal («8,8 %»), no como número con tres decimales
+  («8.820»). «Le falta para la evaluación externa» nombra el umbral.
+
 ## [1.8.0] - 2026-11-25
 
 **Requiere migrar:** sí. Dos DocTypes nuevos (tablas hijas), campos nuevos en Elemento Marco y Valoración de
